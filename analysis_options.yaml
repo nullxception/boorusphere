@@ -1,0 +1,24 @@
+include: package:effective_dart/analysis_options.yaml
+
+analyzer:
+  enable-experiment:
+    - non-nullable
+    - extension-methods
+
+  exclude:
+    - lib/**/*.gr.dart
+    - lib/**/*.config.dart
+    - lib/**/*.g.dart
+    - lib/**/*.freezed.dart
+
+  errors:
+    public_member_api_docs: ignore
+    type_annotate_public_apis: ignore
+    todo: ignore
+    lines_longer_than_80_chars: ignore
+
+linter:
+  rules:
+    - prefer_const_constructors
+    - prefer_single_quotes
+    - use_if_null_to_convert_nulls_to_bools
