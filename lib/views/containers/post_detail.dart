@@ -16,6 +16,7 @@ class PostDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final uiTheme = useProvider(uiThemeProvider);
     final activeServer = useProvider(activeServerProvider);
     final selectedtag = useProvider(_selectedTagProvider);
     final fabController = useAnimationController(
@@ -73,9 +74,18 @@ class PostDetails extends HookWidget {
               itemBuilder: (index) {
                 final tag = data.tags[index];
                 return ItemTags(
+                  color: uiTheme == ThemeMode.dark
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade200,
+                  textColor: uiTheme == ThemeMode.dark
+                      ? Colors.grey.shade200
+                      : Colors.grey.shade800,
+                  activeColor: Theme.of(context).accentColor,
+                  border: Border.all(style: BorderStyle.none),
                   active: selectedtag.contains(tag),
                   title: tag,
                   index: index,
+                  elevation: 0,
                   onPressed: (it) {
                     if (it.active ?? false) {
                       // display FAB on first select
