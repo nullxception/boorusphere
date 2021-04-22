@@ -8,35 +8,20 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../model/booru_post.dart';
 import '../../provider/common.dart';
 
-class PostDetails extends StatefulHookWidget {
+final _selectedTagProvider = Provider.autoDispose<List<String>>((_) => []);
+
+class PostDetails extends HookWidget {
   const PostDetails({Key? keys, required this.data}) : super(key: keys);
-
   final BooruPost data;
-
-  @override
-  State<StatefulWidget> createState() => _PostDetailsState();
-}
-
-class _PostDetailsState extends State<PostDetails> {
-  final _tagStateKey = GlobalKey<TagsState>();
-
-  String getSelectedTags(TagsState? state) {
-    return state?.getAllItem
-            .where((it) => it.active ?? false)
-            .map((it) => it.title)
-            .join(' ') ??
-        '';
-  }
-
-  bool hasSelectedTags(TagsState? state) {
-    final count = state?.getAllItem.where((it) => it.active ?? false).length;
-    return count != null && count > 0;
-  }
 
   @override
   Widget build(BuildContext context) {
     final activeServer = useProvider(activeServerProvider);
-    final postUrl = activeServer.composePostUrl(widget.data.id);
+    final selectedtag = useProvider(_selectedTagProvider);
+    final fabController = useAnimationController(
+        duration: const Duration(milliseconds: 300), initialValue: 0);
+
+    final postUrl = activeServer.composePostUrl(data.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,11 +31,11 @@ class _PostDetailsState extends State<PostDetails> {
         children: [
           ListTile(
             title: const Text('Size'),
-            subtitle: Text('${widget.data.width}x${widget.data.height}'),
+            subtitle: Text('${data.width}x${data.height}'),
           ),
           ListTile(
             title: const Text('Type'),
-            subtitle: Text(widget.data.mimeType),
+            subtitle: Text(data.mimeType),
           ),
           ListTile(
             title: const Text('Location'),
@@ -74,8 +59,8 @@ class _PostDetailsState extends State<PostDetails> {
                   EdgeInsets.zero,
                 ),
               ),
-              onPressed: () => launch(widget.data.src),
-              child: Text(widget.data.src),
+              onPressed: () => launch(data.src),
+              child: Text(data.src),
             ),
           ),
           const ListTile(
@@ -83,27 +68,41 @@ class _PostDetailsState extends State<PostDetails> {
           ),
           ListTile(
             title: Tags(
-              key: _tagStateKey,
               alignment: WrapAlignment.start,
-              itemCount: widget.data.tags.length,
-              itemBuilder: (index) => ItemTags(
-                active: false,
-                title: widget.data.tags[index],
-                index: index,
-                onPressed: (a) {
-                  setState(() {});
-                },
-              ),
+              itemCount: data.tags.length,
+              itemBuilder: (index) {
+                final tag = data.tags[index];
+                return ItemTags(
+                  active: selectedtag.contains(tag),
+                  title: tag,
+                  index: index,
+                  onPressed: (it) {
+                    if (it.active ?? false) {
+                      // display FAB on first select
+                      if (selectedtag.isEmpty) {
+                        fabController.forward();
+                      }
+                      selectedtag.add(tag);
+                    } else if (it.active == false) {
+                      selectedtag.remove(tag);
+                      // display FAB on last removal
+                      if (selectedtag.isEmpty) {
+                        fabController.reverse();
+                      }
+                    }
+                  },
+                );
+              },
             ),
           )
         ],
       ),
-      floatingActionButton: Visibility(
-        visible: hasSelectedTags(_tagStateKey.currentState),
+      floatingActionButton: ScaleTransition(
+        scale: fabController,
         child: FloatingActionButton(
           child: const Icon(Icons.copy),
           onPressed: () {
-            final tags = getSelectedTags(_tagStateKey.currentState);
+            final tags = selectedtag.join(' ');
             if (tags.isNotEmpty) {
               Clipboard.setData(
                 ClipboardData(text: tags),
@@ -111,7 +110,7 @@ class _PostDetailsState extends State<PostDetails> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Copied to clipboard:\n$tags'),
-                  duration: const Duration(seconds: 1),
+                  duration: const Duration(milliseconds: 600),
                 ),
               );
             }
