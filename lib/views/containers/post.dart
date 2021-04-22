@@ -22,7 +22,7 @@ class Post extends HookWidget {
     final page = useProvider(_pageProvider);
 
     final currentPage = page.state == 0 ? beginPage : page.state;
-    final contentIsVideo = pageCache[currentPage].displayType != PostType.video;
+    final isNotVideo = pageCache[currentPage].displayType != PostType.video;
 
     useEffect(() {
       // reset fullscreen state when pop back to timeline
@@ -53,7 +53,7 @@ class Post extends HookWidget {
         itemBuilder: (_, index) => PostDisplay(content: pageCache[index]),
       ),
       bottomNavigationBar: Visibility(
-        visible: !style.isFullScreen || contentIsVideo,
+        visible: !style.isFullScreen && isNotVideo,
         child: PostToolbox(pageCache[currentPage]),
       ),
     );
