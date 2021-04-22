@@ -12,7 +12,14 @@ class Boorusphere extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Boorusphere',
       theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        accentColor: Colors.blue,
+        toggleableActiveColor: Colors.blue.shade300,
+      ),
       themeMode: watch(uiThemeProvider),
       initialRoute: Routes.home,
       routes: Routes.of(context),
