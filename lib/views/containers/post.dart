@@ -9,8 +9,6 @@ import '../components/post_toolbox.dart';
 import '../components/preferred_visibility.dart';
 import '../components/subbed_title.dart';
 
-final _pageProvider = StateProvider.autoDispose((ref) => 0);
-
 class Post extends HookWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,10 +17,9 @@ class Post extends HookWidget {
     final pageController = usePageController(initialPage: beginPage);
     final style = useProvider(styleProvider);
     final pageCache = useProvider(pageCacheProvider).state;
-    final page = useProvider(_pageProvider);
+    final page = useState(beginPage);
 
-    final currentPage = page.state == 0 ? beginPage : page.state;
-    final isNotVideo = pageCache[currentPage].displayType != PostType.video;
+    final isNotVideo = pageCache[page.value].displayType != PostType.video;
 
     useEffect(() {
       // reset fullscreen state when pop back to timeline
@@ -41,20 +38,20 @@ class Post extends HookWidget {
           backgroundColor: Colors.black.withOpacity(0.4),
           elevation: 0,
           title: SubbedTitle(
-            title: '#${currentPage + 1} of ${pageCache.length}',
-            subtitle: pageCache[currentPage].tags.join(' '),
+            title: '#${page.value + 1} of ${pageCache.length}',
+            subtitle: pageCache[page.value].tags.join(' '),
           ),
         ),
       ),
       body: PageView.builder(
         controller: pageController,
-        onPageChanged: (index) => page.state = index,
+        onPageChanged: (index) => page.value = index,
         itemCount: pageCache.length,
         itemBuilder: (_, index) => PostDisplay(content: pageCache[index]),
       ),
       bottomNavigationBar: Visibility(
         visible: !style.isFullScreen && isNotVideo,
-        child: PostToolbox(pageCache[currentPage]),
+        child: PostToolbox(pageCache[page.value]),
       ),
     );
   }
