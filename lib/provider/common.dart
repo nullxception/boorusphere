@@ -18,6 +18,7 @@ import 'ui_theme.dart';
 // Hive Boxes
 final searchHistoryBox =
     StateProvider((_) => Hive.box<SearchHistory>('searchHistory'));
+final settingsBox = StateProvider((_) => Hive.openBox('settings'));
 
 // Common Providers
 final preferenceProvider = Provider((_) => SharedPreferences.getInstance());

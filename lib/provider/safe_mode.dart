@@ -8,13 +8,13 @@ class SafeModeState extends StateNotifier<bool> {
   final Reader read;
 
   Future<void> restoreFromPreference() async {
-    final prefs = await read(preferenceProvider);
-    state = prefs.getBool('server_safe_mode') ?? true;
+    final prefs = await read(settingsBox).state;
+    state = prefs.get('server_safe_mode') ?? true;
   }
 
   Future<void> setMode({required bool safe}) async {
     state = safe;
-    final prefs = await read(preferenceProvider);
-    prefs.setBool('server_safe_mode', safe);
+    final prefs = await read(settingsBox).state;
+    prefs.put('server_safe_mode', safe);
   }
 }
