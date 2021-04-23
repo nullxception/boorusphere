@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/booru_post.dart';
+import '../model/search_history.dart';
 import '../model/server_data.dart';
 import 'active_server.dart';
 import 'api_provider.dart';
@@ -13,6 +15,11 @@ import 'server_list.dart';
 import 'style_provider.dart';
 import 'ui_theme.dart';
 
+// Hive Boxes
+final searchHistoryBox =
+    StateProvider((_) => Hive.box<SearchHistory>('searchHistory'));
+
+// Common Providers
 final preferenceProvider = Provider((_) => SharedPreferences.getInstance());
 final pageLoadingProvider = StateProvider((_) => false);
 final errorMessageProvider = StateProvider((_) => '');

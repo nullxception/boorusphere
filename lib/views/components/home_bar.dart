@@ -10,14 +10,12 @@ import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
 final _suggestionProvider = StateProvider<List<String>>((_) => []);
-final _suggestionHistoryProvider =
-    StateProvider<Map<dynamic, SearchHistory>>((_) => {});
-final _searchHistoryProvider =
-    StateProvider((_) => Hive.box<SearchHistory>('searchHistory'));
+final _suggestionHistoryProvider = StateProvider<Map<dynamic, SearchHistory>>(
+    (ref) => ref.read(searchHistoryBox).state.toMap());
 
 class HomeBar extends HookWidget {
   Map<dynamic, SearchHistory> _buildSuggestionHistory({
-    required String query,
+    String query = '*',
     required Box<SearchHistory> history,
   }) {
     final mappedWithKeys = history.toMap();
@@ -45,7 +43,7 @@ class HomeBar extends HookWidget {
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final suggestion = useProvider(_suggestionProvider);
-    final history = useProvider(_searchHistoryProvider);
+    final history = useProvider(searchHistoryBox);
     final suggestionHistory = useProvider(_suggestionHistoryProvider);
     final activeServer = useProvider(activeServerProvider);
 
