@@ -68,17 +68,23 @@ class HomeBar extends HookWidget {
         ),
       ],
       builder: (context, transition) {
-        return _SearchResult(controller: controller);
+        return _SearchSuggestionResult(controller: controller);
       },
     );
   }
 }
 
-class _SearchResult extends HookWidget {
-  const _SearchResult({Key? key, required this.controller}) : super(key: key);
+class _SearchSuggestionResult extends StatefulHookWidget {
+  const _SearchSuggestionResult({Key? key, required this.controller})
+      : super(key: key);
 
   final FloatingSearchBarController controller;
 
+  @override
+  _SearchSuggestionResultState createState() => _SearchSuggestionResultState();
+}
+
+class _SearchSuggestionResultState extends State<_SearchSuggestionResult> {
   String _concatSuggestionResult({
     required String input,
     required String suggested,
@@ -120,14 +126,15 @@ class _SearchResult extends HookWidget {
                         ? IconButton(
                             onPressed: () {
                               history.state.deleteAt(index);
+                              setState(() {});
                             },
                             icon: const Icon(Icons.delete_forever),
                           )
                         : null,
                     title: Text(query),
                     onTap: () {
-                      controller.query = _concatSuggestionResult(
-                        input: controller.query,
+                      widget.controller.query = _concatSuggestionResult(
+                        input: widget.controller.query,
                         suggested: query,
                       );
                     },
