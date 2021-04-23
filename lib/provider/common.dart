@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/booru_post.dart';
 import '../model/search_history.dart';
@@ -21,7 +20,6 @@ final searchHistoryBox =
 final settingsBox = StateProvider((_) => Hive.openBox('settings'));
 
 // Common Providers
-final preferenceProvider = Provider((_) => SharedPreferences.getInstance());
 final pageLoadingProvider = StateProvider((_) => false);
 final errorMessageProvider = StateProvider((_) => '');
 final booruPostsProvider = Provider<List<BooruPost>>((_) => []);

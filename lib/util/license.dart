@@ -10,11 +10,11 @@ class License {
   final String? licenseUrl;
 
   License({
-   required this.name,
-   required this.license,
-   this.version,
-   this.licenseUrl,
-   this.url,
+    required this.name,
+    required this.license,
+    this.version,
+    this.licenseUrl,
+    this.url,
   });
 }
 
@@ -27,7 +27,8 @@ class LicenseUtil {
         name: 'cached_network_image',
         version: '^3.0.0-nullsafety',
         url: 'https://github.com/Baseflow/flutter_cached_network_image',
-        licenseUrl: 'https://raw.githubusercontent.com/Baseflow/flutter_cached_network_image/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/Baseflow/flutter_cached_network_image/master/LICENSE',
         license: '''
 The MIT License (MIT)
 
@@ -56,7 +57,8 @@ SOFTWARE.
         name: 'cupertino_icons',
         version: '^1.0.2',
         url: 'https://github.com/flutter/cupertino_icons',
-        licenseUrl: 'https://raw.githubusercontent.com/flutter/cupertino_icons/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/flutter/cupertino_icons/master/LICENSE',
         license: '''The MIT License (MIT)
 
 Copyright (c) 2016 Vladimir Kharlampidi
@@ -82,7 +84,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.''',
         name: 'dartz',
         version: '^0.10.0-nullsafety.1',
         url: 'https://github.com/spebbe/dartz',
-        licenseUrl: 'https://raw.githubusercontent.com/spebbe/dartz/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/spebbe/dartz/master/LICENSE',
         license: '''The MIT License (MIT)
 
 Copyright (c) 2016, 2017, 2018, 2019, 2020 Björn Sperber
@@ -110,7 +113,8 @@ SOFTWARE.
         name: 'flutter_riverpod',
         version: '^0.14.0+1',
         url: 'https://riverpod.dev',
-        licenseUrl: 'https://raw.githubusercontent.com/rrousselGit/river_pod/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/rrousselGit/river_pod/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2020 Remi Rousselet
@@ -137,7 +141,8 @@ SOFTWARE.''',
         name: 'flutter_staggered_grid_view',
         version: '^0.4.0-nullsafety.3',
         url: 'https://github.com/letsar/flutter_staggered_grid_view',
-        licenseUrl: 'https://raw.githubusercontent.com/letsar/flutter_staggered_grid_view/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/letsar/flutter_staggered_grid_view/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2018 Romain Rastel
@@ -165,7 +170,8 @@ SOFTWARE.
         name: 'hooks_riverpod',
         version: '^0.14.0+1',
         url: 'https://riverpod.dev',
-        licenseUrl: 'https://raw.githubusercontent.com/rrousselGit/river_pod/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/rrousselGit/river_pod/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2020 Remi Rousselet
@@ -192,8 +198,9 @@ SOFTWARE.''',
         name: 'http',
         version: '^0.13.1',
         url: 'https://github.com/dart-lang/http',
-        licenseUrl: 'https://raw.githubusercontent.com/dart-lang/http/master/LICENSE',
-        license: '''Copyright 2014, the Dart project authors. 
+        licenseUrl:
+            'https://raw.githubusercontent.com/dart-lang/http/master/LICENSE',
+        license: '''Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -226,8 +233,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         name: 'json_serializable',
         version: '^4.1.0',
         url: null,
-        licenseUrl: 'https://raw.githubusercontent.com/google/json_serializable.dart/master/json_serializable/LICENSE',
-        license: '''Copyright 2017, the Dart project authors. All rights reserved.
+        licenseUrl:
+            'https://raw.githubusercontent.com/google/json_serializable.dart/master/json_serializable/LICENSE',
+        license:
+            '''Copyright 2017, the Dart project authors. All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
@@ -259,7 +268,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         name: 'material_floating_search_bar',
         version: '^0.3.4',
         url: null,
-        licenseUrl: 'https://raw.githubusercontent.com/bnxm/material_floating_search_bar/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/bnxm/material_floating_search_bar/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2020 bnxm
@@ -286,8 +296,9 @@ SOFTWARE.''',
         name: 'mime',
         version: '^1.0.0',
         url: 'https://github.com/dart-lang/mime',
-        licenseUrl: 'https://raw.githubusercontent.com/dart-lang/mime/master/LICENSE',
-        license: '''Copyright 2015, the Dart project authors. 
+        licenseUrl:
+            'https://raw.githubusercontent.com/dart-lang/mime/master/LICENSE',
+        license: '''Copyright 2015, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -320,7 +331,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         name: 'photo_view',
         version: '^0.11.1',
         url: 'https://github.com/renancaraujo/photo_view',
-        licenseUrl: 'https://raw.githubusercontent.com/renancaraujo/photo_view/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/renancaraujo/photo_view/master/LICENSE',
         license: '''Copyright 2020 Renan C. Araújo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -334,7 +346,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         name: 'settings_ui',
         version: '^1.0.0-nullsafety.2',
         url: 'https://github.com/yako-dev/flutter-settings-ui',
-        licenseUrl: 'https://raw.githubusercontent.com/yako-dev/flutter-settings-ui/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/yako-dev/flutter-settings-ui/master/LICENSE',
         license: '''                                 Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -539,42 +552,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ''',
       ))
       ..add(License(
-        name: 'shared_preferences',
-        version: '^2.0.5',
-        url: 'https://github.com/flutter/plugins/tree/master/packages/shared_preferences/shared_preferences',
-        licenseUrl: 'https://raw.githubusercontent.com/flutter/plugins/master/packages/shared_preferences/shared_preferences/LICENSE',
-        license: '''Copyright 2013 The Flutter Authors. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-    * Neither the name of Google Inc. nor the names of its
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-''',
-      ))
-      ..add(License(
         name: 'url_launcher',
         version: '^6.0.3',
-        url: 'https://github.com/flutter/plugins/tree/master/packages/url_launcher/url_launcher',
-        licenseUrl: 'https://raw.githubusercontent.com/flutter/plugins/master/packages/url_launcher/url_launcher/LICENSE',
+        url:
+            'https://github.com/flutter/plugins/tree/master/packages/url_launcher/url_launcher',
+        licenseUrl:
+            'https://raw.githubusercontent.com/flutter/plugins/master/packages/url_launcher/url_launcher/LICENSE',
         license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -605,8 +588,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       ..add(License(
         name: 'video_player',
         version: '^2.1.1',
-        url: 'https://github.com/flutter/plugins/tree/master/packages/video_player/video_player',
-        licenseUrl: 'https://raw.githubusercontent.com/flutter/plugins/master/packages/video_player/video_player/LICENSE',
+        url:
+            'https://github.com/flutter/plugins/tree/master/packages/video_player/video_player',
+        licenseUrl:
+            'https://raw.githubusercontent.com/flutter/plugins/master/packages/video_player/video_player/LICENSE',
         license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -638,7 +623,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         name: 'xml2json',
         version: '^5.0.0',
         url: 'https://github.com/shamblett/xml2json',
-        licenseUrl: 'https://raw.githubusercontent.com/shamblett/xml2json/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/shamblett/xml2json/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2019 Steve Hamblett<steve.hamblett@linux.com>
@@ -666,7 +652,8 @@ SOFTWARE.
         name: 'fimber',
         version: '^0.5.0-nullsafety.1',
         url: 'https://github.com/magillus/flutter-fimber/tree/master/fimber',
-        licenseUrl: 'https://raw.githubusercontent.com/magillus/flutter-fimber/master/fimber/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/magillus/flutter-fimber/master/fimber/LICENSE',
         license: '''
                                  Apache License
                            Version 2.0, January 2004
@@ -875,8 +862,9 @@ SOFTWARE.
         name: 'build_runner',
         version: '^1.12.2',
         url: null,
-        licenseUrl: 'https://raw.githubusercontent.com/dart-lang/build/master/build_runner/LICENSE',
-        license: '''Copyright 2016, the Dart project authors. 
+        licenseUrl:
+            'https://raw.githubusercontent.com/dart-lang/build/master/build_runner/LICENSE',
+        license: '''Copyright 2016, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -909,7 +897,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         name: 'effective_dart',
         version: '^1.3.0',
         url: 'https://github.com/tenhobi/effective_dart',
-        licenseUrl: 'https://raw.githubusercontent.com/tenhobi/effective_dart/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/tenhobi/effective_dart/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2020 Honza Bittner
@@ -937,7 +926,8 @@ SOFTWARE.
         name: 'flutter_launcher_icons',
         version: '^0.9.0',
         url: 'https://github.com/fluttercommunity/flutter_launcher_icons',
-        licenseUrl: 'https://raw.githubusercontent.com/fluttercommunity/flutter_launcher_icons/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/fluttercommunity/flutter_launcher_icons/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2019 Mark O'Sullivan
@@ -965,7 +955,8 @@ SOFTWARE.
         name: 'icapps_license',
         version: '^2.0.0',
         url: 'https://github.com/icapps/flutter-icapps-license',
-        licenseUrl: 'https://raw.githubusercontent.com/icapps/flutter-icapps-license/master/LICENSE',
+        licenseUrl:
+            'https://raw.githubusercontent.com/icapps/flutter-icapps-license/master/LICENSE',
         license: '''MIT License
 
 Copyright (c) 2019 icapps
@@ -988,6 +979,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ''',
-      ))
-;  }
+      ));
+  }
 }
