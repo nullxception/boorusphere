@@ -61,10 +61,19 @@ class HomeBar extends HookWidget {
         searchTagHandler.setTag(query: value);
         api.fetch(clear: true);
         controller.close();
-        history.state.add(SearchHistory(
-          query: value,
-          server: activeServer.name,
-        ));
+
+        // Check if value already exist on the box
+        final query = value.trim();
+        final check = history.state.values.firstWhere(
+          (it) => it.query == query,
+          orElse: () => const SearchHistory(),
+        );
+        if (check.query != query) {
+          history.state.add(SearchHistory(
+            query: query,
+            server: activeServer.name,
+          ));
+        }
       },
       onQueryChanged: (value) async {
         suggestion.state = await api.fetchSuggestion(query: value);
