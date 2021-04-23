@@ -207,7 +207,7 @@ class ApiProvider {
     final searchTag = read(searchTagProvider);
     final safeMode = read(safeModeProvider);
     final errorMessage = read(errorMessageProvider);
-    final pageCache = read(pageCacheProvider);
+    final booruPosts = read(booruPostsProvider);
 
     if (clear && page.state > 1) {
       page.state = 1;
@@ -220,8 +220,8 @@ class ApiProvider {
     if (errorMessage.state.isNotEmpty) {
       errorMessage.state = '';
     }
-    if (clear && pageCache.state.isNotEmpty) {
-      pageCache.state.clear();
+    if (clear && booruPosts.isNotEmpty) {
+      booruPosts.clear();
     }
 
     final res = await _fetch(
@@ -229,7 +229,7 @@ class ApiProvider {
     );
     res.fold(
       (fail) => errorMessage.state = _parseException(fail),
-      (posts) => pageCache.state.addAll(posts),
+      booruPosts.addAll,
     );
     pageLoading.state = false;
   }

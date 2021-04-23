@@ -16,10 +16,10 @@ class Post extends HookWidget {
 
     final pageController = usePageController(initialPage: beginPage);
     final style = useProvider(styleProvider);
-    final pageCache = useProvider(pageCacheProvider).state;
+    final booruPosts = useProvider(booruPostsProvider);
     final page = useState(beginPage);
 
-    final isNotVideo = pageCache[page.value].displayType != PostType.video;
+    final isNotVideo = booruPosts[page.value].displayType != PostType.video;
 
     useEffect(() {
       // reset fullscreen state when pop back to timeline
@@ -38,20 +38,20 @@ class Post extends HookWidget {
           backgroundColor: Colors.black.withOpacity(0.4),
           elevation: 0,
           title: SubbedTitle(
-            title: '#${page.value + 1} of ${pageCache.length}',
-            subtitle: pageCache[page.value].tags.join(' '),
+            title: '#${page.value + 1} of ${booruPosts.length}',
+            subtitle: booruPosts[page.value].tags.join(' '),
           ),
         ),
       ),
       body: PageView.builder(
         controller: pageController,
         onPageChanged: (index) => page.value = index,
-        itemCount: pageCache.length,
-        itemBuilder: (_, index) => PostDisplay(content: pageCache[index]),
+        itemCount: booruPosts.length,
+        itemBuilder: (_, index) => PostDisplay(content: booruPosts[index]),
       ),
       bottomNavigationBar: Visibility(
         visible: !style.isFullScreen && isNotVideo,
-        child: PostToolbox(pageCache[page.value]),
+        child: PostToolbox(booruPosts[page.value]),
       ),
     );
   }

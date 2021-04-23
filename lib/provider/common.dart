@@ -23,8 +23,7 @@ final searchHistoryBox =
 final preferenceProvider = Provider((_) => SharedPreferences.getInstance());
 final pageLoadingProvider = StateProvider((_) => false);
 final errorMessageProvider = StateProvider((_) => '');
-final pageCacheProvider = StateProvider<List<BooruPost>>((_) => []);
-final pagerProvider = StateProvider((_) => 1);
+final booruPostsProvider = Provider<List<BooruPost>>((_) => []);
 final apiProvider = Provider((ref) => ApiProvider(ref.read));
 final styleProvider = ChangeNotifierProvider((_) => StyleProvider());
 

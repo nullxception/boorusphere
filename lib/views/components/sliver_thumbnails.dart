@@ -11,7 +11,7 @@ class SliverThumbnails extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final gridExtra = useProvider(gridProvider);
-    final pageCache = useProvider(pageCacheProvider).state;
+    final booruPosts = useProvider(booruPostsProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
@@ -20,7 +20,7 @@ class SliverThumbnails extends HookWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      itemCount: pageCache.length,
+      itemCount: booruPosts.length,
       itemBuilder: (context, index) => GestureDetector(
         child: Card(
           shape: const RoundedRectangleBorder(
@@ -32,9 +32,9 @@ class SliverThumbnails extends HookWidget {
             fadeOutDuration: const Duration(milliseconds: 500),
             filterQuality: FilterQuality.none,
             fit: BoxFit.fill,
-            imageUrl: pageCache[index].thumbnail,
+            imageUrl: booruPosts[index].thumbnail,
             progressIndicatorBuilder: (_, __, ___) => AspectRatio(
-              aspectRatio: pageCache[index].width / pageCache[index].height,
+              aspectRatio: booruPosts[index].width / booruPosts[index].height,
               child: const Padding(
                 padding: EdgeInsets.all(20),
                 child: Center(child: LinearProgressIndicator()),
