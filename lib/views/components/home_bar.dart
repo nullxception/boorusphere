@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../model/search_history.dart';
 import '../../provider/common.dart';
 import '../hooks/floating_searchbar_controller.dart';
 
 final _suggestionState = StateProvider<List<String>>((_) => []);
+final _searchHistoryProvider =
+    StateProvider((_) => Hive.box<SearchHistory>('searchHistory'));
 
 class HomeBar extends HookWidget {
   @override
@@ -17,6 +21,8 @@ class HomeBar extends HookWidget {
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final suggestion = useProvider(_suggestionState);
+    final history = useProvider(_searchHistoryProvider);
+    final activeServer = useProvider(activeServerProvider);
 
     return FloatingSearchBar(
       autocorrect: false,
@@ -30,6 +36,10 @@ class HomeBar extends HookWidget {
         searchTagHandler.setTag(query: value);
         api.fetch(clear: true);
         controller.close();
+        history.state.add(SearchHistory(
+          query: value,
+          server: activeServer.name,
+        ));
       },
       onQueryChanged: (value) async {
         suggestion.state = await api.fetchSuggestion(query: value);
@@ -81,6 +91,11 @@ class _SearchResult extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final suggestion = useProvider(_suggestionState);
+    final history = useProvider(_searchHistoryProvider);
+    final dataLength = suggestion.state.isEmpty
+        ? history.state.length
+        : suggestion.state.length;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Card(
@@ -91,25 +106,37 @@ class _SearchResult extends HookWidget {
             physics: const ScrollPhysics(),
             padding: const EdgeInsets.all(0),
             itemBuilder: (context, index) {
+              final query = suggestion.state.isEmpty
+                  ? history.state.values.elementAt(index).query
+                  : suggestion.state[index];
               return Column(
                 children: [
                   ListTile(
                     horizontalTitleGap: 1,
-                    leading: const Icon(Icons.tag, size: 24),
-                    title: Text(suggestion.state[index]),
+                    leading: Icon(
+                        suggestion.state.isEmpty ? Icons.history : Icons.tag,
+                        size: 24),
+                    trailing: suggestion.state.isEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              history.state.deleteAt(index);
+                            },
+                            icon: const Icon(Icons.delete_forever),
+                          )
+                        : null,
+                    title: Text(query),
                     onTap: () {
                       controller.query = _concatSuggestionResult(
                         input: controller.query,
-                        suggested: suggestion.state[index],
+                        suggested: query,
                       );
                     },
                   ),
-                  if (index < suggestion.state.length - 1)
-                    const Divider(height: 1),
+                  if (index < dataLength - 1) const Divider(height: 1),
                 ],
               );
             },
-            itemCount: suggestion.state.length,
+            itemCount: dataLength,
           )),
     );
   }
