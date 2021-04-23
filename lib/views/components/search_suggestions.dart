@@ -14,18 +14,14 @@ class SearchSuggestionResult extends StatefulWidget {
 
   final FloatingSearchBarController controller;
   final List<String> suggestions;
-  final Iterable<SearchHistory> history;
-  final Function(int index)? onRemoveHistory;
+  final Map<dynamic, SearchHistory> history;
+  final Function(dynamic key)? onRemoveHistory;
 
   @override
   _SearchSuggestionResultState createState() => _SearchSuggestionResultState();
 }
 
 class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
-  get dataCount => widget.suggestions.isEmpty
-      ? widget.history.length
-      : widget.suggestions.length;
-
   String _concatSuggestionResult({
     required String input,
     required String suggested,
@@ -42,45 +38,68 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
       child: Card(
           elevation: 4.0,
           color: Theme.of(context).cardColor,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            padding: const EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              final query = widget.suggestions.isEmpty
-                  ? widget.history.elementAt(index).query
-                  : widget.suggestions[index];
-
-              return Column(
-                children: [
-                  ListTile(
-                    horizontalTitleGap: 1,
-                    leading: Icon(
-                      widget.suggestions.isEmpty ? Icons.history : Icons.tag,
-                      size: 24,
-                    ),
-                    trailing: widget.suggestions.isEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              widget.onRemoveHistory?.call(index);
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.close, size: 24),
-                          )
-                        : null,
-                    title: Text(query),
-                    onTap: () {
-                      widget.controller.query = _concatSuggestionResult(
-                        input: widget.controller.query,
-                        suggested: query,
-                      );
-                    },
-                  ),
-                  if (index < dataCount - 1) const Divider(height: 1),
-                ],
-              );
-            },
-            itemCount: dataCount,
+          child: Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                itemBuilder: (context, index) {
+                  final query = widget.history.values.elementAt(index).query;
+                  return Column(
+                    children: [
+                      ListTile(
+                        horizontalTitleGap: 1,
+                        leading: const Icon(Icons.history, size: 24),
+                        trailing: IconButton(
+                          onPressed: () {
+                            final key = widget.history.keys.elementAt(index);
+                            widget.onRemoveHistory?.call(key);
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.close, size: 24),
+                        ),
+                        title: Text(query),
+                        onTap: () {
+                          widget.controller.query = _concatSuggestionResult(
+                            input: widget.controller.query,
+                            suggested: query,
+                          );
+                        },
+                      ),
+                      const Divider(height: 1),
+                    ],
+                  );
+                },
+                itemCount: widget.history.length,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                itemBuilder: (context, index) {
+                  final query = widget.suggestions[index];
+                  return Column(
+                    children: [
+                      ListTile(
+                        horizontalTitleGap: 1,
+                        leading: const Icon(Icons.tag, size: 24),
+                        title: Text(query),
+                        onTap: () {
+                          widget.controller.query = _concatSuggestionResult(
+                            input: widget.controller.query,
+                            suggested: query,
+                          );
+                        },
+                      ),
+                      if (index < widget.suggestions.length - 1)
+                        const Divider(height: 1),
+                    ],
+                  );
+                },
+                itemCount: widget.suggestions.length,
+              ),
+            ],
           )),
     );
   }

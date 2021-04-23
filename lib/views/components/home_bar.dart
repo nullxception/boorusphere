@@ -9,11 +9,34 @@ import '../../provider/common.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
-final _suggestionState = StateProvider<List<String>>((_) => []);
+final _suggestionProvider = StateProvider<List<String>>((_) => []);
+final _suggestionHistoryProvider =
+    StateProvider<Map<dynamic, SearchHistory>>((_) => {});
 final _searchHistoryProvider =
     StateProvider((_) => Hive.box<SearchHistory>('searchHistory'));
 
 class HomeBar extends HookWidget {
+  Map<dynamic, SearchHistory> _buildSuggestionHistory({
+    required String query,
+    required Box<SearchHistory> history,
+  }) {
+    final mappedWithKeys = history.toMap();
+    final queries = query.trim().split(' ');
+    final last = queries.last.trim();
+
+    // Filter the query, it must be longer than 2
+    if (query.endsWith(' ') || last.length < 2) {
+      return mappedWithKeys;
+    }
+
+    // Filtering history that contains last word from any state (either incomplete
+    // or already contains multiple words)
+    return mappedWithKeys
+      ..removeWhere((key, value) =>
+          !value.query.contains(last) ||
+          queries.sublist(0, queries.length - 1).contains(value.query));
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = useFloatingSearchBarController();
@@ -21,8 +44,9 @@ class HomeBar extends HookWidget {
     final api = useProvider(apiProvider);
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
-    final suggestion = useProvider(_suggestionState);
+    final suggestion = useProvider(_suggestionProvider);
     final history = useProvider(_searchHistoryProvider);
+    final suggestionHistory = useProvider(_suggestionHistoryProvider);
     final activeServer = useProvider(activeServerProvider);
 
     return FloatingSearchBar(
@@ -44,6 +68,8 @@ class HomeBar extends HookWidget {
       },
       onQueryChanged: (value) async {
         suggestion.state = await api.fetchSuggestion(query: value);
+        suggestionHistory.state =
+            _buildSuggestionHistory(query: value, history: history.state);
       },
       clearQueryOnClose: false,
       actions: [
@@ -72,9 +98,12 @@ class HomeBar extends HookWidget {
         return SearchSuggestionResult(
           controller: controller,
           suggestions: suggestion.state,
-          history: history.state.values,
-          onRemoveHistory: (index) {
-            history.state.deleteAt(index);
+          history: suggestionHistory.state,
+          onRemoveHistory: (key) {
+            history.state.delete(key);
+            // rebuild history suggestion
+            suggestionHistory.state = _buildSuggestionHistory(
+                query: controller.query, history: history.state);
           },
         );
       },
