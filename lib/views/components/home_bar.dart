@@ -9,10 +9,6 @@ import '../../provider/common.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
-final _suggestionProvider = StateProvider<List<String>>((_) => []);
-final _suggestionHistoryProvider = StateProvider<Map<dynamic, SearchHistory>>(
-    (ref) => ref.read(searchHistoryBox).state.toMap());
-
 class HomeBar extends HookWidget {
   Map<dynamic, SearchHistory> _buildSuggestionHistory({
     String query = '*',
@@ -42,10 +38,12 @@ class HomeBar extends HookWidget {
     final api = useProvider(apiProvider);
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
-    final suggestion = useProvider(_suggestionProvider);
     final history = useProvider(searchHistoryBox);
-    final suggestionHistory = useProvider(_suggestionHistoryProvider);
     final activeServer = useProvider(activeServerProvider);
+
+    final suggestion = useState(<String>[]);
+    final suggestionHistory = useState<Map<dynamic, SearchHistory>>(
+        context.read(searchHistoryBox).state.toMap());
 
     return FloatingSearchBar(
       autocorrect: false,
@@ -76,8 +74,8 @@ class HomeBar extends HookWidget {
         }
       },
       onQueryChanged: (value) async {
-        suggestion.state = await api.fetchSuggestion(query: value);
-        suggestionHistory.state =
+        suggestion.value = await api.fetchSuggestion(query: value);
+        suggestionHistory.value =
             _buildSuggestionHistory(query: value, history: history.state);
       },
       clearQueryOnClose: false,
@@ -106,13 +104,15 @@ class HomeBar extends HookWidget {
       builder: (context, transition) {
         return SearchSuggestionResult(
           controller: controller,
-          suggestions: suggestion.state,
-          history: suggestionHistory.state,
+          suggestions: suggestion.value,
+          history: suggestionHistory.value,
           onRemoveHistory: (key) {
             history.state.delete(key);
             // rebuild history suggestion
-            suggestionHistory.state = _buildSuggestionHistory(
-                query: controller.query, history: history.state);
+            suggestionHistory.value = _buildSuggestionHistory(
+              query: controller.query,
+              history: history.state,
+            );
           },
         );
       },
