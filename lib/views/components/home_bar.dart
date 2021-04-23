@@ -56,12 +56,14 @@ class HomeBar extends HookWidget {
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
       onSubmitted: (value) {
-        searchTagHandler.setTag(query: value);
+        final query = value.trim();
+        if (query.isEmpty) return;
+
+        searchTagHandler.setTag(query: query);
         api.fetch(clear: true);
         controller.close();
 
         // Check if value already exist on the box
-        final query = value.trim();
         final check = history.state.values.firstWhere(
           (it) => it.query == query,
           orElse: () => const SearchHistory(),
