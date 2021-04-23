@@ -7,6 +7,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../../model/search_history.dart';
 import '../../provider/common.dart';
 import '../hooks/floating_searchbar_controller.dart';
+import 'search_suggestions.dart';
 
 final _suggestionState = StateProvider<List<String>>((_) => []);
 final _searchHistoryProvider =
@@ -68,83 +69,15 @@ class HomeBar extends HookWidget {
         ),
       ],
       builder: (context, transition) {
-        return _SearchSuggestionResult(controller: controller);
+        return SearchSuggestionResult(
+          controller: controller,
+          suggestions: suggestion.state,
+          history: history.state.values,
+          onRemoveHistory: (index) {
+            history.state.deleteAt(index);
+          },
+        );
       },
-    );
-  }
-}
-
-class _SearchSuggestionResult extends StatefulHookWidget {
-  const _SearchSuggestionResult({Key? key, required this.controller})
-      : super(key: key);
-
-  final FloatingSearchBarController controller;
-
-  @override
-  _SearchSuggestionResultState createState() => _SearchSuggestionResultState();
-}
-
-class _SearchSuggestionResultState extends State<_SearchSuggestionResult> {
-  String _concatSuggestionResult({
-    required String input,
-    required String suggested,
-  }) {
-    final queries = input.split(' ');
-    final result = queries.sublist(0, queries.length - 1)..add(suggested);
-    return '${result.join(' ')} '.replaceAll('  ', ' ').trimLeft();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final suggestion = useProvider(_suggestionState);
-    final history = useProvider(_searchHistoryProvider);
-    final dataLength = suggestion.state.isEmpty
-        ? history.state.length
-        : suggestion.state.length;
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Card(
-          elevation: 4.0,
-          color: Theme.of(context).cardColor,
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            padding: const EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              final query = suggestion.state.isEmpty
-                  ? history.state.values.elementAt(index).query
-                  : suggestion.state[index];
-              return Column(
-                children: [
-                  ListTile(
-                    horizontalTitleGap: 1,
-                    leading: Icon(
-                        suggestion.state.isEmpty ? Icons.history : Icons.tag,
-                        size: 24),
-                    trailing: suggestion.state.isEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              history.state.deleteAt(index);
-                              setState(() {});
-                            },
-                            icon: const Icon(Icons.delete_forever),
-                          )
-                        : null,
-                    title: Text(query),
-                    onTap: () {
-                      widget.controller.query = _concatSuggestionResult(
-                        input: widget.controller.query,
-                        suggested: query,
-                      );
-                    },
-                  ),
-                  if (index < dataLength - 1) const Divider(height: 1),
-                ],
-              );
-            },
-            itemCount: dataLength,
-          )),
     );
   }
 }
