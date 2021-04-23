@@ -8,8 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../model/booru_post.dart';
 import '../../provider/common.dart';
 
-final _selectedTagProvider = Provider.autoDispose<List<String>>((_) => []);
-
 class PostDetails extends HookWidget {
   const PostDetails({Key? keys, required this.data}) : super(key: keys);
   final BooruPost data;
@@ -18,7 +16,7 @@ class PostDetails extends HookWidget {
   Widget build(BuildContext context) {
     final uiTheme = useProvider(uiThemeProvider);
     final activeServer = useProvider(activeServerProvider);
-    final selectedtag = useProvider(_selectedTagProvider);
+    final selectedtag = useState(<String>[]);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 300), initialValue: 0);
 
@@ -82,21 +80,21 @@ class PostDetails extends HookWidget {
                       : Colors.grey.shade800,
                   activeColor: Theme.of(context).accentColor,
                   border: Border.all(style: BorderStyle.none),
-                  active: selectedtag.contains(tag),
+                  active: selectedtag.value.contains(tag),
                   title: tag,
                   index: index,
                   elevation: 0,
                   onPressed: (it) {
                     if (it.active ?? false) {
                       // display FAB on first select
-                      if (selectedtag.isEmpty) {
+                      if (selectedtag.value.isEmpty) {
                         fabController.forward();
                       }
-                      selectedtag.add(tag);
+                      selectedtag.value.add(tag);
                     } else if (it.active == false) {
-                      selectedtag.remove(tag);
+                      selectedtag.value.remove(tag);
                       // display FAB on last removal
-                      if (selectedtag.isEmpty) {
+                      if (selectedtag.value.isEmpty) {
                         fabController.reverse();
                       }
                     }
@@ -112,7 +110,7 @@ class PostDetails extends HookWidget {
         child: FloatingActionButton(
           child: const Icon(Icons.copy),
           onPressed: () {
-            final tags = selectedtag.join(' ');
+            final tags = selectedtag.value.join(' ');
             if (tags.isNotEmpty) {
               Clipboard.setData(
                 ClipboardData(text: tags),
