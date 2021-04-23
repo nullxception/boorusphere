@@ -11,13 +11,13 @@ class GridState extends StateNotifier<int> {
   final Reader read;
 
   Future<void> restoreFromPreference() async {
-    final prefs = await read(preferenceProvider);
-    state = prefs.getInt(gridKey) ?? 0;
+    final prefs = await read(settingsBox).state;
+    state = prefs.get(gridKey) ?? 0;
   }
 
   Future<void> rotate() async {
     state = state < 2 ? state + 1 : 0;
-    final prefs = await read(preferenceProvider);
-    prefs.setInt(gridKey, state);
+    final prefs = await read(settingsBox).state;
+    prefs.put(gridKey, state);
   }
 }
