@@ -34,6 +34,8 @@ class HomeBar extends HookWidget {
       hint: 'Search...',
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
+      transitionCurve: Curves.easeInCirc,
+      transition: CircularFloatingSearchBarTransition(),
       onSubmitted: (value) {
         final query = value.trim();
         if (query.isEmpty) return;
