@@ -35,7 +35,6 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(SearchHistoryAdapter());
-  await Hive.openBox<SearchHistory>('searchHistory');
 
   runApp(ProviderScope(child: Boorusphere()));
 }
