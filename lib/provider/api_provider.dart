@@ -26,9 +26,9 @@ class ApiProvider {
     final activeServer = read(activeServerProvider.notifier);
     final safeMode = read(safeModeProvider.notifier);
 
-    await serverList.loadFromAssets();
-    await activeServer.restoreFromPreference();
-    await safeMode.restoreFromPreference();
+    await serverList.init();
+    await activeServer.init();
+    await safeMode.init();
     fetch(clear: true);
   }
 

@@ -10,7 +10,7 @@ class ServerListState extends StateNotifier<List<ServerData>> {
 
   final Reader read;
 
-  Future<void> loadFromAssets() async {
+  Future<void> init() async {
     final json = await rootBundle.loadString('assets/servers.json');
     final serverList = jsonDecode(json) as List;
 

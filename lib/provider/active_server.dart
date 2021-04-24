@@ -8,8 +8,8 @@ class ActiveServerState extends StateNotifier<ServerData> {
 
   final Reader read;
 
-  Future<void> restoreFromPreference() async {
-    final prefs = await read(settingsBox).state;
+  Future<void> init() async {
+    final prefs = await read(settingsBox);
     final activeServerName = prefs.get('active_server');
     if (activeServerName != null && state.name != activeServerName) {
       state = read(serverListProvider.notifier).select(activeServerName);
@@ -19,7 +19,7 @@ class ActiveServerState extends StateNotifier<ServerData> {
   Future<void> setActiveServer({required String name}) async {
     if (name != state.name) {
       state = read(serverListProvider.notifier).select(name);
-      final prefs = await read(settingsBox).state;
+      final prefs = await read(settingsBox);
       prefs.put('active_server', name);
     }
   }
