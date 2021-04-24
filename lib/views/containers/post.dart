@@ -17,6 +17,7 @@ class Post extends HookWidget {
     final pageController = usePageController(initialPage: beginPage);
     final style = useProvider(styleProvider);
     final booruPosts = useProvider(booruPostsProvider);
+    final lastOpenedIndex = useProvider(lastOpenedPostProvider);
     final page = useState(beginPage);
 
     final isNotVideo = booruPosts[page.value].displayType != PostType.video;
@@ -45,7 +46,10 @@ class Post extends HookWidget {
       ),
       body: PageView.builder(
         controller: pageController,
-        onPageChanged: (index) => page.value = index,
+        onPageChanged: (index) {
+          page.value = index;
+          lastOpenedIndex.state = index;
+        },
         itemCount: booruPosts.length,
         itemBuilder: (_, index) => PostDisplay(content: booruPosts[index]),
       ),

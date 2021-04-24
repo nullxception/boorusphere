@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../provider/common.dart';
 import '../components/home_bar.dart';
@@ -11,7 +12,9 @@ import '../components/sliver_thumbnails.dart';
 class Home extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final scrollController = useScrollController();
+    final scrollController = useMemoized(() {
+      return AutoScrollController(axis: Axis.vertical);
+    });
     final api = useProvider(apiProvider);
     final pageLoading = useProvider(pageLoadingProvider);
     final errorMessage = useProvider(errorMessageProvider);
@@ -47,7 +50,9 @@ class Home extends HookWidget {
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(10),
-                sliver: SliverThumbnails(),
+                sliver: SliverThumbnails(
+                  autoScrollController: scrollController,
+                ),
               ),
               SliverVisibility(
                 visible: errorMessage.state.isNotEmpty,
