@@ -38,7 +38,13 @@ class HomeBar extends HookWidget {
       transition: CircularFloatingSearchBarTransition(),
       onSubmitted: (value) {
         final query = value.trim();
-        if (query.isEmpty) return;
+        if (query.isEmpty) {
+          // restore title when user cancels search by submitting a blank input
+          if (controller.query != searchTag) {
+            controller.query = '$searchTag ';
+          }
+          return;
+        }
 
         searchTagHandler.setTag(query: query);
         api.fetch(clear: true);
