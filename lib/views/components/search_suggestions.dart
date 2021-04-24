@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import '../../model/search_history.dart';
-
 class SearchSuggestionResult extends StatefulWidget {
   const SearchSuggestionResult({
     Key? key,
@@ -14,7 +12,7 @@ class SearchSuggestionResult extends StatefulWidget {
 
   final FloatingSearchBarController controller;
   final List<String> suggestions;
-  final Map<dynamic, SearchHistory> history;
+  final Map history;
   final Function(dynamic key)? onRemoveHistory;
 
   @override

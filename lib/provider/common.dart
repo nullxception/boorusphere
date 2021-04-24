@@ -3,23 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
 import '../model/booru_post.dart';
-import '../model/search_history.dart';
 import '../model/server_data.dart';
 import 'active_server.dart';
 import 'api_provider.dart';
 import 'grid.dart';
 import 'safe_mode.dart';
+import 'search_history.dart';
 import 'search_tag.dart';
 import 'server_list.dart';
 import 'style_provider.dart';
 import 'ui_theme.dart';
 
 // Hive Boxes
-final searchHistoryBox =
-    StateProvider((_) => Hive.box<SearchHistory>('searchHistory'));
+final searchHistoryBox = Provider((_) => Hive.openBox('searchHistory'));
 final settingsBox = Provider((_) => Hive.openBox('settings'));
 
 // Common Providers
+final searchHistoryProvider =
+    Provider((ref) => SearchHistoryRepository(ref.read));
 final pageLoadingProvider = StateProvider((_) => false);
 final errorMessageProvider = StateProvider((_) => '');
 final booruPostsProvider = Provider<List<BooruPost>>((_) => []);

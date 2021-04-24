@@ -1,36 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import '../../model/search_history.dart';
 import '../../provider/common.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
 class HomeBar extends HookWidget {
-  Map<dynamic, SearchHistory> _buildSuggestionHistory({
-    String query = '*',
-    required Box<SearchHistory> history,
-  }) {
-    final mappedWithKeys = history.toMap();
-    final queries = query.trim().split(' ');
-    final last = queries.last.trim();
-
-    // Filter the query, it must be longer than 2
-    if (query.endsWith(' ') || last.length < 2) {
-      return mappedWithKeys;
-    }
-
-    // Filtering history that contains last word from any state (either incomplete
-    // or already contains multiple words)
-    return mappedWithKeys
-      ..removeWhere((key, value) =>
-          !value.query.contains(last) ||
-          queries.sublist(0, queries.length - 1).contains(value.query));
-  }
-
   @override
   Widget build(BuildContext context) {
     final controller = useFloatingSearchBarController();
@@ -38,12 +15,9 @@ class HomeBar extends HookWidget {
     final api = useProvider(apiProvider);
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
-    final history = useProvider(searchHistoryBox);
-    final activeServer = useProvider(activeServerProvider);
-
+    final searchHistory = useProvider(searchHistoryProvider);
     final suggestion = useState(<String>[]);
-    final suggestionHistory = useState<Map<dynamic, SearchHistory>>(
-        context.read(searchHistoryBox).state.toMap());
+    final suggestionHistory = useState({});
 
     return FloatingSearchBar(
       autocorrect: false,
@@ -53,6 +27,11 @@ class HomeBar extends HookWidget {
       hint: 'Search...',
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
+      onFocusChanged: (focused) {
+        searchHistory.mapped.then((it) {
+          suggestionHistory.value = focused ? it : {};
+        });
+      },
       onSubmitted: (value) {
         final query = value.trim();
         if (query.isEmpty) return;
@@ -62,21 +41,12 @@ class HomeBar extends HookWidget {
         controller.close();
 
         // Check if value already exist on the box
-        final check = history.state.values.firstWhere(
-          (it) => it.query == query,
-          orElse: () => const SearchHistory(),
-        );
-        if (check.query != query) {
-          history.state.add(SearchHistory(
-            query: query,
-            server: activeServer.name,
-          ));
-        }
+        searchHistory.push(query);
       },
       onQueryChanged: (value) async {
         suggestion.value = await api.fetchSuggestion(query: value);
         suggestionHistory.value =
-            _buildSuggestionHistory(query: value, history: history.state);
+            await searchHistory.composeSuggestion(query: value);
       },
       clearQueryOnClose: false,
       actions: [
@@ -106,13 +76,11 @@ class HomeBar extends HookWidget {
           controller: controller,
           suggestions: suggestion.value,
           history: suggestionHistory.value,
-          onRemoveHistory: (key) {
-            history.state.delete(key);
+          onRemoveHistory: (key) async {
+            searchHistory.delete(key);
             // rebuild history suggestion
-            suggestionHistory.value = _buildSuggestionHistory(
-              query: controller.query,
-              history: history.state,
-            );
+            suggestionHistory.value =
+                await searchHistory.composeSuggestion(query: controller.query);
           },
         );
       },
