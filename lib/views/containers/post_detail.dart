@@ -9,17 +9,22 @@ import '../../model/booru_post.dart';
 import '../../provider/common.dart';
 
 class PostDetails extends HookWidget {
-  const PostDetails({Key? keys, required this.data}) : super(key: keys);
-  final BooruPost data;
+  const PostDetails({Key? keys, required this.id}) : super(key: keys);
+  final int id;
 
   @override
   Widget build(BuildContext context) {
     final uiTheme = useProvider(uiThemeProvider);
     final activeServer = useProvider(activeServerProvider);
+    final booruPosts = useProvider(booruPostsProvider);
     final selectedtag = useState(<String>[]);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 300), initialValue: 0);
 
+    final data = booruPosts.firstWhere(
+      (element) => element.id == id,
+      orElse: () => BooruPost.empty(),
+    );
     final postUrl = activeServer.composePostUrl(data.id);
 
     return Scaffold(

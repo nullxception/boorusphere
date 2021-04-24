@@ -31,7 +31,7 @@ class PostToolbox extends StatelessWidget {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PostDetails(data: booru)),
+                    builder: (context) => PostDetails(id: booru.id)),
               ),
             ),
           ],

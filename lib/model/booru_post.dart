@@ -24,6 +24,16 @@ class BooruPost with _$BooruPost {
     required int height,
   }) = _BooruPost;
 
+  factory BooruPost.empty() => const BooruPost(
+        id: -1,
+        src: '',
+        displaySrc: '',
+        thumbnail: '',
+        tags: [],
+        width: -1,
+        height: -1,
+      );
+
   String get mimeType =>
       lookupMimeType(src.split('/').last) ?? 'application/octet-stream';
 

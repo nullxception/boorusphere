@@ -130,7 +130,8 @@ class _PostVideoDisplayState extends State<PostVideoDisplay> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PostDetails(data: widget.content),
+                        builder: (context) =>
+                            PostDetails(id: widget.content.id),
                       ),
                     ),
                   ),
