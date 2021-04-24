@@ -19,6 +19,13 @@ class HomeBar extends HookWidget {
     final suggestion = useState(<String>[]);
     final suggestionHistory = useState({});
 
+    useEffect(() {
+      // Populate suggestion history on first build
+      searchHistory.mapped.then((it) {
+        if (it.isNotEmpty) suggestionHistory.value = it;
+      });
+    }, [suggestionHistory]);
+
     return FloatingSearchBar(
       autocorrect: false,
       margins: EdgeInsets.fromLTRB(
@@ -27,11 +34,6 @@ class HomeBar extends HookWidget {
       hint: 'Search...',
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
-      onFocusChanged: (focused) {
-        searchHistory.mapped.then((it) {
-          suggestionHistory.value = focused ? it : {};
-        });
-      },
       onSubmitted: (value) {
         final query = value.trim();
         if (query.isEmpty) return;
