@@ -27,6 +27,8 @@ class HomeBar extends HookWidget {
     }, [suggestionHistory]);
 
     return FloatingSearchBar(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      implicitDuration: Duration.zero,
       autocorrect: false,
       margins: EdgeInsets.fromLTRB(
           10.5, MediaQuery.of(context).viewPadding.top + 12, 10, 0),
