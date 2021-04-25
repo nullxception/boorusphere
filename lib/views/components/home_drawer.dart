@@ -51,13 +51,10 @@ class HomeDrawer extends StatelessWidget {
 class _ThemeSwitcherButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final uiTheme = useProvider(uiThemeProvider);
     final uiThemeHandler = useProvider(uiThemeProvider.notifier);
     return IconButton(
-      icon: Icon(
-        uiTheme != ThemeMode.dark ? Icons.wb_sunny : Icons.wb_incandescent,
-      ),
-      onPressed: uiThemeHandler.toggle,
+      icon: Icon(uiThemeHandler.icon),
+      onPressed: uiThemeHandler.cycle,
     );
   }
 }

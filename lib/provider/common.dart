@@ -28,8 +28,8 @@ final booruPostsProvider = Provider<List<BooruPost>>((_) => []);
 final apiProvider = Provider((ref) => ApiProvider(ref.read));
 final styleProvider = ChangeNotifierProvider((_) => StyleProvider());
 
-final uiThemeProvider = StateNotifierProvider<UIThemeState, ThemeMode>((_) {
-  return UIThemeState();
+final uiThemeProvider = StateNotifierProvider<UIThemeState, ThemeMode>((ref) {
+  return UIThemeState(ref.read)..init();
 });
 
 final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
