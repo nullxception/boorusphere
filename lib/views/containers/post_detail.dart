@@ -67,6 +67,20 @@ class PostDetails extends HookWidget {
               child: Text(data.src),
             ),
           ),
+          if (data.displaySrc != data.src)
+            ListTile(
+              title: const Text('Source (displayed)'),
+              subtitle: TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.centerLeft,
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.zero,
+                  ),
+                ),
+                onPressed: () => launch(data.displaySrc),
+                child: Text(data.displaySrc),
+              ),
+            ),
           const ListTile(
             title: Text('Tags'),
           ),
