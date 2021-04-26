@@ -14,7 +14,7 @@ class PostDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final uiTheme = useProvider(uiThemeProvider);
+    final theme = Theme.of(context);
     final activeServer = useProvider(activeServerProvider);
     final booruPosts = useProvider(booruPostsProvider);
     final selectedtag = useState(<String>[]);
@@ -77,10 +77,10 @@ class PostDetails extends HookWidget {
               itemBuilder: (index) {
                 final tag = data.tags[index];
                 return ItemTags(
-                  color: uiTheme == ThemeMode.dark
+                  color: theme.brightness == Brightness.dark
                       ? Colors.grey.shade800
                       : Colors.grey.shade200,
-                  textColor: uiTheme == ThemeMode.dark
+                  textColor: theme.brightness == Brightness.dark
                       ? Colors.grey.shade200
                       : Colors.grey.shade800,
                   activeColor: Theme.of(context).accentColor,
