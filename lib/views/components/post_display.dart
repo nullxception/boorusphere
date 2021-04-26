@@ -31,7 +31,7 @@ class PostDisplay extends HookWidget {
           if (content.displayType == PostType.photo)
             PostImageDisplay(url: content.src)
           else if (content.displayType == PostType.video)
-            PostVideoDisplay(content: content)
+            PostVideoDisplay(booru: content)
           else
             PostErrorDisplay(mime: content.mimeType)
         ],

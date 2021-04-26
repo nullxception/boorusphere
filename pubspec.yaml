@@ -25,6 +25,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  better_player: ^0.0.65
   cached_network_image: ^3.0.0-nullsafety
   cupertino_icons: ^1.0.2
   dartz: ^0.10.0-nullsafety.1
@@ -46,7 +47,6 @@ dependencies:
   scroll_to_index: ^2.0.0
   settings_ui: ^1.0.0-nullsafety.2
   url_launcher: ^6.0.3
-  video_player: ^2.1.1
   xml2json: ^5.0.0
 
 dev_dependencies:
