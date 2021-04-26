@@ -23,11 +23,13 @@ class PostDisplay extends HookWidget {
         alignment: AlignmentDirectional.center,
         fit: StackFit.passthrough,
         children: [
-          CachedNetworkImage(
-            fit: BoxFit.contain,
-            imageUrl: content.thumbnail,
-            filterQuality: FilterQuality.high,
-          ),
+          // Skip placeholder for video because it already handled by the player
+          if (content.displayType != PostType.video)
+            CachedNetworkImage(
+              fit: BoxFit.contain,
+              imageUrl: content.thumbnail,
+              filterQuality: FilterQuality.high,
+            ),
           if (content.displayType == PostType.photo)
             PostImageDisplay(url: content.src)
           else if (content.displayType == PostType.video)
