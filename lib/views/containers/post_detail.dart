@@ -121,7 +121,8 @@ class PostDetails extends HookWidget {
                 );
               },
             ),
-          )
+          ),
+          SizedBox.fromSize(size: const Size(0, 92)),
         ],
       ),
       floatingActionButton: ScaleTransition(
