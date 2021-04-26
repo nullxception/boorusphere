@@ -23,6 +23,7 @@ class PostVideoDisplay extends HookWidget {
           allowedScreenSleep: false,
           showPlaceholderUntilPlay: true,
           autoDetectFullscreenDeviceOrientation: true,
+          fit: BoxFit.contain,
           placeholder: CachedNetworkImage(
             fit: BoxFit.contain,
             imageUrl: booru.thumbnail,
