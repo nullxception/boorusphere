@@ -82,11 +82,50 @@ class _ThemeSwitcherButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final uiThemeHandler = useProvider(uiThemeProvider.notifier);
+    final uiTheme = useProvider(uiThemeProvider);
+    final uiThemeGroup = {
+      'Dark': ThemeMode.dark,
+      'Light': ThemeMode.light,
+      'System wide': ThemeMode.system,
+    };
+
     return ListTile(
       title: const Text('Switch theme'),
       leading: Icon(uiThemeHandler.icon),
       dense: true,
-      onTap: uiThemeHandler.cycle,
+      onTap: () => showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+        ),
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: uiThemeGroup
+                .map((key, value) {
+                  return MapEntry(
+                    key,
+                    RadioListTile(
+                      value: value,
+                      groupValue: uiTheme,
+                      onChanged: (value) {
+                        if (value is ThemeMode) {
+                          uiThemeHandler.setMode(mode: value);
+                        }
+                        Navigator.pop(context);
+                      },
+                      title: Text(key),
+                    ),
+                  );
+                })
+                .values
+                .toList(),
+          );
+        },
+      ),
     );
   }
 }
