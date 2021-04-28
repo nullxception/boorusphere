@@ -103,35 +103,31 @@ class _ServerSelection extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text('Servers', style: TextStyle(fontWeight: FontWeight.w600)),
-        ),
-        ...serverList
-            .map((e) => Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-                  child: ListTile(
-                    title: Text(e.name),
-                    leading: const Icon(Icons.public),
-                    dense: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    selected: e.name == activeServer.name,
-                    selectedTileColor: theme.accentColor.withAlpha(
-                        theme.brightness == Brightness.light ? 50 : 25),
-                    onTap: () {
-                      activeServerHandler.setActiveServer(name: e.name);
-                      api.fetch(clear: true);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ))
-            .toList(),
-      ],
+      children: serverList.map((it) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+          child: ListTile(
+            title: Text(it.name),
+            leading: const Icon(Icons.public),
+            dense: true,
+            contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            selected: it.name == activeServer.name,
+            selectedTileColor: theme.accentColor
+                .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
+            onTap: () {
+              activeServerHandler.setActiveServer(name: it.name);
+              api.fetch(clear: true);
+              Navigator.pop(context);
+            },
+          ),
+        );
+      }).toList(),
     );
   }
 }
