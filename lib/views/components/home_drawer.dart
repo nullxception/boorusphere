@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../provider/common.dart';
 import '../../routes.dart';
@@ -62,6 +63,7 @@ class HomeDrawer extends StatelessWidget {
                                 onTap: () => Navigator.pushNamed(
                                     context, Routes.settings),
                               ),
+                              AppVersionTile(),
                             ],
                           ),
                         ),
@@ -74,6 +76,26 @@ class HomeDrawer extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class AppVersionTile extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final version = useProvider(versionProvider);
+    return ListTile(
+      title: Text(version.shouldUpdate
+          ? 'Update available: ${version.lastestVersion}'
+          : 'Boorusphere ${version.version}'),
+      subtitle:
+          version.shouldUpdate ? const Text('Click here to download') : null,
+      leading: Icon(
+        Icons.info_outline,
+        color: version.shouldUpdate ? Colors.pink.shade300 : null,
+      ),
+      dense: true,
+      onTap: version.shouldUpdate ? () => launch(version.downloadUrl) : null,
     );
   }
 }

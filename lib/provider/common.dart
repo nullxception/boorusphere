@@ -13,6 +13,7 @@ import 'search_tag.dart';
 import 'server_list.dart';
 import 'style_provider.dart';
 import 'ui_theme.dart';
+import 'version.dart';
 
 // Hive Boxes
 final searchHistoryBox = Provider((_) => Hive.openBox('searchHistory'));
@@ -52,4 +53,8 @@ final searchTagProvider = StateNotifierProvider<SearchTagState, String>((ref) {
 
 final gridProvider = StateNotifierProvider<GridState, int>((ref) {
   return GridState(ref.read);
+});
+
+final versionProvider = ChangeNotifierProvider<VersionState>((ref) {
+  return VersionState(ref.read);
 });
