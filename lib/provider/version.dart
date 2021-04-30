@@ -11,8 +11,9 @@ class VersionState extends ChangeNotifier {
   final Reader read;
   String version = '0.0.0';
   String lastestVersion = '0.0.0';
+  String _remoteTag = '0.0.0+0';
 
-  get downloadUrl => '$releaseUrl/tag/$lastestVersion';
+  get downloadUrl => '$releaseUrl/tag/$_remoteTag';
   get shouldUpdate => version != lastestVersion;
 
   VersionState(this.read) {
@@ -21,8 +22,8 @@ class VersionState extends ChangeNotifier {
 
   void _init() async {
     final info = await PackageInfo.fromPlatform();
-    version = '${info.version}+${info.buildNumber}';
-    lastestVersion = '${info.version}+${info.buildNumber}';
+    version = info.version;
+    lastestVersion = info.version;
     notifyListeners();
     Future.delayed(const Duration(seconds: 3), checkForUpdates);
   }
@@ -33,7 +34,8 @@ class VersionState extends ChangeNotifier {
       if (res.statusCode == 200) {
         final version = loadYaml(res.body)['version'];
         if (version is String && version.contains('+')) {
-          lastestVersion = version;
+          _remoteTag = version;
+          lastestVersion = version.split('+').first;
           notifyListeners();
         }
       }
