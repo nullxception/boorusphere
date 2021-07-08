@@ -219,9 +219,8 @@ class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   const _$_ServerData(
       {required this.name,

@@ -135,6 +135,7 @@ class __$ServerQueryCopyWithImpl<$Res> extends _$ServerQueryCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
 class _$_ServerQuery with DiagnosticableTreeMixin implements _ServerQuery {
   const _$_ServerQuery(
       {this.tags = '*', this.page = 1, this.limit = 50, this.safeMode = true});

@@ -115,9 +115,9 @@ class __$SearchHistoryCopyWithImpl<$Res>
   }
 }
 
-@HiveType(typeId: 1, adapterName: 'SearchHistoryAdapter')
-
 /// @nodoc
+
+@HiveType(typeId: 1, adapterName: 'SearchHistoryAdapter')
 class _$_SearchHistory with DiagnosticableTreeMixin implements _SearchHistory {
   const _$_SearchHistory(
       {@HiveField(0) this.query = '*',

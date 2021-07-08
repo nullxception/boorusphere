@@ -188,6 +188,7 @@ class __$BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
 class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   const _$_BooruPost(
       {required this.id,
