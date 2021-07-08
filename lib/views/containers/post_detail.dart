@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/common.dart';
+import '../components/tag.dart';
 
 class PostDetails extends HookWidget {
   const PostDetails({Key? keys, required this.id}) : super(key: keys);
@@ -14,7 +14,6 @@ class PostDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final activeServer = useProvider(activeServerProvider);
     final booruPosts = useProvider(booruPostsProvider);
     final selectedtag = useState(<String>[]);
@@ -85,42 +84,28 @@ class PostDetails extends HookWidget {
             title: Text('Tags'),
           ),
           ListTile(
-            title: Tags(
-              alignment: WrapAlignment.start,
-              itemCount: data.tags.length,
-              itemBuilder: (index) {
-                final tag = data.tags[index];
-                return ItemTags(
-                  color: theme.brightness == Brightness.dark
-                      ? Colors.grey.shade800
-                      : Colors.grey.shade200,
-                  textColor: theme.brightness == Brightness.dark
-                      ? Colors.grey.shade200
-                      : Colors.grey.shade800,
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                  border: Border.all(style: BorderStyle.none),
-                  active: selectedtag.value.contains(tag),
-                  title: tag,
-                  index: index,
-                  elevation: 0,
-                  onPressed: (it) {
-                    if (it.active ?? false) {
-                      // display FAB on first select
-                      if (selectedtag.value.isEmpty) {
-                        fabController.forward();
-                      }
-                      selectedtag.value.add(tag);
-                    } else if (it.active == false) {
-                      selectedtag.value.remove(tag);
-                      // display FAB on last removal
-                      if (selectedtag.value.isEmpty) {
-                        fabController.reverse();
-                      }
+            title: Wrap(
+                children: data.tags.map((tag) {
+              return Tag(
+                onPressed: () {
+                  if (!selectedtag.value.contains(tag)) {
+                    // display FAB on first select
+                    if (selectedtag.value.isEmpty) {
+                      fabController.forward();
                     }
-                  },
-                );
-              },
-            ),
+                    selectedtag.value.add(tag);
+                  } else {
+                    selectedtag.value.remove(tag);
+                    // display FAB on last removal
+                    if (selectedtag.value.isEmpty) {
+                      fabController.reverse();
+                    }
+                  }
+                },
+                tag: tag,
+                active: () => selectedtag.value.contains(tag),
+              );
+            }).toList()),
           ),
           SizedBox.fromSize(size: const Size(0, 92)),
         ],
