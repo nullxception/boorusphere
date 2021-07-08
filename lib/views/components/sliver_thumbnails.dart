@@ -13,6 +13,18 @@ class SliverThumbnails extends HookWidget {
 
   SliverThumbnails({Key? key, required this.autoScrollController})
       : super(key: key);
+
+  FilterQuality thumbnailQuality(int gridExtra) {
+    switch (gridExtra) {
+      case 0:
+        return FilterQuality.medium;
+      case 1:
+        return FilterQuality.low;
+      default:
+        return FilterQuality.none;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final gridExtra = useProvider(gridProvider);
@@ -40,7 +52,7 @@ class SliverThumbnails extends HookWidget {
             child: CachedNetworkImage(
               fadeInDuration: const Duration(milliseconds: 300),
               fadeOutDuration: const Duration(milliseconds: 500),
-              filterQuality: FilterQuality.none,
+              filterQuality: thumbnailQuality(gridExtra),
               fit: BoxFit.fill,
               imageUrl: booruPosts[index].thumbnail,
               progressIndicatorBuilder: (_, __, ___) => AspectRatio(
