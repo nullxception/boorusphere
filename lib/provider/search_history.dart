@@ -10,18 +10,18 @@ class SearchHistoryRepository {
   SearchHistoryRepository(this.read);
 
   Future<Map> composeSuggestion({String query = '*'}) async {
-    final history = await read(searchHistoryBox);
+    final history = await mapped;
     final queries = query.trim().split(' ');
     final last = queries.last.trim();
 
     // Filter the query, it must be longer than 2
     if (query.endsWith(' ') || last.length < 2) {
-      return history.toMap();
+      return history;
     }
 
     // Filtering history that contains last word from any state (either incomplete
     // or already contains multiple words)
-    return history.toMap()
+    return history
       ..removeWhere((key, value) =>
           !value.query.contains(last) ||
           queries.sublist(0, queries.length - 1).contains(value.query));
