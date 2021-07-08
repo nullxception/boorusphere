@@ -48,7 +48,7 @@ class SearchHistoryRepository {
       (it) => it.query == query,
       orElse: () => const SearchHistory(),
     );
-    return search == query;
+    return search.query == query;
   }
 
   Future<void> push(String value) async {
