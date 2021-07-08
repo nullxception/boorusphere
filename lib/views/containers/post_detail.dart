@@ -97,7 +97,7 @@ class PostDetails extends HookWidget {
                   textColor: theme.brightness == Brightness.dark
                       ? Colors.grey.shade200
                       : Colors.grey.shade800,
-                  activeColor: Theme.of(context).accentColor,
+                  activeColor: Theme.of(context).colorScheme.secondary,
                   border: Border.all(style: BorderStyle.none),
                   active: selectedtag.value.contains(tag),
                   title: tag,

@@ -179,7 +179,7 @@ class _ServerSelection extends HookWidget {
               ),
             ),
             selected: it.name == activeServer.name,
-            selectedTileColor: theme.accentColor
+            selectedTileColor: theme.colorScheme.secondary
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
               activeServerHandler.setActiveServer(name: it.name);
