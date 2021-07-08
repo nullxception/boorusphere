@@ -43,7 +43,8 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                 physics: const ScrollPhysics(),
                 padding: const EdgeInsets.all(0),
                 itemBuilder: (context, index) {
-                  final query = widget.history.values.elementAt(index).query;
+                  final rIndex = widget.history.length - 1 - index;
+                  final query = widget.history.values.elementAt(rIndex).query;
                   return Column(
                     children: [
                       ListTile(
@@ -51,7 +52,7 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                         leading: const Icon(Icons.history, size: 24),
                         trailing: IconButton(
                           onPressed: () {
-                            final key = widget.history.keys.elementAt(index);
+                            final key = widget.history.keys.elementAt(rIndex);
                             widget.onRemoveHistory?.call(key);
                             setState(() {});
                           },
