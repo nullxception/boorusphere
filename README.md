@@ -17,7 +17,7 @@ $ flutter build apk --target-platform=android-arm64 --no-sound-null-safety
 This projects uses several code generator such as [`freezed`](https://github.com/rrousselGit/freezed) and [`json_serializable`](https://github.com/google/json_serializable.dart), so if you're editing some areas that needs a code generator (such as models), make sure run the build_runner before debugging:
 
 ```bash
-$ flutter pub run build_runner build
+$ flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
 ## License
