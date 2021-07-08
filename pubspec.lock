@@ -14,7 +14,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   archive:
     dependency: transitive
     description:
@@ -35,7 +35,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
+    version: "2.7.0"
   better_player:
     dependency: "direct main"
     description:
@@ -477,7 +477,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   mime:
     dependency: "direct main"
     description:
@@ -565,9 +565,11 @@ packages:
   photo_view:
     dependency: "direct main"
     description:
-      name: photo_view
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "52685ab7beaf8a9107904bdb8a1590924015d016"
+      resolved-ref: "52685ab7beaf8a9107904bdb8a1590924015d016"
+      url: "git://github.com/fireslime/photo_view"
+    source: git
     version: "0.11.1"
   platform:
     dependency: transitive
@@ -748,7 +750,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   timing:
     dependency: transitive
     description:
