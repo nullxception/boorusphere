@@ -7,13 +7,17 @@
     {
       "name": "debug",
       "request": "launch",
-      "args": ["--no-sound-null-safety", "--verbose"],
+      "args": [
+        "--verbose"
+      ],
       "type": "dart"
     },
     {
       "name": "profile",
       "request": "launch",
-      "args": ["--no-sound-null-safety", "--profile"],
+      "args": [
+        "--profile"
+      ],
       "type": "dart"
     }
   ]
