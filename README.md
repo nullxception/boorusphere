@@ -1,14 +1,29 @@
-<p align="center"><img src="assets/banner.jpg" alt="boorusphere's banner image"/></p>
-<h3 align="center">Yet another booru imageboards viewer for Android</h3>
-<p align="center"><img src="assets/preview.jpg" alt="application screenshots"/></p>
+<p align="center">
+    <img src="assets/banner.jpg" alt="boorusphere's banner image" width="70%"/>
+    <br/>
+    <i>Yet another booru imageboards viewer for Android</i>
+</p>
 
 ## Download
+<a href="https://apt.izzysoft.de/fdroid/index/apk/io.chaldeaprjkt.boorusphere">
+    <img src="assets/button-IzzyOnDroid.png" alt="IzzyOnDroid release page" width="170">
+</a>
+<a href="https://github.com/nullxception/boorusphere/releases">
+    <img src="assets/button-GHReleases.png" alt="github release page" width="170">
+</a>
 
-You can directly go to the [Releases Page](https://github.com/nullxception/boorusphere/releases) and download the appropriate version for your device.
+## Preview
 
-## Development notes
+<details>
+    <summary>Click Here</summary>
+    <p align="center">
+        <img src="assets/preview.jpg" alt="application screenshots"/>
+    </p>
+</details>
 
-You can build this app just like any other flutter app :
+## Building
+
+You can build this app just like any other flutter app, for example:
 
 ```bash
 $ flutter build apk --target-platform=android-arm64
