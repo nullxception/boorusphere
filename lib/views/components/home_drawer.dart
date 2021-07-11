@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../provider/common.dart';
 import '../../routes.dart';
+import 'favicon.dart';
 
 class HomeDrawer extends StatelessWidget {
   @override
@@ -169,7 +170,7 @@ class _ServerSelection extends HookWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           child: ListTile(
             title: Text(it.name),
-            leading: const Icon(Icons.public),
+            leading: Favicon(url: '${it.homepage}/favicon.ico'),
             dense: true,
             contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
             shape: const RoundedRectangleBorder(
