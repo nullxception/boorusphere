@@ -37,4 +37,4 @@ $ flutter pub run build_runner build --delete-conflicting-outputs
 
 ## License
 
-This work is licensed under [BSD 3-Clause License](LICENSE).
+This work is licensed under [BSD 3-Clause License](LICENSE.md).
