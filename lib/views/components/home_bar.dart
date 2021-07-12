@@ -3,11 +3,39 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../provider/api_provider.dart';
 import '../../provider/common.dart';
+import '../../provider/search_history.dart';
+import '../../provider/search_tag.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
 class HomeBar extends HookWidget {
+  void _searchForTag({
+    required String value,
+    required FloatingSearchBarController controller,
+    required SearchTagState searchTagHandler,
+    required ApiProvider api,
+    required String searchTag,
+    required SearchHistoryRepository searchHistory,
+  }) {
+    final query = value.trim();
+    if (query.isEmpty) {
+      // restore title when user cancels search by submitting a blank input
+      if (controller.query != searchTag) {
+        controller.query = '$searchTag ';
+      }
+      return;
+    }
+
+    searchTagHandler.setTag(query: query);
+    api.fetch(clear: true);
+    controller.close();
+
+    // Check if value already exist on the box
+    searchHistory.push(query);
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = useFloatingSearchBarController();
@@ -39,21 +67,14 @@ class HomeBar extends HookWidget {
       transitionCurve: Curves.easeInCirc,
       transition: CircularFloatingSearchBarTransition(),
       onSubmitted: (value) {
-        final query = value.trim();
-        if (query.isEmpty) {
-          // restore title when user cancels search by submitting a blank input
-          if (controller.query != searchTag) {
-            controller.query = '$searchTag ';
-          }
-          return;
-        }
-
-        searchTagHandler.setTag(query: query);
-        api.fetch(clear: true);
-        controller.close();
-
-        // Check if value already exist on the box
-        searchHistory.push(query);
+        _searchForTag(
+          value: value,
+          api: api,
+          controller: controller,
+          searchHistory: searchHistory,
+          searchTag: searchTag,
+          searchTagHandler: searchTagHandler,
+        );
       },
       onQueryChanged: (value) async {
         suggestion.value = await api.fetchSuggestion(query: value);
@@ -85,16 +106,25 @@ class HomeBar extends HookWidget {
       ],
       builder: (context, transition) {
         return SearchSuggestionResult(
-          controller: controller,
-          suggestions: suggestion.value,
-          history: suggestionHistory.value,
-          onRemoveHistory: (key) async {
-            searchHistory.delete(key);
-            // rebuild history suggestion
-            suggestionHistory.value =
-                await searchHistory.composeSuggestion(query: controller.query);
-          },
-        );
+            controller: controller,
+            suggestions: suggestion.value,
+            history: suggestionHistory.value,
+            onRemoveHistory: (key) async {
+              searchHistory.delete(key);
+              // rebuild history suggestion
+              suggestionHistory.value = await searchHistory.composeSuggestion(
+                  query: controller.query);
+            },
+            onSearchTag: (value) {
+              _searchForTag(
+                value: value,
+                api: api,
+                controller: controller,
+                searchHistory: searchHistory,
+                searchTag: searchTag,
+                searchTagHandler: searchTagHandler,
+              );
+            });
       },
     );
   }

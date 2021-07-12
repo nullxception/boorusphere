@@ -8,12 +8,14 @@ class SearchSuggestionResult extends StatefulWidget {
     required this.suggestions,
     required this.history,
     this.onRemoveHistory,
+    this.onSearchTag,
   }) : super(key: key);
 
   final FloatingSearchBarController controller;
   final List<String> suggestions;
   final Map history;
   final Function(dynamic key)? onRemoveHistory;
+  final Function(String value)? onSearchTag;
 
   @override
   _SearchSuggestionResultState createState() => _SearchSuggestionResultState();
@@ -49,6 +51,7 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                         query: query,
                         onTap: () {
                           widget.controller.query = query;
+                          widget.onSearchTag?.call(query);
                         },
                         onAdded: () {
                           _addToInput(query);
@@ -77,6 +80,7 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                         query: query,
                         onTap: () {
                           widget.controller.query = query;
+                          widget.onSearchTag?.call(query);
                         },
                         onAdded: () {
                           _addToInput(query);
