@@ -20,13 +20,11 @@ class SearchSuggestionResult extends StatefulWidget {
 }
 
 class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
-  String _concatSuggestionResult({
-    required String input,
-    required String suggested,
-  }) {
-    final queries = input.split(' ');
+  void _addToInput(String suggested) {
+    final queries = widget.controller.query.split(' ');
     final result = queries.sublist(0, queries.length - 1)..add(suggested);
-    return '${result.join(' ')} '.replaceAll('  ', ' ').trimLeft();
+    widget.controller.query =
+        '${result.join(' ')} '.replaceAll('  ', ' ').trimLeft();
   }
 
   @override
@@ -53,10 +51,7 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                           widget.controller.query = query;
                         },
                         onAdded: () {
-                          widget.controller.query = _concatSuggestionResult(
-                            input: widget.controller.query,
-                            suggested: query,
-                          );
+                          _addToInput(query);
                         },
                         onRemoved: () {
                           final key = widget.history.keys.elementAt(rIndex);
@@ -84,10 +79,7 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                           widget.controller.query = query;
                         },
                         onAdded: () {
-                          widget.controller.query = _concatSuggestionResult(
-                            input: widget.controller.query,
-                            suggested: query,
-                          );
+                          _addToInput(query);
                         },
                       ),
                       if (index < widget.suggestions.length - 1)
