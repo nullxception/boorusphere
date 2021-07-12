@@ -47,37 +47,21 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                   final query = widget.history.values.elementAt(rIndex).query;
                   return Column(
                     children: [
-                      ListTile(
-                        contentPadding: const EdgeInsets.only(left: 12),
-                        horizontalTitleGap: 1,
-                        leading: const Icon(Icons.history, size: 22),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                widget.controller.query =
-                                    _concatSuggestionResult(
-                                  input: widget.controller.query,
-                                  suggested: query,
-                                );
-                              },
-                              icon: const Icon(Icons.add, size: 22),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                final key =
-                                    widget.history.keys.elementAt(rIndex);
-                                widget.onRemoveHistory?.call(key);
-                                setState(() {});
-                              },
-                              icon: const Icon(Icons.close, size: 22),
-                            ),
-                          ],
-                        ),
-                        title: Text(query),
+                      _SuggestionEntry(
+                        query: query,
                         onTap: () {
                           widget.controller.query = query;
+                        },
+                        onAdded: () {
+                          widget.controller.query = _concatSuggestionResult(
+                            input: widget.controller.query,
+                            suggested: query,
+                          );
+                        },
+                        onRemoved: () {
+                          final key = widget.history.keys.elementAt(rIndex);
+                          widget.onRemoveHistory?.call(key);
+                          setState(() {});
                         },
                       ),
                       const Divider(height: 1),
@@ -94,29 +78,16 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                   final query = widget.suggestions[index];
                   return Column(
                     children: [
-                      ListTile(
-                        contentPadding: const EdgeInsets.only(left: 12),
-                        horizontalTitleGap: 1,
-                        leading: const Icon(Icons.tag, size: 22),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                widget.controller.query =
-                                    _concatSuggestionResult(
-                                  input: widget.controller.query,
-                                  suggested: query,
-                                );
-                              },
-                              icon: const Icon(Icons.add, size: 22),
-                            ),
-                            const SizedBox(width: 8 * 3 + 24),
-                          ],
-                        ),
-                        title: Text(query),
+                      _SuggestionEntry(
+                        query: query,
                         onTap: () {
                           widget.controller.query = query;
+                        },
+                        onAdded: () {
+                          widget.controller.query = _concatSuggestionResult(
+                            input: widget.controller.query,
+                            suggested: query,
+                          );
                         },
                       ),
                       if (index < widget.suggestions.length - 1)
@@ -128,6 +99,47 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
               ),
             ],
           )),
+    );
+  }
+}
+
+class _SuggestionEntry extends StatelessWidget {
+  const _SuggestionEntry({
+    Key? key,
+    required this.query,
+    required this.onTap,
+    required this.onAdded,
+    this.onRemoved,
+  }) : super(key: key);
+
+  final String query;
+  final Function() onTap;
+  final Function() onAdded;
+  final Function()? onRemoved;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 12),
+      horizontalTitleGap: 1,
+      leading: const Icon(Icons.history, size: 22),
+      title: Text(query),
+      onTap: onTap,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: onAdded,
+            icon: const Icon(Icons.add, size: 22),
+          ),
+          onRemoved != null
+              ? IconButton(
+                  onPressed: onRemoved,
+                  icon: const Icon(Icons.close, size: 22),
+                )
+              : const SizedBox(width: 8 * 3 + 24),
+        ],
+      ),
     );
   }
 }
