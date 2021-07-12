@@ -48,22 +48,36 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                   return Column(
                     children: [
                       ListTile(
+                        contentPadding: const EdgeInsets.only(left: 12),
                         horizontalTitleGap: 1,
-                        leading: const Icon(Icons.history, size: 24),
-                        trailing: IconButton(
-                          onPressed: () {
-                            final key = widget.history.keys.elementAt(rIndex);
-                            widget.onRemoveHistory?.call(key);
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.close, size: 24),
+                        leading: const Icon(Icons.history, size: 22),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                widget.controller.query =
+                                    _concatSuggestionResult(
+                                  input: widget.controller.query,
+                                  suggested: query,
+                                );
+                              },
+                              icon: const Icon(Icons.add, size: 22),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                final key =
+                                    widget.history.keys.elementAt(rIndex);
+                                widget.onRemoveHistory?.call(key);
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.close, size: 22),
+                            ),
+                          ],
                         ),
                         title: Text(query),
                         onTap: () {
-                          widget.controller.query = _concatSuggestionResult(
-                            input: widget.controller.query,
-                            suggested: query,
-                          );
+                          widget.controller.query = query;
                         },
                       ),
                       const Divider(height: 1),
@@ -81,14 +95,28 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                   return Column(
                     children: [
                       ListTile(
+                        contentPadding: const EdgeInsets.only(left: 12),
                         horizontalTitleGap: 1,
-                        leading: const Icon(Icons.tag, size: 24),
+                        leading: const Icon(Icons.tag, size: 22),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                widget.controller.query =
+                                    _concatSuggestionResult(
+                                  input: widget.controller.query,
+                                  suggested: query,
+                                );
+                              },
+                              icon: const Icon(Icons.add, size: 22),
+                            ),
+                            const SizedBox(width: 8 * 3 + 24),
+                          ],
+                        ),
                         title: Text(query),
                         onTap: () {
-                          widget.controller.query = _concatSuggestionResult(
-                            input: widget.controller.query,
-                            suggested: query,
-                          );
+                          widget.controller.query = query;
                         },
                       ),
                       if (index < widget.suggestions.length - 1)
