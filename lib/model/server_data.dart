@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 
 import 'server_query.dart';
 
@@ -8,21 +9,34 @@ part 'server_data.g.dart';
 
 @freezed
 class ServerData with _$ServerData {
-  const ServerData._();
-
+  @HiveType(typeId: 2, adapterName: 'ServersAdapter')
   const factory ServerData({
-    required String name,
-    required String homepage,
-    @JsonKey(name: 'post_url') required String postUrl,
-    @JsonKey(name: 'search_url') required String searchUrl,
-    @JsonKey(name: 'safe_mode_tag') String? safeModeTag,
-    @JsonKey(name: 'safe_mode_url') String? safeModeUrl,
-    @JsonKey(name: 'safe_mode') String? safeMode,
-    @JsonKey(name: 'tag_suggestion_url') String? tagSuggestionUrl,
+    @HiveField(0, defaultValue: '') required String name,
+    @HiveField(1, defaultValue: '') required String homepage,
+    @HiveField(2, defaultValue: '')
+    @JsonKey(name: 'post_url')
+        required String postUrl,
+    @HiveField(3, defaultValue: '')
+    @JsonKey(name: 'search_url')
+        required String searchUrl,
+    @HiveField(4, defaultValue: '')
+    @JsonKey(name: 'safe_mode_tag')
+        String? safeModeTag,
+    @HiveField(5, defaultValue: '')
+    @JsonKey(name: 'safe_mode_url')
+        String? safeModeUrl,
+    @HiveField(6, defaultValue: '')
+    @JsonKey(name: 'safe_mode')
+        String? safeMode,
+    @HiveField(7, defaultValue: '')
+    @JsonKey(name: 'tag_suggestion_url')
+        String? tagSuggestionUrl,
   }) = _ServerData;
 
   factory ServerData.fromJson(Map<String, dynamic> json) =>
       _$ServerDataFromJson(json);
+
+  const ServerData._();
 
   bool get canSuggestTags => tagSuggestionUrl?.contains('{tag-part}') ?? false;
 

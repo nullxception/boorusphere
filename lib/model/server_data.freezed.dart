@@ -21,14 +21,28 @@ class _$ServerDataTearOff {
   const _$ServerDataTearOff();
 
   _ServerData call(
-      {required String name,
-      required String homepage,
-      @JsonKey(name: 'post_url') required String postUrl,
-      @JsonKey(name: 'search_url') required String searchUrl,
-      @JsonKey(name: 'safe_mode_tag') String? safeModeTag,
-      @JsonKey(name: 'safe_mode_url') String? safeModeUrl,
-      @JsonKey(name: 'safe_mode') String? safeMode,
-      @JsonKey(name: 'tag_suggestion_url') String? tagSuggestionUrl}) {
+      {@HiveField(0, defaultValue: '')
+          required String name,
+      @HiveField(1, defaultValue: '')
+          required String homepage,
+      @HiveField(2, defaultValue: '')
+      @JsonKey(name: 'post_url')
+          required String postUrl,
+      @HiveField(3, defaultValue: '')
+      @JsonKey(name: 'search_url')
+          required String searchUrl,
+      @HiveField(4, defaultValue: '')
+      @JsonKey(name: 'safe_mode_tag')
+          String? safeModeTag,
+      @HiveField(5, defaultValue: '')
+      @JsonKey(name: 'safe_mode_url')
+          String? safeModeUrl,
+      @HiveField(6, defaultValue: '')
+      @JsonKey(name: 'safe_mode')
+          String? safeMode,
+      @HiveField(7, defaultValue: '')
+      @JsonKey(name: 'tag_suggestion_url')
+          String? tagSuggestionUrl}) {
     return _ServerData(
       name: name,
       homepage: homepage,
@@ -51,18 +65,26 @@ const $ServerData = _$ServerDataTearOff();
 
 /// @nodoc
 mixin _$ServerData {
+  @HiveField(0, defaultValue: '')
   String get name => throw _privateConstructorUsedError;
+  @HiveField(1, defaultValue: '')
   String get homepage => throw _privateConstructorUsedError;
+  @HiveField(2, defaultValue: '')
   @JsonKey(name: 'post_url')
   String get postUrl => throw _privateConstructorUsedError;
+  @HiveField(3, defaultValue: '')
   @JsonKey(name: 'search_url')
   String get searchUrl => throw _privateConstructorUsedError;
+  @HiveField(4, defaultValue: '')
   @JsonKey(name: 'safe_mode_tag')
   String? get safeModeTag => throw _privateConstructorUsedError;
+  @HiveField(5, defaultValue: '')
   @JsonKey(name: 'safe_mode_url')
   String? get safeModeUrl => throw _privateConstructorUsedError;
+  @HiveField(6, defaultValue: '')
   @JsonKey(name: 'safe_mode')
   String? get safeMode => throw _privateConstructorUsedError;
+  @HiveField(7, defaultValue: '')
   @JsonKey(name: 'tag_suggestion_url')
   String? get tagSuggestionUrl => throw _privateConstructorUsedError;
 
@@ -78,14 +100,28 @@ abstract class $ServerDataCopyWith<$Res> {
           ServerData value, $Res Function(ServerData) then) =
       _$ServerDataCopyWithImpl<$Res>;
   $Res call(
-      {String name,
-      String homepage,
-      @JsonKey(name: 'post_url') String postUrl,
-      @JsonKey(name: 'search_url') String searchUrl,
-      @JsonKey(name: 'safe_mode_tag') String? safeModeTag,
-      @JsonKey(name: 'safe_mode_url') String? safeModeUrl,
-      @JsonKey(name: 'safe_mode') String? safeMode,
-      @JsonKey(name: 'tag_suggestion_url') String? tagSuggestionUrl});
+      {@HiveField(0, defaultValue: '')
+          String name,
+      @HiveField(1, defaultValue: '')
+          String homepage,
+      @HiveField(2, defaultValue: '')
+      @JsonKey(name: 'post_url')
+          String postUrl,
+      @HiveField(3, defaultValue: '')
+      @JsonKey(name: 'search_url')
+          String searchUrl,
+      @HiveField(4, defaultValue: '')
+      @JsonKey(name: 'safe_mode_tag')
+          String? safeModeTag,
+      @HiveField(5, defaultValue: '')
+      @JsonKey(name: 'safe_mode_url')
+          String? safeModeUrl,
+      @HiveField(6, defaultValue: '')
+      @JsonKey(name: 'safe_mode')
+          String? safeMode,
+      @HiveField(7, defaultValue: '')
+      @JsonKey(name: 'tag_suggestion_url')
+          String? tagSuggestionUrl});
 }
 
 /// @nodoc
@@ -151,14 +187,28 @@ abstract class _$ServerDataCopyWith<$Res> implements $ServerDataCopyWith<$Res> {
       __$ServerDataCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String name,
-      String homepage,
-      @JsonKey(name: 'post_url') String postUrl,
-      @JsonKey(name: 'search_url') String searchUrl,
-      @JsonKey(name: 'safe_mode_tag') String? safeModeTag,
-      @JsonKey(name: 'safe_mode_url') String? safeModeUrl,
-      @JsonKey(name: 'safe_mode') String? safeMode,
-      @JsonKey(name: 'tag_suggestion_url') String? tagSuggestionUrl});
+      {@HiveField(0, defaultValue: '')
+          String name,
+      @HiveField(1, defaultValue: '')
+          String homepage,
+      @HiveField(2, defaultValue: '')
+      @JsonKey(name: 'post_url')
+          String postUrl,
+      @HiveField(3, defaultValue: '')
+      @JsonKey(name: 'search_url')
+          String searchUrl,
+      @HiveField(4, defaultValue: '')
+      @JsonKey(name: 'safe_mode_tag')
+          String? safeModeTag,
+      @HiveField(5, defaultValue: '')
+      @JsonKey(name: 'safe_mode_url')
+          String? safeModeUrl,
+      @HiveField(6, defaultValue: '')
+      @JsonKey(name: 'safe_mode')
+          String? safeMode,
+      @HiveField(7, defaultValue: '')
+      @JsonKey(name: 'tag_suggestion_url')
+          String? tagSuggestionUrl});
 }
 
 /// @nodoc
@@ -221,41 +271,64 @@ class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
+@HiveType(typeId: 2, adapterName: 'ServersAdapter')
 class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   const _$_ServerData(
-      {required this.name,
-      required this.homepage,
-      @JsonKey(name: 'post_url') required this.postUrl,
-      @JsonKey(name: 'search_url') required this.searchUrl,
-      @JsonKey(name: 'safe_mode_tag') this.safeModeTag,
-      @JsonKey(name: 'safe_mode_url') this.safeModeUrl,
-      @JsonKey(name: 'safe_mode') this.safeMode,
-      @JsonKey(name: 'tag_suggestion_url') this.tagSuggestionUrl})
+      {@HiveField(0, defaultValue: '')
+          required this.name,
+      @HiveField(1, defaultValue: '')
+          required this.homepage,
+      @HiveField(2, defaultValue: '')
+      @JsonKey(name: 'post_url')
+          required this.postUrl,
+      @HiveField(3, defaultValue: '')
+      @JsonKey(name: 'search_url')
+          required this.searchUrl,
+      @HiveField(4, defaultValue: '')
+      @JsonKey(name: 'safe_mode_tag')
+          this.safeModeTag,
+      @HiveField(5, defaultValue: '')
+      @JsonKey(name: 'safe_mode_url')
+          this.safeModeUrl,
+      @HiveField(6, defaultValue: '')
+      @JsonKey(name: 'safe_mode')
+          this.safeMode,
+      @HiveField(7, defaultValue: '')
+      @JsonKey(name: 'tag_suggestion_url')
+          this.tagSuggestionUrl})
       : super._();
 
   factory _$_ServerData.fromJson(Map<String, dynamic> json) =>
       _$_$_ServerDataFromJson(json);
 
   @override
+  @HiveField(0, defaultValue: '')
   final String name;
   @override
+  @HiveField(1, defaultValue: '')
   final String homepage;
   @override
+  @HiveField(2, defaultValue: '')
   @JsonKey(name: 'post_url')
   final String postUrl;
   @override
+  @HiveField(3, defaultValue: '')
   @JsonKey(name: 'search_url')
   final String searchUrl;
   @override
+  @HiveField(4, defaultValue: '')
   @JsonKey(name: 'safe_mode_tag')
   final String? safeModeTag;
   @override
+  @HiveField(5, defaultValue: '')
   @JsonKey(name: 'safe_mode_url')
   final String? safeModeUrl;
   @override
+  @HiveField(6, defaultValue: '')
   @JsonKey(name: 'safe_mode')
   final String? safeMode;
   @override
+  @HiveField(7, defaultValue: '')
   @JsonKey(name: 'tag_suggestion_url')
   final String? tagSuggestionUrl;
 
@@ -333,40 +406,61 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
 
 abstract class _ServerData extends ServerData {
   const factory _ServerData(
-          {required String name,
+      {@HiveField(0, defaultValue: '')
+          required String name,
+      @HiveField(1, defaultValue: '')
           required String homepage,
-          @JsonKey(name: 'post_url') required String postUrl,
-          @JsonKey(name: 'search_url') required String searchUrl,
-          @JsonKey(name: 'safe_mode_tag') String? safeModeTag,
-          @JsonKey(name: 'safe_mode_url') String? safeModeUrl,
-          @JsonKey(name: 'safe_mode') String? safeMode,
-          @JsonKey(name: 'tag_suggestion_url') String? tagSuggestionUrl}) =
-      _$_ServerData;
+      @HiveField(2, defaultValue: '')
+      @JsonKey(name: 'post_url')
+          required String postUrl,
+      @HiveField(3, defaultValue: '')
+      @JsonKey(name: 'search_url')
+          required String searchUrl,
+      @HiveField(4, defaultValue: '')
+      @JsonKey(name: 'safe_mode_tag')
+          String? safeModeTag,
+      @HiveField(5, defaultValue: '')
+      @JsonKey(name: 'safe_mode_url')
+          String? safeModeUrl,
+      @HiveField(6, defaultValue: '')
+      @JsonKey(name: 'safe_mode')
+          String? safeMode,
+      @HiveField(7, defaultValue: '')
+      @JsonKey(name: 'tag_suggestion_url')
+          String? tagSuggestionUrl}) = _$_ServerData;
   const _ServerData._() : super._();
 
   factory _ServerData.fromJson(Map<String, dynamic> json) =
       _$_ServerData.fromJson;
 
   @override
+  @HiveField(0, defaultValue: '')
   String get name => throw _privateConstructorUsedError;
   @override
+  @HiveField(1, defaultValue: '')
   String get homepage => throw _privateConstructorUsedError;
   @override
+  @HiveField(2, defaultValue: '')
   @JsonKey(name: 'post_url')
   String get postUrl => throw _privateConstructorUsedError;
   @override
+  @HiveField(3, defaultValue: '')
   @JsonKey(name: 'search_url')
   String get searchUrl => throw _privateConstructorUsedError;
   @override
+  @HiveField(4, defaultValue: '')
   @JsonKey(name: 'safe_mode_tag')
   String? get safeModeTag => throw _privateConstructorUsedError;
   @override
+  @HiveField(5, defaultValue: '')
   @JsonKey(name: 'safe_mode_url')
   String? get safeModeUrl => throw _privateConstructorUsedError;
   @override
+  @HiveField(6, defaultValue: '')
   @JsonKey(name: 'safe_mode')
   String? get safeMode => throw _privateConstructorUsedError;
   @override
+  @HiveField(7, defaultValue: '')
   @JsonKey(name: 'tag_suggestion_url')
   String? get tagSuggestionUrl => throw _privateConstructorUsedError;
   @override

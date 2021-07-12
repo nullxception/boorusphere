@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'model/search_history.dart';
+import 'model/server_data.dart';
 import 'provider/common.dart';
 import 'routes.dart';
 
@@ -34,6 +35,7 @@ void main() async {
   Fimber.plantTree(DebugTree());
 
   await Hive.initFlutter();
+  Hive.registerAdapter(ServersAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
 
   runApp(ProviderScope(child: Boorusphere()));

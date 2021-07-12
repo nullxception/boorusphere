@@ -18,6 +18,7 @@ import 'version.dart';
 // Hive Boxes
 final searchHistoryBox = Provider((_) => Hive.openBox('searchHistory'));
 final settingsBox = Provider((_) => Hive.openBox('settings'));
+final serversBox = Provider((_) => Hive.openBox('servers'));
 
 // Common Providers
 final searchHistoryProvider =
