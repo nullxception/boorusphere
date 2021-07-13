@@ -115,16 +115,14 @@ class _SuggestionEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tag = query is SearchHistory
-        ? (query as SearchHistory).query
-        : query as String;
-    final serverName =
-        query is SearchHistory ? (query as SearchHistory).server : '';
+    final isHistory = query is SearchHistory;
+    final tag = isHistory ? (query as SearchHistory).query : query as String;
+    final serverName = isHistory ? (query as SearchHistory).server : '';
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 12),
       horizontalTitleGap: 1,
-      leading: const Icon(Icons.history, size: 22),
+      leading: Icon(isHistory ? Icons.history : Icons.tag, size: 22),
       title: Text(tag),
       subtitle: serverName.isNotEmpty ? Text('at $serverName') : null,
       onTap: () => onTap.call(tag),
