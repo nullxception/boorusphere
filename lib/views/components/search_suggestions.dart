@@ -72,14 +72,11 @@ class SearchSuggestionResult extends HookWidget {
             },
             itemCount: history.length,
           ),
-          const SizedBox(width: double.infinity, height: 10),
-          Visibility(
-            visible: suggestions.isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          if (suggestions.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
               child: Text('Suggested at ${activeServer.name}'),
             ),
-          ),
           ListView.builder(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
