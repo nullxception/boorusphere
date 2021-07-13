@@ -5,7 +5,6 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../provider/api_provider.dart';
 import '../../provider/common.dart';
-import '../../provider/search_history.dart';
 import '../../provider/search_tag.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
@@ -17,11 +16,11 @@ class HomeBar extends HookWidget {
     required SearchTagState searchTagHandler,
     required ApiProvider api,
     required String searchTag,
-    required SearchHistoryRepository searchHistory,
   }) {
     final query = value.trim();
+
+    // restore title when user cancels search by submitting a blank input
     if (query.isEmpty) {
-      // restore title when user cancels search by submitting a blank input
       if (controller.query != searchTag) {
         controller.query = '$searchTag ';
       }
@@ -31,9 +30,6 @@ class HomeBar extends HookWidget {
     searchTagHandler.setTag(query: query);
     api.fetch(clear: true);
     controller.close();
-
-    // Check if value already exist on the box
-    searchHistory.push(query);
   }
 
   @override
@@ -71,7 +67,6 @@ class HomeBar extends HookWidget {
           value: value,
           api: api,
           controller: controller,
-          searchHistory: searchHistory,
           searchTag: searchTag,
           searchTagHandler: searchTagHandler,
         );
@@ -120,7 +115,6 @@ class HomeBar extends HookWidget {
                 value: value,
                 api: api,
                 controller: controller,
-                searchHistory: searchHistory,
                 searchTag: searchTag,
                 searchTagHandler: searchTagHandler,
               );
