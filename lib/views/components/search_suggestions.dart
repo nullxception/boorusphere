@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/search_history.dart';
+import '../../provider/common.dart';
 
-class SearchSuggestionResult extends StatelessWidget {
+class SearchSuggestionResult extends HookWidget {
   const SearchSuggestionResult({
     Key? key,
     required this.controller,
@@ -32,6 +35,8 @@ class SearchSuggestionResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final activeServer = useProvider(activeServerProvider);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(
@@ -70,9 +75,9 @@ class SearchSuggestionResult extends StatelessWidget {
           const SizedBox(width: double.infinity, height: 10),
           Visibility(
             visible: suggestions.isNotEmpty,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Text('Suggested'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text('Suggested at ${activeServer.name}'),
             ),
           ),
           ListView.builder(
