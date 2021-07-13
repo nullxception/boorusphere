@@ -61,7 +61,8 @@ class HomeBar extends HookWidget {
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
       transitionCurve: Curves.easeInCirc,
-      transition: CircularFloatingSearchBarTransition(),
+      transition: ExpandingFloatingSearchBarTransition(),
+      transitionDuration: const Duration(milliseconds: 250),
       onSubmitted: (value) {
         _searchForTag(
           value: value,

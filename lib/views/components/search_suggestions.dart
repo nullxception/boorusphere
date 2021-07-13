@@ -32,55 +32,66 @@ class SearchSuggestionResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Card(
-          elevation: 4.0,
-          color: Theme.of(context).cardColor,
-          child: Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                padding: const EdgeInsets.all(0),
-                itemBuilder: (context, index) {
-                  final rIndex = history.length - 1 - index;
-                  return Column(
-                    children: [
-                      _SuggestionEntry(
-                        query: history.values.elementAt(rIndex).query,
-                        onTap: _searchTag,
-                        onAdded: _addToInput,
-                        onRemoved: () {
-                          final key = history.keys.elementAt(rIndex);
-                          onRemoveHistory?.call(key);
-                        },
-                      ),
-                      const Divider(height: 1),
-                    ],
-                  );
-                },
-                itemCount: history.length,
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                padding: const EdgeInsets.all(0),
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      _SuggestionEntry(
-                        query: suggestions[index],
-                        onTap: _searchTag,
-                        onAdded: _addToInput,
-                      ),
-                      if (index < suggestions.length - 1)
-                        const Divider(height: 1),
-                    ],
-                  );
-                },
-                itemCount: suggestions.length,
-              ),
-            ],
-          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Visibility(
+            visible: history.isNotEmpty,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text('Recently'),
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            padding: const EdgeInsets.all(0),
+            itemBuilder: (context, index) {
+              final rIndex = history.length - 1 - index;
+              return Column(
+                children: [
+                  _SuggestionEntry(
+                    query: history.values.elementAt(rIndex).query,
+                    onTap: _searchTag,
+                    onAdded: _addToInput,
+                    onRemoved: () {
+                      final key = history.keys.elementAt(rIndex);
+                      onRemoveHistory?.call(key);
+                    },
+                  ),
+                  const Divider(height: 1),
+                ],
+              );
+            },
+            itemCount: history.length,
+          ),
+          Visibility(
+            visible: suggestions.isNotEmpty,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text('Suggested'),
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            padding: const EdgeInsets.all(0),
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  _SuggestionEntry(
+                    query: suggestions[index],
+                    onTap: _searchTag,
+                    onAdded: _addToInput,
+                  ),
+                  if (index < suggestions.length - 1) const Divider(height: 1),
+                ],
+              );
+            },
+            itemCount: suggestions.length,
+          ),
+        ],
+      ),
     );
   }
 }
