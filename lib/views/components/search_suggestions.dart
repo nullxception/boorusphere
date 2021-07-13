@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../model/search_history.dart';
+
 class SearchSuggestionResult extends StatelessWidget {
   const SearchSuggestionResult({
     Key? key,
@@ -51,7 +53,7 @@ class SearchSuggestionResult extends StatelessWidget {
               return Column(
                 children: [
                   _SuggestionEntry(
-                    query: history.values.elementAt(rIndex).query,
+                    query: history.values.elementAt(rIndex) as SearchHistory,
                     onTap: _searchTag,
                     onAdded: _addToInput,
                     onRemoved: () {
@@ -65,6 +67,7 @@ class SearchSuggestionResult extends StatelessWidget {
             },
             itemCount: history.length,
           ),
+          const SizedBox(width: double.infinity, height: 10),
           Visibility(
             visible: suggestions.isNotEmpty,
             child: const Padding(
@@ -105,24 +108,31 @@ class _SuggestionEntry extends StatelessWidget {
     this.onRemoved,
   }) : super(key: key);
 
-  final String query;
+  final dynamic query;
   final Function(String entry) onTap;
   final Function(String entry) onAdded;
   final Function()? onRemoved;
 
   @override
   Widget build(BuildContext context) {
+    final tag = query is SearchHistory
+        ? (query as SearchHistory).query
+        : query as String;
+    final serverName =
+        query is SearchHistory ? (query as SearchHistory).server : '';
+
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 12),
       horizontalTitleGap: 1,
       leading: const Icon(Icons.history, size: 22),
-      title: Text(query),
-      onTap: () => onTap.call(query),
+      title: Text(tag),
+      subtitle: serverName.isNotEmpty ? Text('at $serverName') : null,
+      onTap: () => onTap.call(tag),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: () => onAdded.call(query),
+            onPressed: () => onAdded.call(tag),
             icon: const Icon(Icons.add, size: 22),
           ),
           onRemoved != null
