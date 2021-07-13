@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-class SearchSuggestionResult extends StatefulWidget {
+class SearchSuggestionResult extends StatelessWidget {
   const SearchSuggestionResult({
     Key? key,
     required this.controller,
@@ -17,16 +17,15 @@ class SearchSuggestionResult extends StatefulWidget {
   final Function(dynamic key)? onRemoveHistory;
   final Function(String value)? onSearchTag;
 
-  @override
-  _SearchSuggestionResultState createState() => _SearchSuggestionResultState();
-}
-
-class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
   void _addToInput(String suggested) {
-    final queries = widget.controller.query.split(' ');
+    final queries = controller.query.split(' ');
     final result = queries.sublist(0, queries.length - 1)..add(suggested);
-    widget.controller.query =
-        '${result.join(' ')} '.replaceAll('  ', ' ').trimLeft();
+    controller.query = '${result.join(' ')} '.replaceAll('  ', ' ').trimLeft();
+  }
+
+  void _searchTag(String query) {
+    controller.query = query;
+    onSearchTag?.call(query);
   }
 
   @override
@@ -43,55 +42,42 @@ class _SearchSuggestionResultState extends State<SearchSuggestionResult> {
                 physics: const ScrollPhysics(),
                 padding: const EdgeInsets.all(0),
                 itemBuilder: (context, index) {
-                  final rIndex = widget.history.length - 1 - index;
-                  final query = widget.history.values.elementAt(rIndex).query;
+                  final rIndex = history.length - 1 - index;
                   return Column(
                     children: [
                       _SuggestionEntry(
-                        query: query,
-                        onTap: () {
-                          widget.controller.query = query;
-                          widget.onSearchTag?.call(query);
-                        },
-                        onAdded: () {
-                          _addToInput(query);
-                        },
+                        query: history.values.elementAt(rIndex).query,
+                        onTap: _searchTag,
+                        onAdded: _addToInput,
                         onRemoved: () {
-                          final key = widget.history.keys.elementAt(rIndex);
-                          widget.onRemoveHistory?.call(key);
-                          setState(() {});
+                          final key = history.keys.elementAt(rIndex);
+                          onRemoveHistory?.call(key);
                         },
                       ),
                       const Divider(height: 1),
                     ],
                   );
                 },
-                itemCount: widget.history.length,
+                itemCount: history.length,
               ),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const ScrollPhysics(),
                 padding: const EdgeInsets.all(0),
                 itemBuilder: (context, index) {
-                  final query = widget.suggestions[index];
                   return Column(
                     children: [
                       _SuggestionEntry(
-                        query: query,
-                        onTap: () {
-                          widget.controller.query = query;
-                          widget.onSearchTag?.call(query);
-                        },
-                        onAdded: () {
-                          _addToInput(query);
-                        },
+                        query: suggestions[index],
+                        onTap: _searchTag,
+                        onAdded: _addToInput,
                       ),
-                      if (index < widget.suggestions.length - 1)
+                      if (index < suggestions.length - 1)
                         const Divider(height: 1),
                     ],
                   );
                 },
-                itemCount: widget.suggestions.length,
+                itemCount: suggestions.length,
               ),
             ],
           )),
@@ -109,8 +95,8 @@ class _SuggestionEntry extends StatelessWidget {
   }) : super(key: key);
 
   final String query;
-  final Function() onTap;
-  final Function() onAdded;
+  final Function(String entry) onTap;
+  final Function(String entry) onAdded;
   final Function()? onRemoved;
 
   @override
@@ -120,12 +106,12 @@ class _SuggestionEntry extends StatelessWidget {
       horizontalTitleGap: 1,
       leading: const Icon(Icons.history, size: 22),
       title: Text(query),
-      onTap: onTap,
+      onTap: () => onTap.call(query),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: onAdded,
+            onPressed: () => onAdded.call(query),
             icon: const Icon(Icons.add, size: 22),
           ),
           onRemoved != null
