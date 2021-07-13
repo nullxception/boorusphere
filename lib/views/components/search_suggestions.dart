@@ -57,14 +57,31 @@ class SearchSuggestionResult extends HookWidget {
               final rIndex = history.length - 1 - index;
               return Column(
                 children: [
-                  _SuggestionEntry(
-                    query: history.values.elementAt(rIndex) as SearchHistory,
-                    onTap: _searchTag,
-                    onAdded: _addToInput,
-                    onRemoved: () {
+                  Dismissible(
+                    key: Key('item-of-$index'),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
                       final key = history.keys.elementAt(rIndex);
                       onRemoveHistory?.call(key);
                     },
+                    child: _SuggestionEntry(
+                      query: history.values.elementAt(rIndex) as SearchHistory,
+                      onTap: _searchTag,
+                      onAdded: _addToInput,
+                    ),
+                    background: Container(
+                      color: Colors.red,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Text('Remove'),
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Icon(Icons.delete, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   const Divider(height: 1),
                 ],
@@ -107,13 +124,11 @@ class _SuggestionEntry extends StatelessWidget {
     required this.query,
     required this.onTap,
     required this.onAdded,
-    this.onRemoved,
   }) : super(key: key);
 
   final dynamic query;
   final Function(String entry) onTap;
   final Function(String entry) onAdded;
-  final Function()? onRemoved;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +137,6 @@ class _SuggestionEntry extends StatelessWidget {
     final serverName = isHistory ? (query as SearchHistory).server : '';
 
     return ListTile(
-      contentPadding: const EdgeInsets.only(left: 12),
       horizontalTitleGap: 1,
       leading: Icon(isHistory ? Icons.history : Icons.tag, size: 22),
       title: Text(tag),
@@ -135,12 +149,6 @@ class _SuggestionEntry extends StatelessWidget {
             onPressed: () => onAdded.call(tag),
             icon: const Icon(Icons.add, size: 22),
           ),
-          onRemoved != null
-              ? IconButton(
-                  onPressed: onRemoved,
-                  icon: const Icon(Icons.close, size: 22),
-                )
-              : const SizedBox(width: 8 * 3 + 24),
         ],
       ),
     );
