@@ -59,8 +59,10 @@ class ApiProvider {
     }
   }
 
-  List<BooruPost> _parseHttpResponse(http.Response res) {
+  Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
     final searchTag = read(searchTagProvider);
+    final blockedTags = read(blockedTagsProvider);
+    final blocked = await blockedTags.listedEntries;
 
     if (res.statusCode != 200) {
       throw HttpException('Something went wrong [${res.statusCode}]');
@@ -97,15 +99,19 @@ class ApiProvider {
       final tags = _getEntry(post, '^(tags|tag_str)');
       final width = _parseJsonNumber(post, '^(image_wid|width)');
       final height = _parseJsonNumber(post, '^(image_hei|height)');
+      final tagList = tags.value.toString().trim().split(' ');
 
-      if (src != null && thumbnail != null && width > 0 && height > 0) {
+      final hasContent = width > 0 && height > 0;
+      final notBlocked = !tagList.any(blocked.contains);
+
+      if (src != null && thumbnail != null && hasContent && notBlocked) {
         result.add(
           BooruPost(
             id: id,
             src: src,
             displaySrc: displaySrc ?? src,
             thumbnail: thumbnail,
-            tags: tags.value.toString().trim().split(' '),
+            tags: tagList,
             width: width,
             height: height,
           ),
@@ -120,7 +126,8 @@ class ApiProvider {
     final activeServer = read(activeServerProvider);
     try {
       final res = await http.get(activeServer.composeSearchUrl(query));
-      return right(_parseHttpResponse(res));
+      final data = await _parseHttpResponse(res);
+      return right(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
       return left(e);

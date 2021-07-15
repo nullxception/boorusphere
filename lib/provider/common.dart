@@ -6,6 +6,7 @@ import '../model/booru_post.dart';
 import '../model/server_data.dart';
 import 'active_server.dart';
 import 'api_provider.dart';
+import 'blocked_tags.dart';
 import 'grid.dart';
 import 'safe_mode.dart';
 import 'search_history.dart';
@@ -19,10 +20,12 @@ import 'version.dart';
 final searchHistoryBox = Provider((_) => Hive.openBox('searchHistory'));
 final settingsBox = Provider((_) => Hive.openBox('settings'));
 final serversBox = Provider((_) => Hive.openBox('servers'));
+final blockedTagsBox = Provider((_) => Hive.openBox('blockedTags'));
 
 // Common Providers
 final searchHistoryProvider =
     Provider((ref) => SearchHistoryRepository(ref.read));
+final blockedTagsProvider = Provider((ref) => BlockedTagsRepository(ref.read));
 final pageLoadingProvider = StateProvider((_) => false);
 final errorMessageProvider = StateProvider((_) => '');
 final lastOpenedPostProvider = StateProvider((_) => -1);

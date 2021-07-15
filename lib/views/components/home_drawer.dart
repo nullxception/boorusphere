@@ -56,6 +56,13 @@ class HomeDrawer extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Divider(),
+                              ListTile(
+                                title: const Text('Blocked Tags'),
+                                leading: const Icon(Icons.block),
+                                dense: true,
+                                onTap: () => Navigator.pushNamed(
+                                    context, Routes.tagsBlocker),
+                              ),
                               _ThemeSwitcherButton(),
                               ListTile(
                                 title: const Text('Settings'),
