@@ -3,19 +3,19 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Tag extends HookWidget {
   final String tag;
-  final Function() active;
+  final bool Function()? active;
   final Function() onPressed;
 
   Tag({
     Key? key,
     required this.tag,
-    required this.active,
     required this.onPressed,
+    this.active,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isClicked = useState(false);
+    final isClicked = useState(active?.call() ?? false);
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 4, 8, 4),
       child: SizedBox(
