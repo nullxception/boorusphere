@@ -89,29 +89,44 @@ class SearchSuggestionResult extends HookWidget {
             },
             itemCount: history.length,
           ),
-          if (suggestions.isNotEmpty)
+          if (!activeServer.canSuggestTags)
+            Center(
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.search_off),
+                  ),
+                  Text(
+                      '${activeServer.name} did not support search suggestion'),
+                ],
+              ),
+            ),
+          if (activeServer.canSuggestTags && suggestions.isNotEmpty)
             Padding(
               padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
               child: Text('Suggested at ${activeServer.name}'),
             ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            padding: const EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  _SuggestionEntry(
-                    query: suggestions[index],
-                    onTap: _searchTag,
-                    onAdded: _addToInput,
-                  ),
-                  if (index < suggestions.length - 1) const Divider(height: 1),
-                ],
-              );
-            },
-            itemCount: suggestions.length,
-          ),
+          if (activeServer.canSuggestTags)
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const ScrollPhysics(),
+              padding: const EdgeInsets.all(0),
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    _SuggestionEntry(
+                      query: suggestions[index],
+                      onTap: _searchTag,
+                      onAdded: _addToInput,
+                    ),
+                    if (index < suggestions.length - 1)
+                      const Divider(height: 1),
+                  ],
+                );
+              },
+              itemCount: suggestions.length,
+            ),
         ],
       ),
     );
