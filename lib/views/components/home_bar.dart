@@ -101,25 +101,36 @@ class HomeBar extends HookWidget {
         ),
       ],
       builder: (context, transition) {
-        return SearchSuggestionResult(
-            controller: controller,
-            suggestions: suggestion.value,
-            history: suggestionHistory.value,
-            onRemoveHistory: (key) async {
-              searchHistory.delete(key);
-              // rebuild history suggestion
-              suggestionHistory.value = await searchHistory.composeSuggestion(
-                  query: controller.query);
-            },
-            onSearchTag: (value) {
-              _searchForTag(
-                value: value,
-                api: api,
+        return suggestionHistory.value.isEmpty && controller.query.isEmpty
+            ? Center(
+                child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.history),
+                  ),
+                  const Text('No search history yet'),
+                ],
+              ))
+            : SearchSuggestionResult(
                 controller: controller,
-                searchTag: searchTag,
-                searchTagHandler: searchTagHandler,
-              );
-            });
+                suggestions: suggestion.value,
+                history: suggestionHistory.value,
+                onRemoveHistory: (key) async {
+                  searchHistory.delete(key);
+                  // rebuild history suggestion
+                  suggestionHistory.value = await searchHistory
+                      .composeSuggestion(query: controller.query);
+                },
+                onSearchTag: (value) {
+                  _searchForTag(
+                    value: value,
+                    api: api,
+                    controller: controller,
+                    searchTag: searchTag,
+                    searchTagHandler: searchTagHandler,
+                  );
+                });
       },
     );
   }
