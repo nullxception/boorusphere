@@ -154,7 +154,10 @@ class ApiProvider {
     }
   }
 
-  List<String> _parseSuggestionTags(http.Response res) {
+  Future<List<String>> _parseSuggestionTags(http.Response res) async {
+    final blockedTags = read(blockedTagsProvider);
+    final blocked = await blockedTags.listedEntries;
+
     if (res.statusCode != 200) {
       throw HttpException('Something went wrong [${res.statusCode}]');
     }
@@ -172,7 +175,7 @@ class ApiProvider {
     for (final Map<String, dynamic> entry in entries) {
       final tags = _getEntry(entry, '^(name|tag)');
       final postCount = _parseJsonNumber(entry, '.*count');
-      if (postCount > 0) {
+      if (postCount > 0 && !blocked.contains(tags.value)) {
         result.add(tags.value);
       }
     }
@@ -197,7 +200,8 @@ class ApiProvider {
 
     try {
       final res = await http.get(activeServer.composeSuggestionUrl(last));
-      return _parseSuggestionTags(res)
+      final tags = await _parseSuggestionTags(res);
+      return tags
           .where((it) =>
               it.contains(last) &&
               !queries.sublist(0, queries.length - 1).contains(it))
