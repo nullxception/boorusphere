@@ -58,9 +58,16 @@ class Home extends HookWidget {
                 visible: errorMessage.state.isNotEmpty,
                 sliver: SliverToBoxAdapter(
                   child: Container(
-                    height: 32,
-                    alignment: Alignment.center,
-                    child: Text(errorMessage.state),
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 24),
+                          child: Icon(Icons.search_off),
+                        ),
+                        Text(errorMessage.state, textAlign: TextAlign.center),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -68,7 +75,7 @@ class Home extends HookWidget {
                 visible: pageLoading.state,
                 sliver: SliverToBoxAdapter(
                   child: Container(
-                    height: 32,
+                    height: 192,
                     alignment: Alignment.center,
                     child: const SizedBox(
                       width: 128,
