@@ -55,13 +55,13 @@ class SearchSuggestionResult extends HookWidget {
             padding: const EdgeInsets.all(0),
             itemBuilder: (context, index) {
               final rIndex = history.length - 1 - index;
+              final key = history.keys.elementAt(rIndex);
               return Column(
                 children: [
                   Dismissible(
-                    key: Key('item-of-$index'),
+                    key: Key(key.toString()),
                     direction: DismissDirection.endToStart,
                     onDismissed: (direction) {
-                      final key = history.keys.elementAt(rIndex);
                       onRemoveHistory?.call(key);
                     },
                     child: _SuggestionEntry(
