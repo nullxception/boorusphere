@@ -60,6 +60,7 @@ class ApiProvider {
   }
 
   Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
+    final booruPosts = read(booruPostsProvider);
     final searchTag = read(searchTagProvider);
     final blockedTags = read(blockedTagsProvider);
     final blocked = await blockedTags.listedEntries;
@@ -68,7 +69,9 @@ class ApiProvider {
       throw HttpException('Something went wrong [${res.statusCode}]');
     } else if (!res.body.contains(RegExp('https?:\/\/.*'))) {
       // no url founds in the document means no image(s) available to display
-      throw HttpException('No result for "$searchTag"');
+      throw HttpException(booruPosts.isNotEmpty
+          ? 'No more result for "$searchTag"'
+          : 'No result for "$searchTag"');
     }
 
     List<dynamic> entries;
