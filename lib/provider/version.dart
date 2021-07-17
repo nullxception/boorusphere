@@ -11,9 +11,8 @@ class VersionState extends ChangeNotifier {
   final Reader read;
   String version = '0.0.0';
   String lastestVersion = '0.0.0';
-  String _remoteTag = '0.0.0+0';
 
-  get downloadUrl => '$releaseUrl/tag/$_remoteTag';
+  get downloadUrl => '$releaseUrl/latest';
   get shouldUpdate => version != lastestVersion;
 
   VersionState(this.read) {
@@ -34,7 +33,6 @@ class VersionState extends ChangeNotifier {
       if (res.statusCode == 200) {
         final version = loadYaml(res.body)['version'];
         if (version is String && version.contains('+')) {
-          _remoteTag = version;
           lastestVersion = version.split('+').first;
           notifyListeners();
         }
