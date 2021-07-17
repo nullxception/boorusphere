@@ -37,7 +37,9 @@ class Home extends HookWidget {
 
     if (!pageLoading.state) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        if (errorMessage.state.isNotEmpty) {
+        final current = scrollController.position.pixels;
+        final estimatedFloor = scrollController.position.maxScrollExtent - 200;
+        if (errorMessage.state.isNotEmpty && current >= estimatedFloor) {
           scrollController.animateTo(
             scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 250),
