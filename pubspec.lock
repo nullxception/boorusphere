@@ -558,12 +558,10 @@ packages:
   photo_view:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "52685ab7beaf8a9107904bdb8a1590924015d016"
-      resolved-ref: "52685ab7beaf8a9107904bdb8a1590924015d016"
-      url: "git://github.com/fireslime/photo_view"
-    source: git
-    version: "0.11.1"
+      name: photo_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.0"
   platform:
     dependency: transitive
     description:
