@@ -2,8 +2,10 @@ import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
+import '../../provider/common.dart';
 import '../containers/post_detail.dart';
 
 class PostVideoDisplay extends HookWidget {
@@ -13,9 +15,10 @@ class PostVideoDisplay extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerPersist = useProvider(videoPlayerProvider);
     final controller = useMemoized(() {
       final theme = Theme.of(context);
-      return BetterPlayerController(
+      final controller = BetterPlayerController(
         BetterPlayerConfiguration(
           autoPlay: true,
           looping: true,
@@ -58,6 +61,19 @@ class PostVideoDisplay extends HookWidget {
               const BetterPlayerCacheConfiguration(useCache: true),
         ),
       );
+      controller.addEventsListener((ev) {
+        switch (ev.betterPlayerEventType) {
+          case BetterPlayerEventType.initialized:
+            controller.setVolume(playerPersist.mute ? 0 : 1);
+            break;
+          case BetterPlayerEventType.setVolume:
+            playerPersist.mute =
+                controller.videoPlayerController?.value.volume == 0;
+            break;
+          default:
+        }
+      });
+      return controller;
     });
 
     return BetterPlayer(controller: controller);
