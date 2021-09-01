@@ -21,7 +21,6 @@ class Boorusphere extends ConsumerWidget {
           accentColor: Colors.blue,
           brightness: Brightness.dark,
         ),
-        accentColor: Colors.blue,
         toggleableActiveColor: Colors.blue.shade300,
       ),
       themeMode: watch(uiThemeProvider),
