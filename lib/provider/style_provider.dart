@@ -13,10 +13,7 @@ class StyleProvider extends ChangeNotifier {
     if (_isFull == enable) return;
 
     _isFull = enable;
-    SystemChrome.setEnabledSystemUIOverlays(
-      _isFull ? [] : SystemUiOverlay.values,
-    );
-
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     if (notify) notifyListeners();
   }
 
@@ -37,7 +34,7 @@ class StyleProvider extends ChangeNotifier {
     if (!(_isLandOnly | _isFull)) return;
 
     if (_isFull != false) {
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       _isFull = false;
     }
     if (_isLandOnly != false) {
