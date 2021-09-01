@@ -10,6 +10,10 @@ class Settings extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final safeMode = useProvider(safeModeProvider);
+    final sectionTitleStyle = TextStyle(
+      color: Theme.of(context).colorScheme.secondary,
+      fontWeight: FontWeight.bold,
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: SettingsList(
@@ -19,6 +23,7 @@ class Settings extends HookWidget {
         sections: [
           SettingsSection(
             title: 'Server',
+            titleTextStyle: sectionTitleStyle,
             titlePadding: const EdgeInsets.all(20),
             tiles: [
               SettingsTile.switchTile(
@@ -36,6 +41,7 @@ class Settings extends HookWidget {
           ),
           SettingsSection(
             title: 'Misc',
+            titleTextStyle: sectionTitleStyle,
             titlePadding: const EdgeInsets.all(20),
             tiles: [
               SettingsTile(
