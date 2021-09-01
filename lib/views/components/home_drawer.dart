@@ -134,25 +134,40 @@ class _ThemeSwitcherButton extends HookWidget {
         builder: (context) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: uiThemeGroup
-                .map((key, value) {
-                  return MapEntry(
-                    key,
-                    RadioListTile(
-                      value: value,
-                      groupValue: uiTheme,
-                      onChanged: (value) {
-                        if (value is ThemeMode) {
-                          uiThemeHandler.setMode(mode: value);
-                        }
-                        Navigator.pop(context);
-                      },
-                      title: Text(key),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const ListTile(
+                title: Padding(
+                  padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
+                  child: Text(
+                    'Switch theme',
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w200,
                     ),
-                  );
-                })
-                .values
-                .toList(),
+                  ),
+                ),
+              ),
+              ...uiThemeGroup
+                  .map((key, value) {
+                    return MapEntry(
+                      key,
+                      RadioListTile(
+                        value: value,
+                        groupValue: uiTheme,
+                        onChanged: (value) {
+                          if (value is ThemeMode) {
+                            uiThemeHandler.setMode(mode: value);
+                          }
+                          Navigator.pop(context);
+                        },
+                        title: Text(key),
+                      ),
+                    );
+                  })
+                  .values
+                  .toList(),
+            ],
           );
         },
       ),
