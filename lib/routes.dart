@@ -6,7 +6,7 @@ import 'views/containers/post.dart';
 import 'views/containers/settings.dart';
 import 'views/containers/tags_blocker.dart';
 
-class Routes {
+mixin Routes {
   static const home = '';
   static const post = 'post';
   static const tagsBlocker = 'tagsBlocker';
