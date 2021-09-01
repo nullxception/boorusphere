@@ -13,24 +13,12 @@ class ServerData with _$ServerData {
   const factory ServerData({
     @HiveField(0, defaultValue: '') required String name,
     @HiveField(1, defaultValue: '') required String homepage,
-    @HiveField(2, defaultValue: '')
-    @JsonKey(name: 'post_url')
-        required String postUrl,
-    @HiveField(3, defaultValue: '')
-    @JsonKey(name: 'search_url')
-        required String searchUrl,
-    @HiveField(4, defaultValue: '')
-    @JsonKey(name: 'safe_mode_tag')
-        String? safeModeTag,
-    @HiveField(5, defaultValue: '')
-    @JsonKey(name: 'safe_mode_url')
-        String? safeModeUrl,
-    @HiveField(6, defaultValue: '')
-    @JsonKey(name: 'safe_mode')
-        String? safeMode,
-    @HiveField(7, defaultValue: '')
-    @JsonKey(name: 'tag_suggestion_url')
-        String? tagSuggestionUrl,
+    @HiveField(2, defaultValue: '') required String postUrl,
+    @HiveField(3, defaultValue: '') required String searchUrl,
+    @HiveField(4, defaultValue: '') String? safeModeTag,
+    @HiveField(5, defaultValue: '') String? safeModeUrl,
+    @HiveField(6, defaultValue: '') String? safeMode,
+    @HiveField(7, defaultValue: '') String? tagSuggestionUrl,
   }) = _ServerData;
 
   factory ServerData.fromJson(Map<String, dynamic> json) =>
