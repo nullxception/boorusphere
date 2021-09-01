@@ -9,8 +9,7 @@
     "name": "Danbooru",
     "homepage": "https://danbooru.donmai.us",
     "searchUrl": "posts.json?tags={tags}&page={page-id}&limit={post-limit}",
-    "safeMode": "url",
-    "safeModeUrl": "posts.json?tags={tags}&page={page-id}&limit={post-limit}&rating=s",
+    "safeMode": "posts.json?tags={tags}&page={page-id}&limit={post-limit}&rating=s",
     "tagSuggestionUrl": "tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit=20",
     "postUrl": "posts/{post-id}"
   },
@@ -18,8 +17,7 @@
     "name": "Gelbooru",
     "homepage": "https://gelbooru.com",
     "searchUrl": "index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}",
-    "safeMode": "tag",
-    "safeModeTag": "rating:safe",
+    "safeMode": "rating:safe",
     "tagSuggestionUrl": "index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit=20",
     "postUrl": "index.php?page=post&s=view&id={post-id}"
   },
@@ -27,8 +25,7 @@
     "name": "Konachan",
     "homepage": "https://konachan.net",
     "searchUrl": "post.json?tags={tags}&page={page-id}&limit={post-limit}",
-    "safeMode": "tag",
-    "safeModeTag": "rating:safe",
+    "safeMode": "rating:safe",
     "tagSuggestionUrl": "tag.json?name=*{tag-part}*&order=count&limit=20",
     "postUrl": "post/show/{post-id}"
   },
@@ -36,8 +33,7 @@
     "name": "Yandere",
     "homepage": "https://yande.re",
     "searchUrl": "post.json?tags={tags}&page={page-id}&limit={post-limit}",
-    "safeMode": "tag",
-    "safeModeTag": "rating:safe",
+    "safeMode": "rating:safe",
     "tagSuggestionUrl": "tag.json?name=*{tag-part}*&order=count&limit=20",
     "postUrl": "post/show/{post-id}"
   }

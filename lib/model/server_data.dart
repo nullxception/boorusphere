@@ -15,8 +15,6 @@ class ServerData with _$ServerData {
     @HiveField(1, defaultValue: '') required String homepage,
     @HiveField(2, defaultValue: '') required String postUrl,
     @HiveField(3, defaultValue: '') required String searchUrl,
-    @HiveField(4, defaultValue: '') String? safeModeTag,
-    @HiveField(5, defaultValue: '') String? safeModeUrl,
     @HiveField(6, defaultValue: '') String? safeMode,
     @HiveField(7, defaultValue: '') String? tagSuggestionUrl,
   }) = _ServerData;
@@ -36,10 +34,12 @@ class ServerData with _$ServerData {
   Uri composeSearchUrl(ServerQuery query) {
     var _url = '$homepage/$searchUrl';
     var _tags = query.tags;
-    if (query.safeMode && safeMode == 'url') {
-      _url = '$homepage/$safeModeUrl';
-    } else if (query.safeMode && safeMode == 'tag') {
-      _tags += ' $safeModeTag';
+    if (query.safeMode &&
+        safeMode != null &&
+        safeMode!.contains(RegExp('[?=/]'))) {
+      _url = '$homepage/$safeMode';
+    } else if (query.safeMode && safeMode != null) {
+      _tags += ' $safeMode';
     }
 
     return Uri.parse(

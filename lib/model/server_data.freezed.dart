@@ -25,8 +25,6 @@ class _$ServerDataTearOff {
       @HiveField(1, defaultValue: '') required String homepage,
       @HiveField(2, defaultValue: '') required String postUrl,
       @HiveField(3, defaultValue: '') required String searchUrl,
-      @HiveField(4, defaultValue: '') String? safeModeTag,
-      @HiveField(5, defaultValue: '') String? safeModeUrl,
       @HiveField(6, defaultValue: '') String? safeMode,
       @HiveField(7, defaultValue: '') String? tagSuggestionUrl}) {
     return _ServerData(
@@ -34,8 +32,6 @@ class _$ServerDataTearOff {
       homepage: homepage,
       postUrl: postUrl,
       searchUrl: searchUrl,
-      safeModeTag: safeModeTag,
-      safeModeUrl: safeModeUrl,
       safeMode: safeMode,
       tagSuggestionUrl: tagSuggestionUrl,
     );
@@ -59,10 +55,6 @@ mixin _$ServerData {
   String get postUrl => throw _privateConstructorUsedError;
   @HiveField(3, defaultValue: '')
   String get searchUrl => throw _privateConstructorUsedError;
-  @HiveField(4, defaultValue: '')
-  String? get safeModeTag => throw _privateConstructorUsedError;
-  @HiveField(5, defaultValue: '')
-  String? get safeModeUrl => throw _privateConstructorUsedError;
   @HiveField(6, defaultValue: '')
   String? get safeMode => throw _privateConstructorUsedError;
   @HiveField(7, defaultValue: '')
@@ -84,8 +76,6 @@ abstract class $ServerDataCopyWith<$Res> {
       @HiveField(1, defaultValue: '') String homepage,
       @HiveField(2, defaultValue: '') String postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
-      @HiveField(4, defaultValue: '') String? safeModeTag,
-      @HiveField(5, defaultValue: '') String? safeModeUrl,
       @HiveField(6, defaultValue: '') String? safeMode,
       @HiveField(7, defaultValue: '') String? tagSuggestionUrl});
 }
@@ -104,8 +94,6 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
     Object? homepage = freezed,
     Object? postUrl = freezed,
     Object? searchUrl = freezed,
-    Object? safeModeTag = freezed,
-    Object? safeModeUrl = freezed,
     Object? safeMode = freezed,
     Object? tagSuggestionUrl = freezed,
   }) {
@@ -126,14 +114,6 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      safeModeTag: safeModeTag == freezed
-          ? _value.safeModeTag
-          : safeModeTag // ignore: cast_nullable_to_non_nullable
-              as String?,
-      safeModeUrl: safeModeUrl == freezed
-          ? _value.safeModeUrl
-          : safeModeUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       safeMode: safeMode == freezed
           ? _value.safeMode
           : safeMode // ignore: cast_nullable_to_non_nullable
@@ -157,8 +137,6 @@ abstract class _$ServerDataCopyWith<$Res> implements $ServerDataCopyWith<$Res> {
       @HiveField(1, defaultValue: '') String homepage,
       @HiveField(2, defaultValue: '') String postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
-      @HiveField(4, defaultValue: '') String? safeModeTag,
-      @HiveField(5, defaultValue: '') String? safeModeUrl,
       @HiveField(6, defaultValue: '') String? safeMode,
       @HiveField(7, defaultValue: '') String? tagSuggestionUrl});
 }
@@ -179,8 +157,6 @@ class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
     Object? homepage = freezed,
     Object? postUrl = freezed,
     Object? searchUrl = freezed,
-    Object? safeModeTag = freezed,
-    Object? safeModeUrl = freezed,
     Object? safeMode = freezed,
     Object? tagSuggestionUrl = freezed,
   }) {
@@ -201,14 +177,6 @@ class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      safeModeTag: safeModeTag == freezed
-          ? _value.safeModeTag
-          : safeModeTag // ignore: cast_nullable_to_non_nullable
-              as String?,
-      safeModeUrl: safeModeUrl == freezed
-          ? _value.safeModeUrl
-          : safeModeUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       safeMode: safeMode == freezed
           ? _value.safeMode
           : safeMode // ignore: cast_nullable_to_non_nullable
@@ -230,8 +198,6 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       @HiveField(1, defaultValue: '') required this.homepage,
       @HiveField(2, defaultValue: '') required this.postUrl,
       @HiveField(3, defaultValue: '') required this.searchUrl,
-      @HiveField(4, defaultValue: '') this.safeModeTag,
-      @HiveField(5, defaultValue: '') this.safeModeUrl,
       @HiveField(6, defaultValue: '') this.safeMode,
       @HiveField(7, defaultValue: '') this.tagSuggestionUrl})
       : super._();
@@ -252,12 +218,6 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   @HiveField(3, defaultValue: '')
   final String searchUrl;
   @override
-  @HiveField(4, defaultValue: '')
-  final String? safeModeTag;
-  @override
-  @HiveField(5, defaultValue: '')
-  final String? safeModeUrl;
-  @override
   @HiveField(6, defaultValue: '')
   final String? safeMode;
   @override
@@ -266,7 +226,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ServerData(name: $name, homepage: $homepage, postUrl: $postUrl, searchUrl: $searchUrl, safeModeTag: $safeModeTag, safeModeUrl: $safeModeUrl, safeMode: $safeMode, tagSuggestionUrl: $tagSuggestionUrl)';
+    return 'ServerData(name: $name, homepage: $homepage, postUrl: $postUrl, searchUrl: $searchUrl, safeMode: $safeMode, tagSuggestionUrl: $tagSuggestionUrl)';
   }
 
   @override
@@ -278,8 +238,6 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('homepage', homepage))
       ..add(DiagnosticsProperty('postUrl', postUrl))
       ..add(DiagnosticsProperty('searchUrl', searchUrl))
-      ..add(DiagnosticsProperty('safeModeTag', safeModeTag))
-      ..add(DiagnosticsProperty('safeModeUrl', safeModeUrl))
       ..add(DiagnosticsProperty('safeMode', safeMode))
       ..add(DiagnosticsProperty('tagSuggestionUrl', tagSuggestionUrl));
   }
@@ -299,12 +257,6 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
             (identical(other.searchUrl, searchUrl) ||
                 const DeepCollectionEquality()
                     .equals(other.searchUrl, searchUrl)) &&
-            (identical(other.safeModeTag, safeModeTag) ||
-                const DeepCollectionEquality()
-                    .equals(other.safeModeTag, safeModeTag)) &&
-            (identical(other.safeModeUrl, safeModeUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.safeModeUrl, safeModeUrl)) &&
             (identical(other.safeMode, safeMode) ||
                 const DeepCollectionEquality()
                     .equals(other.safeMode, safeMode)) &&
@@ -320,8 +272,6 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(homepage) ^
       const DeepCollectionEquality().hash(postUrl) ^
       const DeepCollectionEquality().hash(searchUrl) ^
-      const DeepCollectionEquality().hash(safeModeTag) ^
-      const DeepCollectionEquality().hash(safeModeUrl) ^
       const DeepCollectionEquality().hash(safeMode) ^
       const DeepCollectionEquality().hash(tagSuggestionUrl);
 
@@ -342,8 +292,6 @@ abstract class _ServerData extends ServerData {
           @HiveField(1, defaultValue: '') required String homepage,
           @HiveField(2, defaultValue: '') required String postUrl,
           @HiveField(3, defaultValue: '') required String searchUrl,
-          @HiveField(4, defaultValue: '') String? safeModeTag,
-          @HiveField(5, defaultValue: '') String? safeModeUrl,
           @HiveField(6, defaultValue: '') String? safeMode,
           @HiveField(7, defaultValue: '') String? tagSuggestionUrl}) =
       _$_ServerData;
@@ -364,12 +312,6 @@ abstract class _ServerData extends ServerData {
   @override
   @HiveField(3, defaultValue: '')
   String get searchUrl => throw _privateConstructorUsedError;
-  @override
-  @HiveField(4, defaultValue: '')
-  String? get safeModeTag => throw _privateConstructorUsedError;
-  @override
-  @HiveField(5, defaultValue: '')
-  String? get safeModeUrl => throw _privateConstructorUsedError;
   @override
   @HiveField(6, defaultValue: '')
   String? get safeMode => throw _privateConstructorUsedError;
