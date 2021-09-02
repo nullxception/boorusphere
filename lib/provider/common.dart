@@ -28,6 +28,7 @@ final searchHistoryProvider =
     Provider((ref) => SearchHistoryRepository(ref.read));
 final blockedTagsProvider = Provider((ref) => BlockedTagsRepository(ref.read));
 final pageLoadingProvider = StateProvider((_) => false);
+final homeDrawerSwipeableProvider = StateProvider((_) => true);
 final errorMessageProvider = StateProvider((_) => '');
 final lastOpenedPostProvider = StateProvider((_) => -1);
 final booruPostsProvider = Provider<List<BooruPost>>((_) => []);

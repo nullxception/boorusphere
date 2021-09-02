@@ -43,6 +43,7 @@ class HomeBar extends HookWidget {
     final searchHistory = useProvider(searchHistoryProvider);
     final suggestion = useState(<String>[]);
     final suggestionHistory = useState({});
+    final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
 
     useEffect(() {
       // Populate suggestion history on first build
@@ -79,6 +80,9 @@ class HomeBar extends HookWidget {
         }
         suggestionHistory.value =
             await searchHistory.composeSuggestion(query: value);
+      },
+      onFocusChanged: (focused) {
+        homeDrawerSwipeable.state = !focused;
       },
       clearQueryOnClose: false,
       actions: [

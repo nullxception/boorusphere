@@ -19,6 +19,7 @@ class Home extends HookWidget {
     final api = useProvider(apiProvider);
     final pageLoading = useProvider(pageLoadingProvider);
     final errorMessage = useProvider(errorMessageProvider);
+    final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
 
     useEffect(() {
       void loadMore() {
@@ -52,7 +53,8 @@ class Home extends HookWidget {
 
     return Scaffold(
       drawer: HomeDrawer(),
-      drawerEdgeDragWidth: MediaQuery.of(context).size.width,
+      drawerEdgeDragWidth:
+          homeDrawerSwipeable.state ? MediaQuery.of(context).size.width : 30,
       body: Stack(
         fit: StackFit.expand,
         children: [
