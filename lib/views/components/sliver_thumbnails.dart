@@ -33,10 +33,6 @@ class SliverThumbnails extends HookWidget {
     final booruPosts = useProvider(booruPostsProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
-    final baseShimmer = Theme.of(context).colorScheme.onSurface.withOpacity(
-        Theme.of(context).brightness == Brightness.dark ? 0.2 : 0.5);
-    final hlShimmer = Theme.of(context).colorScheme.onSurface.withOpacity(
-        Theme.of(context).brightness == Brightness.dark ? 0.5 : 0.2);
 
     return SliverStaggeredGrid.countBuilder(
       crossAxisCount: flexibleGrid,
@@ -61,8 +57,12 @@ class SliverThumbnails extends HookWidget {
               fit: BoxFit.fill,
               imageUrl: booruPosts[index].thumbnail,
               progressIndicatorBuilder: (_, __, ___) => Shimmer.fromColors(
-                baseColor: baseShimmer,
-                highlightColor: hlShimmer,
+                baseColor: Theme.of(context).brightness == Brightness.light
+                    ? Colors.grey.shade300
+                    : Colors.grey.shade700,
+                highlightColor: Theme.of(context).brightness == Brightness.light
+                    ? Colors.white
+                    : Colors.grey.shade500,
                 child: AspectRatio(
                   aspectRatio:
                       booruPosts[index].width / booruPosts[index].height,
