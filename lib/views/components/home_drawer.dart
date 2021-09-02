@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../model/server_data.dart';
 import '../../provider/common.dart';
 import '../../routes.dart';
 import 'favicon.dart';
@@ -56,6 +57,7 @@ class HomeDrawer extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Divider(),
+                              _BackToHomeTile(),
                               ListTile(
                                 title: const Text('Blocked Tags'),
                                 leading: const Icon(Icons.block),
@@ -104,6 +106,29 @@ class AppVersionTile extends HookWidget {
       ),
       dense: true,
       onTap: version.shouldUpdate ? () => launch(version.downloadUrl) : null,
+    );
+  }
+}
+
+class _BackToHomeTile extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final api = useProvider(apiProvider);
+    final searchTag = useProvider(searchTagProvider);
+    final searchTagHandler = useProvider(searchTagProvider.notifier);
+
+    return Visibility(
+      visible: searchTag != ServerData.defaultTag,
+      child: ListTile(
+        title: const Text('Back to home'),
+        leading: const Icon(Icons.home_outlined),
+        dense: true,
+        onTap: () {
+          searchTagHandler.setTag(query: ServerData.defaultTag);
+          api.fetch(clear: true);
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 }
