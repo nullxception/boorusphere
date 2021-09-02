@@ -48,6 +48,11 @@ class HomeBar extends HookWidget {
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
 
     useEffect(() {
+      // Populate search tag on first build
+      controller.query = searchTag == ServerData.defaultTag ? '' : searchTag;
+    }, [searchTag]);
+
+    useEffect(() {
       // Populate suggestion history on first build
       searchHistory.mapped.then((it) {
         if (it.isNotEmpty) suggestionHistory.value = it;
@@ -61,7 +66,7 @@ class HomeBar extends HookWidget {
       margins: EdgeInsets.fromLTRB(
           10.5, MediaQuery.of(context).viewPadding.top + 12, 10, 0),
       borderRadius: BorderRadius.circular(8),
-      hint: searchTag == ServerData.defaultTag ? 'Search...' : searchTag,
+      hint: 'Search...',
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
       transitionCurve: Curves.easeInCirc,
