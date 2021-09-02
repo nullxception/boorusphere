@@ -13,6 +13,7 @@ class SearchSuggestionResult extends HookWidget {
     required this.suggestions,
     required this.history,
     this.onRemoveHistory,
+    this.onClearHistory,
     this.onSearchTag,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class SearchSuggestionResult extends HookWidget {
   final List<String> suggestions;
   final Map history;
   final Function(dynamic key)? onRemoveHistory;
+  final Function()? onClearHistory;
   final Function(String value)? onSearchTag;
 
   void _addToInput(String suggested) {
@@ -44,9 +46,26 @@ class SearchSuggestionResult extends HookWidget {
         children: [
           Visibility(
             visible: history.isNotEmpty,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Text('Recently'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Recently'),
+                  TextButton(
+                    onPressed: () {
+                      onClearHistory?.call();
+                    },
+                    child: Text(
+                      'Clear all',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           ListView.builder(

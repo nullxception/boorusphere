@@ -32,6 +32,11 @@ class SearchHistoryRepository {
     return history.toMap();
   }
 
+  Future<void> clear() async {
+    final history = await read(searchHistoryBox);
+    history.clear();
+  }
+
   Future<void> delete(key) async {
     final history = await read(searchHistoryBox);
     history.delete(key);

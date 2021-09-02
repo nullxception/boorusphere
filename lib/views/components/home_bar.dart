@@ -124,6 +124,10 @@ class HomeBar extends HookWidget {
                 controller: controller,
                 suggestions: suggestion.value,
                 history: suggestionHistory.value,
+                onClearHistory: () async {
+                  searchHistory.clear();
+                  suggestionHistory.value = {};
+                },
                 onRemoveHistory: (key) async {
                   searchHistory.delete(key);
                   // rebuild history suggestion
