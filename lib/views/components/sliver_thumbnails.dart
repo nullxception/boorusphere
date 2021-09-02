@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../provider/common.dart';
 import '../../routes.dart';
@@ -32,6 +33,10 @@ class SliverThumbnails extends HookWidget {
     final booruPosts = useProvider(booruPostsProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
+    final baseShimmer = Theme.of(context).colorScheme.onSurface.withOpacity(
+        Theme.of(context).brightness == Brightness.dark ? 0.2 : 0.5);
+    final hlShimmer = Theme.of(context).colorScheme.onSurface.withOpacity(
+        Theme.of(context).brightness == Brightness.dark ? 0.5 : 0.2);
 
     return SliverStaggeredGrid.countBuilder(
       crossAxisCount: flexibleGrid,
@@ -55,11 +60,16 @@ class SliverThumbnails extends HookWidget {
               filterQuality: thumbnailQuality(gridExtra),
               fit: BoxFit.fill,
               imageUrl: booruPosts[index].thumbnail,
-              progressIndicatorBuilder: (_, __, ___) => AspectRatio(
-                aspectRatio: booruPosts[index].width / booruPosts[index].height,
-                child: const Align(
-                  child: LinearProgressIndicator(),
-                  alignment: Alignment.bottomCenter,
+              progressIndicatorBuilder: (_, __, ___) => Shimmer.fromColors(
+                baseColor: baseShimmer,
+                highlightColor: hlShimmer,
+                child: AspectRatio(
+                  aspectRatio:
+                      booruPosts[index].width / booruPosts[index].height,
+                  child: Container(
+                    color: Colors.black,
+                    child: const SizedBox.expand(),
+                  ),
                 ),
               ),
               errorWidget: (_, __, error) =>

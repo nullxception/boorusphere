@@ -7,6 +7,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import '../../provider/common.dart';
 import '../components/home_bar.dart';
 import '../components/home_drawer.dart';
+import '../components/sliver_page_state.dart';
 import '../components/sliver_thumbnails.dart';
 
 class Home extends HookWidget {
@@ -66,42 +67,7 @@ class Home extends HookWidget {
                   autoScrollController: scrollController,
                 ),
               ),
-              SliverVisibility(
-                visible: errorMessage.state.isNotEmpty,
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 24),
-                          child: Icon(Icons.search_off),
-                        ),
-                        Text(errorMessage.state, textAlign: TextAlign.center),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 24),
-                          child: ElevatedButton(
-                              onPressed: api.loadMore,
-                              child: const Text('try again')),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SliverVisibility(
-                visible: pageLoading.state,
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    height: 48,
-                    alignment: Alignment.center,
-                    child: const SizedBox(
-                      width: 128,
-                      child: LinearProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ),
+              SliverPageState()
             ],
           ),
           HomeBar(),
