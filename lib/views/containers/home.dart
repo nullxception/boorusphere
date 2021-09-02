@@ -58,14 +58,9 @@ class Home extends HookWidget {
             controller: scrollController,
             physics: const BouncingScrollPhysics(),
             slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: MediaQuery.of(context).padding.top +
-                      AppBar().preferredSize.height,
-                ),
-              ),
               SliverPadding(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(
+                    10, MediaQuery.of(context).viewPadding.top + 72, 10, 10),
                 sliver: SliverThumbnails(
                   autoScrollController: scrollController,
                 ),
