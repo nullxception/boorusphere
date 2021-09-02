@@ -51,6 +51,7 @@ class Home extends HookWidget {
 
     return Scaffold(
       drawer: HomeDrawer(),
+      drawerEdgeDragWidth: MediaQuery.of(context).size.width,
       body: Stack(
         fit: StackFit.expand,
         children: [
