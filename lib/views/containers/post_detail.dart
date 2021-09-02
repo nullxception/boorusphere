@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../model/booru_post.dart';
 import '../../provider/common.dart';
 import '../components/tag.dart';
+import 'home.dart';
 
 class PostDetails extends HookWidget {
   const PostDetails({Key? keys, required this.id}) : super(key: keys);
@@ -17,8 +18,10 @@ class PostDetails extends HookWidget {
     final activeServer = useProvider(activeServerProvider);
     final booruPosts = useProvider(booruPostsProvider);
     final selectedtag = useState(<String>[]);
+    final api = useProvider(apiProvider);
+    final searchTagHandler = useProvider(searchTagProvider.notifier);
     final fabController = useAnimationController(
-        duration: const Duration(milliseconds: 300), initialValue: 0);
+        duration: const Duration(milliseconds: 150), initialValue: 0);
 
     final data = booruPosts.firstWhere(
       (element) => element.id == id,
@@ -107,28 +110,59 @@ class PostDetails extends HookWidget {
               );
             }).toList()),
           ),
-          SizedBox.fromSize(size: const Size(0, 92)),
+          SizedBox.fromSize(size: const Size(0, 72)),
         ],
       ),
-      floatingActionButton: ScaleTransition(
-        scale: fabController,
-        child: FloatingActionButton(
-          child: const Icon(Icons.copy),
-          onPressed: () {
-            final tags = selectedtag.value.join(' ');
-            if (tags.isNotEmpty) {
-              Clipboard.setData(
-                ClipboardData(text: tags),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Copied to clipboard:\n$tags'),
-                  duration: const Duration(milliseconds: 600),
-                ),
-              );
-            }
-          },
-        ),
+      floatingActionButton: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            right: 64,
+            child: ScaleTransition(
+              scale: fabController,
+              child: FloatingActionButton(
+                heroTag: null,
+                child: const Icon(Icons.search),
+                onPressed: () {
+                  final tags = selectedtag.value.join(' ');
+                  if (tags.isNotEmpty) {
+                    searchTagHandler.setTag(query: tags);
+                    api.fetch(clear: true);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: ScaleTransition(
+              scale: fabController,
+              child: FloatingActionButton(
+                heroTag: null,
+                child: const Icon(Icons.copy),
+                onPressed: () {
+                  final tags = selectedtag.value.join(' ');
+                  if (tags.isNotEmpty) {
+                    Clipboard.setData(
+                      ClipboardData(text: tags),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Copied to clipboard:\n$tags'),
+                        duration: const Duration(milliseconds: 600),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

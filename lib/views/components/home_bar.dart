@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../model/server_data.dart';
 import '../../provider/api_provider.dart';
 import '../../provider/common.dart';
 import '../../provider/search_tag.dart';
@@ -59,7 +60,7 @@ class HomeBar extends HookWidget {
       margins: EdgeInsets.fromLTRB(
           10.5, MediaQuery.of(context).viewPadding.top + 12, 10, 0),
       borderRadius: BorderRadius.circular(8),
-      hint: 'Search...',
+      hint: searchTag == ServerData.defaultTag ? 'Search...' : searchTag,
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
       transitionCurve: Curves.easeInCirc,
