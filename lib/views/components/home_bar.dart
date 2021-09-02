@@ -37,6 +37,7 @@ class HomeBar extends HookWidget {
   Widget build(BuildContext context) {
     final controller = useFloatingSearchBarController();
     final gridHandler = useProvider(gridProvider.notifier);
+    final grid = useProvider(gridProvider);
     final activeServer = useProvider(activeServerProvider);
     final api = useProvider(apiProvider);
     final searchTag = useProvider(searchTagProvider);
@@ -90,7 +91,10 @@ class HomeBar extends HookWidget {
         FloatingSearchBarAction(
           showIfOpened: false,
           child: CircularButton(
-            icon: const Icon(Icons.grid_view),
+            icon: Icon(
+              Icons.grid_view,
+              size: (IconTheme.of(context).size ?? 24) + 4 - (4 * (grid + 1)),
+            ),
             onPressed: gridHandler.rotate,
           ),
         ),
