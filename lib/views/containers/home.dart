@@ -20,11 +20,8 @@ class Home extends HookWidget {
     final pageLoading = useProvider(pageLoadingProvider);
     final errorMessage = useProvider(errorMessageProvider);
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
-
-    useEffect(() {
-      void loadMore() {
-        if (errorMessage.state.isNotEmpty) return;
-
+    final loadMoreCall = useCallback(() {
+      if (errorMessage.state.isEmpty) {
         // Infinite page with scroll detection
         final threshold = MediaQuery.of(context).size.height / 6;
         if (scrollController.position.pixels >=
@@ -32,9 +29,11 @@ class Home extends HookWidget {
           api.loadMore();
         }
       }
+    }, [key]);
 
-      scrollController.addListener(loadMore);
-      return () => scrollController.removeListener(loadMore);
+    useEffect(() {
+      scrollController.addListener(loadMoreCall);
+      return () => scrollController.removeListener(loadMoreCall);
     }, [scrollController]);
 
     if (!pageLoading.state) {
