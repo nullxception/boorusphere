@@ -56,21 +56,8 @@ class SliverThumbnails extends HookWidget {
               filterQuality: thumbnailQuality(gridExtra),
               fit: BoxFit.fill,
               imageUrl: booruPosts[index].thumbnail,
-              progressIndicatorBuilder: (_, __, ___) => Shimmer.fromColors(
-                baseColor: Theme.of(context).brightness == Brightness.light
-                    ? Colors.grey.shade300
-                    : Colors.grey.shade700,
-                highlightColor: Theme.of(context).brightness == Brightness.light
-                    ? Colors.white
-                    : Colors.grey.shade500,
-                child: AspectRatio(
-                  aspectRatio:
-                      booruPosts[index].width / booruPosts[index].height,
-                  child: Container(
-                    color: Colors.black,
-                    child: const SizedBox.expand(),
-                  ),
-                ),
+              progressIndicatorBuilder: (_, __, ___) => _ThumbnailShimmer(
+                aspectRatio: booruPosts[index].width / booruPosts[index].height,
               ),
               errorWidget: (_, __, error) =>
                   const Icon(Icons.broken_image_outlined),
@@ -94,6 +81,50 @@ class SliverThumbnails extends HookWidget {
         ),
       ),
       staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
+    );
+  }
+}
+
+class _ThumbnailShimmer extends StatelessWidget {
+  const _ThumbnailShimmer({
+    Key? key,
+    required this.aspectRatio,
+  }) : super(key: key);
+
+  final double aspectRatio;
+
+  @override
+  Widget build(BuildContext context) {
+    final baseColor = Theme.of(context).brightness == Brightness.light
+        ? Colors.grey.shade300
+        : Colors.grey.shade700;
+    final highlightColor = Theme.of(context).brightness == Brightness.light
+        ? Colors.white
+        : Colors.grey.shade500;
+
+    return Shimmer(
+      gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: <Color>[
+            baseColor,
+            baseColor,
+            highlightColor,
+            baseColor,
+            baseColor
+          ],
+          stops: const <double>[
+            0.0,
+            0.35,
+            0.5,
+            0.65,
+            1.0
+          ]),
+      period: const Duration(milliseconds: 700),
+      child: AspectRatio(
+        aspectRatio: aspectRatio,
+        child: Container(color: Colors.black, child: const SizedBox.expand()),
+      ),
     );
   }
 }
