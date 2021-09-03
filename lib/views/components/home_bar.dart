@@ -11,6 +11,10 @@ import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
 class HomeBar extends HookWidget {
+  const HomeBar({Key? key, this.body}) : super(key: key);
+
+  final Widget? body;
+
   void _searchForTag({
     required String value,
     required FloatingSearchBarController controller,
@@ -153,6 +157,7 @@ class HomeBar extends HookWidget {
                   );
                 });
       },
+      body: body,
     );
   }
 }

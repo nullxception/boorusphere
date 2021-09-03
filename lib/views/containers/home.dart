@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../provider/common.dart';
@@ -54,25 +55,28 @@ class Home extends HookWidget {
       drawer: HomeDrawer(),
       drawerEdgeDragWidth:
           homeDrawerSwipeable.state ? MediaQuery.of(context).size.width : 30,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          CustomScrollView(
-            controller: scrollController,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                    10, MediaQuery.of(context).viewPadding.top + 72, 10, 10),
-                sliver: SliverThumbnails(
-                  autoScrollController: scrollController,
-                ),
+      body: HomeBar(
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            FloatingSearchBarScrollNotifier(
+              child: CustomScrollView(
+                controller: scrollController,
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(10,
+                        MediaQuery.of(context).viewPadding.top + 72, 10, 10),
+                    sliver: SliverThumbnails(
+                      autoScrollController: scrollController,
+                    ),
+                  ),
+                  SliverPageState()
+                ],
               ),
-              SliverPageState()
-            ],
-          ),
-          HomeBar(),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
