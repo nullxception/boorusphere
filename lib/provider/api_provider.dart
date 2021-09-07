@@ -206,7 +206,7 @@ class ApiProvider {
     final page = read(_pageNumberProvider);
     final pageLoading = read(pageLoadingProvider);
     final searchTag = read(searchTagProvider);
-    final safeMode = read(safeModeProvider);
+    final server = read(serverProvider);
     final errorMessage = read(errorMessageProvider);
     final booruPosts = read(booruPostsProvider);
 
@@ -226,7 +226,8 @@ class ApiProvider {
     }
 
     final res = await _fetch(
-      ServerQuery(page: page.state, tags: searchTag, safeMode: safeMode),
+      ServerQuery(
+          page: page.state, tags: searchTag, safeMode: server.useSafeMode),
     );
     res.fold(
       (fail) => errorMessage.state = _parseException(fail),

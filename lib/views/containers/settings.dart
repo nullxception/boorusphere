@@ -9,7 +9,7 @@ import '../../routes.dart';
 class Settings extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final safeMode = useProvider(safeModeProvider);
+    final server = useProvider(serverProvider);
     final sectionTitleStyle = TextStyle(
       color: Theme.of(context).colorScheme.secondary,
       fontWeight: FontWeight.bold,
@@ -32,9 +32,9 @@ class Settings extends HookWidget {
                 subtitle:
                     'Fetch content that are safe.\nNote that rated "safe" on booru-powered site doesn\'t mean "Safe For Work".',
                 leading: const Icon(Icons.phonelink_lock),
-                switchValue: safeMode,
+                switchValue: server.useSafeMode,
                 onToggle: (value) {
-                  context.read(safeModeProvider.notifier).setMode(safe: value);
+                  server.setSafeMode(value);
                 },
               ),
             ],

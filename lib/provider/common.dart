@@ -6,7 +6,6 @@ import '../model/booru_post.dart';
 import 'api_provider.dart';
 import 'blocked_tags.dart';
 import 'grid.dart';
-import 'safe_mode.dart';
 import 'search_history.dart';
 import 'search_tag.dart';
 import 'server.dart';
@@ -41,10 +40,6 @@ final serverProvider = ChangeNotifierProvider((ref) {
 
 final uiThemeProvider = StateNotifierProvider<UIThemeState, ThemeMode>((ref) {
   return UIThemeState(ref.read)..init();
-});
-
-final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
-  return SafeModeState(ref.read)..init();
 });
 
 final searchTagProvider = StateNotifierProvider<SearchTagState, String>((ref) {

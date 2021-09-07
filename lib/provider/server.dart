@@ -11,17 +11,20 @@ class ServerState extends ChangeNotifier {
   final Reader read;
   List<ServerData> _serverList = [];
   ServerData _activeServer = defaultServer;
+  bool _safeMode = true;
 
   ServerState(this.read);
 
   List<ServerData> get all => _serverList;
   ServerData get active => _activeServer;
+  bool get useSafeMode => _safeMode;
 
   Future<void> init() async {
     final api = read(apiProvider);
     final prefs = await read(settingsBox);
     final serverBox = await read(serversBox);
 
+    _safeMode = prefs.get('server_safe_mode') ?? true;
     if (serverBox.isEmpty) {
       final fromAssets = await _defaultServersAssets();
       serverBox.addAll(fromAssets);
@@ -55,6 +58,13 @@ class ServerState extends ChangeNotifier {
       final prefs = await read(settingsBox);
       prefs.put('active_server', name);
     }
+  }
+
+  Future<void> setSafeMode(safe) async {
+    _safeMode = safe;
+    final prefs = await read(settingsBox);
+    prefs.put('server_safe_mode', safe);
+    notifyListeners();
   }
 
   static const defaultServer = ServerData(
