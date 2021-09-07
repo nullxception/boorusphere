@@ -9,7 +9,7 @@
     "name": "Danbooru",
     "homepage": "https://danbooru.donmai.us",
     "searchUrl": "posts.json?tags={tags}&page={page-id}&limit={post-limit}",
-    "safeMode": "posts.json?tags={tags}&page={page-id}&limit={post-limit}&rating=s",
+    "safeMode": "rating:safe",
     "tagSuggestionUrl": "tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit=20",
     "postUrl": "posts/{post-id}"
   },
