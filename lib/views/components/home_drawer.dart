@@ -204,15 +204,13 @@ class _ServerSelection extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final api = useProvider(apiProvider);
-    final activeServer = useProvider(activeServerProvider);
-    final activeServerHandler = useProvider(activeServerProvider.notifier);
-    final serverList = useProvider(serverListProvider);
+    final server = useProvider(serverProvider);
     final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: serverList.map((it) {
+      children: server.all.map((it) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           child: ListTile(
@@ -226,11 +224,11 @@ class _ServerSelection extends HookWidget {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            selected: it.name == activeServer.name,
+            selected: it.name == server.active.name,
             selectedTileColor: theme.colorScheme.secondary
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
-              activeServerHandler.setActiveServer(name: it.name);
+              server.setActiveServer(name: it.name);
               api.fetch(clear: true);
               Navigator.pop(context);
             },

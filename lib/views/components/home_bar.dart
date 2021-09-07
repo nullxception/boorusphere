@@ -42,7 +42,7 @@ class HomeBar extends HookWidget {
     final controller = useFloatingSearchBarController();
     final gridHandler = useProvider(gridProvider.notifier);
     final grid = useProvider(gridProvider);
-    final activeServer = useProvider(activeServerProvider);
+    final server = useProvider(serverProvider);
     final api = useProvider(apiProvider);
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
@@ -86,7 +86,7 @@ class HomeBar extends HookWidget {
         );
       },
       onQueryChanged: (value) async {
-        if (activeServer.canSuggestTags) {
+        if (server.active.canSuggestTags) {
           suggestion.value = await api.fetchSuggestion(query: value);
         }
         suggestionHistory.value =

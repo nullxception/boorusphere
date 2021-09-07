@@ -37,7 +37,7 @@ class SearchSuggestionResult extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeServer = useProvider(activeServerProvider);
+    final server = useProvider(serverProvider);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
@@ -108,7 +108,7 @@ class SearchSuggestionResult extends HookWidget {
             },
             itemCount: history.length,
           ),
-          if (!activeServer.canSuggestTags)
+          if (!server.active.canSuggestTags)
             Center(
               child: Column(
                 children: [
@@ -117,16 +117,16 @@ class SearchSuggestionResult extends HookWidget {
                     child: Icon(Icons.search_off),
                   ),
                   Text(
-                      '${activeServer.name} did not support search suggestion'),
+                      '${server.active.name} did not support search suggestion'),
                 ],
               ),
             ),
-          if (activeServer.canSuggestTags && suggestions.isNotEmpty)
+          if (server.active.canSuggestTags && suggestions.isNotEmpty)
             Padding(
               padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
-              child: Text('Suggested at ${activeServer.name}'),
+              child: Text('Suggested at ${server.active.name}'),
             ),
-          if (activeServer.canSuggestTags)
+          if (server.active.canSuggestTags)
             ListView.builder(
               shrinkWrap: true,
               physics: const ScrollPhysics(),

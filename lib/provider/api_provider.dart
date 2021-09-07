@@ -22,12 +22,10 @@ class ApiProvider {
   }
 
   void _init() async {
-    final serverList = read(serverListProvider.notifier);
-    final activeServer = read(activeServerProvider.notifier);
+    final server = read(serverProvider);
     final safeMode = read(safeModeProvider.notifier);
 
-    await serverList.init();
-    await activeServer.init();
+    await server.init();
     await safeMode.init();
     fetch(clear: true);
   }
@@ -126,9 +124,9 @@ class ApiProvider {
   }
 
   Future<Either<Exception, List<BooruPost>>> _fetch(ServerQuery query) async {
-    final activeServer = read(activeServerProvider);
+    final server = read(serverProvider);
     try {
-      final res = await http.get(activeServer.composeSearchUrl(query));
+      final res = await http.get(server.active.composeSearchUrl(query));
       final data = await _parseHttpResponse(res);
       return right(data);
     } on Exception catch (e) {
@@ -195,14 +193,14 @@ class ApiProvider {
       return [];
     }
 
-    final activeServer = read(activeServerProvider);
-    if (!activeServer.canSuggestTags) {
-      Fimber.w('No search suggestion feature on ${activeServer.name}');
+    final server = read(serverProvider);
+    if (!server.active.canSuggestTags) {
+      Fimber.w('No search suggestion feature on ${server.active.name}');
       return [];
     }
 
     try {
-      final res = await http.get(activeServer.composeSuggestionUrl(last));
+      final res = await http.get(server.active.composeSuggestionUrl(last));
       final tags = await _parseSuggestionTags(res);
       return tags
           .where((it) =>

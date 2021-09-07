@@ -15,7 +15,7 @@ class PostDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeServer = useProvider(activeServerProvider);
+    final server = useProvider(serverProvider);
     final booruPosts = useProvider(booruPostsProvider);
     final selectedtag = useState(<String>[]);
     final api = useProvider(apiProvider);
@@ -27,7 +27,7 @@ class PostDetails extends HookWidget {
       (element) => element.id == id,
       orElse: () => BooruPost.empty(),
     );
-    final postUrl = activeServer.composePostUrl(data.id);
+    final postUrl = server.active.composePostUrl(data.id);
 
     return Scaffold(
       appBar: AppBar(

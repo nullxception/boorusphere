@@ -61,12 +61,12 @@ class SearchHistoryRepository {
     if (query.isEmpty) return;
 
     final history = await read(searchHistoryBox);
-    final activeServer = await read(activeServerProvider);
+    final server = await read(serverProvider);
     try {
       if (!await checkExists(value: query)) {
         history.add(SearchHistory(
           query: query,
-          server: activeServer.name,
+          server: server.active.name,
         ));
       }
     } on Exception catch (e) {
