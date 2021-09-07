@@ -17,18 +17,7 @@ final _pageNumberProvider = StateProvider((_) => 1);
 class ApiProvider {
   final Reader read;
 
-  ApiProvider(this.read) {
-    _init();
-  }
-
-  void _init() async {
-    final server = read(serverProvider);
-    final safeMode = read(safeModeProvider.notifier);
-
-    await server.init();
-    await safeMode.init();
-    fetch(clear: true);
-  }
+  ApiProvider(this.read);
 
   MapEntry<String, dynamic> _getEntry(Map<String, dynamic> data, String key) {
     return data.entries.firstWhere(

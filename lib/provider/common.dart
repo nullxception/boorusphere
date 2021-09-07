@@ -22,8 +22,6 @@ final serversBox = Provider((_) => Hive.openBox('servers'));
 final blockedTagsBox = Provider((_) => Hive.openBox('blockedTags'));
 
 // Common Providers
-final searchHistoryProvider =
-    Provider((ref) => SearchHistoryRepository(ref.read));
 final blockedTagsProvider = Provider((ref) => BlockedTagsRepository(ref.read));
 final pageLoadingProvider = StateProvider((_) => false);
 final homeDrawerSwipeableProvider = StateProvider((_) => true);
@@ -32,14 +30,21 @@ final lastOpenedPostProvider = StateProvider((_) => -1);
 final booruPostsProvider = Provider<List<BooruPost>>((_) => []);
 final apiProvider = Provider((ref) => ApiProvider(ref.read));
 final styleProvider = ChangeNotifierProvider((_) => StyleProvider());
-final serverProvider = ChangeNotifierProvider((ref) => ServerState(ref.read));
+
+final searchHistoryProvider = Provider((ref) {
+  return SearchHistoryRepository(ref.read);
+});
+
+final serverProvider = ChangeNotifierProvider((ref) {
+  return ServerState(ref.read)..init();
+});
 
 final uiThemeProvider = StateNotifierProvider<UIThemeState, ThemeMode>((ref) {
   return UIThemeState(ref.read)..init();
 });
 
 final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
-  return SafeModeState(ref.read);
+  return SafeModeState(ref.read)..init();
 });
 
 final searchTagProvider = StateNotifierProvider<SearchTagState, String>((ref) {

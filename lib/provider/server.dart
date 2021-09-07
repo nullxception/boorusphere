@@ -18,7 +18,10 @@ class ServerState extends ChangeNotifier {
   ServerData get active => _activeServer;
 
   Future<void> init() async {
+    final api = read(apiProvider);
+    final prefs = await read(settingsBox);
     final serverBox = await read(serversBox);
+
     if (serverBox.isEmpty) {
       final fromAssets = await _defaultServersAssets();
       serverBox.addAll(fromAssets);
@@ -27,11 +30,12 @@ class ServerState extends ChangeNotifier {
       _serverList = serverBox.values.map((it) => it as ServerData).toList();
     }
 
-    final prefs = await read(settingsBox);
     final activeServerName = prefs.get('active_server');
     if (activeServerName != null && _activeServer.name != activeServerName) {
       _activeServer = read(serverProvider).select(activeServerName);
     }
+
+    api.fetch(clear: true);
   }
 
   Future<List<ServerData>> _defaultServersAssets() async {

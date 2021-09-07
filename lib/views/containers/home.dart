@@ -22,7 +22,7 @@ class Home extends HookWidget {
     final errorMessage = useProvider(errorMessageProvider);
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
     final loadMoreCall = useCallback(() {
-      if (errorMessage.state.isEmpty) {
+      if (errorMessage.state.isEmpty && !pageLoading.state) {
         // Infinite page with scroll detection
         final threshold = MediaQuery.of(context).size.height / 6;
         if (scrollController.position.pixels >=
