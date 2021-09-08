@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
-import '../../provider/common.dart';
+import '../../provider/system_chrome.dart';
 import 'post_error.dart';
 import 'post_image.dart';
 import 'post_video.dart';
@@ -16,7 +16,7 @@ class PostDisplay extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = useProvider(styleProvider);
+    final style = useProvider(systemChromeProvider);
     return GestureDetector(
       onTap: () => style.setFullScreen(enable: !style.isFullScreen),
       child: Stack(

@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
-import '../../provider/common.dart';
+import '../../provider/video_player.dart';
 import '../containers/post_detail.dart';
 
 class PostVideoDisplay extends HookWidget {

@@ -3,11 +3,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
-import '../../provider/common.dart';
+import '../../provider/booru_api.dart';
+import '../../provider/system_chrome.dart';
 import '../components/post_display.dart';
 import '../components/post_toolbox.dart';
 import '../components/preferred_visibility.dart';
 import '../components/subbed_title.dart';
+
+final lastOpenedPostProvider = StateProvider((_) => -1);
 
 class Post extends HookWidget {
   @override
@@ -15,8 +18,8 @@ class Post extends HookWidget {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
 
     final pageController = usePageController(initialPage: beginPage);
-    final style = useProvider(styleProvider);
-    final booruPosts = useProvider(booruPostsProvider);
+    final style = useProvider(systemChromeProvider);
+    final booruPosts = useProvider(postsProvider);
     final lastOpenedIndex = useProvider(lastOpenedPostProvider);
     final page = useState(beginPage);
 

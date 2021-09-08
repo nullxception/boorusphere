@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../provider/blocked_tags.dart';
-import '../../provider/common.dart';
 
 class TagsBlocker extends HookWidget {
   void updateTags(BlockedTagsRepository repo, ValueNotifier storage) {

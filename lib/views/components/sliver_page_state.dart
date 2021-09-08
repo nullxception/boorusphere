@@ -3,14 +3,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../provider/common.dart';
+import '../../provider/booru_api.dart';
 
 class SliverPageState extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final api = useProvider(apiProvider);
+    final api = useProvider(booruApiProvider);
     final pageLoading = useProvider(pageLoadingProvider);
-    final errorMessage = useProvider(errorMessageProvider);
+    final errorMessage = useProvider(pageErrorProvider);
 
     return SliverToBoxAdapter(
       child: Column(

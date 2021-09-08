@@ -5,7 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/booru_post.dart';
-import '../../provider/common.dart';
+import '../../provider/booru_api.dart';
+import '../../provider/search_tag.dart';
+import '../../provider/server_data.dart';
 import '../components/tag.dart';
 import 'home.dart';
 
@@ -15,10 +17,10 @@ class PostDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final server = useProvider(serverProvider);
-    final booruPosts = useProvider(booruPostsProvider);
+    final server = useProvider(serverDataProvider);
+    final booruPosts = useProvider(postsProvider);
     final selectedtag = useState(<String>[]);
-    final api = useProvider(apiProvider);
+    final api = useProvider(booruApiProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);

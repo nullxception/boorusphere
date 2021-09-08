@@ -5,11 +5,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-import '../../provider/common.dart';
+import '../../provider/booru_api.dart';
 import '../components/home_bar.dart';
 import '../components/home_drawer.dart';
 import '../components/sliver_page_state.dart';
 import '../components/sliver_thumbnails.dart';
+
+final homeDrawerSwipeableProvider = StateProvider((_) => true);
 
 class Home extends HookWidget {
   @override
@@ -17,9 +19,9 @@ class Home extends HookWidget {
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
-    final api = useProvider(apiProvider);
+    final api = useProvider(booruApiProvider);
     final pageLoading = useProvider(pageLoadingProvider);
-    final errorMessage = useProvider(errorMessageProvider);
+    final errorMessage = useProvider(pageErrorProvider);
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
     final loadMoreCall = useCallback(() {
       if (errorMessage.state.isEmpty && !pageLoading.state) {

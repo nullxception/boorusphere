@@ -5,22 +5,25 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/server_data.dart';
-import 'common.dart';
+import 'booru_api.dart';
+import 'hive_boxes.dart';
 
-class ServerState extends ChangeNotifier {
+class ServerDataNotifier extends ChangeNotifier {
   final Reader read;
   List<ServerData> _serverList = [];
   ServerData _activeServer = defaultServer;
   bool _safeMode = true;
 
-  ServerState(this.read);
+  ServerDataNotifier(this.read) {
+    _init();
+  }
 
   List<ServerData> get all => _serverList;
   ServerData get active => _activeServer;
   bool get useSafeMode => _safeMode;
 
-  Future<void> init() async {
-    final api = read(apiProvider);
+  Future<void> _init() async {
+    final api = read(booruApiProvider);
     final prefs = await read(settingsBox);
     final serverBox = await read(serversBox);
 
@@ -35,7 +38,7 @@ class ServerState extends ChangeNotifier {
 
     final activeServerName = prefs.get('active_server');
     if (activeServerName != null && _activeServer.name != activeServerName) {
-      _activeServer = read(serverProvider).select(activeServerName);
+      _activeServer = read(serverDataProvider).select(activeServerName);
     }
 
     api.fetch(clear: true);
@@ -54,7 +57,7 @@ class ServerState extends ChangeNotifier {
 
   Future<void> setActiveServer({required String name}) async {
     if (name != _activeServer.name) {
-      _activeServer = read(serverProvider).select(name);
+      _activeServer = read(serverDataProvider).select(name);
       final prefs = await read(settingsBox);
       prefs.put('active_server', name);
     }
@@ -75,3 +78,6 @@ class ServerState extends ChangeNotifier {
         'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
   );
 }
+
+final serverDataProvider =
+    ChangeNotifierProvider((ref) => ServerDataNotifier(ref.read));

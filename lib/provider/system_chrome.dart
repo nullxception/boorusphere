@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StyleProvider extends ChangeNotifier {
+class SystemChromeNotifier extends ChangeNotifier {
   bool _isFull = false;
   bool _isLandOnly = false;
 
@@ -51,3 +52,6 @@ class StyleProvider extends ChangeNotifier {
     super.dispose();
   }
 }
+
+final systemChromeProvider =
+    ChangeNotifierProvider((_) => SystemChromeNotifier());

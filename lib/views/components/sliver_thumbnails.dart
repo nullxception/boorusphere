@@ -6,8 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../provider/common.dart';
+import '../../provider/booru_api.dart';
+import '../../provider/grid.dart';
 import '../../routes.dart';
+import '../containers/post.dart';
 
 class SliverThumbnails extends HookWidget {
   final AutoScrollController autoScrollController;
@@ -30,7 +32,7 @@ class SliverThumbnails extends HookWidget {
   Widget build(BuildContext context) {
     final gridExtra = useProvider(gridProvider);
     final lastOpenedIndex = useProvider(lastOpenedPostProvider);
-    final booruPosts = useProvider(booruPostsProvider);
+    final booruPosts = useProvider(postsProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 

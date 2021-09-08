@@ -10,14 +10,19 @@ import 'package:xml2json/xml2json.dart';
 
 import '../model/booru_post.dart';
 import '../model/server_query.dart';
-import 'common.dart';
+import 'blocked_tags.dart';
+import 'search_tag.dart';
+import 'server_data.dart';
 
 final _pageNumberProvider = StateProvider((_) => 1);
+final pageLoadingProvider = StateProvider((_) => false);
+final pageErrorProvider = StateProvider((_) => '');
+final postsProvider = Provider<List<BooruPost>>((_) => []);
 
-class ApiProvider {
+class BooruApi {
   final Reader read;
 
-  ApiProvider(this.read);
+  BooruApi(this.read);
 
   MapEntry<String, dynamic> _getEntry(Map<String, dynamic> data, String key) {
     return data.entries.firstWhere(
@@ -47,7 +52,7 @@ class ApiProvider {
   }
 
   Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
-    final booruPosts = read(booruPostsProvider);
+    final booruPosts = read(postsProvider);
     final searchTag = read(searchTagProvider);
     final blockedTags = read(blockedTagsProvider);
     final blocked = await blockedTags.listedEntries;
@@ -113,7 +118,7 @@ class ApiProvider {
   }
 
   Future<Either<Exception, List<BooruPost>>> _fetch(ServerQuery query) async {
-    final server = read(serverProvider);
+    final server = read(serverDataProvider);
     try {
       final res = await http.get(server.active.composeSearchUrl(query));
       final data = await _parseHttpResponse(res);
@@ -182,7 +187,7 @@ class ApiProvider {
       return [];
     }
 
-    final server = read(serverProvider);
+    final server = read(serverDataProvider);
     if (!server.active.canSuggestTags) {
       Fimber.w('No search suggestion feature on ${server.active.name}');
       return [];
@@ -206,9 +211,9 @@ class ApiProvider {
     final page = read(_pageNumberProvider);
     final pageLoading = read(pageLoadingProvider);
     final searchTag = read(searchTagProvider);
-    final server = read(serverProvider);
-    final errorMessage = read(errorMessageProvider);
-    final booruPosts = read(booruPostsProvider);
+    final server = read(serverDataProvider);
+    final errorMessage = read(pageErrorProvider);
+    final booruPosts = read(postsProvider);
 
     if (clear && page.state > 1) {
       page.state = 1;
@@ -243,3 +248,5 @@ class ApiProvider {
     }
   }
 }
+
+final booruApiProvider = Provider((ref) => BooruApi(ref.read));

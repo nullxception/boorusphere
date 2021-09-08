@@ -2,7 +2,8 @@ import 'package:fimber/fimber.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../model/search_history.dart';
-import 'common.dart';
+import 'hive_boxes.dart';
+import 'server_data.dart';
 
 class SearchHistoryRepository {
   final Reader read;
@@ -61,7 +62,7 @@ class SearchHistoryRepository {
     if (query.isEmpty) return;
 
     final history = await read(searchHistoryBox);
-    final server = await read(serverProvider);
+    final server = await read(serverDataProvider);
     try {
       if (!await checkExists(value: query)) {
         history.add(SearchHistory(
@@ -74,3 +75,6 @@ class SearchHistoryRepository {
     }
   }
 }
+
+final searchHistoryProvider =
+    Provider((ref) => SearchHistoryRepository(ref.read));

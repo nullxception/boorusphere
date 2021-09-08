@@ -4,9 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/server_data.dart';
-import '../../provider/api_provider.dart';
-import '../../provider/common.dart';
+import '../../provider/booru_api.dart';
+import '../../provider/grid.dart';
+import '../../provider/search_history.dart';
 import '../../provider/search_tag.dart';
+import '../../provider/server_data.dart';
+import '../containers/home.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
@@ -18,8 +21,8 @@ class HomeBar extends HookWidget {
   void _searchForTag({
     required String value,
     required FloatingSearchBarController controller,
-    required SearchTagState searchTagHandler,
-    required ApiProvider api,
+    required SearchTagNotifier searchTagHandler,
+    required BooruApi api,
     required String searchTag,
   }) {
     final query = value.trim();
@@ -42,8 +45,8 @@ class HomeBar extends HookWidget {
     final controller = useFloatingSearchBarController();
     final gridHandler = useProvider(gridProvider.notifier);
     final grid = useProvider(gridProvider);
-    final server = useProvider(serverProvider);
-    final api = useProvider(apiProvider);
+    final server = useProvider(serverDataProvider);
+    final api = useProvider(booruApiProvider);
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final searchHistory = useProvider(searchHistoryProvider);

@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
-class VersionState extends ChangeNotifier {
+class AppVersionNotifier extends ChangeNotifier {
   final Reader read;
   String version = '0.0.0';
   String lastestVersion = '0.0.0';
@@ -15,7 +15,7 @@ class VersionState extends ChangeNotifier {
   get downloadUrl => '$releaseUrl/latest';
   get shouldUpdate => version != lastestVersion;
 
-  VersionState(this.read) {
+  AppVersionNotifier(this.read) {
     _init();
   }
 
@@ -49,3 +49,6 @@ class VersionState extends ChangeNotifier {
   static const releaseUrl =
       'https://github.com/nullxception/boorusphere/releases';
 }
+
+final appVersionProvider =
+    ChangeNotifierProvider((ref) => AppVersionNotifier(ref.read));

@@ -1,7 +1,7 @@
 import 'package:fimber/fimber.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'common.dart';
+import 'hive_boxes.dart';
 
 class BlockedTagsRepository {
   final Reader read;
@@ -54,3 +54,5 @@ class BlockedTagsRepository {
     }
   }
 }
+
+final blockedTagsProvider = Provider((ref) => BlockedTagsRepository(ref.read));

@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'common.dart';
+import 'hive_boxes.dart';
 
-class GridState extends StateNotifier<int> {
-  GridState(this.read) : super(0) {
+class GridNotifier extends StateNotifier<int> {
+  GridNotifier(this.read) : super(0) {
     restoreFromPreference();
   }
 
@@ -21,3 +21,6 @@ class GridState extends StateNotifier<int> {
     prefs.put(gridKey, state);
   }
 }
+
+final gridProvider =
+    StateNotifierProvider<GridNotifier, int>((ref) => GridNotifier(ref.read));

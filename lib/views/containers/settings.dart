@@ -3,13 +3,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../provider/common.dart';
+import '../../provider/server_data.dart';
 import '../../routes.dart';
 
 class Settings extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final server = useProvider(serverProvider);
+    final server = useProvider(serverDataProvider);
     final sectionTitleStyle = TextStyle(
       color: Theme.of(context).colorScheme.secondary,
       fontWeight: FontWeight.bold,

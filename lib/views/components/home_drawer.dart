@@ -4,7 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/server_data.dart';
-import '../../provider/common.dart';
+import '../../provider/app_theme.dart';
+import '../../provider/app_version.dart';
+import '../../provider/booru_api.dart';
+import '../../provider/search_tag.dart';
+import '../../provider/server_data.dart';
 import '../../routes.dart';
 import 'favicon.dart';
 
@@ -93,7 +97,7 @@ class HomeDrawer extends StatelessWidget {
 class AppVersionTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final version = useProvider(versionProvider);
+    final version = useProvider(appVersionProvider);
     return ListTile(
       title: Text(version.shouldUpdate
           ? 'Update available: ${version.lastestVersion}'
@@ -113,7 +117,7 @@ class AppVersionTile extends HookWidget {
 class _BackToHomeTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final api = useProvider(apiProvider);
+    final api = useProvider(booruApiProvider);
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
 
@@ -136,8 +140,8 @@ class _BackToHomeTile extends HookWidget {
 class _ThemeSwitcherButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final uiThemeHandler = useProvider(uiThemeProvider.notifier);
-    final uiTheme = useProvider(uiThemeProvider);
+    final uiThemeHandler = useProvider(appThemeProvider.notifier);
+    final uiTheme = useProvider(appThemeProvider);
     final uiThemeGroup = {
       'Dark': ThemeMode.dark,
       'Light': ThemeMode.light,
@@ -203,8 +207,8 @@ class _ThemeSwitcherButton extends HookWidget {
 class _ServerSelection extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final api = useProvider(apiProvider);
-    final server = useProvider(serverProvider);
+    final api = useProvider(booruApiProvider);
+    final server = useProvider(serverDataProvider);
     final theme = Theme.of(context);
 
     return Column(

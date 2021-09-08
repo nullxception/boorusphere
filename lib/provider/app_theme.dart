@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'common.dart';
+import 'hive_boxes.dart';
 
-class UIThemeState extends StateNotifier<ThemeMode> {
+class AppThemeNotifier extends StateNotifier<ThemeMode> {
   static const key = 'ui_theme_mode';
   final Reader read;
 
-  UIThemeState(this.read) : super(ThemeMode.dark);
+  AppThemeNotifier(this.read) : super(ThemeMode.dark) {
+    _init();
+  }
 
-  Future<void> init() async {
+  Future<void> _init() async {
     final prefs = await read(settingsBox);
     final modeString = prefs.get(key);
     switch (modeString) {
@@ -64,3 +66,6 @@ class UIThemeState extends StateNotifier<ThemeMode> {
     }
   }
 }
+
+final appThemeProvider = StateNotifierProvider<AppThemeNotifier, ThemeMode>(
+    (ref) => AppThemeNotifier(ref.read));

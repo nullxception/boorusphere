@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/server_data.dart';
-import 'common.dart';
+import 'search_history.dart';
 
-class SearchTagState extends StateNotifier<String> {
-  SearchTagState(this.read) : super(ServerData.defaultTag);
+class SearchTagNotifier extends StateNotifier<String> {
+  SearchTagNotifier(this.read) : super(ServerData.defaultTag);
 
   final Reader read;
 
@@ -17,3 +17,6 @@ class SearchTagState extends StateNotifier<String> {
     }
   }
 }
+
+final searchTagProvider = StateNotifierProvider<SearchTagNotifier, String>(
+    (ref) => SearchTagNotifier(ref.read));

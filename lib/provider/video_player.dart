@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'common.dart';
+import 'hive_boxes.dart';
 
-class VideoPlayerState extends ChangeNotifier {
+class VideoPlayerNotifier extends ChangeNotifier {
   static const keyMute = 'videoplayer_mute';
 
   final Reader read;
 
   bool _mute = false;
 
-  VideoPlayerState(this.read) {
+  VideoPlayerNotifier(this.read) {
     _init();
   }
 
@@ -26,3 +26,6 @@ class VideoPlayerState extends ChangeNotifier {
     read(settingsBox).then((it) => it.put(keyMute, value));
   }
 }
+
+final videoPlayerProvider =
+    ChangeNotifierProvider((ref) => VideoPlayerNotifier(ref.read));

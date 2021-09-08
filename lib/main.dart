@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'model/search_history.dart';
 import 'model/server_data.dart';
-import 'provider/common.dart';
+import 'provider/app_theme.dart';
 import 'routes.dart';
 
 class Boorusphere extends ConsumerWidget {
@@ -23,7 +23,7 @@ class Boorusphere extends ConsumerWidget {
         ),
         toggleableActiveColor: Colors.blue.shade300,
       ),
-      themeMode: watch(uiThemeProvider),
+      themeMode: watch(appThemeProvider),
       initialRoute: Routes.home,
       routes: Routes.of(context),
     );

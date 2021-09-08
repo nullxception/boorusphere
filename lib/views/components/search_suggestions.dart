@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/search_history.dart';
-import '../../provider/common.dart';
+import '../../provider/server_data.dart';
 
 class SearchSuggestionResult extends HookWidget {
   const SearchSuggestionResult({
@@ -37,7 +37,7 @@ class SearchSuggestionResult extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final server = useProvider(serverProvider);
+    final server = useProvider(serverDataProvider);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
