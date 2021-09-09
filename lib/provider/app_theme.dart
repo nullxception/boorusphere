@@ -3,46 +3,57 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'hive_boxes.dart';
 
-class AppThemeNotifier extends StateNotifier<ThemeMode> {
-  static const key = 'ui_theme_mode';
+class AppThemeNotifier extends ChangeNotifier {
+  static const keyThemeMode = 'ui_theme_mode';
+  static const keyThemeDarker = 'ui_theme_darker';
   final Reader read;
+  bool _isDarker = false;
+  ThemeMode _current = ThemeMode.system;
 
-  AppThemeNotifier(this.read) : super(ThemeMode.system) {
+  AppThemeNotifier(this.read) {
     _init();
   }
 
+  get current => _current;
+  get isDarkerTheme => _isDarker;
+
   Future<void> _init() async {
     final prefs = await read(settingsBox);
-    final modeString = prefs.get(key);
+    final modeString = prefs.get(keyThemeMode);
     switch (modeString) {
       case 'dark':
-        state = ThemeMode.dark;
+        _current = ThemeMode.dark;
         break;
       case 'light':
-        state = ThemeMode.light;
+        _current = ThemeMode.light;
         break;
       default:
-        state = ThemeMode.system;
+        _current = ThemeMode.system;
     }
+
+    final darkerTheme = prefs.get(keyThemeDarker);
+    _isDarker = darkerTheme ?? false;
+    notifyListeners();
   }
 
   Future<void> setMode({required ThemeMode mode}) async {
-    state = mode;
+    _current = mode;
     final prefs = await read(settingsBox);
     switch (mode) {
       case ThemeMode.dark:
-        prefs.put(key, 'dark');
+        prefs.put(keyThemeMode, 'dark');
         break;
       case ThemeMode.light:
-        prefs.put(key, 'light');
+        prefs.put(keyThemeMode, 'light');
         break;
       default:
-        prefs.put(key, 'system');
+        prefs.put(keyThemeMode, 'system');
     }
+    notifyListeners();
   }
 
   IconData get themeIcon {
-    switch (state) {
+    switch (_current) {
       case ThemeMode.dark:
         return Icons.brightness_2;
       case ThemeMode.light:
@@ -53,7 +64,7 @@ class AppThemeNotifier extends StateNotifier<ThemeMode> {
   }
 
   void cycleTheme() async {
-    switch (state) {
+    switch (_current) {
       case ThemeMode.dark:
         setMode(mode: ThemeMode.light);
         break;
@@ -65,7 +76,41 @@ class AppThemeNotifier extends StateNotifier<ThemeMode> {
         break;
     }
   }
+
+  void useDarkerTheme(value) async {
+    _isDarker = value;
+    notifyListeners();
+    final prefs = await read(settingsBox);
+    prefs.put(keyThemeDarker, value);
+  }
 }
 
-final appThemeProvider = StateNotifierProvider<AppThemeNotifier, ThemeMode>(
-    (ref) => AppThemeNotifier(ref.read));
+mixin AppTheme {
+  static ThemeData light() => ThemeData.light();
+
+  static ThemeData dark() => ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        toggleableActiveColor: Colors.blue.shade300,
+      );
+
+  static ThemeData darker() => ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: Colors.blue,
+          brightness: Brightness.dark,
+          cardColor: Colors.black.withRed(20).withGreen(20).withBlue(20),
+          backgroundColor: Colors.black,
+        ),
+        primaryColor: Colors.black,
+        backgroundColor: Colors.black,
+        canvasColor: Colors.black,
+        cardColor: Colors.black.withRed(20).withGreen(20).withBlue(20),
+        scaffoldBackgroundColor: Colors.black,
+        toggleableActiveColor: Colors.blue.shade300,
+      );
+}
+
+final appThemeProvider =
+    ChangeNotifierProvider((ref) => AppThemeNotifier(ref.read));

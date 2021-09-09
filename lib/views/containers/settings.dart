@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../../provider/app_theme.dart';
 import '../../provider/server_data.dart';
 import '../../routes.dart';
 
@@ -10,6 +11,7 @@ class Settings extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final server = useProvider(serverDataProvider);
+    final appTheme = useProvider(appThemeProvider);
     final sectionTitleStyle = TextStyle(
       color: Theme.of(context).colorScheme.secondary,
       fontWeight: FontWeight.bold,
@@ -21,6 +23,23 @@ class Settings extends HookWidget {
         backgroundColor: Colors.transparent,
         darkBackgroundColor: Colors.transparent,
         sections: [
+          SettingsSection(
+            title: 'Interface',
+            titleTextStyle: sectionTitleStyle,
+            titlePadding: const EdgeInsets.all(20),
+            tiles: [
+              SettingsTile.switchTile(
+                title: 'Darker Theme',
+                subtitleMaxLines: 5,
+                subtitle: 'Use deeper dark color for the dark mode',
+                leading: const Icon(Icons.brightness_3),
+                switchValue: appTheme.isDarkerTheme,
+                onToggle: (value) {
+                  appTheme.useDarkerTheme(value);
+                },
+              ),
+            ],
+          ),
           SettingsSection(
             title: 'Server',
             titleTextStyle: sectionTitleStyle,
