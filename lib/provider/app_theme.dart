@@ -7,7 +7,7 @@ class AppThemeNotifier extends StateNotifier<ThemeMode> {
   static const key = 'ui_theme_mode';
   final Reader read;
 
-  AppThemeNotifier(this.read) : super(ThemeMode.dark) {
+  AppThemeNotifier(this.read) : super(ThemeMode.system) {
     _init();
   }
 
@@ -41,7 +41,7 @@ class AppThemeNotifier extends StateNotifier<ThemeMode> {
     }
   }
 
-  IconData get icon {
+  IconData get themeIcon {
     switch (state) {
       case ThemeMode.dark:
         return Icons.brightness_2;
@@ -52,7 +52,7 @@ class AppThemeNotifier extends StateNotifier<ThemeMode> {
     }
   }
 
-  void cycle() async {
+  void cycleTheme() async {
     switch (state) {
       case ThemeMode.dark:
         setMode(mode: ThemeMode.light);

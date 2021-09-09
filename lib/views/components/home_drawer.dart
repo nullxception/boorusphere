@@ -37,15 +37,22 @@ class HomeDrawer extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 25),
-                              child: Text(
-                                'Boorusphere!',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w200,
-                                ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 30, 15, 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Boorusphere!',
+                                    style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                                  ),
+                                  _ThemeSwitcherButton(),
+                                ],
                               ),
                             ),
                             const Divider(),
@@ -69,7 +76,6 @@ class HomeDrawer extends StatelessWidget {
                                 onTap: () => Navigator.pushNamed(
                                     context, Routes.tagsBlocker),
                               ),
-                              _ThemeSwitcherButton(),
                               ListTile(
                                 title: const Text('Settings'),
                                 leading: const Icon(Icons.settings),
@@ -90,6 +96,18 @@ class HomeDrawer extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class _ThemeSwitcherButton extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appThemeHandler = useProvider(appThemeProvider.notifier);
+
+    return IconButton(
+      icon: Icon(appThemeHandler.themeIcon),
+      onPressed: appThemeHandler.cycleTheme,
     );
   }
 }
@@ -131,73 +149,6 @@ class _BackToHomeTile extends HookWidget {
           searchTagHandler.setTag(query: ServerData.defaultTag);
           api.fetch(clear: true);
           Navigator.pop(context);
-        },
-      ),
-    );
-  }
-}
-
-class _ThemeSwitcherButton extends HookWidget {
-  @override
-  Widget build(BuildContext context) {
-    final uiThemeHandler = useProvider(appThemeProvider.notifier);
-    final uiTheme = useProvider(appThemeProvider);
-    final uiThemeGroup = {
-      'Dark': ThemeMode.dark,
-      'Light': ThemeMode.light,
-      'System wide': ThemeMode.system,
-    };
-
-    return ListTile(
-      title: const Text('Switch theme'),
-      leading: Icon(uiThemeHandler.icon),
-      dense: true,
-      onTap: () => showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
-          ),
-        ),
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const ListTile(
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(8, 16, 8, 0),
-                  child: Text(
-                    'Switch theme',
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                ),
-              ),
-              ...uiThemeGroup
-                  .map((key, value) {
-                    return MapEntry(
-                      key,
-                      RadioListTile(
-                        value: value,
-                        groupValue: uiTheme,
-                        onChanged: (value) {
-                          if (value is ThemeMode) {
-                            uiThemeHandler.setMode(mode: value);
-                          }
-                          Navigator.pop(context);
-                        },
-                        title: Text(key),
-                      ),
-                    );
-                  })
-                  .values
-                  .toList(),
-            ],
-          );
         },
       ),
     );
