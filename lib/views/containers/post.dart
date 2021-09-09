@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
-import '../../provider/system_chrome.dart';
 import '../components/post_display.dart';
 import '../components/post_toolbox.dart';
 import '../components/preferred_visibility.dart';
@@ -18,17 +18,22 @@ class Post extends HookWidget {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
 
     final pageController = usePageController(initialPage: beginPage);
-    final style = useProvider(systemChromeProvider);
     final booruPosts = useProvider(postsProvider);
     final lastOpenedIndex = useProvider(lastOpenedPostProvider);
     final page = useState(beginPage);
+    final isFullscreen = useState(false);
 
     final isNotVideo = booruPosts[page.value].displayType != PostType.video;
 
     useEffect(() {
-      // reset fullscreen state when pop back to timeline
+      SystemChrome.setSystemUIChangeCallback((fullscreen) async {
+        isFullscreen.value = fullscreen;
+      });
+
+      // reset SystemChrome when pop back to timeline
       return () {
-        return style.resetSystemOverrides(notify: false);
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        SystemChrome.setPreferredOrientations([]);
       };
     }, const []);
 
@@ -37,7 +42,7 @@ class Post extends HookWidget {
       extendBodyBehindAppBar: true,
       extendBody: true,
       appBar: PreferredVisibility(
-        visible: !style.isFullScreen,
+        visible: !isFullscreen.value,
         child: AppBar(
           backgroundColor: Colors.black.withOpacity(0.4),
           elevation: 0,
@@ -57,7 +62,7 @@ class Post extends HookWidget {
         itemBuilder: (_, index) => PostDisplay(content: booruPosts[index]),
       ),
       bottomNavigationBar: Visibility(
-        visible: !style.isFullScreen && isNotVideo,
+        visible: !isFullscreen.value && isNotVideo,
         child: PostToolbox(booruPosts[page.value]),
       ),
     );
