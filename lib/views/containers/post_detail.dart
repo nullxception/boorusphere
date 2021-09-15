@@ -15,6 +15,16 @@ class PostDetails extends HookWidget {
   const PostDetails({Key? keys, required this.id}) : super(key: keys);
   final int id;
 
+  void copyToClipboard(BuildContext context, String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Copied to clipboard'),
+        duration: Duration(milliseconds: 600),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final server = useProvider(serverDataProvider);
@@ -57,6 +67,13 @@ class PostDetails extends HookWidget {
               onPressed: () => launch(postUrl.toString()),
               child: Text(postUrl.toString()),
             ),
+            trailing: IconButton(
+              iconSize: 18,
+              onPressed: () {
+                copyToClipboard(context, postUrl.toString());
+              },
+              icon: const Icon(Icons.copy),
+            ),
           ),
           ListTile(
             title: const Text('Source'),
@@ -69,6 +86,13 @@ class PostDetails extends HookWidget {
               ),
               onPressed: () => launch(data.src),
               child: Text(data.src),
+            ),
+            trailing: IconButton(
+              iconSize: 18,
+              onPressed: () {
+                copyToClipboard(context, data.src);
+              },
+              icon: const Icon(Icons.copy),
             ),
           ),
           if (data.displaySrc != data.src)
@@ -150,15 +174,7 @@ class PostDetails extends HookWidget {
                 onPressed: () {
                   final tags = selectedtag.value.join(' ');
                   if (tags.isNotEmpty) {
-                    Clipboard.setData(
-                      ClipboardData(text: tags),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Copied to clipboard:\n$tags'),
-                        duration: const Duration(milliseconds: 600),
-                      ),
-                    );
+                    copyToClipboard(context, tags);
                   }
                 },
               ),
