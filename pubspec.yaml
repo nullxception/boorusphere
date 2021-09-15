@@ -60,7 +60,10 @@ dev_dependencies:
   effective_dart: ^1.3.0
   flutter_launcher_icons: ^0.9.0
   freezed: ^0.14.1+2
-  icapps_license: ^2.0.0
+  icapps_license:
+    git:
+      url: git://github.com/icapps/flutter-icapps-license.git
+      ref: master
 
 flutter_icons:
   android: true
@@ -73,7 +76,18 @@ flutter_icons:
 
 icapps_license:
   nullsafety: true
-
+  licenses:
+    cached_network_image: https://raw.githubusercontent.com/Baseflow/flutter_cached_network_image/develop/cached_network_image/LICENSE
+    cupertino_icons: https://raw.githubusercontent.com/flutter/packages/master/third_party/packages/cupertino_icons/LICENSE
+    flutter_cache_manager: https://raw.githubusercontent.com/Baseflow/flutter_cache_manager/develop/LICENSE.md
+    freezed: https://raw.githubusercontent.com/rrousselGit/freezed/master/packages/freezed/LICENSE
+    freezed_annotation: https://raw.githubusercontent.com/rrousselGit/freezed/master/packages/freezed_annotation/LICENSE
+  extra_licenses:
+    icapps_license:
+      name: icapps_license
+      version: master
+      url: https://github.com/icapps/flutter-icapps-license
+      license: https://raw.githubusercontent.com/icapps/flutter-icapps-license/master/LICENSE
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter.

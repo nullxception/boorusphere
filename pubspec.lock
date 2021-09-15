@@ -432,9 +432,11 @@ packages:
   icapps_license:
     dependency: "direct dev"
     description:
-      name: icapps_license
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: c8462ac98da0cec35aa7c1c530e987e0cb0b5a7a
+      url: "git://github.com/icapps/flutter-icapps-license.git"
+    source: git
     version: "2.0.0"
   image:
     dependency: transitive
