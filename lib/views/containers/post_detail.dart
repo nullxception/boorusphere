@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,7 +35,7 @@ class PostDetails extends HookWidget {
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);
-
+    var showFAB = useState(false);
     final data = booruPosts.firstWhere(
       (element) => element.id == id,
       orElse: () => BooruPost.empty(),
@@ -130,6 +131,8 @@ class PostDetails extends HookWidget {
                       fabController.reverse();
                     }
                   }
+
+                  showFAB.value = selectedtag.value.isNotEmpty;
                 },
                 tag: tag,
                 active: () => selectedtag.value.contains(tag),
@@ -139,46 +142,33 @@ class PostDetails extends HookWidget {
           SizedBox.fromSize(size: const Size(0, 72)),
         ],
       ),
-      floatingActionButton: Stack(
+      floatingActionButton: SpeedDial(
+        icon: Icons.menu,
+        visible: showFAB.value,
         children: [
-          Positioned(
-            bottom: 0,
-            right: 64,
-            child: ScaleTransition(
-              scale: fabController,
-              child: FloatingActionButton(
-                heroTag: null,
-                child: const Icon(Icons.search),
-                onPressed: () {
-                  final tags = selectedtag.value.join(' ');
-                  if (tags.isNotEmpty) {
-                    searchTagHandler.setTag(query: tags);
-                    api.fetch(clear: true);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                    );
-                  }
-                },
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: ScaleTransition(
-              scale: fabController,
-              child: FloatingActionButton(
-                heroTag: null,
-                child: const Icon(Icons.copy),
-                onPressed: () {
-                  final tags = selectedtag.value.join(' ');
-                  if (tags.isNotEmpty) {
-                    copyToClipboard(context, tags);
-                  }
-                },
-              ),
-            ),
+          SpeedDialChild(
+              child: const Icon(Icons.copy),
+              label: 'Copy tag',
+              onTap: () {
+                final tags = selectedtag.value.join(' ');
+                if (tags.isNotEmpty) {
+                  copyToClipboard(context, tags);
+                }
+              }),
+          SpeedDialChild(
+            child: const Icon(Icons.search),
+            label: 'Search it',
+            onTap: () {
+              final tags = selectedtag.value.join(' ');
+              if (tags.isNotEmpty) {
+                searchTagHandler.setTag(query: tags);
+                api.fetch(clear: true);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              }
+            },
           ),
         ],
       ),
