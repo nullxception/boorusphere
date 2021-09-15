@@ -12,6 +12,7 @@ class PostToolbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       alignment: Alignment.bottomRight,
       child: Card(
         margin: const EdgeInsets.fromLTRB(12, 12, 16, 20),
