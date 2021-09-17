@@ -7,8 +7,6 @@ part 'server_query.freezed.dart';
 class ServerQuery with _$ServerQuery {
   const factory ServerQuery({
     @Default('*') String tags,
-    @Default(1) int page,
-    @Default(50) int limit,
     @Default(true) bool safeMode,
   }) = _ServerQuery;
 }

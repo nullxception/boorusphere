@@ -31,7 +31,7 @@ class ServerData with _$ServerData {
     return Uri.parse(url.replaceAll('{post-id}', id.toString()));
   }
 
-  Uri composeSearchUrl(ServerQuery query) {
+  Uri composeSearchUrl(ServerQuery query, int page) {
     var url = '$homepage/$searchUrl';
     var tags = query.tags;
     if (query.safeMode &&
@@ -45,8 +45,8 @@ class ServerData with _$ServerData {
     return Uri.parse(
       url
           .replaceAll('{tags}', tags)
-          .replaceAll('{page-id}', query.page.toString())
-          .replaceAll('{post-limit}', query.limit.toString()),
+          .replaceAll('{page-id}', page.toString())
+          .replaceAll('{post-limit}', '40'),
     );
   }
 

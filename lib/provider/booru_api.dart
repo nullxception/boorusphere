@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -15,15 +14,15 @@ import 'blocked_tags.dart';
 import 'search_tag.dart';
 import 'server_data.dart';
 
-final _pageNumberProvider = StateProvider((_) => 1);
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => '');
 final postsProvider = Provider<List<BooruPost>>((_) => []);
 
 class BooruApi {
-  final Reader read;
-
   BooruApi(this.read);
+
+  final Reader read;
+  int _page = 1;
 
   Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
     final booruPosts = read(postsProvider);
@@ -91,18 +90,6 @@ class BooruApi {
     return result;
   }
 
-  Future<Either<Exception, List<BooruPost>>> _fetch(ServerQuery query) async {
-    final server = read(serverDataProvider);
-    try {
-      final res = await http.get(server.active.composeSearchUrl(query));
-      final data = await _parseHttpResponse(res);
-      return right(data);
-    } on Exception catch (e) {
-      Fimber.d('Caught Exception', ex: e);
-      return left(e);
-    }
-  }
-
   String _parseException(Exception fail) {
     try {
       final message = fail
@@ -124,17 +111,16 @@ class BooruApi {
   }
 
   Future<void> fetch({bool clear = false}) async {
-    final page = read(_pageNumberProvider);
     final pageLoading = read(pageLoadingProvider);
     final searchTag = read(searchTagProvider);
     final server = read(serverDataProvider);
     final errorMessage = read(pageErrorProvider);
     final booruPosts = read(postsProvider);
 
-    if (clear && page.state > 1) {
-      page.state = 1;
+    if (clear && _page > 1) {
+      _page = 1;
     } else if (!clear) {
-      page.state++;
+      _page++;
     }
     if (!pageLoading.state) {
       pageLoading.state = true;
@@ -146,15 +132,17 @@ class BooruApi {
       booruPosts.clear();
     }
 
-    final res = await _fetch(
-      ServerQuery(
-          page: page.state, tags: searchTag, safeMode: server.useSafeMode),
-    );
-    res.fold(
-      (fail) => errorMessage.state = _parseException(fail),
-      booruPosts.addAll,
-    );
-    pageLoading.state = false;
+    try {
+      final q = ServerQuery(tags: searchTag, safeMode: server.useSafeMode);
+      final res = await http.get(server.active.composeSearchUrl(q, _page));
+      final data = await _parseHttpResponse(res);
+      booruPosts.addAll(data);
+    } on Exception catch (e) {
+      Fimber.d('Caught Exception', ex: e);
+      errorMessage.state = _parseException(e);
+    } finally {
+      pageLoading.state = false;
+    }
   }
 
   void loadMore() {
