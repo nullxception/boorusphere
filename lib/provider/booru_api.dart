@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
 import '../model/booru_post.dart';
-import '../model/server_query.dart';
 import '../util/map_utils.dart';
 import 'blocked_tags.dart';
 import 'booru_query.dart';
@@ -133,9 +132,8 @@ class BooruApi {
     }
 
     try {
-      final q =
-          ServerQuery(tags: booruQuery.tags, safeMode: server.useSafeMode);
-      final res = await http.get(server.active.composeSearchUrl(q, _page));
+      final res =
+          await http.get(server.active.composeSearchUrl(booruQuery, _page));
       final data = await _parseHttpResponse(res);
       booruPosts.addAll(data);
     } on Exception catch (e) {

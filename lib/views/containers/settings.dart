@@ -4,13 +4,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../provider/app_theme.dart';
-import '../../provider/server_data.dart';
+import '../../provider/booru_query.dart';
 import '../../routes.dart';
 
 class Settings extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final server = useProvider(serverDataProvider);
+    final booruQuery = useProvider(booruQueryProvider);
+    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
     final appTheme = useProvider(appThemeProvider);
     final sectionTitleStyle = TextStyle(
       color: Theme.of(context).colorScheme.secondary,
@@ -51,9 +52,9 @@ class Settings extends HookWidget {
                 subtitle:
                     'Fetch content that are safe.\nNote that rated "safe" on booru-powered site doesn\'t mean "Safe For Work".',
                 leading: const Icon(Icons.phonelink_lock),
-                switchValue: server.useSafeMode,
+                switchValue: booruQuery.safeMode,
                 onToggle: (value) {
-                  server.setSafeMode(value);
+                  booruQueryNotifier.setSafeMode(value);
                 },
               ),
             ],

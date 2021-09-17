@@ -12,7 +12,6 @@ class ServerDataNotifier extends ChangeNotifier {
   final Reader read;
   List<ServerData> _serverList = [];
   ServerData _activeServer = defaultServer;
-  bool _safeMode = true;
 
   ServerDataNotifier(this.read) {
     _init();
@@ -20,14 +19,12 @@ class ServerDataNotifier extends ChangeNotifier {
 
   List<ServerData> get all => _serverList;
   ServerData get active => _activeServer;
-  bool get useSafeMode => _safeMode;
 
   Future<void> _init() async {
     final api = read(booruApiProvider);
     final prefs = await read(settingsBox);
     final serverBox = await read(serversBox);
 
-    _safeMode = prefs.get('server_safe_mode') ?? true;
     if (serverBox.isEmpty) {
       final fromAssets = await _defaultServersAssets();
       serverBox.addAll(fromAssets);
@@ -61,13 +58,6 @@ class ServerDataNotifier extends ChangeNotifier {
       final prefs = await read(settingsBox);
       prefs.put('active_server', name);
     }
-  }
-
-  Future<void> setSafeMode(safe) async {
-    _safeMode = safe;
-    final prefs = await read(settingsBox);
-    prefs.put('server_safe_mode', safe);
-    notifyListeners();
   }
 
   static const defaultServer = ServerData(
