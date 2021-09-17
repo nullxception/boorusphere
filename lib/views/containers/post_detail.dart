@@ -163,9 +163,10 @@ class PostDetails extends HookWidget {
               if (tags.isNotEmpty) {
                 searchTagHandler.setTag(query: tags);
                 api.fetch(clear: true);
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),
+                  (route) => false,
                 );
               }
             },
