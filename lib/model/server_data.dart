@@ -52,9 +52,8 @@ class ServerData with _$ServerData {
 
   Uri composeSuggestionUrl(String query) {
     final url = '$homepage/$tagSuggestionUrl';
-    final trquery = query.trim();
     if (canSuggestTags) {
-      return Uri.parse(url.replaceAll('{tag-part}', trquery));
+      return Uri.parse(url.replaceAll('{tag-part}', query));
     } else {
       throw Exception('no suggestion config for server $name');
     }

@@ -10,9 +10,8 @@ class SearchTagNotifier extends StateNotifier<String> {
 
   Future<void> setTag({required String query}) async {
     final searchHistory = read(searchHistoryProvider);
-    final tags = query.trim();
-    if (state != tags) {
-      state = tags;
+    if (state != query) {
+      state = query;
       searchHistory.push(query);
     }
   }

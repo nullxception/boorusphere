@@ -90,14 +90,14 @@ class HomeBar extends HookWidget {
         );
       },
       onQueryChanged: (value) async {
-        final last = value.trim().split(' ').last.trim();
+        final last = value.trim().split(' ').last;
         if (server.active.canSuggestTags &&
             !value.endsWith(' ') &&
             last.length > 2) {
           typedSearchBarQuery.state = value.trim();
         }
         suggestionHistory.value =
-            await searchHistory.composeSuggestion(query: value);
+            await searchHistory.composeSuggestion(query: last);
       },
       onFocusChanged: (focused) {
         homeDrawerSwipeable.state = !focused;
@@ -140,7 +140,7 @@ class HomeBar extends HookWidget {
               searchHistory.delete(key);
               // rebuild history suggestion
               suggestionHistory.value = await searchHistory.composeSuggestion(
-                  query: controller.query);
+                  query: controller.query.trim());
             },
             onSearchTag: (value) {
               _searchForTag(

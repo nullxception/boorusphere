@@ -59,14 +59,14 @@ class SearchSuggestionHandler {
 
   Future<List<String>> fetch({required String query}) async {
     final queries = query.trim().split(' ');
-    final last = queries.last.trim();
     final server = read(serverDataProvider);
     try {
-      final res = await http.get(server.active.composeSuggestionUrl(last));
+      final res =
+          await http.get(server.active.composeSuggestionUrl(queries.last));
       final tags = await _parse(res);
       return tags
           .where((it) =>
-              it.contains(last) &&
+              it.contains(queries.last) &&
               !queries.sublist(0, queries.length - 1).contains(it))
           .toList();
     } on FormatException {

@@ -12,11 +12,10 @@ class SearchHistoryRepository {
 
   Future<Map> composeSuggestion({String query = '*'}) async {
     final history = await mapped;
-    final queries = query.trim().split(' ');
-    final last = queries.last.trim();
+    final queries = query.split(' ');
 
     // Filter the query, it must be longer than 2
-    if (query.endsWith(' ') || last.length < 2) {
+    if (query.endsWith(' ') || queries.last.length < 2) {
       return history;
     }
 
@@ -24,7 +23,7 @@ class SearchHistoryRepository {
     // or already contains multiple words)
     return history
       ..removeWhere((key, value) =>
-          !value.query.contains(last) ||
+          !value.query.contains(queries.last) ||
           queries.sublist(0, queries.length - 1).contains(value.query));
   }
 
