@@ -10,17 +10,15 @@ import '../util/map_utils.dart';
 import 'blocked_tags.dart';
 import 'server_data.dart';
 
-final typedSearchBarQueryProvider = StateProvider((ref) => '');
 final searchSuggestionProvider =
-    FutureProvider.autoDispose<List<String>>((ref) async {
+    FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
   final handler = SearchSuggestionHandler(ref.read);
-  final typedData = ref.watch(typedSearchBarQueryProvider).state;
-  final last = typedData.trim().split(' ').last.trim();
-  if (typedData.endsWith(' ') && last.length <= 2) {
+  final last = query.trim().split(' ').last.trim();
+  if (query.endsWith(' ') && last.length <= 2) {
     return [];
   }
 
-  return await handler.fetch(query: typedData);
+  return await handler.fetch(query: query);
 });
 
 class SearchSuggestionHandler {

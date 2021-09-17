@@ -11,6 +11,7 @@ import '../../provider/server_data.dart';
 class SearchSuggestionResult extends HookWidget {
   const SearchSuggestionResult({
     Key? key,
+    required this.query,
     required this.controller,
     required this.history,
     this.onRemoveHistory,
@@ -20,6 +21,7 @@ class SearchSuggestionResult extends HookWidget {
 
   final FloatingSearchBarController controller;
   final Map history;
+  final String query;
   final Function(dynamic key)? onRemoveHistory;
   final Function()? onClearHistory;
   final Function(String value)? onSearchTag;
@@ -38,8 +40,7 @@ class SearchSuggestionResult extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final server = useProvider(serverDataProvider);
-    final suggester = useProvider(searchSuggestionProvider);
-
+    final suggester = useProvider(searchSuggestionProvider(query));
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(

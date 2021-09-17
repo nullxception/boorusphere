@@ -7,7 +7,6 @@ import '../../model/server_data.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/grid.dart';
 import '../../provider/search_history.dart';
-import '../../provider/search_suggestion.dart';
 import '../../provider/search_tag.dart';
 import '../../provider/server_data.dart';
 import '../containers/home.dart';
@@ -51,9 +50,10 @@ class HomeBar extends HookWidget {
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final searchHistory = useProvider(searchHistoryProvider);
-    final suggestionHistory = useState({});
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
-    final typedSearchBarQuery = useProvider(typedSearchBarQueryProvider);
+
+    final suggestionHistory = useState({});
+    final typedQuery = useState('');
 
     useEffect(() {
       // Populate search tag on first build
@@ -94,7 +94,7 @@ class HomeBar extends HookWidget {
         if (server.active.canSuggestTags &&
             !value.endsWith(' ') &&
             last.length > 2) {
-          typedSearchBarQuery.state = value.trim();
+          typedQuery.value = value.trim();
         }
         suggestionHistory.value =
             await searchHistory.composeSuggestion(query: last);
@@ -130,6 +130,7 @@ class HomeBar extends HookWidget {
       ],
       builder: (context, transition) {
         return SearchSuggestionResult(
+            query: typedQuery.value,
             controller: controller,
             history: suggestionHistory.value,
             onClearHistory: () async {
