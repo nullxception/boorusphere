@@ -1,3 +1,4 @@
+import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -57,27 +58,33 @@ class Home extends HookWidget {
       drawer: HomeDrawer(),
       drawerEdgeDragWidth:
           homeDrawerSwipeable.state ? MediaQuery.of(context).size.width : 30,
-      body: HomeBar(
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            FloatingSearchBarScrollNotifier(
-              child: CustomScrollView(
-                controller: scrollController,
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(10,
-                        MediaQuery.of(context).viewPadding.top + 72, 10, 10),
-                    sliver: SliverThumbnails(
-                      autoScrollController: scrollController,
+      body: DoubleBack(
+        onFirstBackPress: (context) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Press back again to exit')));
+        },
+        child: HomeBar(
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              FloatingSearchBarScrollNotifier(
+                child: CustomScrollView(
+                  controller: scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.fromLTRB(10,
+                          MediaQuery.of(context).viewPadding.top + 72, 10, 10),
+                      sliver: SliverThumbnails(
+                        autoScrollController: scrollController,
+                      ),
                     ),
-                  ),
-                  SliverPageState()
-                ],
+                    SliverPageState()
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

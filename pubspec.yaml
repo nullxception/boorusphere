@@ -52,6 +52,7 @@ dependencies:
   url_launcher: ^6.0.3
   xml2json: ^5.0.0
   yaml: ^3.1.0
+  double_back_to_close: ^2.0.0
 
 dev_dependencies:
   flutter_test:
