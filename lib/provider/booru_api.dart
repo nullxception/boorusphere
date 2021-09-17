@@ -11,7 +11,7 @@ import '../model/booru_post.dart';
 import '../model/server_query.dart';
 import '../util/map_utils.dart';
 import 'blocked_tags.dart';
-import 'search_tag.dart';
+import 'booru_query.dart';
 import 'server_data.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
@@ -26,7 +26,7 @@ class BooruApi {
 
   Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
     final booruPosts = read(postsProvider);
-    final searchTag = read(searchTagProvider);
+    final booruQuery = read(booruQueryProvider);
     final blockedTags = read(blockedTagsProvider);
     final blocked = await blockedTags.listedEntries;
 
@@ -35,8 +35,8 @@ class BooruApi {
     } else if (!res.body.contains(RegExp('https?:\/\/.*'))) {
       // no url founds in the document means no image(s) available to display
       throw HttpException(booruPosts.isNotEmpty
-          ? 'No more result for "$searchTag"'
-          : 'No result for "$searchTag"');
+          ? 'No more result for "${booruQuery.tags}"'
+          : 'No result for "${booruQuery.tags}"');
     }
 
     List<dynamic> entries;
@@ -112,7 +112,7 @@ class BooruApi {
 
   Future<void> fetch({bool clear = false}) async {
     final pageLoading = read(pageLoadingProvider);
-    final searchTag = read(searchTagProvider);
+    final booruQuery = read(booruQueryProvider);
     final server = read(serverDataProvider);
     final errorMessage = read(pageErrorProvider);
     final booruPosts = read(postsProvider);
@@ -133,7 +133,8 @@ class BooruApi {
     }
 
     try {
-      final q = ServerQuery(tags: searchTag, safeMode: server.useSafeMode);
+      final q =
+          ServerQuery(tags: booruQuery.tags, safeMode: server.useSafeMode);
       final res = await http.get(server.active.composeSearchUrl(q, _page));
       final data = await _parseHttpResponse(res);
       booruPosts.addAll(data);

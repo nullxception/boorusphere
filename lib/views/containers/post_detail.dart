@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
-import '../../provider/search_tag.dart';
+import '../../provider/booru_query.dart';
 import '../../provider/server_data.dart';
 import '../components/tag.dart';
 import 'home.dart';
@@ -32,7 +32,7 @@ class PostDetails extends HookWidget {
     final booruPosts = useProvider(postsProvider);
     final selectedtag = useState(<String>[]);
     final api = useProvider(booruApiProvider);
-    final searchTagHandler = useProvider(searchTagProvider.notifier);
+    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);
     var showFAB = useState(false);
@@ -161,7 +161,7 @@ class PostDetails extends HookWidget {
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
-                searchTagHandler.setTag(query: tags);
+                booruQueryNotifier.setTag(query: tags);
                 api.fetch(clear: true);
                 Navigator.pushAndRemoveUntil(
                   context,

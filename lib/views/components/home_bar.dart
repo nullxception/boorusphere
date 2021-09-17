@@ -5,9 +5,9 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/server_data.dart';
 import '../../provider/booru_api.dart';
+import '../../provider/booru_query.dart';
 import '../../provider/grid.dart';
 import '../../provider/search_history.dart';
-import '../../provider/search_tag.dart';
 import '../../provider/server_data.dart';
 import '../containers/home.dart';
 import '../hooks/floating_searchbar_controller.dart';
@@ -21,7 +21,7 @@ class HomeBar extends HookWidget {
   void _searchForTag({
     required String value,
     required FloatingSearchBarController controller,
-    required SearchTagNotifier searchTagHandler,
+    required BooruQueryNotifier searchTagHandler,
     required BooruApi api,
     required String searchTag,
   }) {
@@ -47,8 +47,8 @@ class HomeBar extends HookWidget {
     final grid = useProvider(gridProvider);
     final server = useProvider(serverDataProvider);
     final api = useProvider(booruApiProvider);
-    final searchTag = useProvider(searchTagProvider);
-    final searchTagHandler = useProvider(searchTagProvider.notifier);
+    final booruQuery = useProvider(booruQueryProvider);
+    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
     final searchHistory = useProvider(searchHistoryProvider);
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
 
@@ -57,8 +57,9 @@ class HomeBar extends HookWidget {
 
     useEffect(() {
       // Populate search tag on first build
-      controller.query = searchTag == ServerData.defaultTag ? '' : searchTag;
-    }, [searchTag]);
+      controller.query =
+          booruQuery.tags == ServerData.defaultTag ? '' : booruQuery.tags;
+    }, [booruQuery]);
 
     useEffect(() {
       // Populate suggestion history on first build
@@ -85,8 +86,8 @@ class HomeBar extends HookWidget {
           value: value,
           api: api,
           controller: controller,
-          searchTag: searchTag,
-          searchTagHandler: searchTagHandler,
+          searchTag: booruQuery.tags,
+          searchTagHandler: booruQueryNotifier,
         );
       },
       onQueryChanged: (value) async {
@@ -117,8 +118,8 @@ class HomeBar extends HookWidget {
         FloatingSearchBarAction.icon(
           icon: const Icon(Icons.rotate_left),
           onTap: () {
-            if (controller.query != searchTag) {
-              controller.query = '$searchTag ';
+            if (controller.query != booruQuery.tags) {
+              controller.query = '${booruQuery.tags} ';
             }
           },
           showIfOpened: true,
@@ -148,8 +149,8 @@ class HomeBar extends HookWidget {
                 value: value,
                 api: api,
                 controller: controller,
-                searchTag: searchTag,
-                searchTagHandler: searchTagHandler,
+                searchTag: booruQuery.tags,
+                searchTagHandler: booruQueryNotifier,
               );
             });
       },

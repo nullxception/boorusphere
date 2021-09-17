@@ -7,7 +7,7 @@ import '../../model/server_data.dart';
 import '../../provider/app_theme.dart';
 import '../../provider/app_version.dart';
 import '../../provider/booru_api.dart';
-import '../../provider/search_tag.dart';
+import '../../provider/booru_query.dart';
 import '../../provider/server_data.dart';
 import '../../routes.dart';
 import 'favicon.dart';
@@ -136,17 +136,17 @@ class _BackToHomeTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final api = useProvider(booruApiProvider);
-    final searchTag = useProvider(searchTagProvider);
-    final searchTagHandler = useProvider(searchTagProvider.notifier);
+    final booruQuery = useProvider(booruQueryProvider);
+    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
 
     return Visibility(
-      visible: searchTag != ServerData.defaultTag,
+      visible: booruQuery.tags != ServerData.defaultTag,
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          searchTagHandler.setTag(query: ServerData.defaultTag);
+          booruQueryNotifier.setTag(query: ServerData.defaultTag);
           api.fetch(clear: true);
           Navigator.pop(context);
         },
