@@ -10,6 +10,7 @@ import 'package:xml2json/xml2json.dart';
 
 import '../model/booru_post.dart';
 import '../model/server_query.dart';
+import '../util/map_utils.dart';
 import 'blocked_tags.dart';
 import 'search_tag.dart';
 import 'server_data.dart';
@@ -23,33 +24,6 @@ class BooruApi {
   final Reader read;
 
   BooruApi(this.read);
-
-  MapEntry<String, dynamic> _getEntry(Map<String, dynamic> data, String key) {
-    return data.entries.firstWhere(
-      (e) => e.key.contains(RegExp(key)),
-      orElse: () => const MapEntry('', null),
-    );
-  }
-
-  String? _parseJsonLink(Map<String, dynamic> data, String key) {
-    final result = _getEntry(data, key).value;
-    if (result is String && result.contains(RegExp('https?:\/\/.*'))) {
-      return result;
-    } else {
-      return null;
-    }
-  }
-
-  int _parseJsonNumber(Map<String, dynamic> data, String key) {
-    final result = _getEntry(data, key);
-    if (result.value is int) {
-      return result.value;
-    } else if (result.value is String) {
-      return int.parse(result.value);
-    } else {
-      return 0;
-    }
-  }
 
   Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
     final booruPosts = read(postsProvider);
@@ -87,13 +61,13 @@ class BooruApi {
 
     final result = <BooruPost>[];
     for (final Map<String, dynamic> post in entries) {
-      final id = _parseJsonNumber(post, r'^id$');
-      final src = _parseJsonLink(post, '^(file_url|url)');
-      final displaySrc = _parseJsonLink(post, '^large_file');
-      final thumbnail = _parseJsonLink(post, '^(preview_fi|preview)');
-      final tags = _getEntry(post, '^(tags|tag_str)');
-      final width = _parseJsonNumber(post, '^(image_wid|width)');
-      final height = _parseJsonNumber(post, '^(image_hei|height)');
+      final id = MapUtils.getInt(post, r'^id$');
+      final src = MapUtils.getUrl(post, '^(file_url|url)');
+      final displaySrc = MapUtils.getUrl(post, '^large_file');
+      final thumbnail = MapUtils.getUrl(post, '^(preview_fi|preview)');
+      final tags = MapUtils.findEntry(post, '^(tags|tag_str)');
+      final width = MapUtils.getInt(post, '^(image_wid|width)');
+      final height = MapUtils.getInt(post, '^(image_hei|height)');
       final tagList = tags.value.toString().trim().split(' ');
 
       final hasContent = width > 0 && height > 0;
@@ -146,64 +120,6 @@ class BooruApi {
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
       return 'Something went wrong';
-    }
-  }
-
-  Future<List<String>> _parseSuggestionTags(http.Response res) async {
-    final blockedTags = read(blockedTagsProvider);
-    final blocked = await blockedTags.listedEntries;
-
-    if (res.statusCode != 200) {
-      throw HttpException('Something went wrong [${res.statusCode}]');
-    }
-
-    List<dynamic> entries;
-    if (res.body.contains(RegExp('[a-z][\'"]\s*:'))) {
-      entries = jsonDecode(res.body);
-    } else if (res.body.isEmpty) {
-      return [];
-    } else {
-      throw const FormatException('Unknown document format');
-    }
-
-    final result = <String>[];
-    for (final Map<String, dynamic> entry in entries) {
-      final tags = _getEntry(entry, '^(name|tag)');
-      final postCount = _parseJsonNumber(entry, '.*count');
-      if (postCount > 0 && !blocked.contains(tags.value)) {
-        result.add(tags.value);
-      }
-    }
-
-    return result;
-  }
-
-  Future<List<String>> fetchSuggestion({required String query}) async {
-    final queries = query.trim().split(' ');
-    final last = queries.last.trim();
-
-    // Filter the query, it must be longer than 2
-    if (query.endsWith(' ') || last.length < 2) {
-      return [];
-    }
-
-    final server = read(serverDataProvider);
-    if (!server.active.canSuggestTags) {
-      Fimber.w('No search suggestion feature on ${server.active.name}');
-      return [];
-    }
-
-    try {
-      final res = await http.get(server.active.composeSuggestionUrl(last));
-      final tags = await _parseSuggestionTags(res);
-      return tags
-          .where((it) =>
-              it.contains(last) &&
-              !queries.sublist(0, queries.length - 1).contains(it))
-          .toList();
-    } on Exception catch (e) {
-      Fimber.e('Something went wrong', ex: e);
-      return [];
     }
   }
 

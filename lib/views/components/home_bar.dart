@@ -7,6 +7,7 @@ import '../../model/server_data.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/grid.dart';
 import '../../provider/search_history.dart';
+import '../../provider/search_suggestion.dart';
 import '../../provider/search_tag.dart';
 import '../../provider/server_data.dart';
 import '../containers/home.dart';
@@ -50,9 +51,9 @@ class HomeBar extends HookWidget {
     final searchTag = useProvider(searchTagProvider);
     final searchTagHandler = useProvider(searchTagProvider.notifier);
     final searchHistory = useProvider(searchHistoryProvider);
-    final suggestion = useState(<String>[]);
     final suggestionHistory = useState({});
     final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
+    final typedSearchBarQuery = useProvider(typedSearchBarQueryProvider);
 
     useEffect(() {
       // Populate search tag on first build
@@ -89,8 +90,11 @@ class HomeBar extends HookWidget {
         );
       },
       onQueryChanged: (value) async {
-        if (server.active.canSuggestTags) {
-          suggestion.value = await api.fetchSuggestion(query: value);
+        final last = value.trim().split(' ').last.trim();
+        if (server.active.canSuggestTags &&
+            !value.endsWith(' ') &&
+            last.length > 2) {
+          typedSearchBarQuery.state = value.trim();
         }
         suggestionHistory.value =
             await searchHistory.composeSuggestion(query: value);
@@ -125,40 +129,28 @@ class HomeBar extends HookWidget {
         ),
       ],
       builder: (context, transition) {
-        return suggestionHistory.value.isEmpty && controller.query.isEmpty
-            ? Center(
-                child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(Icons.history),
-                  ),
-                  const Text('No search history yet'),
-                ],
-              ))
-            : SearchSuggestionResult(
+        return SearchSuggestionResult(
+            controller: controller,
+            history: suggestionHistory.value,
+            onClearHistory: () async {
+              searchHistory.clear();
+              suggestionHistory.value = {};
+            },
+            onRemoveHistory: (key) async {
+              searchHistory.delete(key);
+              // rebuild history suggestion
+              suggestionHistory.value = await searchHistory.composeSuggestion(
+                  query: controller.query);
+            },
+            onSearchTag: (value) {
+              _searchForTag(
+                value: value,
+                api: api,
                 controller: controller,
-                suggestions: suggestion.value,
-                history: suggestionHistory.value,
-                onClearHistory: () async {
-                  searchHistory.clear();
-                  suggestionHistory.value = {};
-                },
-                onRemoveHistory: (key) async {
-                  searchHistory.delete(key);
-                  // rebuild history suggestion
-                  suggestionHistory.value = await searchHistory
-                      .composeSuggestion(query: controller.query);
-                },
-                onSearchTag: (value) {
-                  _searchForTag(
-                    value: value,
-                    api: api,
-                    controller: controller,
-                    searchTag: searchTag,
-                    searchTagHandler: searchTagHandler,
-                  );
-                });
+                searchTag: searchTag,
+                searchTagHandler: searchTagHandler,
+              );
+            });
       },
       body: body,
     );

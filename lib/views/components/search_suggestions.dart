@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/search_history.dart';
+import '../../provider/search_suggestion.dart';
 import '../../provider/server_data.dart';
 
 class SearchSuggestionResult extends HookWidget {
   const SearchSuggestionResult({
     Key? key,
     required this.controller,
-    required this.suggestions,
     required this.history,
     this.onRemoveHistory,
     this.onClearHistory,
@@ -18,7 +19,6 @@ class SearchSuggestionResult extends HookWidget {
   }) : super(key: key);
 
   final FloatingSearchBarController controller;
-  final List<String> suggestions;
   final Map history;
   final Function(dynamic key)? onRemoveHistory;
   final Function()? onClearHistory;
@@ -38,6 +38,7 @@ class SearchSuggestionResult extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final server = useProvider(serverDataProvider);
+    final suggester = useProvider(searchSuggestionProvider);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
@@ -121,31 +122,48 @@ class SearchSuggestionResult extends HookWidget {
                 ],
               ),
             ),
-          if (server.active.canSuggestTags && suggestions.isNotEmpty)
+          if (server.active.canSuggestTags)
             Padding(
               padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
               child: Text('Suggested at ${server.active.name}'),
             ),
           if (server.active.canSuggestTags)
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              padding: const EdgeInsets.all(0),
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    _SuggestionEntry(
-                      query: suggestions[index],
-                      onTap: _searchTag,
-                      onAdded: _addToInput,
-                    ),
-                    if (index < suggestions.length - 1)
-                      const Divider(height: 1),
-                  ],
+            suggester.when(
+              data: (value) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  padding: const EdgeInsets.all(0),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        _SuggestionEntry(
+                          query: value[index],
+                          onTap: _searchTag,
+                          onAdded: _addToInput,
+                        ),
+                        if (index < value.length - 1) const Divider(height: 1),
+                      ],
+                    );
+                  },
+                  itemCount: value.length,
                 );
               },
-              itemCount: suggestions.length,
-            ),
+              loading: () => SizedBox(
+                height: 128,
+                child: Center(
+                  child: SpinKitThreeBounce(
+                      size: 32,
+                      color: Theme.of(context).colorScheme.onBackground),
+                ),
+              ),
+              error: (ex, _) => SizedBox(
+                height: 128,
+                child: Center(
+                  child: Text(ex.toString().split(':')[1]),
+                ),
+              ),
+            )
         ],
       ),
     );
