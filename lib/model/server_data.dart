@@ -32,19 +32,19 @@ class ServerData with _$ServerData {
   }
 
   Uri composeSearchUrl(ServerQuery query) {
-    var _url = '$homepage/$searchUrl';
-    var _tags = query.tags;
+    var url = '$homepage/$searchUrl';
+    var tags = query.tags;
     if (query.safeMode &&
         safeMode != null &&
         safeMode!.contains(RegExp('[?=/]'))) {
-      _url = '$homepage/$safeMode';
+      url = '$homepage/$safeMode';
     } else if (query.safeMode && safeMode != null) {
-      _tags += ' $safeMode';
+      tags += ' $safeMode';
     }
 
     return Uri.parse(
-      _url
-          .replaceAll('{tags}', _tags)
+      url
+          .replaceAll('{tags}', tags)
           .replaceAll('{page-id}', query.page.toString())
           .replaceAll('{post-limit}', query.limit.toString()),
     );
