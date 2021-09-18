@@ -18,12 +18,12 @@ class Post extends HookWidget {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
 
     final pageController = usePageController(initialPage: beginPage);
-    final booruPosts = useProvider(postsProvider);
+    final api = useProvider(booruApiProvider);
     final lastOpenedIndex = useProvider(lastOpenedPostProvider);
     final page = useState(beginPage);
     final isFullscreen = useState(false);
 
-    final isNotVideo = booruPosts[page.value].displayType != PostType.video;
+    final isNotVideo = api.posts[page.value].displayType != PostType.video;
 
     useEffect(() {
       SystemChrome.setSystemUIChangeCallback((fullscreen) async {
@@ -47,8 +47,8 @@ class Post extends HookWidget {
           backgroundColor: Colors.black.withOpacity(0.4),
           elevation: 0,
           title: SubbedTitle(
-            title: '#${page.value + 1} of ${booruPosts.length}',
-            subtitle: booruPosts[page.value].tags.join(' '),
+            title: '#${page.value + 1} of ${api.posts.length}',
+            subtitle: api.posts[page.value].tags.join(' '),
           ),
         ),
       ),
@@ -58,12 +58,12 @@ class Post extends HookWidget {
           page.value = index;
           lastOpenedIndex.state = index;
         },
-        itemCount: booruPosts.length,
-        itemBuilder: (_, index) => PostDisplay(content: booruPosts[index]),
+        itemCount: api.posts.length,
+        itemBuilder: (_, index) => PostDisplay(content: api.posts[index]),
       ),
       bottomNavigationBar: Visibility(
         visible: !isFullscreen.value && isNotVideo,
-        child: PostToolbox(booruPosts[page.value]),
+        child: PostToolbox(api.posts[page.value]),
       ),
     );
   }

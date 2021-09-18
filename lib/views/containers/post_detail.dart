@@ -29,14 +29,13 @@ class PostDetails extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final server = useProvider(serverDataProvider);
-    final booruPosts = useProvider(postsProvider);
     final selectedtag = useState(<String>[]);
     final api = useProvider(booruApiProvider);
     final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);
     var showFAB = useState(false);
-    final data = booruPosts.firstWhere(
+    final data = api.posts.firstWhere(
       (element) => element.id == id,
       orElse: () => BooruPost.empty(),
     );

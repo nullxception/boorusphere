@@ -15,16 +15,16 @@ import 'server_data.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => '');
-final postsProvider = Provider<List<BooruPost>>((_) => []);
 
 class BooruApi {
   BooruApi(this.read);
 
   final Reader read;
+  final List<BooruPost> posts = [];
+
   int _page = 1;
 
   Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
-    final booruPosts = read(postsProvider);
     final booruQuery = read(booruQueryProvider);
     final blockedTags = read(blockedTagsProvider);
     final blocked = await blockedTags.listedEntries;
@@ -33,7 +33,7 @@ class BooruApi {
       throw HttpException('Something went wrong [${res.statusCode}]');
     } else if (!res.body.contains(RegExp('https?:\/\/.*'))) {
       // no url founds in the document means no image(s) available to display
-      throw HttpException(booruPosts.isNotEmpty
+      throw HttpException(posts.isNotEmpty
           ? 'No more result for "${booruQuery.tags}"'
           : 'No result for "${booruQuery.tags}"');
     }
@@ -114,7 +114,6 @@ class BooruApi {
     final booruQuery = read(booruQueryProvider);
     final server = read(serverDataProvider);
     final errorMessage = read(pageErrorProvider);
-    final booruPosts = read(postsProvider);
 
     if (clear && _page > 1) {
       _page = 1;
@@ -127,15 +126,15 @@ class BooruApi {
     if (errorMessage.state.isNotEmpty) {
       errorMessage.state = '';
     }
-    if (clear && booruPosts.isNotEmpty) {
-      booruPosts.clear();
+    if (clear && posts.isNotEmpty) {
+      posts.clear();
     }
 
     try {
       final res =
           await http.get(server.active.composeSearchUrl(booruQuery, _page));
       final data = await _parseHttpResponse(res);
-      booruPosts.addAll(data);
+      posts.addAll(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
       errorMessage.state = _parseException(e);

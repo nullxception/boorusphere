@@ -32,7 +32,7 @@ class SliverThumbnails extends HookWidget {
   Widget build(BuildContext context) {
     final gridExtra = useProvider(gridProvider);
     final lastOpenedIndex = useProvider(lastOpenedPostProvider);
-    final booruPosts = useProvider(postsProvider);
+    final api = useProvider(booruApiProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
@@ -41,7 +41,7 @@ class SliverThumbnails extends HookWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      itemCount: booruPosts.length,
+      itemCount: api.posts.length,
       itemBuilder: (context, index) => AutoScrollTag(
         key: ValueKey(index),
         controller: autoScrollController,
@@ -57,9 +57,9 @@ class SliverThumbnails extends HookWidget {
               fadeOutDuration: const Duration(milliseconds: 500),
               filterQuality: thumbnailQuality(gridExtra),
               fit: BoxFit.fill,
-              imageUrl: booruPosts[index].thumbnail,
+              imageUrl: api.posts[index].thumbnail,
               progressIndicatorBuilder: (_, __, ___) => _ThumbnailShimmer(
-                aspectRatio: booruPosts[index].width / booruPosts[index].height,
+                aspectRatio: api.posts[index].width / api.posts[index].height,
               ),
               errorWidget: (_, __, error) =>
                   const Icon(Icons.broken_image_outlined),
