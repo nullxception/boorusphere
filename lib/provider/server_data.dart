@@ -38,7 +38,8 @@ class ServerDataNotifier extends ChangeNotifier {
       _activeServer = read(serverDataProvider).select(activeServerName);
     }
 
-    api.fetch(clear: true);
+    api.posts.clear();
+    api.fetch();
   }
 
   Future<List<ServerData>> _defaultServersAssets() async {

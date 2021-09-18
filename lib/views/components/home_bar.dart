@@ -36,7 +36,8 @@ class HomeBar extends HookWidget {
     }
 
     searchTagHandler.setTag(query: query);
-    api.fetch(clear: true);
+    api.posts.clear();
+    api.fetch();
     controller.close();
   }
 

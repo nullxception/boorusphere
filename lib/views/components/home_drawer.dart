@@ -147,7 +147,8 @@ class _BackToHomeTile extends HookWidget {
         dense: true,
         onTap: () {
           booruQueryNotifier.setTag(query: ServerData.defaultTag);
-          api.fetch(clear: true);
+          api.posts.clear();
+          api.fetch();
           Navigator.pop(context);
         },
       ),
@@ -184,7 +185,8 @@ class _ServerSelection extends HookWidget {
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
               server.setActiveServer(name: it.name);
-              api.fetch(clear: true);
+              api.posts.clear();
+              api.fetch();
               Navigator.pop(context);
             },
           ),

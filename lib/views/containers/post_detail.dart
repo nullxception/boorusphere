@@ -161,7 +161,8 @@ class PostDetails extends HookWidget {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
                 booruQueryNotifier.setTag(query: tags);
-                api.fetch(clear: true);
+                api.posts.clear();
+                api.fetch();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),

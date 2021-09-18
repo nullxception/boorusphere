@@ -109,16 +109,14 @@ class BooruApi {
     }
   }
 
-  Future<void> fetch({bool clear = false}) async {
+  void fetch() async {
     final pageLoading = read(pageLoadingProvider);
     final booruQuery = read(booruQueryProvider);
     final server = read(serverDataProvider);
     final errorMessage = read(pageErrorProvider);
 
-    if (clear && _page > 1) {
+    if (posts.isEmpty) {
       _page = 1;
-    } else if (!clear) {
-      _page++;
     }
     if (!pageLoading.state) {
       pageLoading.state = true;
@@ -126,13 +124,11 @@ class BooruApi {
     if (errorMessage.state.isNotEmpty) {
       errorMessage.state = '';
     }
-    if (clear && posts.isNotEmpty) {
-      posts.clear();
-    }
 
     try {
-      final res =
-          await http.get(server.active.composeSearchUrl(booruQuery, _page));
+      final url = server.active.composeSearchUrl(booruQuery, _page);
+      Fimber.d('Fetching $url');
+      final res = await http.get(url);
       final data = await _parseHttpResponse(res);
       posts.addAll(data);
     } on Exception catch (e) {
@@ -146,6 +142,7 @@ class BooruApi {
   void loadMore() {
     final pageLoading = read(pageLoadingProvider);
     if (!pageLoading.state) {
+      _page++;
       fetch();
     }
   }
