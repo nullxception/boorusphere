@@ -13,7 +13,7 @@ class ServerData with _$ServerData {
   const factory ServerData({
     @HiveField(0, defaultValue: '') required String name,
     @HiveField(1, defaultValue: '') required String homepage,
-    @HiveField(2, defaultValue: '') required String postUrl,
+    @HiveField(2, defaultValue: '') String? postUrl,
     @HiveField(3, defaultValue: '') required String searchUrl,
     @HiveField(6, defaultValue: '') String? safeMode,
     @HiveField(7, defaultValue: '') String? tagSuggestionUrl,
@@ -26,7 +26,9 @@ class ServerData with _$ServerData {
 
   bool get canSuggestTags => tagSuggestionUrl?.contains('{tag-part}') ?? false;
 
-  Uri composePostUrl(int id) {
+  Uri? composePostUrl(int id) {
+    if (postUrl == null) return null;
+
     final url = '$homepage/$postUrl';
     return Uri.parse(url.replaceAll('{post-id}', id.toString()));
   }

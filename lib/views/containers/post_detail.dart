@@ -55,26 +55,27 @@ class PostDetails extends HookWidget {
             title: const Text('Type'),
             subtitle: Text(data.mimeType),
           ),
-          ListTile(
-            title: const Text('Location'),
-            subtitle: TextButton(
-              style: ButtonStyle(
-                alignment: Alignment.centerLeft,
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.zero,
+          if (postUrl != null)
+            ListTile(
+              title: const Text('Location'),
+              subtitle: TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.centerLeft,
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.zero,
+                  ),
                 ),
+                onPressed: () => launch(postUrl.toString()),
+                child: Text(postUrl.toString()),
               ),
-              onPressed: () => launch(postUrl.toString()),
-              child: Text(postUrl.toString()),
+              trailing: IconButton(
+                iconSize: 18,
+                onPressed: () {
+                  copyToClipboard(context, postUrl.toString());
+                },
+                icon: const Icon(Icons.copy),
+              ),
             ),
-            trailing: IconButton(
-              iconSize: 18,
-              onPressed: () {
-                copyToClipboard(context, postUrl.toString());
-              },
-              icon: const Icon(Icons.copy),
-            ),
-          ),
           ListTile(
             title: const Text('Source'),
             subtitle: TextButton(

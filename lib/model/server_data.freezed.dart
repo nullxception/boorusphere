@@ -23,7 +23,7 @@ class _$ServerDataTearOff {
   _ServerData call(
       {@HiveField(0, defaultValue: '') required String name,
       @HiveField(1, defaultValue: '') required String homepage,
-      @HiveField(2, defaultValue: '') required String postUrl,
+      @HiveField(2, defaultValue: '') String? postUrl,
       @HiveField(3, defaultValue: '') required String searchUrl,
       @HiveField(6, defaultValue: '') String? safeMode,
       @HiveField(7, defaultValue: '') String? tagSuggestionUrl}) {
@@ -52,7 +52,7 @@ mixin _$ServerData {
   @HiveField(1, defaultValue: '')
   String get homepage => throw _privateConstructorUsedError;
   @HiveField(2, defaultValue: '')
-  String get postUrl => throw _privateConstructorUsedError;
+  String? get postUrl => throw _privateConstructorUsedError;
   @HiveField(3, defaultValue: '')
   String get searchUrl => throw _privateConstructorUsedError;
   @HiveField(6, defaultValue: '')
@@ -74,7 +74,7 @@ abstract class $ServerDataCopyWith<$Res> {
   $Res call(
       {@HiveField(0, defaultValue: '') String name,
       @HiveField(1, defaultValue: '') String homepage,
-      @HiveField(2, defaultValue: '') String postUrl,
+      @HiveField(2, defaultValue: '') String? postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
       @HiveField(6, defaultValue: '') String? safeMode,
       @HiveField(7, defaultValue: '') String? tagSuggestionUrl});
@@ -109,7 +109,7 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
       postUrl: postUrl == freezed
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       searchUrl: searchUrl == freezed
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
@@ -135,7 +135,7 @@ abstract class _$ServerDataCopyWith<$Res> implements $ServerDataCopyWith<$Res> {
   $Res call(
       {@HiveField(0, defaultValue: '') String name,
       @HiveField(1, defaultValue: '') String homepage,
-      @HiveField(2, defaultValue: '') String postUrl,
+      @HiveField(2, defaultValue: '') String? postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
       @HiveField(6, defaultValue: '') String? safeMode,
       @HiveField(7, defaultValue: '') String? tagSuggestionUrl});
@@ -172,7 +172,7 @@ class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
       postUrl: postUrl == freezed
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       searchUrl: searchUrl == freezed
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
@@ -196,7 +196,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   const _$_ServerData(
       {@HiveField(0, defaultValue: '') required this.name,
       @HiveField(1, defaultValue: '') required this.homepage,
-      @HiveField(2, defaultValue: '') required this.postUrl,
+      @HiveField(2, defaultValue: '') this.postUrl,
       @HiveField(3, defaultValue: '') required this.searchUrl,
       @HiveField(6, defaultValue: '') this.safeMode,
       @HiveField(7, defaultValue: '') this.tagSuggestionUrl})
@@ -213,7 +213,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   final String homepage;
   @override
   @HiveField(2, defaultValue: '')
-  final String postUrl;
+  final String? postUrl;
   @override
   @HiveField(3, defaultValue: '')
   final String searchUrl;
@@ -290,7 +290,7 @@ abstract class _ServerData extends ServerData {
   const factory _ServerData(
           {@HiveField(0, defaultValue: '') required String name,
           @HiveField(1, defaultValue: '') required String homepage,
-          @HiveField(2, defaultValue: '') required String postUrl,
+          @HiveField(2, defaultValue: '') String? postUrl,
           @HiveField(3, defaultValue: '') required String searchUrl,
           @HiveField(6, defaultValue: '') String? safeMode,
           @HiveField(7, defaultValue: '') String? tagSuggestionUrl}) =
@@ -308,7 +308,7 @@ abstract class _ServerData extends ServerData {
   String get homepage => throw _privateConstructorUsedError;
   @override
   @HiveField(2, defaultValue: '')
-  String get postUrl => throw _privateConstructorUsedError;
+  String? get postUrl => throw _privateConstructorUsedError;
   @override
   @HiveField(3, defaultValue: '')
   String get searchUrl => throw _privateConstructorUsedError;
