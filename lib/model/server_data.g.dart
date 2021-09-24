@@ -21,7 +21,6 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
       homepage: fields[1] == null ? '' : fields[1] as String,
       postUrl: fields[2] == null ? '' : fields[2] as String?,
       searchUrl: fields[3] == null ? '' : fields[3] as String,
-      safeMode: fields[6] == null ? '' : fields[6] as String?,
       tagSuggestionUrl: fields[7] == null ? '' : fields[7] as String?,
     );
   }
@@ -29,7 +28,7 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
   @override
   void write(BinaryWriter writer, _$_ServerData obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -38,8 +37,6 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
       ..write(obj.postUrl)
       ..writeByte(3)
       ..write(obj.searchUrl)
-      ..writeByte(6)
-      ..write(obj.safeMode)
       ..writeByte(7)
       ..write(obj.tagSuggestionUrl);
   }
@@ -65,7 +62,6 @@ _$_ServerData _$_$_ServerDataFromJson(Map<String, dynamic> json) {
     homepage: json['homepage'] as String,
     postUrl: json['postUrl'] as String?,
     searchUrl: json['searchUrl'] as String,
-    safeMode: json['safeMode'] as String?,
     tagSuggestionUrl: json['tagSuggestionUrl'] as String?,
   );
 }
@@ -76,6 +72,5 @@ Map<String, dynamic> _$_$_ServerDataToJson(_$_ServerData instance) =>
       'homepage': instance.homepage,
       'postUrl': instance.postUrl,
       'searchUrl': instance.searchUrl,
-      'safeMode': instance.safeMode,
       'tagSuggestionUrl': instance.tagSuggestionUrl,
     };
