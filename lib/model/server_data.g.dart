@@ -56,17 +56,16 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ServerData _$_$_ServerDataFromJson(Map<String, dynamic> json) {
-  return _$_ServerData(
-    name: json['name'] as String,
-    homepage: json['homepage'] as String,
-    postUrl: json['postUrl'] as String?,
-    searchUrl: json['searchUrl'] as String,
-    tagSuggestionUrl: json['tagSuggestionUrl'] as String?,
-  );
-}
+_$_ServerData _$$_ServerDataFromJson(Map<String, dynamic> json) =>
+    _$_ServerData(
+      name: json['name'] as String,
+      homepage: json['homepage'] as String,
+      postUrl: json['postUrl'] as String?,
+      searchUrl: json['searchUrl'] as String,
+      tagSuggestionUrl: json['tagSuggestionUrl'] as String?,
+    );
 
-Map<String, dynamic> _$_$_ServerDataToJson(_$_ServerData instance) =>
+Map<String, dynamic> _$$_ServerDataToJson(_$_ServerData instance) =>
     <String, dynamic>{
       'name': instance.name,
       'homepage': instance.homepage,

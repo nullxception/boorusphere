@@ -41,7 +41,7 @@ dependencies:
   hive_generator: ^1.1.0
   hooks_riverpod: ^0.14.0+1
   http: ^0.13.1
-  json_serializable: ^4.1.0
+  json_serializable: ^5.0.2
   material_floating_search_bar: ^0.3.4
   mime: ^1.0.0
   package_info: ^2.0.0
