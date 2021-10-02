@@ -14,16 +14,16 @@ import '../components/sliver_thumbnails.dart';
 
 final homeDrawerSwipeableProvider = StateProvider((_) => true);
 
-class Home extends HookWidget {
+class Home extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
-    final api = useProvider(booruApiProvider);
-    final pageLoading = useProvider(pageLoadingProvider);
-    final errorMessage = useProvider(pageErrorProvider);
-    final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
+    final api = ref.watch(booruApiProvider);
+    final pageLoading = ref.watch(pageLoadingProvider);
+    final errorMessage = ref.watch(pageErrorProvider);
+    final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
     final loadMoreCall = useCallback(() {
       if (errorMessage.state.isEmpty && !pageLoading.state) {
         // Infinite page with scroll detection

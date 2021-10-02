@@ -13,7 +13,7 @@ import '../containers/home.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
-class HomeBar extends HookWidget {
+class HomeBar extends HookConsumerWidget {
   const HomeBar({Key? key, this.body}) : super(key: key);
 
   final Widget? body;
@@ -42,16 +42,16 @@ class HomeBar extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final controller = useFloatingSearchBarController();
-    final gridHandler = useProvider(gridProvider.notifier);
-    final grid = useProvider(gridProvider);
-    final server = useProvider(serverDataProvider);
-    final api = useProvider(booruApiProvider);
-    final booruQuery = useProvider(booruQueryProvider);
-    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
-    final searchHistory = useProvider(searchHistoryProvider);
-    final homeDrawerSwipeable = useProvider(homeDrawerSwipeableProvider);
+    final gridHandler = ref.watch(gridProvider.notifier);
+    final grid = ref.watch(gridProvider);
+    final server = ref.watch(serverDataProvider);
+    final api = ref.watch(booruApiProvider);
+    final booruQuery = ref.watch(booruQueryProvider);
+    final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
+    final searchHistory = ref.watch(searchHistoryProvider);
+    final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
 
     final suggestionHistory = useState({});
     final typedQuery = useState('');

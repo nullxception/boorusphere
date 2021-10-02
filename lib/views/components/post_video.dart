@@ -8,14 +8,14 @@ import '../../model/booru_post.dart';
 import '../../provider/video_player.dart';
 import '../containers/post_detail.dart';
 
-class PostVideoDisplay extends HookWidget {
+class PostVideoDisplay extends HookConsumerWidget {
   const PostVideoDisplay({Key? key, required this.booru}) : super(key: key);
 
   final BooruPost booru;
 
   @override
-  Widget build(BuildContext context) {
-    final playerPersist = useProvider(videoPlayerProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerPersist = ref.watch(videoPlayerProvider);
     final controller = useMemoized(() {
       final theme = Theme.of(context);
       final controller = BetterPlayerController(

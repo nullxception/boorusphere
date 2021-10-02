@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -100,10 +99,10 @@ class HomeDrawer extends StatelessWidget {
   }
 }
 
-class _ThemeSwitcherButton extends HookWidget {
+class _ThemeSwitcherButton extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final appThemeHandler = useProvider(appThemeProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appThemeHandler = ref.watch(appThemeProvider.notifier);
 
     return IconButton(
       icon: Icon(appThemeHandler.themeIcon),
@@ -112,10 +111,10 @@ class _ThemeSwitcherButton extends HookWidget {
   }
 }
 
-class AppVersionTile extends HookWidget {
+class AppVersionTile extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final version = useProvider(appVersionProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final version = ref.watch(appVersionProvider);
     return ListTile(
       title: Text(version.shouldUpdate
           ? 'Update available: ${version.lastestVersion}'
@@ -132,12 +131,12 @@ class AppVersionTile extends HookWidget {
   }
 }
 
-class _BackToHomeTile extends HookWidget {
+class _BackToHomeTile extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final api = useProvider(booruApiProvider);
-    final booruQuery = useProvider(booruQueryProvider);
-    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final api = ref.watch(booruApiProvider);
+    final booruQuery = ref.watch(booruQueryProvider);
+    final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
 
     return Visibility(
       visible: booruQuery.tags != ServerData.defaultTag,
@@ -156,11 +155,11 @@ class _BackToHomeTile extends HookWidget {
   }
 }
 
-class _ServerSelection extends HookWidget {
+class _ServerSelection extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final api = useProvider(booruApiProvider);
-    final server = useProvider(serverDataProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final api = ref.watch(booruApiProvider);
+    final server = ref.watch(serverDataProvider);
     final theme = Theme.of(context);
 
     return Column(

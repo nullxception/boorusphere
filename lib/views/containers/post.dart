@@ -12,14 +12,14 @@ import '../components/subbed_title.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
 
-class Post extends HookWidget {
+class Post extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
 
     final pageController = usePageController(initialPage: beginPage);
-    final api = useProvider(booruApiProvider);
-    final lastOpenedIndex = useProvider(lastOpenedPostProvider);
+    final api = ref.watch(booruApiProvider);
+    final lastOpenedIndex = ref.watch(lastOpenedPostProvider);
     final page = useState(beginPage);
     final isFullscreen = useState(false);
 

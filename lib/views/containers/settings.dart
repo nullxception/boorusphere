@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -7,12 +6,12 @@ import '../../provider/app_theme.dart';
 import '../../provider/booru_query.dart';
 import '../../routes.dart';
 
-class Settings extends HookWidget {
+class Settings extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final booruQuery = useProvider(booruQueryProvider);
-    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
-    final appTheme = useProvider(appThemeProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final booruQuery = ref.watch(booruQueryProvider);
+    final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
+    final appTheme = ref.watch(appThemeProvider);
     final sectionTitleStyle = TextStyle(
       color: Theme.of(context).colorScheme.secondary,
       fontWeight: FontWeight.bold,

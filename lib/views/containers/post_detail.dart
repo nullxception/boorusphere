@@ -12,7 +12,7 @@ import '../../provider/server_data.dart';
 import '../components/tag.dart';
 import 'home.dart';
 
-class PostDetails extends HookWidget {
+class PostDetails extends HookConsumerWidget {
   const PostDetails({Key? keys, required this.id}) : super(key: keys);
   final int id;
 
@@ -27,11 +27,11 @@ class PostDetails extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final server = useProvider(serverDataProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final server = ref.watch(serverDataProvider);
     final selectedtag = useState(<String>[]);
-    final api = useProvider(booruApiProvider);
-    final booruQueryNotifier = useProvider(booruQueryProvider.notifier);
+    final api = ref.watch(booruApiProvider);
+    final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);
     var showFAB = useState(false);

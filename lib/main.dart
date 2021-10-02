@@ -1,6 +1,5 @@
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,10 +10,10 @@ import 'model/server_data.dart';
 import 'provider/app_theme.dart';
 import 'routes.dart';
 
-class Boorusphere extends HookWidget {
+class Boorusphere extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final appTheme = useProvider(appThemeProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appTheme = ref.watch(appThemeProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Boorusphere',

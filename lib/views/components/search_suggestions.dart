@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -8,7 +7,7 @@ import '../../model/search_history.dart';
 import '../../provider/search_suggestion.dart';
 import '../../provider/server_data.dart';
 
-class SearchSuggestionResult extends HookWidget {
+class SearchSuggestionResult extends HookConsumerWidget {
   const SearchSuggestionResult({
     Key? key,
     required this.query,
@@ -38,9 +37,9 @@ class SearchSuggestionResult extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final server = useProvider(serverDataProvider);
-    final suggester = useProvider(searchSuggestionProvider(query));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final server = ref.watch(serverDataProvider);
+    final suggester = ref.watch(searchSuggestionProvider(query));
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(

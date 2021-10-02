@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../provider/blocked_tags.dart';
 
-class TagsBlocker extends HookWidget {
+class TagsBlocker extends HookConsumerWidget {
   void updateTags(BlockedTagsRepository repo, ValueNotifier storage) {
     repo.mapped.then((it) {
       storage.value = it;
@@ -12,8 +12,8 @@ class TagsBlocker extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final blockedTagsHandler = useProvider(blockedTagsProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final blockedTags = useState({});
 
     useEffect(() {
