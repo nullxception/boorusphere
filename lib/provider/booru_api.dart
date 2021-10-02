@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
 import '../model/booru_post.dart';
+import '../model/server_data.dart';
+import '../model/server_payload.dart';
 import '../util/map_utils.dart';
 import 'blocked_tags.dart';
 import 'booru_query.dart';
@@ -146,6 +148,73 @@ class BooruApi {
       fetch();
     }
   }
+
+  Future<ServerPayload> _queryTest(
+      String url, List<String> queries, ServerPayloadType type) async {
+    String? result;
+    await Future.wait(queries.map((it) async {
+      final query = it
+          .replaceAll('{q}', type == ServerPayloadType.suggestion ? 'a' : '*')
+          .replaceAll('{l}', '3')
+          .replaceAll('{p}', '1')
+          .replaceAll('{id}', '100');
+      final res = await http.get(Uri.parse('$url/$query'));
+      if (res.statusCode == 200) {
+        result = it;
+      }
+    }));
+    return ServerPayload(host: url, query: result, type: type);
+  }
+
+  Future<ServerData> scanServerUrl(String url) async {
+    final tests = await Future.wait(
+      [
+        _queryTest(url, searchQueries, ServerPayloadType.search),
+        _queryTest(url, tagSuggestionQueries, ServerPayloadType.suggestion),
+        _queryTest(url, webPostUrls, ServerPayloadType.post),
+      ],
+    );
+    var post, search, suggestion;
+    for (final payload in tests) {
+      switch (payload.type) {
+        case ServerPayloadType.search:
+          search = payload.query;
+          break;
+        case ServerPayloadType.suggestion:
+          suggestion = payload.query;
+          break;
+        case ServerPayloadType.post:
+          post = payload.query;
+          break;
+        default:
+          break;
+      }
+    }
+    return ServerData(
+        name: Uri.parse(url).host,
+        homepage: url,
+        postUrl: post,
+        searchUrl: search,
+        tagSuggestionUrl: suggestion);
+  }
+
+  static const searchQueries = [
+    'post.json?tags={q}&page={p}&limit={l}',
+    'posts.json?tags={q}&page={p}&limit={l}',
+    'index.php?page=dapi&s=post&q=index&tags={q}&pid={p}&limit={l}',
+  ];
+
+  static const tagSuggestionQueries = [
+    'tag.json?name=*{q}*&order=count&limit={l}',
+    'tags.json?search[name_matches]=*{q}*&search[order]=count&limit={l}',
+    'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{q}%&orderby=count&limit={l}',
+  ];
+
+  static const webPostUrls = [
+    'posts/{id}',
+    'index.php?page=post&s=view&id={id}',
+    'post/show/{id}',
+  ];
 }
 
 final booruApiProvider = Provider((ref) => BooruApi(ref.read));
