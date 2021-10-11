@@ -57,7 +57,9 @@ android {
 
     buildTypes {
         debug {
-           signingConfig signingConfigs.release
+            if (keystoreProperties.containsKey('keyAlias')) {
+               signingConfig signingConfigs.release
+            }
         }
         release {
            signingConfig signingConfigs.release
