@@ -35,7 +35,7 @@ class ServerDataNotifier extends ChangeNotifier {
 
     final activeServerName = prefs.get('active_server');
     if (activeServerName != null && _activeServer.name != activeServerName) {
-      _activeServer = read(serverDataProvider).select(activeServerName);
+      _activeServer = select(activeServerName);
     }
 
     api.posts.clear();
