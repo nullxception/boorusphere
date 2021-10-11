@@ -38,7 +38,7 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   hive_generator: ^1.1.0
-  hooks_riverpod: ^1.0.0-dev.7
+  hooks_riverpod: ^1.0.0-dev.11
   http: ^0.13.1
   json_serializable: ^5.0.2
   material_floating_search_bar: ^0.3.4

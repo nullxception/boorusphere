@@ -149,7 +149,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
                   itemCount: value.length,
                 );
               },
-              loading: () => SizedBox(
+              loading: (_) => SizedBox(
                 height: 128,
                 child: Center(
                   child: SpinKitThreeBounce(
@@ -157,7 +157,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
                       color: Theme.of(context).colorScheme.onBackground),
                 ),
               ),
-              error: (ex, _) => SizedBox(
+              error: (ex, _, __) => SizedBox(
                 height: 128,
                 child: Center(
                   child: Text(ex.toString().split(':')[1]),
