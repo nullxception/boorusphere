@@ -39,9 +39,9 @@ class PostVideoDisplay extends HookConsumerWidget {
             enableQualities: false,
             enableSubtitles: false,
             enableAudioTracks: false,
-            overflowModalColor: theme.cardTheme.color ?? Colors.grey.shade900,
-            overflowModalTextColor:
-                theme.textTheme.subtitle1?.color ?? Colors.grey.shade100,
+            overflowModalColor: theme.colorScheme.surface,
+            overflowModalTextColor: theme.colorScheme.onSurface,
+            overflowMenuIconsColor: theme.colorScheme.onSurface,
             overflowMenuCustomItems: [
               BetterPlayerOverflowMenuItem(
                 Icons.info,
@@ -77,6 +77,8 @@ class PostVideoDisplay extends HookConsumerWidget {
       return controller;
     });
 
-    return BetterPlayer(controller: controller);
+    return SafeArea(
+      child: BetterPlayer(controller: controller),
+    );
   }
 }
