@@ -33,6 +33,7 @@ class PostVideoDisplay extends HookConsumerWidget {
             filterQuality: FilterQuality.high,
           ),
           controlsConfiguration: BetterPlayerControlsConfiguration(
+            showControlsOnInitialize: false,
             enableSkips: false,
             enableProgressText: false,
             enableQualities: false,
