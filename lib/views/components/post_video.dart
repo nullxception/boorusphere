@@ -20,20 +20,14 @@ class PostVideoDisplay extends ConsumerStatefulWidget {
 }
 
 class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
-  VideoPlayerController? _controller;
+  VideoPlayerController? controller;
 
   bool hideControl = false;
   bool isFullscreen = false;
 
   get booru => widget.booru;
 
-  Future<FileInfo> _getVideoFile(String url) async {
-    final cacheManager = DefaultCacheManager();
-    return await cacheManager.getFileFromCache(url) ??
-        await cacheManager.downloadFile(url);
-  }
-
-  void _autoHideController() {
+  void autoHideController() {
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted && !hideControl) {
         setState(() {
@@ -43,16 +37,19 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
     });
   }
 
-  void _sourceInit() async {
-    final videoData = await _getVideoFile(booru.displaySrc);
+  void sourceInit() async {
+    final cache = DefaultCacheManager();
+    final videoData = await cache.getFileFromCache(booru.displaySrc) ??
+        await cache.downloadFile(booru.displaySrc);
+
     if (mounted) {
-      _controller = VideoPlayerController.file(videoData.file)
+      controller = VideoPlayerController.file(videoData.file)
         ..setLooping(true)
         ..addListener(() => setState(() {}))
         ..initialize().whenComplete(() {
-          _autoHideController();
-          _controller?.setVolume(ref.read(videoPlayerProvider).mute ? 0 : 1);
-          _controller?.play();
+          autoHideController();
+          controller?.setVolume(ref.read(videoPlayerProvider).mute ? 0 : 1);
+          controller?.play();
         });
     }
   }
@@ -68,114 +65,113 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
         !isFullscreen ? SystemUiMode.edgeToEdge : SystemUiMode.immersive,
       );
     });
-    _autoHideController();
+    autoHideController();
   }
 
   @override
   void initState() {
-    _sourceInit();
     super.initState();
+    sourceInit();
   }
 
   @override
   Widget build(BuildContext context) {
     final vpp = ref.watch(videoPlayerProvider);
-    return Center(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _controller?.value.isInitialized ?? false
-              ? AspectRatio(
-                  aspectRatio: booru.width / booru.height,
-                  child: VideoPlayer(_controller!),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (controller?.value.isInitialized ?? false)
+          AspectRatio(
+            aspectRatio: booru.width / booru.height,
+            child: VideoPlayer(controller!),
+          ),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => setState(() => hideControl = !hideControl),
+          child: !hideControl
+              ? Container(
+                  color: Colors.black26,
+                  alignment: Alignment.center,
+                  child: InkWell(
+                    onTap: () {
+                      if (controller?.value.isPlaying ?? false) {
+                        controller?.pause();
+                      } else {
+                        controller?.play();
+                      }
+                    },
+                    child: Icon(
+                      controller?.value.isPlaying ?? false
+                          ? Icons.pause_outlined
+                          : Icons.play_arrow,
+                      color: Colors.white,
+                      size: 64.0,
+                    ),
+                  ),
                 )
               : Container(),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              setState(() => hideControl = !hideControl);
-            },
-            child: hideControl
-                ? Container()
-                : Container(
-                    color: Colors.black26,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () => _controller?.value.isPlaying ?? false
-                            ? _controller?.pause()
-                            : _controller?.play(),
-                        child: Icon(
-                          _controller?.value.isPlaying ?? false
-                              ? Icons.pause_outlined
-                              : Icons.play_arrow,
-                          color: Colors.white,
-                          size: 64.0,
+        ),
+        if (!hideControl)
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              16,
+              MediaQuery.of(context).padding.top,
+              16,
+              MediaQuery.of(context).padding.bottom + (isFullscreen ? 24 : 56),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        vpp.mute = !vpp.mute;
+                        controller?.setVolume(vpp.mute ? 0 : 1);
+                      },
+                      icon: Icon(
+                        vpp.mute ? Icons.volume_mute : Icons.volume_up,
+                      ),
+                      color: Colors.white,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.info),
+                      color: Colors.white,
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostDetails(id: booru.id),
                         ),
                       ),
                     ),
-                  ),
-          ),
-          if (!hideControl)
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                MediaQuery.of(context).padding.top,
-                16,
-                MediaQuery.of(context).padding.bottom +
-                    (isFullscreen ? 24 : 56),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          vpp.mute = !vpp.mute;
-                          _controller?.setVolume(vpp.mute ? 0 : 1);
-                        },
-                        icon: Icon(vpp.mute == true
-                            ? Icons.volume_mute
-                            : Icons.volume_up),
-                        color: Colors.white,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.info),
-                        color: Colors.white,
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PostDetails(id: booru.id),
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(isFullscreen
+                    IconButton(
+                      icon: Icon(
+                        isFullscreen
                             ? Icons.fullscreen_exit
-                            : Icons.fullscreen_outlined),
-                        color: Colors.white,
-                        onPressed: toggleFullscreenMode,
+                            : Icons.fullscreen_outlined,
                       ),
-                    ],
-                  ),
-                  VideoProgress(controller: _controller),
-                ],
-              ),
+                      color: Colors.white,
+                      onPressed: toggleFullscreenMode,
+                    ),
+                  ],
+                ),
+                VideoProgress(controller: controller),
+              ],
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
   @override
   void dispose() {
-    _controller?.removeListener(() => setState(() {}));
-    if (_controller?.value.isPlaying ?? false) {
-      _controller?.pause();
+    controller?.removeListener(() => setState(() {}));
+    if (controller?.value.isPlaying ?? false) {
+      controller?.pause();
     }
-    _controller?.dispose();
+    controller?.dispose();
     super.dispose();
   }
 }
@@ -187,8 +183,8 @@ class VideoProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lController = controller;
-    if (lController == null || lController.value.isInitialized == false) {
+    final ctrl = controller;
+    if (ctrl == null || ctrl.value.isInitialized == false) {
       return LinearProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(
           Colors.redAccent.shade700,
@@ -198,7 +194,7 @@ class VideoProgress extends StatelessWidget {
     }
 
     return VideoProgressIndicator(
-      lController,
+      ctrl,
       colors: VideoProgressColors(
         playedColor: Colors.redAccent.shade700,
         backgroundColor: Colors.white.withAlpha(20),
