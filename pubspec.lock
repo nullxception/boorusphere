@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
-  better_player:
-    dependency: "direct main"
-    description:
-      name: better_player
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.76"
   boolean_selector:
     dependency: transitive
     description:
@@ -338,13 +331,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_widget_from_html_core:
-    dependency: transitive
-    description:
-      name: flutter_widget_from_html_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   freezed:
     dependency: "direct dev"
     description:
@@ -856,48 +842,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  visibility_detector:
-    dependency: transitive
+  video_player:
+    dependency: "direct main"
     description:
-      name: visibility_detector
+      name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
-  wakelock:
+    version: "2.2.5"
+  video_player_platform_interface:
     dependency: transitive
     description:
-      name: wakelock
+      name: video_player_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.6"
-  wakelock_macos:
+    version: "4.2.0"
+  video_player_web:
     dependency: transitive
     description:
-      name: wakelock_macos
+      name: video_player_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
-  wakelock_platform_interface:
-    dependency: transitive
-    description:
-      name: wakelock_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
-  wakelock_web:
-    dependency: transitive
-    description:
-      name: wakelock_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
-  wakelock_windows:
-    dependency: transitive
-    description:
-      name: wakelock_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
+    version: "2.0.4"
   watcher:
     dependency: transitive
     description:

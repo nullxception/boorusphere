@@ -25,7 +25,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  better_player: ^0.0.65
   cached_network_image: ^3.0.0-nullsafety
   cupertino_icons: ^1.0.2
   dartz: ^0.10.0-nullsafety.1
@@ -52,6 +51,7 @@ dependencies:
   xml2json: ^5.0.0
   yaml: ^3.1.0
   double_back_to_close: ^2.0.0
+  video_player: ^2.2.5
 
 dev_dependencies:
   flutter_test:
