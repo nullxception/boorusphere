@@ -14,10 +14,10 @@ mixin Routes {
   static const licenses = 'licenses';
 
   static Map<String, WidgetBuilder> of(BuildContext context) => {
-        home: (context) => Home(),
-        post: (context) => Post(),
-        tagsBlocker: (context) => TagsBlocker(),
-        settings: (context) => Settings(),
-        licenses: (context) => Licenses(),
+        home: (context) => const Home(),
+        post: (context) => const Post(),
+        tagsBlocker: (context) => const TagsBlocker(),
+        settings: (context) => const Settings(),
+        licenses: (context) => const Licenses(),
       };
 }

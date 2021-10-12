@@ -6,6 +6,8 @@ class PreferredVisibility extends StatelessWidget implements PreferredSize {
       : super(key: key);
 
   final bool visible;
+
+  @override
   final PreferredSizeWidget child;
 
   @override

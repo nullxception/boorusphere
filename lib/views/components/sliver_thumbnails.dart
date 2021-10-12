@@ -13,7 +13,7 @@ import '../containers/post.dart';
 class SliverThumbnails extends HookConsumerWidget {
   final AutoScrollController autoScrollController;
 
-  SliverThumbnails({Key? key, required this.autoScrollController})
+  const SliverThumbnails({Key? key, required this.autoScrollController})
       : super(key: key);
 
   FilterQuality thumbnailQuality(int gridExtra) {

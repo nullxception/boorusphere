@@ -166,7 +166,7 @@ class PostDetails extends HookConsumerWidget {
                 api.fetch();
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Home()),
+                  MaterialPageRoute(builder: (context) => const Home()),
                   (route) => false,
                 );
               }

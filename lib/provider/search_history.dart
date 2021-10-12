@@ -61,7 +61,7 @@ class SearchHistoryRepository {
     if (query.isEmpty) return;
 
     final history = await read(searchHistoryBox);
-    final server = await read(serverDataProvider);
+    final server = read(serverDataProvider);
     try {
       if (!await checkExists(value: query)) {
         history.add(SearchHistory(

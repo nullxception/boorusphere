@@ -12,6 +12,8 @@ import '../../routes.dart';
 import 'favicon.dart';
 
 class HomeDrawer extends StatelessWidget {
+  const HomeDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -82,7 +84,7 @@ class HomeDrawer extends StatelessWidget {
                                 onTap: () => Navigator.pushNamed(
                                     context, Routes.settings),
                               ),
-                              AppVersionTile(),
+                              const AppVersionTile(),
                             ],
                           ),
                         ),
@@ -112,6 +114,8 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
 }
 
 class AppVersionTile extends HookConsumerWidget {
+  const AppVersionTile({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final version = ref.watch(appVersionProvider);

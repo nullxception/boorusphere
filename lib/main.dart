@@ -11,6 +11,8 @@ import 'provider/app_theme.dart';
 import 'routes.dart';
 
 class Boorusphere extends HookConsumerWidget {
+  const Boorusphere({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appTheme = ref.watch(appThemeProvider);
@@ -33,5 +35,5 @@ void main() async {
   Hive.registerAdapter(ServersAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
 
-  runApp(ProviderScope(child: Boorusphere()));
+  runApp(const ProviderScope(child: Boorusphere()));
 }

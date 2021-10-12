@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../provider/booru_api.dart';
 
 class SliverPageState extends HookConsumerWidget {
+  const SliverPageState({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final api = ref.watch(booruApiProvider);

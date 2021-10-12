@@ -35,7 +35,7 @@ class SearchSuggestionHandler {
     }
 
     List<dynamic> entries;
-    if (res.body.contains(RegExp('[a-z][\'"]\s*:'))) {
+    if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
       entries = jsonDecode(res.body);
     } else if (res.body.isEmpty) {
       return [];

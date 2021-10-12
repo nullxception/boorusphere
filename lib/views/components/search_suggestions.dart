@@ -93,9 +93,9 @@ class SearchSuggestionResult extends HookConsumerWidget {
                       color: Colors.red,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text('Remove'),
-                          const Padding(
+                        children: const [
+                          Text('Remove'),
+                          Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Icon(Icons.delete, color: Colors.white),
                           ),

@@ -13,6 +13,8 @@ import '../components/subbed_title.dart';
 final lastOpenedPostProvider = StateProvider((_) => -1);
 
 class Post extends HookConsumerWidget {
+  const Post({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;

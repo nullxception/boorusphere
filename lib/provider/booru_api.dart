@@ -33,7 +33,7 @@ class BooruApi {
 
     if (res.statusCode != 200) {
       throw HttpException('Something went wrong [${res.statusCode}]');
-    } else if (!res.body.contains(RegExp('https?:\/\/.*'))) {
+    } else if (!res.body.contains(RegExp('https?://.*'))) {
       // no url founds in the document means no image(s) available to display
       throw HttpException(posts.isNotEmpty
           ? 'No more result for "${booruQuery.tags}"'
@@ -41,7 +41,7 @@ class BooruApi {
     }
 
     List<dynamic> entries;
-    if (res.body.contains(RegExp('[a-z][\'"]\s*:'))) {
+    if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
       // json body, like on danbooru or yandere
       entries = jsonDecode(res.body);
     } else if (res.body.startsWith('<?xm')) {
@@ -174,7 +174,7 @@ class BooruApi {
         _queryTest(url, webPostUrls, ServerPayloadType.post),
       ],
     );
-    var post, search, suggestion;
+    String? post, search, suggestion;
     for (final payload in tests) {
       switch (payload.type) {
         case ServerPayloadType.search:
@@ -194,7 +194,7 @@ class BooruApi {
         name: Uri.parse(url).host,
         homepage: url,
         postUrl: post,
-        searchUrl: search,
+        searchUrl: search ?? '',
         tagSuggestionUrl: suggestion);
   }
 

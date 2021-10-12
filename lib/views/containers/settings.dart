@@ -7,6 +7,8 @@ import '../../provider/booru_query.dart';
 import '../../routes.dart';
 
 class Settings extends HookConsumerWidget {
+  const Settings({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booruQuery = ref.watch(booruQueryProvider);

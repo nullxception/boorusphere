@@ -15,6 +15,8 @@ import '../components/sliver_thumbnails.dart';
 final homeDrawerSwipeableProvider = StateProvider((_) => true);
 
 class Home extends HookConsumerWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useMemoized(() {
@@ -55,7 +57,7 @@ class Home extends HookConsumerWidget {
     }
 
     return Scaffold(
-      drawer: HomeDrawer(),
+      drawer: const HomeDrawer(),
       drawerEdgeDragWidth:
           homeDrawerSwipeable.state ? MediaQuery.of(context).size.width : 30,
       body: DoubleBack(
@@ -79,7 +81,7 @@ class Home extends HookConsumerWidget {
                         autoScrollController: scrollController,
                       ),
                     ),
-                    SliverPageState()
+                    const SliverPageState()
                   ],
                 ),
               ),

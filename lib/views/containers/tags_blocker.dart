@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../provider/blocked_tags.dart';
 
 class TagsBlocker extends HookConsumerWidget {
+  const TagsBlocker({Key? key}) : super(key: key);
+
   void updateTags(BlockedTagsRepository repo, ValueNotifier storage) {
     repo.mapped.then((it) {
       storage.value = it;

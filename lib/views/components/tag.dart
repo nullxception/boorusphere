@@ -6,7 +6,7 @@ class Tag extends HookWidget {
   final bool Function()? active;
   final Function() onPressed;
 
-  Tag({
+  const Tag({
     Key? key,
     required this.tag,
     required this.onPressed,

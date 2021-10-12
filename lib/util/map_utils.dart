@@ -9,7 +9,7 @@ mixin MapUtils {
 
   static String? getUrl(Map<String, dynamic> data, String key) {
     final result = findEntry(data, key).value;
-    if (result is String && result.contains(RegExp('https?:\/\/.*'))) {
+    if (result is String && result.contains(RegExp('https?://.*'))) {
       return result;
     } else {
       return null;
