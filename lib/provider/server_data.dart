@@ -55,7 +55,7 @@ class ServerDataNotifier extends ChangeNotifier {
 
   Future<void> setActiveServer({required String name}) async {
     if (name != _activeServer.name) {
-      _activeServer = read(serverDataProvider).select(name);
+      _activeServer = select(name);
       final prefs = await read(settingsBox);
       prefs.put('active_server', name);
     }
