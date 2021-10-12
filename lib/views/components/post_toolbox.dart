@@ -12,31 +12,28 @@ class PostToolbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.black.withOpacity(0.4),
+      height: 64 + MediaQuery.of(context).padding.bottom,
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      alignment: Alignment.bottomRight,
-      child: Card(
-        margin: const EdgeInsets.fromLTRB(12, 12, 16, 20),
-        color: Colors.black.withOpacity(0.6),
-        elevation: 0,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.link_outlined),
-              onPressed: () => launch(booru.src),
-              color: Colors.white,
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.link_outlined),
+            onPressed: () => launch(booru.src),
+            color: Colors.white,
+          ),
+          IconButton(
+            icon: const Icon(Icons.info),
+            color: Colors.white,
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostDetails(id: booru.id)),
             ),
-            IconButton(
-              icon: const Icon(Icons.info),
-              color: Colors.white,
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PostDetails(id: booru.id)),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
