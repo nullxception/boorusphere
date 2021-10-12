@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -21,6 +22,7 @@ class PostVideoDisplay extends ConsumerStatefulWidget {
 
 class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   VideoPlayerController? controller;
+  CancelableOperation<FileInfo>? fetchVideo;
 
   bool hideControl = false;
   bool isFullscreen = false;
@@ -39,11 +41,16 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
 
   void sourceInit() async {
     final cache = DefaultCacheManager();
-    final videoData = await cache.getFileFromCache(booru.displaySrc) ??
-        await cache.downloadFile(booru.displaySrc);
+    final fromCache = await cache.getFileFromCache(booru.displaySrc);
+    if (fromCache == null) {
+      fetchVideo = CancelableOperation.fromFuture(
+        cache.downloadFile(booru.displaySrc),
+      );
+    }
+    final data = fromCache ?? await fetchVideo!.value;
 
     if (mounted) {
-      controller = VideoPlayerController.file(videoData.file)
+      controller = VideoPlayerController.file(data.file)
         ..setLooping(true)
         ..addListener(() => setState(() {}))
         ..initialize().whenComplete(() {
@@ -167,6 +174,10 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
 
   @override
   void dispose() {
+    if (fetchVideo?.isCompleted == false) {
+      fetchVideo!.cancel();
+    }
+
     controller?.removeListener(() => setState(() {}));
     if (controller?.value.isPlaying ?? false) {
       controller?.pause();
