@@ -20,6 +20,8 @@ analyzer:
 
 linter:
   rules:
+    - directives_ordering
     - prefer_const_constructors
+    - prefer_relative_imports
     - prefer_single_quotes
     - use_if_null_to_convert_nulls_to_bools
