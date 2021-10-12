@@ -9,6 +9,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/video_player.dart';
+import '../containers/post.dart';
 import '../containers/post_detail.dart';
 
 class PostVideoDisplay extends ConsumerStatefulWidget {
@@ -25,7 +26,6 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   CancelableOperation<FileInfo>? fetchVideo;
 
   bool hideControl = false;
-  bool isFullscreen = false;
 
   get booru => widget.booru;
 
@@ -62,16 +62,15 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   }
 
   void toggleFullscreenMode() {
-    setState(() {
-      isFullscreen = !isFullscreen;
-      SystemChrome.setPreferredOrientations(isFullscreen &&
-              booru.width > booru.height
-          ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
-          : []);
-      SystemChrome.setEnabledSystemUIMode(
-        !isFullscreen ? SystemUiMode.edgeToEdge : SystemUiMode.immersive,
-      );
-    });
+    final isFullscreen = ref.read(postFullscreenProvider);
+    isFullscreen.state = !isFullscreen.state;
+    SystemChrome.setPreferredOrientations(isFullscreen.state &&
+            booru.width > booru.height
+        ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
+        : []);
+    SystemChrome.setEnabledSystemUIMode(
+      !isFullscreen.state ? SystemUiMode.edgeToEdge : SystemUiMode.immersive,
+    );
     autoHideController();
   }
 
@@ -84,91 +83,103 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   @override
   Widget build(BuildContext context) {
     final vpp = ref.watch(videoPlayerProvider);
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        if (controller?.value.isInitialized ?? false)
-          AspectRatio(
-            aspectRatio: booru.width / booru.height,
-            child: VideoPlayer(controller!),
-          ),
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () => setState(() => hideControl = !hideControl),
-          child: !hideControl
-              ? Container(
-                  color: Colors.black26,
-                  alignment: Alignment.center,
-                  child: InkWell(
-                    onTap: () {
-                      if (controller?.value.isPlaying ?? false) {
-                        controller?.pause();
-                      } else {
-                        controller?.play();
-                      }
-                    },
-                    child: Icon(
-                      controller?.value.isPlaying ?? false
-                          ? Icons.pause_outlined
-                          : Icons.play_arrow,
-                      color: Colors.white,
-                      size: 64.0,
-                    ),
-                  ),
-                )
-              : Container(),
-        ),
-        if (!hideControl)
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              16,
-              MediaQuery.of(context).padding.top,
-              16,
-              MediaQuery.of(context).padding.bottom + (isFullscreen ? 24 : 56),
+    final isFullscreen = ref.watch(postFullscreenProvider);
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        SystemChrome.setEnabledSystemUIMode(isFullscreen.state
+            ? SystemUiMode.edgeToEdge
+            : SystemUiMode.immersive);
+        isFullscreen.state = !isFullscreen.state;
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (controller?.value.isInitialized ?? false)
+            AspectRatio(
+              aspectRatio: booru.width / booru.height,
+              child: VideoPlayer(controller!),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        vpp.mute = !vpp.mute;
-                        controller?.setVolume(vpp.mute ? 0 : 1);
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => setState(() => hideControl = !hideControl),
+            child: !hideControl
+                ? Container(
+                    color: Colors.black26,
+                    alignment: Alignment.center,
+                    child: InkWell(
+                      onTap: () {
+                        if (controller?.value.isPlaying ?? false) {
+                          controller?.pause();
+                        } else {
+                          controller?.play();
+                        }
                       },
-                      icon: Icon(
-                        vpp.mute ? Icons.volume_mute : Icons.volume_up,
+                      child: Icon(
+                        controller?.value.isPlaying ?? false
+                            ? Icons.pause_outlined
+                            : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 64.0,
                       ),
-                      color: Colors.white,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.info),
-                      color: Colors.white,
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostDetails(id: booru.id),
+                  )
+                : Container(),
+          ),
+          if (!hideControl)
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                MediaQuery.of(context).padding.top,
+                16,
+                MediaQuery.of(context).padding.bottom +
+                    (isFullscreen.state ? 24 : 56),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          vpp.mute = !vpp.mute;
+                          controller?.setVolume(vpp.mute ? 0 : 1);
+                        },
+                        icon: Icon(
+                          vpp.mute ? Icons.volume_mute : Icons.volume_up,
+                        ),
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.info),
+                        color: Colors.white,
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostDetails(id: booru.id),
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        isFullscreen
-                            ? Icons.fullscreen_exit
-                            : Icons.fullscreen_outlined,
+                      IconButton(
+                        icon: Icon(
+                          isFullscreen.state
+                              ? Icons.fullscreen_exit
+                              : Icons.fullscreen_outlined,
+                        ),
+                        color: Colors.white,
+                        onPressed: toggleFullscreenMode,
                       ),
-                      color: Colors.white,
-                      onPressed: toggleFullscreenMode,
-                    ),
-                  ],
-                ),
-                VideoProgress(controller: controller),
-              ],
+                    ],
+                  ),
+                  VideoProgress(controller: controller),
+                ],
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
