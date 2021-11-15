@@ -13,7 +13,7 @@ class PostImageDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFullscreen = ref.watch(postFullscreenProvider);
+    final isFullscreen = ref.watch(postFullscreenProvider.state);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

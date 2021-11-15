@@ -51,7 +51,7 @@ class HomeBar extends HookConsumerWidget {
     final booruQuery = ref.watch(booruQueryProvider);
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final searchHistory = ref.watch(searchHistoryProvider);
-    final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
+    final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider.state);
 
     final suggestionHistory = useState({});
     final typedQuery = useState('');

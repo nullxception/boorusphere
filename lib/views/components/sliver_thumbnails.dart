@@ -30,7 +30,7 @@ class SliverThumbnails extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
-    final lastOpenedIndex = ref.watch(lastOpenedPostProvider);
+    final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final api = ref.watch(booruApiProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;

@@ -62,7 +62,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   }
 
   void toggleFullscreenMode() {
-    final isFullscreen = ref.read(postFullscreenProvider);
+    final isFullscreen = ref.read(postFullscreenProvider.state);
     isFullscreen.state = !isFullscreen.state;
     SystemChrome.setPreferredOrientations(isFullscreen.state &&
             booru.width > booru.height
@@ -83,7 +83,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   @override
   Widget build(BuildContext context) {
     final vpp = ref.watch(videoPlayerProvider);
-    final isFullscreen = ref.watch(postFullscreenProvider);
+    final isFullscreen = ref.watch(postFullscreenProvider.state);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

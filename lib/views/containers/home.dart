@@ -1,6 +1,5 @@
 import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -27,7 +26,7 @@ class Home extends HookConsumerWidget {
     final errorMessage = ref.watch(pageErrorProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
     final loadMoreCall = useCallback(() {
-      if (errorMessage.state.isEmpty && !pageLoading.state) {
+      if (errorMessage.isEmpty && !pageLoading) {
         // Infinite page with scroll detection
         final threshold = MediaQuery.of(context).size.height / 6;
         if (scrollController.position.pixels >=
@@ -42,11 +41,11 @@ class Home extends HookConsumerWidget {
       return () => scrollController.removeListener(loadMoreCall);
     }, [scrollController]);
 
-    if (!pageLoading.state) {
+    if (!pageLoading) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         final current = scrollController.position.pixels;
         final estimatedFloor = scrollController.position.maxScrollExtent - 200;
-        if (errorMessage.state.isNotEmpty && current >= estimatedFloor) {
+        if (errorMessage.isNotEmpty && current >= estimatedFloor) {
           scrollController.animateTo(
             scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 250),
@@ -59,7 +58,7 @@ class Home extends HookConsumerWidget {
     return Scaffold(
       drawer: const HomeDrawer(),
       drawerEdgeDragWidth:
-          homeDrawerSwipeable.state ? MediaQuery.of(context).size.width : 30,
+          homeDrawerSwipeable ? MediaQuery.of(context).size.width : 30,
       body: DoubleBack(
         onFirstBackPress: (context) {
           ScaffoldMessenger.of(context).showSnackBar(

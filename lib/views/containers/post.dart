@@ -25,9 +25,9 @@ class Post extends HookConsumerWidget {
 
     final pageController = usePageController(initialPage: beginPage);
     final api = ref.watch(booruApiProvider);
-    final lastOpenedIndex = ref.watch(lastOpenedPostProvider);
+    final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final page = useState(beginPage);
-    final isFullscreen = ref.watch(postFullscreenProvider);
+    final isFullscreen = ref.watch(postFullscreenProvider.state);
 
     final isNotVideo = api.posts[page.value].displayType != PostType.video;
 

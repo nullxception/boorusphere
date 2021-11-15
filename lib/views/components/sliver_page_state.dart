@@ -16,7 +16,7 @@ class SliverPageState extends HookConsumerWidget {
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          if (errorMessage.state.isNotEmpty)
+          if (errorMessage.isNotEmpty)
             Container(
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -25,7 +25,7 @@ class SliverPageState extends HookConsumerWidget {
                     padding: EdgeInsets.only(bottom: 24),
                     child: Icon(Icons.search_off),
                   ),
-                  Text(errorMessage.state, textAlign: TextAlign.center),
+                  Text(errorMessage, textAlign: TextAlign.center),
                   Padding(
                     padding: const EdgeInsets.only(top: 24),
                     child: ElevatedButton(
@@ -35,7 +35,7 @@ class SliverPageState extends HookConsumerWidget {
                 ],
               ),
             ),
-          if (pageLoading.state)
+          if (pageLoading)
             Container(
               height: 64,
               alignment: Alignment.center,

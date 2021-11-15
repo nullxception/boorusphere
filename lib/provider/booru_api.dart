@@ -112,10 +112,10 @@ class BooruApi {
   }
 
   void fetch() async {
-    final pageLoading = read(pageLoadingProvider);
+    final pageLoading = read(pageLoadingProvider.state);
     final booruQuery = read(booruQueryProvider);
     final server = read(serverDataProvider);
-    final errorMessage = read(pageErrorProvider);
+    final errorMessage = read(pageErrorProvider.state);
 
     if (posts.isEmpty) {
       _page = 1;
@@ -142,7 +142,7 @@ class BooruApi {
   }
 
   void loadMore() {
-    final pageLoading = read(pageLoadingProvider);
+    final pageLoading = read(pageLoadingProvider.state);
     if (!pageLoading.state) {
       _page++;
       fetch();

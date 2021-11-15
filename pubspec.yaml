@@ -34,17 +34,17 @@ dependencies:
   flutter_spinkit: ^5.1.0
   flutter_staggered_grid_view: ^0.4.0-nullsafety.3
   flutter_speed_dial: ^4.3.0
-  freezed_annotation: ^0.14.1
+  freezed_annotation: ^0.15.0
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   hive_generator: ^1.1.0
   hooks_riverpod: ^1.0.0-dev.11
   http: ^0.13.1
-  json_serializable: ^5.0.2
+  json_serializable: ^6.0.1
   material_floating_search_bar: ^0.3.4
   mime: ^1.0.0
   package_info: ^2.0.0
-  photo_view: ^0.12.0
+  photo_view: ^0.13.0
   scroll_to_index: ^2.0.0
   shimmer: ^2.0.0
   settings_ui: ^1.0.0-nullsafety.2
@@ -61,7 +61,7 @@ dev_dependencies:
   build_runner: ^2.0.5
   effective_dart: ^1.3.0
   flutter_launcher_icons: ^0.9.0
-  freezed: ^0.14.1+2
+  freezed: ^0.15.1+1
   icapps_license:
     git:
       url: git://github.com/icapps/flutter-icapps-license.git
