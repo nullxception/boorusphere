@@ -70,7 +70,7 @@ class HomeDrawer extends StatelessWidget {
                               const Divider(),
                               _BackToHomeTile(),
                               ListTile(
-                                title: const Text('Blocked Tags'),
+                                title: const Text('Tags Blocker'),
                                 leading: const Icon(Icons.block),
                                 dense: true,
                                 onTap: () => Navigator.pushNamed(
