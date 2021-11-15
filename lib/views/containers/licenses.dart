@@ -11,9 +11,7 @@ class Licenses extends StatelessWidget {
     licenses.sort((a, b) => a.name.compareTo(b.name));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Open Source Licenses'),
-      ),
+      appBar: AppBar(title: const Text('Open Source Licenses')),
       body: ListView.builder(
         itemCount: licenses.length,
         itemBuilder: (context, index) {

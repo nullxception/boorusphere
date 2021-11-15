@@ -42,9 +42,7 @@ class PostDetails extends HookConsumerWidget {
     final postUrl = server.active.composePostUrl(data.id);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Info'),
-      ),
+      appBar: AppBar(title: const Text('Info')),
       body: ListView(
         children: [
           ListTile(

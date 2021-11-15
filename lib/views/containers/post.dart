@@ -52,7 +52,6 @@ class Post extends HookConsumerWidget {
         visible: !isFullscreen.state,
         child: AppBar(
           backgroundColor: Colors.black.withOpacity(0.4),
-          elevation: 0,
           title: SubbedTitle(
             title: '#${page.value + 1} of ${api.posts.length}',
             subtitle: api.posts[page.value].tags.join(' '),

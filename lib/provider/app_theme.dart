@@ -86,12 +86,23 @@ class AppThemeNotifier extends ChangeNotifier {
 }
 
 mixin AppTheme {
-  static ThemeData light() => ThemeData.light();
+  static ThemeData light() => ThemeData.light().copyWith(
+        appBarTheme: AppBarTheme(
+          backgroundColor: ThemeData.light().scaffoldBackgroundColor,
+          foregroundColor: ThemeData.light().colorScheme.onSurface,
+          elevation: 0,
+        ),
+      );
 
   static ThemeData dark() => ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.blue,
           brightness: Brightness.dark,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
+          foregroundColor: ThemeData.dark().colorScheme.onSurface,
+          elevation: 0,
         ),
         toggleableActiveColor: Colors.blue.shade300,
       );
@@ -102,6 +113,11 @@ mixin AppTheme {
           brightness: Brightness.dark,
           cardColor: Colors.black.withRed(20).withGreen(20).withBlue(20),
           backgroundColor: Colors.black,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: ThemeData.dark().colorScheme.onSurface,
+          elevation: 0,
         ),
         primaryColor: Colors.black,
         backgroundColor: Colors.black,

@@ -26,9 +26,7 @@ class TagsBlocker extends HookConsumerWidget {
     }, [blockedTags]);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tags Blocker'),
-      ),
+      appBar: AppBar(title: const Text('Tags Blocker')),
       body: SingleChildScrollView(
         child: Column(
           children: [
