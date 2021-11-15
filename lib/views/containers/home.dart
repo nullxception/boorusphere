@@ -71,7 +71,6 @@ class Home extends HookConsumerWidget {
               FloatingSearchBarScrollNotifier(
                 child: CustomScrollView(
                   controller: scrollController,
-                  physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverPadding(
                       padding: EdgeInsets.fromLTRB(10,

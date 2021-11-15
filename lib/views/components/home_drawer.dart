@@ -21,7 +21,6 @@ class HomeDrawer extends StatelessWidget {
         builder: (context, constraints) {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
-            physics: const BouncingScrollPhysics(),
             child: ConstrainedBox(
               constraints: constraints.copyWith(
                 minHeight: constraints.maxHeight,
