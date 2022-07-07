@@ -35,12 +35,12 @@ class SliverThumbnails extends HookConsumerWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
-    return SliverStaggeredGrid.countBuilder(
+    return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      itemCount: api.posts.length,
+      childCount: api.posts.length,
       itemBuilder: (context, index) => AutoScrollTag(
         key: ValueKey(index),
         controller: autoScrollController,
@@ -81,7 +81,6 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
         ),
       ),
-      staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
     );
   }
 }
