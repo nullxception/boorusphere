@@ -1,10 +1,6 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  enable-experiment:
-    - non-nullable
-    - extension-methods
-
   exclude:
     - lib/**/*.gr.dart
     - lib/**/*.config.dart
