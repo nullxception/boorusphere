@@ -42,7 +42,7 @@ class Home extends HookConsumerWidget {
     }, [scrollController]);
 
     if (!pageLoading) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         final current = scrollController.position.pixels;
         final estimatedFloor = scrollController.position.maxScrollExtent - 200;
         if (errorMessage.isNotEmpty && current >= estimatedFloor) {
