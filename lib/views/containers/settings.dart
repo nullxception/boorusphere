@@ -14,28 +14,25 @@ class Settings extends HookConsumerWidget {
     final booruQuery = ref.watch(booruQueryProvider);
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final appTheme = ref.watch(appThemeProvider);
-    final sectionTitleStyle = TextStyle(
-      color: Theme.of(context).colorScheme.secondary,
-      fontWeight: FontWeight.bold,
-    );
+
+    const themeSettings =
+        SettingsThemeData(settingsListBackground: Colors.transparent);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: SettingsList(
-        shrinkWrap: true,
-        backgroundColor: Colors.transparent,
-        darkBackgroundColor: Colors.transparent,
+        lightTheme: themeSettings,
+        darkTheme: themeSettings,
         sections: [
           SettingsSection(
-            title: 'Interface',
-            titleTextStyle: sectionTitleStyle,
-            titlePadding: const EdgeInsets.all(20),
+            title: const Text('Interface'),
             tiles: [
               SettingsTile.switchTile(
-                title: 'Darker Theme',
-                subtitleMaxLines: 5,
-                subtitle: 'Use deeper dark color for the dark mode',
+                title: const Text('Darker Theme'),
+                description:
+                    const Text('Use deeper dark color for the dark mode'),
                 leading: const Icon(Icons.brightness_3),
-                switchValue: appTheme.isDarkerTheme,
+                initialValue: appTheme.isDarkerTheme,
                 onToggle: (value) {
                   appTheme.useDarkerTheme(value);
                 },
@@ -43,17 +40,14 @@ class Settings extends HookConsumerWidget {
             ],
           ),
           SettingsSection(
-            title: 'Server',
-            titleTextStyle: sectionTitleStyle,
-            titlePadding: const EdgeInsets.all(20),
+            title: const Text('Server'),
             tiles: [
               SettingsTile.switchTile(
-                title: 'Safe Mode',
-                subtitleMaxLines: 5,
-                subtitle:
-                    'Fetch content that are safe.\nNote that rated "safe" on booru-powered site doesn\'t mean "Safe For Work".',
+                title: const Text('Safe Mode'),
+                description: const Text(
+                    'Fetch content that are safe.\nNote that rated "safe" on booru-powered site doesn\'t mean "Safe For Work".'),
                 leading: const Icon(Icons.phonelink_lock),
-                switchValue: booruQuery.safeMode,
+                initialValue: booruQuery.safeMode,
                 onToggle: (value) {
                   booruQueryNotifier.setSafeMode(value);
                 },
@@ -61,12 +55,10 @@ class Settings extends HookConsumerWidget {
             ],
           ),
           SettingsSection(
-            title: 'Misc',
-            titleTextStyle: sectionTitleStyle,
-            titlePadding: const EdgeInsets.all(20),
+            title: const Text('Misc'),
             tiles: [
               SettingsTile(
-                title: 'Open source licenses',
+                title: const Text('Open source licenses'),
                 leading: const Icon(Icons.collections_bookmark),
                 onPressed: (context) =>
                     Navigator.pushNamed(context, Routes.licenses),
