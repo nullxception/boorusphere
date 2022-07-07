@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/booru_post.dart';
 import '../containers/post_detail.dart';
@@ -21,7 +21,7 @@ class PostToolbox extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.link_outlined),
-            onPressed: () => launch(booru.src),
+            onPressed: () => launchUrlString(booru.src),
             color: Colors.white,
           ),
           IconButton(

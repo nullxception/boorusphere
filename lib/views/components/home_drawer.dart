@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/server_data.dart';
 import '../../provider/app_theme.dart';
@@ -129,7 +129,9 @@ class AppVersionTile extends HookConsumerWidget {
         color: version.shouldUpdate ? Colors.pink.shade300 : null,
       ),
       dense: true,
-      onTap: version.shouldUpdate ? () => launch(version.downloadUrl) : null,
+      onTap: version.shouldUpdate
+          ? () => launchUrlString(version.downloadUrl)
+          : null,
     );
   }
 }

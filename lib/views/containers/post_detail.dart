@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
@@ -63,7 +64,7 @@ class PostDetails extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launch(postUrl.toString()),
+                onPressed: () => launchUrl(postUrl),
                 child: Text(postUrl.toString()),
               ),
               trailing: IconButton(
@@ -83,7 +84,7 @@ class PostDetails extends HookConsumerWidget {
                   EdgeInsets.zero,
                 ),
               ),
-              onPressed: () => launch(data.src),
+              onPressed: () => launchUrlString(data.src),
               child: Text(data.src),
             ),
             trailing: IconButton(
@@ -104,7 +105,7 @@ class PostDetails extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launch(data.displaySrc),
+                onPressed: () => launchUrlString(data.displaySrc),
                 child: Text(data.displaySrc),
               ),
             ),
