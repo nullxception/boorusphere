@@ -18,7 +18,7 @@ class PostVideoDisplay extends ConsumerStatefulWidget {
   final BooruPost booru;
 
   @override
-  _PostVideoDisplayState createState() => _PostVideoDisplayState();
+  ConsumerState<PostVideoDisplay> createState() => _PostVideoDisplayState();
 }
 
 class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
