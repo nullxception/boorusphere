@@ -84,11 +84,6 @@ class SearchSuggestionResult extends HookConsumerWidget {
                     onDismissed: (direction) {
                       onRemoveHistory?.call(key);
                     },
-                    child: _SuggestionEntry(
-                      query: history.values.elementAt(rIndex) as SearchHistory,
-                      onTap: _searchTag,
-                      onAdded: _addToInput,
-                    ),
                     background: Container(
                       color: Colors.red,
                       child: Row(
@@ -101,6 +96,11 @@ class SearchSuggestionResult extends HookConsumerWidget {
                           ),
                         ],
                       ),
+                    ),
+                    child: _SuggestionEntry(
+                      query: history.values.elementAt(rIndex) as SearchHistory,
+                      onTap: _searchTag,
+                      onAdded: _addToInput,
                     ),
                   ),
                   const Divider(height: 1),

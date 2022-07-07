@@ -18,8 +18,8 @@ class PreferredVisibility extends StatelessWidget implements PreferredSize {
     return visible
         ? child
         : const PreferredSize(
-            child: SizedBox.shrink(),
             preferredSize: Size.zero,
+            child: SizedBox.shrink(),
           );
   }
 }

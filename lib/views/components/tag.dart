@@ -25,14 +25,6 @@ class Tag extends HookWidget {
             isClicked.value = !isClicked.value;
             onPressed();
           },
-          child: Text(
-            tag,
-            style: TextStyle(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.grey.shade200
-                  : Colors.grey.shade800,
-            ),
-          ),
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             minimumSize: const Size(1, 1),
@@ -41,6 +33,14 @@ class Tag extends HookWidget {
                 : (Theme.of(context).brightness == Brightness.dark
                     ? Colors.grey.shade800
                     : Colors.grey.shade200),
+          ),
+          child: Text(
+            tag,
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.grey.shade200
+                  : Colors.grey.shade800,
+            ),
           ),
         ),
       ),
