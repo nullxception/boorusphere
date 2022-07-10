@@ -13,6 +13,7 @@ analyzer:
     type_annotate_public_apis: ignore
     todo: ignore
     lines_longer_than_80_chars: ignore
+    body_might_complete_normally_nullable: ignore
 
 linter:
   rules:
