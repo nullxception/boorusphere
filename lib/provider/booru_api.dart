@@ -154,10 +154,11 @@ class BooruApi {
     String? result;
     await Future.wait(queries.map((it) async {
       final query = it
-          .replaceAll('{q}', type == ServerPayloadType.suggestion ? 'a' : '*')
-          .replaceAll('{l}', '3')
-          .replaceAll('{p}', '1')
-          .replaceAll('{id}', '100');
+          .replaceAll('{tags}', '*')
+          .replaceAll('{tag-part}', 'a')
+          .replaceAll('{post-limit}', '3')
+          .replaceAll('{page-id}', '1')
+          .replaceAll('{post-id}', '100');
       final res = await http.get(Uri.parse('$url/$query'));
       if (res.statusCode == 200) {
         result = it;
@@ -199,21 +200,21 @@ class BooruApi {
   }
 
   static const searchQueries = [
-    'post.json?tags={q}&page={p}&limit={l}',
-    'posts.json?tags={q}&page={p}&limit={l}',
-    'index.php?page=dapi&s=post&q=index&tags={q}&pid={p}&limit={l}',
+    'post.json?tags={tags}&page={page-id}&limit={post-limit}',
+    'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
+    'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
   ];
 
   static const tagSuggestionQueries = [
-    'tag.json?name=*{q}*&order=count&limit={l}',
-    'tags.json?search[name_matches]=*{q}*&search[order]=count&limit={l}',
-    'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{q}%&orderby=count&limit={l}',
+    'tag.json?name=*{tag-part}*&order=count&limit={post-limit}',
+    'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
+    'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
   ];
 
   static const webPostUrls = [
-    'posts/{id}',
-    'index.php?page=post&s=view&id={id}',
-    'post/show/{id}',
+    'posts/{post-id}',
+    'index.php?page=post&s=view&id={post-id}',
+    'post/show/{post-id}',
   ];
 }
 
