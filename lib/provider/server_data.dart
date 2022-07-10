@@ -23,14 +23,14 @@ class ServerDataNotifier extends ChangeNotifier {
   Future<void> _init() async {
     final api = read(booruApiProvider);
     final prefs = await read(settingsBox);
-    final serverBox = await read(serversBox);
+    final server = await read(serverBox);
 
-    if (serverBox.isEmpty) {
+    if (server.isEmpty) {
       final fromAssets = await _defaultServersAssets();
-      serverBox.addAll(fromAssets);
-      _serverList = fromAssets;
+      server.putAll(fromAssets);
+      _serverList = fromAssets.values.toList();
     } else {
-      _serverList = serverBox.values.map((it) => it as ServerData).toList();
+      _serverList = server.values.map((it) => it as ServerData).toList();
     }
 
     final activeServerName = prefs.get('active_server');
@@ -42,11 +42,14 @@ class ServerDataNotifier extends ChangeNotifier {
     api.fetch();
   }
 
-  Future<List<ServerData>> _defaultServersAssets() async {
+  Future<Map<String, ServerData>> _defaultServersAssets() async {
     final json = await rootBundle.loadString('assets/servers.json');
     final servers = jsonDecode(json) as List;
 
-    return servers.map((it) => ServerData.fromJson(it)).toList();
+    return Map.fromEntries(servers.map((it) {
+      final value = ServerData.fromJson(it);
+      return MapEntry(value.homepage, value);
+    }));
   }
 
   ServerData select(String name) {
