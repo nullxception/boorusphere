@@ -10,8 +10,8 @@ import 'hive_boxes.dart';
 
 class ServerDataNotifier extends ChangeNotifier {
   final Reader read;
-  List<ServerData> _serverList = [];
-  ServerData _activeServer = defaultServer;
+  late List<ServerData> _serverList;
+  late ServerData _activeServer;
 
   ServerDataNotifier(this.read) {
     _init();
@@ -28,15 +28,11 @@ class ServerDataNotifier extends ChangeNotifier {
     if (server.isEmpty) {
       final fromAssets = await _defaultServersAssets();
       server.putAll(fromAssets);
-      _serverList = fromAssets.values.toList();
-    } else {
-      _serverList = server.values.map((it) => it as ServerData).toList();
     }
+    _serverList = server.values.map((it) => it as ServerData).toList();
 
     final activeServerName = prefs.get('active_server');
-    if (activeServerName != null && _activeServer.name != activeServerName) {
-      _activeServer = select(activeServerName);
-    }
+    _activeServer = select(activeServerName ?? 'Safebooru');
 
     api.posts.clear();
     api.fetch();
@@ -77,14 +73,6 @@ class ServerDataNotifier extends ChangeNotifier {
     _serverList = server.values.map((it) => it as ServerData).toList();
     notifyListeners();
   }
-
-  static const defaultServer = ServerData(
-    name: 'Safebooru',
-    homepage: 'https://safebooru.org',
-    postUrl: 'index.php?page=post&s=view&id={post-id}',
-    searchUrl:
-        'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
-  );
 }
 
 final serverDataProvider =
