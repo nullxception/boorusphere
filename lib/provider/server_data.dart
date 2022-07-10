@@ -64,6 +64,20 @@ class ServerDataNotifier extends ChangeNotifier {
     }
   }
 
+  void addServer({required ServerData data}) async {
+    final server = await read(serverBox);
+    server.put(data.homepage, data);
+    _serverList = server.values.map((it) => it as ServerData).toList();
+    notifyListeners();
+  }
+
+  void removeServer({required ServerData data}) async {
+    final server = await read(serverBox);
+    server.delete(data.homepage);
+    _serverList = server.values.map((it) => it as ServerData).toList();
+    notifyListeners();
+  }
+
   static const defaultServer = ServerData(
     name: 'Safebooru',
     homepage: 'https://safebooru.org',
