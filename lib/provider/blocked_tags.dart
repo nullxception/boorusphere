@@ -1,4 +1,3 @@
-import 'package:fimber/fimber.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'hive_boxes.dart';
@@ -24,14 +23,11 @@ class BlockedTagsRepository {
   }
 
   Future<bool> checkExists({required String value}) async {
-    final tag = value.trim();
-    if (tag.isEmpty) throw Exception('value must not be empty');
-
     final blocked = await read(blockedTagsBox);
     if (blocked.isEmpty) return false;
 
-    return tag ==
-        blocked.values.firstWhere((it) => it == tag, orElse: () => '');
+    return value ==
+        blocked.values.firstWhere((it) => it == value, orElse: () => '');
   }
 
   Future<void> push(String value) async {
@@ -39,12 +35,8 @@ class BlockedTagsRepository {
     if (tag.isEmpty) return;
 
     final blocked = await read(blockedTagsBox);
-    try {
-      if (!await checkExists(value: tag)) {
-        blocked.add(tag);
-      }
-    } on Exception catch (e) {
-      Fimber.d('Caught an Exception', ex: e);
+    if (!await checkExists(value: tag)) {
+      blocked.add(tag);
     }
   }
 

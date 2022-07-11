@@ -1,4 +1,3 @@
-import 'package:fimber/fimber.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../model/search_history.dart';
@@ -43,17 +42,14 @@ class SearchHistoryRepository {
   }
 
   Future<bool> checkExists({required String value}) async {
-    final query = value.trim();
-    if (query.isEmpty) throw Exception('value must not be empty');
-
     final data = await read(searchHistoryBox);
     if (data.isEmpty) return false;
 
     final search = data.values.firstWhere(
-      (it) => it.query == query,
+      (it) => it.query == value,
       orElse: () => const SearchHistory(),
     );
-    return search.query == query;
+    return search.query == value;
   }
 
   Future<void> push(String value) async {
@@ -62,15 +58,11 @@ class SearchHistoryRepository {
 
     final history = await read(searchHistoryBox);
     final server = read(serverDataProvider);
-    try {
-      if (!await checkExists(value: query)) {
-        history.add(SearchHistory(
-          query: query,
-          server: server.active.name,
-        ));
-      }
-    } on Exception catch (e) {
-      Fimber.d('Caught an Exception', ex: e);
+    if (!await checkExists(value: query)) {
+      history.add(SearchHistory(
+        query: query,
+        server: server.active.name,
+      ));
     }
   }
 }

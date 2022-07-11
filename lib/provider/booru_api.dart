@@ -92,25 +92,12 @@ class BooruApi {
     return result;
   }
 
-  String _parseException(Exception fail) {
-    try {
-      final message = fail
-          .toString()
-          .split(':')
-          .skipWhile((it) => it.contains(RegExp(r'xception$')))
-          .join(':')
-          .trim();
-
-      if (message.isNotEmpty) {
-        return message;
-      } else {
-        throw Exception('An empty exception was throwed');
-      }
-    } on Exception catch (e) {
-      Fimber.d('Caught Exception', ex: e);
-      return 'Something went wrong';
-    }
-  }
+  String _getExceptionMessage(Exception e) => e
+      .toString()
+      .split(':')
+      .skipWhile((it) => it.contains(RegExp(r'xception$')))
+      .join(':')
+      .trim();
 
   void fetch() async {
     final pageLoading = read(pageLoadingProvider.state);
@@ -136,10 +123,10 @@ class BooruApi {
       posts.addAll(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
-      errorMessage.state = _parseException(e);
-    } finally {
-      pageLoading.state = false;
+      errorMessage.state = _getExceptionMessage(e);
     }
+
+    pageLoading.state = false;
   }
 
   void loadMore() {
