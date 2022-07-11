@@ -67,6 +67,7 @@ class AddServer extends HookConsumerWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final data = useState<ServerData?>(null);
     final isLoading = useState(false);
+    final errorMessage = useState('');
     final scanText = useTextEditingController(text: 'https://');
 
     return Scaffold(
@@ -98,17 +99,24 @@ class AddServer extends HookConsumerWidget {
             ),
             ElevatedButton(
               onPressed: !isLoading.value
-                  ? () {
+                  ? () async {
                       if (formKey.currentState?.validate() != true) return;
 
                       FocusScope.of(context).unfocus();
                       data.value = null;
                       isLoading.value = true;
-                      api.scanServerUrl(scanText.text).then((res) {
+                      try {
+                        final res = await api.scanServerUrl(scanText.text);
                         data.value = res;
-                      }).whenComplete(() {
-                        isLoading.value = false;
-                      });
+                      } catch (e) {
+                        errorMessage.value = e.toString();
+                        data.value = ServerData(
+                          name: Uri.parse(scanText.text).host,
+                          homepage: scanText.text,
+                          searchUrl: '',
+                        );
+                      }
+                      isLoading.value = false;
                     }
                   : null,
               child: const Text('Scan'),
@@ -122,6 +130,12 @@ class AddServer extends HookConsumerWidget {
                     size: 32, color: Theme.of(context).colorScheme.secondary),
               ),
             ),
+            if (errorMessage.value.isNotEmpty)
+              Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  color: Theme.of(context).highlightColor,
+                  padding: const EdgeInsets.all(16),
+                  child: Text(errorMessage.value)),
             if (data.value != null) ServerScanViewWidget(data: data.value!),
           ],
         ),
