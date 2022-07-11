@@ -151,20 +151,24 @@ class BooruApi {
 
   Future<ServerPayload> _queryTest(
       String url, List<String> queries, ServerPayloadType type) async {
-    String? result;
-    await Future.wait(queries.map((it) async {
-      final query = it
-          .replaceAll('{tags}', '*')
-          .replaceAll('{tag-part}', 'a')
-          .replaceAll('{post-limit}', '3')
-          .replaceAll('{page-id}', '1')
-          .replaceAll('{post-id}', '100');
-      final res = await http.get(Uri.parse('$url/$query'));
-      if (res.statusCode == 200) {
-        result = it;
-      }
-    }));
-    return ServerPayload(host: url, query: result, type: type);
+    final result = await Future.wait(
+      queries.map((query) async {
+        final test = query
+            .replaceAll('{tags}', '*')
+            .replaceAll('{tag-part}', 'a')
+            .replaceAll('{post-limit}', '3')
+            .replaceAll('{page-id}', '1')
+            .replaceAll('{post-id}', '100');
+        final res = await http.get(Uri.parse('$url/$test'));
+
+        return res.statusCode == 200 ? query : '';
+      }),
+    );
+
+    return ServerPayload(
+        host: url,
+        query: result.firstWhere((it) => it.isNotEmpty, orElse: () => ''),
+        type: type);
   }
 
   Future<ServerData> scanServerUrl(String url) async {

@@ -13,7 +13,7 @@ enum ServerPayloadType {
 class ServerPayload with _$ServerPayload {
   const factory ServerPayload({
     @Default('') String host,
-    String? query,
+    @Default('') String query,
     @Default(ServerPayloadType.search) ServerPayloadType type,
   }) = _ServerPayload;
 }

@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ServerPayload {
   String get host => throw _privateConstructorUsedError;
-  String? get query => throw _privateConstructorUsedError;
+  String get query => throw _privateConstructorUsedError;
   ServerPayloadType get type => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +30,7 @@ abstract class $ServerPayloadCopyWith<$Res> {
   factory $ServerPayloadCopyWith(
           ServerPayload value, $Res Function(ServerPayload) then) =
       _$ServerPayloadCopyWithImpl<$Res>;
-  $Res call({String host, String? query, ServerPayloadType type});
+  $Res call({String host, String query, ServerPayloadType type});
 }
 
 /// @nodoc
@@ -56,7 +56,7 @@ class _$ServerPayloadCopyWithImpl<$Res>
       query: query == freezed
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -72,7 +72,7 @@ abstract class _$$_ServerPayloadCopyWith<$Res>
           _$_ServerPayload value, $Res Function(_$_ServerPayload) then) =
       __$$_ServerPayloadCopyWithImpl<$Res>;
   @override
-  $Res call({String host, String? query, ServerPayloadType type});
+  $Res call({String host, String query, ServerPayloadType type});
 }
 
 /// @nodoc
@@ -100,7 +100,7 @@ class __$$_ServerPayloadCopyWithImpl<$Res>
       query: query == freezed
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -113,13 +113,14 @@ class __$$_ServerPayloadCopyWithImpl<$Res>
 
 class _$_ServerPayload with DiagnosticableTreeMixin implements _ServerPayload {
   const _$_ServerPayload(
-      {this.host = '', this.query, this.type = ServerPayloadType.search});
+      {this.host = '', this.query = '', this.type = ServerPayloadType.search});
 
   @override
   @JsonKey()
   final String host;
   @override
-  final String? query;
+  @JsonKey()
+  final String query;
   @override
   @JsonKey()
   final ServerPayloadType type;
@@ -165,13 +166,13 @@ class _$_ServerPayload with DiagnosticableTreeMixin implements _ServerPayload {
 abstract class _ServerPayload implements ServerPayload {
   const factory _ServerPayload(
       {final String host,
-      final String? query,
+      final String query,
       final ServerPayloadType type}) = _$_ServerPayload;
 
   @override
   String get host;
   @override
-  String? get query;
+  String get query;
   @override
   ServerPayloadType get type;
   @override
