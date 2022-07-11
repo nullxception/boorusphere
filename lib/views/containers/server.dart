@@ -73,46 +73,48 @@ class AddServer extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Add new server'),
       ),
-      body: Column(
-        children: [
-          Form(
-            key: formKey,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-              child: TextFormField(
-                controller: scanText,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Example: https://abc.com',
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                child: TextFormField(
+                  controller: scanText,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Example: https://abc.com',
+                  ),
                 ),
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (isLoading.value) return;
+            ElevatedButton(
+              onPressed: () {
+                if (isLoading.value) return;
 
-              data.value = null;
-              isLoading.value = true;
-              api.scanServerUrl(scanText.text).then((res) {
-                data.value = res;
-              }).whenComplete(() {
-                isLoading.value = false;
-              });
-            },
-            child: const Text('Scan'),
-          ),
-          Visibility(
-            visible: isLoading.value,
-            child: Container(
-              height: 64,
-              alignment: Alignment.center,
-              child: SpinKitThreeBounce(
-                  size: 32, color: Theme.of(context).colorScheme.secondary),
+                data.value = null;
+                isLoading.value = true;
+                api.scanServerUrl(scanText.text).then((res) {
+                  data.value = res;
+                }).whenComplete(() {
+                  isLoading.value = false;
+                });
+              },
+              child: const Text('Scan'),
             ),
-          ),
-          if (data.value != null) ServerScanViewWidget(data: data.value!),
-        ],
+            Visibility(
+              visible: isLoading.value,
+              child: Container(
+                height: 64,
+                alignment: Alignment.center,
+                child: SpinKitThreeBounce(
+                    size: 32, color: Theme.of(context).colorScheme.secondary),
+              ),
+            ),
+            if (data.value != null) ServerScanViewWidget(data: data.value!),
+          ],
+        ),
       ),
     );
   }
