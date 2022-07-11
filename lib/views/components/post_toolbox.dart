@@ -21,7 +21,8 @@ class PostToolbox extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.link_outlined),
-            onPressed: () => launchUrlString(booru.src),
+            onPressed: () => launchUrlString(booru.src,
+                mode: LaunchMode.externalApplication),
             color: Colors.white,
           ),
           IconButton(

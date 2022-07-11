@@ -137,7 +137,8 @@ class AppVersionTile extends HookConsumerWidget {
       ),
       dense: true,
       onTap: version.shouldUpdate
-          ? () => launchUrlString(version.downloadUrl)
+          ? () => launchUrlString(version.downloadUrl,
+              mode: LaunchMode.externalApplication)
           : null,
     );
   }
