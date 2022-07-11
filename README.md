@@ -29,10 +29,11 @@ You can build this app just like any other flutter app, for example:
 $ flutter build apk --target-platform=android-arm64
 ```
 
-This projects uses several code generator such as [`freezed`](https://github.com/rrousselGit/freezed) and [`json_serializable`](https://github.com/google/json_serializable.dart), so if you're editing some areas that needs a code generator (such as models), make sure run the build_runner before debugging:
+This projects uses several code generator such as [`freezed`](https://github.com/rrousselGit/freezed), [`json_serializable`](https://github.com/google/json_serializable.dart), and [`license_generator`](https://github.com/icapps/flutter-icapps-license), so if you're editing some areas that needs a code generator (such as models) or add/removing packages, make sure run the build_runner before debugging:
 
 ```bash
 $ flutter pub run build_runner build --delete-conflicting-outputs
+$ flutter pub run license_generator generate
 ```
 
 ## License
