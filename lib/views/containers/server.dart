@@ -135,6 +135,7 @@ class ServerScanViewWidget extends HookConsumerWidget {
     final cSearchUrl = useTextEditingController(text: data.searchUrl);
     final cSuggestUrl =
         useTextEditingController(text: data.tagSuggestionUrl ?? '');
+    final cPostUrl = useTextEditingController(text: data.postUrl);
 
     return Column(
       children: [
@@ -172,13 +173,28 @@ class ServerScanViewWidget extends HookConsumerWidget {
                     labelText: 'Tag Suggestion Payload',
                   ),
                 ),
+                TextFormField(
+                  controller: cPostUrl,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Web Post Payload',
+                  ),
+                ),
               ],
             ),
           ),
         ),
         ElevatedButton(
           onPressed: () {
-            serverData.addServer(data: data);
+            serverData.addServer(
+              data: data.copyWith(
+                name: cName.text,
+                homepage: cHomepage.text,
+                searchUrl: cSearchUrl.text,
+                tagSuggestionUrl: cSuggestUrl.text,
+                postUrl: cPostUrl.text,
+              ),
+            );
             Navigator.pop(context);
           },
           child: const Text('Save'),
