@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'search_history.dart';
@@ -11,24 +12,7 @@ part of 'search_history.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$SearchHistoryTearOff {
-  const _$SearchHistoryTearOff();
-
-  _SearchHistory call(
-      {@HiveField(0) String query = '*',
-      @HiveField(1) String server = 'Safebooru'}) {
-    return _SearchHistory(
-      query: query,
-      server: server,
-    );
-  }
-}
-
-/// @nodoc
-const $SearchHistory = _$SearchHistoryTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$SearchHistory {
@@ -78,32 +62,32 @@ class _$SearchHistoryCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$SearchHistoryCopyWith<$Res>
+abstract class _$$_SearchHistoryCopyWith<$Res>
     implements $SearchHistoryCopyWith<$Res> {
-  factory _$SearchHistoryCopyWith(
-          _SearchHistory value, $Res Function(_SearchHistory) then) =
-      __$SearchHistoryCopyWithImpl<$Res>;
+  factory _$$_SearchHistoryCopyWith(
+          _$_SearchHistory value, $Res Function(_$_SearchHistory) then) =
+      __$$_SearchHistoryCopyWithImpl<$Res>;
   @override
   $Res call({@HiveField(0) String query, @HiveField(1) String server});
 }
 
 /// @nodoc
-class __$SearchHistoryCopyWithImpl<$Res>
+class __$$_SearchHistoryCopyWithImpl<$Res>
     extends _$SearchHistoryCopyWithImpl<$Res>
-    implements _$SearchHistoryCopyWith<$Res> {
-  __$SearchHistoryCopyWithImpl(
-      _SearchHistory _value, $Res Function(_SearchHistory) _then)
-      : super(_value, (v) => _then(v as _SearchHistory));
+    implements _$$_SearchHistoryCopyWith<$Res> {
+  __$$_SearchHistoryCopyWithImpl(
+      _$_SearchHistory _value, $Res Function(_$_SearchHistory) _then)
+      : super(_value, (v) => _then(v as _$_SearchHistory));
 
   @override
-  _SearchHistory get _value => super._value as _SearchHistory;
+  _$_SearchHistory get _value => super._value as _$_SearchHistory;
 
   @override
   $Res call({
     Object? query = freezed,
     Object? server = freezed,
   }) {
-    return _then(_SearchHistory(
+    return _then(_$_SearchHistory(
       query: query == freezed
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
@@ -124,12 +108,12 @@ class _$_SearchHistory with DiagnosticableTreeMixin implements _SearchHistory {
       {@HiveField(0) this.query = '*',
       @HiveField(1) this.server = 'Safebooru'});
 
-  @JsonKey(defaultValue: '*')
   @override
+  @JsonKey()
   @HiveField(0)
   final String query;
-  @JsonKey(defaultValue: 'Safebooru')
   @override
+  @JsonKey()
   @HiveField(1)
   final String server;
 
@@ -150,38 +134,37 @@ class _$_SearchHistory with DiagnosticableTreeMixin implements _SearchHistory {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _SearchHistory &&
-            (identical(other.query, query) ||
-                const DeepCollectionEquality().equals(other.query, query)) &&
-            (identical(other.server, server) ||
-                const DeepCollectionEquality().equals(other.server, server)));
+        (other.runtimeType == runtimeType &&
+            other is _$_SearchHistory &&
+            const DeepCollectionEquality().equals(other.query, query) &&
+            const DeepCollectionEquality().equals(other.server, server));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(query) ^
-      const DeepCollectionEquality().hash(server);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(query),
+      const DeepCollectionEquality().hash(server));
 
   @JsonKey(ignore: true)
   @override
-  _$SearchHistoryCopyWith<_SearchHistory> get copyWith =>
-      __$SearchHistoryCopyWithImpl<_SearchHistory>(this, _$identity);
+  _$$_SearchHistoryCopyWith<_$_SearchHistory> get copyWith =>
+      __$$_SearchHistoryCopyWithImpl<_$_SearchHistory>(this, _$identity);
 }
 
 abstract class _SearchHistory implements SearchHistory {
   const factory _SearchHistory(
-      {@HiveField(0) String query,
-      @HiveField(1) String server}) = _$_SearchHistory;
+      {@HiveField(0) final String query,
+      @HiveField(1) final String server}) = _$_SearchHistory;
 
   @override
   @HiveField(0)
-  String get query => throw _privateConstructorUsedError;
+  String get query;
   @override
   @HiveField(1)
-  String get server => throw _privateConstructorUsedError;
+  String get server;
   @override
   @JsonKey(ignore: true)
-  _$SearchHistoryCopyWith<_SearchHistory> get copyWith =>
+  _$$_SearchHistoryCopyWith<_$_SearchHistory> get copyWith =>
       throw _privateConstructorUsedError;
 }

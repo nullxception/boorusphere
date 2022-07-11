@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'server_data.dart';
@@ -11,38 +12,11 @@ part of 'server_data.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ServerData _$ServerDataFromJson(Map<String, dynamic> json) {
   return _ServerData.fromJson(json);
 }
-
-/// @nodoc
-class _$ServerDataTearOff {
-  const _$ServerDataTearOff();
-
-  _ServerData call(
-      {@HiveField(0, defaultValue: '') required String name,
-      @HiveField(1, defaultValue: '') required String homepage,
-      @HiveField(2, defaultValue: '') String? postUrl,
-      @HiveField(3, defaultValue: '') required String searchUrl,
-      @HiveField(7, defaultValue: '') String? tagSuggestionUrl}) {
-    return _ServerData(
-      name: name,
-      homepage: homepage,
-      postUrl: postUrl,
-      searchUrl: searchUrl,
-      tagSuggestionUrl: tagSuggestionUrl,
-    );
-  }
-
-  ServerData fromJson(Map<String, Object> json) {
-    return ServerData.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ServerData = _$ServerDataTearOff();
 
 /// @nodoc
 mixin _$ServerData {
@@ -118,10 +92,11 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ServerDataCopyWith<$Res> implements $ServerDataCopyWith<$Res> {
-  factory _$ServerDataCopyWith(
-          _ServerData value, $Res Function(_ServerData) then) =
-      __$ServerDataCopyWithImpl<$Res>;
+abstract class _$$_ServerDataCopyWith<$Res>
+    implements $ServerDataCopyWith<$Res> {
+  factory _$$_ServerDataCopyWith(
+          _$_ServerData value, $Res Function(_$_ServerData) then) =
+      __$$_ServerDataCopyWithImpl<$Res>;
   @override
   $Res call(
       {@HiveField(0, defaultValue: '') String name,
@@ -132,14 +107,14 @@ abstract class _$ServerDataCopyWith<$Res> implements $ServerDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
-    implements _$ServerDataCopyWith<$Res> {
-  __$ServerDataCopyWithImpl(
-      _ServerData _value, $Res Function(_ServerData) _then)
-      : super(_value, (v) => _then(v as _ServerData));
+class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
+    implements _$$_ServerDataCopyWith<$Res> {
+  __$$_ServerDataCopyWithImpl(
+      _$_ServerData _value, $Res Function(_$_ServerData) _then)
+      : super(_value, (v) => _then(v as _$_ServerData));
 
   @override
-  _ServerData get _value => super._value as _ServerData;
+  _$_ServerData get _value => super._value as _$_ServerData;
 
   @override
   $Res call({
@@ -149,7 +124,7 @@ class __$ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
     Object? searchUrl = freezed,
     Object? tagSuggestionUrl = freezed,
   }) {
-    return _then(_ServerData(
+    return _then(_$_ServerData(
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -225,36 +200,30 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ServerData &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.homepage, homepage) ||
-                const DeepCollectionEquality()
-                    .equals(other.homepage, homepage)) &&
-            (identical(other.postUrl, postUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.postUrl, postUrl)) &&
-            (identical(other.searchUrl, searchUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.searchUrl, searchUrl)) &&
-            (identical(other.tagSuggestionUrl, tagSuggestionUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.tagSuggestionUrl, tagSuggestionUrl)));
+        (other.runtimeType == runtimeType &&
+            other is _$_ServerData &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.homepage, homepage) &&
+            const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
+            const DeepCollectionEquality().equals(other.searchUrl, searchUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.tagSuggestionUrl, tagSuggestionUrl));
   }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(homepage) ^
-      const DeepCollectionEquality().hash(postUrl) ^
-      const DeepCollectionEquality().hash(searchUrl) ^
-      const DeepCollectionEquality().hash(tagSuggestionUrl);
 
   @JsonKey(ignore: true)
   @override
-  _$ServerDataCopyWith<_ServerData> get copyWith =>
-      __$ServerDataCopyWithImpl<_ServerData>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(homepage),
+      const DeepCollectionEquality().hash(postUrl),
+      const DeepCollectionEquality().hash(searchUrl),
+      const DeepCollectionEquality().hash(tagSuggestionUrl));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ServerDataCopyWith<_$_ServerData> get copyWith =>
+      __$$_ServerDataCopyWithImpl<_$_ServerData>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -264,11 +233,11 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
 
 abstract class _ServerData extends ServerData {
   const factory _ServerData(
-          {@HiveField(0, defaultValue: '') required String name,
-          @HiveField(1, defaultValue: '') required String homepage,
-          @HiveField(2, defaultValue: '') String? postUrl,
-          @HiveField(3, defaultValue: '') required String searchUrl,
-          @HiveField(7, defaultValue: '') String? tagSuggestionUrl}) =
+          {@HiveField(0, defaultValue: '') required final String name,
+          @HiveField(1, defaultValue: '') required final String homepage,
+          @HiveField(2, defaultValue: '') final String? postUrl,
+          @HiveField(3, defaultValue: '') required final String searchUrl,
+          @HiveField(7, defaultValue: '') final String? tagSuggestionUrl}) =
       _$_ServerData;
   const _ServerData._() : super._();
 
@@ -277,21 +246,21 @@ abstract class _ServerData extends ServerData {
 
   @override
   @HiveField(0, defaultValue: '')
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
   @HiveField(1, defaultValue: '')
-  String get homepage => throw _privateConstructorUsedError;
+  String get homepage;
   @override
   @HiveField(2, defaultValue: '')
-  String? get postUrl => throw _privateConstructorUsedError;
+  String? get postUrl;
   @override
   @HiveField(3, defaultValue: '')
-  String get searchUrl => throw _privateConstructorUsedError;
+  String get searchUrl;
   @override
   @HiveField(7, defaultValue: '')
-  String? get tagSuggestionUrl => throw _privateConstructorUsedError;
+  String? get tagSuggestionUrl;
   @override
   @JsonKey(ignore: true)
-  _$ServerDataCopyWith<_ServerData> get copyWith =>
+  _$$_ServerDataCopyWith<_$_ServerData> get copyWith =>
       throw _privateConstructorUsedError;
 }

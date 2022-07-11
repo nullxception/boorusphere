@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'server_payload.dart';
@@ -11,26 +12,7 @@ part of 'server_payload.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$ServerPayloadTearOff {
-  const _$ServerPayloadTearOff();
-
-  _ServerPayload call(
-      {String host = '',
-      String? query,
-      ServerPayloadType type = ServerPayloadType.search}) {
-    return _ServerPayload(
-      host: host,
-      query: query,
-      type: type,
-    );
-  }
-}
-
-/// @nodoc
-const $ServerPayload = _$ServerPayloadTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$ServerPayload {
@@ -84,25 +66,25 @@ class _$ServerPayloadCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ServerPayloadCopyWith<$Res>
+abstract class _$$_ServerPayloadCopyWith<$Res>
     implements $ServerPayloadCopyWith<$Res> {
-  factory _$ServerPayloadCopyWith(
-          _ServerPayload value, $Res Function(_ServerPayload) then) =
-      __$ServerPayloadCopyWithImpl<$Res>;
+  factory _$$_ServerPayloadCopyWith(
+          _$_ServerPayload value, $Res Function(_$_ServerPayload) then) =
+      __$$_ServerPayloadCopyWithImpl<$Res>;
   @override
   $Res call({String host, String? query, ServerPayloadType type});
 }
 
 /// @nodoc
-class __$ServerPayloadCopyWithImpl<$Res>
+class __$$_ServerPayloadCopyWithImpl<$Res>
     extends _$ServerPayloadCopyWithImpl<$Res>
-    implements _$ServerPayloadCopyWith<$Res> {
-  __$ServerPayloadCopyWithImpl(
-      _ServerPayload _value, $Res Function(_ServerPayload) _then)
-      : super(_value, (v) => _then(v as _ServerPayload));
+    implements _$$_ServerPayloadCopyWith<$Res> {
+  __$$_ServerPayloadCopyWithImpl(
+      _$_ServerPayload _value, $Res Function(_$_ServerPayload) _then)
+      : super(_value, (v) => _then(v as _$_ServerPayload));
 
   @override
-  _ServerPayload get _value => super._value as _ServerPayload;
+  _$_ServerPayload get _value => super._value as _$_ServerPayload;
 
   @override
   $Res call({
@@ -110,7 +92,7 @@ class __$ServerPayloadCopyWithImpl<$Res>
     Object? query = freezed,
     Object? type = freezed,
   }) {
-    return _then(_ServerPayload(
+    return _then(_$_ServerPayload(
       host: host == freezed
           ? _value.host
           : host // ignore: cast_nullable_to_non_nullable
@@ -133,13 +115,13 @@ class _$_ServerPayload with DiagnosticableTreeMixin implements _ServerPayload {
   const _$_ServerPayload(
       {this.host = '', this.query, this.type = ServerPayloadType.search});
 
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String host;
   @override
   final String? query;
-  @JsonKey(defaultValue: ServerPayloadType.search)
   @override
+  @JsonKey()
   final ServerPayloadType type;
 
   @override
@@ -160,40 +142,40 @@ class _$_ServerPayload with DiagnosticableTreeMixin implements _ServerPayload {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ServerPayload &&
-            (identical(other.host, host) ||
-                const DeepCollectionEquality().equals(other.host, host)) &&
-            (identical(other.query, query) ||
-                const DeepCollectionEquality().equals(other.query, query)) &&
-            (identical(other.type, type) ||
-                const DeepCollectionEquality().equals(other.type, type)));
+        (other.runtimeType == runtimeType &&
+            other is _$_ServerPayload &&
+            const DeepCollectionEquality().equals(other.host, host) &&
+            const DeepCollectionEquality().equals(other.query, query) &&
+            const DeepCollectionEquality().equals(other.type, type));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(host) ^
-      const DeepCollectionEquality().hash(query) ^
-      const DeepCollectionEquality().hash(type);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(host),
+      const DeepCollectionEquality().hash(query),
+      const DeepCollectionEquality().hash(type));
 
   @JsonKey(ignore: true)
   @override
-  _$ServerPayloadCopyWith<_ServerPayload> get copyWith =>
-      __$ServerPayloadCopyWithImpl<_ServerPayload>(this, _$identity);
+  _$$_ServerPayloadCopyWith<_$_ServerPayload> get copyWith =>
+      __$$_ServerPayloadCopyWithImpl<_$_ServerPayload>(this, _$identity);
 }
 
 abstract class _ServerPayload implements ServerPayload {
   const factory _ServerPayload(
-      {String host, String? query, ServerPayloadType type}) = _$_ServerPayload;
+      {final String host,
+      final String? query,
+      final ServerPayloadType type}) = _$_ServerPayload;
 
   @override
-  String get host => throw _privateConstructorUsedError;
+  String get host;
   @override
-  String? get query => throw _privateConstructorUsedError;
+  String? get query;
   @override
-  ServerPayloadType get type => throw _privateConstructorUsedError;
+  ServerPayloadType get type;
   @override
   @JsonKey(ignore: true)
-  _$ServerPayloadCopyWith<_ServerPayload> get copyWith =>
+  _$$_ServerPayloadCopyWith<_$_ServerPayload> get copyWith =>
       throw _privateConstructorUsedError;
 }
