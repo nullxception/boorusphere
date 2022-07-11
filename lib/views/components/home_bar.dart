@@ -93,9 +93,7 @@ class HomeBar extends HookConsumerWidget {
       },
       onQueryChanged: (value) async {
         final last = value.trim().split(' ').last;
-        if (server.active.canSuggestTags &&
-            !value.endsWith(' ') &&
-            last.length > 2) {
+        if (server.active.canSuggestTags) {
           typedQuery.value = value.trim();
         }
         suggestionHistory.value =

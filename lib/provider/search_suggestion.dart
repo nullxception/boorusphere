@@ -13,11 +13,6 @@ import 'server_data.dart';
 final searchSuggestionProvider =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
   final handler = SearchSuggestionHandler(ref.read);
-  final last = query.trim().split(' ').last.trim();
-  if (query.endsWith(' ') && last.length <= 2) {
-    return [];
-  }
-
   return await handler.fetch(query: query);
 });
 
@@ -56,6 +51,10 @@ class SearchSuggestionHandler {
   }
 
   Future<List<String>> fetch({required String query}) async {
+    if (query.endsWith(' ')) {
+      return [];
+    }
+
     final queries = query.trim().split(' ');
     final server = read(serverDataProvider);
     try {
@@ -68,6 +67,11 @@ class SearchSuggestionHandler {
               !queries.sublist(0, queries.length - 1).contains(it))
           .toList();
     } on FormatException {
+      if (query.isEmpty) {
+        // the server did not support empty tag matches (hot/trending tags)
+        return [];
+      }
+
       throw Exception('No tag that matches "$query"');
     } on Exception catch (e) {
       Fimber.e('Something went wrong', ex: e);
