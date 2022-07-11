@@ -107,17 +107,17 @@ class AddServer extends HookConsumerWidget {
                       data.value = ServerData.empty;
                       isLoading.value = true;
                       errorMessage.value = '';
-                      try {
-                        final res = await api.scanServerUrl(scanText.text);
-                        data.value = res;
-                      } catch (e) {
-                        errorMessage.value = e.toString();
+                      final res = await api.scanServerUrl(scanText.text);
+                      res.fold((l) {
+                        errorMessage.value = l.toString();
                         data.value = ServerData(
                           name: Uri.parse(scanText.text).host,
                           homepage: scanText.text,
                           searchUrl: '',
                         );
-                      }
+                      }, (r) {
+                        data.value = r;
+                      });
                       isLoading.value = false;
                     }
                   : null,
