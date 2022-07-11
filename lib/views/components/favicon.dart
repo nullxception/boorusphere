@@ -14,6 +14,8 @@ class Favicon extends StatelessWidget {
       imageUrl: url,
       placeholder: (_, __) => const Icon(Icons.public),
       errorWidget: (_, __, ___) => const Icon(Icons.public),
+      fadeInDuration: Duration.zero,
+      fadeOutDuration: Duration.zero,
       imageBuilder: (context, img) => Container(
         width: IconTheme.of(context).size,
         height: IconTheme.of(context).size,
