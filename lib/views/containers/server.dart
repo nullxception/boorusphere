@@ -195,6 +195,8 @@ class ServerScanViewWidget extends HookConsumerWidget {
                   ),
                 ),
                 TextFormField(
+                  minLines: 1,
+                  maxLines: 3,
                   controller: cSearchUrl,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -202,6 +204,8 @@ class ServerScanViewWidget extends HookConsumerWidget {
                   ),
                 ),
                 TextFormField(
+                  minLines: 1,
+                  maxLines: 3,
                   controller: cSuggestUrl,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -209,6 +213,8 @@ class ServerScanViewWidget extends HookConsumerWidget {
                   ),
                 ),
                 TextFormField(
+                  minLines: 1,
+                  maxLines: 3,
                   controller: cPostUrl,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
