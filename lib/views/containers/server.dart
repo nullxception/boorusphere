@@ -65,7 +65,7 @@ class AddServer extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final api = ref.watch(booruApiProvider);
     final formKey = useMemoized(() => GlobalKey<FormState>());
-    final data = useState<ServerData?>(null);
+    final data = useState(ServerData.empty);
     final isLoading = useState(false);
     final errorMessage = useState('');
     final scanText = useTextEditingController(text: 'https://');
@@ -104,7 +104,7 @@ class AddServer extends HookConsumerWidget {
                       if (formKey.currentState?.validate() != true) return;
 
                       FocusScope.of(context).unfocus();
-                      data.value = null;
+                      data.value = ServerData.empty;
                       isLoading.value = true;
                       errorMessage.value = '';
                       try {
@@ -138,7 +138,8 @@ class AddServer extends HookConsumerWidget {
                   color: Theme.of(context).highlightColor,
                   padding: const EdgeInsets.all(16),
                   child: Text(errorMessage.value)),
-            if (data.value != null) ServerScanViewWidget(data: data.value!),
+            if (data.value.name.isNotEmpty)
+              ServerScanViewWidget(data: data.value),
           ],
         ),
       ),
@@ -161,8 +162,7 @@ class ServerScanViewWidget extends HookConsumerWidget {
     final cName = useTextEditingController(text: data.name);
     final cHomepage = useTextEditingController(text: data.homepage);
     final cSearchUrl = useTextEditingController(text: data.searchUrl);
-    final cSuggestUrl =
-        useTextEditingController(text: data.tagSuggestionUrl ?? '');
+    final cSuggestUrl = useTextEditingController(text: data.tagSuggestionUrl);
     final cPostUrl = useTextEditingController(text: data.postUrl);
 
     return Column(
@@ -299,12 +299,8 @@ class PayloadLoaderWidget extends StatelessWidget {
               dense: true,
               onTap: () {
                 searchController.text = it.searchUrl;
-                if (it.tagSuggestionUrl != null) {
-                  suggestController.text = it.tagSuggestionUrl!;
-                }
-                if (it.postUrl != null) {
-                  postController.text = it.postUrl!;
-                }
+                suggestController.text = it.tagSuggestionUrl;
+                postController.text = it.postUrl;
                 Navigator.pop(context);
               },
             );

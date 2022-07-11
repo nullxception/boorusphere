@@ -13,9 +13,9 @@ class ServerData with _$ServerData {
   const factory ServerData({
     @HiveField(0, defaultValue: '') required String name,
     @HiveField(1, defaultValue: '') required String homepage,
-    @HiveField(2, defaultValue: '') String? postUrl,
+    @HiveField(2, defaultValue: '') @Default('') String postUrl,
     @HiveField(3, defaultValue: '') required String searchUrl,
-    @HiveField(7, defaultValue: '') String? tagSuggestionUrl,
+    @HiveField(7, defaultValue: '') @Default('') String tagSuggestionUrl,
   }) = _ServerData;
 
   factory ServerData.fromJson(Map<String, dynamic> json) =>
@@ -23,13 +23,13 @@ class ServerData with _$ServerData {
 
   const ServerData._();
 
-  bool get canSuggestTags => tagSuggestionUrl?.contains('{tag-part}') ?? false;
+  bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
-  Uri? composePostUrl(int id) {
-    if (postUrl == null) return null;
+  String composePostUrl(int id) {
+    if (postUrl.isEmpty) return '';
 
     final url = '$homepage/$postUrl';
-    return Uri.parse(url.replaceAll('{post-id}', id.toString()));
+    return url.replaceAll('{post-id}', id.toString());
   }
 
   Uri composeSearchUrl(ServerQuery query, int page) {
@@ -54,5 +54,7 @@ class ServerData with _$ServerData {
     }
   }
 
+  static const ServerData empty =
+      ServerData(name: '', homepage: '', searchUrl: '');
   static const String defaultTag = '*';
 }

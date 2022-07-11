@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/booru_post.dart';
@@ -54,7 +53,7 @@ class PostDetails extends HookConsumerWidget {
             title: const Text('Type'),
             subtitle: Text(data.mimeType),
           ),
-          if (postUrl != null)
+          if (postUrl.isNotEmpty)
             ListTile(
               title: const Text('Location'),
               subtitle: TextButton(
@@ -64,7 +63,7 @@ class PostDetails extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launchUrl(postUrl),
+                onPressed: () => launchUrlString(postUrl),
                 child: Text(postUrl.toString()),
               ),
               trailing: IconButton(

@@ -172,6 +172,7 @@ class BooruApi {
   }
 
   Future<ServerData> scanServerUrl(String url) async {
+    String post = '', search = '', suggestion = '';
     final tests = await Future.wait(
       [
         _queryTest(url, searchQueries, ServerPayloadType.search),
@@ -179,7 +180,7 @@ class BooruApi {
         _queryTest(url, webPostUrls, ServerPayloadType.post),
       ],
     );
-    String? post, search, suggestion;
+
     for (final payload in tests) {
       switch (payload.type) {
         case ServerPayloadType.search:
@@ -195,12 +196,14 @@ class BooruApi {
           break;
       }
     }
+
     return ServerData(
-        name: Uri.parse(url).host,
-        homepage: url,
-        postUrl: post,
-        searchUrl: search ?? '',
-        tagSuggestionUrl: suggestion);
+      name: Uri.parse(url).host,
+      homepage: url,
+      postUrl: post,
+      searchUrl: search,
+      tagSuggestionUrl: suggestion,
+    );
   }
 
   static const searchQueries = [
