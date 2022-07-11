@@ -105,6 +105,7 @@ class AddServer extends HookConsumerWidget {
                       FocusScope.of(context).unfocus();
                       data.value = null;
                       isLoading.value = true;
+                      errorMessage.value = '';
                       try {
                         final res = await api.scanServerUrl(scanText.text);
                         data.value = res;
