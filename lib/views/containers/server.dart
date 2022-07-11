@@ -101,6 +101,7 @@ class AddServer extends HookConsumerWidget {
                   ? () {
                       if (formKey.currentState?.validate() != true) return;
 
+                      FocusScope.of(context).unfocus();
                       data.value = null;
                       isLoading.value = true;
                       api.scanServerUrl(scanText.text).then((res) {
