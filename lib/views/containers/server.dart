@@ -142,9 +142,17 @@ class ServerScanViewWidget extends HookConsumerWidget {
         Form(
           key: formKey,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+            padding: const EdgeInsets.all(16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: Text(
+                    'Details',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
                 TextFormField(
                   controller: cName,
                   decoration: const InputDecoration(
@@ -157,6 +165,31 @@ class ServerScanViewWidget extends HookConsumerWidget {
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Homepage',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Payload',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PayloadLoaderWidget(
+                                serverData: serverData,
+                                searchController: cSearchUrl,
+                                suggestController: cSuggestUrl,
+                                postController: cPostUrl),
+                          );
+                        },
+                        child: const Text('From Preset'),
+                      ),
+                    ],
                   ),
                 ),
                 TextFormField(
@@ -200,6 +233,50 @@ class ServerScanViewWidget extends HookConsumerWidget {
           child: const Text('Save'),
         ),
       ],
+    );
+  }
+}
+
+class PayloadLoaderWidget extends StatelessWidget {
+  const PayloadLoaderWidget({
+    Key? key,
+    required this.serverData,
+    required this.searchController,
+    required this.suggestController,
+    required this.postController,
+  }) : super(key: key);
+
+  final ServerDataNotifier serverData;
+  final TextEditingController searchController;
+  final TextEditingController suggestController;
+  final TextEditingController postController;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Server'),
+      contentPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      content: SingleChildScrollView(
+        child: Column(
+          children: serverData.all.map((it) {
+            return ListTile(
+              title: Text(it.name),
+              leading: Favicon(url: '${it.homepage}/favicon.ico'),
+              dense: true,
+              onTap: () {
+                searchController.text = it.searchUrl;
+                if (it.tagSuggestionUrl != null) {
+                  suggestController.text = it.tagSuggestionUrl!;
+                }
+                if (it.postUrl != null) {
+                  postController.text = it.postUrl!;
+                }
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }
