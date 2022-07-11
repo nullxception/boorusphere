@@ -79,28 +79,37 @@ class AddServer extends HookConsumerWidget {
             Form(
               key: formKey,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                padding: const EdgeInsets.all(16),
                 child: TextFormField(
                   controller: scanText,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Example: https://abc.com',
                   ),
+                  validator: (value) {
+                    if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
+                      return 'not a valid url';
+                    }
+
+                    return null;
+                  },
                 ),
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                if (isLoading.value) return;
+              onPressed: !isLoading.value
+                  ? () {
+                      if (formKey.currentState?.validate() != true) return;
 
-                data.value = null;
-                isLoading.value = true;
-                api.scanServerUrl(scanText.text).then((res) {
-                  data.value = res;
-                }).whenComplete(() {
-                  isLoading.value = false;
-                });
-              },
+                      data.value = null;
+                      isLoading.value = true;
+                      api.scanServerUrl(scanText.text).then((res) {
+                        data.value = res;
+                      }).whenComplete(() {
+                        isLoading.value = false;
+                      });
+                    }
+                  : null,
               child: const Text('Scan'),
             ),
             Visibility(
