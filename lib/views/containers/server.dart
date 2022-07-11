@@ -75,6 +75,7 @@ class AddServer extends HookConsumerWidget {
         title: const Text('Add new server'),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 16),
         child: Column(
           children: [
             Form(
