@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:retry/retry.dart';
 import 'package:xml2json/xml2json.dart';
 
 import '../model/booru_post.dart';
@@ -18,6 +19,7 @@ import 'server_data.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => '');
+final rere = const RetryOptions(maxAttempts: 4).retry;
 
 class BooruApi {
   BooruApi(this.read);
@@ -118,7 +120,10 @@ class BooruApi {
     try {
       final url = server.active.composeSearchUrl(booruQuery, _page);
       Fimber.d('Fetching $url');
-      final res = await http.get(url);
+      final res = await rere(
+        () => http.get(url).timeout(const Duration(seconds: 5)),
+        retryIf: (e) => e is SocketException || e is TimeoutException,
+      );
       final data = await _parseHttpResponse(res);
       posts.addAll(data);
     } on Exception catch (e) {
@@ -138,7 +143,7 @@ class BooruApi {
   }
 
   Future<ServerPayload> _queryTest(
-      String url, List<String> queries, ServerPayloadType type) async {
+      String host, List<String> queries, ServerPayloadType type) async {
     final result = await Future.wait(
       queries.map((query) async {
         final test = query
@@ -147,14 +152,18 @@ class BooruApi {
             .replaceAll('{post-limit}', '3')
             .replaceAll('{page-id}', '1')
             .replaceAll('{post-id}', '100');
-        final res = await http.get(Uri.parse('$url/$test'));
+        final url = Uri.parse('$host/$test');
+        final res = await rere(
+          () => http.get(url).timeout(const Duration(seconds: 5)),
+          retryIf: (e) => e is SocketException || e is TimeoutException,
+        );
 
         return res.statusCode == 200 ? query : '';
       }),
     );
 
     return ServerPayload(
-        host: url,
+        host: host,
         query: result.firstWhere((it) => it.isNotEmpty, orElse: () => ''),
         type: type);
   }
@@ -232,8 +241,11 @@ class BooruApi {
     final queries = query.trim().split(' ');
     final server = read(serverDataProvider);
     try {
-      final res =
-          await http.get(server.active.composeSuggestionUrl(queries.last));
+      final url = server.active.composeSuggestionUrl(queries.last);
+      final res = await rere(
+        () => http.get(url).timeout(const Duration(seconds: 5)),
+        retryIf: (e) => e is SocketException || e is TimeoutException,
+      );
       final tags = await _parseSuggestion(res);
       return tags
           .where((it) =>
