@@ -110,7 +110,7 @@ class HomeDrawer extends StatelessWidget {
 class _ThemeSwitcherButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeHandler = ref.watch(appThemeProvider.notifier);
+    final appThemeHandler = ref.watch(appThemeProvider);
 
     return IconButton(
       icon: Icon(appThemeHandler.themeIcon),
