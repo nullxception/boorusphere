@@ -67,13 +67,12 @@ class BooruApi {
       final displaySrc = MapUtils.getUrl(post, '^large_file');
       final thumbnail =
           MapUtils.getUrl(post, '^(preview_url|preview_file|preview)');
-      final tags = MapUtils.findEntry(post, '^(tags|tag_str)');
+      final tags = MapUtils.getTags(post, '^(tags|tag_str)');
       final width = MapUtils.getInt(post, '^(image_wi|preview_wi|width)');
       final height = MapUtils.getInt(post, '^(image_he|preview_he|height)');
-      final tagList = tags.value.toString().trim().split(' ');
 
       final hasContent = width > 0 && height > 0;
-      final notBlocked = !tagList.any(blocked.contains);
+      final notBlocked = !tags.any(blocked.contains);
 
       if (src.isNotEmpty && thumbnail.isNotEmpty && hasContent && notBlocked) {
         result.add(
@@ -82,7 +81,7 @@ class BooruApi {
             src: src,
             displaySrc: displaySrc.isEmpty ? src : displaySrc,
             thumbnail: thumbnail,
-            tags: tagList,
+            tags: tags,
             width: width,
             height: height,
           ),

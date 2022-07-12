@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:convert';
+
 mixin MapUtils {
   static MapEntry<String, dynamic> findEntry(
       Map<String, dynamic> data, String key) {
@@ -7,19 +10,51 @@ mixin MapUtils {
     );
   }
 
-  static String getUrl(Map<String, dynamic> data, String key) => data.entries
-      .firstWhere((e) => e.value is String && e.key.contains(RegExp(key)),
-          orElse: () => const MapEntry('', ''))
-      .value;
+  static String getGdataText(dynamic data) {
+    try {
+      return jsonDecode(jsonEncode(data))['\$t'];
+    } catch (e) {
+      return '';
+    }
+  }
+
+  static String getUrl(Map<String, dynamic> data, String key) {
+    if (data.values.first is LinkedHashMap) {
+      final gdata = data.entries.firstWhere(
+          (e) =>
+              e.value.toString().contains('http') &&
+              e.key.contains(RegExp(key)),
+          orElse: () => const MapEntry('', ''));
+      return getGdataText(gdata.value);
+    }
+
+    return data.entries
+        .firstWhere((e) => e.value is String && e.key.contains(RegExp(key)),
+            orElse: () => const MapEntry('', ''))
+        .value;
+  }
 
   static int getInt(Map<String, dynamic> data, String key) {
-    final result = findEntry(data, key);
-    if (result.value is int) {
-      return result.value;
-    } else if (result.value is String) {
-      return int.parse(result.value);
-    } else {
-      return 0;
+    final res = findEntry(data, key).value;
+    if (res is int) {
+      return res;
+    } else if (res is String) {
+      return int.parse(res);
+    } else if (res is LinkedHashMap) {
+      return int.parse(getGdataText(res));
     }
+
+    return 0;
+  }
+
+  static List<String> getTags(Map<String, dynamic> data, String key) {
+    final res = findEntry(data, key).value;
+    if (res is LinkedHashMap) {
+      return getGdataText(res).trim().split(' ');
+    } else if (res is List) {
+      return res.toString().trim().split(' ');
+    }
+
+    return [];
   }
 }
