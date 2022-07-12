@@ -34,7 +34,7 @@ class BooruApi {
 
     if (res.statusCode != 200) {
       throw HttpException('Something went wrong [${res.statusCode}]');
-    } else if (!res.body.contains(RegExp('https?://.*'))) {
+    } else if (!res.body.contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
       throw HttpException(posts.isNotEmpty
           ? 'No more result for "${booruQuery.tags}"'
@@ -43,10 +43,10 @@ class BooruApi {
 
     List<dynamic> entries;
     if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
-      // json body, like on danbooru or yandere
-      entries = jsonDecode(res.body);
-    } else if (res.body.startsWith('<?xm')) {
-      // xml body, like safebooru for example
+      entries = res.body.contains('@attributes')
+          ? jsonDecode(res.body)['post']
+          : jsonDecode(res.body);
+    } else if (res.body.contains('<?xml')) {
       final xjson = Xml2Json();
       xjson.parse(res.body.replaceAll('\\', ''));
 
@@ -65,10 +65,11 @@ class BooruApi {
       final id = MapUtils.getInt(post, r'^id$');
       final src = MapUtils.getUrl(post, '^(file_url|url)');
       final displaySrc = MapUtils.getUrl(post, '^large_file');
-      final thumbnail = MapUtils.getUrl(post, '^(preview_fi|preview)');
+      final thumbnail =
+          MapUtils.getUrl(post, '^(preview_url|preview_file|preview)');
       final tags = MapUtils.findEntry(post, '^(tags|tag_str)');
-      final width = MapUtils.getInt(post, '^(image_wid|width)');
-      final height = MapUtils.getInt(post, '^(image_hei|height)');
+      final width = MapUtils.getInt(post, '^(image_wi|preview_wi|width)');
+      final height = MapUtils.getInt(post, '^(image_he|preview_he|height)');
       final tagList = tags.value.toString().trim().split(' ');
 
       final hasContent = width > 0 && height > 0;
@@ -200,6 +201,7 @@ class BooruApi {
   static const searchQueries = [
     'post.json?tags={tags}&page={page-id}&limit={post-limit}',
     'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
+    'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
   ];
 
