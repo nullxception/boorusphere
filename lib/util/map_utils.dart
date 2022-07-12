@@ -7,14 +7,10 @@ mixin MapUtils {
     );
   }
 
-  static String? getUrl(Map<String, dynamic> data, String key) {
-    final result = findEntry(data, key).value;
-    if (result is String && result.contains(RegExp('https?://.*'))) {
-      return result;
-    } else {
-      return null;
-    }
-  }
+  static String getUrl(Map<String, dynamic> data, String key) => data.entries
+      .firstWhere((e) => e.value is String && e.key.contains(RegExp(key)),
+          orElse: () => const MapEntry('', ''))
+      .value;
 
   static int getInt(Map<String, dynamic> data, String key) {
     final result = findEntry(data, key);

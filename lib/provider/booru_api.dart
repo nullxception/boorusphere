@@ -74,12 +74,12 @@ class BooruApi {
       final hasContent = width > 0 && height > 0;
       final notBlocked = !tagList.any(blocked.contains);
 
-      if (src != null && thumbnail != null && hasContent && notBlocked) {
+      if (src.isNotEmpty && thumbnail.isNotEmpty && hasContent && notBlocked) {
         result.add(
           BooruPost(
             id: id,
             src: src,
-            displaySrc: displaySrc ?? src,
+            displaySrc: displaySrc.isEmpty ? src : displaySrc,
             thumbnail: thumbnail,
             tags: tagList,
             width: width,
