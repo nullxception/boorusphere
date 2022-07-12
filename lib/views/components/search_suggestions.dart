@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/search_history.dart';
-import '../../provider/search_suggestion.dart';
+import '../../provider/booru_api.dart';
 import '../../provider/server_data.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {
@@ -39,7 +39,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final server = ref.watch(serverDataProvider);
-    final suggester = ref.watch(searchSuggestionProvider(query));
+    final suggester = ref.watch(suggestionProvider(query));
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(

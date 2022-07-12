@@ -197,6 +197,62 @@ class BooruApi {
         tagSuggestionUrl: suggestion));
   }
 
+  Future<List<String>> _parseSuggestion(http.Response res) async {
+    final blockedTags = read(blockedTagsProvider);
+    final blocked = await blockedTags.listedEntries;
+
+    if (res.statusCode != 200) {
+      throw HttpException('Something went wrong [${res.statusCode}]');
+    }
+
+    List<dynamic> entries;
+    if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
+      entries = res.body.contains('@attributes')
+          ? jsonDecode(res.body)['tag']
+          : jsonDecode(res.body);
+    } else if (res.body.isEmpty) {
+      return [];
+    } else {
+      throw const FormatException('Unknown document format');
+    }
+
+    final result = <String>[];
+    for (final Map<String, dynamic> entry in entries) {
+      final tags = MapUtils.findEntry(entry, '^(name|tag)');
+      final postCount = MapUtils.getInt(entry, '.*count');
+      if (postCount > 0 && !blocked.contains(tags.value)) {
+        result.add(tags.value);
+      }
+    }
+
+    return result;
+  }
+
+  Future<List<String>> fetchSuggestion({required String query}) async {
+    final queries = query.trim().split(' ');
+    final server = read(serverDataProvider);
+    try {
+      final res =
+          await http.get(server.active.composeSuggestionUrl(queries.last));
+      final tags = await _parseSuggestion(res);
+      return tags
+          .where((it) =>
+              it.contains(queries.last) &&
+              !queries.sublist(0, queries.length - 1).contains(it))
+          .toList();
+    } on FormatException {
+      if (query.isEmpty) {
+        // the server did not support empty tag matches (hot/trending tags)
+        return [];
+      }
+
+      throw Exception('No tag that matches "$query"');
+    } on Exception catch (e) {
+      Fimber.e('Something went wrong', ex: e);
+      rethrow;
+    }
+  }
+
   static const searchQueries = [
     'post.json?tags={tags}&page={page-id}&limit={post-limit}',
     'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
@@ -218,3 +274,12 @@ class BooruApi {
 }
 
 final booruApiProvider = Provider((ref) => BooruApi(ref.read));
+final suggestionProvider =
+    FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
+  if (query.endsWith(' ')) {
+    return [];
+  }
+
+  final api = ref.read(booruApiProvider);
+  return await api.fetchSuggestion(query: query);
+});
