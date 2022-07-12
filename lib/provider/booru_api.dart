@@ -128,7 +128,8 @@ class BooruApi {
       posts.addAll(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
-      errorMessage.state = _getExceptionMessage(e);
+      final msg = _getExceptionMessage(e);
+      errorMessage.state = booruQuery.safeMode ? '(Safe Mode) $msg' : msg;
     }
 
     pageLoading.state = false;
