@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,7 +25,7 @@ class PostImageDisplay extends ConsumerWidget {
       },
       child: PhotoView(
         minScale: PhotoViewComputedScale.contained,
-        imageProvider: CachedNetworkImageProvider(url),
+        imageProvider: ExtendedNetworkImageProvider(url),
         loadingBuilder: (_, ev) => Center(
           child: SizedBox(
             width: 92,

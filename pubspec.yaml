@@ -26,9 +26,9 @@ dependencies:
   flutter:
     sdk: flutter
   async: ^2.8.2
-  cached_network_image: ^3.0.0-nullsafety
   cupertino_icons: ^1.0.2
   dartz: ^0.10.0-nullsafety.1
+  extended_image: ^6.2.1
   fimber: ^0.6.1
   flutter_cache_manager: ^3.0.0-nullsafety.1
   flutter_hooks: ^0.18.5+1

@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class Favicon extends StatelessWidget {
@@ -10,20 +10,16 @@ class Favicon extends StatelessWidget {
   final String url;
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: url,
-      placeholder: (_, __) => const Icon(Icons.public),
-      errorWidget: (_, __, ___) => const Icon(Icons.public),
-      fadeInDuration: Duration.zero,
-      fadeOutDuration: Duration.zero,
-      imageBuilder: (context, img) => Container(
-        width: IconTheme.of(context).size,
-        height: IconTheme.of(context).size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(image: img, fit: BoxFit.contain),
-        ),
-      ),
+    return ExtendedImage.network(
+      url,
+      width: IconTheme.of(context).size,
+      height: IconTheme.of(context).size,
+      shape: BoxShape.circle,
+      fit: BoxFit.contain,
+      loadStateChanged: (state) =>
+          state.extendedImageLoadState == LoadState.completed
+              ? state.completedWidget
+              : const Icon(Icons.public),
     );
   }
 }

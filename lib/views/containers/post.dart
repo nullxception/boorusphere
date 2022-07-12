@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -71,9 +71,9 @@ class Post extends HookConsumerWidget {
             alignment: AlignmentDirectional.center,
             fit: StackFit.passthrough,
             children: [
-              CachedNetworkImage(
+              ExtendedImage.network(
+                content.thumbnail,
                 fit: BoxFit.contain,
-                imageUrl: content.thumbnail,
                 filterQuality: FilterQuality.high,
               ),
               if (content.displayType == PostType.photo)

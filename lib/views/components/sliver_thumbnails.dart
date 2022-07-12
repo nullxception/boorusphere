@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/grid.dart';
 import '../../routes.dart';
@@ -15,17 +16,6 @@ class SliverThumbnails extends HookConsumerWidget {
 
   const SliverThumbnails({Key? key, required this.autoScrollController})
       : super(key: key);
-
-  FilterQuality thumbnailQuality(int gridExtra) {
-    switch (gridExtra) {
-      case 0:
-        return FilterQuality.medium;
-      case 1:
-        return FilterQuality.low;
-      default:
-        return FilterQuality.none;
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,18 +41,7 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: GestureDetector(
-            child: CachedNetworkImage(
-              fadeInDuration: const Duration(milliseconds: 300),
-              fadeOutDuration: const Duration(milliseconds: 500),
-              filterQuality: thumbnailQuality(gridExtra),
-              fit: BoxFit.fill,
-              imageUrl: api.posts[index].thumbnail,
-              progressIndicatorBuilder: (_, __, ___) => _ThumbnailShimmer(
-                aspectRatio: api.posts[index].width / api.posts[index].height,
-              ),
-              errorWidget: (_, __, error) =>
-                  const Icon(Icons.broken_image_outlined),
-            ),
+            child: Thumbnail(post: api.posts[index]),
             onTap: () {
               // invalidate the state first so we can use it for checking mechanism too
               lastOpenedIndex.state = -1;
@@ -81,6 +60,45 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Thumbnail extends HookConsumerWidget {
+  const Thumbnail({Key? key, required this.post}) : super(key: key);
+  final BooruPost post;
+
+  FilterQuality _thumbnailQuality(int gridExtra) {
+    switch (gridExtra) {
+      case 0:
+        return FilterQuality.medium;
+      case 1:
+        return FilterQuality.low;
+      default:
+        return FilterQuality.none;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gridExtra = ref.watch(gridProvider);
+
+    return ExtendedImage.network(
+      post.thumbnail,
+      filterQuality: _thumbnailQuality(gridExtra),
+      fit: BoxFit.fill,
+      loadStateChanged: (state) {
+        switch (state.extendedImageLoadState) {
+          case LoadState.loading:
+            return _ThumbnailShimmer(
+              aspectRatio: post.width / post.height,
+            );
+          case LoadState.failed:
+            return const Icon(Icons.broken_image_outlined);
+          default:
+            return state.completedWidget;
+        }
+      },
     );
   }
 }
