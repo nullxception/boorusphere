@@ -53,6 +53,8 @@ mixin MapUtils {
       return getGdataText(res).trim().split(' ');
     } else if (res is List) {
       return res.toString().trim().split(' ');
+    } else if (res is String) {
+      return res.trim().split(' ');
     }
 
     return [];
