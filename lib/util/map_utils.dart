@@ -47,7 +47,7 @@ mixin MapUtils {
     return 0;
   }
 
-  static List<String> getTags(Map<String, dynamic> data, String key) {
+  static List<String> getWordlist(Map<String, dynamic> data, String key) {
     final res = findEntry(data, key).value;
     if (res is LinkedHashMap) {
       return getGdataText(res).trim().split(' ');

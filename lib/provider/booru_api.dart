@@ -69,7 +69,7 @@ class BooruApi {
       final displaySrc = MapUtils.getUrl(post, '^large_file');
       final thumbnail =
           MapUtils.getUrl(post, '^(preview_url|preview_file|preview)');
-      final tags = MapUtils.getTags(post, '^(tags|tag_str)');
+      final tags = MapUtils.getWordlist(post, '^(tags|tag_str)');
       final width = MapUtils.getInt(post, '^(image_wi|preview_wi|width)');
       final height = MapUtils.getInt(post, '^(image_he|preview_he|height)');
 
