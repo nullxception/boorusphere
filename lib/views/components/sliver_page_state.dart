@@ -42,6 +42,16 @@ class SliverPageState extends HookConsumerWidget {
               child: SpinKitThreeBounce(
                   size: 32, color: Theme.of(context).colorScheme.secondary),
             ),
+          if (errorMessage.isEmpty && !pageLoading && api.posts.isNotEmpty)
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: ElevatedButton(
+                      onPressed: api.loadMore, child: const Text('load more')),
+                )
+              ],
+            ),
         ],
       ),
     );
