@@ -53,7 +53,35 @@ class PostImageDisplay extends HookConsumerWidget {
                 ),
               );
             case LoadState.failed:
-              return const SizedBox.shrink();
+              return SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Card(
+                      color: Colors.black,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Failed to load image'),
+                            const SizedBox(width: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                state.reLoadImage();
+                              },
+                              child: const Text('Try Again'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
             default:
               return Container(
                 color: Colors.black,
