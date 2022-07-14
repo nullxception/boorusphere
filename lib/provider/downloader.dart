@@ -105,6 +105,7 @@ class Downloader extends ChangeNotifier {
 
     if (taskId != null) {
       entries.add(DownloadEntry(id: taskId, url: url));
+      notifyListeners();
     }
   }
 
