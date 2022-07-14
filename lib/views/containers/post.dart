@@ -72,10 +72,14 @@ class Post extends HookConsumerWidget {
             alignment: AlignmentDirectional.center,
             fit: StackFit.passthrough,
             children: [
-              ExtendedImage.network(
-                content.thumbnail,
-                fit: BoxFit.contain,
-                filterQuality: FilterQuality.high,
+              Container(
+                color: Colors.black,
+                child: ExtendedImage.network(
+                  content.thumbnail,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.high,
+                  enableLoadState: false,
+                ),
               ),
               if (content.displayType == PostType.photo)
                 PostImageDisplay(url: content.src)

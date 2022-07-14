@@ -1,12 +1,12 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:photo_view/photo_view.dart';
 
 import '../containers/post.dart';
 
-class PostImageDisplay extends ConsumerWidget {
+class PostImageDisplay extends HookConsumerWidget {
   const PostImageDisplay({Key? key, required this.url}) : super(key: key);
 
   final String url;
@@ -14,6 +14,10 @@ class PostImageDisplay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isFullscreen = ref.watch(postFullscreenProvider.state);
+    final zoomController =
+        useAnimationController(duration: const Duration(milliseconds: 150));
+    final zoomAnimation = useState<Animation<double>?>(null);
+    final zoomStateCallback = useState<VoidCallback?>(null);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -23,24 +27,58 @@ class PostImageDisplay extends ConsumerWidget {
             : SystemUiMode.immersive);
         isFullscreen.state = !isFullscreen.state;
       },
-      child: PhotoView(
-        minScale: PhotoViewComputedScale.contained,
-        imageProvider: ExtendedNetworkImageProvider(url),
-        loadingBuilder: (_, ev) => Center(
-          child: SizedBox(
-            width: 92,
-            height: 92,
-            child: CircularProgressIndicator(
-              strokeWidth: 8,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.white.withAlpha(200),
-              ),
-              value: ev != null && ev.expectedTotalBytes != null
-                  ? ev.cumulativeBytesLoaded / (ev.expectedTotalBytes ?? 1)
-                  : null,
-            ),
-          ),
-        ),
+      child: ExtendedImage.network(
+        url,
+        fit: BoxFit.contain,
+        mode: ExtendedImageMode.gesture,
+        handleLoadingProgress: true,
+        loadStateChanged: (state) {
+          switch (state.extendedImageLoadState) {
+            case LoadState.loading:
+              final prog = state.loadingProgress;
+              return Center(
+                child: SizedBox(
+                  width: 92,
+                  height: 92,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 8,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.white.withAlpha(200),
+                    ),
+                    value: prog != null && prog.expectedTotalBytes != null
+                        ? prog.cumulativeBytesLoaded /
+                            (prog.expectedTotalBytes ?? 1)
+                        : null,
+                  ),
+                ),
+              );
+            case LoadState.failed:
+              return const SizedBox.shrink();
+            default:
+              return Container(
+                color: Colors.black,
+                child: state.completedWidget,
+              );
+          }
+        },
+        onDoubleTap: (state) {
+          final downOffset = state.pointerDownPosition;
+          final begin = state.gestureDetails?.totalScale ?? 1;
+          zoomAnimation.value?.removeListener(zoomStateCallback.value!);
+
+          zoomController.stop();
+          zoomController.reset();
+
+          zoomStateCallback.value = () {
+            state.handleDoubleTap(
+                scale: zoomAnimation.value?.value,
+                doubleTapPosition: downOffset);
+          };
+          zoomAnimation.value = zoomController
+              .drive(Tween<double>(begin: begin, end: begin == 1 ? 2 : 1));
+          zoomAnimation.value?.addListener(zoomStateCallback.value!);
+          zoomController.forward();
+        },
       ),
     );
   }
