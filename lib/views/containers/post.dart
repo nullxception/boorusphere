@@ -12,6 +12,7 @@ import '../components/post_toolbox.dart';
 import '../components/post_video.dart';
 import '../components/preferred_visibility.dart';
 import '../components/subbed_title.dart';
+import '../hooks/extended_page_controller.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
 final postFullscreenProvider = StateProvider((_) => false);
@@ -23,7 +24,7 @@ class Post extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
 
-    final pageController = usePageController(initialPage: beginPage);
+    final pageController = useExtendedPageController(initialPage: beginPage);
     final api = ref.watch(booruApiProvider);
     final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final page = useState(beginPage);
@@ -59,7 +60,7 @@ class Post extends HookConsumerWidget {
           ),
         ),
       ),
-      body: PageView.builder(
+      body: ExtendedImageGesturePageView.builder(
         controller: pageController,
         onPageChanged: (index) {
           page.value = index;
@@ -68,27 +69,14 @@ class Post extends HookConsumerWidget {
         itemCount: api.posts.length,
         itemBuilder: (_, index) {
           final content = api.posts[index];
-          return Stack(
-            alignment: AlignmentDirectional.center,
-            fit: StackFit.passthrough,
-            children: [
-              Container(
-                color: Colors.black,
-                child: ExtendedImage.network(
-                  content.thumbnail,
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.high,
-                  enableLoadState: false,
-                ),
-              ),
-              if (content.displayType == PostType.photo)
-                PostImageDisplay(url: content.src)
-              else if (content.displayType == PostType.video)
-                PostVideoDisplay(booru: content)
-              else
-                PostErrorDisplay(mime: content.mimeType)
-            ],
-          );
+          switch (content.displayType) {
+            case PostType.photo:
+              return PostImageDisplay(booru: content);
+            case PostType.video:
+              return PostVideoDisplay(booru: content);
+            default:
+              return PostErrorDisplay(booru: content);
+          }
         },
       ),
       bottomNavigationBar: Visibility(

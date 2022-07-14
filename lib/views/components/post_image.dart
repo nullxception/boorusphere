@@ -4,12 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../model/booru_post.dart';
 import '../containers/post.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
-  const PostImageDisplay({Key? key, required this.url}) : super(key: key);
+  const PostImageDisplay({Key? key, required this.booru}) : super(key: key);
 
-  final String url;
+  final BooruPost booru;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,65 +29,19 @@ class PostImageDisplay extends HookConsumerWidget {
         isFullscreen.state = !isFullscreen.state;
       },
       child: ExtendedImage.network(
-        url,
+        booru.src,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
+        initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
         handleLoadingProgress: true,
         loadStateChanged: (state) {
           switch (state.extendedImageLoadState) {
             case LoadState.loading:
-              final prog = state.loadingProgress;
-              return Center(
-                child: SizedBox(
-                  width: 92,
-                  height: 92,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 8,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.white.withAlpha(200),
-                    ),
-                    value: prog != null && prog.expectedTotalBytes != null
-                        ? prog.cumulativeBytesLoaded /
-                            (prog.expectedTotalBytes ?? 1)
-                        : null,
-                  ),
-                ),
-              );
+              return PostImageLoadingView(booru: booru, state: state);
             case LoadState.failed:
-              return SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Card(
-                      color: Colors.black,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Failed to load image'),
-                            const SizedBox(width: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                state.reLoadImage();
-                              },
-                              child: const Text('Try Again'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
+              return PostImageFailedView(booru: booru, state: state);
             default:
-              return Container(
-                color: Colors.black,
-                child: state.completedWidget,
-              );
+              return state.completedWidget;
           }
         },
         onDoubleTap: (state) {
@@ -108,6 +63,105 @@ class PostImageDisplay extends HookConsumerWidget {
           zoomController.forward();
         },
       ),
+    );
+  }
+}
+
+class PostImageFailedView extends StatelessWidget {
+  const PostImageFailedView({
+    Key? key,
+    required this.booru,
+    required this.state,
+  }) : super(key: key);
+
+  final BooruPost booru;
+  final ExtendedImageState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      fit: StackFit.passthrough,
+      children: [
+        ExtendedImage.network(
+          booru.thumbnail,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.high,
+          enableLoadState: false,
+        ),
+        SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Card(
+                color: Colors.black,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Failed to load image'),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          state.reLoadImage();
+                        },
+                        child: const Text('Try Again'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PostImageLoadingView extends StatelessWidget {
+  const PostImageLoadingView({
+    Key? key,
+    required this.booru,
+    required this.state,
+  }) : super(key: key);
+
+  final BooruPost booru;
+  final ExtendedImageState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final prog = state.loadingProgress;
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      fit: StackFit.passthrough,
+      children: [
+        ExtendedImage.network(
+          booru.thumbnail,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.high,
+          enableLoadState: false,
+        ),
+        Center(
+          child: SizedBox(
+            width: 92,
+            height: 92,
+            child: CircularProgressIndicator(
+              strokeWidth: 8,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Colors.white.withAlpha(200),
+              ),
+              value: prog != null && prog.expectedTotalBytes != null
+                  ? prog.cumulativeBytesLoaded / (prog.expectedTotalBytes ?? 1)
+                  : null,
+            ),
+          ),
+        )
+      ],
     );
   }
 }

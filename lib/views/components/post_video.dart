@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -96,6 +97,16 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
       child: Stack(
         alignment: Alignment.center,
         children: [
+          if (!(controller?.value.isInitialized ?? false))
+            AspectRatio(
+              aspectRatio: booru.width / booru.height,
+              child: ExtendedImage.network(
+                booru.thumbnail,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.high,
+                enableLoadState: false,
+              ),
+            ),
           if (controller?.value.isInitialized ?? false)
             AspectRatio(
               aspectRatio: booru.width / booru.height,
