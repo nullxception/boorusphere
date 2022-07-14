@@ -4,7 +4,7 @@ homepage: https://github.com/nullxception/boorusphere
 repository: https://github.com/nullxception/boorusphere.git
 
 # The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -20,8 +20,14 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.8+6
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.5 <3.0.0"
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
@@ -70,8 +76,7 @@ dev_dependencies:
 
 flutter_icons:
   android: true
-  ios: true
-  remove_alpha_ios: true
+  ios: false
   image_path: assets/icons/icon-base.png
   image_path_android: assets/icons/icon-circle.png
   adaptive_icon_foreground: assets/icons/logo.png
@@ -87,19 +92,23 @@ license_generator:
     freezed_annotation: https://raw.githubusercontent.com/rrousselGit/freezed/master/packages/freezed_annotation/LICENSE
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-# The following section is specific to Flutter.
+
+# The following section is specific to Flutter packages.
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/servers.json
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
