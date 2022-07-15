@@ -126,7 +126,7 @@ mixin AppTheme {
         useMaterial3: true,
         colorScheme: seededScheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: seededScheme.surface,
+          backgroundColor: seededScheme.surface.darken(2),
           foregroundColor: seededScheme.onSurface,
           elevation: 0,
         ),
