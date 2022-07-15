@@ -44,6 +44,7 @@ class PostDetails extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Info')),
       body: ListView(
+        padding: EdgeInsets.zero,
         children: [
           ListTile(
             title: const Text('Size'),

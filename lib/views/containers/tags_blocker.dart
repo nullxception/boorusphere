@@ -39,7 +39,7 @@ class TagsBlocker extends HookConsumerWidget {
             Form(
               key: formKey,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: TextFormField(
                   controller: blockedTagsController,
                   onFieldSubmitted: (value) {
@@ -56,19 +56,12 @@ class TagsBlocker extends HookConsumerWidget {
                 ),
               ),
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: const Text(
-                'Blocked tags',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
+            const ListTile(
+              title: Text('Blocked tags'),
             ),
             blockedTags.value.isNotEmpty
                 ? ListView.builder(
+                    padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     itemCount: blockedTags.value.length,
                     physics: const NeverScrollableScrollPhysics(),

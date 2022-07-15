@@ -13,6 +13,7 @@ class Licenses extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Open Source Licenses')),
       body: ListView.builder(
+        padding: EdgeInsets.zero,
         itemCount: licenses.length,
         itemBuilder: (context, index) {
           final item = licenses[index];
