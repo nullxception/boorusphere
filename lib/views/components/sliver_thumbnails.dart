@@ -94,7 +94,10 @@ class Thumbnail extends HookConsumerWidget {
               aspectRatio: post.width / post.height,
             );
           case LoadState.failed:
-            return const Icon(Icons.broken_image_outlined);
+            return AspectRatio(
+              aspectRatio: post.width / post.height,
+              child: const Icon(Icons.broken_image_outlined),
+            );
           default:
             return state.completedWidget;
         }
