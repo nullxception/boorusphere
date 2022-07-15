@@ -37,7 +37,7 @@ class PostDetails extends HookConsumerWidget {
     var showFAB = useState(false);
     final data = api.posts.firstWhere(
       (element) => element.id == id,
-      orElse: () => BooruPost.empty(),
+      orElse: () => BooruPost.empty,
     );
     final postUrl = server.active.composePostUrl(data.id);
 

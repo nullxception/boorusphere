@@ -8,6 +8,10 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../model/booru_post.dart';
+import '../model/download_entry.dart';
+import 'hive_boxes.dart';
+
 class DownloadInfo {
   final String id;
   final DownloadTaskStatus status;
@@ -21,18 +25,6 @@ class DownloadInfo {
 
   static DownloadInfo none =
       DownloadInfo(id: '', status: DownloadTaskStatus.undefined, progress: 0);
-}
-
-class DownloadEntry {
-  final String id;
-  final String url;
-
-  DownloadEntry({
-    required this.id,
-    required this.url,
-  });
-
-  static DownloadEntry none = DownloadEntry(id: '', url: '');
 }
 
 class Downloader extends ChangeNotifier {
@@ -84,7 +76,7 @@ class Downloader extends ChangeNotifier {
     }
   }
 
-  Future<void> download(url) async {
+  Future<void> download(BooruPost post) async {
     final downloadPath = await platformDownloadPath;
 
     if (!await isDirWritable(downloadPath)) {
@@ -98,13 +90,16 @@ class Downloader extends ChangeNotifier {
     }
 
     final taskId = await FlutterDownloader.enqueue(
-        url: url,
+        url: post.src,
         savedDir: booruDir.absolute.path,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
-      entries.add(DownloadEntry(id: taskId, url: url));
+      final entry = DownloadEntry(id: taskId, booru: post);
+      final box = await read(downloadBox);
+      box.put(taskId, entry);
+      entries.add(entry);
       notifyListeners();
     }
   }
@@ -128,13 +123,31 @@ class Downloader extends ChangeNotifier {
       (it) =>
           it.id ==
           entries
-              .firstWhere((it) => it.url == url,
+              .firstWhere((it) => it.booru.src == url,
                   orElse: () => DownloadEntry.none)
               .id,
       orElse: () => DownloadInfo.none);
 
+  Future<void> clearAllTask() async {
+    final tasks = await FlutterDownloader.loadTasks();
+    if (tasks != null) {
+      await Future.wait(tasks.map((e) async => await FlutterDownloader.remove(
+          taskId: e.taskId, shouldDeleteContent: false)));
+    }
+
+    final box = await read(downloadBox);
+    if (box.values.isNotEmpty) {
+      box.deleteAll(box.keys);
+    }
+
+    statuses.clear();
+    entries.clear();
+    notifyListeners();
+  }
+
   Future<void> populateDownloadTasks() async {
     final tasks = await FlutterDownloader.loadTasks();
+    final box = await read(downloadBox);
     if (tasks != null) {
       statuses.addAll(tasks
           .map((e) => DownloadInfo(
@@ -143,14 +156,9 @@ class Downloader extends ChangeNotifier {
                 progress: e.progress,
               ))
           .toList());
-
-      entries.addAll(tasks
-          .map((e) => DownloadEntry(
-                id: e.taskId,
-                url: e.url,
-              ))
-          .toList());
-
+      if (box.values.isNotEmpty) {
+        entries.addAll(box.values.cast<DownloadEntry>());
+      }
       notifyListeners();
     }
   }

@@ -173,7 +173,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
                                 ? Icons.download_done
                                 : Icons.download),
                             onPressed: () {
-                              downloadNotifier.download(booru.src);
+                              downloadNotifier.download(booru);
                             },
                             color: Colors.white,
                             disabledColor:

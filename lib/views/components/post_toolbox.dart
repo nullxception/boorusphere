@@ -38,7 +38,7 @@ class PostToolbox extends HookConsumerWidget {
                     ? Icons.download_done
                     : Icons.download),
                 onPressed: () {
-                  downloadNotifier.download(booru.src);
+                  downloadNotifier.download(booru);
                 },
                 color: Colors.white,
                 disabledColor: Theme.of(context).colorScheme.primary,

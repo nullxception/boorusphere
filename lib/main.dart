@@ -5,6 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'model/booru_post.dart';
+import 'model/download_entry.dart';
 import 'model/search_history.dart';
 import 'model/server_data.dart';
 import 'provider/app_theme.dart';
@@ -51,6 +53,8 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ServersAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
+  Hive.registerAdapter(BooruPostAdapter());
+  Hive.registerAdapter(DownloadEntryAdapter());
 
   runApp(const ProviderScope(child: Boorusphere()));
 }

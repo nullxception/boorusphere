@@ -16,12 +16,19 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BooruPost {
+  @HiveField(0)
   int get id => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get src => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get displaySrc => throw _privateConstructorUsedError;
+  @HiveField(3)
   String get thumbnail => throw _privateConstructorUsedError;
+  @HiveField(4)
   List<String> get tags => throw _privateConstructorUsedError;
+  @HiveField(5)
   int get width => throw _privateConstructorUsedError;
+  @HiveField(6)
   int get height => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -34,13 +41,13 @@ abstract class $BooruPostCopyWith<$Res> {
   factory $BooruPostCopyWith(BooruPost value, $Res Function(BooruPost) then) =
       _$BooruPostCopyWithImpl<$Res>;
   $Res call(
-      {int id,
-      String src,
-      String displaySrc,
-      String thumbnail,
-      List<String> tags,
-      int width,
-      int height});
+      {@HiveField(0) int id,
+      @HiveField(1) String src,
+      @HiveField(2) String displaySrc,
+      @HiveField(3) String thumbnail,
+      @HiveField(4) List<String> tags,
+      @HiveField(5) int width,
+      @HiveField(6) int height});
 }
 
 /// @nodoc
@@ -101,13 +108,13 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
       __$$_BooruPostCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id,
-      String src,
-      String displaySrc,
-      String thumbnail,
-      List<String> tags,
-      int width,
-      int height});
+      {@HiveField(0) int id,
+      @HiveField(1) String src,
+      @HiveField(2) String displaySrc,
+      @HiveField(3) String thumbnail,
+      @HiveField(4) List<String> tags,
+      @HiveField(5) int width,
+      @HiveField(6) int height});
 }
 
 /// @nodoc
@@ -165,36 +172,44 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
 
 /// @nodoc
 
+@HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
 class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   const _$_BooruPost(
-      {required this.id,
-      required this.src,
-      required this.displaySrc,
-      required this.thumbnail,
-      required final List<String> tags,
-      required this.width,
-      required this.height})
+      {@HiveField(0) required this.id,
+      @HiveField(1) required this.src,
+      @HiveField(2) required this.displaySrc,
+      @HiveField(3) required this.thumbnail,
+      @HiveField(4) required final List<String> tags,
+      @HiveField(5) required this.width,
+      @HiveField(6) required this.height})
       : _tags = tags,
         super._();
 
   @override
+  @HiveField(0)
   final int id;
   @override
+  @HiveField(1)
   final String src;
   @override
+  @HiveField(2)
   final String displaySrc;
   @override
+  @HiveField(3)
   final String thumbnail;
   final List<String> _tags;
   @override
+  @HiveField(4)
   List<String> get tags {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_tags);
   }
 
   @override
+  @HiveField(5)
   final int width;
   @override
+  @HiveField(6)
   final int height;
 
   @override
@@ -250,28 +265,35 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 
 abstract class _BooruPost extends BooruPost {
   const factory _BooruPost(
-      {required final int id,
-      required final String src,
-      required final String displaySrc,
-      required final String thumbnail,
-      required final List<String> tags,
-      required final int width,
-      required final int height}) = _$_BooruPost;
+      {@HiveField(0) required final int id,
+      @HiveField(1) required final String src,
+      @HiveField(2) required final String displaySrc,
+      @HiveField(3) required final String thumbnail,
+      @HiveField(4) required final List<String> tags,
+      @HiveField(5) required final int width,
+      @HiveField(6) required final int height}) = _$_BooruPost;
   const _BooruPost._() : super._();
 
   @override
+  @HiveField(0)
   int get id;
   @override
+  @HiveField(1)
   String get src;
   @override
+  @HiveField(2)
   String get displaySrc;
   @override
+  @HiveField(3)
   String get thumbnail;
   @override
+  @HiveField(4)
   List<String> get tags;
   @override
+  @HiveField(5)
   int get width;
   @override
+  @HiveField(6)
   int get height;
   @override
   @JsonKey(ignore: true)

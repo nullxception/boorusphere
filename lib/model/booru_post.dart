@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:mime/mime.dart';
 
 part 'booru_post.freezed.dart';
+part 'booru_post.g.dart';
 
 enum PostType {
   video,
@@ -14,25 +16,16 @@ enum PostType {
 class BooruPost with _$BooruPost {
   const BooruPost._();
 
+  @HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
   const factory BooruPost({
-    required int id,
-    required String src,
-    required String displaySrc,
-    required String thumbnail,
-    required List<String> tags,
-    required int width,
-    required int height,
+    @HiveField(0) required int id,
+    @HiveField(1) required String src,
+    @HiveField(2) required String displaySrc,
+    @HiveField(3) required String thumbnail,
+    @HiveField(4) required List<String> tags,
+    @HiveField(5) required int width,
+    @HiveField(6) required int height,
   }) = _BooruPost;
-
-  factory BooruPost.empty() => const BooruPost(
-        id: -1,
-        src: '',
-        displaySrc: '',
-        thumbnail: '',
-        tags: [],
-        width: -1,
-        height: -1,
-      );
 
   String get mimeType =>
       lookupMimeType(src.split('/').last) ?? 'application/octet-stream';
@@ -47,4 +40,13 @@ class BooruPost with _$BooruPost {
       return PostType.unsupported;
     }
   }
+
+  static const empty = BooruPost(
+      id: -1,
+      src: '',
+      displaySrc: '',
+      thumbnail: '',
+      tags: [],
+      width: -1,
+      height: -1);
 }
