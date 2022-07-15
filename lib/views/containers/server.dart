@@ -17,12 +17,11 @@ class ServerPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Server')),
-      body: Column(
-        children: [
-          ...server.all.map((it) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-              child: ListTile(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ...server.all.map((it) {
+              return ListTile(
                 title: Text(it.name),
                 subtitle: Text(it.homepage),
                 leading: Favicon(url: '${it.homepage}/favicon.ico'),
@@ -33,26 +32,20 @@ class ServerPage extends HookConsumerWidget {
                   icon: const Icon(Icons.delete),
                 ),
                 dense: true,
-                contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                onTap: () {},
+                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                onTap: null,
+              );
+            }).toList(),
+            ListTile(
+              title: const Text('Add'),
+              leading: const Icon(Icons.add),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddServer()),
               ),
-            );
-          }).toList(),
-          ListTile(
-            title: const Text('Add'),
-            leading: const Icon(Icons.add),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddServer()),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -76,12 +69,13 @@ class AddServer extends HookConsumerWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16),
-        child: Column(
-          children: [
-            Form(
-              key: formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextFormField(
                   controller: scanText,
                   decoration: const InputDecoration(
@@ -97,50 +91,60 @@ class AddServer extends HookConsumerWidget {
                   },
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: !isLoading.value
-                  ? () async {
-                      if (formKey.currentState?.validate() != true) return;
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: ElevatedButton(
+                  onPressed: !isLoading.value
+                      ? () async {
+                          if (formKey.currentState?.validate() != true) {
+                            return;
+                          }
 
-                      FocusScope.of(context).unfocus();
-                      data.value = ServerData.empty;
-                      isLoading.value = true;
-                      errorMessage.value = '';
-                      final res = await api.scanServerUrl(scanText.text);
-                      res.fold((l) {
-                        errorMessage.value = l.toString();
-                        data.value = ServerData(
-                          name: Uri.parse(scanText.text).host,
-                          homepage: scanText.text,
-                          searchUrl: '',
-                        );
-                      }, (r) {
-                        data.value = r;
-                      });
-                      isLoading.value = false;
-                    }
-                  : null,
-              child: const Text('Scan'),
-            ),
-            Visibility(
-              visible: isLoading.value,
-              child: Container(
-                height: 64,
-                alignment: Alignment.center,
-                child: SpinKitThreeBounce(
-                    size: 32, color: Theme.of(context).colorScheme.primary),
+                          FocusScope.of(context).unfocus();
+                          data.value = ServerData.empty;
+                          isLoading.value = true;
+                          errorMessage.value = '';
+                          final res = await api.scanServerUrl(scanText.text);
+                          res.fold((l) {
+                            errorMessage.value = l.toString();
+                            data.value = ServerData(
+                              name: Uri.parse(scanText.text).host,
+                              homepage: scanText.text,
+                              searchUrl: '',
+                            );
+                          }, (r) {
+                            data.value = r;
+                          });
+                          isLoading.value = false;
+                        }
+                      : null,
+                  child: const Text('Scan'),
+                ),
               ),
-            ),
-            if (errorMessage.value.isNotEmpty)
-              Container(
+              Visibility(
+                visible: isLoading.value,
+                child: Container(
+                  height: 64,
+                  alignment: Alignment.center,
+                  child: SpinKitThreeBounce(
+                      size: 32, color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+              if (errorMessage.value.isNotEmpty)
+                Container(
                   margin: const EdgeInsets.only(top: 8),
-                  color: Theme.of(context).highlightColor,
+                  color: Theme.of(context).colorScheme.error,
                   padding: const EdgeInsets.all(16),
-                  child: Text(errorMessage.value)),
-            if (data.value.name.isNotEmpty)
-              ServerScanViewWidget(data: data.value),
-          ],
+                  child: Text(
+                    errorMessage.value,
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.onError),
+                  ),
+                ),
+              if (data.value.name.isNotEmpty)
+                ServerScanViewWidget(data: data.value),
+            ],
+          ),
         ),
       ),
     );
@@ -166,6 +170,7 @@ class ServerScanViewWidget extends HookConsumerWidget {
     final cPostUrl = useTextEditingController(text: data.postUrl);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Form(
           key: formKey,
@@ -251,20 +256,23 @@ class ServerScanViewWidget extends HookConsumerWidget {
             ),
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            serverData.addServer(
-              data: data.copyWith(
-                name: cName.text,
-                homepage: cHomepage.text,
-                searchUrl: cSearchUrl.text,
-                tagSuggestionUrl: cSuggestUrl.text,
-                postUrl: cPostUrl.text,
-              ),
-            );
-            Navigator.pop(context);
-          },
-          child: const Text('Save'),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: ElevatedButton(
+            onPressed: () {
+              serverData.addServer(
+                data: data.copyWith(
+                  name: cName.text,
+                  homepage: cHomepage.text,
+                  searchUrl: cSearchUrl.text,
+                  tagSuggestionUrl: cSuggestUrl.text,
+                  postUrl: cPostUrl.text,
+                ),
+              );
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
         ),
       ],
     );
