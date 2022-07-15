@@ -52,7 +52,7 @@ class Post extends HookConsumerWidget {
       appBar: PreferredVisibility(
         visible: !isFullscreen.state,
         child: AppBar(
-          backgroundColor: Colors.black.withOpacity(0.4),
+          backgroundColor: Colors.black38,
           foregroundColor: Colors.white,
           title: SubbedTitle(
             title: '#${page.value + 1} of ${api.posts.length}',

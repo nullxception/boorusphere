@@ -121,7 +121,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
             onTap: () => setState(() => hideControl = !hideControl),
             child: !hideControl
                 ? Container(
-                    color: Colors.black26,
+                    color: Colors.black38,
                     alignment: Alignment.center,
                     child: InkWell(
                       onTap: () {

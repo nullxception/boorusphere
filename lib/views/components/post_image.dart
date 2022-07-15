@@ -92,18 +92,20 @@ class PostImageFailedView extends StatelessWidget {
         SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Card(
-                color: Colors.black,
-                margin: const EdgeInsets.only(bottom: 16),
+              Container(
+                color: Colors.black38,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Failed to load image'),
+                      const Text(
+                        'Failed to load image',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       const SizedBox(width: 16),
                       ElevatedButton(
                         onPressed: () {
@@ -114,7 +116,7 @@ class PostImageFailedView extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

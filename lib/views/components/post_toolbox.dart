@@ -18,7 +18,7 @@ class PostToolbox extends HookConsumerWidget {
     final downloadStatus = downloadNotifier.getStatus(booru.src);
 
     return Container(
-      color: Colors.black.withOpacity(0.4),
+      color: Colors.black38,
       height: 64 + MediaQuery.of(context).padding.bottom,
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       alignment: Alignment.centerRight,
