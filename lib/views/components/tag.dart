@@ -29,7 +29,7 @@ class Tag extends HookWidget {
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             minimumSize: const Size(1, 1),
             backgroundColor: isClicked.value
-                ? Theme.of(context).colorScheme.secondary
+                ? Theme.of(context).colorScheme.primary
                 : (Theme.of(context).brightness == Brightness.dark
                     ? Colors.grey.shade800
                     : Colors.grey.shade200),

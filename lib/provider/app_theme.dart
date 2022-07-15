@@ -1,5 +1,7 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 import 'hive_boxes.dart';
 
@@ -9,6 +11,10 @@ class AppThemeNotifier extends ChangeNotifier {
   final Reader read;
   bool _isDarker = false;
   ThemeMode _current = ThemeMode.system;
+
+  final lightColorsDefault = ColorScheme.fromSeed(seedColor: AppTheme.idAccent);
+  final darkColorsDefault = ColorScheme.fromSeed(
+      seedColor: AppTheme.idAccent, brightness: Brightness.dark);
 
   AppThemeNotifier(this.read) {
     _init();
@@ -83,48 +89,73 @@ class AppThemeNotifier extends ChangeNotifier {
     final prefs = await read(settingsBox);
     prefs.put(keyThemeDarker, value);
   }
+
+  ThemeData schemeFrom(ColorScheme? scheme, Brightness brightness) {
+    final colors = scheme?.harmonized();
+
+    if (brightness == Brightness.light) {
+      return AppTheme.light(colors ?? lightColorsDefault);
+    } else if (isDarkerTheme) {
+      return AppTheme.darker(colors ?? darkColorsDefault);
+    } else {
+      return AppTheme.dark(colors ?? darkColorsDefault);
+    }
+  }
 }
 
 mixin AppTheme {
-  static ThemeData light() => ThemeData.light().copyWith(
+  static const idAccent = Color.fromARGB(255, 149, 30, 229);
+
+  static ThemeData light(ColorScheme seededScheme) =>
+      ThemeData.light().copyWith(
+        useMaterial3: true,
+        colorScheme: seededScheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: ThemeData.light().scaffoldBackgroundColor,
-          foregroundColor: ThemeData.light().colorScheme.onSurface,
+          backgroundColor: seededScheme.surface,
+          foregroundColor: seededScheme.onSurface,
           elevation: 0,
         ),
+        backgroundColor: seededScheme.surface,
+        canvasColor: seededScheme.surface,
+        cardColor: seededScheme.surface.darken(2),
+        scaffoldBackgroundColor: seededScheme.surface,
+        toggleableActiveColor: seededScheme.primary,
       );
 
-  static ThemeData dark() => ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: Colors.blue,
-          brightness: Brightness.dark,
-        ),
+  static ThemeData dark(ColorScheme seededScheme) => ThemeData.dark().copyWith(
+        useMaterial3: true,
+        colorScheme: seededScheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
-          foregroundColor: ThemeData.dark().colorScheme.onSurface,
+          backgroundColor: seededScheme.surface,
+          foregroundColor: seededScheme.onSurface,
           elevation: 0,
         ),
-        toggleableActiveColor: Colors.blue.shade300,
+        backgroundColor: seededScheme.surface,
+        canvasColor: seededScheme.surface,
+        cardColor: seededScheme.surface.lighten(3),
+        scaffoldBackgroundColor: seededScheme.surface.darken(2),
+        toggleableActiveColor: seededScheme.primary,
       );
 
-  static ThemeData darker() => ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: Colors.blue,
+  static ThemeData darker(ColorScheme seededScheme) =>
+      ThemeData.dark().copyWith(
+        useMaterial3: true,
+        colorScheme: seededScheme.copyWith(
           brightness: Brightness.dark,
-          cardColor: Colors.black.withRed(20).withGreen(20).withBlue(20),
-          backgroundColor: Colors.black,
+          surface: seededScheme.background,
+          background: Colors.black,
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.black,
-          foregroundColor: ThemeData.dark().colorScheme.onSurface,
+          foregroundColor: seededScheme.onSurface,
           elevation: 0,
         ),
         primaryColor: Colors.black,
         backgroundColor: Colors.black,
         canvasColor: Colors.black,
-        cardColor: Colors.black.withRed(20).withGreen(20).withBlue(20),
+        cardColor: seededScheme.background.darken(3),
         scaffoldBackgroundColor: Colors.black,
-        toggleableActiveColor: Colors.blue.shade300,
+        toggleableActiveColor: seededScheme.primary,
       );
 }
 

@@ -193,7 +193,7 @@ class _ServerSelection extends HookConsumerWidget {
               ),
             ),
             selected: it.name == server.active.name,
-            selectedTileColor: theme.colorScheme.secondary
+            selectedTileColor: theme.colorScheme.primary
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
               server.setActiveServer(name: it.name);

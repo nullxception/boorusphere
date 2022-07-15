@@ -40,7 +40,7 @@ class SliverPageState extends HookConsumerWidget {
               height: 64,
               alignment: Alignment.center,
               child: SpinKitThreeBounce(
-                  size: 32, color: Theme.of(context).colorScheme.secondary),
+                  size: 32, color: Theme.of(context).colorScheme.primary),
             ),
           if (errorMessage.isEmpty && !pageLoading && api.posts.isNotEmpty)
             Column(

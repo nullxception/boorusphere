@@ -129,7 +129,7 @@ class AddServer extends HookConsumerWidget {
                 height: 64,
                 alignment: Alignment.center,
                 child: SpinKitThreeBounce(
-                    size: 32, color: Theme.of(context).colorScheme.secondary),
+                    size: 32, color: Theme.of(context).colorScheme.primary),
               ),
             ),
             if (errorMessage.value.isNotEmpty)

@@ -15,8 +15,9 @@ class Settings extends HookConsumerWidget {
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final appTheme = ref.watch(appThemeProvider);
 
-    const themeSettings =
-        SettingsThemeData(settingsListBackground: Colors.transparent);
+    final themeSettings = SettingsThemeData(
+        titleTextColor: Theme.of(context).colorScheme.primary,
+        settingsListBackground: Colors.transparent);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),

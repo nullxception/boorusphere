@@ -70,7 +70,8 @@ class HomeBar extends HookConsumerWidget {
     }, [suggestionHistory]);
 
     return FloatingSearchBar(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).cardColor,
+      elevation: 2,
       implicitDuration: Duration.zero,
       autocorrect: false,
       margins: EdgeInsets.fromLTRB(
