@@ -16,6 +16,7 @@ class Tag extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isClicked = useState(active?.call() ?? false);
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 4, 8, 4),
       child: SizedBox(
@@ -25,22 +26,17 @@ class Tag extends HookWidget {
             isClicked.value = !isClicked.value;
             onPressed();
           },
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
             minimumSize: const Size(1, 1),
             backgroundColor: isClicked.value
-                ? Theme.of(context).colorScheme.primary
-                : (Theme.of(context).brightness == Brightness.dark
-                    ? Colors.grey.shade800
-                    : Colors.grey.shade200),
+                ? colorScheme.surfaceVariant
+                : colorScheme.surface,
+            side: BorderSide(width: 1, color: colorScheme.surfaceVariant),
           ),
           child: Text(
             tag,
-            style: TextStyle(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.grey.shade200
-                  : Colors.grey.shade800,
-            ),
+            style: TextStyle(color: colorScheme.onSurface),
           ),
         ),
       ),
