@@ -5,10 +5,12 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../model/booru_post.dart';
+import '../../provider/downloader.dart';
 import '../../provider/video_player.dart';
 import '../containers/post.dart';
 import '../containers/post_detail.dart';
@@ -85,6 +87,8 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   Widget build(BuildContext context) {
     final vpp = ref.watch(videoPlayerProvider);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
+    final downloadNotifier = ref.watch(downloadProvider);
+    final downloadStatus = downloadNotifier.getStatus(booru.src);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -154,6 +158,29 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            value: downloadStatus.status ==
+                                    DownloadTaskStatus.running
+                                ? (1 * downloadStatus.progress) / 100
+                                : 0,
+                          ),
+                          IconButton(
+                            icon: Icon(downloadStatus.status ==
+                                    DownloadTaskStatus.complete
+                                ? Icons.download_done
+                                : Icons.download),
+                            onPressed: () {
+                              downloadNotifier.download(booru.src);
+                            },
+                            color: Colors.white,
+                            disabledColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                        ],
+                      ),
                       IconButton(
                         onPressed: () {
                           vpp.mute = !vpp.mute;
