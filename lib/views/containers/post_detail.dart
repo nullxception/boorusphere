@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/booru_post.dart';
+import '../../model/server_data.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/booru_query.dart';
 import '../../provider/server_data.dart';
@@ -31,6 +32,7 @@ class PostDetails extends HookConsumerWidget {
     final server = ref.watch(serverDataProvider);
     final selectedtag = useState(<String>[]);
     final api = ref.watch(booruApiProvider);
+    final booruQuery = ref.watch(booruQueryProvider);
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);
@@ -157,9 +159,29 @@ class PostDetails extends HookConsumerWidget {
                   copyToClipboard(context, tags);
                 }
               }),
+          if (booruQuery.tags != ServerData.defaultTag)
+            SpeedDialChild(
+              child: const Icon(Icons.search),
+              label: 'Add tag to current search',
+              onTap: () {
+                final selectedTags = selectedtag.value;
+                if (selectedTags.isNotEmpty) {
+                  final tags = Set<String>.from(booruQuery.tags.split(' '));
+                  tags.addAll(selectedTags);
+                  booruQueryNotifier.setTag(query: tags.join(' '));
+                  api.posts.clear();
+                  api.fetch();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Home()),
+                    (route) => false,
+                  );
+                }
+              },
+            ),
           SpeedDialChild(
             child: const Icon(Icons.search),
-            label: 'Search it',
+            label: 'Search tag',
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
