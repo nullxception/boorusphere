@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../provider/booru_api.dart';
+import 'notice_card.dart';
 
 class SliverPageState extends HookConsumerWidget {
   const SliverPageState({Key? key}) : super(key: key);
@@ -17,22 +18,23 @@ class SliverPageState extends HookConsumerWidget {
       child: Column(
         children: [
           if (errorMessage.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 24),
-                    child: Icon(Icons.search_off),
-                  ),
-                  Text(errorMessage, textAlign: TextAlign.center),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: ElevatedButton(
+            Center(
+              child: NoticeCard(
+                icon: const Icon(Icons.search),
+                margin: const EdgeInsets.all(16),
+                children: Column(
+                  children: [
+                    Text(errorMessage, textAlign: TextAlign.center),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: ElevatedButton(
                         onPressed: api.loadMore,
-                        child: const Text('Try again')),
-                  )
-                ],
+                        style: ElevatedButton.styleFrom(elevation: 0),
+                        child: const Text('Try again'),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           if (pageLoading)

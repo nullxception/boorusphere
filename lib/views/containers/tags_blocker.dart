@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../provider/blocked_tags.dart';
+import '../components/notice_card.dart';
 
 class TagsBlocker extends HookConsumerWidget {
   const TagsBlocker({Key? key}) : super(key: key);
@@ -81,15 +82,11 @@ class TagsBlocker extends HookConsumerWidget {
                       );
                     },
                   )
-                : Center(
-                    child: Column(
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Icon(Icons.search_off),
-                        ),
-                        Text('No blocked tags yet'),
-                      ],
+                : const Center(
+                    child: NoticeCard(
+                      icon: Icon(Icons.tag),
+                      margin: EdgeInsets.only(top: 64),
+                      children: Text('No blocked tags yet'),
                     ),
                   ),
           ],
