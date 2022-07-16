@@ -59,4 +59,5 @@ class ServerData with _$ServerData {
   static const ServerData empty =
       ServerData(name: '', homepage: '', searchUrl: '');
   static const String defaultTag = '*';
+  static const defaultServerName = 'Safebooru';
 }

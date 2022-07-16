@@ -32,7 +32,7 @@ class ServerDataNotifier extends ChangeNotifier {
     _serverList = server.values.map((it) => it as ServerData).toList();
 
     final activeServerName = prefs.get('active_server');
-    _activeServer = select(activeServerName ?? 'Safebooru');
+    _activeServer = select(activeServerName ?? ServerData.defaultServerName);
 
     api.posts.clear();
     api.fetch();
@@ -69,6 +69,9 @@ class ServerDataNotifier extends ChangeNotifier {
   }
 
   void removeServer({required ServerData data}) async {
+    if (data.name == ServerData.defaultServerName) {
+      throw Exception('Default server cannot be deleted');
+    }
     final server = await read(serverBox);
     server.delete(data.homepage);
     _serverList = server.values.map((it) => it as ServerData).toList();

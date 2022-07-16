@@ -25,12 +25,14 @@ class ServerPage extends HookConsumerWidget {
                 title: Text(it.name),
                 subtitle: Text(it.homepage),
                 leading: Favicon(url: '${it.homepage}/favicon.ico'),
-                trailing: IconButton(
-                  onPressed: () {
-                    server.removeServer(data: it);
-                  },
-                  icon: const Icon(Icons.delete),
-                ),
+                trailing: it.name == ServerData.defaultServerName
+                    ? null
+                    : IconButton(
+                        onPressed: () {
+                          server.removeServer(data: it);
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
                 dense: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 onTap: null,
