@@ -217,6 +217,10 @@ class Downloader extends ChangeNotifier {
     entries.removeWhere((it) => it.id == id);
     notifyListeners();
   }
+
+  void openTaskFile({required String id}) {
+    FlutterDownloader.open(taskId: id);
+  }
 }
 
 final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref.read));

@@ -126,7 +126,9 @@ class DownloadsPage extends HookConsumerWidget {
                 ),
                 dense: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                onTap: null,
+                onTap: status != DownloadTaskStatus.complete
+                    ? null
+                    : () => downloader.openTaskFile(id: it.id),
               );
             }).toList(),
           ],
