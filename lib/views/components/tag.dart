@@ -36,6 +36,7 @@ class Tag extends HookWidget {
           ),
           child: Text(
             tag,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(color: colorScheme.onSurface),
           ),
         ),
