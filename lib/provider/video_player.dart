@@ -24,6 +24,7 @@ class VideoPlayerNotifier extends ChangeNotifier {
   set mute(value) {
     _mute = value;
     read(settingsBox).then((it) => it.put(keyMute, value));
+    notifyListeners();
   }
 }
 
