@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/booru_post.dart';
 import '../../model/server_data.dart';
+import '../../provider/blocked_tags.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/booru_query.dart';
 import '../../provider/server_data.dart';
@@ -34,6 +35,7 @@ class PostDetails extends HookConsumerWidget {
     final api = ref.watch(booruApiProvider);
     final booruQuery = ref.watch(booruQueryProvider);
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
+    final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 150), initialValue: 0);
     var showFAB = useState(false);
@@ -159,6 +161,22 @@ class PostDetails extends HookConsumerWidget {
                   copyToClipboard(context, tags);
                 }
               }),
+          SpeedDialChild(
+            child: const Icon(Icons.block),
+            label: 'Block selected tag',
+            onTap: () {
+              final selectedTags = selectedtag.value;
+              if (selectedTags.isNotEmpty) {
+                blockedTagsHandler.pushAll(selectedTags);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Added to tags blocker list'),
+                    duration: Duration(milliseconds: 600),
+                  ),
+                );
+              }
+            },
+          ),
           if (booruQuery.tags != ServerData.defaultTag)
             SpeedDialChild(
               child: const Icon(Icons.search),
