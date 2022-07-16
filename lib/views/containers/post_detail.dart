@@ -23,7 +23,7 @@ class PostDetails extends HookConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Copied to clipboard'),
-        duration: Duration(milliseconds: 600),
+        duration: Duration(seconds: 1),
       ),
     );
   }
@@ -37,7 +37,7 @@ class PostDetails extends HookConsumerWidget {
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
-        duration: const Duration(milliseconds: 150), initialValue: 0);
+        duration: const Duration(milliseconds: 250), initialValue: 0);
     var showFAB = useState(false);
     final data = api.posts.firstWhere(
       (element) => element.id == id,
@@ -173,7 +173,7 @@ class PostDetails extends HookConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Added to tags blocker list'),
-                    duration: Duration(milliseconds: 600),
+                    duration: Duration(seconds: 1),
                   ),
                 );
               }
