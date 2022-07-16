@@ -18,25 +18,26 @@ class DownloadsPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Downloads'),
         actions: [
-          PopupMenuButton(
-            onSelected: (value) {
-              switch (value) {
-                case 'clear-all':
-                  downloader.clearAllTask();
-                  break;
-                default:
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem(
-                  value: 'clear-all',
-                  child: Text('Clear all'),
-                )
-              ];
-            },
-          )
+          if (downloader.entries.isNotEmpty)
+            PopupMenuButton(
+              onSelected: (value) {
+                switch (value) {
+                  case 'clear-all':
+                    downloader.clearAllTask();
+                    break;
+                  default:
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem(
+                    value: 'clear-all',
+                    child: Text('Clear all'),
+                  )
+                ];
+              },
+            )
         ],
       ),
       body: SingleChildScrollView(
