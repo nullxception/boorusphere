@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
@@ -118,12 +119,13 @@ class _ThumbnailShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseColor = Theme.of(context).brightness == Brightness.light
-        ? Colors.grey.shade300
-        : Colors.grey.shade700;
-    final highlightColor = Theme.of(context).brightness == Brightness.light
-        ? Colors.white
-        : Colors.grey.shade500;
+    final theme = Theme.of(context);
+    final baseColor = theme.brightness == Brightness.light
+        ? theme.colorScheme.background.desaturate(50).darken(2)
+        : theme.colorScheme.surface;
+    final highlightColor = theme.brightness == Brightness.light
+        ? theme.colorScheme.background.desaturate(50).lighten(2)
+        : theme.colorScheme.surface.lighten(5);
 
     return Shimmer(
       gradient: LinearGradient(
