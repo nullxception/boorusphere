@@ -30,28 +30,25 @@ class SliverPageState extends HookConsumerWidget {
                     padding: const EdgeInsets.only(top: 24),
                     child: ElevatedButton(
                         onPressed: api.loadMore,
-                        child: const Text('try again')),
+                        child: const Text('Try again')),
                   )
                 ],
               ),
             ),
           if (pageLoading)
             Container(
-              height: 64,
+              height: 90,
               alignment: Alignment.center,
               child: SpinKitThreeBounce(
                   size: 32, color: Theme.of(context).colorScheme.primary),
             ),
           if (errorMessage.isEmpty && !pageLoading && api.posts.isNotEmpty)
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: ElevatedButton(
-                      onPressed: api.loadMore, child: const Text('load more')),
-                )
-              ],
-            ),
+            Container(
+              height: 90,
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                  onPressed: api.loadMore, child: const Text('Load more')),
+            )
         ],
       ),
     );

@@ -28,9 +28,7 @@ class Home extends HookConsumerWidget {
     final loadMoreCall = useCallback(() {
       if (errorMessage.isEmpty && !pageLoading) {
         // Infinite page with scroll detection
-        final threshold = MediaQuery.of(context).size.height / 6;
-        if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - threshold) {
+        if (scrollController.position.extentAfter < 200) {
           api.loadMore();
         }
       }
