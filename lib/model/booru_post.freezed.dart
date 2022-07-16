@@ -30,6 +30,8 @@ mixin _$BooruPost {
   int get width => throw _privateConstructorUsedError;
   @HiveField(6)
   int get height => throw _privateConstructorUsedError;
+  @HiveField(7)
+  String get serverName => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BooruPostCopyWith<BooruPost> get copyWith =>
@@ -47,7 +49,8 @@ abstract class $BooruPostCopyWith<$Res> {
       @HiveField(3) String thumbnail,
       @HiveField(4) List<String> tags,
       @HiveField(5) int width,
-      @HiveField(6) int height});
+      @HiveField(6) int height,
+      @HiveField(7) String serverName});
 }
 
 /// @nodoc
@@ -67,6 +70,7 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
     Object? tags = freezed,
     Object? width = freezed,
     Object? height = freezed,
+    Object? serverName = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -97,6 +101,10 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
+      serverName: serverName == freezed
+          ? _value.serverName
+          : serverName // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -114,7 +122,8 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
       @HiveField(3) String thumbnail,
       @HiveField(4) List<String> tags,
       @HiveField(5) int width,
-      @HiveField(6) int height});
+      @HiveField(6) int height,
+      @HiveField(7) String serverName});
 }
 
 /// @nodoc
@@ -136,6 +145,7 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
     Object? tags = freezed,
     Object? width = freezed,
     Object? height = freezed,
+    Object? serverName = freezed,
   }) {
     return _then(_$_BooruPost(
       id: id == freezed
@@ -166,6 +176,10 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
+      serverName: serverName == freezed
+          ? _value.serverName
+          : serverName // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -181,7 +195,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       @HiveField(3) required this.thumbnail,
       @HiveField(4) required final List<String> tags,
       @HiveField(5) required this.width,
-      @HiveField(6) required this.height})
+      @HiveField(6) required this.height,
+      @HiveField(7) required this.serverName})
       : _tags = tags,
         super._();
 
@@ -211,10 +226,13 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   @override
   @HiveField(6)
   final int height;
+  @override
+  @HiveField(7)
+  final String serverName;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BooruPost(id: $id, src: $src, displaySrc: $displaySrc, thumbnail: $thumbnail, tags: $tags, width: $width, height: $height)';
+    return 'BooruPost(id: $id, src: $src, displaySrc: $displaySrc, thumbnail: $thumbnail, tags: $tags, width: $width, height: $height, serverName: $serverName)';
   }
 
   @override
@@ -228,7 +246,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('thumbnail', thumbnail))
       ..add(DiagnosticsProperty('tags', tags))
       ..add(DiagnosticsProperty('width', width))
-      ..add(DiagnosticsProperty('height', height));
+      ..add(DiagnosticsProperty('height', height))
+      ..add(DiagnosticsProperty('serverName', serverName));
   }
 
   @override
@@ -243,7 +262,9 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
             const DeepCollectionEquality().equals(other.thumbnail, thumbnail) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality().equals(other.width, width) &&
-            const DeepCollectionEquality().equals(other.height, height));
+            const DeepCollectionEquality().equals(other.height, height) &&
+            const DeepCollectionEquality()
+                .equals(other.serverName, serverName));
   }
 
   @override
@@ -255,7 +276,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(thumbnail),
       const DeepCollectionEquality().hash(_tags),
       const DeepCollectionEquality().hash(width),
-      const DeepCollectionEquality().hash(height));
+      const DeepCollectionEquality().hash(height),
+      const DeepCollectionEquality().hash(serverName));
 
   @JsonKey(ignore: true)
   @override
@@ -271,7 +293,8 @@ abstract class _BooruPost extends BooruPost {
       @HiveField(3) required final String thumbnail,
       @HiveField(4) required final List<String> tags,
       @HiveField(5) required final int width,
-      @HiveField(6) required final int height}) = _$_BooruPost;
+      @HiveField(6) required final int height,
+      @HiveField(7) required final String serverName}) = _$_BooruPost;
   const _BooruPost._() : super._();
 
   @override
@@ -295,6 +318,9 @@ abstract class _BooruPost extends BooruPost {
   @override
   @HiveField(6)
   int get height;
+  @override
+  @HiveField(7)
+  String get serverName;
   @override
   @JsonKey(ignore: true)
   _$$_BooruPostCopyWith<_$_BooruPost> get copyWith =>

@@ -76,6 +76,13 @@ class Downloader extends ChangeNotifier {
     }
   }
 
+  String getFileNameFromUrl(String src) {
+    return Uri.parse(src)
+        .path
+        .split('/')
+        .lastWhere((it) => it.contains(RegExp(r'.+\..+')));
+  }
+
   Future<void> download(BooruPost post) async {
     final downloadPath = await platformDownloadPath;
 
@@ -96,7 +103,10 @@ class Downloader extends ChangeNotifier {
         openFileFromNotification: true);
 
     if (taskId != null) {
-      final entry = DownloadEntry(id: taskId, booru: post);
+      final destination =
+          '${booruDir.absolute.path}/${getFileNameFromUrl(post.src)}';
+      final entry =
+          DownloadEntry(id: taskId, booru: post, destination: destination);
       final box = await read(downloadBox);
       box.put(taskId, entry);
       entries.add(entry);
@@ -161,6 +171,14 @@ class Downloader extends ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  Future<void> clearTask({required String id}) async {
+    await FlutterDownloader.remove(taskId: id, shouldDeleteContent: false);
+    read(downloadBox).then((it) => it.delete(id));
+    statuses.removeWhere((it) => it.id == id);
+    entries.removeWhere((it) => it.id == id);
+    notifyListeners();
   }
 }
 

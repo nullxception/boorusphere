@@ -25,6 +25,7 @@ class BooruPost with _$BooruPost {
     @HiveField(4) required List<String> tags,
     @HiveField(5) required int width,
     @HiveField(6) required int height,
+    @HiveField(7) required String serverName,
   }) = _BooruPost;
 
   String get mimeType =>
@@ -48,5 +49,6 @@ class BooruPost with _$BooruPost {
       thumbnail: '',
       tags: [],
       width: -1,
-      height: -1);
+      height: -1,
+      serverName: '');
 }

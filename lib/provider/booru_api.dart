@@ -29,7 +29,8 @@ class BooruApi {
 
   int _page = 1;
 
-  Future<List<BooruPost>> _parseHttpResponse(http.Response res) async {
+  Future<List<BooruPost>> _parseQueryResponse(
+      ServerData server, http.Response res) async {
     final booruQuery = read(booruQueryProvider);
     final blockedTags = read(blockedTagsProvider);
     final blocked = await blockedTags.listedEntries;
@@ -86,6 +87,7 @@ class BooruApi {
             tags: tags,
             width: width,
             height: height,
+            serverName: server.name,
           ),
         );
       }
@@ -124,7 +126,7 @@ class BooruApi {
         () => http.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
-      final data = await _parseHttpResponse(res);
+      final data = await _parseQueryResponse(server.active, res);
       posts.addAll(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
