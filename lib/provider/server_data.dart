@@ -49,7 +49,8 @@ class ServerDataNotifier extends ChangeNotifier {
   }
 
   ServerData select(String name) {
-    return _serverList.firstWhere((element) => element.name == name);
+    return _serverList.firstWhere((element) => element.name == name,
+        orElse: () => _serverList.first);
   }
 
   Future<void> setActiveServer({required String name}) async {
@@ -71,6 +72,9 @@ class ServerDataNotifier extends ChangeNotifier {
     final server = await read(serverBox);
     server.delete(data.homepage);
     _serverList = server.values.map((it) => it as ServerData).toList();
+    if (_activeServer == data) {
+      setActiveServer(name: _serverList.first.name);
+    }
     notifyListeners();
   }
 }
