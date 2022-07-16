@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/downloader.dart';
+import '../components/notice_card.dart';
 import 'post_detail.dart';
 
 class DownloadsPage extends HookConsumerWidget {
@@ -41,6 +42,14 @@ class DownloadsPage extends HookConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            if (downloader.entries.isEmpty)
+              const Center(
+                child: NoticeCard(
+                  icon: Icon(Icons.cloud_download),
+                  margin: EdgeInsets.only(top: 64),
+                  children: Text('Your downloaded files will appear here'),
+                ),
+              ),
             ...downloader.entries.map((it) {
               final fileName = downloader.getFileNameFromUrl(it.booru.src);
               final status = downloader.getStatusFromId(it.id);
