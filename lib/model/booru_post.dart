@@ -46,8 +46,8 @@ class BooruPost with _$BooruPost {
   }
 
   ServerData getServerData(ServerDataNotifier serverDataNotifier) =>
-      serverDataNotifier.all
-          .firstWhere((element) => element.name == serverName);
+      serverDataNotifier.all.firstWhere((element) => element.name == serverName,
+          orElse: () => ServerData.empty);
 
   String getPostUrl(ServerDataNotifier serverDataNotifier) =>
       getServerData(serverDataNotifier).composePostUrl(id);
