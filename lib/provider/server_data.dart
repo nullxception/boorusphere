@@ -80,6 +80,18 @@ class ServerDataNotifier extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void resetToDefault() async {
+    final server = await read(serverBox);
+    final fromAssets = await _defaultServersAssets();
+
+    server.deleteAll(server.keys);
+    server.putAll(fromAssets);
+    _serverList = server.values.map((it) => it as ServerData).toList();
+
+    setActiveServer(name: ServerData.defaultServerName);
+    notifyListeners();
+  }
 }
 
 final serverDataProvider =

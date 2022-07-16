@@ -16,7 +16,55 @@ class ServerPage extends HookConsumerWidget {
     final server = ref.watch(serverDataProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Server')),
+      appBar: AppBar(
+        title: const Text('Server'),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) {
+              switch (value) {
+                case 'reset':
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      title: const Text('Server'),
+                      content: const Text(
+                        '''
+Are you sure you want to reset server list to default ? \n\nThis will erase all of your added server.''',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            server.resetToDefault();
+                          },
+                          child: const Text('Reset'),
+                        )
+                      ],
+                    ),
+                  );
+                  break;
+                default:
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                  value: 'reset',
+                  child: Text('Reset to default'),
+                )
+              ];
+            },
+          )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
