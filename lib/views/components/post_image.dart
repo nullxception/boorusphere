@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -135,9 +137,16 @@ class PostImageLoadingView extends StatelessWidget {
   final BooruPost booru;
   final ExtendedImageState state;
 
+  double calcProgress(ImageChunkEvent? chunk) =>
+      chunk != null && chunk.expectedTotalBytes != null
+          ? chunk.cumulativeBytesLoaded / (chunk.expectedTotalBytes ?? 1)
+          : 0;
+
+  int calcPercentage(ImageChunkEvent? chunk) =>
+      (100 * calcProgress(chunk)).round();
+
   @override
   Widget build(BuildContext context) {
-    final prog = state.loadingProgress;
     return Stack(
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
@@ -149,17 +158,37 @@ class PostImageLoadingView extends StatelessWidget {
           enableLoadState: false,
         ),
         Center(
-          child: SizedBox(
-            width: 92,
-            height: 92,
-            child: CircularProgressIndicator(
-              strokeWidth: 8,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.white.withAlpha(200),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(25),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Colors.black54,
+                padding: const EdgeInsets.all(24),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 64,
+                      height: 64,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 5,
+                        valueColor: const AlwaysStoppedAnimation(
+                          Colors.white54,
+                        ),
+                        value: calcProgress(state.loadingProgress),
+                      ),
+                    ),
+                    Text(
+                      '${calcPercentage(state.loadingProgress)}%',
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
               ),
-              value: prog != null && prog.expectedTotalBytes != null
-                  ? prog.cumulativeBytesLoaded / (prog.expectedTotalBytes ?? 1)
-                  : null,
             ),
           ),
         )
