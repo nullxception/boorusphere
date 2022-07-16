@@ -138,6 +138,11 @@ class Downloader extends ChangeNotifier {
               .id,
       orElse: () => DownloadInfo.none);
 
+  DownloadTaskStatus getStatusFromId(String id) => statuses
+      .firstWhere((element) => element.id == id,
+          orElse: () => DownloadInfo.none)
+      .status;
+
   Future<void> clearAllTask() async {
     final tasks = await FlutterDownloader.loadTasks();
     if (tasks != null) {
@@ -173,6 +178,38 @@ class Downloader extends ChangeNotifier {
     }
   }
 
+  Future<void> retryTask({required String id}) async {
+    final downloadPath = await platformDownloadPath;
+
+    if (!await isDirWritable(downloadPath)) {
+      await Permission.storage.request();
+    }
+
+    final booruDir = Directory('$downloadPath/$_booruDirname');
+    final booruDirExists = await booruDir.exists();
+    if (await isDirWritable(downloadPath) && !booruDirExists) {
+      await booruDir.create();
+    }
+
+    final newTaskId = await FlutterDownloader.retry(taskId: id);
+    if (newTaskId != null) {
+      final box = await read(downloadBox);
+      final newEntry =
+          entries.firstWhere((it) => it.id == id).copyWith(id: newTaskId);
+
+      box.delete(id);
+      box.put(newTaskId, newEntry);
+      statuses.removeWhere((it) => it.id == id);
+      entries.removeWhere((it) => it.id == id);
+      entries.add(newEntry);
+      notifyListeners();
+    }
+  }
+
+  Future<void> cancelTask({required String id}) async {
+    await FlutterDownloader.cancel(taskId: id);
+  }
+
   Future<void> clearTask({required String id}) async {
     await FlutterDownloader.remove(taskId: id, shouldDeleteContent: false);
     read(downloadBox).then((it) => it.delete(id));
@@ -183,3 +220,24 @@ class Downloader extends ChangeNotifier {
 }
 
 final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref.read));
+
+extension CustomDownloadTaskStatusX on DownloadTaskStatus {
+  String describe() {
+    switch (value) {
+      case 1:
+        return 'Enqueued';
+      case 2:
+        return 'Downloading';
+      case 3:
+        return 'Completed';
+      case 4:
+        return 'Failed';
+      case 5:
+        return 'Canceled';
+      case 6:
+        return 'Paused';
+      default:
+        return 'Undefined';
+    }
+  }
+}
