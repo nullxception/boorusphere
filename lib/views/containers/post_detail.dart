@@ -149,7 +149,9 @@ class PostDetails extends HookConsumerWidget {
         ],
       ),
       floatingActionButton: SpeedDial(
-        icon: Icons.menu,
+        icon: Icons.tag,
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        foregroundColor: Theme.of(context).colorScheme.onTertiary,
         visible: showFAB.value,
         children: [
           SpeedDialChild(
