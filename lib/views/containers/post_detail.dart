@@ -42,7 +42,7 @@ class PostDetails extends HookConsumerWidget {
     final postUrl = booru.getPostUrl(server);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Info')),
+      appBar: AppBar(title: const Text('Detail')),
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
