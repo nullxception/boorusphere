@@ -10,7 +10,6 @@ import '../../model/server_data.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/booru_query.dart';
-import '../../provider/server_data.dart';
 import '../components/tag.dart';
 import 'home.dart';
 
@@ -30,7 +29,6 @@ class PostDetails extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server = ref.watch(serverDataProvider);
     final selectedtag = useState(<String>[]);
     final api = ref.watch(booruApiProvider);
     final booruQuery = ref.watch(booruQueryProvider);
@@ -39,7 +37,6 @@ class PostDetails extends HookConsumerWidget {
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
     final showFAB = useState(false);
-    final postUrl = booru.getPostUrl(server);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detail')),
@@ -54,7 +51,7 @@ class PostDetails extends HookConsumerWidget {
             title: const Text('Type'),
             subtitle: Text(booru.mimeType),
           ),
-          if (postUrl.isNotEmpty)
+          if (booru.postUrl.isNotEmpty)
             ListTile(
               title: const Text('Location'),
               subtitle: TextButton(
@@ -64,14 +61,14 @@ class PostDetails extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launchUrlString(postUrl,
+                onPressed: () => launchUrlString(booru.postUrl,
                     mode: LaunchMode.externalApplication),
-                child: Text(postUrl.toString()),
+                child: Text(booru.postUrl.toString()),
               ),
               trailing: IconButton(
                 iconSize: 18,
                 onPressed: () {
-                  copyToClipboard(context, postUrl.toString());
+                  copyToClipboard(context, booru.postUrl.toString());
                 },
                 icon: const Icon(Icons.copy),
               ),

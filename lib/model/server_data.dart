@@ -24,13 +24,6 @@ class ServerData with _$ServerData {
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
-  String composePostUrl(int id) {
-    if (postUrl.isEmpty) return '';
-
-    final url = '$homepage/$postUrl';
-    return url.replaceAll('{post-id}', id.toString());
-  }
-
   Uri composeSearchUrl(ServerQuery query, int page) {
     return Uri.parse(
       '$homepage/$searchUrl'

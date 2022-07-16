@@ -3,9 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:mime/mime.dart';
 
-import '../provider/server_data.dart';
-import 'server_data.dart';
-
 part 'booru_post.freezed.dart';
 part 'booru_post.g.dart';
 
@@ -29,6 +26,7 @@ class BooruPost with _$BooruPost {
     @HiveField(5, defaultValue: -1) required int width,
     @HiveField(6, defaultValue: -1) required int height,
     @HiveField(7, defaultValue: '') required String serverName,
+    @HiveField(8, defaultValue: '') required String postUrl,
   }) = _BooruPost;
 
   String get mimeType =>
@@ -45,13 +43,6 @@ class BooruPost with _$BooruPost {
     }
   }
 
-  ServerData getServerData(ServerDataNotifier serverDataNotifier) =>
-      serverDataNotifier.all.firstWhere((element) => element.name == serverName,
-          orElse: () => ServerData.empty);
-
-  String getPostUrl(ServerDataNotifier serverDataNotifier) =>
-      getServerData(serverDataNotifier).composePostUrl(id);
-
   static const empty = BooruPost(
     id: -1,
     src: '',
@@ -61,5 +52,6 @@ class BooruPost with _$BooruPost {
     width: -1,
     height: -1,
     serverName: '',
+    postUrl: '',
   );
 }

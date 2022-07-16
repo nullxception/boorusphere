@@ -65,7 +65,7 @@ class BooruApi {
 
     final result = <BooruPost>[];
     for (final Map<String, dynamic> post in entries) {
-      final id = MapUtils.getInt(post, r'^id$');
+      final id = MapUtils.getInt(post, r'^id$', or: -1);
       final src = MapUtils.getUrl(post, '^(file_url|url)');
       final displaySrc = MapUtils.getUrl(post, '^large_file');
       final thumbnail =
@@ -76,6 +76,7 @@ class BooruApi {
 
       final hasContent = width > 0 && height > 0;
       final notBlocked = !tags.any(blocked.contains);
+      final postUrl = id < 0 ? '' : _composePostUrl(server, id);
 
       if (src.isNotEmpty && thumbnail.isNotEmpty && hasContent && notBlocked) {
         result.add(
@@ -88,12 +89,22 @@ class BooruApi {
             width: width,
             height: height,
             serverName: server.name,
+            postUrl: postUrl,
           ),
         );
       }
     }
 
     return result;
+  }
+
+  String _composePostUrl(ServerData server, int id) {
+    if (server.postUrl.isEmpty) {
+      return '';
+    }
+
+    final query = server.postUrl.replaceAll('{post-id}', id.toString());
+    return '${server.homepage}/$query';
   }
 
   String _getExceptionMessage(Exception e) => e

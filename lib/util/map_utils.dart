@@ -34,7 +34,7 @@ mixin MapUtils {
         .value;
   }
 
-  static int getInt(Map<String, dynamic> data, String key) {
+  static int getInt(Map<String, dynamic> data, String key, {int or = 0}) {
     final res = findEntry(data, key).value;
     if (res is int) {
       return res;
@@ -44,7 +44,7 @@ mixin MapUtils {
       return int.parse(getGdataText(res));
     }
 
-    return 0;
+    return or;
   }
 
   static List<String> getWordlist(Map<String, dynamic> data, String key) {
