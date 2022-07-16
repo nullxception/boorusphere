@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'views/containers/downloads.dart';
 import 'views/containers/home.dart';
 import 'views/containers/licenses.dart';
 import 'views/containers/post.dart';
@@ -14,6 +15,7 @@ mixin Routes {
   static const settings = 'settings';
   static const server = 'server';
   static const licenses = 'licenses';
+  static const downloads = 'downloads';
 
   static Map<String, WidgetBuilder> of(BuildContext context) => {
         home: (context) => const Home(),
@@ -22,5 +24,6 @@ mixin Routes {
         settings: (context) => const Settings(),
         licenses: (context) => const Licenses(),
         server: (context) => const ServerPage(),
+        downloads: (context) => const DownloadsPage(),
       };
 }

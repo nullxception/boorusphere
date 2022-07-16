@@ -70,6 +70,13 @@ class HomeDrawer extends StatelessWidget {
                               const Divider(),
                               _BackToHomeTile(),
                               ListTile(
+                                title: const Text('Downloads'),
+                                leading: const Icon(Icons.cloud_download),
+                                dense: true,
+                                onTap: () => Navigator.pushNamed(
+                                    context, Routes.downloads),
+                              ),
+                              ListTile(
                                 title: const Text('Server'),
                                 leading: const Icon(Icons.public),
                                 dense: true,
