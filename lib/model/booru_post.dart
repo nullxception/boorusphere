@@ -3,6 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:mime/mime.dart';
 
+import '../provider/server_data.dart';
+import 'server_data.dart';
+
 part 'booru_post.freezed.dart';
 part 'booru_post.g.dart';
 
@@ -41,6 +44,13 @@ class BooruPost with _$BooruPost {
       return PostType.unsupported;
     }
   }
+
+  ServerData getServerData(ServerDataNotifier serverDataNotifier) =>
+      serverDataNotifier.all
+          .firstWhere((element) => element.name == serverName);
+
+  String getPostUrl(ServerDataNotifier serverDataNotifier) =>
+      getServerData(serverDataNotifier).composePostUrl(id);
 
   static const empty = BooruPost(
     id: -1,

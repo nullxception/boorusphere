@@ -197,7 +197,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PostDetails(id: booru.id),
+                            builder: (context) => PostDetails(booru: booru),
                           ),
                         ),
                       ),

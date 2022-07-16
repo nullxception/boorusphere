@@ -15,8 +15,8 @@ import '../components/tag.dart';
 import 'home.dart';
 
 class PostDetails extends HookConsumerWidget {
-  const PostDetails({Key? keys, required this.id}) : super(key: keys);
-  final int id;
+  const PostDetails({Key? keys, required this.booru}) : super(key: keys);
+  final BooruPost booru;
 
   void copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
@@ -38,12 +38,8 @@ class PostDetails extends HookConsumerWidget {
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
-    var showFAB = useState(false);
-    final data = api.posts.firstWhere(
-      (element) => element.id == id,
-      orElse: () => BooruPost.empty,
-    );
-    final postUrl = server.active.composePostUrl(data.id);
+    final showFAB = useState(false);
+    final postUrl = booru.getPostUrl(server);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Info')),
@@ -52,11 +48,11 @@ class PostDetails extends HookConsumerWidget {
         children: [
           ListTile(
             title: const Text('Size'),
-            subtitle: Text('${data.width}x${data.height}'),
+            subtitle: Text('${booru.width}x${booru.height}'),
           ),
           ListTile(
             title: const Text('Type'),
-            subtitle: Text(data.mimeType),
+            subtitle: Text(booru.mimeType),
           ),
           if (postUrl.isNotEmpty)
             ListTile(
@@ -89,19 +85,19 @@ class PostDetails extends HookConsumerWidget {
                   EdgeInsets.zero,
                 ),
               ),
-              onPressed: () => launchUrlString(data.src,
+              onPressed: () => launchUrlString(booru.src,
                   mode: LaunchMode.externalApplication),
-              child: Text(data.src),
+              child: Text(booru.src),
             ),
             trailing: IconButton(
               iconSize: 18,
               onPressed: () {
-                copyToClipboard(context, data.src);
+                copyToClipboard(context, booru.src);
               },
               icon: const Icon(Icons.copy),
             ),
           ),
-          if (data.displaySrc != data.src)
+          if (booru.displaySrc != booru.src)
             ListTile(
               title: const Text('Source (displayed)'),
               subtitle: TextButton(
@@ -111,9 +107,9 @@ class PostDetails extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launchUrlString(data.displaySrc,
+                onPressed: () => launchUrlString(booru.displaySrc,
                     mode: LaunchMode.externalApplication),
-                child: Text(data.displaySrc),
+                child: Text(booru.displaySrc),
               ),
             ),
           const ListTile(
@@ -121,7 +117,7 @@ class PostDetails extends HookConsumerWidget {
           ),
           ListTile(
             title: Wrap(
-                children: data.tags.map((tag) {
+                children: booru.tags.map((tag) {
               return Tag(
                 onPressed: () {
                   if (!selectedtag.value.contains(tag)) {
