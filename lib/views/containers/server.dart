@@ -259,15 +259,19 @@ class ServerScanViewWidget extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PayloadLoaderWidget(
-                                serverData: serverData,
-                                searchController: cSearchUrl,
-                                suggestController: cSuggestUrl,
-                                postController: cPostUrl),
+                        onPressed: () async {
+                          final result = await Navigator.push<ServerData>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PayloadsPage(),
+                            ),
                           );
+
+                          if (result != null) {
+                            cSearchUrl.text = result.searchUrl;
+                            cSuggestUrl.text = result.tagSuggestionUrl;
+                            cPostUrl.text = result.postUrl;
+                          }
                         },
                         child: const Text('From Preset'),
                       ),
@@ -328,37 +332,25 @@ class ServerScanViewWidget extends HookConsumerWidget {
   }
 }
 
-class PayloadLoaderWidget extends StatelessWidget {
-  const PayloadLoaderWidget({
-    Key? key,
-    required this.serverData,
-    required this.searchController,
-    required this.suggestController,
-    required this.postController,
-  }) : super(key: key);
-
-  final ServerDataNotifier serverData;
-  final TextEditingController searchController;
-  final TextEditingController suggestController;
-  final TextEditingController postController;
+class PayloadsPage extends HookConsumerWidget {
+  const PayloadsPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Server'),
-      contentPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-      content: SingleChildScrollView(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final serverData = ref.watch(serverDataProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Select Server')),
+      body: SingleChildScrollView(
         child: Column(
-          children: serverData.all.map((it) {
+          children: serverData.allWithDefaults.map((it) {
             return ListTile(
               title: Text(it.name),
+              subtitle: Text(it.homepage),
               leading: Favicon(url: '${it.homepage}/favicon.ico'),
               dense: true,
               onTap: () {
-                searchController.text = it.searchUrl;
-                suggestController.text = it.tagSuggestionUrl;
-                postController.text = it.postUrl;
-                Navigator.pop(context);
+                Navigator.pop(context, it);
               },
             );
           }).toList(),

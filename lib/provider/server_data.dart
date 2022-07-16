@@ -12,12 +12,15 @@ class ServerDataNotifier extends ChangeNotifier {
   final Reader read;
   late List<ServerData> _serverList;
   late ServerData _activeServer;
+  final _defaultServerList = <ServerData>{};
 
   ServerDataNotifier(this.read) {
     _init();
   }
 
   List<ServerData> get all => _serverList;
+  Set<ServerData> get allWithDefaults =>
+      <ServerData>{..._defaultServerList, ..._serverList};
   ServerData get active => _activeServer;
 
   Future<void> _init() async {
@@ -25,8 +28,10 @@ class ServerDataNotifier extends ChangeNotifier {
     final prefs = await read(settingsBox);
     final server = await read(serverBox);
 
+    final fromAssets = await _defaultServersAssets();
+    _defaultServerList.addAll(fromAssets.values);
+
     if (server.isEmpty) {
-      final fromAssets = await _defaultServersAssets();
       server.putAll(fromAssets);
     }
     _serverList = server.values.map((it) => it as ServerData).toList();
