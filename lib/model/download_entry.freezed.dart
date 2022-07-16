@@ -20,6 +20,8 @@ mixin _$DownloadEntry {
   String get id => throw _privateConstructorUsedError;
   @HiveField(1)
   BooruPost get booru => throw _privateConstructorUsedError;
+  @HiveField(2)
+  String get destination => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DownloadEntryCopyWith<DownloadEntry> get copyWith =>
@@ -31,7 +33,10 @@ abstract class $DownloadEntryCopyWith<$Res> {
   factory $DownloadEntryCopyWith(
           DownloadEntry value, $Res Function(DownloadEntry) then) =
       _$DownloadEntryCopyWithImpl<$Res>;
-  $Res call({@HiveField(0) String id, @HiveField(1) BooruPost booru});
+  $Res call(
+      {@HiveField(0) String id,
+      @HiveField(1) BooruPost booru,
+      @HiveField(2) String destination});
 
   $BooruPostCopyWith<$Res> get booru;
 }
@@ -49,6 +54,7 @@ class _$DownloadEntryCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? booru = freezed,
+    Object? destination = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -59,6 +65,10 @@ class _$DownloadEntryCopyWithImpl<$Res>
           ? _value.booru
           : booru // ignore: cast_nullable_to_non_nullable
               as BooruPost,
+      destination: destination == freezed
+          ? _value.destination
+          : destination // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 
@@ -77,7 +87,10 @@ abstract class _$$_DownloadEntryCopyWith<$Res>
           _$_DownloadEntry value, $Res Function(_$_DownloadEntry) then) =
       __$$_DownloadEntryCopyWithImpl<$Res>;
   @override
-  $Res call({@HiveField(0) String id, @HiveField(1) BooruPost booru});
+  $Res call(
+      {@HiveField(0) String id,
+      @HiveField(1) BooruPost booru,
+      @HiveField(2) String destination});
 
   @override
   $BooruPostCopyWith<$Res> get booru;
@@ -98,6 +111,7 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? booru = freezed,
+    Object? destination = freezed,
   }) {
     return _then(_$_DownloadEntry(
       id: id == freezed
@@ -108,6 +122,10 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
           ? _value.booru
           : booru // ignore: cast_nullable_to_non_nullable
               as BooruPost,
+      destination: destination == freezed
+          ? _value.destination
+          : destination // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -117,7 +135,9 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
 @HiveType(typeId: 4, adapterName: 'DownloadEntryAdapter')
 class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
   const _$_DownloadEntry(
-      {@HiveField(0) required this.id, @HiveField(1) required this.booru});
+      {@HiveField(0) required this.id,
+      @HiveField(1) required this.booru,
+      @HiveField(2) required this.destination});
 
   @override
   @HiveField(0)
@@ -125,10 +145,13 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
   @override
   @HiveField(1)
   final BooruPost booru;
+  @override
+  @HiveField(2)
+  final String destination;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'DownloadEntry(id: $id, booru: $booru)';
+    return 'DownloadEntry(id: $id, booru: $booru, destination: $destination)';
   }
 
   @override
@@ -137,7 +160,8 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
     properties
       ..add(DiagnosticsProperty('type', 'DownloadEntry'))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('booru', booru));
+      ..add(DiagnosticsProperty('booru', booru))
+      ..add(DiagnosticsProperty('destination', destination));
   }
 
   @override
@@ -146,14 +170,17 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
         (other.runtimeType == runtimeType &&
             other is _$_DownloadEntry &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.booru, booru));
+            const DeepCollectionEquality().equals(other.booru, booru) &&
+            const DeepCollectionEquality()
+                .equals(other.destination, destination));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(booru));
+      const DeepCollectionEquality().hash(booru),
+      const DeepCollectionEquality().hash(destination));
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +191,8 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
 abstract class _DownloadEntry implements DownloadEntry {
   const factory _DownloadEntry(
       {@HiveField(0) required final String id,
-      @HiveField(1) required final BooruPost booru}) = _$_DownloadEntry;
+      @HiveField(1) required final BooruPost booru,
+      @HiveField(2) required final String destination}) = _$_DownloadEntry;
 
   @override
   @HiveField(0)
@@ -172,6 +200,9 @@ abstract class _DownloadEntry implements DownloadEntry {
   @override
   @HiveField(1)
   BooruPost get booru;
+  @override
+  @HiveField(2)
+  String get destination;
   @override
   @JsonKey(ignore: true)
   _$$_DownloadEntryCopyWith<_$_DownloadEntry> get copyWith =>

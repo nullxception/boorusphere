@@ -19,17 +19,20 @@ class DownloadEntryAdapter extends TypeAdapter<_$_DownloadEntry> {
     return _$_DownloadEntry(
       id: fields[0] as String,
       booru: fields[1] as BooruPost,
+      destination: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_DownloadEntry obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.booru);
+      ..write(obj.booru)
+      ..writeByte(2)
+      ..write(obj.destination);
   }
 
   @override

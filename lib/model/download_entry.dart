@@ -13,7 +13,9 @@ class DownloadEntry with _$DownloadEntry {
   const factory DownloadEntry({
     @HiveField(0) required String id,
     @HiveField(1) required BooruPost booru,
+    @HiveField(2) required String destination,
   }) = _DownloadEntry;
 
-  static const none = DownloadEntry(id: '', booru: BooruPost.empty);
+  static const none =
+      DownloadEntry(id: '', booru: BooruPost.empty, destination: '');
 }
