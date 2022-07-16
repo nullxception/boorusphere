@@ -17,8 +17,8 @@ class SearchHistoryAdapter extends TypeAdapter<_$_SearchHistory> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$_SearchHistory(
-      query: fields[0] as String,
-      server: fields[1] as String,
+      query: fields[0] == null ? '' : fields[0] as String,
+      server: fields[1] == null ? '' : fields[1] as String,
     );
   }
 

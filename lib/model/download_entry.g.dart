@@ -17,9 +17,9 @@ class DownloadEntryAdapter extends TypeAdapter<_$_DownloadEntry> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$_DownloadEntry(
-      id: fields[0] as String,
-      booru: fields[1] as BooruPost,
-      destination: fields[2] as String,
+      id: fields[0] == null ? '' : fields[0] as String,
+      booru: fields[1] == null ? BooruPost.empty : fields[1] as BooruPost,
+      destination: fields[2] == null ? '' : fields[2] as String,
     );
   }
 

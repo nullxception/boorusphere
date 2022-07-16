@@ -107,10 +107,9 @@ class AddServer extends HookConsumerWidget {
                           final res = await api.scanServerUrl(scanText.text);
                           res.fold((l) {
                             errorMessage.value = l.toString();
-                            data.value = ServerData(
+                            data.value = ServerData.empty.copyWith(
                               name: Uri.parse(scanText.text).host,
                               homepage: scanText.text,
-                              searchUrl: '',
                             );
                           }, (r) {
                             data.value = r;

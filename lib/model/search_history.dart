@@ -9,7 +9,7 @@ part 'search_history.g.dart';
 class SearchHistory with _$SearchHistory {
   @HiveType(typeId: 1, adapterName: 'SearchHistoryAdapter')
   const factory SearchHistory({
-    @HiveField(0) @Default('*') String query,
-    @HiveField(1) @Default('Safebooru') String server,
+    @HiveField(0, defaultValue: '') @Default('*') String query,
+    @HiveField(1, defaultValue: '') @Default('') String server,
   }) = _SearchHistory;
 }

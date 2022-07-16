@@ -16,11 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DownloadEntry {
-  @HiveField(0)
+  @HiveField(0, defaultValue: '')
   String get id => throw _privateConstructorUsedError;
-  @HiveField(1)
+  @HiveField(1, defaultValue: BooruPost.empty)
   BooruPost get booru => throw _privateConstructorUsedError;
-  @HiveField(2)
+  @HiveField(2, defaultValue: '')
   String get destination => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -34,9 +34,9 @@ abstract class $DownloadEntryCopyWith<$Res> {
           DownloadEntry value, $Res Function(DownloadEntry) then) =
       _$DownloadEntryCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) BooruPost booru,
-      @HiveField(2) String destination});
+      {@HiveField(0, defaultValue: '') String id,
+      @HiveField(1, defaultValue: BooruPost.empty) BooruPost booru,
+      @HiveField(2, defaultValue: '') String destination});
 
   $BooruPostCopyWith<$Res> get booru;
 }
@@ -88,9 +88,9 @@ abstract class _$$_DownloadEntryCopyWith<$Res>
       __$$_DownloadEntryCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) BooruPost booru,
-      @HiveField(2) String destination});
+      {@HiveField(0, defaultValue: '') String id,
+      @HiveField(1, defaultValue: BooruPost.empty) BooruPost booru,
+      @HiveField(2, defaultValue: '') String destination});
 
   @override
   $BooruPostCopyWith<$Res> get booru;
@@ -135,18 +135,18 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
 @HiveType(typeId: 4, adapterName: 'DownloadEntryAdapter')
 class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
   const _$_DownloadEntry(
-      {@HiveField(0) required this.id,
-      @HiveField(1) required this.booru,
-      @HiveField(2) required this.destination});
+      {@HiveField(0, defaultValue: '') required this.id,
+      @HiveField(1, defaultValue: BooruPost.empty) required this.booru,
+      @HiveField(2, defaultValue: '') required this.destination});
 
   @override
-  @HiveField(0)
+  @HiveField(0, defaultValue: '')
   final String id;
   @override
-  @HiveField(1)
+  @HiveField(1, defaultValue: BooruPost.empty)
   final BooruPost booru;
   @override
-  @HiveField(2)
+  @HiveField(2, defaultValue: '')
   final String destination;
 
   @override
@@ -190,18 +190,21 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
 
 abstract class _DownloadEntry implements DownloadEntry {
   const factory _DownloadEntry(
-      {@HiveField(0) required final String id,
-      @HiveField(1) required final BooruPost booru,
-      @HiveField(2) required final String destination}) = _$_DownloadEntry;
+      {@HiveField(0, defaultValue: '')
+          required final String id,
+      @HiveField(1, defaultValue: BooruPost.empty)
+          required final BooruPost booru,
+      @HiveField(2, defaultValue: '')
+          required final String destination}) = _$_DownloadEntry;
 
   @override
-  @HiveField(0)
+  @HiveField(0, defaultValue: '')
   String get id;
   @override
-  @HiveField(1)
+  @HiveField(1, defaultValue: BooruPost.empty)
   BooruPost get booru;
   @override
-  @HiveField(2)
+  @HiveField(2, defaultValue: '')
   String get destination;
   @override
   @JsonKey(ignore: true)

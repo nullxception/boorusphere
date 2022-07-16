@@ -18,14 +18,14 @@ class BooruPost with _$BooruPost {
 
   @HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
   const factory BooruPost({
-    @HiveField(0) required int id,
-    @HiveField(1) required String src,
-    @HiveField(2) required String displaySrc,
-    @HiveField(3) required String thumbnail,
-    @HiveField(4) required List<String> tags,
-    @HiveField(5) required int width,
-    @HiveField(6) required int height,
-    @HiveField(7) required String serverName,
+    @HiveField(0, defaultValue: -1) required int id,
+    @HiveField(1, defaultValue: '') required String src,
+    @HiveField(2, defaultValue: '') required String displaySrc,
+    @HiveField(3, defaultValue: '') required String thumbnail,
+    @HiveField(4, defaultValue: []) required List<String> tags,
+    @HiveField(5, defaultValue: -1) required int width,
+    @HiveField(6, defaultValue: -1) required int height,
+    @HiveField(7, defaultValue: '') required String serverName,
   }) = _BooruPost;
 
   String get mimeType =>
@@ -43,12 +43,13 @@ class BooruPost with _$BooruPost {
   }
 
   static const empty = BooruPost(
-      id: -1,
-      src: '',
-      displaySrc: '',
-      thumbnail: '',
-      tags: [],
-      width: -1,
-      height: -1,
-      serverName: '');
+    id: -1,
+    src: '',
+    displaySrc: '',
+    thumbnail: '',
+    tags: [],
+    width: -1,
+    height: -1,
+    serverName: '',
+  );
 }

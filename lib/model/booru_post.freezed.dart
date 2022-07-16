@@ -16,21 +16,21 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BooruPost {
-  @HiveField(0)
+  @HiveField(0, defaultValue: -1)
   int get id => throw _privateConstructorUsedError;
-  @HiveField(1)
+  @HiveField(1, defaultValue: '')
   String get src => throw _privateConstructorUsedError;
-  @HiveField(2)
+  @HiveField(2, defaultValue: '')
   String get displaySrc => throw _privateConstructorUsedError;
-  @HiveField(3)
+  @HiveField(3, defaultValue: '')
   String get thumbnail => throw _privateConstructorUsedError;
-  @HiveField(4)
+  @HiveField(4, defaultValue: [])
   List<String> get tags => throw _privateConstructorUsedError;
-  @HiveField(5)
+  @HiveField(5, defaultValue: -1)
   int get width => throw _privateConstructorUsedError;
-  @HiveField(6)
+  @HiveField(6, defaultValue: -1)
   int get height => throw _privateConstructorUsedError;
-  @HiveField(7)
+  @HiveField(7, defaultValue: '')
   String get serverName => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -43,14 +43,14 @@ abstract class $BooruPostCopyWith<$Res> {
   factory $BooruPostCopyWith(BooruPost value, $Res Function(BooruPost) then) =
       _$BooruPostCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0) int id,
-      @HiveField(1) String src,
-      @HiveField(2) String displaySrc,
-      @HiveField(3) String thumbnail,
-      @HiveField(4) List<String> tags,
-      @HiveField(5) int width,
-      @HiveField(6) int height,
-      @HiveField(7) String serverName});
+      {@HiveField(0, defaultValue: -1) int id,
+      @HiveField(1, defaultValue: '') String src,
+      @HiveField(2, defaultValue: '') String displaySrc,
+      @HiveField(3, defaultValue: '') String thumbnail,
+      @HiveField(4, defaultValue: []) List<String> tags,
+      @HiveField(5, defaultValue: -1) int width,
+      @HiveField(6, defaultValue: -1) int height,
+      @HiveField(7, defaultValue: '') String serverName});
 }
 
 /// @nodoc
@@ -116,14 +116,14 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
       __$$_BooruPostCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0) int id,
-      @HiveField(1) String src,
-      @HiveField(2) String displaySrc,
-      @HiveField(3) String thumbnail,
-      @HiveField(4) List<String> tags,
-      @HiveField(5) int width,
-      @HiveField(6) int height,
-      @HiveField(7) String serverName});
+      {@HiveField(0, defaultValue: -1) int id,
+      @HiveField(1, defaultValue: '') String src,
+      @HiveField(2, defaultValue: '') String displaySrc,
+      @HiveField(3, defaultValue: '') String thumbnail,
+      @HiveField(4, defaultValue: []) List<String> tags,
+      @HiveField(5, defaultValue: -1) int width,
+      @HiveField(6, defaultValue: -1) int height,
+      @HiveField(7, defaultValue: '') String serverName});
 }
 
 /// @nodoc
@@ -189,45 +189,45 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
 @HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
 class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   const _$_BooruPost(
-      {@HiveField(0) required this.id,
-      @HiveField(1) required this.src,
-      @HiveField(2) required this.displaySrc,
-      @HiveField(3) required this.thumbnail,
-      @HiveField(4) required final List<String> tags,
-      @HiveField(5) required this.width,
-      @HiveField(6) required this.height,
-      @HiveField(7) required this.serverName})
+      {@HiveField(0, defaultValue: -1) required this.id,
+      @HiveField(1, defaultValue: '') required this.src,
+      @HiveField(2, defaultValue: '') required this.displaySrc,
+      @HiveField(3, defaultValue: '') required this.thumbnail,
+      @HiveField(4, defaultValue: []) required final List<String> tags,
+      @HiveField(5, defaultValue: -1) required this.width,
+      @HiveField(6, defaultValue: -1) required this.height,
+      @HiveField(7, defaultValue: '') required this.serverName})
       : _tags = tags,
         super._();
 
   @override
-  @HiveField(0)
+  @HiveField(0, defaultValue: -1)
   final int id;
   @override
-  @HiveField(1)
+  @HiveField(1, defaultValue: '')
   final String src;
   @override
-  @HiveField(2)
+  @HiveField(2, defaultValue: '')
   final String displaySrc;
   @override
-  @HiveField(3)
+  @HiveField(3, defaultValue: '')
   final String thumbnail;
   final List<String> _tags;
   @override
-  @HiveField(4)
+  @HiveField(4, defaultValue: [])
   List<String> get tags {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_tags);
   }
 
   @override
-  @HiveField(5)
+  @HiveField(5, defaultValue: -1)
   final int width;
   @override
-  @HiveField(6)
+  @HiveField(6, defaultValue: -1)
   final int height;
   @override
-  @HiveField(7)
+  @HiveField(7, defaultValue: '')
   final String serverName;
 
   @override
@@ -287,39 +287,40 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 
 abstract class _BooruPost extends BooruPost {
   const factory _BooruPost(
-      {@HiveField(0) required final int id,
-      @HiveField(1) required final String src,
-      @HiveField(2) required final String displaySrc,
-      @HiveField(3) required final String thumbnail,
-      @HiveField(4) required final List<String> tags,
-      @HiveField(5) required final int width,
-      @HiveField(6) required final int height,
-      @HiveField(7) required final String serverName}) = _$_BooruPost;
+          {@HiveField(0, defaultValue: -1) required final int id,
+          @HiveField(1, defaultValue: '') required final String src,
+          @HiveField(2, defaultValue: '') required final String displaySrc,
+          @HiveField(3, defaultValue: '') required final String thumbnail,
+          @HiveField(4, defaultValue: []) required final List<String> tags,
+          @HiveField(5, defaultValue: -1) required final int width,
+          @HiveField(6, defaultValue: -1) required final int height,
+          @HiveField(7, defaultValue: '') required final String serverName}) =
+      _$_BooruPost;
   const _BooruPost._() : super._();
 
   @override
-  @HiveField(0)
+  @HiveField(0, defaultValue: -1)
   int get id;
   @override
-  @HiveField(1)
+  @HiveField(1, defaultValue: '')
   String get src;
   @override
-  @HiveField(2)
+  @HiveField(2, defaultValue: '')
   String get displaySrc;
   @override
-  @HiveField(3)
+  @HiveField(3, defaultValue: '')
   String get thumbnail;
   @override
-  @HiveField(4)
+  @HiveField(4, defaultValue: [])
   List<String> get tags;
   @override
-  @HiveField(5)
+  @HiveField(5, defaultValue: -1)
   int get width;
   @override
-  @HiveField(6)
+  @HiveField(6, defaultValue: -1)
   int get height;
   @override
-  @HiveField(7)
+  @HiveField(7, defaultValue: '')
   String get serverName;
   @override
   @JsonKey(ignore: true)

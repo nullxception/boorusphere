@@ -134,7 +134,7 @@ class Downloader extends ChangeNotifier {
           it.id ==
           entries
               .firstWhere((it) => it.booru.src == url,
-                  orElse: () => DownloadEntry.none)
+                  orElse: () => DownloadEntry.empty)
               .id,
       orElse: () => DownloadInfo.none);
 

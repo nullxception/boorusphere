@@ -16,9 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SearchHistory {
-  @HiveField(0)
+  @HiveField(0, defaultValue: '')
   String get query => throw _privateConstructorUsedError;
-  @HiveField(1)
+  @HiveField(1, defaultValue: '')
   String get server => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,7 +31,9 @@ abstract class $SearchHistoryCopyWith<$Res> {
   factory $SearchHistoryCopyWith(
           SearchHistory value, $Res Function(SearchHistory) then) =
       _$SearchHistoryCopyWithImpl<$Res>;
-  $Res call({@HiveField(0) String query, @HiveField(1) String server});
+  $Res call(
+      {@HiveField(0, defaultValue: '') String query,
+      @HiveField(1, defaultValue: '') String server});
 }
 
 /// @nodoc
@@ -68,7 +70,9 @@ abstract class _$$_SearchHistoryCopyWith<$Res>
           _$_SearchHistory value, $Res Function(_$_SearchHistory) then) =
       __$$_SearchHistoryCopyWithImpl<$Res>;
   @override
-  $Res call({@HiveField(0) String query, @HiveField(1) String server});
+  $Res call(
+      {@HiveField(0, defaultValue: '') String query,
+      @HiveField(1, defaultValue: '') String server});
 }
 
 /// @nodoc
@@ -105,16 +109,16 @@ class __$$_SearchHistoryCopyWithImpl<$Res>
 @HiveType(typeId: 1, adapterName: 'SearchHistoryAdapter')
 class _$_SearchHistory with DiagnosticableTreeMixin implements _SearchHistory {
   const _$_SearchHistory(
-      {@HiveField(0) this.query = '*',
-      @HiveField(1) this.server = 'Safebooru'});
+      {@HiveField(0, defaultValue: '') this.query = '*',
+      @HiveField(1, defaultValue: '') this.server = ''});
 
   @override
   @JsonKey()
-  @HiveField(0)
+  @HiveField(0, defaultValue: '')
   final String query;
   @override
   @JsonKey()
-  @HiveField(1)
+  @HiveField(1, defaultValue: '')
   final String server;
 
   @override
@@ -154,14 +158,14 @@ class _$_SearchHistory with DiagnosticableTreeMixin implements _SearchHistory {
 
 abstract class _SearchHistory implements SearchHistory {
   const factory _SearchHistory(
-      {@HiveField(0) final String query,
-      @HiveField(1) final String server}) = _$_SearchHistory;
+      {@HiveField(0, defaultValue: '') final String query,
+      @HiveField(1, defaultValue: '') final String server}) = _$_SearchHistory;
 
   @override
-  @HiveField(0)
+  @HiveField(0, defaultValue: '')
   String get query;
   @override
-  @HiveField(1)
+  @HiveField(1, defaultValue: '')
   String get server;
   @override
   @JsonKey(ignore: true)

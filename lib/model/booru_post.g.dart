@@ -17,14 +17,14 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$_BooruPost(
-      id: fields[0] as int,
-      src: fields[1] as String,
-      displaySrc: fields[2] as String,
-      thumbnail: fields[3] as String,
-      tags: (fields[4] as List).cast<String>(),
-      width: fields[5] as int,
-      height: fields[6] as int,
-      serverName: fields[7] as String,
+      id: fields[0] == null ? -1 : fields[0] as int,
+      src: fields[1] == null ? '' : fields[1] as String,
+      displaySrc: fields[2] == null ? '' : fields[2] as String,
+      thumbnail: fields[3] == null ? '' : fields[3] as String,
+      tags: fields[4] == null ? [] : (fields[4] as List).cast<String>(),
+      width: fields[5] == null ? -1 : fields[5] as int,
+      height: fields[6] == null ? -1 : fields[6] as int,
+      serverName: fields[7] == null ? '' : fields[7] as String,
     );
   }
 
