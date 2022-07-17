@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:media_scanner/media_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../model/booru_post.dart';
@@ -127,6 +128,11 @@ class Downloader extends ChangeNotifier {
     statuses.removeWhere((el) => el.id == info.id);
     statuses.add(info);
     notifyListeners();
+    if (info.status == DownloadTaskStatus.complete) {
+      final entry = entries.firstWhere((it) => it.id == info.id,
+          orElse: () => DownloadEntry.empty);
+      rescanMediaAndroid(entry);
+    }
   }
 
   DownloadInfo getStatus(String url) => statuses.firstWhere(
@@ -220,6 +226,15 @@ class Downloader extends ChangeNotifier {
 
   void openTaskFile({required String id}) {
     FlutterDownloader.open(taskId: id);
+    final entry = entries.firstWhere((it) => it.id == id,
+        orElse: () => DownloadEntry.empty);
+    rescanMediaAndroid(entry);
+  }
+
+  void rescanMediaAndroid(DownloadEntry entry) {
+    if (Platform.isAndroid && entry.destination.isNotEmpty) {
+      MediaScanner.loadMedia(path: entry.destination);
+    }
   }
 }
 
