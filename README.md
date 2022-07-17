@@ -14,12 +14,12 @@
 
 ## Preview
 
-<details>
-    <summary>Click Here</summary>
-    <p align="center">
-        <img src="assets/preview.jpg" alt="application screenshots"/>
-    </p>
-</details>
+<p align="center">
+    <img width="23%" src="assets/previews/screen0.jpg" alt="screenshot of application menu"/>
+    <img width="23%" src="assets/previews/screen1.jpg" alt="screenshot of search result"/>
+    <img width="23%" src="assets/previews/screen2.jpg" alt="screenshot of photo preview"/>
+    <img width="23%" src="assets/previews/screen3.jpg" alt="screenshot of video preview"/>
+</p>
 
 ## Building
 
