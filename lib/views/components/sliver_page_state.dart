@@ -28,7 +28,7 @@ class SliverPageState extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 24),
                       child: ElevatedButton(
-                        onPressed: api.loadMore,
+                        onPressed: api.fetch,
                         style: ElevatedButton.styleFrom(elevation: 0),
                         child: const Text('Try again'),
                       ),
