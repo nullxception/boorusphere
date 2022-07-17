@@ -57,7 +57,7 @@ class PostToolbox extends HookConsumerWidget {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PostDetails(booru: booru)),
+                  builder: (context) => PostDetailsPage(booru: booru)),
             ),
           ),
         ],

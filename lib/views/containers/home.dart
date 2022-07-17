@@ -13,8 +13,8 @@ import '../components/sliver_thumbnails.dart';
 
 final homeDrawerSwipeableProvider = StateProvider((_) => true);
 
-class Home extends HookConsumerWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends HookConsumerWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

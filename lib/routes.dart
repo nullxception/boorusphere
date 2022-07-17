@@ -18,11 +18,11 @@ mixin Routes {
   static const downloads = 'downloads';
 
   static Map<String, WidgetBuilder> of(BuildContext context) => {
-        home: (context) => const Home(),
-        post: (context) => const Post(),
-        tagsBlocker: (context) => const TagsBlocker(),
-        settings: (context) => const Settings(),
-        licenses: (context) => const Licenses(),
+        home: (context) => const HomePage(),
+        post: (context) => const PostPage(),
+        tagsBlocker: (context) => const TagsBlockerPage(),
+        settings: (context) => const SettingsPage(),
+        licenses: (context) => const LicensesPage(),
         server: (context) => const ServerPage(),
         downloads: (context) => const DownloadsPage(),
       };

@@ -13,8 +13,8 @@ import '../../provider/booru_query.dart';
 import '../components/tag.dart';
 import 'home.dart';
 
-class PostDetails extends HookConsumerWidget {
-  const PostDetails({Key? keys, required this.booru}) : super(key: keys);
+class PostDetailsPage extends HookConsumerWidget {
+  const PostDetailsPage({Key? keys, required this.booru}) : super(key: keys);
   final BooruPost booru;
 
   void copyToClipboard(BuildContext context, String text) {
@@ -186,7 +186,7 @@ class PostDetails extends HookConsumerWidget {
                   api.fetch();
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const Home()),
+                    MaterialPageRoute(builder: (context) => const HomePage()),
                     (route) => false,
                   );
                 }
@@ -203,7 +203,7 @@ class PostDetails extends HookConsumerWidget {
                 api.fetch();
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const Home()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                   (route) => false,
                 );
               }

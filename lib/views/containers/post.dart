@@ -17,8 +17,8 @@ import '../hooks/extended_page_controller.dart';
 final lastOpenedPostProvider = StateProvider((_) => -1);
 final postFullscreenProvider = StateProvider((_) => false);
 
-class Post extends HookConsumerWidget {
-  const Post({Key? key}) : super(key: key);
+class PostPage extends HookConsumerWidget {
+  const PostPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

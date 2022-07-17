@@ -6,8 +6,8 @@ import '../../provider/app_theme.dart';
 import '../../provider/booru_query.dart';
 import '../../routes.dart';
 
-class Settings extends HookConsumerWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsPage extends HookConsumerWidget {
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

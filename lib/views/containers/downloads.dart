@@ -93,7 +93,7 @@ class DownloadsPage extends HookConsumerWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  PostDetails(booru: it.booru)),
+                                  PostDetailsPage(booru: it.booru)),
                         );
                         break;
                       default:
