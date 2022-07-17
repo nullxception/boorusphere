@@ -9,14 +9,14 @@ import '../../provider/server_data.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {
   const SearchSuggestionResult({
-    Key? key,
+    super.key,
     required this.query,
     required this.controller,
     required this.history,
     this.onRemoveHistory,
     this.onClearHistory,
     this.onSearchTag,
-  }) : super(key: key);
+  });
 
   final FloatingSearchBarController controller;
   final Map history;
@@ -172,11 +172,10 @@ class SearchSuggestionResult extends HookConsumerWidget {
 
 class _SuggestionEntry extends StatelessWidget {
   const _SuggestionEntry({
-    Key? key,
     required this.query,
     required this.onTap,
     required this.onAdded,
-  }) : super(key: key);
+  });
 
   final dynamic query;
   final Function(String entry) onTap;

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class Favicon extends StatelessWidget {
   const Favicon({
-    Key? key,
+    super.key,
     required this.url,
-  }) : super(key: key);
+  });
 
   final String url;
   @override

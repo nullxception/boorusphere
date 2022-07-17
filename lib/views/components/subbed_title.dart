@@ -6,11 +6,11 @@ class SubbedTitle extends StatelessWidget {
   final CrossAxisAlignment crossAxisAlignment;
 
   const SubbedTitle({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     this.crossAxisAlignment = CrossAxisAlignment.start,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

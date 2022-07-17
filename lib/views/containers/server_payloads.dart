@@ -5,7 +5,7 @@ import '../../provider/server_data.dart';
 import '../components/favicon.dart';
 
 class ServerPayloadsPage extends HookConsumerWidget {
-  const ServerPayloadsPage({Key? key}) : super(key: key);
+  const ServerPayloadsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PreferredVisibility extends StatelessWidget implements PreferredSize {
-  const PreferredVisibility(
-      {Key? key, required this.visible, required this.child})
-      : super(key: key);
+  const PreferredVisibility({
+    super.key,
+    required this.visible,
+    required this.child,
+  });
 
   final bool visible;
 

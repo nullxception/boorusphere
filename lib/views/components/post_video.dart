@@ -16,7 +16,7 @@ import '../containers/post.dart';
 import '../containers/post_detail.dart';
 
 class PostVideoDisplay extends ConsumerStatefulWidget {
-  const PostVideoDisplay({Key? key, required this.booru}) : super(key: key);
+  const PostVideoDisplay({super.key, required this.booru});
 
   final BooruPost booru;
 
@@ -237,7 +237,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
 }
 
 class VideoProgress extends StatelessWidget {
-  const VideoProgress({Key? key, this.controller}) : super(key: key);
+  const VideoProgress({super.key, this.controller});
 
   final VideoPlayerController? controller;
 

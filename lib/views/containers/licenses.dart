@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../util/license.dart';
 
 class LicensesPage extends StatelessWidget {
-  const LicensesPage({Key? key}) : super(key: key);
+  const LicensesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

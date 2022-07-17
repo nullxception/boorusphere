@@ -6,7 +6,7 @@ import '../../provider/booru_api.dart';
 import 'notice_card.dart';
 
 class SliverPageState extends HookConsumerWidget {
-  const SliverPageState({Key? key}) : super(key: key);
+  const SliverPageState({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

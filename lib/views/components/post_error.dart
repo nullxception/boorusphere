@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../model/booru_post.dart';
 
 class PostErrorDisplay extends StatelessWidget {
-  const PostErrorDisplay({Key? key, required this.booru}) : super(key: key);
+  const PostErrorDisplay({super.key, required this.booru});
 
   final BooruPost booru;
 

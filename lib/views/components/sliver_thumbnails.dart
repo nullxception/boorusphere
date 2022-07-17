@@ -15,8 +15,7 @@ import '../containers/post.dart';
 class SliverThumbnails extends HookConsumerWidget {
   final AutoScrollController autoScrollController;
 
-  const SliverThumbnails({Key? key, required this.autoScrollController})
-      : super(key: key);
+  const SliverThumbnails({super.key, required this.autoScrollController});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +65,7 @@ class SliverThumbnails extends HookConsumerWidget {
 }
 
 class Thumbnail extends HookConsumerWidget {
-  const Thumbnail({Key? key, required this.post}) : super(key: key);
+  const Thumbnail({super.key, required this.post});
   final BooruPost post;
 
   FilterQuality _thumbnailQuality(int gridExtra) {
@@ -110,10 +109,7 @@ class Thumbnail extends HookConsumerWidget {
 }
 
 class _ThumbnailShimmer extends StatelessWidget {
-  const _ThumbnailShimmer({
-    Key? key,
-    required this.aspectRatio,
-  }) : super(key: key);
+  const _ThumbnailShimmer({required this.aspectRatio});
 
   final double aspectRatio;
 

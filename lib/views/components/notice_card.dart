@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class NoticeCard extends StatelessWidget {
   const NoticeCard({
-    Key? key,
+    super.key,
     required this.icon,
     required this.children,
     this.margin,
-  }) : super(key: key);
+  });
 
   final Widget icon;
   final Widget children;

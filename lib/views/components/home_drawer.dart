@@ -12,7 +12,7 @@ import '../../routes.dart';
 import 'favicon.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
+  const HomeDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +127,7 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
 }
 
 class AppVersionTile extends HookConsumerWidget {
-  const AppVersionTile({Key? key}) : super(key: key);
+  const AppVersionTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

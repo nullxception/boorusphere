@@ -14,7 +14,7 @@ import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
 
 class HomeBar extends HookConsumerWidget {
-  const HomeBar({Key? key, this.body}) : super(key: key);
+  const HomeBar({super.key, this.body});
 
   final Widget? body;
 

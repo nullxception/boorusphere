@@ -8,9 +8,9 @@ import '../containers/server_payloads.dart';
 
 class ServerScanner extends HookConsumerWidget {
   const ServerScanner({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   final ServerData data;
 

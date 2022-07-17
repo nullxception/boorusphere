@@ -14,7 +14,7 @@ import '../components/tag.dart';
 import 'home.dart';
 
 class PostDetailsPage extends HookConsumerWidget {
-  const PostDetailsPage({Key? keys, required this.booru}) : super(key: keys);
+  const PostDetailsPage({super.key, required this.booru});
   final BooruPost booru;
 
   void copyToClipboard(BuildContext context, String text) {

@@ -8,7 +8,7 @@ import '../components/notice_card.dart';
 import 'post_detail.dart';
 
 class DownloadsPage extends HookConsumerWidget {
-  const DownloadsPage({Key? key}) : super(key: key);
+  const DownloadsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

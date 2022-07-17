@@ -18,7 +18,7 @@ final lastOpenedPostProvider = StateProvider((_) => -1);
 final postFullscreenProvider = StateProvider((_) => false);
 
 class PostPage extends HookConsumerWidget {
-  const PostPage({Key? key}) : super(key: key);
+  const PostPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

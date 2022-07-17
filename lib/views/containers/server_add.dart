@@ -8,7 +8,7 @@ import '../../provider/booru_api.dart';
 import '../components/server_scanner.dart';
 
 class ServerAddPage extends HookConsumerWidget {
-  const ServerAddPage({Key? key}) : super(key: key);
+  const ServerAddPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

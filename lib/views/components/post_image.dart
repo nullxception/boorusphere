@@ -10,7 +10,7 @@ import '../../model/booru_post.dart';
 import '../containers/post.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
-  const PostImageDisplay({Key? key, required this.booru}) : super(key: key);
+  const PostImageDisplay({super.key, required this.booru});
 
   final BooruPost booru;
 
@@ -71,10 +71,10 @@ class PostImageDisplay extends HookConsumerWidget {
 
 class PostImageFailedView extends StatelessWidget {
   const PostImageFailedView({
-    Key? key,
+    super.key,
     required this.booru,
     required this.state,
-  }) : super(key: key);
+  });
 
   final BooruPost booru;
   final ExtendedImageState state;
@@ -129,10 +129,10 @@ class PostImageFailedView extends StatelessWidget {
 
 class PostImageLoadingView extends StatelessWidget {
   const PostImageLoadingView({
-    Key? key,
+    super.key,
     required this.booru,
     required this.state,
-  }) : super(key: key);
+  });
 
   final BooruPost booru;
   final ExtendedImageState state;

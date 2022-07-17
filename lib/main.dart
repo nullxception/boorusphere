@@ -15,7 +15,7 @@ import 'routes.dart';
 import 'views/components/bouncing_scroll.dart';
 
 class Boorusphere extends HookConsumerWidget {
-  const Boorusphere({Key? key}) : super(key: key);
+  const Boorusphere({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
