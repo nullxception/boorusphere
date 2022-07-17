@@ -93,12 +93,11 @@ class HomeBar extends HookConsumerWidget {
         );
       },
       onQueryChanged: (value) async {
-        final last = value.trim().split(' ').last;
         if (server.active.canSuggestTags) {
           typedQuery.value = value.trim();
         }
         suggestionHistory.value =
-            await searchHistory.composeSuggestion(query: last);
+            await searchHistory.composeSuggestion(query: value);
       },
       onFocusChanged: (focused) {
         homeDrawerSwipeable.state = !focused;

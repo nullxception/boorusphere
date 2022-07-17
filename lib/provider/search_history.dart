@@ -9,12 +9,11 @@ class SearchHistoryRepository {
 
   SearchHistoryRepository(this.read);
 
-  Future<Map> composeSuggestion({String query = '*'}) async {
+  Future<Map> composeSuggestion({required String query}) async {
     final history = await mapped;
     final queries = query.split(' ');
 
-    // Filter the query, it must be longer than 2
-    if (query.endsWith(' ') || queries.last.length < 2) {
+    if (query.endsWith(' ') || query.isEmpty) {
       return history;
     }
 
