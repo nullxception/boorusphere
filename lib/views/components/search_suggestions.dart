@@ -26,9 +26,11 @@ class SearchSuggestionResult extends HookConsumerWidget {
   final Function(String value)? onSearchTag;
 
   void _addToInput(String suggested) {
-    final queries = controller.query.split(' ');
-    final result = queries.sublist(0, queries.length - 1)..add(suggested);
-    controller.query = '${result.join(' ')} '.replaceAll('  ', ' ').trimLeft();
+    final queries = controller.query.replaceAll('  ', ' ').split(' ');
+    final result = queries.sublist(0, queries.length - 1).toSet()
+      ..addAll(suggested.split(' '));
+
+    controller.query = '${result.join(' ')} ';
   }
 
   void _searchTag(String query) {
