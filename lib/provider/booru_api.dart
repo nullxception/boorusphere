@@ -149,8 +149,9 @@ class BooruApi {
   }
 
   void loadMore() {
-    final pageLoading = read(pageLoadingProvider.state);
-    if (!pageLoading.state) {
+    final pageLoading = read(pageLoadingProvider);
+    final pageError = read(pageErrorProvider);
+    if (pageError.isEmpty && !pageLoading) {
       _page++;
       fetch();
     }

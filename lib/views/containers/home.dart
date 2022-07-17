@@ -26,11 +26,8 @@ class HomePage extends HookConsumerWidget {
     final errorMessage = ref.watch(pageErrorProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
     final loadMoreCall = useCallback(() {
-      if (errorMessage.isEmpty && !pageLoading) {
-        // Infinite page with scroll detection
-        if (scrollController.position.extentAfter < 200) {
-          api.loadMore();
-        }
+      if (scrollController.position.extentAfter < 200) {
+        api.loadMore();
       }
     }, [key]);
 
