@@ -8,6 +8,9 @@ import '../model/server_data.dart';
 import 'booru_api.dart';
 import 'hive_boxes.dart';
 
+final serverDataProvider =
+    ChangeNotifierProvider((ref) => ServerDataNotifier(ref.read));
+
 class ServerDataNotifier extends ChangeNotifier {
   final Reader read;
   late List<ServerData> _serverList;
@@ -36,8 +39,8 @@ class ServerDataNotifier extends ChangeNotifier {
     }
     _serverList = server.values.map((it) => it as ServerData).toList();
 
-    final activeServerName = prefs.get('active_server');
-    _activeServer = select(activeServerName ?? ServerData.defaultServerName);
+    final activeServerName = prefs.get('active_server') ?? '';
+    _activeServer = select(activeServerName);
 
     api.posts.clear();
     api.fetch();
@@ -74,8 +77,8 @@ class ServerDataNotifier extends ChangeNotifier {
   }
 
   void removeServer({required ServerData data}) async {
-    if (data.name == ServerData.defaultServerName) {
-      throw Exception('Default server cannot be deleted');
+    if (_serverList.length == 1) {
+      throw Exception('Last server cannot be deleted');
     }
     final server = await read(serverBox);
     server.delete(data.homepage);
@@ -94,10 +97,7 @@ class ServerDataNotifier extends ChangeNotifier {
     server.putAll(fromAssets);
     _serverList = server.values.map((it) => it as ServerData).toList();
 
-    setActiveServer(name: ServerData.defaultServerName);
+    setActiveServer(name: _serverList.first.name);
     notifyListeners();
   }
 }
-
-final serverDataProvider =
-    ChangeNotifierProvider((ref) => ServerDataNotifier(ref.read));

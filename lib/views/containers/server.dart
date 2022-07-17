@@ -70,7 +70,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                 title: Text(it.name),
                 subtitle: Text(it.homepage),
                 leading: Favicon(url: '${it.homepage}/favicon.ico'),
-                trailing: it.name == ServerData.defaultServerName
+                trailing: server.all.length == 1
                     ? null
                     : IconButton(
                         onPressed: () {
