@@ -5,7 +5,6 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
@@ -87,8 +86,8 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
   Widget build(BuildContext context) {
     final vpp = ref.watch(videoPlayerProvider);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
-    final downloadNotifier = ref.watch(downloadProvider);
-    final downloadStatus = downloadNotifier.getStatus(booru.src);
+    final downloader = ref.watch(downloadProvider);
+    final downloadProgress = downloader.getProgressByURL(booru.src);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -162,18 +161,16 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
                         alignment: Alignment.center,
                         children: [
                           CircularProgressIndicator(
-                            value: downloadStatus.status ==
-                                    DownloadTaskStatus.running
-                                ? (1 * downloadStatus.progress) / 100
+                            value: downloadProgress.status.isDownloading
+                                ? (1 * downloadProgress.progress) / 100
                                 : 0,
                           ),
                           IconButton(
-                            icon: Icon(downloadStatus.status ==
-                                    DownloadTaskStatus.complete
+                            icon: Icon(downloadProgress.status.isDownloaded
                                 ? Icons.download_done
                                 : Icons.download),
                             onPressed: () {
-                              downloadNotifier.download(booru);
+                              downloader.download(booru);
                             },
                             color: Colors.white,
                             disabledColor:

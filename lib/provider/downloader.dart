@@ -11,30 +11,19 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../model/booru_post.dart';
 import '../model/download_entry.dart';
+import '../model/download_progress.dart';
+import '../model/download_status.dart';
 import 'hive_boxes.dart';
 
-class DownloadInfo {
-  final String id;
-  final DownloadTaskStatus status;
-  final int progress;
-
-  DownloadInfo({
-    required this.id,
-    required this.status,
-    required this.progress,
-  });
-
-  static DownloadInfo none =
-      DownloadInfo(id: '', status: DownloadTaskStatus.undefined, progress: 0);
-}
+final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref.read));
 
 class Downloader extends ChangeNotifier {
   Downloader(this.read);
 
   final Reader read;
   final _port = ReceivePort();
-  final entries = <DownloadEntry>[];
-  final statuses = <DownloadInfo>[];
+  final entries = <DownloadEntry>{};
+  final progresses = <DownloadProgress>{};
 
   static const _portName = 'downloaderPort';
   static const platformPath = MethodChannel('io.chaldeaprjkt.boorusphere/path');
@@ -45,24 +34,110 @@ class Downloader extends ChangeNotifier {
     IsolateNameServer.removePortNameMapping(_portName);
     IsolateNameServer.registerPortWithName(_port.sendPort, _portName);
     _port.listen((message) {
-      updateInfo(DownloadInfo(
+      final DownloadTaskStatus status = message[1];
+      final newProg = DownloadProgress(
         id: message[0],
-        status: message[1],
+        status: DownloadStatus.fromIndex(status.value),
         progress: message[2],
-      ));
+      );
+      _updateDownloadProgress(newProg);
     });
     FlutterDownloader.registerCallback(flutterDownloaderCallback);
-    populateDownloadTasks();
+    _populateDownloadEntries();
+  }
+
+  @pragma('vm:entry-point')
+  static void flutterDownloaderCallback(
+    String id,
+    DownloadTaskStatus status,
+    int progress,
+  ) {
+    IsolateNameServer.lookupPortByName(_portName)?.send([id, status, progress]);
+  }
+
+  void _updateDownloadProgress(DownloadProgress prog) {
+    progresses.removeWhere((el) => el.id == prog.id);
+    progresses.add(prog);
+    notifyListeners();
+    if (prog.status.isDownloaded) {
+      final entry = entries.firstWhere((it) => it.id == prog.id,
+          orElse: () => DownloadEntry.empty);
+      _rescanMediaAndroid(entry);
+    }
+  }
+
+  void _rescanMediaAndroid(DownloadEntry entry) {
+    if (Platform.isAndroid && entry.destination.isNotEmpty) {
+      MediaScanner.loadMedia(path: entry.destination);
+    }
   }
 
   Future<void> unregister() async {
     IsolateNameServer.removePortNameMapping(_portName);
   }
 
-  Future<String> get platformDownloadPath async =>
-      await platformPath.invokeMethod('getDownload');
+  Future<String> get platformDownloadPath async {
+    return await platformPath.invokeMethod('getDownload');
+  }
 
-  Future<bool> isDirWritable(String dirPath) async {
+  Future<void> _populateDownloadEntries() async {
+    final tasks = await FlutterDownloader.loadTasks();
+    final box = await read(downloadBox);
+    if (tasks != null) {
+      progresses.addAll(tasks
+          .map((e) => DownloadProgress(
+                id: e.taskId,
+                status: DownloadStatus.fromIndex(e.status.value),
+                progress: e.progress,
+              ))
+          .toList());
+      if (box.values.isNotEmpty) {
+        entries.addAll(box.values.cast<DownloadEntry>());
+      }
+      notifyListeners();
+    }
+  }
+
+  Future<void> _addEntry({required DownloadEntry entry}) async {
+    final box = await read(downloadBox);
+    box.put(entry.id, entry);
+    entries.add(entry);
+  }
+
+  Future<void> _updateEntry(
+      {required String id, required DownloadEntry newEntry}) async {
+    final box = await read(downloadBox);
+    _removeEntry(id: id);
+    box.put(newEntry.id, newEntry);
+    entries.add(newEntry);
+  }
+
+  Future<void> _removeEntry({required String id}) async {
+    final box = await read(downloadBox);
+
+    box.delete(id);
+    progresses.removeWhere((it) => it.id == id);
+    entries.removeWhere((it) => it.id == id);
+  }
+
+  Future<void> clearEntries() async {
+    final tasks = await FlutterDownloader.loadTasks();
+    if (tasks != null) {
+      await Future.wait(tasks.map((e) async => await FlutterDownloader.remove(
+          taskId: e.taskId, shouldDeleteContent: false)));
+    }
+
+    final box = await read(downloadBox);
+    if (box.values.isNotEmpty) {
+      box.deleteAll(box.keys);
+    }
+
+    progresses.clear();
+    entries.clear();
+    notifyListeners();
+  }
+
+  Future<bool> _isDirWritable(String dirPath) async {
     final f = File('$dirPath/.boorusphere.tmp');
     try {
       await f.writeAsString('', mode: FileMode.append, flush: true);
@@ -87,13 +162,13 @@ class Downloader extends ChangeNotifier {
   Future<void> download(BooruPost post) async {
     final downloadPath = await platformDownloadPath;
 
-    if (!await isDirWritable(downloadPath)) {
+    if (!await _isDirWritable(downloadPath)) {
       await Permission.storage.request();
     }
 
     final booruDir = Directory('$downloadPath/$_booruDirname');
     final booruDirExists = await booruDir.exists();
-    if (await isDirWritable(downloadPath) && !booruDirExists) {
+    if (await _isDirWritable(downloadPath) && !booruDirExists) {
       await booruDir.create();
     }
 
@@ -108,155 +183,46 @@ class Downloader extends ChangeNotifier {
           '${booruDir.absolute.path}/${getFileNameFromUrl(post.src)}';
       final entry =
           DownloadEntry(id: taskId, booru: post, destination: destination);
-      final box = await read(downloadBox);
-      box.put(taskId, entry);
-      entries.add(entry);
+      _addEntry(entry: entry);
       notifyListeners();
     }
   }
 
-  @pragma('vm:entry-point')
-  static void flutterDownloaderCallback(
-    String id,
-    DownloadTaskStatus status,
-    int progress,
-  ) {
-    IsolateNameServer.lookupPortByName(_portName)?.send([id, status, progress]);
-  }
-
-  void updateInfo(DownloadInfo info) {
-    statuses.removeWhere((el) => el.id == info.id);
-    statuses.add(info);
-    notifyListeners();
-    if (info.status == DownloadTaskStatus.complete) {
-      final entry = entries.firstWhere((it) => it.id == info.id,
-          orElse: () => DownloadEntry.empty);
-      rescanMediaAndroid(entry);
-    }
-  }
-
-  DownloadInfo getStatus(String url) => statuses.firstWhere(
-      (it) =>
-          it.id ==
-          entries
-              .firstWhere((it) => it.booru.src == url,
-                  orElse: () => DownloadEntry.empty)
-              .id,
-      orElse: () => DownloadInfo.none);
-
-  DownloadTaskStatus getStatusFromId(String id) => statuses
-      .firstWhere((element) => element.id == id,
-          orElse: () => DownloadInfo.none)
-      .status;
-
-  Future<void> clearAllTask() async {
-    final tasks = await FlutterDownloader.loadTasks();
-    if (tasks != null) {
-      await Future.wait(tasks.map((e) async => await FlutterDownloader.remove(
-          taskId: e.taskId, shouldDeleteContent: false)));
-    }
-
-    final box = await read(downloadBox);
-    if (box.values.isNotEmpty) {
-      box.deleteAll(box.keys);
-    }
-
-    statuses.clear();
-    entries.clear();
-    notifyListeners();
-  }
-
-  Future<void> populateDownloadTasks() async {
-    final tasks = await FlutterDownloader.loadTasks();
-    final box = await read(downloadBox);
-    if (tasks != null) {
-      statuses.addAll(tasks
-          .map((e) => DownloadInfo(
-                id: e.taskId,
-                status: e.status,
-                progress: e.progress,
-              ))
-          .toList());
-      if (box.values.isNotEmpty) {
-        entries.addAll(box.values.cast<DownloadEntry>());
-      }
-      notifyListeners();
-    }
-  }
-
-  Future<void> retryTask({required String id}) async {
-    final downloadPath = await platformDownloadPath;
-
-    if (!await isDirWritable(downloadPath)) {
-      await Permission.storage.request();
-    }
-
-    final booruDir = Directory('$downloadPath/$_booruDirname');
-    final booruDirExists = await booruDir.exists();
-    if (await isDirWritable(downloadPath) && !booruDirExists) {
-      await booruDir.create();
-    }
-
-    final newTaskId = await FlutterDownloader.retry(taskId: id);
-    if (newTaskId != null) {
-      final box = await read(downloadBox);
+  Future<void> retryEntry({required String id}) async {
+    final newId = await FlutterDownloader.retry(taskId: id);
+    if (newId != null) {
       final newEntry =
-          entries.firstWhere((it) => it.id == id).copyWith(id: newTaskId);
-
-      box.delete(id);
-      box.put(newTaskId, newEntry);
-      statuses.removeWhere((it) => it.id == id);
-      entries.removeWhere((it) => it.id == id);
-      entries.add(newEntry);
+          entries.firstWhere((it) => it.id == id).copyWith(id: newId);
+      _updateEntry(id: id, newEntry: newEntry);
       notifyListeners();
     }
   }
 
-  Future<void> cancelTask({required String id}) async {
+  Future<void> cancelEntry({required String id}) async {
     await FlutterDownloader.cancel(taskId: id);
   }
 
-  Future<void> clearTask({required String id}) async {
+  Future<void> clearEntry({required String id}) async {
     await FlutterDownloader.remove(taskId: id, shouldDeleteContent: false);
-    read(downloadBox).then((it) => it.delete(id));
-    statuses.removeWhere((it) => it.id == id);
-    entries.removeWhere((it) => it.id == id);
+    _removeEntry(id: id);
     notifyListeners();
   }
 
-  void openTaskFile({required String id}) {
+  void openEntryFile({required String id}) {
     FlutterDownloader.open(taskId: id);
     final entry = entries.firstWhere((it) => it.id == id,
         orElse: () => DownloadEntry.empty);
-    rescanMediaAndroid(entry);
+    _rescanMediaAndroid(entry);
   }
 
-  void rescanMediaAndroid(DownloadEntry entry) {
-    if (Platform.isAndroid && entry.destination.isNotEmpty) {
-      MediaScanner.loadMedia(path: entry.destination);
-    }
+  DownloadProgress getProgressByURL(String url) {
+    final entry = entries.firstWhere((it) => it.booru.src == url,
+        orElse: () => DownloadEntry.empty);
+    return getProgress(entry.id);
   }
-}
 
-final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref.read));
-
-extension CustomDownloadTaskStatusX on DownloadTaskStatus {
-  String describe() {
-    switch (value) {
-      case 1:
-        return 'Enqueued';
-      case 2:
-        return 'Downloading';
-      case 3:
-        return 'Completed';
-      case 4:
-        return 'Failed';
-      case 5:
-        return 'Canceled';
-      case 6:
-        return 'Paused';
-      default:
-        return 'Undefined';
-    }
+  DownloadProgress getProgress(String id) {
+    return progresses.firstWhere((it) => it.id == id,
+        orElse: () => DownloadProgress.none);
   }
 }

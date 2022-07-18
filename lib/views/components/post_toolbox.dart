@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -14,8 +13,8 @@ class PostToolbox extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloadNotifier = ref.watch(downloadProvider);
-    final downloadStatus = downloadNotifier.getStatus(booru.src);
+    final downloader = ref.watch(downloadProvider);
+    final downloadProgress = downloader.getProgressByURL(booru.src);
 
     return Container(
       color: Colors.black38,
@@ -29,16 +28,16 @@ class PostToolbox extends HookConsumerWidget {
             alignment: Alignment.center,
             children: [
               CircularProgressIndicator(
-                value: downloadStatus.status == DownloadTaskStatus.running
-                    ? (1 * downloadStatus.progress) / 100
+                value: downloadProgress.status.isDownloading
+                    ? (1 * downloadProgress.progress) / 100
                     : 0,
               ),
               IconButton(
-                icon: Icon(downloadStatus.status == DownloadTaskStatus.complete
+                icon: Icon(downloadProgress.status.isDownloaded
                     ? Icons.download_done
                     : Icons.download),
                 onPressed: () {
-                  downloadNotifier.download(booru);
+                  downloader.download(booru);
                 },
                 color: Colors.white,
                 disabledColor: Theme.of(context).colorScheme.primary,

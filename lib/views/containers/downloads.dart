@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
@@ -23,7 +22,7 @@ class DownloadsPage extends HookConsumerWidget {
               onSelected: (value) {
                 switch (value) {
                   case 'clear-all':
-                    downloader.clearAllTask();
+                    downloader.clearEntries();
                     break;
                   default:
                     break;
@@ -53,14 +52,14 @@ class DownloadsPage extends HookConsumerWidget {
               ),
             ...downloader.entries.map((it) {
               final fileName = downloader.getFileNameFromUrl(it.booru.src);
-              final status = downloader.getStatusFromId(it.id);
+              final progress = downloader.getProgress(it.id);
 
               return ListTile(
                 title: Text(fileName),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    '${status.describe()} • ${it.booru.serverName}',
+                    '${progress.status.name} • ${it.booru.serverName}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -80,13 +79,13 @@ class DownloadsPage extends HookConsumerWidget {
                   onSelected: (value) {
                     switch (value) {
                       case 'retry':
-                        downloader.retryTask(id: it.id);
+                        downloader.retryEntry(id: it.id);
                         break;
                       case 'cancel':
-                        downloader.cancelTask(id: it.id);
+                        downloader.cancelEntry(id: it.id);
                         break;
                       case 'clear':
-                        downloader.clearTask(id: it.id);
+                        downloader.clearEntry(id: it.id);
                         break;
                       case 'show-detail':
                         Navigator.push(
@@ -102,13 +101,13 @@ class DownloadsPage extends HookConsumerWidget {
                   },
                   itemBuilder: (BuildContext context) {
                     return [
-                      if (status == DownloadTaskStatus.canceled ||
-                          status == DownloadTaskStatus.failed)
+                      if (progress.status.isCanceled ||
+                          progress.status.isFailed)
                         const PopupMenuItem(
                           value: 'retry',
                           child: Text('Retry'),
                         ),
-                      if (status == DownloadTaskStatus.running)
+                      if (progress.status.isDownloading)
                         const PopupMenuItem(
                           value: 'cancel',
                           child: Text('Cancel'),
@@ -126,9 +125,9 @@ class DownloadsPage extends HookConsumerWidget {
                 ),
                 dense: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                onTap: status != DownloadTaskStatus.complete
+                onTap: !progress.status.isDownloaded
                     ? null
-                    : () => downloader.openTaskFile(id: it.id),
+                    : () => downloader.openEntryFile(id: it.id),
               );
             }).toList(),
           ],
