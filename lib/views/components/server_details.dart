@@ -6,13 +6,17 @@ import '../../model/server_data.dart';
 import '../../provider/server_data.dart';
 import '../containers/server_payloads.dart';
 
-class ServerScanner extends HookConsumerWidget {
-  const ServerScanner({
+class ServerDetails extends HookConsumerWidget {
+  const ServerDetails({
     super.key,
     required this.data,
+    required this.onSubmitted,
+    required this.isEditing,
   });
 
   final ServerData data;
+  final Function(ServerData) onSubmitted;
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,6 +58,14 @@ class ServerScanner extends HookConsumerWidget {
                     border: UnderlineInputBorder(),
                     labelText: 'Homepage',
                   ),
+                  validator: (value) {
+                    final homepages = serverData.all.map((it) => it.homepage);
+                    if (!isEditing && homepages.contains(value)) {
+                      return 'Server data for $value already exists';
+                    }
+
+                    return null;
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -119,16 +131,17 @@ class ServerScanner extends HookConsumerWidget {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: ElevatedButton(
             onPressed: () {
-              serverData.addServer(
-                data: data.copyWith(
-                  name: cName.text,
-                  homepage: cHomepage.text,
-                  searchUrl: cSearchUrl.text,
-                  tagSuggestionUrl: cSuggestUrl.text,
-                  postUrl: cPostUrl.text,
-                ),
-              );
-              Navigator.pop(context);
+              if (formKey.currentState?.validate() != true) {
+                return;
+              }
+
+              onSubmitted.call(data.copyWith(
+                name: cName.text,
+                homepage: cHomepage.text,
+                searchUrl: cSearchUrl.text,
+                tagSuggestionUrl: cSuggestUrl.text,
+                postUrl: cPostUrl.text,
+              ));
             },
             child: const Text('Save'),
           ),

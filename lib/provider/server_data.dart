@@ -100,4 +100,18 @@ class ServerDataNotifier extends ChangeNotifier {
     setActiveServer(name: _serverList.first.name);
     notifyListeners();
   }
+
+  Future<void> editServer({
+    required ServerData server,
+    required ServerData newData,
+  }) async {
+    final box = await read(serverBox);
+    box.delete(server.homepage);
+    box.put(server.homepage, newData);
+    _serverList = box.values.map((it) => it as ServerData).toList();
+    if (_activeServer == server && newData.name != _activeServer.name) {
+      setActiveServer(name: newData.name);
+    }
+    notifyListeners();
+  }
 }

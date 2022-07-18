@@ -5,23 +5,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/server_data.dart';
 import '../../provider/booru_api.dart';
-import '../components/server_scanner.dart';
+import '../../provider/server_data.dart';
+import '../components/server_details.dart';
 
-class ServerAddPage extends HookConsumerWidget {
-  const ServerAddPage({super.key});
+class ServerEditorPage extends HookConsumerWidget {
+  const ServerEditorPage({super.key, this.server = ServerData.empty});
+
+  final ServerData server;
+
+  bool get isEditing => server != ServerData.empty;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final api = ref.watch(booruApiProvider);
+    final serverData = ref.watch(serverDataProvider);
     final formKey = useMemoized(() => GlobalKey<FormState>());
-    final data = useState(ServerData.empty);
+    final data = useState(server);
     final isLoading = useState(false);
     final errorMessage = useState('');
-    final scanText = useTextEditingController(text: 'https://');
+    final scanText = useTextEditingController(
+        text: isEditing ? server.homepage : 'https://');
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add new server'),
+        title: Text(isEditing ? 'Edit ${server.name}' : 'Add new server'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16),
@@ -39,6 +46,10 @@ class ServerAddPage extends HookConsumerWidget {
                     labelText: 'Example: https://abc.com',
                   ),
                   validator: (value) {
+                    final homepages = serverData.all.map((it) => it.homepage);
+                    if (!isEditing && homepages.contains(value)) {
+                      return 'Server data for $value already exists';
+                    }
                     if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
                       return 'not a valid url';
                     }
@@ -97,7 +108,19 @@ class ServerAddPage extends HookConsumerWidget {
                         TextStyle(color: Theme.of(context).colorScheme.onError),
                   ),
                 ),
-              if (data.value.name.isNotEmpty) ServerScanner(data: data.value),
+              if (data.value.name.isNotEmpty)
+                ServerDetails(
+                  data: data.value,
+                  isEditing: isEditing,
+                  onSubmitted: (data) {
+                    if (isEditing) {
+                      serverData.editServer(server: server, newData: data);
+                    } else {
+                      serverData.addServer(data: data);
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
             ],
           ),
         ),
