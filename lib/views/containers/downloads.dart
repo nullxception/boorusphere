@@ -68,11 +68,22 @@ class DownloadsPage extends HookConsumerWidget {
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Icon(it.booru.displayType == PostType.video
-                        ? Icons.video_library
-                        : Icons.photo),
+                  margin: EdgeInsets.zero,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        value: progress.status.isDownloading
+                            ? (1 * progress.progress) / 100
+                            : 0,
+                      ),
+                      Icon(
+                        it.booru.displayType == PostType.video
+                            ? Icons.video_library
+                            : Icons.photo,
+                        size: 16,
+                      ),
+                    ],
                   ),
                 ),
                 trailing: PopupMenuButton(
