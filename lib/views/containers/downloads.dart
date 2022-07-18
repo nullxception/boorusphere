@@ -51,11 +51,16 @@ class DownloadsPage extends HookConsumerWidget {
                 ),
               ),
             ...downloader.entries.map((it) {
-              final fileName = downloader.getFileNameFromUrl(it.booru.src);
+              final fileName =
+                  Uri.decodeFull(downloader.getFileNameFromUrl(it.booru.src));
               final progress = downloader.getProgress(it.id);
 
               return ListTile(
-                title: Text(fileName),
+                title: Text(
+                  fileName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
