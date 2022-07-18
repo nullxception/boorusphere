@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dartz/dartz.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -183,42 +182,38 @@ class BooruApi {
         type: type);
   }
 
-  Future<Either<Exception, ServerData>> scanServerUrl(String url) async {
+  Future<ServerData> scanServerUrl(String url) async {
     String post = '', search = '', suggestion = '';
-    try {
-      final tests = await Future.wait(
-        [
-          _queryTest(url, searchQueries, ServerPayloadType.search),
-          _queryTest(url, tagSuggestionQueries, ServerPayloadType.suggestion),
-          _queryTest(url, webPostUrls, ServerPayloadType.post),
-        ],
-      );
+    final tests = await Future.wait(
+      [
+        _queryTest(url, searchQueries, ServerPayloadType.search),
+        _queryTest(url, tagSuggestionQueries, ServerPayloadType.suggestion),
+        _queryTest(url, webPostUrls, ServerPayloadType.post),
+      ],
+    );
 
-      for (final payload in tests) {
-        switch (payload.type) {
-          case ServerPayloadType.search:
-            search = payload.query;
-            break;
-          case ServerPayloadType.suggestion:
-            suggestion = payload.query;
-            break;
-          case ServerPayloadType.post:
-            post = payload.query;
-            break;
-          default:
-            break;
-        }
+    for (final payload in tests) {
+      switch (payload.type) {
+        case ServerPayloadType.search:
+          search = payload.query;
+          break;
+        case ServerPayloadType.suggestion:
+          suggestion = payload.query;
+          break;
+        case ServerPayloadType.post:
+          post = payload.query;
+          break;
+        default:
+          break;
       }
-    } on Exception catch (e) {
-      return Left(e);
     }
 
-    return Right(ServerData(
+    return ServerData(
         name: Uri.parse(url).host,
         homepage: url,
         postUrl: post,
         searchUrl: search,
-        tagSuggestionUrl: suggestion));
+        tagSuggestionUrl: suggestion);
   }
 
   Future<List<String>> _parseSuggestion(http.Response res) async {

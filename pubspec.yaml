@@ -33,7 +33,6 @@ dependencies:
     sdk: flutter
   async: ^2.8.2
   cupertino_icons: ^1.0.2
-  dartz: ^0.10.0-nullsafety.1
   double_back_to_close: ^2.0.0
   dynamic_color: ^1.4.0
   extended_image: ^6.2.1

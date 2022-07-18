@@ -60,16 +60,17 @@ class ServerAddPage extends HookConsumerWidget {
                           data.value = ServerData.empty;
                           isLoading.value = true;
                           errorMessage.value = '';
-                          final res = await api.scanServerUrl(scanText.text);
-                          res.fold((l) {
-                            errorMessage.value = l.toString();
+                          try {
+                            final res = await api.scanServerUrl(scanText.text);
+                            data.value = res;
+                          } catch (e) {
+                            errorMessage.value = e.toString();
                             data.value = ServerData.empty.copyWith(
                               name: Uri.parse(scanText.text).host,
                               homepage: scanText.text,
                             );
-                          }, (r) {
-                            data.value = r;
-                          });
+                          }
+
                           isLoading.value = false;
                         }
                       : null,
