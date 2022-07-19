@@ -80,10 +80,10 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: false
-  image_path: assets/icons/icon-base.png
-  image_path_android: assets/icons/icon-circle.png
-  adaptive_icon_foreground: assets/icons/logo.png
-  adaptive_icon_background: "#2e2e2e"
+  image_path: assets/icons/exported/legacy-fill.png
+  image_path_android: assets/icons/exported/legacy-circle.png
+  adaptive_icon_foreground: assets/icons/exported/adaptive-foreground.png
+  adaptive_icon_background: "#f6ebf9"
 
 license_generator:
   nullsafety: true

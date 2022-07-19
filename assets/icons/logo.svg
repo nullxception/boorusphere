@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 108 108"
+   id="svg588"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview590"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="8.1296296"
+     inkscape:cx="33.396355"
+     inkscape:cy="54"
+     inkscape:window-width="1920"
+     inkscape:window-height="1044"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="container" />
+  <defs
+     id="defs569">
+    <linearGradient
+       id="b"
+       x1="-179"
+       x2="-105.2"
+       y1="-140"
+       y2="-140"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#198eff"
+         stop-opacity=".1"
+         offset="0"
+         id="stop559" />
+      <stop
+         stop-color="#198eff"
+         offset="1"
+         id="stop561" />
+    </linearGradient>
+    <linearGradient
+       id="a"
+       x1="142"
+       x2="116"
+       y1="124"
+       y2="54"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#c269ff"
+         stop-opacity="0"
+         offset="0"
+         id="stop564" />
+      <stop
+         stop-color="#c269ff"
+         offset="1"
+         id="stop566" />
+    </linearGradient>
+  </defs>
+  <g
+     id="md-adaptive"
+     transform="translate(-96.199,-13.743)"
+     fill="none"
+     stroke="#fff">
+    <g
+       transform="translate(-30.196,-26.665)"
+       id="g575">
+      <path
+         d="m164.43 68.457h31.939c5.9886 0 9.981 4.8963 9.981 10.772v30.357c0 5.8756-3.9924 10.772-9.981 10.772h-31.939c-5.9886 0-9.981-4.8963-9.981-10.772v-30.357c0-5.8756 3.9924-10.772 9.981-10.772z"
+         stroke-width=".098864"
+         id="path571" />
+      <path
+         d="m206.33 94.897a25.931 25.461 0 01-25.931 25.461 25.931 25.461 0 01-25.931-25.461 25.931 25.461 0 0125.931-26.44 25.931 25.461 0 0125.931 26.44z"
+         stroke-width=".098827"
+         id="path573" />
+    </g>
+    <path
+       d="m179.2 39.243-58 57m0-57 58 57m-58-57.5h58v58h-58z"
+       stroke-width=".1"
+       id="path577" />
+  </g>
+  <g
+     id="container">
+    <rect
+       id="base"
+       x="18"
+       y="18"
+       width="72"
+       height="72"
+       fill="#c269ff"
+       stroke-width="1.2414"
+       style="fill:#f6ebf9;fill-opacity:1" />
+    <rect
+       id="base-circle"
+       x="18"
+       y="18"
+       width="72"
+       height="72"
+       ry="36"
+       fill="#c269ff"
+       stroke-width="1.2414"
+       style="fill:#f6ebf9;fill-opacity:1" />
+    <g
+       id="logo"
+       transform="matrix(.25795 0 0 .27273 20.248 20.727)">
+      <path
+         d="m123 56h3a29 29 45 0129 29v5a76 76 135 01-76 76 8 8 62 01-6-10v-51a50 50 135 0150-49z"
+         fill="url(#a)"
+         id="path582" />
+      <path
+         transform="matrix(0,-1,-1,0,0,0)"
+         d="m-138-189h4a33 33 45 0133 32v5a79 79 135 01-79 79h-3a5 5 45 01-5-5v-61a50 50 135 0150-50z"
+         fill="url(#b)"
+         id="path584" />
+    </g>
+  </g>
+</svg>
