@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/server_data.dart';
 import '../../provider/app_theme.dart';
@@ -136,17 +135,12 @@ class AppVersionTile extends HookConsumerWidget {
       title: Text(version.shouldUpdate
           ? 'Update available: ${version.lastestVersion}'
           : 'Boorusphere ${version.version}'),
-      subtitle:
-          version.shouldUpdate ? const Text('Click here to download') : null,
       leading: Icon(
         Icons.info_outline,
         color: version.shouldUpdate ? Colors.pink.shade300 : null,
       ),
       dense: true,
-      onTap: version.shouldUpdate
-          ? () => launchUrlString(version.downloadUrl,
-              mode: LaunchMode.externalApplication)
-          : null,
+      onTap: () => Navigator.pushNamed(context, Routes.about),
     );
   }
 }

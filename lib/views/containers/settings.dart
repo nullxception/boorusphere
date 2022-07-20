@@ -4,7 +4,6 @@ import 'package:settings_ui/settings_ui.dart';
 
 import '../../provider/app_theme.dart';
 import '../../provider/booru_query.dart';
-import '../../routes.dart';
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});
@@ -52,17 +51,6 @@ class SettingsPage extends HookConsumerWidget {
                 onToggle: (value) {
                   booruQueryNotifier.setSafeMode(value);
                 },
-              ),
-            ],
-          ),
-          SettingsSection(
-            title: const Text('Misc'),
-            tiles: [
-              SettingsTile(
-                title: const Text('Open source licenses'),
-                leading: const Icon(Icons.collections_bookmark),
-                onPressed: (context) =>
-                    Navigator.pushNamed(context, Routes.licenses),
               ),
             ],
           ),

@@ -28,3 +28,9 @@ inkscape \
     export-dpi:$dpi;
     export-filename:$dest/adaptive-foreground.png;
     export-do" logo.svg
+
+inkscape \
+    --actions="export-id-only;export-id:logo;
+    export-dpi:$dpi;
+    export-filename:$dest/logo.png;
+    export-do" logo.svg
