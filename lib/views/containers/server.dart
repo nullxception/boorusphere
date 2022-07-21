@@ -10,7 +10,8 @@ class ServerPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverDataProvider);
+    final serverDataNotifier = ref.watch(serverDataProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +40,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                         ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            server.resetToDefault();
+                            serverDataNotifier.resetToDefault();
                           },
                           child: const Text('Reset'),
                         )
@@ -65,7 +66,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ...server.all.map((it) {
+            ...serverData.map((it) {
               return ListTile(
                 title: Text(it.name),
                 subtitle: Text(it.homepage),
@@ -81,7 +82,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                                     ServerEditorPage(server: it)));
                         break;
                       case 'remove':
-                        if (server.all.length == 1) {
+                        if (serverData.length == 1) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   duration: Duration(seconds: 1),
@@ -90,7 +91,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                           break;
                         }
 
-                        server.removeServer(data: it);
+                        serverDataNotifier.removeServer(data: it);
                         break;
                       default:
                         break;

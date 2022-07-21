@@ -1,34 +1,26 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/server_data.dart';
-import 'booru_api.dart';
 import 'hive_boxes.dart';
+import 'settings/active_server.dart';
 
 final serverDataProvider =
-    ChangeNotifierProvider((ref) => ServerDataNotifier(ref.read));
+    StateNotifierProvider<ServersState, List<ServerData>>(
+        (ref) => ServersState(ref.read));
 
-class ServerDataNotifier extends ChangeNotifier {
+class ServersState extends StateNotifier<List<ServerData>> {
+  ServersState(this.read) : super([]);
   final Reader read;
-  late List<ServerData> _serverList;
-  late ServerData _activeServer;
-  final _defaultServerList = <ServerData>{};
 
-  ServerDataNotifier(this.read) {
-    _init();
-  }
+  final _defaultServerList = <ServerData>[];
 
-  List<ServerData> get all => _serverList;
   Set<ServerData> get allWithDefaults =>
-      <ServerData>{..._defaultServerList, ..._serverList};
-  ServerData get active => _activeServer;
+      <ServerData>{..._defaultServerList, ...state};
 
-  Future<void> _init() async {
-    final api = read(booruApiProvider);
-    final prefs = await read(settingsBox);
+  Future<void> populateData() async {
     final server = await read(serverBox);
 
     final fromAssets = await _defaultServersAssets();
@@ -37,13 +29,7 @@ class ServerDataNotifier extends ChangeNotifier {
     if (server.isEmpty) {
       server.putAll(fromAssets);
     }
-    _serverList = server.values.map((it) => it as ServerData).toList();
-
-    final activeServerName = prefs.get('active_server') ?? '';
-    _activeServer = select(activeServerName);
-
-    api.posts.clear();
-    api.fetch();
+    state = server.values.map((it) => it as ServerData).toList();
   }
 
   Future<Map<String, ServerData>> _defaultServersAssets() async {
@@ -57,61 +43,59 @@ class ServerDataNotifier extends ChangeNotifier {
   }
 
   ServerData select(String name) {
-    return _serverList.firstWhere((element) => element.name == name,
-        orElse: () => _serverList.first);
-  }
-
-  Future<void> setActiveServer({required String name}) async {
-    if (name != _activeServer.name) {
-      _activeServer = select(name);
-      final prefs = await read(settingsBox);
-      prefs.put('active_server', name);
-    }
+    return state.isEmpty
+        ? ServerData.empty
+        : state.firstWhere((element) => element.name == name,
+            orElse: () => state.first);
   }
 
   void addServer({required ServerData data}) async {
     final server = await read(serverBox);
     server.put(data.homepage, data);
-    _serverList = server.values.map((it) => it as ServerData).toList();
-    notifyListeners();
+    state = server.values.map((it) => it as ServerData).toList();
   }
 
   void removeServer({required ServerData data}) async {
-    if (_serverList.length == 1) {
+    final activeServerNotifier = read(activeServerProvider.notifier);
+    final activeServer = read(activeServerProvider);
+
+    if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
     final server = await read(serverBox);
     server.delete(data.homepage);
-    _serverList = server.values.map((it) => it as ServerData).toList();
-    if (_activeServer == data) {
-      setActiveServer(name: _serverList.first.name);
+    state = server.values.map((it) => it as ServerData).toList();
+    if (activeServer == data) {
+      activeServerNotifier.use(state.first);
     }
-    notifyListeners();
   }
 
   void resetToDefault() async {
     final server = await read(serverBox);
+    final activeServerNotifier = read(activeServerProvider.notifier);
+
     final fromAssets = await _defaultServersAssets();
 
     server.deleteAll(server.keys);
     server.putAll(fromAssets);
-    _serverList = server.values.map((it) => it as ServerData).toList();
+    state = server.values.map((it) => it as ServerData).toList();
 
-    setActiveServer(name: _serverList.first.name);
-    notifyListeners();
+    activeServerNotifier.use(state.first);
   }
 
   Future<void> editServer({
-    required ServerData server,
+    required ServerData data,
     required ServerData newData,
   }) async {
-    final box = await read(serverBox);
-    box.delete(server.homepage);
-    box.put(server.homepage, newData);
-    _serverList = box.values.map((it) => it as ServerData).toList();
-    if (_activeServer == server && newData.name != _activeServer.name) {
-      setActiveServer(name: newData.name);
+    final server = await read(serverBox);
+    final activeServer = read(activeServerProvider);
+    final activeServerNotifier = read(activeServerProvider.notifier);
+
+    server.delete(data.homepage);
+    server.put(data.homepage, newData);
+    state = server.values.map((it) => it as ServerData).toList();
+    if (activeServer == data && newData.name != activeServer.name) {
+      activeServerNotifier.use(newData);
     }
-    notifyListeners();
   }
 }

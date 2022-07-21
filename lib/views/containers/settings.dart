@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../provider/app_theme.dart';
 import '../../provider/booru_query.dart';
+import '../../provider/settings/theme.dart';
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});
@@ -12,7 +12,8 @@ class SettingsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final booruQuery = ref.watch(booruQueryProvider);
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
-    final appTheme = ref.watch(appThemeProvider);
+    final darkerTheme = ref.watch(darkerThemeProvider);
+    final darkerThemeNotifier = ref.watch(darkerThemeProvider.notifier);
 
     final themeSettings = SettingsThemeData(
         titleTextColor: Theme.of(context).colorScheme.primary,
@@ -32,9 +33,9 @@ class SettingsPage extends HookConsumerWidget {
                 description:
                     const Text('Use deeper dark color for the dark mode'),
                 leading: const Icon(Icons.brightness_3),
-                initialValue: appTheme.isDarkerTheme,
+                initialValue: darkerTheme,
                 onToggle: (value) {
-                  appTheme.useDarkerTheme(value);
+                  darkerThemeNotifier.enable(value);
                 },
               ),
             ],

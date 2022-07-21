@@ -46,7 +46,7 @@ class ServerEditorPage extends HookConsumerWidget {
                     labelText: 'Example: https://abc.com',
                   ),
                   validator: (value) {
-                    final homepages = serverData.all.map((it) => it.homepage);
+                    final homepages = serverData.map((it) => it.homepage);
                     if (!isEditing && homepages.contains(value)) {
                       return 'Server data for $value already exists';
                     }
@@ -113,10 +113,14 @@ class ServerEditorPage extends HookConsumerWidget {
                   data: data.value,
                   isEditing: isEditing,
                   onSubmitted: (data) {
+                    final serverDataNotifier =
+                        ref.read(serverDataProvider.notifier);
+
                     if (isEditing) {
-                      serverData.editServer(server: server, newData: data);
+                      serverDataNotifier.editServer(
+                          data: server, newData: data);
                     } else {
-                      serverData.addServer(data: data);
+                      serverDataNotifier.addServer(data: data);
                     }
                     Navigator.pop(context);
                   },

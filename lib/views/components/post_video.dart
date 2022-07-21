@@ -10,7 +10,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/downloader.dart';
-import '../../provider/video_player.dart';
+import '../../provider/settings/video_player.dart';
 import '../containers/post.dart';
 import '../containers/post_detail.dart';
 
@@ -57,7 +57,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
         ..addListener(() => setState(() {}))
         ..initialize().whenComplete(() {
           autoHideController();
-          controller?.setVolume(ref.read(videoPlayerProvider).mute ? 0 : 1);
+          controller?.setVolume(ref.read(videoPlayerMuteProvider) ? 0 : 1);
           controller?.play();
         });
     }
@@ -84,7 +84,8 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final vpp = ref.watch(videoPlayerProvider);
+    final playerMute = ref.watch(videoPlayerMuteProvider);
+    final playerMuteNotifier = ref.watch(videoPlayerMuteProvider.notifier);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(booru.src);
@@ -180,11 +181,11 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
                       ),
                       IconButton(
                         onPressed: () {
-                          vpp.mute = !vpp.mute;
-                          controller?.setVolume(vpp.mute ? 0 : 1);
+                          playerMuteNotifier.toggle();
+                          controller?.setVolume(playerMute ? 0 : 1);
                         },
                         icon: Icon(
-                          vpp.mute ? Icons.volume_mute : Icons.volume_up,
+                          playerMute ? Icons.volume_mute : Icons.volume_up,
                         ),
                         color: Colors.white,
                       ),

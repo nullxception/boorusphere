@@ -6,9 +6,9 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../../model/server_data.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/booru_query.dart';
-import '../../provider/grid.dart';
 import '../../provider/search_history.dart';
-import '../../provider/server_data.dart';
+import '../../provider/settings/active_server.dart';
+import '../../provider/settings/grid.dart';
 import '../containers/home.dart';
 import '../hooks/floating_searchbar_controller.dart';
 import 'search_suggestions.dart';
@@ -46,12 +46,12 @@ class HomeBar extends HookConsumerWidget {
     final controller = useFloatingSearchBarController();
     final gridHandler = ref.watch(gridProvider.notifier);
     final grid = ref.watch(gridProvider);
-    final server = ref.watch(serverDataProvider);
     final api = ref.watch(booruApiProvider);
     final booruQuery = ref.watch(booruQueryProvider);
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final searchHistory = ref.watch(searchHistoryProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider.state);
+    final activeServer = ref.watch(activeServerProvider);
 
     final suggestionHistory = useState({});
     final typedQuery = useState('');
@@ -93,7 +93,7 @@ class HomeBar extends HookConsumerWidget {
         );
       },
       onQueryChanged: (value) async {
-        if (server.active.canSuggestTags) {
+        if (activeServer.canSuggestTags) {
           typedQuery.value = value.trim();
         }
         suggestionHistory.value =

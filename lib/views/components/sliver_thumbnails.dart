@@ -8,7 +8,7 @@ import 'package:tinycolor2/tinycolor2.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
-import '../../provider/grid.dart';
+import '../../provider/settings/grid.dart';
 import '../../routes.dart';
 import '../containers/post.dart';
 

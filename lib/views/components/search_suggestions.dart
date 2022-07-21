@@ -5,7 +5,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/search_history.dart';
 import '../../provider/booru_api.dart';
-import '../../provider/server_data.dart';
+import '../../provider/settings/active_server.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {
   const SearchSuggestionResult({
@@ -40,7 +40,8 @@ class SearchSuggestionResult extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server = ref.watch(serverDataProvider);
+    final activeServer = ref.watch(activeServerProvider);
+
     final suggester = ref.watch(suggestionProvider(query));
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
@@ -111,7 +112,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
             },
             itemCount: history.length,
           ),
-          if (!server.active.canSuggestTags)
+          if (!activeServer.canSuggestTags)
             Center(
               child: Column(
                 children: [
@@ -120,16 +121,16 @@ class SearchSuggestionResult extends HookConsumerWidget {
                     child: Icon(Icons.search_off),
                   ),
                   Text(
-                      '${server.active.name} did not support search suggestion'),
+                      '${activeServer.name} did not support search suggestion'),
                 ],
               ),
             ),
-          if (server.active.canSuggestTags)
+          if (activeServer.canSuggestTags)
             Padding(
               padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
-              child: Text('Suggested at ${server.active.name}'),
+              child: Text('Suggested at ${activeServer.name}'),
             ),
-          if (server.active.canSuggestTags)
+          if (activeServer.canSuggestTags)
             suggester.when(
               data: (value) {
                 return ListView.builder(

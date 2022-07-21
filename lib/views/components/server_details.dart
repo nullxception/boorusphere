@@ -59,7 +59,7 @@ class ServerDetails extends HookConsumerWidget {
                     labelText: 'Homepage',
                   ),
                   validator: (value) {
-                    final homepages = serverData.all.map((it) => it.homepage);
+                    final homepages = serverData.map((it) => it.homepage);
                     if (!isEditing && homepages.contains(value)) {
                       return 'Server data for $value already exists';
                     }

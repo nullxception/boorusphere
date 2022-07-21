@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/server_data.dart';
-import '../../provider/app_theme.dart';
 import '../../provider/app_version.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/booru_query.dart';
 import '../../provider/server_data.dart';
+import '../../provider/settings/active_server.dart';
+import '../../provider/settings/theme.dart';
 import '../../routes.dart';
 import 'favicon.dart';
 
@@ -114,13 +115,24 @@ class HomeDrawer extends StatelessWidget {
 }
 
 class _ThemeSwitcherButton extends HookConsumerWidget {
+  IconData themeIconOf(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.dark:
+        return Icons.brightness_2;
+      case ThemeMode.light:
+        return Icons.brightness_high;
+      default:
+        return Icons.brightness_auto;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appThemeHandler = ref.watch(appThemeProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return IconButton(
-      icon: Icon(appThemeHandler.themeIcon),
-      onPressed: appThemeHandler.cycleTheme,
+      icon: Icon(themeIconOf(themeMode)),
+      onPressed: ref.read(themeModeProvider.notifier).cycleTheme,
     );
   }
 }
@@ -173,13 +185,16 @@ class _ServerSelection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final api = ref.watch(booruApiProvider);
-    final server = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverDataProvider);
+    final activeServer = ref.watch(activeServerProvider);
+    final activeServerNotifier = ref.read(activeServerProvider.notifier);
+
     final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: server.all.map((it) {
+      children: serverData.map((it) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           child: ListTile(
@@ -193,11 +208,11 @@ class _ServerSelection extends HookConsumerWidget {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            selected: it.name == server.active.name,
+            selected: it.name == activeServer.name,
             selectedTileColor: theme.colorScheme.primary
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
-              server.setActiveServer(name: it.name);
+              activeServerNotifier.use(it);
               api.posts.clear();
               api.fetch();
               Navigator.pop(context);

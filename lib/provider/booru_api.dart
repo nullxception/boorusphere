@@ -14,7 +14,7 @@ import '../model/server_payload.dart';
 import '../util/map_utils.dart';
 import 'blocked_tags.dart';
 import 'booru_query.dart';
-import 'server_data.dart';
+import 'settings/active_server.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => '');
@@ -116,8 +116,8 @@ class BooruApi {
   void fetch() async {
     final pageLoading = read(pageLoadingProvider.state);
     final booruQuery = read(booruQueryProvider);
-    final server = read(serverDataProvider);
     final errorMessage = read(pageErrorProvider.state);
+    final activeServer = read(activeServerProvider);
 
     if (posts.isEmpty) {
       _page = 1;
@@ -130,13 +130,13 @@ class BooruApi {
     }
 
     try {
-      final url = server.active.composeSearchUrl(booruQuery, _page);
+      final url = activeServer.composeSearchUrl(booruQuery, _page);
       Fimber.d('Fetching $url');
       final res = await rere(
         () => http.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
-      final data = await _parseQueryResponse(server.active, res);
+      final data = await _parseQueryResponse(activeServer, res);
       posts.addAll(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
@@ -249,9 +249,10 @@ class BooruApi {
 
   Future<List<String>> fetchSuggestion({required String query}) async {
     final queries = query.trim().split(' ');
-    final server = read(serverDataProvider);
+    final activeServer = read(activeServerProvider);
+
     try {
-      final url = server.active.composeSuggestionUrl(queries.last);
+      final url = activeServer.composeSuggestionUrl(queries.last);
       final res = await rere(
         () => http.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,

@@ -2,7 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../model/search_history.dart';
 import 'hive_boxes.dart';
-import 'server_data.dart';
+import 'settings/active_server.dart';
 
 class SearchHistoryRepository {
   final Reader read;
@@ -56,11 +56,12 @@ class SearchHistoryRepository {
     if (query.isEmpty) return;
 
     final history = await read(searchHistoryBox);
-    final server = read(serverDataProvider);
+    final activeServer = read(activeServerProvider);
+
     if (!await checkExists(value: query)) {
       history.add(SearchHistory(
         query: query,
-        server: server.active.name,
+        server: activeServer.name,
       ));
     }
   }
