@@ -72,6 +72,7 @@ class BooruApi {
       final tags = MapUtils.getWordlist(post, '^(tags|tag_str)');
       final width = MapUtils.getInt(post, '^(image_wi|preview_wi|width)');
       final height = MapUtils.getInt(post, '^(image_he|preview_he|height)');
+      final rating = MapUtils.getString(post, '^rating');
 
       final hasContent = width > 0 && height > 0;
       final notBlocked = !tags.any(blocked.contains);
@@ -89,6 +90,7 @@ class BooruApi {
             height: height,
             serverName: server.name,
             postUrl: postUrl,
+            rateValue: rating.isEmpty ? 'q' : rating,
           ),
         );
       }

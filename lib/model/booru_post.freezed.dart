@@ -34,6 +34,8 @@ mixin _$BooruPost {
   String get serverName => throw _privateConstructorUsedError;
   @HiveField(8, defaultValue: '')
   String get postUrl => throw _privateConstructorUsedError;
+  @HiveField(9, defaultValue: 'q')
+  String get rateValue => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BooruPostCopyWith<BooruPost> get copyWith =>
@@ -53,7 +55,8 @@ abstract class $BooruPostCopyWith<$Res> {
       @HiveField(5, defaultValue: -1) int width,
       @HiveField(6, defaultValue: -1) int height,
       @HiveField(7, defaultValue: '') String serverName,
-      @HiveField(8, defaultValue: '') String postUrl});
+      @HiveField(8, defaultValue: '') String postUrl,
+      @HiveField(9, defaultValue: 'q') String rateValue});
 }
 
 /// @nodoc
@@ -75,6 +78,7 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
     Object? height = freezed,
     Object? serverName = freezed,
     Object? postUrl = freezed,
+    Object? rateValue = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -113,6 +117,10 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      rateValue: rateValue == freezed
+          ? _value.rateValue
+          : rateValue // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -132,7 +140,8 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
       @HiveField(5, defaultValue: -1) int width,
       @HiveField(6, defaultValue: -1) int height,
       @HiveField(7, defaultValue: '') String serverName,
-      @HiveField(8, defaultValue: '') String postUrl});
+      @HiveField(8, defaultValue: '') String postUrl,
+      @HiveField(9, defaultValue: 'q') String rateValue});
 }
 
 /// @nodoc
@@ -156,6 +165,7 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
     Object? height = freezed,
     Object? serverName = freezed,
     Object? postUrl = freezed,
+    Object? rateValue = freezed,
   }) {
     return _then(_$_BooruPost(
       id: id == freezed
@@ -194,6 +204,10 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      rateValue: rateValue == freezed
+          ? _value.rateValue
+          : rateValue // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -211,7 +225,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       @HiveField(5, defaultValue: -1) required this.width,
       @HiveField(6, defaultValue: -1) required this.height,
       @HiveField(7, defaultValue: '') required this.serverName,
-      @HiveField(8, defaultValue: '') required this.postUrl})
+      @HiveField(8, defaultValue: '') required this.postUrl,
+      @HiveField(9, defaultValue: 'q') this.rateValue = 'q'})
       : _tags = tags,
         super._();
 
@@ -247,10 +262,14 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   @override
   @HiveField(8, defaultValue: '')
   final String postUrl;
+  @override
+  @JsonKey()
+  @HiveField(9, defaultValue: 'q')
+  final String rateValue;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BooruPost(id: $id, src: $src, displaySrc: $displaySrc, thumbnail: $thumbnail, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl)';
+    return 'BooruPost(id: $id, src: $src, displaySrc: $displaySrc, thumbnail: $thumbnail, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue)';
   }
 
   @override
@@ -266,7 +285,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('width', width))
       ..add(DiagnosticsProperty('height', height))
       ..add(DiagnosticsProperty('serverName', serverName))
-      ..add(DiagnosticsProperty('postUrl', postUrl));
+      ..add(DiagnosticsProperty('postUrl', postUrl))
+      ..add(DiagnosticsProperty('rateValue', rateValue));
   }
 
   @override
@@ -284,7 +304,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
             const DeepCollectionEquality().equals(other.height, height) &&
             const DeepCollectionEquality()
                 .equals(other.serverName, serverName) &&
-            const DeepCollectionEquality().equals(other.postUrl, postUrl));
+            const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
+            const DeepCollectionEquality().equals(other.rateValue, rateValue));
   }
 
   @override
@@ -298,7 +319,8 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(width),
       const DeepCollectionEquality().hash(height),
       const DeepCollectionEquality().hash(serverName),
-      const DeepCollectionEquality().hash(postUrl));
+      const DeepCollectionEquality().hash(postUrl),
+      const DeepCollectionEquality().hash(rateValue));
 
   @JsonKey(ignore: true)
   @override
@@ -308,16 +330,16 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 
 abstract class _BooruPost extends BooruPost {
   const factory _BooruPost(
-          {@HiveField(0, defaultValue: -1) required final int id,
-          @HiveField(1, defaultValue: '') required final String src,
-          @HiveField(2, defaultValue: '') required final String displaySrc,
-          @HiveField(3, defaultValue: '') required final String thumbnail,
-          @HiveField(4, defaultValue: []) required final List<String> tags,
-          @HiveField(5, defaultValue: -1) required final int width,
-          @HiveField(6, defaultValue: -1) required final int height,
-          @HiveField(7, defaultValue: '') required final String serverName,
-          @HiveField(8, defaultValue: '') required final String postUrl}) =
-      _$_BooruPost;
+      {@HiveField(0, defaultValue: -1) required final int id,
+      @HiveField(1, defaultValue: '') required final String src,
+      @HiveField(2, defaultValue: '') required final String displaySrc,
+      @HiveField(3, defaultValue: '') required final String thumbnail,
+      @HiveField(4, defaultValue: []) required final List<String> tags,
+      @HiveField(5, defaultValue: -1) required final int width,
+      @HiveField(6, defaultValue: -1) required final int height,
+      @HiveField(7, defaultValue: '') required final String serverName,
+      @HiveField(8, defaultValue: '') required final String postUrl,
+      @HiveField(9, defaultValue: 'q') final String rateValue}) = _$_BooruPost;
   const _BooruPost._() : super._();
 
   @override
@@ -347,6 +369,9 @@ abstract class _BooruPost extends BooruPost {
   @override
   @HiveField(8, defaultValue: '')
   String get postUrl;
+  @override
+  @HiveField(9, defaultValue: 'q')
+  String get rateValue;
   @override
   @JsonKey(ignore: true)
   _$$_BooruPostCopyWith<_$_BooruPost> get copyWith =>

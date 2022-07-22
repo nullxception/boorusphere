@@ -12,6 +12,12 @@ enum PostType {
   unsupported,
 }
 
+enum PostRating {
+  questionable,
+  explicit,
+  safe;
+}
+
 @freezed
 class BooruPost with _$BooruPost {
   const BooruPost._();
@@ -27,6 +33,7 @@ class BooruPost with _$BooruPost {
     @HiveField(6, defaultValue: -1) required int height,
     @HiveField(7, defaultValue: '') required String serverName,
     @HiveField(8, defaultValue: '') required String postUrl,
+    @HiveField(9, defaultValue: 'q') @Default('q') String rateValue,
   }) = _BooruPost;
 
   String get mimeType =>
@@ -40,6 +47,19 @@ class BooruPost with _$BooruPost {
       return PostType.photo;
     } else {
       return PostType.unsupported;
+    }
+  }
+
+  PostRating get rating {
+    switch (rateValue) {
+      case 'explicit':
+      case 'e':
+        return PostRating.explicit;
+      case 'safe':
+      case 's':
+        return PostRating.safe;
+      default:
+        return PostRating.questionable;
     }
   }
 

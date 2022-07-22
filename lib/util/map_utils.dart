@@ -59,4 +59,15 @@ mixin MapUtils {
 
     return [];
   }
+
+  static String getString(Map<String, dynamic> data, String key) {
+    final res = findEntry(data, key).value;
+    if (res is LinkedHashMap) {
+      return getGdataText(res).trim();
+    } else if (res is String) {
+      return res.trim();
+    }
+
+    return '';
+  }
 }

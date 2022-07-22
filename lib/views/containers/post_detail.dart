@@ -51,6 +51,10 @@ class PostDetailsPage extends HookConsumerWidget {
             title: const Text('Type'),
             subtitle: Text(booru.mimeType),
           ),
+          ListTile(
+            title: const Text('Rating'),
+            subtitle: Text(booru.rating.name),
+          ),
           if (booru.postUrl.isNotEmpty)
             ListTile(
               title: const Text('Location'),
