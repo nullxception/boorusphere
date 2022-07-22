@@ -18,6 +18,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final messenger = ScaffoldMessenger.of(context);
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
@@ -25,6 +26,8 @@ class HomePage extends HookConsumerWidget {
     final pageLoading = ref.watch(pageLoadingProvider);
     final errorMessage = ref.watch(pageErrorProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
+    final isDrawerOpened = useState(false);
+
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
         api.loadMore();
@@ -54,9 +57,19 @@ class HomePage extends HookConsumerWidget {
       drawer: const HomeDrawer(),
       drawerEdgeDragWidth:
           homeDrawerSwipeable ? MediaQuery.of(context).size.width : 30,
+      onDrawerChanged: (isOpened) {
+        if (isOpened) {
+          messenger.hideCurrentSnackBar();
+        }
+        isDrawerOpened.value = isOpened;
+      },
       body: DoubleBack(
+        condition: !isDrawerOpened.value,
+        onConditionFail: () {
+          messenger.hideCurrentSnackBar();
+        },
         onFirstBackPress: (context) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          messenger.showSnackBar(
               const SnackBar(content: Text('Press back again to exit')));
         },
         child: HomeBar(
