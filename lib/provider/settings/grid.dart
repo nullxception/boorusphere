@@ -7,7 +7,7 @@ final _savedGrid =
 
 final gridProvider = StateNotifierProvider<GridState, int>((ref) {
   final fromSettings =
-      ref.read(_savedGrid).maybeWhen(data: (data) => data, orElse: () => 0);
+      ref.watch(_savedGrid).maybeWhen(data: (data) => data, orElse: () => 0);
 
   return GridState(ref.read, fromSettings);
 });

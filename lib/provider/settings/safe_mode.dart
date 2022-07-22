@@ -7,7 +7,7 @@ final _savedSafeMode =
 
 final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
   final fromSettings = ref
-      .read(_savedSafeMode)
+      .watch(_savedSafeMode)
       .maybeWhen(data: (data) => data, orElse: () => true);
 
   return SafeModeState(ref.read, fromSettings);

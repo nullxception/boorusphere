@@ -6,7 +6,7 @@ import 'settings/safe_mode.dart';
 
 final booruQueryProvider =
     StateNotifierProvider<BooruQueryNotifier, ServerQuery>((ref) {
-  final safeMode = ref.read(safeModeProvider);
+  final safeMode = ref.watch(safeModeProvider);
   return BooruQueryNotifier(ref.read, ServerQuery(safeMode: safeMode));
 });
 

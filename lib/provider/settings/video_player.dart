@@ -8,7 +8,7 @@ final _savedVideoPlayerMute = FutureProvider<bool>(
 final videoPlayerMuteProvider =
     StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
   final fromSettings = ref
-      .read(_savedVideoPlayerMute)
+      .watch(_savedVideoPlayerMute)
       .maybeWhen(data: (data) => data, orElse: () => false);
 
   return VideoPlayerMuteState(ref.read, fromSettings);

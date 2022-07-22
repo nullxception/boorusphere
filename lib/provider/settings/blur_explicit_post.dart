@@ -8,7 +8,7 @@ final _savedBlurExplicitPost = FutureProvider<bool>(
 final blurExplicitPostProvider =
     StateNotifierProvider<BlurExplicitPostState, bool>((ref) {
   final fromSettings = ref
-      .read(_savedBlurExplicitPost)
+      .watch(_savedBlurExplicitPost)
       .maybeWhen(data: (data) => data, orElse: () => true);
 
   return BlurExplicitPostState(ref.read, fromSettings);

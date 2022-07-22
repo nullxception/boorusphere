@@ -9,7 +9,7 @@ final _savedThemeMode =
 final themeModeProvider =
     StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
   final fromSettings = ref
-      .read(_savedThemeMode)
+      .watch(_savedThemeMode)
       .maybeWhen(data: (data) => data, orElse: () => ThemeMode.system);
 
   return ThemeModeState(ref.read, fromSettings);
@@ -21,7 +21,7 @@ final _savedDarkerTheme =
 final darkerThemeProvider =
     StateNotifierProvider<DarkerThemeState, bool>((ref) {
   final fromSettings = ref
-      .read(_savedDarkerTheme)
+      .watch(_savedDarkerTheme)
       .maybeWhen(data: (data) => data, orElse: () => false);
 
   return DarkerThemeState(ref.read, fromSettings);
