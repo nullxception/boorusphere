@@ -11,7 +11,7 @@ import 'package:xml2json/xml2json.dart';
 import '../model/booru_post.dart';
 import '../model/server_data.dart';
 import '../model/server_payload.dart';
-import '../util/map_utils.dart';
+import '../util/map_ext.dart';
 import 'blocked_tags.dart';
 import 'booru_query.dart';
 import 'settings/active_server.dart';
@@ -63,16 +63,25 @@ class BooruApi {
     }
 
     final result = <BooruPost>[];
+
+    final idKey = ['id'];
+    final srcKey = ['file_url', 'url'];
+    final displaySrcKey = ['large_file_url'];
+    final thumbnailKey = ['preview_url', 'preview_file_url', 'preview'];
+    final tagsKey = ['tags', 'tag_string'];
+    final widthKey = ['image_width', 'width', 'preview_width'];
+    final heightKey = ['image_height', 'height', 'preview_height'];
+    final ratingKey = ['rating'];
+
     for (final Map<String, dynamic> post in entries) {
-      final id = MapUtils.getInt(post, r'^id$', or: -1);
-      final src = MapUtils.getUrl(post, '^(file_url|url)');
-      final displaySrc = MapUtils.getUrl(post, '^large_file');
-      final thumbnail =
-          MapUtils.getUrl(post, '^(preview_url|preview_file|preview)');
-      final tags = MapUtils.getWordlist(post, '^(tags|tag_str)');
-      final width = MapUtils.getInt(post, '^(image_wi|preview_wi|width)');
-      final height = MapUtils.getInt(post, '^(image_he|preview_he|height)');
-      final rating = MapUtils.getString(post, '^rating');
+      final id = post.take(idKey, orElse: -1);
+      final src = post.take(srcKey, orElse: '');
+      final displaySrc = post.take(displaySrcKey, orElse: '');
+      final thumbnail = post.take(thumbnailKey, orElse: '');
+      final tags = post.take(tagsKey, orElse: <String>[]);
+      final width = post.take(widthKey, orElse: -1);
+      final height = post.take(heightKey, orElse: -1);
+      final rating = post.take(ratingKey, orElse: 'q');
 
       final hasContent = width > 0 && height > 0;
       final notBlocked = !tags.any(blocked.contains);
@@ -253,10 +262,9 @@ class BooruApi {
 
     final result = <String>[];
     for (final Map<String, dynamic> entry in entries) {
-      final tags = MapUtils.findEntry(entry, '^(name|tag)');
-      final postCount = MapUtils.getInt(entry, '.*count');
-      if (postCount > 0 && !blocked.contains(tags.value)) {
-        result.add(tags.value);
+      final tag = entry.take(['name', 'tag'], orElse: '');
+      if (!blocked.contains(tag)) {
+        result.add(tag);
       }
     }
 
