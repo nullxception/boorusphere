@@ -49,8 +49,8 @@ class SettingsPage extends HookConsumerWidget {
             tiles: [
               SettingsTile.switchTile(
                 title: const Text('Blur explicit content'),
-                description: const Text(
-                    'Content rated as explicit will be blurred on the home page'),
+                description:
+                    const Text('Content rated as explicit will be blurred'),
                 leading: const Icon(Icons.phonelink_lock),
                 initialValue: blurExplicitPost,
                 onToggle: (value) {

@@ -7,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
+import '../../provider/settings/blur_explicit_post.dart';
 import '../containers/post.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
@@ -17,6 +18,7 @@ class PostImageDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isFullscreen = ref.watch(postFullscreenProvider.state);
+    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final zoomController =
         useAnimationController(duration: const Duration(milliseconds: 150));
     final zoomAnimation = useState<Animation<double>?>(null);
@@ -39,7 +41,11 @@ class PostImageDisplay extends HookConsumerWidget {
         loadStateChanged: (state) {
           switch (state.extendedImageLoadState) {
             case LoadState.loading:
-              return PostImageLoadingView(booru: booru, state: state);
+              return PostImageLoadingView(
+                booru: booru,
+                state: state,
+                blurImage: blurExplicitPost,
+              );
             case LoadState.failed:
               return PostImageFailedView(booru: booru, state: state);
             default:
@@ -132,10 +138,12 @@ class PostImageLoadingView extends StatelessWidget {
     super.key,
     required this.booru,
     required this.state,
+    this.blurImage = false,
   });
 
   final BooruPost booru;
   final ExtendedImageState state;
+  final bool blurImage;
 
   double calcProgress(ImageChunkEvent? chunk) =>
       chunk != null && chunk.expectedTotalBytes != null
@@ -147,16 +155,23 @@ class PostImageLoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final image = ExtendedImage.network(
+      booru.thumbnail,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.high,
+      enableLoadState: false,
+    );
+
     return Stack(
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
       children: [
-        ExtendedImage.network(
-          booru.thumbnail,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
-          enableLoadState: false,
-        ),
+        blurImage && booru.rating == PostRating.explicit
+            ? ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                child: image,
+              )
+            : image,
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
