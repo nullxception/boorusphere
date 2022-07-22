@@ -16,7 +16,7 @@ class ActiveServerState extends StateNotifier<ServerData> {
   Future<void> restoreFromPreference() async {
     final settings = await read(settingsBox);
     final serverDataNotifier = read(serverDataProvider.notifier);
-    final name = settings.get(boxKey) ?? '';
+    final name = settings.get(boxKey, defaultValue: '');
     state = serverDataNotifier.select(name);
   }
 

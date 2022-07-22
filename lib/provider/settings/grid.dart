@@ -25,7 +25,7 @@ class GridState extends StateNotifier<int> {
 
   static Future<int> restore(FutureProviderRef ref) async {
     final settings = await ref.read(settingsBox);
-    return settings.get(GridState.boxKey) ?? 0;
+    return settings.get(boxKey, defaultValue: 0);
   }
 
   static const boxKey = 'timeline_grid_number';

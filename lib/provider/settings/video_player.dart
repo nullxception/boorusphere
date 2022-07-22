@@ -19,11 +19,6 @@ class VideoPlayerMuteState extends StateNotifier<bool> {
 
   final Reader read;
 
-  Future<void> restoreFromPreference() async {
-    final prefs = await read(settingsBox);
-    state = prefs.get(boxKey) ?? false;
-  }
-
   Future<void> toggle() async {
     final newState = !state;
     state = newState;
@@ -35,6 +30,6 @@ class VideoPlayerMuteState extends StateNotifier<bool> {
 
   static Future<bool> restore(FutureProviderRef<bool> ref) async {
     final settings = await ref.read(settingsBox);
-    return settings.get(VideoPlayerMuteState.boxKey) ?? false;
+    return settings.get(VideoPlayerMuteState.boxKey, defaultValue: false);
   }
 }

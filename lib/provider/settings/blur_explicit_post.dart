@@ -27,7 +27,7 @@ class BlurExplicitPostState extends StateNotifier<bool> {
 
   static Future<bool> restore(FutureProviderRef ref) async {
     final settings = await ref.read(settingsBox);
-    return settings.get(BlurExplicitPostState.boxKey) ?? true;
+    return settings.get(boxKey, defaultValue: true);
   }
 
   static const boxKey = 'blur_explicit_post';

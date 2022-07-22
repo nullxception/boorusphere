@@ -26,7 +26,7 @@ class SafeModeState extends StateNotifier<bool> {
 
   static Future<bool> restore(FutureProviderRef ref) async {
     final settings = await ref.read(settingsBox);
-    return settings.get(SafeModeState.boxKey) ?? true;
+    return settings.get(boxKey, defaultValue: true);
   }
 
   static const boxKey = 'server_safe_mode';

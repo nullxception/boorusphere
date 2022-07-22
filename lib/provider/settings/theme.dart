@@ -32,12 +32,6 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
 
   final Reader read;
 
-  Future<void> restoreFromPreference() async {
-    final settings = await read(settingsBox);
-    final modeValue = settings.get(boxKey) ?? ThemeMode.system.index;
-    state = ThemeMode.values[modeValue];
-  }
-
   Future<void> setMode({required ThemeMode mode}) async {
     state = mode;
     final settings = await read(settingsBox);
@@ -58,9 +52,10 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
     }
   }
 
-  static Future<ThemeMode> restore(FutureProviderRef<ThemeMode> ref) async {
+  static Future<ThemeMode> restore(FutureProviderRef ref) async {
     final settings = await ref.read(settingsBox);
-    return settings.get(ThemeModeState.boxKey) ?? ThemeMode.system;
+    final value = settings.get(boxKey, defaultValue: ThemeMode.system.index);
+    return ThemeMode.values[value];
   }
 
   static const boxKey = 'theme_mode';
@@ -81,6 +76,6 @@ class DarkerThemeState extends StateNotifier<bool> {
 
   static Future<bool> restore(FutureProviderRef<bool> ref) async {
     final settings = await ref.read(settingsBox);
-    return settings.get(ThemeModeState.boxKey) ?? false;
+    return settings.get(boxKey, defaultValue: false);
   }
 }
