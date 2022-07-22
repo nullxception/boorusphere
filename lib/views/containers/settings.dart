@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../provider/booru_query.dart';
+import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/theme.dart';
 
 class SettingsPage extends HookConsumerWidget {
@@ -14,6 +15,9 @@ class SettingsPage extends HookConsumerWidget {
     final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
     final darkerTheme = ref.watch(darkerThemeProvider);
     final darkerThemeNotifier = ref.watch(darkerThemeProvider.notifier);
+    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
+    final blurExplicitPostNotifier =
+        ref.watch(blurExplicitPostProvider.notifier);
 
     final themeSettings = SettingsThemeData(
         titleTextColor: Theme.of(context).colorScheme.primary,
@@ -41,12 +45,22 @@ class SettingsPage extends HookConsumerWidget {
             ],
           ),
           SettingsSection(
-            title: const Text('Server'),
+            title: const Text('Safe Mode'),
             tiles: [
               SettingsTile.switchTile(
-                title: const Text('Safe Mode'),
+                title: const Text('Blur explicit content'),
                 description: const Text(
-                    'Fetch content that are safe.\nNote that rated "safe" on booru-powered site doesn\'t mean "Safe For Work".'),
+                    'Content rated as explicit will be blurred on the home page'),
+                leading: const Icon(Icons.phonelink_lock),
+                initialValue: blurExplicitPost,
+                onToggle: (value) {
+                  blurExplicitPostNotifier.enable(value);
+                },
+              ),
+              SettingsTile.switchTile(
+                title: const Text('Rated safe only'),
+                description: const Text(
+                    'Only fetch content that rated as safe. Note that rated as safe doesn\'t guarantee "safe for work"'),
                 leading: const Icon(Icons.phonelink_lock),
                 initialValue: booruQuery.safeMode,
                 onToggle: (value) {

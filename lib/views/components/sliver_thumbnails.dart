@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -8,6 +10,7 @@ import 'package:tinycolor2/tinycolor2.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/booru_api.dart';
+import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/grid.dart';
 import '../../routes.dart';
 import '../containers/post.dart';
@@ -82,8 +85,9 @@ class Thumbnail extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
+    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
 
-    return ExtendedImage.network(
+    final image = ExtendedImage.network(
       post.thumbnail,
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.fill,
@@ -105,6 +109,13 @@ class Thumbnail extends HookConsumerWidget {
         }
       },
     );
+
+    return blurExplicitPost && post.rating == PostRating.explicit
+        ? ImageFiltered(
+            imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+            child: image,
+          )
+        : image;
   }
 }
 
