@@ -66,11 +66,16 @@ class BooruApi {
 
     final idKey = ['id'];
     final srcKey = ['file_url', 'url'];
-    final displaySrcKey = ['large_file_url'];
+    final displaySrcKey = ['large_file_url', 'sample_url'];
     final thumbnailKey = ['preview_url', 'preview_file_url', 'preview'];
     final tagsKey = ['tags', 'tag_string'];
-    final widthKey = ['image_width', 'width', 'preview_width'];
-    final heightKey = ['image_height', 'height', 'preview_height'];
+    final widthKey = ['image_width', 'width', 'sample_width', 'preview_width'];
+    final heightKey = [
+      'image_height',
+      'height',
+      'sample_height',
+      'preview_height'
+    ];
     final ratingKey = ['rating'];
 
     for (final Map<String, dynamic> post in entries) {
