@@ -235,6 +235,16 @@ class BooruApi {
           : jsonDecode(res.body);
     } else if (res.body.isEmpty) {
       return [];
+    } else if (res.body.contains('<?xml')) {
+      final xjson = Xml2Json();
+      xjson.parse(res.body.replaceAll('\\', ''));
+
+      final jsonObj = jsonDecode(xjson.toGData());
+      if (jsonObj.values.first.keys.contains('tag')) {
+        entries = jsonObj.values.first['tag'];
+      } else {
+        throw const FormatException('Unknown document format');
+      }
     } else {
       throw const FormatException('Unknown document format');
     }
@@ -291,6 +301,7 @@ class BooruApi {
     'tag.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
+    'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
   ];
 
   static const webPostUrls = [
