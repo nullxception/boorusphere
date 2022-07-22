@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../model/booru_post.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../containers/post.dart';
+import 'post_placeholder_image.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
   const PostImageDisplay({super.key, required this.booru});
@@ -47,7 +48,11 @@ class PostImageDisplay extends HookConsumerWidget {
                 blurImage: blurExplicitPost,
               );
             case LoadState.failed:
-              return PostImageFailedView(booru: booru, state: state);
+              return PostImageFailedView(
+                booru: booru,
+                state: state,
+                blurImage: blurExplicitPost,
+              );
             default:
               return state.completedWidget;
           }
@@ -80,23 +85,19 @@ class PostImageFailedView extends StatelessWidget {
     super.key,
     required this.booru,
     required this.state,
+    required this.blurImage,
   });
 
   final BooruPost booru;
   final ExtendedImageState state;
-
+  final bool blurImage;
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
       children: [
-        ExtendedImage.network(
-          booru.thumbnail,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
-          enableLoadState: false,
-        ),
+        PostPlaceholderImage(url: booru.thumbnail, shouldBlur: blurImage),
         SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,25 +160,7 @@ class PostImageLoadingView extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
       children: [
-        ExtendedImage.network(
-          booru.thumbnail,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
-          enableLoadState: false,
-          loadStateChanged: (state) {
-            final shouldBlur = blurImage && booru.rating == PostRating.explicit;
-            final isCompleted =
-                state.extendedImageLoadState == LoadState.completed;
-            if (isCompleted && shouldBlur) {
-              return ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                child: state.completedWidget,
-              );
-            }
-
-            return state.completedWidget;
-          },
-        ),
+        PostPlaceholderImage(url: booru.thumbnail, shouldBlur: blurImage),
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),

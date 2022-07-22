@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -10,9 +9,11 @@ import 'package:video_player/video_player.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/downloader.dart';
+import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/video_player.dart';
 import '../containers/post.dart';
 import '../containers/post_detail.dart';
+import 'post_placeholder_image.dart';
 
 class PostVideoDisplay extends ConsumerStatefulWidget {
   const PostVideoDisplay({super.key, required this.booru});
@@ -29,7 +30,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
 
   bool hideControl = false;
 
-  get booru => widget.booru;
+  BooruPost get booru => widget.booru;
 
   void autoHideController() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -87,6 +88,7 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
     final playerMute = ref.watch(videoPlayerMuteProvider);
     final playerMuteNotifier = ref.watch(videoPlayerMuteProvider.notifier);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
+    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(booru.src);
 
@@ -104,11 +106,10 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
           if (!(controller?.value.isInitialized ?? false))
             AspectRatio(
               aspectRatio: booru.width / booru.height,
-              child: ExtendedImage.network(
-                booru.thumbnail,
-                fit: BoxFit.contain,
-                filterQuality: FilterQuality.high,
-                enableLoadState: false,
+              child: PostPlaceholderImage(
+                url: booru.thumbnail,
+                shouldBlur:
+                    blurExplicitPost && booru.rating == PostRating.explicit,
               ),
             ),
           if (controller?.value.isInitialized ?? false)

@@ -1,26 +1,25 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
+import '../../provider/settings/blur_explicit_post.dart';
+import 'post_placeholder_image.dart';
 
-class PostErrorDisplay extends StatelessWidget {
+class PostErrorDisplay extends HookConsumerWidget {
   const PostErrorDisplay({super.key, required this.booru});
 
   final BooruPost booru;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     return Stack(
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ExtendedImage.network(
-              booru.thumbnail,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
-              enableLoadState: false,
-            ),
+            PostPlaceholderImage(
+                url: booru.thumbnail, shouldBlur: blurExplicitPost),
             Card(
               margin: const EdgeInsets.fromLTRB(16, 32, 16, 32),
               child: Padding(
