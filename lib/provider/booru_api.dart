@@ -172,7 +172,11 @@ class BooruApi {
           retryIf: (e) => e is SocketException || e is TimeoutException,
         );
 
-        return res.statusCode == 200 ? query : '';
+        if (res.statusCode != 200) return '';
+        if (type == ServerPayloadType.post) return query;
+        final contentType = res.headers['content-type'] ?? '';
+
+        return contentType.contains('html') ? '' : query;
       }),
     );
 
