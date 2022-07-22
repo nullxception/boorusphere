@@ -107,7 +107,11 @@ class Thumbnail extends HookConsumerWidget {
           default:
             return blurExplicitPost && post.rating == PostRating.explicit
                 ? ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    imageFilter: ImageFilter.blur(
+                      sigmaX: 8,
+                      sigmaY: 8,
+                      tileMode: TileMode.decal,
+                    ),
                     child: state.completedWidget,
                   )
                 : state.completedWidget;

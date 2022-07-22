@@ -24,7 +24,11 @@ class PostPlaceholderImage extends StatelessWidget {
         final isCompleted = state.extendedImageLoadState == LoadState.completed;
         if (isCompleted && shouldBlur) {
           return ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+            imageFilter: ImageFilter.blur(
+              sigmaX: 8,
+              sigmaY: 8,
+              tileMode: TileMode.decal,
+            ),
             child: state.completedWidget,
           );
         }
