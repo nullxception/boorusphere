@@ -155,23 +155,29 @@ class PostImageLoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final image = ExtendedImage.network(
-      booru.thumbnail,
-      fit: BoxFit.contain,
-      filterQuality: FilterQuality.high,
-      enableLoadState: false,
-    );
-
     return Stack(
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
       children: [
-        blurImage && booru.rating == PostRating.explicit
-            ? ImageFiltered(
+        ExtendedImage.network(
+          booru.thumbnail,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.high,
+          enableLoadState: false,
+          loadStateChanged: (state) {
+            final shouldBlur = blurImage && booru.rating == PostRating.explicit;
+            final isCompleted =
+                state.extendedImageLoadState == LoadState.completed;
+            if (isCompleted && shouldBlur) {
+              return ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                child: image,
-              )
-            : image,
+                child: state.completedWidget,
+              );
+            }
+
+            return state.completedWidget;
+          },
+        ),
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),

@@ -87,7 +87,7 @@ class Thumbnail extends HookConsumerWidget {
     final gridExtra = ref.watch(gridProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
 
-    final image = ExtendedImage.network(
+    return ExtendedImage.network(
       post.thumbnail,
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.fill,
@@ -105,17 +105,15 @@ class Thumbnail extends HookConsumerWidget {
               ),
             );
           default:
-            return state.completedWidget;
+            return blurExplicitPost && post.rating == PostRating.explicit
+                ? ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: state.completedWidget,
+                  )
+                : state.completedWidget;
         }
       },
     );
-
-    return blurExplicitPost && post.rating == PostRating.explicit
-        ? ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-            child: image,
-          )
-        : image;
   }
 }
 
