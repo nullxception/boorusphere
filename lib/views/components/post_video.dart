@@ -22,21 +22,38 @@ final _videoCacheProvider = Provider((_) => DefaultCacheManager());
 
 final _fetcherProvider =
     Provider.family.autoDispose<CancelableOperation, String>((ref, arg) {
-  final cache = ref.read(_videoCacheProvider);
-  return CancelableOperation.fromFuture(cache.downloadFile(arg));
+  final cache = ref.watch(_videoCacheProvider);
+  final cancelable = CancelableOperation.fromFuture(cache.downloadFile(arg));
+
+  ref.onDispose(() {
+    if (!cancelable.isCompleted) {
+      cancelable.cancel();
+    }
+  });
+
+  return cancelable;
 });
 
 final _playerControllerProvider = FutureProvider.autoDispose
     .family<VideoPlayerController, String>((ref, arg) async {
-  final cache = ref.read(_videoCacheProvider);
+  VideoPlayerController controller;
+
+  final cache = ref.watch(_videoCacheProvider);
   final fromCache = await cache.getFileFromCache(arg);
   if (fromCache != null) {
-    return VideoPlayerController.file(fromCache.file);
+    controller = VideoPlayerController.file(fromCache.file);
+  } else {
+    final fetcher = ref.watch(_fetcherProvider(arg));
+    final fromNet = await fetcher.value;
+    controller = VideoPlayerController.file(fromNet.file);
   }
 
-  final fetcher = ref.read(_fetcherProvider(arg));
-  final fromNet = await fetcher.value;
-  return VideoPlayerController.file(fromNet.file);
+  ref.onDispose(() {
+    controller.pause();
+    controller.dispose();
+  });
+
+  return controller;
 });
 
 class PostVideoDisplay extends HookConsumerWidget {
@@ -46,12 +63,10 @@ class PostVideoDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fetcher = ref.watch(_fetcherProvider(booru.src));
     final playerController = ref.watch(_playerControllerProvider(booru.src));
     final playerMute = ref.watch(videoPlayerMuteProvider);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    final cachedController = useState<VideoPlayerController?>(null);
     final showToolbox = useState(true);
     final refresh = useRefresher();
     final isMounted = useIsMounted();
@@ -76,26 +91,23 @@ class PostVideoDisplay extends HookConsumerWidget {
 
     useEffect(() {
       playerController.whenData((it) {
-        cachedController.value = it;
         it.setLooping(true);
         it.initialize().whenComplete(() {
-          autoHideToolbox();
-          it.addListener(() => refresh());
+          onFirstFrame() {
+            refresh();
+            it.removeListener(onFirstFrame);
+          }
+
+          it.addListener(onFirstFrame);
           it.setVolume(playerMute ? 0 : 1);
           it.play();
+          autoHideToolbox();
         });
       });
     }, [playerController]);
 
     useEffect(() {
       autoHideToolbox();
-
-      return () {
-        cachedController.value?.removeListener(() => refresh());
-        cachedController.value?.pause();
-        cachedController.value?.dispose();
-        fetcher.cancel();
-      };
     }, [key]);
 
     return GestureDetector(
