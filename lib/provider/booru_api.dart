@@ -14,6 +14,7 @@ import '../model/server_payload.dart';
 import '../util/map_ext.dart';
 import 'blocked_tags.dart';
 import 'booru_query.dart';
+import 'server_data.dart';
 import 'settings/active_server.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
@@ -304,6 +305,17 @@ class BooruApi {
       Fimber.e('Something went wrong', ex: e);
       rethrow;
     }
+  }
+
+  void initialize() async {
+    final serverDataNotifier = read(serverDataProvider.notifier);
+    final activeServerNotifier = read(activeServerProvider.notifier);
+
+    await serverDataNotifier.populateData();
+    await activeServerNotifier.restoreFromPreference();
+
+    posts.clear();
+    fetch();
   }
 
   static const searchQueries = [
