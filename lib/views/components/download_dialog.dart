@@ -48,6 +48,7 @@ class DownloaderDialog extends HookConsumerWidget {
                 title: Text('Sample file (${_getFileExt(booru.displaySrc)})'),
                 leading: Icon(_getFileIcon(booru.displaySrc)),
                 onTap: () {
+                  Navigator.of(context).pop();
                   downloader.download(booru, url: booru.displaySrc);
                 },
               ),
@@ -55,6 +56,7 @@ class DownloaderDialog extends HookConsumerWidget {
               title: Text('Original file (${_getFileExt(booru.src)})'),
               leading: Icon(_getFileIcon(booru.src)),
               onTap: () {
+                Navigator.of(context).pop();
                 downloader.download(booru);
               },
             ),
