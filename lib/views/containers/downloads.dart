@@ -50,7 +50,7 @@ class DownloadsPage extends HookConsumerWidget {
                   children: Text('Your downloaded files will appear here'),
                 ),
               ),
-            ...downloader.entries.map((it) {
+            ...downloader.entries.reversed.map((it) {
               final fileName =
                   Uri.decodeFull(downloader.getFileNameFromUrl(it.destination));
               final progress = downloader.getProgress(it.id);

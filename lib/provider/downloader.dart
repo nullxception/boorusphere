@@ -22,7 +22,7 @@ class Downloader extends ChangeNotifier {
 
   final Reader read;
   final _port = ReceivePort();
-  final entries = <DownloadEntry>{};
+  final entries = <DownloadEntry>[];
   final progresses = <DownloadProgress>{};
 
   static const _portName = 'downloaderPort';
