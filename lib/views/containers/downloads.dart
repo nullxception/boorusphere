@@ -51,8 +51,8 @@ class DownloadsPage extends HookConsumerWidget {
                 ),
               ),
             ...downloader.entries.map((it) {
-              final fileName =
-                  Uri.decodeFull(downloader.getFileNameFromUrl(it.booru.src));
+              final fileName = Uri.decodeFull(
+                  downloader.getFileNameFromUrl(it.booru.originalFile));
               final progress = downloader.getProgress(it.id);
 
               return ListTile(
@@ -83,7 +83,7 @@ class DownloadsPage extends HookConsumerWidget {
                             : 0,
                       ),
                       Icon(
-                        it.booru.displayType == PostType.video
+                        it.booru.contentType == PostType.video
                             ? Icons.video_library
                             : Icons.photo,
                         size: 16,

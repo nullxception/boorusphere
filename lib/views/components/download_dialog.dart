@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:mime/mime.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/downloader.dart';
+import '../../util/string_ext.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({
@@ -12,20 +12,10 @@ class DownloaderDialog extends HookConsumerWidget {
   }) : super(key: key);
   final BooruPost booru;
 
-  String _getFileExt(String url) {
-    try {
-      return url.split('/').last.split('.').last;
-    } catch (e) {
-      return '';
-    }
-  }
-
   IconData _getFileIcon(String url) {
-    final name = url.split('/').last;
-    final mime = lookupMimeType(name) ?? '';
-    if (mime.startsWith('video')) {
+    if (url.mimeType.startsWith('video')) {
       return Icons.video_library;
-    } else if (mime.startsWith('image')) {
+    } else if (url.mimeType.startsWith('image')) {
       return Icons.photo;
     } else {
       return Icons.file_present;
@@ -43,18 +33,18 @@ class DownloaderDialog extends HookConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const ListTile(title: Text('Download')),
-            if (booru.hasDisplaySrc)
+            if (booru.sampleFile.isNotEmpty)
               ListTile(
-                title: Text('Sample file (${_getFileExt(booru.displaySrc)})'),
-                leading: Icon(_getFileIcon(booru.displaySrc)),
+                title: Text('Sample file (${booru.sampleFile.ext})'),
+                leading: Icon(_getFileIcon(booru.sampleFile)),
                 onTap: () {
                   Navigator.of(context).pop();
-                  downloader.download(booru, url: booru.displaySrc);
+                  downloader.download(booru, url: booru.sampleFile);
                 },
               ),
             ListTile(
-              title: Text('Original file (${_getFileExt(booru.src)})'),
-              leading: Icon(_getFileIcon(booru.src)),
+              title: Text('Original file (${booru.originalFile.ext})'),
+              leading: Icon(_getFileIcon(booru.originalFile)),
               onTap: () {
                 Navigator.of(context).pop();
                 downloader.download(booru);

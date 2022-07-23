@@ -65,9 +65,9 @@ class BooruApi {
     final result = <BooruPost>[];
 
     final idKey = ['id'];
-    final srcKey = ['file_url', 'url'];
-    final displaySrcKey = ['large_file_url', 'sample_url'];
-    final thumbnailKey = ['preview_url', 'preview_file_url', 'preview'];
+    final originalFileKey = ['file_url', 'url'];
+    final sampleFileKey = ['large_file_url', 'sample_url'];
+    final previewFileKey = ['preview_url', 'preview_file_url', 'preview'];
     final tagsKey = ['tags', 'tag_string'];
     final widthKey = ['image_width', 'width', 'sample_width', 'preview_width'];
     final heightKey = [
@@ -80,25 +80,26 @@ class BooruApi {
 
     for (final Map<String, dynamic> post in entries) {
       final id = post.take(idKey, orElse: -1);
-      final src = post.take(srcKey, orElse: '');
-      final displaySrc = post.take(displaySrcKey, orElse: '');
-      final thumbnail = post.take(thumbnailKey, orElse: '');
+      final originalFile = post.take(originalFileKey, orElse: '');
+      final sampleFile = post.take(sampleFileKey, orElse: '');
+      final previewFile = post.take(previewFileKey, orElse: '');
       final tags = post.take(tagsKey, orElse: <String>[]);
       final width = post.take(widthKey, orElse: -1);
       final height = post.take(heightKey, orElse: -1);
       final rating = post.take(ratingKey, orElse: 'q');
 
+      final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
       final notBlocked = !tags.any(blocked.contains);
       final postUrl = id < 0 ? '' : _composePostUrl(server, id);
 
-      if (src.isNotEmpty && thumbnail.isNotEmpty && hasContent && notBlocked) {
+      if (hasFile && hasContent && notBlocked) {
         result.add(
           BooruPost(
             id: id,
-            src: src,
-            displaySrc: displaySrc.isEmpty ? src : displaySrc,
-            thumbnail: thumbnail,
+            originalFile: originalFile,
+            sampleFile: sampleFile,
+            previewFile: previewFile,
             tags: tags,
             width: width,
             height: height,

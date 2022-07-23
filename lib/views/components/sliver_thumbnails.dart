@@ -44,7 +44,7 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: GestureDetector(
-            child: Thumbnail(post: api.posts[index]),
+            child: Thumbnail(booru: api.posts[index]),
             onTap: () {
               // invalidate the state first so we can use it for checking mechanism too
               lastOpenedIndex.state = -1;
@@ -68,8 +68,8 @@ class SliverThumbnails extends HookConsumerWidget {
 }
 
 class Thumbnail extends HookConsumerWidget {
-  const Thumbnail({super.key, required this.post});
-  final BooruPost post;
+  const Thumbnail({super.key, required this.booru});
+  final BooruPost booru;
 
   FilterQuality _thumbnailQuality(int gridExtra) {
     switch (gridExtra) {
@@ -88,24 +88,24 @@ class Thumbnail extends HookConsumerWidget {
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
 
     return ExtendedImage.network(
-      post.thumbnail,
+      booru.previewFile,
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.fill,
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
             return _ThumbnailShimmer(
-              aspectRatio: post.width / post.height,
+              aspectRatio: booru.width / booru.height,
             );
           case LoadState.failed:
             return Material(
               child: AspectRatio(
-                aspectRatio: post.width / post.height,
+                aspectRatio: booru.width / booru.height,
                 child: const Icon(Icons.broken_image_outlined),
               ),
             );
           default:
-            return blurExplicitPost && post.rating == PostRating.explicit
+            return blurExplicitPost && booru.rating == PostRating.explicit
                 ? ImageFiltered(
                     imageFilter: ImageFilter.blur(
                       sigmaX: 8,

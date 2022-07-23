@@ -15,7 +15,7 @@ class PostToolbox extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(booru.src);
+    final downloadProgress = downloader.getProgressByURL(booru.originalFile);
 
     return Container(
       color: Colors.black38,
@@ -47,7 +47,7 @@ class PostToolbox extends HookConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.link_outlined),
-            onPressed: () => launchUrlString(booru.src,
+            onPressed: () => launchUrlString(booru.originalFile,
                 mode: LaunchMode.externalApplication),
             color: Colors.white,
           ),

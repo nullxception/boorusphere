@@ -30,7 +30,7 @@ class PostPage extends HookConsumerWidget {
     final page = useState(beginPage);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
 
-    final isNotVideo = api.posts[page.value].displayType != PostType.video;
+    final isNotVideo = api.posts[page.value].contentType != PostType.video;
 
     useEffect(() {
       SystemChrome.setSystemUIChangeCallback((fullscreen) async {
@@ -69,7 +69,7 @@ class PostPage extends HookConsumerWidget {
         itemCount: api.posts.length,
         itemBuilder: (_, index) {
           final content = api.posts[index];
-          switch (content.displayType) {
+          switch (content.contentType) {
             case PostType.photo:
               return PostImageDisplay(booru: content);
             case PostType.video:

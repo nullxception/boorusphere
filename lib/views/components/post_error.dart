@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
 import '../../provider/settings/blur_explicit_post.dart';
+import '../../util/string_ext.dart';
 import 'post_placeholder_image.dart';
 
 class PostErrorDisplay extends HookConsumerWidget {
@@ -19,13 +20,13 @@ class PostErrorDisplay extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             PostPlaceholderImage(
-                url: booru.thumbnail, shouldBlur: blurExplicitPost),
+                url: booru.previewFile, shouldBlur: blurExplicitPost),
             Card(
               margin: const EdgeInsets.fromLTRB(16, 32, 16, 32),
               child: Padding(
                 padding: const EdgeInsets.all(1),
                 child: Text(
-                  '${booru.mimeType} is unsupported at the moment',
+                  '${booru.contentFile.mimeType} is unsupported at the moment',
                   textAlign: TextAlign.center,
                 ),
               ),

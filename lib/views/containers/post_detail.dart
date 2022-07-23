@@ -10,6 +10,7 @@ import '../../model/server_data.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/booru_api.dart';
 import '../../provider/booru_query.dart';
+import '../../util/string_ext.dart';
 import '../components/tag.dart';
 import 'home.dart';
 
@@ -49,7 +50,7 @@ class PostDetailsPage extends HookConsumerWidget {
           ),
           ListTile(
             title: const Text('Type'),
-            subtitle: Text(booru.mimeType),
+            subtitle: Text(booru.contentFile.mimeType),
           ),
           ListTile(
             title: const Text('Rating'),
@@ -77,7 +78,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 icon: const Icon(Icons.copy),
               ),
             ),
-          if (booru.hasDisplaySrc)
+          if (booru.sampleFile.isNotEmpty)
             ListTile(
               title: const Text('Sample file (displayed)'),
               subtitle: TextButton(
@@ -87,9 +88,9 @@ class PostDetailsPage extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launchUrlString(booru.displaySrc,
+                onPressed: () => launchUrlString(booru.sampleFile,
                     mode: LaunchMode.externalApplication),
-                child: Text(booru.displaySrc),
+                child: Text(booru.sampleFile),
               ),
             ),
           ListTile(
@@ -101,14 +102,14 @@ class PostDetailsPage extends HookConsumerWidget {
                   EdgeInsets.zero,
                 ),
               ),
-              onPressed: () => launchUrlString(booru.src,
+              onPressed: () => launchUrlString(booru.originalFile,
                   mode: LaunchMode.externalApplication),
-              child: Text(booru.src),
+              child: Text(booru.originalFile),
             ),
             trailing: IconButton(
               iconSize: 18,
               onPressed: () {
-                copyToClipboard(context, booru.src);
+                copyToClipboard(context, booru.originalFile);
               },
               icon: const Icon(Icons.copy),
             ),

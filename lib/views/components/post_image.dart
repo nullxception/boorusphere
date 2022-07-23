@@ -34,7 +34,7 @@ class PostImageDisplay extends HookConsumerWidget {
         isFullscreen.state = !isFullscreen.state;
       },
       child: ExtendedImage.network(
-        booru.displaySrc,
+        booru.contentFile,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
         initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
@@ -98,7 +98,7 @@ class PostImageFailedView extends StatelessWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: booru.thumbnail,
+          url: booru.previewFile,
           shouldBlur: shouldBlur && booru.rating == PostRating.explicit,
         ),
         SafeArea(
@@ -164,7 +164,7 @@ class PostImageLoadingView extends StatelessWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: booru.thumbnail,
+          url: booru.previewFile,
           shouldBlur: shouldBlur && booru.rating == PostRating.explicit,
         ),
         Center(

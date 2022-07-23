@@ -173,14 +173,14 @@ class Downloader extends ChangeNotifier {
     }
 
     final taskId = await FlutterDownloader.enqueue(
-        url: url ?? post.src,
+        url: url ?? post.originalFile,
         savedDir: booruDir.absolute.path,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
       final destination =
-          '${booruDir.absolute.path}/${getFileNameFromUrl(post.src)}';
+          '${booruDir.absolute.path}/${getFileNameFromUrl(post.originalFile)}';
       final entry =
           DownloadEntry(id: taskId, booru: post, destination: destination);
       _addEntry(entry: entry);
@@ -216,7 +216,7 @@ class Downloader extends ChangeNotifier {
   }
 
   DownloadProgress getProgressByURL(String url) {
-    final entry = entries.firstWhere((it) => it.booru.src == url,
+    final entry = entries.firstWhere((it) => it.booru.originalFile == url,
         orElse: () => DownloadEntry.empty);
     return getProgress(entry.id);
   }

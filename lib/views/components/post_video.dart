@@ -64,7 +64,7 @@ class PostVideoDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController =
-        ref.watch(_playerControllerProvider(booru.displaySrc));
+        ref.watch(_playerControllerProvider(booru.contentFile));
     final playerMute = ref.watch(videoPlayerMuteProvider);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
@@ -150,7 +150,7 @@ class PostVideoDisplay extends HookConsumerWidget {
               AspectRatio(
                 aspectRatio: booru.width / booru.height,
                 child: PostPlaceholderImage(
-                  url: booru.thumbnail,
+                  url: booru.previewFile,
                   shouldBlur:
                       blurExplicitPost && booru.rating == PostRating.explicit,
                 ),
@@ -224,7 +224,7 @@ class _PlayerToolbox extends HookConsumerWidget {
     final isMuted = ref.watch(videoPlayerMuteProvider);
     final playerMuteNotifier = ref.watch(videoPlayerMuteProvider.notifier);
     final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(booru.src);
+    final downloadProgress = downloader.getProgressByURL(booru.originalFile);
 
     return Padding(
       padding: EdgeInsets.fromLTRB(

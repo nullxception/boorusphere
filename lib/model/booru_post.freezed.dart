@@ -19,11 +19,11 @@ mixin _$BooruPost {
   @HiveField(0, defaultValue: -1)
   int get id => throw _privateConstructorUsedError;
   @HiveField(1, defaultValue: '')
-  String get src => throw _privateConstructorUsedError;
+  String get originalFile => throw _privateConstructorUsedError;
   @HiveField(2, defaultValue: '')
-  String get displaySrc => throw _privateConstructorUsedError;
+  String get sampleFile => throw _privateConstructorUsedError;
   @HiveField(3, defaultValue: '')
-  String get thumbnail => throw _privateConstructorUsedError;
+  String get previewFile => throw _privateConstructorUsedError;
   @HiveField(4, defaultValue: [])
   List<String> get tags => throw _privateConstructorUsedError;
   @HiveField(5, defaultValue: -1)
@@ -48,9 +48,9 @@ abstract class $BooruPostCopyWith<$Res> {
       _$BooruPostCopyWithImpl<$Res>;
   $Res call(
       {@HiveField(0, defaultValue: -1) int id,
-      @HiveField(1, defaultValue: '') String src,
-      @HiveField(2, defaultValue: '') String displaySrc,
-      @HiveField(3, defaultValue: '') String thumbnail,
+      @HiveField(1, defaultValue: '') String originalFile,
+      @HiveField(2, defaultValue: '') String sampleFile,
+      @HiveField(3, defaultValue: '') String previewFile,
       @HiveField(4, defaultValue: []) List<String> tags,
       @HiveField(5, defaultValue: -1) int width,
       @HiveField(6, defaultValue: -1) int height,
@@ -70,9 +70,9 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? src = freezed,
-    Object? displaySrc = freezed,
-    Object? thumbnail = freezed,
+    Object? originalFile = freezed,
+    Object? sampleFile = freezed,
+    Object? previewFile = freezed,
     Object? tags = freezed,
     Object? width = freezed,
     Object? height = freezed,
@@ -85,17 +85,17 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      src: src == freezed
-          ? _value.src
-          : src // ignore: cast_nullable_to_non_nullable
+      originalFile: originalFile == freezed
+          ? _value.originalFile
+          : originalFile // ignore: cast_nullable_to_non_nullable
               as String,
-      displaySrc: displaySrc == freezed
-          ? _value.displaySrc
-          : displaySrc // ignore: cast_nullable_to_non_nullable
+      sampleFile: sampleFile == freezed
+          ? _value.sampleFile
+          : sampleFile // ignore: cast_nullable_to_non_nullable
               as String,
-      thumbnail: thumbnail == freezed
-          ? _value.thumbnail
-          : thumbnail // ignore: cast_nullable_to_non_nullable
+      previewFile: previewFile == freezed
+          ? _value.previewFile
+          : previewFile // ignore: cast_nullable_to_non_nullable
               as String,
       tags: tags == freezed
           ? _value.tags
@@ -133,9 +133,9 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
   @override
   $Res call(
       {@HiveField(0, defaultValue: -1) int id,
-      @HiveField(1, defaultValue: '') String src,
-      @HiveField(2, defaultValue: '') String displaySrc,
-      @HiveField(3, defaultValue: '') String thumbnail,
+      @HiveField(1, defaultValue: '') String originalFile,
+      @HiveField(2, defaultValue: '') String sampleFile,
+      @HiveField(3, defaultValue: '') String previewFile,
       @HiveField(4, defaultValue: []) List<String> tags,
       @HiveField(5, defaultValue: -1) int width,
       @HiveField(6, defaultValue: -1) int height,
@@ -157,9 +157,9 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? src = freezed,
-    Object? displaySrc = freezed,
-    Object? thumbnail = freezed,
+    Object? originalFile = freezed,
+    Object? sampleFile = freezed,
+    Object? previewFile = freezed,
     Object? tags = freezed,
     Object? width = freezed,
     Object? height = freezed,
@@ -172,17 +172,17 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      src: src == freezed
-          ? _value.src
-          : src // ignore: cast_nullable_to_non_nullable
+      originalFile: originalFile == freezed
+          ? _value.originalFile
+          : originalFile // ignore: cast_nullable_to_non_nullable
               as String,
-      displaySrc: displaySrc == freezed
-          ? _value.displaySrc
-          : displaySrc // ignore: cast_nullable_to_non_nullable
+      sampleFile: sampleFile == freezed
+          ? _value.sampleFile
+          : sampleFile // ignore: cast_nullable_to_non_nullable
               as String,
-      thumbnail: thumbnail == freezed
-          ? _value.thumbnail
-          : thumbnail // ignore: cast_nullable_to_non_nullable
+      previewFile: previewFile == freezed
+          ? _value.previewFile
+          : previewFile // ignore: cast_nullable_to_non_nullable
               as String,
       tags: tags == freezed
           ? _value._tags
@@ -218,9 +218,9 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
 class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   const _$_BooruPost(
       {@HiveField(0, defaultValue: -1) required this.id,
-      @HiveField(1, defaultValue: '') required this.src,
-      @HiveField(2, defaultValue: '') required this.displaySrc,
-      @HiveField(3, defaultValue: '') required this.thumbnail,
+      @HiveField(1, defaultValue: '') required this.originalFile,
+      @HiveField(2, defaultValue: '') required this.sampleFile,
+      @HiveField(3, defaultValue: '') required this.previewFile,
       @HiveField(4, defaultValue: []) required final List<String> tags,
       @HiveField(5, defaultValue: -1) required this.width,
       @HiveField(6, defaultValue: -1) required this.height,
@@ -235,13 +235,13 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   final int id;
   @override
   @HiveField(1, defaultValue: '')
-  final String src;
+  final String originalFile;
   @override
   @HiveField(2, defaultValue: '')
-  final String displaySrc;
+  final String sampleFile;
   @override
   @HiveField(3, defaultValue: '')
-  final String thumbnail;
+  final String previewFile;
   final List<String> _tags;
   @override
   @HiveField(4, defaultValue: [])
@@ -269,7 +269,7 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BooruPost(id: $id, src: $src, displaySrc: $displaySrc, thumbnail: $thumbnail, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue)';
+    return 'BooruPost(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue)';
   }
 
   @override
@@ -278,9 +278,9 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
     properties
       ..add(DiagnosticsProperty('type', 'BooruPost'))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('src', src))
-      ..add(DiagnosticsProperty('displaySrc', displaySrc))
-      ..add(DiagnosticsProperty('thumbnail', thumbnail))
+      ..add(DiagnosticsProperty('originalFile', originalFile))
+      ..add(DiagnosticsProperty('sampleFile', sampleFile))
+      ..add(DiagnosticsProperty('previewFile', previewFile))
       ..add(DiagnosticsProperty('tags', tags))
       ..add(DiagnosticsProperty('width', width))
       ..add(DiagnosticsProperty('height', height))
@@ -295,10 +295,12 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
         (other.runtimeType == runtimeType &&
             other is _$_BooruPost &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.src, src) &&
             const DeepCollectionEquality()
-                .equals(other.displaySrc, displaySrc) &&
-            const DeepCollectionEquality().equals(other.thumbnail, thumbnail) &&
+                .equals(other.originalFile, originalFile) &&
+            const DeepCollectionEquality()
+                .equals(other.sampleFile, sampleFile) &&
+            const DeepCollectionEquality()
+                .equals(other.previewFile, previewFile) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality().equals(other.width, width) &&
             const DeepCollectionEquality().equals(other.height, height) &&
@@ -312,9 +314,9 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(src),
-      const DeepCollectionEquality().hash(displaySrc),
-      const DeepCollectionEquality().hash(thumbnail),
+      const DeepCollectionEquality().hash(originalFile),
+      const DeepCollectionEquality().hash(sampleFile),
+      const DeepCollectionEquality().hash(previewFile),
       const DeepCollectionEquality().hash(_tags),
       const DeepCollectionEquality().hash(width),
       const DeepCollectionEquality().hash(height),
@@ -331,9 +333,9 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 abstract class _BooruPost extends BooruPost {
   const factory _BooruPost(
       {@HiveField(0, defaultValue: -1) required final int id,
-      @HiveField(1, defaultValue: '') required final String src,
-      @HiveField(2, defaultValue: '') required final String displaySrc,
-      @HiveField(3, defaultValue: '') required final String thumbnail,
+      @HiveField(1, defaultValue: '') required final String originalFile,
+      @HiveField(2, defaultValue: '') required final String sampleFile,
+      @HiveField(3, defaultValue: '') required final String previewFile,
       @HiveField(4, defaultValue: []) required final List<String> tags,
       @HiveField(5, defaultValue: -1) required final int width,
       @HiveField(6, defaultValue: -1) required final int height,
@@ -347,13 +349,13 @@ abstract class _BooruPost extends BooruPost {
   int get id;
   @override
   @HiveField(1, defaultValue: '')
-  String get src;
+  String get originalFile;
   @override
   @HiveField(2, defaultValue: '')
-  String get displaySrc;
+  String get sampleFile;
   @override
   @HiveField(3, defaultValue: '')
-  String get thumbnail;
+  String get previewFile;
   @override
   @HiveField(4, defaultValue: [])
   List<String> get tags;

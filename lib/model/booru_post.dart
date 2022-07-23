@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:mime/mime.dart';
+
+import '../util/string_ext.dart';
 
 part 'booru_post.freezed.dart';
 part 'booru_post.g.dart';
@@ -25,9 +26,9 @@ class BooruPost with _$BooruPost {
   @HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
   const factory BooruPost({
     @HiveField(0, defaultValue: -1) required int id,
-    @HiveField(1, defaultValue: '') required String src,
-    @HiveField(2, defaultValue: '') required String displaySrc,
-    @HiveField(3, defaultValue: '') required String thumbnail,
+    @HiveField(1, defaultValue: '') required String originalFile,
+    @HiveField(2, defaultValue: '') required String sampleFile,
+    @HiveField(3, defaultValue: '') required String previewFile,
     @HiveField(4, defaultValue: []) required List<String> tags,
     @HiveField(5, defaultValue: -1) required int width,
     @HiveField(6, defaultValue: -1) required int height,
@@ -36,21 +37,17 @@ class BooruPost with _$BooruPost {
     @HiveField(9, defaultValue: 'q') @Default('q') String rateValue,
   }) = _BooruPost;
 
-  String get mimeType =>
-      lookupMimeType(src.split('/').last) ?? 'application/octet-stream';
+  String get contentFile => sampleFile.isEmpty ? originalFile : sampleFile;
 
-  PostType get displayType {
-    final dispMime = lookupMimeType(displaySrc.split('/').last) ?? '';
-    if (dispMime.startsWith('video')) {
+  PostType get contentType {
+    if (contentFile.mimeType.startsWith('video')) {
       return PostType.video;
-    } else if (dispMime.startsWith('image')) {
+    } else if (contentFile.mimeType.startsWith('image')) {
       return PostType.photo;
     } else {
       return PostType.unsupported;
     }
   }
-
-  bool get hasDisplaySrc => displaySrc.isNotEmpty && displaySrc != src;
 
   PostRating get rating {
     switch (rateValue) {
@@ -67,9 +64,9 @@ class BooruPost with _$BooruPost {
 
   static const empty = BooruPost(
     id: -1,
-    src: '',
-    displaySrc: '',
-    thumbnail: '',
+    originalFile: '',
+    sampleFile: '',
+    previewFile: '',
     tags: [],
     width: -1,
     height: -1,

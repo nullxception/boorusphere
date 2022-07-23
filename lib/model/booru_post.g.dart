@@ -18,9 +18,9 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
     };
     return _$_BooruPost(
       id: fields[0] == null ? -1 : fields[0] as int,
-      src: fields[1] == null ? '' : fields[1] as String,
-      displaySrc: fields[2] == null ? '' : fields[2] as String,
-      thumbnail: fields[3] == null ? '' : fields[3] as String,
+      originalFile: fields[1] == null ? '' : fields[1] as String,
+      sampleFile: fields[2] == null ? '' : fields[2] as String,
+      previewFile: fields[3] == null ? '' : fields[3] as String,
       tags: fields[4] == null ? [] : (fields[4] as List).cast<String>(),
       width: fields[5] == null ? -1 : fields[5] as int,
       height: fields[6] == null ? -1 : fields[6] as int,
@@ -37,11 +37,11 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.src)
+      ..write(obj.originalFile)
       ..writeByte(2)
-      ..write(obj.displaySrc)
+      ..write(obj.sampleFile)
       ..writeByte(3)
-      ..write(obj.thumbnail)
+      ..write(obj.previewFile)
       ..writeByte(5)
       ..write(obj.width)
       ..writeByte(6)
