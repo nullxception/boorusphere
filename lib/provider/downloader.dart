@@ -159,7 +159,7 @@ class Downloader extends ChangeNotifier {
         .lastWhere((it) => it.contains(RegExp(r'.+\..+')));
   }
 
-  Future<void> download(BooruPost post) async {
+  Future<void> download(BooruPost post, {String? url}) async {
     final downloadPath = await platformDownloadPath;
 
     if (!await _isDirWritable(downloadPath)) {
@@ -173,7 +173,7 @@ class Downloader extends ChangeNotifier {
     }
 
     final taskId = await FlutterDownloader.enqueue(
-        url: post.src,
+        url: url ?? post.src,
         savedDir: booruDir.absolute.path,
         showNotification: true,
         openFileFromNotification: true);
