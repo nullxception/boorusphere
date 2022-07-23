@@ -63,7 +63,8 @@ class PostVideoDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerController = ref.watch(_playerControllerProvider(booru.src));
+    final playerController =
+        ref.watch(_playerControllerProvider(booru.displaySrc));
     final playerMute = ref.watch(videoPlayerMuteProvider);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);

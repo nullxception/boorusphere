@@ -34,7 +34,7 @@ class PostImageDisplay extends HookConsumerWidget {
         isFullscreen.state = !isFullscreen.state;
       },
       child: ExtendedImage.network(
-        booru.src,
+        booru.displaySrc,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
         initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
