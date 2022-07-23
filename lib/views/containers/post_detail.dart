@@ -92,6 +92,13 @@ class PostDetailsPage extends HookConsumerWidget {
                     mode: LaunchMode.externalApplication),
                 child: Text(booru.sampleFile),
               ),
+              trailing: IconButton(
+                iconSize: 18,
+                onPressed: () {
+                  copyToClipboard(context, booru.sampleFile);
+                },
+                icon: const Icon(Icons.copy),
+              ),
             ),
           ListTile(
             title: const Text('Original file'),
