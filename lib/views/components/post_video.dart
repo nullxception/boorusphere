@@ -240,7 +240,11 @@ class _PlayerToolbox extends HookConsumerWidget {
                         ? Icons.download_done
                         : Icons.download),
                     onPressed: () {
-                      DownloaderDialog.show(context: context, booru: booru);
+                      if (booru.src == booru.displaySrc) {
+                        downloader.download(booru);
+                      } else {
+                        DownloaderDialog.show(context: context, booru: booru);
+                      }
                     },
                     color: Colors.white,
                     disabledColor: Theme.of(context).colorScheme.primary,
