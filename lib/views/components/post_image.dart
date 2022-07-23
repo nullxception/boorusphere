@@ -45,13 +45,13 @@ class PostImageDisplay extends HookConsumerWidget {
               return PostImageLoadingView(
                 booru: booru,
                 state: state,
-                blurImage: blurExplicitPost,
+                shouldBlur: blurExplicitPost,
               );
             case LoadState.failed:
               return PostImageFailedView(
                 booru: booru,
                 state: state,
-                blurImage: blurExplicitPost,
+                shouldBlur: blurExplicitPost,
               );
             default:
               return state.completedWidget;
@@ -85,19 +85,22 @@ class PostImageFailedView extends StatelessWidget {
     super.key,
     required this.booru,
     required this.state,
-    required this.blurImage,
+    required this.shouldBlur,
   });
 
   final BooruPost booru;
   final ExtendedImageState state;
-  final bool blurImage;
+  final bool shouldBlur;
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
       children: [
-        PostPlaceholderImage(url: booru.thumbnail, shouldBlur: blurImage),
+        PostPlaceholderImage(
+          url: booru.thumbnail,
+          shouldBlur: shouldBlur && booru.rating == PostRating.explicit,
+        ),
         SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,12 +142,12 @@ class PostImageLoadingView extends StatelessWidget {
     super.key,
     required this.booru,
     required this.state,
-    this.blurImage = false,
+    this.shouldBlur = false,
   });
 
   final BooruPost booru;
   final ExtendedImageState state;
-  final bool blurImage;
+  final bool shouldBlur;
 
   double calcProgress(ImageChunkEvent? chunk) =>
       chunk != null && chunk.expectedTotalBytes != null
@@ -160,7 +163,10 @@ class PostImageLoadingView extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       fit: StackFit.passthrough,
       children: [
-        PostPlaceholderImage(url: booru.thumbnail, shouldBlur: blurImage),
+        PostPlaceholderImage(
+          url: booru.thumbnail,
+          shouldBlur: shouldBlur && booru.rating == PostRating.explicit,
+        ),
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
