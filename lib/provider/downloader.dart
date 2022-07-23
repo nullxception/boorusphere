@@ -160,6 +160,7 @@ class Downloader extends ChangeNotifier {
   }
 
   Future<void> download(BooruPost post, {String? url}) async {
+    final fileUrl = url ?? post.originalFile;
     final downloadPath = await platformDownloadPath;
 
     if (!await _isDirWritable(downloadPath)) {
@@ -173,14 +174,14 @@ class Downloader extends ChangeNotifier {
     }
 
     final taskId = await FlutterDownloader.enqueue(
-        url: url ?? post.originalFile,
+        url: fileUrl,
         savedDir: booruDir.absolute.path,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
       final destination =
-          '${booruDir.absolute.path}/${getFileNameFromUrl(post.originalFile)}';
+          '${booruDir.absolute.path}/${getFileNameFromUrl(fileUrl)}';
       final entry =
           DownloadEntry(id: taskId, booru: post, destination: destination);
       _addEntry(entry: entry);

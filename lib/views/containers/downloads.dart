@@ -51,8 +51,8 @@ class DownloadsPage extends HookConsumerWidget {
                 ),
               ),
             ...downloader.entries.map((it) {
-              final fileName = Uri.decodeFull(
-                  downloader.getFileNameFromUrl(it.booru.originalFile));
+              final fileName =
+                  Uri.decodeFull(downloader.getFileNameFromUrl(it.destination));
               final progress = downloader.getProgress(it.id);
 
               return ListTile(
