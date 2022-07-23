@@ -19,11 +19,12 @@ class VideoPlayerMuteState extends StateNotifier<bool> {
 
   final Reader read;
 
-  Future<void> toggle() async {
+  Future<bool> toggle() async {
     final newState = !state;
     state = newState;
     final settings = await read(settingsBox);
     settings.put(boxKey, newState);
+    return newState;
   }
 
   static const boxKey = 'videoplayer_mute';
