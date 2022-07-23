@@ -43,21 +43,21 @@ class DownloaderDialog extends HookConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const ListTile(title: Text('Download')),
+            if (booru.hasDisplaySrc)
+              ListTile(
+                title: Text('Sample file (${_getFileExt(booru.displaySrc)})'),
+                leading: Icon(_getFileIcon(booru.displaySrc)),
+                onTap: () {
+                  downloader.download(booru, url: booru.displaySrc);
+                },
+              ),
             ListTile(
-              title: Text('Source (${_getFileExt(booru.src)})'),
+              title: Text('Original file (${_getFileExt(booru.src)})'),
               leading: Icon(_getFileIcon(booru.src)),
               onTap: () {
                 downloader.download(booru);
               },
             ),
-            if (booru.displaySrc != booru.src)
-              ListTile(
-                title: Text('Sample (${_getFileExt(booru.displaySrc)})'),
-                leading: Icon(_getFileIcon(booru.displaySrc)),
-                onTap: () {
-                  downloader.download(booru, url: booru.displaySrc);
-                },
-              )
           ],
         ),
       ),

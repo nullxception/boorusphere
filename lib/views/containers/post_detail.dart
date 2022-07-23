@@ -77,8 +77,23 @@ class PostDetailsPage extends HookConsumerWidget {
                 icon: const Icon(Icons.copy),
               ),
             ),
+          if (booru.hasDisplaySrc)
+            ListTile(
+              title: const Text('Sample file (displayed)'),
+              subtitle: TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.centerLeft,
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.zero,
+                  ),
+                ),
+                onPressed: () => launchUrlString(booru.displaySrc,
+                    mode: LaunchMode.externalApplication),
+                child: Text(booru.displaySrc),
+              ),
+            ),
           ListTile(
-            title: const Text('Source'),
+            title: const Text('Original file'),
             subtitle: TextButton(
               style: ButtonStyle(
                 alignment: Alignment.centerLeft,
@@ -98,21 +113,6 @@ class PostDetailsPage extends HookConsumerWidget {
               icon: const Icon(Icons.copy),
             ),
           ),
-          if (booru.displaySrc != booru.src)
-            ListTile(
-              title: const Text('Source (displayed)'),
-              subtitle: TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.centerLeft,
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.zero,
-                  ),
-                ),
-                onPressed: () => launchUrlString(booru.displaySrc,
-                    mode: LaunchMode.externalApplication),
-                child: Text(booru.displaySrc),
-              ),
-            ),
           const ListTile(
             title: Text('Tags'),
           ),

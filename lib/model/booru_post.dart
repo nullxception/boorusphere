@@ -50,6 +50,8 @@ class BooruPost with _$BooruPost {
     }
   }
 
+  bool get hasDisplaySrc => displaySrc.isNotEmpty && displaySrc != src;
+
   PostRating get rating {
     switch (rateValue) {
       case 'explicit':
