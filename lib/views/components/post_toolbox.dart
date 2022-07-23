@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../model/booru_post.dart';
 import '../../provider/downloader.dart';
 import '../containers/post_detail.dart';
+import 'download_dialog.dart';
 
 class PostToolbox extends HookConsumerWidget {
   const PostToolbox(this.booru, {Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class PostToolbox extends HookConsumerWidget {
                     ? Icons.download_done
                     : Icons.download),
                 onPressed: () {
-                  downloader.download(booru);
+                  DownloaderDialog.show(context: context, booru: booru);
                 },
                 color: Colors.white,
                 disabledColor: Theme.of(context).colorScheme.primary,

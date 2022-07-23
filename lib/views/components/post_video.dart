@@ -13,6 +13,7 @@ import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/video_player.dart';
 import '../containers/post.dart';
 import '../containers/post_detail.dart';
+import 'download_dialog.dart';
 import 'post_placeholder_image.dart';
 
 class PostVideoDisplay extends ConsumerStatefulWidget {
@@ -172,7 +173,8 @@ class _PostVideoDisplayState extends ConsumerState<PostVideoDisplay> {
                                 ? Icons.download_done
                                 : Icons.download),
                             onPressed: () {
-                              downloader.download(booru);
+                              DownloaderDialog.show(
+                                  context: context, booru: booru);
                             },
                             color: Colors.white,
                             disabledColor:
