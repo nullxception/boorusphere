@@ -329,14 +329,18 @@ class BooruApi {
   static const searchQueries = [
     'post.json?tags={tags}&page={page-id}&limit={post-limit}',
     'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
+    'post/index.json?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
+    'post/index.xml?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
   ];
 
   static const tagSuggestionQueries = [
     'tag.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
+    'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
+    'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
   ];
 
