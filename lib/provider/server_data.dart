@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 import '../model/server_data.dart';
-import 'hive_boxes.dart';
 import 'settings/active_server.dart';
 
 final serverDataProvider =
@@ -13,23 +13,23 @@ final serverDataProvider =
 
 class ServersState extends StateNotifier<List<ServerData>> {
   ServersState(this.ref) : super([]);
-  final Ref ref;
 
+  final Ref ref;
   final _defaultServerList = <ServerData>[];
+
+  Box get _box => Hive.box('server');
 
   Set<ServerData> get allWithDefaults =>
       <ServerData>{..._defaultServerList, ...state};
 
   Future<void> populateData() async {
-    final server = await ref.read(serverBox);
-
     final fromAssets = await _defaultServersAssets();
     _defaultServerList.addAll(fromAssets.values);
 
-    if (server.isEmpty) {
-      server.putAll(fromAssets);
+    if (_box.isEmpty) {
+      await _box.putAll(fromAssets);
     }
-    state = server.values.map((it) => it as ServerData).toList();
+    state = _box.values.map((it) => it as ServerData).toList();
   }
 
   Future<Map<String, ServerData>> _defaultServersAssets() async {
@@ -49,36 +49,33 @@ class ServersState extends StateNotifier<List<ServerData>> {
             orElse: () => state.first);
   }
 
-  void addServer({required ServerData data}) async {
-    final server = await ref.read(serverBox);
-    server.put(data.homepage, data);
-    state = server.values.map((it) => it as ServerData).toList();
+  Future<void> addServer({required ServerData data}) async {
+    await _box.put(data.homepage, data);
+    state = _box.values.map((it) => it as ServerData).toList();
   }
 
-  void removeServer({required ServerData data}) async {
+  void removeServer({required ServerData data}) {
     final activeServerNotifier = ref.read(activeServerProvider.notifier);
     final activeServer = ref.read(activeServerProvider);
 
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
-    final server = await ref.read(serverBox);
-    server.delete(data.homepage);
-    state = server.values.map((it) => it as ServerData).toList();
+    _box.delete(data.homepage);
+    state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data) {
       activeServerNotifier.use(state.first);
     }
   }
 
-  void resetToDefault() async {
-    final server = await ref.read(serverBox);
+  Future<void> resetToDefault() async {
     final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     final fromAssets = await _defaultServersAssets();
 
-    server.deleteAll(server.keys);
-    server.putAll(fromAssets);
-    state = server.values.map((it) => it as ServerData).toList();
+    await _box.deleteAll(_box.keys);
+    await _box.putAll(fromAssets);
+    state = _box.values.map((it) => it as ServerData).toList();
 
     activeServerNotifier.use(state.first);
   }
@@ -87,13 +84,12 @@ class ServersState extends StateNotifier<List<ServerData>> {
     required ServerData data,
     required ServerData newData,
   }) async {
-    final server = await ref.read(serverBox);
     final activeServer = ref.read(activeServerProvider);
     final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
-    server.delete(data.homepage);
-    server.put(data.homepage, newData);
-    state = server.values.map((it) => it as ServerData).toList();
+    await _box.delete(data.homepage);
+    await _box.put(data.homepage, newData);
+    state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data && newData.name != activeServer.name) {
       activeServerNotifier.use(newData);
     }

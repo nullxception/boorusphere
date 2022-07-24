@@ -27,9 +27,8 @@ class SuggestionManager {
 
   final Ref ref;
 
-  Future<List<String>> parse(http.Response res) async {
+  List<String> parse(http.Response res) {
     final blockedTags = ref.read(blockedTagsProvider);
-    final blocked = await blockedTags.listedEntries;
 
     if (res.statusCode != 200) {
       throw HttpException('Something went wrong [${res.statusCode}]');
@@ -59,7 +58,7 @@ class SuggestionManager {
     final result = <String>[];
     for (final Map<String, dynamic> entry in entries) {
       final tag = entry.take(['name', 'tag'], orElse: '');
-      if (!blocked.contains(tag)) {
+      if (!blockedTags.listedEntries.contains(tag)) {
         result.add(tag);
       }
     }
@@ -77,8 +76,8 @@ class SuggestionManager {
         () => http.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
-      final tags = await parse(res);
-      return tags
+
+      return parse(res)
           .where((it) =>
               it.contains(queries.last) &&
               !queries.sublist(0, queries.length - 1).contains(it))

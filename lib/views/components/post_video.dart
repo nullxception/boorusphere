@@ -261,8 +261,8 @@ class _PlayerToolbox extends HookConsumerWidget {
                 ],
               ),
               IconButton(
-                onPressed: () async {
-                  final mute = await playerMuteNotifier.toggle();
+                onPressed: () {
+                  final mute = playerMuteNotifier.toggle();
                   controller?.setVolume(mute ? 0 : 1);
                 },
                 icon: Icon(

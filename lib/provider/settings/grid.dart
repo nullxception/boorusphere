@@ -1,14 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../hive_boxes.dart';
-
-final _savedGrid =
-    FutureProvider<int>((ref) async => await GridState.restore(ref));
+import 'package:hive/hive.dart';
 
 final gridProvider = StateNotifierProvider<GridState, int>((ref) {
-  final fromSettings =
-      ref.watch(_savedGrid).maybeWhen(data: (data) => data, orElse: () => 0);
-
+  final box = Hive.box('settings');
+  final fromSettings = box.get(GridState.boxKey, defaultValue: 0);
   return GridState(ref, fromSettings);
 });
 
@@ -17,15 +12,9 @@ class GridState extends StateNotifier<int> {
 
   final Ref ref;
 
-  Future<void> rotate() async {
+  void rotate() {
     state = state < 2 ? state + 1 : 0;
-    final settings = await ref.read(settingsBox);
-    settings.put(boxKey, state);
-  }
-
-  static Future<int> restore(FutureProviderRef futureRef) async {
-    final settings = await futureRef.read(settingsBox);
-    return settings.get(boxKey, defaultValue: 0);
+    Hive.box('settings').put(boxKey, state);
   }
 
   static const boxKey = 'timeline_grid_number';

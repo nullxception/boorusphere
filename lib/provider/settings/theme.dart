@@ -1,29 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../hive_boxes.dart';
-
-final _savedThemeMode =
-    FutureProvider<ThemeMode>((ref) async => await ThemeModeState.restore(ref));
+import 'package:hive/hive.dart';
 
 final themeModeProvider =
     StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
-  final fromSettings = ref
-      .watch(_savedThemeMode)
-      .maybeWhen(data: (data) => data, orElse: () => ThemeMode.system);
-
-  return ThemeModeState(ref, fromSettings);
+  final box = Hive.box('settings');
+  final fromSettings =
+      box.get(ThemeModeState.boxKey, defaultValue: ThemeMode.system.index);
+  return ThemeModeState(ref, ThemeMode.values[fromSettings]);
 });
-
-final _savedDarkerTheme =
-    FutureProvider<bool>((ref) async => await DarkerThemeState.restore(ref));
 
 final darkerThemeProvider =
     StateNotifierProvider<DarkerThemeState, bool>((ref) {
-  final fromSettings = ref
-      .watch(_savedDarkerTheme)
-      .maybeWhen(data: (data) => data, orElse: () => false);
-
+  final box = Hive.box('settings');
+  final fromSettings = box.get(DarkerThemeState.boxKey, defaultValue: false);
   return DarkerThemeState(ref, fromSettings);
 });
 
@@ -32,13 +22,12 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
 
   final Ref ref;
 
-  Future<void> setMode({required ThemeMode mode}) async {
+  void setMode({required ThemeMode mode}) {
     state = mode;
-    final settings = await ref.read(settingsBox);
-    settings.put(boxKey, mode.index);
+    Hive.box('settings').put(boxKey, mode.index);
   }
 
-  void cycleTheme() async {
+  void cycleTheme() {
     switch (state) {
       case ThemeMode.dark:
         setMode(mode: ThemeMode.light);
@@ -52,12 +41,6 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
     }
   }
 
-  static Future<ThemeMode> restore(FutureProviderRef futureRef) async {
-    final settings = await futureRef.read(settingsBox);
-    final value = settings.get(boxKey, defaultValue: ThemeMode.system.index);
-    return ThemeMode.values[value];
-  }
-
   static const boxKey = 'theme_mode';
 }
 
@@ -66,16 +49,10 @@ class DarkerThemeState extends StateNotifier<bool> {
 
   final Ref ref;
 
-  void enable(bool value) async {
+  void enable(bool value) {
     state = value;
-    final prefs = await ref.read(settingsBox);
-    prefs.put(boxKey, value);
+    Hive.box('settings').put(boxKey, value);
   }
 
   static const boxKey = 'ui_theme_darker';
-
-  static Future<bool> restore(FutureProviderRef futureRef) async {
-    final settings = await futureRef.read(settingsBox);
-    return settings.get(boxKey, defaultValue: false);
-  }
 }

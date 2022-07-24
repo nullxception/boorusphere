@@ -63,9 +63,9 @@ class HomeBar extends HookConsumerWidget {
 
     useEffect(() {
       // Populate suggestion history on first build
-      searchHistory.mapped.then((it) {
-        if (it.isNotEmpty) suggestionHistory.value = it;
-      });
+      if (searchHistory.mapped.isNotEmpty) {
+        suggestionHistory.value = searchHistory.mapped;
+      }
     }, [suggestionHistory]);
 
     return FloatingSearchBar(
@@ -95,8 +95,7 @@ class HomeBar extends HookConsumerWidget {
         if (activeServer.canSuggestTags) {
           typedQuery.value = value.trim();
         }
-        suggestionHistory.value =
-            await searchHistory.composeSuggestion(query: value);
+        suggestionHistory.value = searchHistory.composeSuggestion(query: value);
       },
       onFocusChanged: (focused) {
         homeDrawerSwipeable.state = !focused;
@@ -139,8 +138,9 @@ class HomeBar extends HookConsumerWidget {
             onRemoveHistory: (key) async {
               searchHistory.delete(key);
               // rebuild history suggestion
-              suggestionHistory.value = await searchHistory.composeSuggestion(
-                  query: controller.query.trim());
+              suggestionHistory.value = searchHistory.composeSuggestion(
+                query: controller.query.trim(),
+              );
             },
             onSearchTag: (value) {
               _searchForTag(

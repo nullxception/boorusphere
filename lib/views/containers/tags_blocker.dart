@@ -9,9 +9,7 @@ class TagsBlockerPage extends HookConsumerWidget {
   const TagsBlockerPage({super.key});
 
   void updateTags(BlockedTagsManager repo, ValueNotifier storage) {
-    repo.mapped.then((it) {
-      storage.value = it;
-    });
+    storage.value = repo.mapped;
   }
 
   @override
@@ -45,10 +43,9 @@ class TagsBlockerPage extends HookConsumerWidget {
                   controller: blockedTagsController,
                   onFieldSubmitted: (value) {
                     final values = value.trim().split(' ');
-                    blockedTagsHandler.pushAll(values).then((value) {
-                      updateTags(blockedTagsHandler, blockedTags);
-                      blockedTagsController.clear();
-                    });
+                    blockedTagsHandler.pushAll(values);
+                    updateTags(blockedTagsHandler, blockedTags);
+                    blockedTagsController.clear();
                   },
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -74,9 +71,8 @@ class TagsBlockerPage extends HookConsumerWidget {
                         leading: const Icon(Icons.tag),
                         trailing: IconButton(
                             onPressed: () {
-                              blockedTagsHandler.delete(key).then((value) {
-                                updateTags(blockedTagsHandler, blockedTags);
-                              });
+                              blockedTagsHandler.delete(key);
+                              updateTags(blockedTagsHandler, blockedTags);
                             },
                             icon: const Icon(Icons.close)),
                       );

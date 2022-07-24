@@ -1,16 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../hive_boxes.dart';
-
-final _savedBlurExplicitPost = FutureProvider<bool>(
-    (ref) async => await BlurExplicitPostState.restore(ref));
+import 'package:hive/hive.dart';
 
 final blurExplicitPostProvider =
     StateNotifierProvider<BlurExplicitPostState, bool>((ref) {
-  final fromSettings = ref
-      .watch(_savedBlurExplicitPost)
-      .maybeWhen(data: (data) => data, orElse: () => true);
-
+  final box = Hive.box('settings');
+  final fromSettings =
+      box.get(BlurExplicitPostState.boxKey, defaultValue: true);
   return BlurExplicitPostState(ref, fromSettings);
 });
 
@@ -19,15 +14,9 @@ class BlurExplicitPostState extends StateNotifier<bool> {
 
   final Ref ref;
 
-  Future<void> enable(bool value) async {
+  void enable(bool value) {
     state = value;
-    final settings = await ref.read(settingsBox);
-    settings.put(boxKey, value);
-  }
-
-  static Future<bool> restore(FutureProviderRef futureRef) async {
-    final settings = await futureRef.read(settingsBox);
-    return settings.get(boxKey, defaultValue: true);
+    Hive.box('settings').put(boxKey, value);
   }
 
   static const boxKey = 'blur_explicit_post';

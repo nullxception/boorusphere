@@ -14,7 +14,7 @@ class QueryState extends StateNotifier<ServerQuery> {
 
   final Ref ref;
 
-  Future<void> setTag({required String query}) async {
+  void setTag({required String query}) {
     final searchHistory = ref.read(searchHistoryProvider);
     if (state.tags != query) {
       state = state.copyWith(tags: query);
@@ -22,7 +22,7 @@ class QueryState extends StateNotifier<ServerQuery> {
     }
   }
 
-  Future<void> setSafeMode(enabled) async {
+  void setSafeMode(enabled) {
     if (state.safeMode != enabled) {
       state = state.copyWith(safeMode: enabled);
       final safeModeNotifier = ref.read(safeModeProvider.notifier);

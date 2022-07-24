@@ -1,16 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../hive_boxes.dart';
-
-final _savedVideoPlayerMute = FutureProvider<bool>(
-    (ref) async => await VideoPlayerMuteState.restore(ref));
+import 'package:hive/hive.dart';
 
 final videoPlayerMuteProvider =
     StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
-  final fromSettings = ref
-      .watch(_savedVideoPlayerMute)
-      .maybeWhen(data: (data) => data, orElse: () => false);
-
+  final box = Hive.box('settings');
+  final fromSettings =
+      box.get(VideoPlayerMuteState.boxKey, defaultValue: false);
   return VideoPlayerMuteState(ref, fromSettings);
 });
 
@@ -19,18 +14,12 @@ class VideoPlayerMuteState extends StateNotifier<bool> {
 
   final Ref ref;
 
-  Future<bool> toggle() async {
-    final newState = !state;
-    state = newState;
-    final settings = await ref.read(settingsBox);
-    settings.put(boxKey, newState);
-    return newState;
+  bool toggle() {
+    final result = !state;
+    state = result;
+    Hive.box('settings').put(boxKey, result);
+    return result;
   }
 
   static const boxKey = 'videoplayer_mute';
-
-  static Future<bool> restore(FutureProviderRef futureRef) async {
-    final settings = await futureRef.read(settingsBox);
-    return settings.get(VideoPlayerMuteState.boxKey, defaultValue: false);
-  }
 }

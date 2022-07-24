@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +14,6 @@ import '../model/booru_post.dart';
 import '../model/download_entry.dart';
 import '../model/download_progress.dart';
 import '../model/download_status.dart';
-import 'hive_boxes.dart';
 
 final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref));
 
@@ -25,9 +25,7 @@ class Downloader extends ChangeNotifier {
   final entries = <DownloadEntry>[];
   final progresses = <DownloadProgress>{};
 
-  static const _portName = 'downloaderPort';
-  static const platformPath = MethodChannel('io.chaldeaprjkt.boorusphere/path');
-  static const _booruDirname = 'Boorusphere';
+  Box get _box => Hive.box('downloads');
 
   Future<void> register() async {
     await FlutterDownloader.initialize();
@@ -72,17 +70,16 @@ class Downloader extends ChangeNotifier {
     }
   }
 
-  Future<void> unregister() async {
+  void unregister() {
     IsolateNameServer.removePortNameMapping(_portName);
   }
 
   Future<String> get platformDownloadPath async {
-    return await platformPath.invokeMethod('getDownload');
+    return await _platformPath.invokeMethod('getDownload');
   }
 
   Future<void> _populateDownloadEntries() async {
     final tasks = await FlutterDownloader.loadTasks();
-    final box = await ref.read(downloadBox);
     if (tasks != null) {
       progresses.addAll(tasks
           .map((e) => DownloadProgress(
@@ -91,33 +88,29 @@ class Downloader extends ChangeNotifier {
                 progress: e.progress,
               ))
           .toList());
-      if (box.values.isNotEmpty) {
-        entries.addAll(box.values.cast<DownloadEntry>());
+      if (_box.values.isNotEmpty) {
+        entries.addAll(_box.values.cast<DownloadEntry>());
       }
       notifyListeners();
     }
   }
 
   Future<void> _addEntry({required DownloadEntry entry}) async {
-    final box = await ref.read(downloadBox);
-    box.put(entry.id, entry);
     entries.add(entry);
+    await _box.put(entry.id, entry);
   }
 
   Future<void> _updateEntry(
       {required String id, required DownloadEntry newEntry}) async {
-    final box = await ref.read(downloadBox);
     _removeEntry(id: id);
-    box.put(newEntry.id, newEntry);
     entries.add(newEntry);
+    await _box.put(newEntry.id, newEntry);
   }
 
   Future<void> _removeEntry({required String id}) async {
-    final box = await ref.read(downloadBox);
-
-    box.delete(id);
     progresses.removeWhere((it) => it.id == id);
     entries.removeWhere((it) => it.id == id);
+    await _box.delete(id);
   }
 
   Future<void> clearEntries() async {
@@ -127,9 +120,8 @@ class Downloader extends ChangeNotifier {
           taskId: e.taskId, shouldDeleteContent: false)));
     }
 
-    final box = await ref.read(downloadBox);
-    if (box.values.isNotEmpty) {
-      box.deleteAll(box.keys);
+    if (_box.values.isNotEmpty) {
+      _box.deleteAll(_box.keys);
     }
 
     progresses.clear();
@@ -226,4 +218,9 @@ class Downloader extends ChangeNotifier {
     return progresses.firstWhere((it) => it.id == id,
         orElse: () => DownloadProgress.none);
   }
+
+  static const _portName = 'downloaderPort';
+  static const _platformPath =
+      MethodChannel('io.chaldeaprjkt.boorusphere/path');
+  static const _booruDirname = 'Boorusphere';
 }

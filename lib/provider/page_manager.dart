@@ -28,10 +28,9 @@ class PageManager {
 
   int _page = 1;
 
-  Future<List<BooruPost>> _parse(ServerData server, http.Response res) async {
+  List<BooruPost> _parse(ServerData server, http.Response res) {
     final query = ref.read(queryProvider);
     final blockedTags = ref.read(blockedTagsProvider);
-    final blocked = await blockedTags.listedEntries;
 
     if (res.statusCode != 200) {
       throw HttpException('Something went wrong [${res.statusCode}]');
@@ -93,7 +92,7 @@ class PageManager {
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
-      final notBlocked = !tags.any(blocked.contains);
+      final notBlocked = !tags.any(blockedTags.listedEntries.contains);
       final postUrl = id < 0 ? '' : _composePostUrl(server, id);
 
       if (hasFile && hasContent && notBlocked) {
@@ -160,7 +159,7 @@ class PageManager {
         () => http.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
-      final data = await _parse(activeServer, res);
+      final data = _parse(activeServer, res);
       posts.addAll(data);
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
@@ -185,7 +184,7 @@ class PageManager {
     final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     await serverDataNotifier.populateData();
-    await activeServerNotifier.restoreFromPreference();
+    activeServerNotifier.restoreFromPreference();
 
     posts.clear();
     fetch();

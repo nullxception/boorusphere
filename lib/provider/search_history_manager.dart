@@ -1,7 +1,7 @@
+import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../model/search_history.dart';
-import 'hive_boxes.dart';
 import 'settings/active_server.dart';
 
 final searchHistoryProvider = Provider((ref) => SearchHistoryManager(ref));
@@ -11,8 +11,10 @@ class SearchHistoryManager {
 
   SearchHistoryManager(this.ref);
 
-  Future<Map> composeSuggestion({required String query}) async {
-    final history = await mapped;
+  Box get _box => Hive.box('searchHistory');
+
+  Map composeSuggestion({required String query}) {
+    final history = mapped;
     final queries = query.split(' ');
 
     if (query.endsWith(' ') || query.isEmpty) {
@@ -27,41 +29,34 @@ class SearchHistoryManager {
           queries.sublist(0, queries.length - 1).contains(value.query));
   }
 
-  Future<Map> get mapped async {
-    final history = await ref.read(searchHistoryBox);
-    return history.toMap();
+  Map get mapped => _box.toMap();
+
+  void clear() {
+    _box.clear();
   }
 
-  Future<void> clear() async {
-    final history = await ref.read(searchHistoryBox);
-    history.clear();
+  void delete(key) {
+    _box.delete(key);
   }
 
-  Future<void> delete(key) async {
-    final history = await ref.read(searchHistoryBox);
-    history.delete(key);
-  }
+  bool checkExists({required String value}) {
+    if (_box.isEmpty) return false;
 
-  Future<bool> checkExists({required String value}) async {
-    final data = await ref.read(searchHistoryBox);
-    if (data.isEmpty) return false;
-
-    final pageManager = data.values.firstWhere(
+    final pageManager = _box.values.firstWhere(
       (it) => it.query == value,
       orElse: () => const SearchHistory(),
     );
     return pageManager.query == value;
   }
 
-  Future<void> push(String value) async {
+  void push(String value) {
     final query = value.trim();
     if (query.isEmpty) return;
 
-    final history = await ref.read(searchHistoryBox);
     final activeServer = ref.read(activeServerProvider);
 
-    if (!await checkExists(value: query)) {
-      history.add(SearchHistory(
+    if (!checkExists(value: query)) {
+      _box.add(SearchHistory(
         query: query,
         server: activeServer.name,
       ));

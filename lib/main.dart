@@ -55,12 +55,20 @@ class Boorusphere extends HookConsumerWidget {
 
 void main() async {
   Fimber.plantTree(DebugTree());
+  const boxes = [
+    'searchHistory',
+    'settings',
+    'server',
+    'blockedTags',
+    'downloads',
+  ];
 
   await Hive.initFlutter();
   Hive.registerAdapter(ServersAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
   Hive.registerAdapter(BooruPostAdapter());
   Hive.registerAdapter(DownloadEntryAdapter());
+  await Future.wait(boxes.map((box) => Hive.openBox(box)));
 
   runApp(const ProviderScope(child: Boorusphere()));
 }

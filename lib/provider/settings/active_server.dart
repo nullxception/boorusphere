@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 import '../../model/server_data.dart';
-import '../hive_boxes.dart';
 import '../server_data.dart';
 
 final activeServerProvider =
@@ -13,17 +13,17 @@ class ActiveServerState extends StateNotifier<ServerData> {
 
   final Ref ref;
 
-  Future<void> restoreFromPreference() async {
-    final settings = await ref.read(settingsBox);
+  Box get _box => Hive.box('settings');
+
+  void restoreFromPreference() {
     final serverDataNotifier = ref.read(serverDataProvider.notifier);
-    final name = settings.get(boxKey, defaultValue: '');
+    final name = _box.get(boxKey, defaultValue: '');
     state = serverDataNotifier.select(name);
   }
 
   Future<void> use(ServerData data) async {
     state = data;
-    final settings = await ref.read(settingsBox);
-    settings.put(boxKey, data.name);
+    await _box.put(boxKey, data.name);
   }
 
   static const boxKey = 'active_server';
