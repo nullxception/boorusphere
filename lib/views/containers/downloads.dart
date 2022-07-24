@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../model/download_entry.dart';
 import '../../provider/downloader.dart';
 import '../components/notice_card.dart';
 import 'post_detail.dart';
@@ -77,54 +78,7 @@ class DownloadsPage extends HookConsumerWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
                   fit: BoxFit.cover,
                 ),
-                trailing: PopupMenuButton(
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'retry':
-                        downloader.retryEntry(id: it.id);
-                        break;
-                      case 'cancel':
-                        downloader.cancelEntry(id: it.id);
-                        break;
-                      case 'clear':
-                        downloader.clearEntry(id: it.id);
-                        break;
-                      case 'show-detail':
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  PostDetailsPage(booru: it.booru)),
-                        );
-                        break;
-                      default:
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      if (progress.status.isCanceled ||
-                          progress.status.isFailed)
-                        const PopupMenuItem(
-                          value: 'retry',
-                          child: Text('Retry'),
-                        ),
-                      if (progress.status.isDownloading)
-                        const PopupMenuItem(
-                          value: 'cancel',
-                          child: Text('Cancel'),
-                        ),
-                      const PopupMenuItem(
-                        value: 'show-detail',
-                        child: Text('Show detail'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'clear',
-                        child: Text('Clear'),
-                      ),
-                    ];
-                  },
-                ),
+                trailing: _DownloadEntryPopupMenu(entry: it),
                 dense: true,
                 contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 onTap: !progress.status.isDownloaded
@@ -135,6 +89,65 @@ class DownloadsPage extends HookConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DownloadEntryPopupMenu extends ConsumerWidget {
+  const _DownloadEntryPopupMenu({required this.entry});
+
+  final DownloadEntry entry;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final downloader = ref.watch(downloadProvider);
+    final progress = downloader.getProgress(entry.id);
+
+    return PopupMenuButton(
+      onSelected: (value) {
+        switch (value) {
+          case 'retry':
+            downloader.retryEntry(id: entry.id);
+            break;
+          case 'cancel':
+            downloader.cancelEntry(id: entry.id);
+            break;
+          case 'clear':
+            downloader.clearEntry(id: entry.id);
+            break;
+          case 'show-detail':
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostDetailsPage(booru: entry.booru)),
+            );
+            break;
+          default:
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) {
+        return [
+          if (progress.status.isCanceled || progress.status.isFailed)
+            const PopupMenuItem(
+              value: 'retry',
+              child: Text('Retry'),
+            ),
+          if (progress.status.isDownloading)
+            const PopupMenuItem(
+              value: 'cancel',
+              child: Text('Cancel'),
+            ),
+          const PopupMenuItem(
+            value: 'show-detail',
+            child: Text('Show detail'),
+          ),
+          const PopupMenuItem(
+            value: 'clear',
+            child: Text('Clear'),
+          ),
+        ];
+      },
     );
   }
 }
