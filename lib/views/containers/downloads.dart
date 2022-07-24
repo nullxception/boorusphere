@@ -64,7 +64,9 @@ class DownloadsPage extends HookConsumerWidget {
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    '${progress.status.name} • ${it.booru.serverName}',
+                    progress.status.isDownloading
+                        ? '${progress.status.name} ${progress.progress}% • ${it.booru.serverName}'
+                        : '${progress.status.name} • ${it.booru.serverName}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -74,21 +76,14 @@ class DownloadsPage extends HookConsumerWidget {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   margin: EdgeInsets.zero,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        value: progress.status.isDownloading
-                            ? (1 * progress.progress) / 100
-                            : 0,
-                      ),
-                      Icon(
-                        it.booru.contentType == PostType.video
-                            ? Icons.video_library
-                            : Icons.photo,
-                        size: 16,
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Icon(
+                      it.booru.contentType == PostType.video
+                          ? Icons.video_library
+                          : Icons.photo,
+                      size: 16,
+                    ),
                   ),
                 ),
                 trailing: PopupMenuButton(
