@@ -36,6 +36,14 @@ mixin _$BooruPost {
   String get postUrl => throw _privateConstructorUsedError;
   @HiveField(9, defaultValue: 'q')
   String get rateValue => throw _privateConstructorUsedError;
+  @HiveField(10, defaultValue: -1)
+  int get sampleWidth => throw _privateConstructorUsedError;
+  @HiveField(11, defaultValue: -1)
+  int get sampleHeight => throw _privateConstructorUsedError;
+  @HiveField(12, defaultValue: -1)
+  int get previewWidth => throw _privateConstructorUsedError;
+  @HiveField(13, defaultValue: -1)
+  int get previewHeight => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BooruPostCopyWith<BooruPost> get copyWith =>
@@ -56,7 +64,11 @@ abstract class $BooruPostCopyWith<$Res> {
       @HiveField(6, defaultValue: -1) int height,
       @HiveField(7, defaultValue: '') String serverName,
       @HiveField(8, defaultValue: '') String postUrl,
-      @HiveField(9, defaultValue: 'q') String rateValue});
+      @HiveField(9, defaultValue: 'q') String rateValue,
+      @HiveField(10, defaultValue: -1) int sampleWidth,
+      @HiveField(11, defaultValue: -1) int sampleHeight,
+      @HiveField(12, defaultValue: -1) int previewWidth,
+      @HiveField(13, defaultValue: -1) int previewHeight});
 }
 
 /// @nodoc
@@ -79,6 +91,10 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
     Object? serverName = freezed,
     Object? postUrl = freezed,
     Object? rateValue = freezed,
+    Object? sampleWidth = freezed,
+    Object? sampleHeight = freezed,
+    Object? previewWidth = freezed,
+    Object? previewHeight = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -121,6 +137,22 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
           ? _value.rateValue
           : rateValue // ignore: cast_nullable_to_non_nullable
               as String,
+      sampleWidth: sampleWidth == freezed
+          ? _value.sampleWidth
+          : sampleWidth // ignore: cast_nullable_to_non_nullable
+              as int,
+      sampleHeight: sampleHeight == freezed
+          ? _value.sampleHeight
+          : sampleHeight // ignore: cast_nullable_to_non_nullable
+              as int,
+      previewWidth: previewWidth == freezed
+          ? _value.previewWidth
+          : previewWidth // ignore: cast_nullable_to_non_nullable
+              as int,
+      previewHeight: previewHeight == freezed
+          ? _value.previewHeight
+          : previewHeight // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -141,7 +173,11 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
       @HiveField(6, defaultValue: -1) int height,
       @HiveField(7, defaultValue: '') String serverName,
       @HiveField(8, defaultValue: '') String postUrl,
-      @HiveField(9, defaultValue: 'q') String rateValue});
+      @HiveField(9, defaultValue: 'q') String rateValue,
+      @HiveField(10, defaultValue: -1) int sampleWidth,
+      @HiveField(11, defaultValue: -1) int sampleHeight,
+      @HiveField(12, defaultValue: -1) int previewWidth,
+      @HiveField(13, defaultValue: -1) int previewHeight});
 }
 
 /// @nodoc
@@ -166,6 +202,10 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
     Object? serverName = freezed,
     Object? postUrl = freezed,
     Object? rateValue = freezed,
+    Object? sampleWidth = freezed,
+    Object? sampleHeight = freezed,
+    Object? previewWidth = freezed,
+    Object? previewHeight = freezed,
   }) {
     return _then(_$_BooruPost(
       id: id == freezed
@@ -208,6 +248,22 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
           ? _value.rateValue
           : rateValue // ignore: cast_nullable_to_non_nullable
               as String,
+      sampleWidth: sampleWidth == freezed
+          ? _value.sampleWidth
+          : sampleWidth // ignore: cast_nullable_to_non_nullable
+              as int,
+      sampleHeight: sampleHeight == freezed
+          ? _value.sampleHeight
+          : sampleHeight // ignore: cast_nullable_to_non_nullable
+              as int,
+      previewWidth: previewWidth == freezed
+          ? _value.previewWidth
+          : previewWidth // ignore: cast_nullable_to_non_nullable
+              as int,
+      previewHeight: previewHeight == freezed
+          ? _value.previewHeight
+          : previewHeight // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -226,7 +282,11 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       @HiveField(6, defaultValue: -1) required this.height,
       @HiveField(7, defaultValue: '') required this.serverName,
       @HiveField(8, defaultValue: '') required this.postUrl,
-      @HiveField(9, defaultValue: 'q') this.rateValue = 'q'})
+      @HiveField(9, defaultValue: 'q') this.rateValue = 'q',
+      @HiveField(10, defaultValue: -1) this.sampleWidth = -1,
+      @HiveField(11, defaultValue: -1) this.sampleHeight = -1,
+      @HiveField(12, defaultValue: -1) this.previewWidth = -1,
+      @HiveField(13, defaultValue: -1) this.previewHeight = -1})
       : _tags = tags,
         super._();
 
@@ -266,10 +326,26 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   @JsonKey()
   @HiveField(9, defaultValue: 'q')
   final String rateValue;
+  @override
+  @JsonKey()
+  @HiveField(10, defaultValue: -1)
+  final int sampleWidth;
+  @override
+  @JsonKey()
+  @HiveField(11, defaultValue: -1)
+  final int sampleHeight;
+  @override
+  @JsonKey()
+  @HiveField(12, defaultValue: -1)
+  final int previewWidth;
+  @override
+  @JsonKey()
+  @HiveField(13, defaultValue: -1)
+  final int previewHeight;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BooruPost(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue)';
+    return 'BooruPost(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight)';
   }
 
   @override
@@ -286,7 +362,11 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('height', height))
       ..add(DiagnosticsProperty('serverName', serverName))
       ..add(DiagnosticsProperty('postUrl', postUrl))
-      ..add(DiagnosticsProperty('rateValue', rateValue));
+      ..add(DiagnosticsProperty('rateValue', rateValue))
+      ..add(DiagnosticsProperty('sampleWidth', sampleWidth))
+      ..add(DiagnosticsProperty('sampleHeight', sampleHeight))
+      ..add(DiagnosticsProperty('previewWidth', previewWidth))
+      ..add(DiagnosticsProperty('previewHeight', previewHeight));
   }
 
   @override
@@ -307,7 +387,15 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
             const DeepCollectionEquality()
                 .equals(other.serverName, serverName) &&
             const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
-            const DeepCollectionEquality().equals(other.rateValue, rateValue));
+            const DeepCollectionEquality().equals(other.rateValue, rateValue) &&
+            const DeepCollectionEquality()
+                .equals(other.sampleWidth, sampleWidth) &&
+            const DeepCollectionEquality()
+                .equals(other.sampleHeight, sampleHeight) &&
+            const DeepCollectionEquality()
+                .equals(other.previewWidth, previewWidth) &&
+            const DeepCollectionEquality()
+                .equals(other.previewHeight, previewHeight));
   }
 
   @override
@@ -322,7 +410,11 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(height),
       const DeepCollectionEquality().hash(serverName),
       const DeepCollectionEquality().hash(postUrl),
-      const DeepCollectionEquality().hash(rateValue));
+      const DeepCollectionEquality().hash(rateValue),
+      const DeepCollectionEquality().hash(sampleWidth),
+      const DeepCollectionEquality().hash(sampleHeight),
+      const DeepCollectionEquality().hash(previewWidth),
+      const DeepCollectionEquality().hash(previewHeight));
 
   @JsonKey(ignore: true)
   @override
@@ -341,7 +433,11 @@ abstract class _BooruPost extends BooruPost {
       @HiveField(6, defaultValue: -1) required final int height,
       @HiveField(7, defaultValue: '') required final String serverName,
       @HiveField(8, defaultValue: '') required final String postUrl,
-      @HiveField(9, defaultValue: 'q') final String rateValue}) = _$_BooruPost;
+      @HiveField(9, defaultValue: 'q') final String rateValue,
+      @HiveField(10, defaultValue: -1) final int sampleWidth,
+      @HiveField(11, defaultValue: -1) final int sampleHeight,
+      @HiveField(12, defaultValue: -1) final int previewWidth,
+      @HiveField(13, defaultValue: -1) final int previewHeight}) = _$_BooruPost;
   const _BooruPost._() : super._();
 
   @override
@@ -374,6 +470,18 @@ abstract class _BooruPost extends BooruPost {
   @override
   @HiveField(9, defaultValue: 'q')
   String get rateValue;
+  @override
+  @HiveField(10, defaultValue: -1)
+  int get sampleWidth;
+  @override
+  @HiveField(11, defaultValue: -1)
+  int get sampleHeight;
+  @override
+  @HiveField(12, defaultValue: -1)
+  int get previewWidth;
+  @override
+  @HiveField(13, defaultValue: -1)
+  int get previewHeight;
   @override
   @JsonKey(ignore: true)
   _$$_BooruPostCopyWith<_$_BooruPost> get copyWith =>

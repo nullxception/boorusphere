@@ -35,7 +35,9 @@ class DownloaderDialog extends HookConsumerWidget {
             const ListTile(title: Text('Download')),
             if (booru.sampleFile.isNotEmpty)
               ListTile(
-                title: Text('Sample file (${booru.sampleFile.ext})'),
+                title: const Text('Sample'),
+                subtitle: Text(
+                    '${booru.sampleSize.toString()}, ${booru.sampleFile.ext}'),
                 leading: Icon(_getFileIcon(booru.sampleFile)),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -43,7 +45,9 @@ class DownloaderDialog extends HookConsumerWidget {
                 },
               ),
             ListTile(
-              title: Text('Original file (${booru.originalFile.ext})'),
+              title: const Text('Original'),
+              subtitle: Text(
+                  '${booru.originalSize.toString()}, ${booru.originalFile.ext}'),
               leading: Icon(_getFileIcon(booru.originalFile)),
               onTap: () {
                 Navigator.of(context).pop();

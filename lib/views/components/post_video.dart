@@ -148,7 +148,7 @@ class PostVideoDisplay extends HookConsumerWidget {
             ],
             orElse: () => [
               AspectRatio(
-                aspectRatio: booru.width / booru.height,
+                aspectRatio: booru.aspectRatio,
                 child: PostPlaceholderImage(
                   url: booru.previewFile,
                   shouldBlur:

@@ -94,13 +94,11 @@ class Thumbnail extends HookConsumerWidget {
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return _ThumbnailShimmer(
-              aspectRatio: booru.width / booru.height,
-            );
+            return _ThumbnailShimmer(aspectRatio: booru.aspectRatio);
           case LoadState.failed:
             return Material(
               child: AspectRatio(
-                aspectRatio: booru.width / booru.height,
+                aspectRatio: booru.aspectRatio,
                 child: const Icon(Icons.broken_image_outlined),
               ),
             );

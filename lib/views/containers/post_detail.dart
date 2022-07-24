@@ -45,10 +45,6 @@ class PostDetailsPage extends HookConsumerWidget {
         padding: EdgeInsets.zero,
         children: [
           ListTile(
-            title: const Text('Size'),
-            subtitle: Text('${booru.width}x${booru.height}'),
-          ),
-          ListTile(
             title: const Text('Type'),
             subtitle: Text(booru.contentFile.mimeType),
           ),
@@ -81,16 +77,25 @@ class PostDetailsPage extends HookConsumerWidget {
           if (booru.sampleFile.isNotEmpty)
             ListTile(
               title: const Text('Sample file (displayed)'),
-              subtitle: TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.centerLeft,
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.zero,
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                    child: Text(booru.sampleSize.toString()),
                   ),
-                ),
-                onPressed: () => launchUrlString(booru.sampleFile,
-                    mode: LaunchMode.externalApplication),
-                child: Text(booru.sampleFile),
+                  TextButton(
+                    style: ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.zero,
+                      ),
+                    ),
+                    onPressed: () => launchUrlString(booru.sampleFile,
+                        mode: LaunchMode.externalApplication),
+                    child: Text(booru.sampleFile),
+                  ),
+                ],
               ),
               trailing: IconButton(
                 iconSize: 18,
@@ -102,16 +107,25 @@ class PostDetailsPage extends HookConsumerWidget {
             ),
           ListTile(
             title: const Text('Original file'),
-            subtitle: TextButton(
-              style: ButtonStyle(
-                alignment: Alignment.centerLeft,
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.zero,
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: Text(booru.originalSize.toString()),
                 ),
-              ),
-              onPressed: () => launchUrlString(booru.originalFile,
-                  mode: LaunchMode.externalApplication),
-              child: Text(booru.originalFile),
+                TextButton(
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      EdgeInsets.zero,
+                    ),
+                  ),
+                  onPressed: () => launchUrlString(booru.originalFile,
+                      mode: LaunchMode.externalApplication),
+                  child: Text(booru.originalFile),
+                ),
+              ],
             ),
             trailing: IconButton(
               iconSize: 18,

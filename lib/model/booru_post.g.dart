@@ -27,13 +27,17 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
       serverName: fields[7] == null ? '' : fields[7] as String,
       postUrl: fields[8] == null ? '' : fields[8] as String,
       rateValue: fields[9] == null ? 'q' : fields[9] as String,
+      sampleWidth: fields[10] == null ? -1 : fields[10] as int,
+      sampleHeight: fields[11] == null ? -1 : fields[11] as int,
+      previewWidth: fields[12] == null ? -1 : fields[12] as int,
+      previewHeight: fields[13] == null ? -1 : fields[13] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_BooruPost obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -52,6 +56,14 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
       ..write(obj.postUrl)
       ..writeByte(9)
       ..write(obj.rateValue)
+      ..writeByte(10)
+      ..write(obj.sampleWidth)
+      ..writeByte(11)
+      ..write(obj.sampleHeight)
+      ..writeByte(12)
+      ..write(obj.previewWidth)
+      ..writeByte(13)
+      ..write(obj.previewHeight)
       ..writeByte(4)
       ..write(obj.tags);
   }

@@ -66,17 +66,17 @@ class BooruApi {
     final result = <BooruPost>[];
 
     final idKey = ['id'];
-    final originalFileKey = ['file_url', 'url'];
+    final originalFileKey = ['file_url'];
     final sampleFileKey = ['large_file_url', 'sample_url'];
-    final previewFileKey = ['preview_url', 'preview_file_url', 'preview'];
+    final previewFileKey = ['preview_url', 'preview_file_url'];
     final tagsKey = ['tags', 'tag_string'];
-    final widthKey = ['image_width', 'width', 'sample_width', 'preview_width'];
-    final heightKey = [
-      'image_height',
-      'height',
-      'sample_height',
-      'preview_height'
-    ];
+    final widthKey = ['image_width', 'width'];
+    final heightKey = ['image_height', 'height'];
+    final sampleWidthKey = ['sample_width'];
+    final sampleHeightKey = ['sample_height'];
+    final previewWidthKey = ['preview_width'];
+    final previewHeightKey = ['preview_height'];
+
     final ratingKey = ['rating'];
 
     for (final Map<String, dynamic> post in entries) {
@@ -87,6 +87,10 @@ class BooruApi {
       final tags = post.take(tagsKey, orElse: <String>[]);
       final width = post.take(widthKey, orElse: -1);
       final height = post.take(heightKey, orElse: -1);
+      final sampleWidth = post.take(sampleWidthKey, orElse: -1);
+      final sampleHeight = post.take(sampleHeightKey, orElse: -1);
+      final previewWidth = post.take(previewWidthKey, orElse: -1);
+      final previewHeight = post.take(previewHeightKey, orElse: -1);
       final rating = post.take(ratingKey, orElse: 'q');
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
@@ -104,6 +108,10 @@ class BooruApi {
             tags: tags,
             width: width,
             height: height,
+            sampleWidth: sampleWidth,
+            sampleHeight: sampleHeight,
+            previewWidth: previewWidth,
+            previewHeight: previewHeight,
             serverName: server.name,
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
