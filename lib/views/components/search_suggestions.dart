@@ -106,7 +106,6 @@ class SearchSuggestionResult extends HookConsumerWidget {
                       onAdded: _addToInput,
                     ),
                   ),
-                  const Divider(height: 1),
                 ],
               );
             },
@@ -144,8 +143,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
                           query: value[index],
                           onTap: _searchTag,
                           onAdded: _addToInput,
-                        ),
-                        if (index < value.length - 1) const Divider(height: 1),
+                        )
                       ],
                     );
                   },

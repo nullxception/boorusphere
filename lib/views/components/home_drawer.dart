@@ -55,7 +55,6 @@ class HomeDrawer extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const Divider(),
                             _ServerSelection(),
                           ],
                         ),
