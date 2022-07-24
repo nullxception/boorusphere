@@ -1,7 +1,7 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/booru_post.dart';
 import '../../provider/downloader.dart';
 import '../components/notice_card.dart';
 import 'post_detail.dart';
@@ -70,21 +70,12 @@ class DownloadsPage extends HookConsumerWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
-                leading: Card(
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(
-                      it.booru.contentType == PostType.video
-                          ? Icons.video_library
-                          : Icons.photo,
-                      size: 16,
-                    ),
-                  ),
+                leading: ExtendedImage.network(
+                  it.booru.previewFile,
+                  width: 42,
+                  shape: BoxShape.rectangle,
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  fit: BoxFit.cover,
                 ),
                 trailing: PopupMenuButton(
                   onSelected: (value) {
