@@ -4,12 +4,12 @@ import '../model/search_history.dart';
 import 'hive_boxes.dart';
 import 'settings/active_server.dart';
 
-final searchHistoryProvider = Provider((ref) => SearchHistoryManager(ref.read));
+final searchHistoryProvider = Provider((ref) => SearchHistoryManager(ref));
 
 class SearchHistoryManager {
-  final Reader read;
+  final Ref ref;
 
-  SearchHistoryManager(this.read);
+  SearchHistoryManager(this.ref);
 
   Future<Map> composeSuggestion({required String query}) async {
     final history = await mapped;
@@ -28,22 +28,22 @@ class SearchHistoryManager {
   }
 
   Future<Map> get mapped async {
-    final history = await read(searchHistoryBox);
+    final history = await ref.read(searchHistoryBox);
     return history.toMap();
   }
 
   Future<void> clear() async {
-    final history = await read(searchHistoryBox);
+    final history = await ref.read(searchHistoryBox);
     history.clear();
   }
 
   Future<void> delete(key) async {
-    final history = await read(searchHistoryBox);
+    final history = await ref.read(searchHistoryBox);
     history.delete(key);
   }
 
   Future<bool> checkExists({required String value}) async {
-    final data = await read(searchHistoryBox);
+    final data = await ref.read(searchHistoryBox);
     if (data.isEmpty) return false;
 
     final pageManager = data.values.firstWhere(
@@ -57,8 +57,8 @@ class SearchHistoryManager {
     final query = value.trim();
     if (query.isEmpty) return;
 
-    final history = await read(searchHistoryBox);
-    final activeServer = read(activeServerProvider);
+    final history = await ref.read(searchHistoryBox);
+    final activeServer = ref.read(activeServerProvider);
 
     if (!await checkExists(value: query)) {
       history.add(SearchHistory(

@@ -8,7 +8,7 @@ import '../components/notice_card.dart';
 class TagsBlockerPage extends HookConsumerWidget {
   const TagsBlockerPage({super.key});
 
-  void updateTags(BlockedTagsRepository repo, ValueNotifier storage) {
+  void updateTags(BlockedTagsManager repo, ValueNotifier storage) {
     repo.mapped.then((it) {
       storage.value = it;
     });

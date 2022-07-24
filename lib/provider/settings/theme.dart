@@ -12,7 +12,7 @@ final themeModeProvider =
       .watch(_savedThemeMode)
       .maybeWhen(data: (data) => data, orElse: () => ThemeMode.system);
 
-  return ThemeModeState(ref.read, fromSettings);
+  return ThemeModeState(ref, fromSettings);
 });
 
 final _savedDarkerTheme =
@@ -24,17 +24,17 @@ final darkerThemeProvider =
       .watch(_savedDarkerTheme)
       .maybeWhen(data: (data) => data, orElse: () => false);
 
-  return DarkerThemeState(ref.read, fromSettings);
+  return DarkerThemeState(ref, fromSettings);
 });
 
 class ThemeModeState extends StateNotifier<ThemeMode> {
-  ThemeModeState(this.read, ThemeMode initState) : super(initState);
+  ThemeModeState(this.ref, ThemeMode initState) : super(initState);
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> setMode({required ThemeMode mode}) async {
     state = mode;
-    final settings = await read(settingsBox);
+    final settings = await ref.read(settingsBox);
     settings.put(boxKey, mode.index);
   }
 
@@ -52,8 +52,8 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
     }
   }
 
-  static Future<ThemeMode> restore(FutureProviderRef ref) async {
-    final settings = await ref.read(settingsBox);
+  static Future<ThemeMode> restore(FutureProviderRef futureRef) async {
+    final settings = await futureRef.read(settingsBox);
     final value = settings.get(boxKey, defaultValue: ThemeMode.system.index);
     return ThemeMode.values[value];
   }
@@ -62,20 +62,20 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
 }
 
 class DarkerThemeState extends StateNotifier<bool> {
-  DarkerThemeState(this.read, bool initState) : super(initState);
+  DarkerThemeState(this.ref, bool initState) : super(initState);
 
-  final Reader read;
+  final Ref ref;
 
   void enable(bool value) async {
     state = value;
-    final prefs = await read(settingsBox);
+    final prefs = await ref.read(settingsBox);
     prefs.put(boxKey, value);
   }
 
   static const boxKey = 'ui_theme_darker';
 
-  static Future<bool> restore(FutureProviderRef<bool> ref) async {
-    final settings = await ref.read(settingsBox);
+  static Future<bool> restore(FutureProviderRef futureRef) async {
+    final settings = await futureRef.read(settingsBox);
     return settings.get(boxKey, defaultValue: false);
   }
 }

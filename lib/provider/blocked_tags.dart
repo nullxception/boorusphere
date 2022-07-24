@@ -2,28 +2,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'hive_boxes.dart';
 
-class BlockedTagsRepository {
-  final Reader read;
+final blockedTagsProvider = Provider((ref) => BlockedTagsManager(ref));
 
-  BlockedTagsRepository(this.read);
+class BlockedTagsManager {
+  final Ref ref;
+
+  BlockedTagsManager(this.ref);
 
   Future<Map> get mapped async {
-    final blocked = await read(blockedTagsBox);
+    final blocked = await ref.read(blockedTagsBox);
     return blocked.toMap();
   }
 
   Future<List<String>> get listedEntries async {
-    final blocked = await read(blockedTagsBox);
+    final blocked = await ref.read(blockedTagsBox);
     return blocked.values.map((it) => it.toString()).toList();
   }
 
   Future<void> delete(key) async {
-    final blocked = await read(blockedTagsBox);
+    final blocked = await ref.read(blockedTagsBox);
     blocked.delete(key);
   }
 
   Future<bool> checkExists({required String value}) async {
-    final blocked = await read(blockedTagsBox);
+    final blocked = await ref.read(blockedTagsBox);
     if (blocked.isEmpty) return false;
 
     return value ==
@@ -34,7 +36,7 @@ class BlockedTagsRepository {
     final tag = value.trim();
     if (tag.isEmpty) return;
 
-    final blocked = await read(blockedTagsBox);
+    final blocked = await ref.read(blockedTagsBox);
     if (!await checkExists(value: tag)) {
       blocked.add(tag);
     }
@@ -46,5 +48,3 @@ class BlockedTagsRepository {
     }
   }
 }
-
-final blockedTagsProvider = Provider((ref) => BlockedTagsRepository(ref.read));

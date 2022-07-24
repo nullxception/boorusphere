@@ -9,22 +9,22 @@ final gridProvider = StateNotifierProvider<GridState, int>((ref) {
   final fromSettings =
       ref.watch(_savedGrid).maybeWhen(data: (data) => data, orElse: () => 0);
 
-  return GridState(ref.read, fromSettings);
+  return GridState(ref, fromSettings);
 });
 
 class GridState extends StateNotifier<int> {
-  GridState(this.read, int initState) : super(initState);
+  GridState(this.ref, int initState) : super(initState);
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> rotate() async {
     state = state < 2 ? state + 1 : 0;
-    final settings = await read(settingsBox);
+    final settings = await ref.read(settingsBox);
     settings.put(boxKey, state);
   }
 
-  static Future<int> restore(FutureProviderRef ref) async {
-    final settings = await ref.read(settingsBox);
+  static Future<int> restore(FutureProviderRef futureRef) async {
+    final settings = await futureRef.read(settingsBox);
     return settings.get(boxKey, defaultValue: 0);
   }
 

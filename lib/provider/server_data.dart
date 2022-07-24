@@ -9,11 +9,11 @@ import 'settings/active_server.dart';
 
 final serverDataProvider =
     StateNotifierProvider<ServersState, List<ServerData>>(
-        (ref) => ServersState(ref.read));
+        (ref) => ServersState(ref));
 
 class ServersState extends StateNotifier<List<ServerData>> {
-  ServersState(this.read) : super([]);
-  final Reader read;
+  ServersState(this.ref) : super([]);
+  final Ref ref;
 
   final _defaultServerList = <ServerData>[];
 
@@ -21,7 +21,7 @@ class ServersState extends StateNotifier<List<ServerData>> {
       <ServerData>{..._defaultServerList, ...state};
 
   Future<void> populateData() async {
-    final server = await read(serverBox);
+    final server = await ref.read(serverBox);
 
     final fromAssets = await _defaultServersAssets();
     _defaultServerList.addAll(fromAssets.values);
@@ -50,19 +50,19 @@ class ServersState extends StateNotifier<List<ServerData>> {
   }
 
   void addServer({required ServerData data}) async {
-    final server = await read(serverBox);
+    final server = await ref.read(serverBox);
     server.put(data.homepage, data);
     state = server.values.map((it) => it as ServerData).toList();
   }
 
   void removeServer({required ServerData data}) async {
-    final activeServerNotifier = read(activeServerProvider.notifier);
-    final activeServer = read(activeServerProvider);
+    final activeServerNotifier = ref.read(activeServerProvider.notifier);
+    final activeServer = ref.read(activeServerProvider);
 
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
-    final server = await read(serverBox);
+    final server = await ref.read(serverBox);
     server.delete(data.homepage);
     state = server.values.map((it) => it as ServerData).toList();
     if (activeServer == data) {
@@ -71,8 +71,8 @@ class ServersState extends StateNotifier<List<ServerData>> {
   }
 
   void resetToDefault() async {
-    final server = await read(serverBox);
-    final activeServerNotifier = read(activeServerProvider.notifier);
+    final server = await ref.read(serverBox);
+    final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     final fromAssets = await _defaultServersAssets();
 
@@ -87,9 +87,9 @@ class ServersState extends StateNotifier<List<ServerData>> {
     required ServerData data,
     required ServerData newData,
   }) async {
-    final server = await read(serverBox);
-    final activeServer = read(activeServerProvider);
-    final activeServerNotifier = read(activeServerProvider.notifier);
+    final server = await ref.read(serverBox);
+    final activeServer = ref.read(activeServerProvider);
+    final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     server.delete(data.homepage);
     server.put(data.homepage, newData);

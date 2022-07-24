@@ -6,16 +6,16 @@ import 'settings/safe_mode.dart';
 
 final queryProvider = StateNotifierProvider<QueryState, ServerQuery>((ref) {
   final safeMode = ref.watch(safeModeProvider);
-  return QueryState(ref.read, ServerQuery(safeMode: safeMode));
+  return QueryState(ref, ServerQuery(safeMode: safeMode));
 });
 
 class QueryState extends StateNotifier<ServerQuery> {
-  QueryState(this.read, ServerQuery initState) : super(initState);
+  QueryState(this.ref, ServerQuery initState) : super(initState);
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> setTag({required String query}) async {
-    final searchHistory = read(searchHistoryProvider);
+    final searchHistory = ref.read(searchHistoryProvider);
     if (state.tags != query) {
       state = state.copyWith(tags: query);
       searchHistory.push(query);
@@ -25,7 +25,7 @@ class QueryState extends StateNotifier<ServerQuery> {
   Future<void> setSafeMode(enabled) async {
     if (state.safeMode != enabled) {
       state = state.copyWith(safeMode: enabled);
-      final safeModeNotifier = read(safeModeProvider.notifier);
+      final safeModeNotifier = ref.read(safeModeProvider.notifier);
       safeModeNotifier.enable(enabled);
     }
   }

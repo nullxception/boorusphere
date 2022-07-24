@@ -18,19 +18,19 @@ import 'settings/active_server.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => '');
-final pageManagerProvider = Provider((ref) => PageManager(ref.read));
+final pageManagerProvider = Provider((ref) => PageManager(ref));
 
 class PageManager {
-  PageManager(this.read);
+  PageManager(this.ref);
 
-  final Reader read;
+  final Ref ref;
   final List<BooruPost> posts = [];
 
   int _page = 1;
 
   Future<List<BooruPost>> _parse(ServerData server, http.Response res) async {
-    final query = read(queryProvider);
-    final blockedTags = read(blockedTagsProvider);
+    final query = ref.read(queryProvider);
+    final blockedTags = ref.read(blockedTagsProvider);
     final blocked = await blockedTags.listedEntries;
 
     if (res.statusCode != 200) {
@@ -138,10 +138,10 @@ class PageManager {
       .trim();
 
   void fetch() async {
-    final pageLoading = read(pageLoadingProvider.state);
-    final query = read(queryProvider);
-    final errorMessage = read(pageErrorProvider.state);
-    final activeServer = read(activeServerProvider);
+    final pageLoading = ref.read(pageLoadingProvider.state);
+    final query = ref.read(queryProvider);
+    final errorMessage = ref.read(pageErrorProvider.state);
+    final activeServer = ref.read(activeServerProvider);
 
     if (posts.isEmpty) {
       _page = 1;
@@ -172,8 +172,8 @@ class PageManager {
   }
 
   void loadMore() {
-    final pageLoading = read(pageLoadingProvider);
-    final pageError = read(pageErrorProvider);
+    final pageLoading = ref.read(pageLoadingProvider);
+    final pageError = ref.read(pageErrorProvider);
     if (pageError.isEmpty && !pageLoading) {
       _page++;
       fetch();
@@ -181,8 +181,8 @@ class PageManager {
   }
 
   void initialize() async {
-    final serverDataNotifier = read(serverDataProvider.notifier);
-    final activeServerNotifier = read(activeServerProvider.notifier);
+    final serverDataNotifier = ref.read(serverDataProvider.notifier);
+    final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     await serverDataNotifier.populateData();
     await activeServerNotifier.restoreFromPreference();

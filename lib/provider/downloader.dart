@@ -15,12 +15,12 @@ import '../model/download_progress.dart';
 import '../model/download_status.dart';
 import 'hive_boxes.dart';
 
-final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref.read));
+final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref));
 
 class Downloader extends ChangeNotifier {
-  Downloader(this.read);
+  Downloader(this.ref);
 
-  final Reader read;
+  final Ref ref;
   final _port = ReceivePort();
   final entries = <DownloadEntry>[];
   final progresses = <DownloadProgress>{};
@@ -82,7 +82,7 @@ class Downloader extends ChangeNotifier {
 
   Future<void> _populateDownloadEntries() async {
     final tasks = await FlutterDownloader.loadTasks();
-    final box = await read(downloadBox);
+    final box = await ref.read(downloadBox);
     if (tasks != null) {
       progresses.addAll(tasks
           .map((e) => DownloadProgress(
@@ -99,21 +99,21 @@ class Downloader extends ChangeNotifier {
   }
 
   Future<void> _addEntry({required DownloadEntry entry}) async {
-    final box = await read(downloadBox);
+    final box = await ref.read(downloadBox);
     box.put(entry.id, entry);
     entries.add(entry);
   }
 
   Future<void> _updateEntry(
       {required String id, required DownloadEntry newEntry}) async {
-    final box = await read(downloadBox);
+    final box = await ref.read(downloadBox);
     _removeEntry(id: id);
     box.put(newEntry.id, newEntry);
     entries.add(newEntry);
   }
 
   Future<void> _removeEntry({required String id}) async {
-    final box = await read(downloadBox);
+    final box = await ref.read(downloadBox);
 
     box.delete(id);
     progresses.removeWhere((it) => it.id == id);
@@ -127,7 +127,7 @@ class Downloader extends ChangeNotifier {
           taskId: e.taskId, shouldDeleteContent: false)));
     }
 
-    final box = await read(downloadBox);
+    final box = await ref.read(downloadBox);
     if (box.values.isNotEmpty) {
       box.deleteAll(box.keys);
     }

@@ -8,8 +8,11 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
+final appVersionProvider =
+    ChangeNotifierProvider((ref) => AppVersionNotifier(ref));
+
 class AppVersionNotifier extends ChangeNotifier {
-  final Reader read;
+  final Ref ref;
 
   String version = '0.0.0';
   String lastestVersion = '0.0.0';
@@ -21,7 +24,7 @@ class AppVersionNotifier extends ChangeNotifier {
   bool get isChecking => _isChecking;
   bool get isChecked => _isChecked;
 
-  AppVersionNotifier(this.read) {
+  AppVersionNotifier(this.ref) {
     _init();
   }
 
@@ -88,6 +91,3 @@ class AppVersionNotifier extends ChangeNotifier {
   static const pubspecUrl =
       'https://raw.githubusercontent.com/nullxception/boorusphere/main/pubspec.yaml';
 }
-
-final appVersionProvider =
-    ChangeNotifierProvider((ref) => AppVersionNotifier(ref.read));

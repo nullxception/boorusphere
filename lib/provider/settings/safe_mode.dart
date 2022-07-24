@@ -10,22 +10,22 @@ final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
       .watch(_savedSafeMode)
       .maybeWhen(data: (data) => data, orElse: () => true);
 
-  return SafeModeState(ref.read, fromSettings);
+  return SafeModeState(ref, fromSettings);
 });
 
 class SafeModeState extends StateNotifier<bool> {
-  SafeModeState(this.read, initData) : super(initData);
+  SafeModeState(this.ref, initData) : super(initData);
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> enable(bool value) async {
     state = value;
-    final settings = await read(settingsBox);
+    final settings = await ref.read(settingsBox);
     settings.put(boxKey, value);
   }
 
-  static Future<bool> restore(FutureProviderRef ref) async {
-    final settings = await ref.read(settingsBox);
+  static Future<bool> restore(FutureProviderRef futureRef) async {
+    final settings = await futureRef.read(settingsBox);
     return settings.get(boxKey, defaultValue: true);
   }
 

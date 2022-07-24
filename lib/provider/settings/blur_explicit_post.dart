@@ -11,22 +11,22 @@ final blurExplicitPostProvider =
       .watch(_savedBlurExplicitPost)
       .maybeWhen(data: (data) => data, orElse: () => true);
 
-  return BlurExplicitPostState(ref.read, fromSettings);
+  return BlurExplicitPostState(ref, fromSettings);
 });
 
 class BlurExplicitPostState extends StateNotifier<bool> {
-  BlurExplicitPostState(this.read, initData) : super(initData);
+  BlurExplicitPostState(this.ref, initData) : super(initData);
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> enable(bool value) async {
     state = value;
-    final settings = await read(settingsBox);
+    final settings = await ref.read(settingsBox);
     settings.put(boxKey, value);
   }
 
-  static Future<bool> restore(FutureProviderRef ref) async {
-    final settings = await ref.read(settingsBox);
+  static Future<bool> restore(FutureProviderRef futureRef) async {
+    final settings = await futureRef.read(settingsBox);
     return settings.get(boxKey, defaultValue: true);
   }
 

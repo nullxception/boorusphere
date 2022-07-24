@@ -6,23 +6,23 @@ import '../server_data.dart';
 
 final activeServerProvider =
     StateNotifierProvider<ActiveServerState, ServerData>(
-        (ref) => ActiveServerState(ref.read));
+        (ref) => ActiveServerState(ref));
 
 class ActiveServerState extends StateNotifier<ServerData> {
-  ActiveServerState(this.read) : super(ServerData.empty);
+  ActiveServerState(this.ref) : super(ServerData.empty);
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> restoreFromPreference() async {
-    final settings = await read(settingsBox);
-    final serverDataNotifier = read(serverDataProvider.notifier);
+    final settings = await ref.read(settingsBox);
+    final serverDataNotifier = ref.read(serverDataProvider.notifier);
     final name = settings.get(boxKey, defaultValue: '');
     state = serverDataNotifier.select(name);
   }
 
   Future<void> use(ServerData data) async {
     state = data;
-    final settings = await read(settingsBox);
+    final settings = await ref.read(settingsBox);
     settings.put(boxKey, data.name);
   }
 
