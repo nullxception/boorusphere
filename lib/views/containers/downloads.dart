@@ -120,12 +120,16 @@ class _DownloadEntryPopupMenu extends ConsumerWidget {
 class _DownloadPagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: NoticeCard(
-        icon: Icon(Icons.cloud_download),
-        margin: EdgeInsets.only(top: 64),
-        children: Text('Your downloaded files will appear here'),
-      ),
+    return Column(
+      children: const [
+        Center(
+          child: NoticeCard(
+            icon: Icon(Icons.cloud_download),
+            margin: EdgeInsets.only(top: 64),
+            children: Text('Your downloaded files will appear here'),
+          ),
+        ),
+      ],
     );
   }
 }
