@@ -142,8 +142,14 @@ class _DownloadList extends ConsumerWidget {
             elements: entries,
             padding: const EdgeInsets.only(bottom: 48),
             groupBy: (entry) => entry.booru.serverName,
-            groupSeparatorBuilder: (groupByValue) {
-              return ListTile(title: Text(groupByValue));
+            groupSeparatorBuilder: (serverName) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Text(
+                  serverName,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              );
             },
             itemBuilder: (context, entry) {
               return _DownloadEntryView(entry: entry);
