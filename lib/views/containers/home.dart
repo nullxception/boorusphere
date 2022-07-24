@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-import '../../provider/booru_api.dart';
+import '../../provider/page_manager.dart';
 import '../components/home_bar.dart';
 import '../components/home_drawer.dart';
 import '../components/sliver_page_state.dart';
@@ -22,7 +22,7 @@ class HomePage extends HookConsumerWidget {
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
-    final api = ref.watch(booruApiProvider);
+    final pageManager = ref.watch(pageManagerProvider);
     final pageLoading = ref.watch(pageLoadingProvider);
     final errorMessage = ref.watch(pageErrorProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
@@ -30,7 +30,7 @@ class HomePage extends HookConsumerWidget {
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
-        api.loadMore();
+        pageManager.loadMore();
       }
     }, [key]);
 

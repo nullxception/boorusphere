@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/server_data.dart';
 import '../../provider/app_version.dart';
-import '../../provider/booru_api.dart';
-import '../../provider/booru_query.dart';
+import '../../provider/page_manager.dart';
+import '../../provider/query.dart';
 import '../../provider/server_data.dart';
 import '../../provider/settings/active_server.dart';
 import '../../provider/settings/theme.dart';
@@ -159,20 +159,20 @@ class AppVersionTile extends HookConsumerWidget {
 class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final api = ref.watch(booruApiProvider);
-    final booruQuery = ref.watch(booruQueryProvider);
-    final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
+    final pageManager = ref.watch(pageManagerProvider);
+    final query = ref.watch(queryProvider);
+    final queryNotifier = ref.watch(queryProvider.notifier);
 
     return Visibility(
-      visible: booruQuery.tags != ServerData.defaultTag,
+      visible: query.tags != ServerData.defaultTag,
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          booruQueryNotifier.setTag(query: ServerData.defaultTag);
-          api.posts.clear();
-          api.fetch();
+          queryNotifier.setTag(query: ServerData.defaultTag);
+          pageManager.posts.clear();
+          pageManager.fetch();
           Navigator.pop(context);
         },
       ),
@@ -183,7 +183,7 @@ class _BackToHomeTile extends HookConsumerWidget {
 class _ServerSelection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final api = ref.watch(booruApiProvider);
+    final pageManager = ref.watch(pageManagerProvider);
     final serverData = ref.watch(serverDataProvider);
     final activeServer = ref.watch(activeServerProvider);
     final activeServerNotifier = ref.read(activeServerProvider.notifier);
@@ -212,8 +212,8 @@ class _ServerSelection extends HookConsumerWidget {
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
               activeServerNotifier.use(it);
-              api.posts.clear();
-              api.fetch();
+              pageManager.posts.clear();
+              pageManager.fetch();
               Navigator.pop(context);
             },
           ),

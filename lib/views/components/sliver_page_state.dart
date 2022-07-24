@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../provider/booru_api.dart';
+import '../../provider/page_manager.dart';
 import 'notice_card.dart';
 
 class SliverPageState extends HookConsumerWidget {
@@ -10,7 +10,7 @@ class SliverPageState extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final api = ref.watch(booruApiProvider);
+    final pageManager = ref.watch(pageManagerProvider);
     final pageLoading = ref.watch(pageLoadingProvider);
     final errorMessage = ref.watch(pageErrorProvider);
 
@@ -28,7 +28,7 @@ class SliverPageState extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 24),
                       child: ElevatedButton(
-                        onPressed: api.fetch,
+                        onPressed: pageManager.fetch,
                         style: ElevatedButton.styleFrom(elevation: 0),
                         child: const Text('Try again'),
                       ),
@@ -44,12 +44,15 @@ class SliverPageState extends HookConsumerWidget {
               child: SpinKitThreeBounce(
                   size: 32, color: Theme.of(context).colorScheme.primary),
             ),
-          if (errorMessage.isEmpty && !pageLoading && api.posts.isNotEmpty)
+          if (errorMessage.isEmpty &&
+              !pageLoading &&
+              pageManager.posts.isNotEmpty)
             Container(
               height: 90,
               alignment: Alignment.center,
               child: ElevatedButton(
-                  onPressed: api.loadMore, child: const Text('Load more')),
+                  onPressed: pageManager.loadMore,
+                  child: const Text('Load more')),
             )
         ],
       ),

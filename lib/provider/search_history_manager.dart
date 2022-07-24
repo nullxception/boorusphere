@@ -4,10 +4,12 @@ import '../model/search_history.dart';
 import 'hive_boxes.dart';
 import 'settings/active_server.dart';
 
-class SearchHistoryRepository {
+final searchHistoryProvider = Provider((ref) => SearchHistoryManager(ref.read));
+
+class SearchHistoryManager {
   final Reader read;
 
-  SearchHistoryRepository(this.read);
+  SearchHistoryManager(this.read);
 
   Future<Map> composeSuggestion({required String query}) async {
     final history = await mapped;
@@ -44,11 +46,11 @@ class SearchHistoryRepository {
     final data = await read(searchHistoryBox);
     if (data.isEmpty) return false;
 
-    final search = data.values.firstWhere(
+    final pageManager = data.values.firstWhere(
       (it) => it.query == value,
       orElse: () => const SearchHistory(),
     );
-    return search.query == value;
+    return pageManager.query == value;
   }
 
   Future<void> push(String value) async {
@@ -66,6 +68,3 @@ class SearchHistoryRepository {
     }
   }
 }
-
-final searchHistoryProvider =
-    Provider((ref) => SearchHistoryRepository(ref.read));

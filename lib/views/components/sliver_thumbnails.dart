@@ -9,7 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 import '../../model/booru_post.dart';
-import '../../provider/booru_api.dart';
+import '../../provider/page_manager.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/grid.dart';
 import '../../routes.dart';
@@ -24,7 +24,7 @@ class SliverThumbnails extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
     final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
-    final api = ref.watch(booruApiProvider);
+    final pageManager = ref.watch(pageManagerProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
@@ -33,7 +33,7 @@ class SliverThumbnails extends HookConsumerWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      childCount: api.posts.length,
+      childCount: pageManager.posts.length,
       itemBuilder: (context, index) => AutoScrollTag(
         key: ValueKey(index),
         controller: autoScrollController,
@@ -44,7 +44,7 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: GestureDetector(
-            child: Thumbnail(booru: api.posts[index]),
+            child: Thumbnail(booru: pageManager.posts[index]),
             onTap: () {
               // invalidate the state first so we can use it for checking mechanism too
               lastOpenedIndex.state = -1;

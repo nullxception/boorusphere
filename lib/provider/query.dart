@@ -1,17 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/server_query.dart';
-import 'search_history.dart';
+import 'search_history_manager.dart';
 import 'settings/safe_mode.dart';
 
-final booruQueryProvider =
-    StateNotifierProvider<BooruQueryNotifier, ServerQuery>((ref) {
+final queryProvider = StateNotifierProvider<QueryState, ServerQuery>((ref) {
   final safeMode = ref.watch(safeModeProvider);
-  return BooruQueryNotifier(ref.read, ServerQuery(safeMode: safeMode));
+  return QueryState(ref.read, ServerQuery(safeMode: safeMode));
 });
 
-class BooruQueryNotifier extends StateNotifier<ServerQuery> {
-  BooruQueryNotifier(this.read, ServerQuery initState) : super(initState);
+class QueryState extends StateNotifier<ServerQuery> {
+  QueryState(this.read, ServerQuery initState) : super(initState);
 
   final Reader read;
 

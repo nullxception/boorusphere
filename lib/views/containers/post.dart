@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/booru_post.dart';
-import '../../provider/booru_api.dart';
+import '../../provider/page_manager.dart';
 import '../components/post_error.dart';
 import '../components/post_image.dart';
 import '../components/post_toolbox.dart';
@@ -25,12 +25,13 @@ class PostPage extends HookConsumerWidget {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
 
     final pageController = useExtendedPageController(initialPage: beginPage);
-    final api = ref.watch(booruApiProvider);
+    final pageManager = ref.watch(pageManagerProvider);
     final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final page = useState(beginPage);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
 
-    final isNotVideo = api.posts[page.value].contentType != PostType.video;
+    final isNotVideo =
+        pageManager.posts[page.value].contentType != PostType.video;
 
     useEffect(() {
       SystemChrome.setSystemUIChangeCallback((fullscreen) async {
@@ -55,8 +56,8 @@ class PostPage extends HookConsumerWidget {
           backgroundColor: Colors.black38,
           foregroundColor: Colors.white,
           title: SubbedTitle(
-            title: '#${page.value + 1} of ${api.posts.length}',
-            subtitle: api.posts[page.value].tags.join(' '),
+            title: '#${page.value + 1} of ${pageManager.posts.length}',
+            subtitle: pageManager.posts[page.value].tags.join(' '),
           ),
         ),
       ),
@@ -66,9 +67,9 @@ class PostPage extends HookConsumerWidget {
           page.value = index;
           lastOpenedIndex.state = index;
         },
-        itemCount: api.posts.length,
+        itemCount: pageManager.posts.length,
         itemBuilder: (_, index) {
-          final content = api.posts[index];
+          final content = pageManager.posts[index];
           switch (content.contentType) {
             case PostType.photo:
               return PostImageDisplay(booru: content);
@@ -81,7 +82,7 @@ class PostPage extends HookConsumerWidget {
       ),
       bottomNavigationBar: Visibility(
         visible: !isFullscreen.state && isNotVideo,
-        child: PostToolbox(api.posts[page.value]),
+        child: PostToolbox(pageManager.posts[page.value]),
       ),
     );
   }

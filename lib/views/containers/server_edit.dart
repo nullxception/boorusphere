@@ -4,8 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/server_data.dart';
-import '../../provider/booru_api.dart';
 import '../../provider/server_data.dart';
+import '../../provider/server_scanner.dart';
 import '../components/server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {
@@ -17,7 +17,7 @@ class ServerEditorPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final api = ref.watch(booruApiProvider);
+    final serverScanner = ref.watch(serverScannerProvider);
     final serverData = ref.watch(serverDataProvider);
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final data = useState(server);
@@ -72,7 +72,7 @@ class ServerEditorPage extends HookConsumerWidget {
                           isLoading.value = true;
                           errorMessage.value = '';
                           try {
-                            final res = await api.scanServerUrl(scanText.text);
+                            final res = await serverScanner.scan(scanText.text);
                             data.value = res;
                           } catch (e) {
                             errorMessage.value = e.toString();

@@ -9,8 +9,8 @@ import 'model/booru_post.dart';
 import 'model/download_entry.dart';
 import 'model/search_history.dart';
 import 'model/server_data.dart';
-import 'provider/booru_api.dart';
 import 'provider/downloader.dart';
+import 'provider/page_manager.dart';
 import 'provider/settings/theme.dart';
 import 'routes.dart';
 import 'util/app_theme.dart';
@@ -24,10 +24,10 @@ class Boorusphere extends HookConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
     final downloadNotifier = ref.watch(downloadProvider.notifier);
-    final api = ref.read(booruApiProvider);
+    final pageManager = ref.read(pageManagerProvider);
 
     useEffect(() {
-      api.initialize();
+      pageManager.initialize();
       downloadNotifier.register();
       return () {
         downloadNotifier.unregister();

@@ -8,8 +8,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../model/booru_post.dart';
 import '../../model/server_data.dart';
 import '../../provider/blocked_tags.dart';
-import '../../provider/booru_api.dart';
-import '../../provider/booru_query.dart';
+import '../../provider/page_manager.dart';
+import '../../provider/query.dart';
 import '../../util/string_ext.dart';
 import '../components/tag.dart';
 import 'home.dart';
@@ -31,9 +31,9 @@ class PostDetailsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
-    final api = ref.watch(booruApiProvider);
-    final booruQuery = ref.watch(booruQueryProvider);
-    final booruQueryNotifier = ref.watch(booruQueryProvider.notifier);
+    final pageManager = ref.watch(pageManagerProvider);
+    final query = ref.watch(queryProvider);
+    final queryNotifier = ref.watch(queryProvider.notifier);
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
@@ -198,18 +198,18 @@ class PostDetailsPage extends HookConsumerWidget {
               }
             },
           ),
-          if (booruQuery.tags != ServerData.defaultTag)
+          if (query.tags != ServerData.defaultTag)
             SpeedDialChild(
               child: const Icon(Icons.search),
               label: 'Add tag to current search',
               onTap: () {
                 final selectedTags = selectedtag.value;
                 if (selectedTags.isNotEmpty) {
-                  final tags = Set<String>.from(booruQuery.tags.split(' '));
+                  final tags = Set<String>.from(query.tags.split(' '));
                   tags.addAll(selectedTags);
-                  booruQueryNotifier.setTag(query: tags.join(' '));
-                  api.posts.clear();
-                  api.fetch();
+                  queryNotifier.setTag(query: tags.join(' '));
+                  pageManager.posts.clear();
+                  pageManager.fetch();
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const HomePage()),
@@ -224,9 +224,9 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
-                booruQueryNotifier.setTag(query: tags);
-                api.posts.clear();
-                api.fetch();
+                queryNotifier.setTag(query: tags);
+                pageManager.posts.clear();
+                pageManager.fetch();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const HomePage()),
