@@ -140,6 +140,7 @@ class _DownloadList extends ConsumerWidget {
     return groupByServer
         ? GroupedListView<DownloadEntry, String>(
             elements: entries,
+            padding: const EdgeInsets.only(bottom: 48),
             groupBy: (entry) => entry.booru.serverName,
             groupSeparatorBuilder: (groupByValue) {
               return ListTile(title: Text(groupByValue));
@@ -149,6 +150,7 @@ class _DownloadList extends ConsumerWidget {
             },
           )
         : ListView.builder(
+            padding: const EdgeInsets.only(bottom: 48),
             itemCount: entries.length,
             itemBuilder: (context, id) {
               return _DownloadEntryView(entry: entries[id]);
