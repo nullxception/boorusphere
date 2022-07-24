@@ -1,18 +1,22 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/download_entry.dart';
 import '../../provider/downloader.dart';
+import '../../provider/settings/downloads/group_by_server.dart';
 import '../components/notice_card.dart';
 import 'post_detail.dart';
 
-class DownloadsPage extends HookConsumerWidget {
+class DownloadsPage extends ConsumerWidget {
   const DownloadsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
+    final groupByServer = ref.watch(groupByServerProvider);
+    final groupByServerNotifier = ref.watch(groupByServerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,70 +29,31 @@ class DownloadsPage extends HookConsumerWidget {
                   case 'clear-all':
                     downloader.clearEntries();
                     break;
+                  case 'group-by-server':
+                    groupByServerNotifier.enable(!groupByServer);
+                    break;
                   default:
                     break;
                 }
               },
               itemBuilder: (BuildContext context) {
                 return [
+                  PopupMenuItem(
+                    value: 'group-by-server',
+                    child: Text(groupByServer ? 'Ungroup' : 'Group by server'),
+                  ),
                   const PopupMenuItem(
                     value: 'clear-all',
                     child: Text('Clear all'),
-                  )
+                  ),
                 ];
               },
             )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (downloader.entries.isEmpty)
-              const Center(
-                child: NoticeCard(
-                  icon: Icon(Icons.cloud_download),
-                  margin: EdgeInsets.only(top: 64),
-                  children: Text('Your downloaded files will appear here'),
-                ),
-              ),
-            ...downloader.entries.reversed.map((it) {
-              final fileName =
-                  Uri.decodeFull(downloader.getFileNameFromUrl(it.destination));
-              final progress = downloader.getProgress(it.id);
-
-              return ListTile(
-                title: Text(
-                  fileName,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    progress.status.isDownloading
-                        ? '${progress.status.name} ${progress.progress}% • ${it.booru.serverName}'
-                        : '${progress.status.name} • ${it.booru.serverName}',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                leading: ExtendedImage.network(
-                  it.booru.previewFile,
-                  width: 42,
-                  shape: BoxShape.rectangle,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  fit: BoxFit.cover,
-                ),
-                trailing: _DownloadEntryPopupMenu(entry: it),
-                dense: true,
-                contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                onTap: !progress.status.isDownloaded
-                    ? null
-                    : () => downloader.openEntryFile(id: it.id),
-              );
-            }).toList(),
-          ],
-        ),
-      ),
+      body: downloader.entries.isEmpty
+          ? _DownloadPagePlaceholder()
+          : _DownloadList(),
     );
   }
 }
@@ -148,6 +113,91 @@ class _DownloadEntryPopupMenu extends ConsumerWidget {
           ),
         ];
       },
+    );
+  }
+}
+
+class _DownloadPagePlaceholder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: NoticeCard(
+        icon: Icon(Icons.cloud_download),
+        margin: EdgeInsets.only(top: 64),
+        children: Text('Your downloaded files will appear here'),
+      ),
+    );
+  }
+}
+
+class _DownloadList extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final downloader = ref.watch(downloadProvider);
+    final groupByServer = ref.watch(groupByServerProvider);
+    final entries = downloader.entries.reversed.toList();
+
+    return groupByServer
+        ? GroupedListView<DownloadEntry, String>(
+            elements: entries,
+            groupBy: (entry) => entry.booru.serverName,
+            groupSeparatorBuilder: (groupByValue) {
+              return ListTile(title: Text(groupByValue));
+            },
+            itemBuilder: (context, entry) {
+              return _DownloadEntryView(entry: entry);
+            },
+          )
+        : ListView.builder(
+            itemCount: entries.length,
+            itemBuilder: (context, id) {
+              return _DownloadEntryView(entry: entries[id]);
+            },
+          );
+  }
+}
+
+class _DownloadEntryView extends ConsumerWidget {
+  const _DownloadEntryView({required this.entry});
+
+  final DownloadEntry entry;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final downloader = ref.watch(downloadProvider);
+    final groupByServer = ref.watch(groupByServerProvider);
+    final progress = downloader.getProgress(entry.id);
+
+    return ListTile(
+      title: Text(
+        Uri.decodeFull(downloader.getFileNameFromUrl(entry.destination)),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(
+          [
+            if (progress.status.isDownloading) '${progress.progress}%',
+            progress.status.name,
+            if (!groupByServer) '• ${entry.booru.serverName}',
+          ].join(' '),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
+      leading: ExtendedImage.network(
+        entry.booru.previewFile,
+        width: 42,
+        shape: BoxShape.rectangle,
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        fit: BoxFit.cover,
+      ),
+      trailing: _DownloadEntryPopupMenu(entry: entry),
+      dense: true,
+      contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      onTap: !progress.status.isDownloaded
+          ? null
+          : () => downloader.openEntryFile(id: entry.id),
     );
   }
 }
