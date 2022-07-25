@@ -24,12 +24,14 @@ class ServerData with _$ServerData {
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
   String searchUrlOf(String query, int page, safeMode) {
+    final tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
+
     return '$homepage/$searchUrl'
         .replaceAll(
             '{tags}',
             safeMode && !homepage.contains('//safe')
-                ? '$query rating:safe'
-                : query)
+                ? '$tags rating:safe'
+                : tags)
         .replaceAll('{page-id}', page.toString())
         .replaceAll('{post-limit}', '40');
   }

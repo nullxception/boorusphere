@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/server_data.dart';
 import '../../provider/app_version.dart';
 import '../../provider/page_manager.dart';
 import '../../provider/server_data.dart';
@@ -162,13 +161,13 @@ class _BackToHomeTile extends HookConsumerWidget {
     final pageQuery = ref.watch(pageQueryProvider);
 
     return Visibility(
-      visible: pageQuery != ServerData.defaultTag,
+      visible: pageQuery.isNotEmpty,
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          pageManager.fetch(query: ServerData.defaultTag, clear: true);
+          pageManager.fetch(query: '', clear: true);
           Navigator.pop(context);
         },
       ),

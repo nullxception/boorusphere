@@ -6,7 +6,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/booru_post.dart';
-import '../../model/server_data.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/page_manager.dart';
 import '../../util/string_ext.dart';
@@ -196,24 +195,23 @@ class PostDetailsPage extends HookConsumerWidget {
               }
             },
           ),
-          if (pageQuery != ServerData.defaultTag)
-            SpeedDialChild(
-              child: const Icon(Icons.search),
-              label: 'Add tag to current search',
-              onTap: () {
-                final selectedTags = selectedtag.value;
-                if (selectedTags.isNotEmpty) {
-                  final tags = Set<String>.from(pageQuery.split(' '));
-                  tags.addAll(selectedTags);
-                  pageManager.fetch(query: tags.join(' '), clear: true);
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                    (route) => false,
-                  );
-                }
-              },
-            ),
+          SpeedDialChild(
+            child: const Icon(Icons.search),
+            label: 'Add tag to current search',
+            onTap: () {
+              final selectedTags = selectedtag.value;
+              if (selectedTags.isNotEmpty) {
+                final tags = Set<String>.from(pageQuery.split(' '));
+                tags.addAll(selectedTags);
+                pageManager.fetch(query: tags.join(' '), clear: true);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  (route) => false,
+                );
+              }
+            },
+          ),
           SpeedDialChild(
             child: const Icon(Icons.search),
             label: 'Search tag',
