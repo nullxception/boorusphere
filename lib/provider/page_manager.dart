@@ -9,6 +9,7 @@ import 'package:xml2json/xml2json.dart';
 
 import '../model/booru_post.dart';
 import '../model/server_data.dart';
+import '../model/sphere_exception.dart';
 import '../util/map_ext.dart';
 import '../util/retry_future.dart';
 import 'blocked_tags.dart';
@@ -31,17 +32,18 @@ class PageManager {
   int _page = 1;
 
   List<BooruPost> _parse(ServerData server, http.Response res) {
-    final pageQuery = ref.read(pageQueryProvider);
     final blockedTags = ref.read(blockedTagsProvider);
 
     if (res.statusCode != 200) {
-      throw HttpException('Something went wrong [${res.statusCode}]');
+      throw SphereException(
+          message: 'Cannot fetch page (HTTP ${res.statusCode})');
     } else if (!res.body.contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
-      throw HttpException(posts.isNotEmpty
-          ? 'No more result for "$pageQuery"'
-          : 'No result for "$pageQuery"');
+      throw SphereException(
+          message: posts.isNotEmpty ? 'No more result' : 'No result found');
     }
+
+    const cantParse = SphereException(message: 'Cannot parse result');
 
     List<dynamic> entries;
     if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
@@ -56,10 +58,10 @@ class PageManager {
       if (jsonObj.values.first.keys.contains('post')) {
         entries = jsonObj.values.first['post'];
       } else {
-        throw const FormatException('Unknown document format');
+        throw cantParse;
       }
     } else {
-      throw const FormatException('Unknown document format');
+      throw cantParse;
     }
 
     final result = <BooruPost>[];
@@ -147,8 +149,17 @@ class PageManager {
       );
       final data = _parse(activeServer, res);
       posts.addAll(data);
-    } catch (e, s) {
-      pageError.state = [e, s];
+    } catch (exception, stackTrace) {
+      if (exception is SphereException) {
+        final message = [
+          exception.message,
+          if (pageQuery.isNotEmpty) 'for $pageQuery',
+          if (safeMode) 'in safe mode'
+        ].join(' ');
+        pageError.state = [exception.copyWith(message: message), stackTrace];
+      } else {
+        pageError.state = [exception, stackTrace];
+      }
     }
 
     pageLoading.state = false;

@@ -3,11 +3,11 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fimber/fimber.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
+import '../model/sphere_exception.dart';
 import '../util/map_ext.dart';
 import '../util/retry_future.dart';
 import 'blocked_tags.dart';
@@ -28,14 +28,18 @@ class SuggestionManager {
 
   final Ref ref;
 
-  List<String> parse(http.Response res) {
+  List<String> parse(http.Response res, String query) {
     final blockedTags = ref.read(blockedTagsProvider);
 
     if (res.statusCode != 200) {
-      throw HttpException('Something went wrong [${res.statusCode}]');
+      throw SphereException(
+          message: 'Cannot fetch data (HTTP ${res.statusCode})');
     }
 
-    List<dynamic> entries;
+    final noTagsError =
+        SphereException(message: 'No tags that matches \'$query\'');
+
+    List<dynamic> entries = [];
     if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
       entries = res.body.contains('@attributes')
           ? jsonDecode(res.body)['tag']
@@ -48,7 +52,7 @@ class SuggestionManager {
 
       final jsonObj = jsonDecode(xjson.toGData());
       if (!jsonObj.values.first.keys.contains('tag')) {
-        throw const FormatException('Unknown document format');
+        throw noTagsError;
       }
 
       final tags = jsonObj.values.first['tag'];
@@ -57,10 +61,10 @@ class SuggestionManager {
       } else if (tags is List) {
         entries = tags;
       } else {
-        throw const FormatException('Unknown document format');
+        throw noTagsError;
       }
     } else {
-      throw const FormatException('Unknown document format');
+      throw noTagsError;
     }
 
     final result = <String>[];
@@ -78,27 +82,23 @@ class SuggestionManager {
     final queries = query.trim().split(' ');
     final activeServer = ref.read(activeServerProvider);
 
+    final url = activeServer.suggestionUrlOf(queries.last);
     try {
-      final url = activeServer.suggestionUrlOf(queries.last);
       final res = await retryFuture(
         () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
 
-      return parse(res)
+      return parse(res, query)
           .where((it) =>
               it.contains(queries.last) &&
               !queries.sublist(0, queries.length - 1).contains(it))
           .toList();
-    } on FormatException {
+    } catch (e) {
       if (query.isEmpty) {
         // the server did not support empty tag matches (hot/trending tags)
         return [];
       }
-
-      throw Exception('No tag that matches "$query"');
-    } on Exception catch (e) {
-      Fimber.e('Something went wrong', ex: e);
       rethrow;
     }
   }
