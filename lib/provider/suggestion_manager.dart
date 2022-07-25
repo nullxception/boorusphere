@@ -70,7 +70,8 @@ class SuggestionManager {
     final result = <String>[];
     for (final Map<String, dynamic> entry in entries) {
       final tag = entry.take(['name', 'tag'], orElse: '');
-      if (!blockedTags.listedEntries.contains(tag)) {
+      final postCount = entry.take(['post_count', 'count'], orElse: 0);
+      if (!blockedTags.listedEntries.contains(tag) && postCount > 0) {
         result.add(tag);
       }
     }
