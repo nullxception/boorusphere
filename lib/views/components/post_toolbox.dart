@@ -16,12 +16,18 @@ class PostToolbox extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(post.originalFile);
-
+    final safeBottom = MediaQuery.of(context).padding.bottom;
     return Container(
-      color: Colors.black38,
-      height: 64 + MediaQuery.of(context).padding.bottom,
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      alignment: Alignment.centerRight,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [Colors.black54, Colors.transparent],
+        ),
+      ),
+      height: 86 + safeBottom,
+      padding: EdgeInsets.only(bottom: safeBottom + 8, right: 8),
+      alignment: Alignment.bottomRight,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -34,6 +40,7 @@ class PostToolbox extends HookConsumerWidget {
                     : 0,
               ),
               IconButton(
+                padding: const EdgeInsets.all(16),
                 icon: Icon(downloadProgress.status.isDownloaded
                     ? Icons.download_done
                     : Icons.download),
@@ -46,12 +53,14 @@ class PostToolbox extends HookConsumerWidget {
             ],
           ),
           IconButton(
+            padding: const EdgeInsets.all(16),
             icon: const Icon(Icons.link_outlined),
             onPressed: () => launchUrlString(post.originalFile,
                 mode: LaunchMode.externalApplication),
             color: Colors.white,
           ),
           IconButton(
+            padding: const EdgeInsets.all(16),
             icon: const Icon(Icons.info),
             color: Colors.white,
             onPressed: () => Navigator.push(

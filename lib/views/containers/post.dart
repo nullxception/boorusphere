@@ -11,7 +11,6 @@ import '../components/post_image.dart';
 import '../components/post_toolbox.dart';
 import '../components/post_video.dart';
 import '../components/preferred_visibility.dart';
-import '../components/subbed_title.dart';
 import '../hooks/extended_page_controller.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
@@ -52,13 +51,9 @@ class PostPage extends HookConsumerWidget {
       extendBody: true,
       appBar: PreferredVisibility(
         visible: !isFullscreen.state,
-        child: AppBar(
-          backgroundColor: Colors.black38,
-          foregroundColor: Colors.white,
-          title: SubbedTitle(
-            title: '#${page.value + 1} of ${pageManager.posts.length}',
-            subtitle: pageManager.posts[page.value].tags.join(' '),
-          ),
+        child: _PostAppBar(
+          subtitle: pageManager.posts[page.value].tags.join(' '),
+          title: '#${page.value + 1} of ${pageManager.posts.length}',
         ),
       ),
       body: ExtendedImageGesturePageView.builder(
@@ -86,4 +81,50 @@ class PostPage extends HookConsumerWidget {
       ),
     );
   }
+}
+
+class _PostAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _PostAppBar({
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomLeft,
+          colors: [Colors.black54, Colors.transparent],
+        ),
+      ),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 4),
+              child: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.w300),
+              ),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 11),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 64);
 }
