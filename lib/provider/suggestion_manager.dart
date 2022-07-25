@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -46,8 +47,15 @@ class SuggestionManager {
       xjson.parse(res.body.replaceAll('\\', ''));
 
       final jsonObj = jsonDecode(xjson.toGData());
-      if (jsonObj.values.first.keys.contains('tag')) {
-        entries = jsonObj.values.first['tag'];
+      if (!jsonObj.values.first.keys.contains('tag')) {
+        throw const FormatException('Unknown document format');
+      }
+
+      final tags = jsonObj.values.first['tag'];
+      if (tags is LinkedHashMap) {
+        entries = [tags];
+      } else if (tags is List) {
+        entries = tags;
       } else {
         throw const FormatException('Unknown document format');
       }
