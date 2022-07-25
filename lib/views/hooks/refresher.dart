@@ -14,7 +14,7 @@ class _RefresherHookState extends HookState<VoidCallback, _RefreshHook> {
   bool _mounted = true;
 
   void _call() {
-    if (_mounted) setState(() {});
+    if (_mounted) markMayNeedRebuild();
   }
 
   @override
