@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/page_manager.dart';
 import '../components/post_error.dart';
 import '../components/post_image.dart';
@@ -69,14 +69,14 @@ class PostPage extends HookConsumerWidget {
         },
         itemCount: pageManager.posts.length,
         itemBuilder: (_, index) {
-          final content = pageManager.posts[index];
-          switch (content.contentType) {
+          final post = pageManager.posts[index];
+          switch (post.contentType) {
             case PostType.photo:
-              return PostImageDisplay(booru: content);
+              return PostImageDisplay(post: post);
             case PostType.video:
-              return PostVideoDisplay(booru: content);
+              return PostVideoDisplay(post: post);
             default:
-              return PostErrorDisplay(booru: content);
+              return PostErrorDisplay(post: post);
           }
         },
       ),

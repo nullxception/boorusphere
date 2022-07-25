@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/downloader.dart';
 import '../../util/string_ext.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({
     Key? key,
-    required this.booru,
+    required this.post,
   }) : super(key: key);
-  final BooruPost booru;
+  final Post post;
 
   IconData _getFileIcon(String url) {
     if (url.mimeType.startsWith('video')) {
@@ -33,25 +33,25 @@ class DownloaderDialog extends HookConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const ListTile(title: Text('Download')),
-            if (booru.sampleFile.isNotEmpty)
+            if (post.sampleFile.isNotEmpty)
               ListTile(
                 title: const Text('Sample'),
                 subtitle: Text(
-                    '${booru.sampleSize.toString()}, ${booru.sampleFile.ext}'),
-                leading: Icon(_getFileIcon(booru.sampleFile)),
+                    '${post.sampleSize.toString()}, ${post.sampleFile.ext}'),
+                leading: Icon(_getFileIcon(post.sampleFile)),
                 onTap: () {
                   Navigator.of(context).pop();
-                  downloader.download(booru, url: booru.sampleFile);
+                  downloader.download(post, url: post.sampleFile);
                 },
               ),
             ListTile(
               title: const Text('Original'),
               subtitle: Text(
-                  '${booru.originalSize.toString()}, ${booru.originalFile.ext}'),
-              leading: Icon(_getFileIcon(booru.originalFile)),
+                  '${post.originalSize.toString()}, ${post.originalFile.ext}'),
+              leading: Icon(_getFileIcon(post.originalFile)),
               onTap: () {
                 Navigator.of(context).pop();
-                downloader.download(booru);
+                downloader.download(post);
               },
             ),
           ],
@@ -60,8 +60,8 @@ class DownloaderDialog extends HookConsumerWidget {
     );
   }
 
-  static void show({required BuildContext context, required BooruPost booru}) {
+  static void show({required BuildContext context, required Post post}) {
     showModalBottomSheet(
-        context: context, builder: (_) => DownloaderDialog(booru: booru));
+        context: context, builder: (_) => DownloaderDialog(post: post));
   }
 }

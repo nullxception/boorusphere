@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
-import '../model/booru_post.dart';
+import '../model/post.dart';
 import '../model/server_data.dart';
 import '../model/sphere_exception.dart';
 import '../util/map_ext.dart';
@@ -27,11 +27,11 @@ class PageManager {
   PageManager(this.ref);
 
   final Ref ref;
-  final List<BooruPost> posts = [];
+  final List<Post> posts = [];
 
   int _page = 1;
 
-  List<BooruPost> _parse(ServerData server, http.Response res) {
+  List<Post> _parse(ServerData server, http.Response res) {
     final blockedTags = ref.read(blockedTagsProvider);
 
     if (res.statusCode != 200) {
@@ -64,7 +64,7 @@ class PageManager {
       throw cantParse;
     }
 
-    final result = <BooruPost>[];
+    final result = <Post>[];
 
     final idKey = ['id'];
     final originalFileKey = ['file_url'];
@@ -101,7 +101,7 @@ class PageManager {
 
       if (hasFile && hasContent && notBlocked) {
         result.add(
-          BooruPost(
+          Post(
             id: id,
             originalFile: originalFile,
             sampleFile: sampleFile,

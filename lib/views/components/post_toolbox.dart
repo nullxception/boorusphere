@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/downloader.dart';
 import '../containers/post_detail.dart';
 import 'download_dialog.dart';
 
 class PostToolbox extends HookConsumerWidget {
-  const PostToolbox(this.booru, {Key? key}) : super(key: key);
+  const PostToolbox(this.post, {Key? key}) : super(key: key);
 
-  final BooruPost booru;
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(booru.originalFile);
+    final downloadProgress = downloader.getProgressByURL(post.originalFile);
 
     return Container(
       color: Colors.black38,
@@ -38,7 +38,7 @@ class PostToolbox extends HookConsumerWidget {
                     ? Icons.download_done
                     : Icons.download),
                 onPressed: () {
-                  DownloaderDialog.show(context: context, booru: booru);
+                  DownloaderDialog.show(context: context, post: post);
                 },
                 color: Colors.white,
                 disabledColor: Theme.of(context).colorScheme.primary,
@@ -47,7 +47,7 @@ class PostToolbox extends HookConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.link_outlined),
-            onPressed: () => launchUrlString(booru.originalFile,
+            onPressed: () => launchUrlString(post.originalFile,
                 mode: LaunchMode.externalApplication),
             color: Colors.white,
           ),
@@ -57,7 +57,7 @@ class PostToolbox extends HookConsumerWidget {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PostDetailsPage(booru: booru)),
+                  builder: (context) => PostDetailsPage(post: post)),
             ),
           ),
         ],

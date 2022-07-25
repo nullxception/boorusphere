@@ -6,15 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../containers/post.dart';
 import 'post_placeholder_image.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
-  const PostImageDisplay({super.key, required this.booru});
+  const PostImageDisplay({super.key, required this.post});
 
-  final BooruPost booru;
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +34,7 @@ class PostImageDisplay extends HookConsumerWidget {
         isFullscreen.state = !isFullscreen.state;
       },
       child: ExtendedImage.network(
-        booru.contentFile,
+        post.contentFile,
         fit: BoxFit.contain,
         mode: ExtendedImageMode.gesture,
         initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
@@ -43,13 +43,13 @@ class PostImageDisplay extends HookConsumerWidget {
           switch (state.extendedImageLoadState) {
             case LoadState.loading:
               return PostImageLoadingView(
-                booru: booru,
+                post: post,
                 state: state,
                 shouldBlur: blurExplicitPost,
               );
             case LoadState.failed:
               return PostImageFailedView(
-                booru: booru,
+                post: post,
                 state: state,
                 shouldBlur: blurExplicitPost,
               );
@@ -83,12 +83,12 @@ class PostImageDisplay extends HookConsumerWidget {
 class PostImageFailedView extends StatelessWidget {
   const PostImageFailedView({
     super.key,
-    required this.booru,
+    required this.post,
     required this.state,
     required this.shouldBlur,
   });
 
-  final BooruPost booru;
+  final Post post;
   final ExtendedImageState state;
   final bool shouldBlur;
   @override
@@ -98,8 +98,8 @@ class PostImageFailedView extends StatelessWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: booru.previewFile,
-          shouldBlur: shouldBlur && booru.rating == PostRating.explicit,
+          url: post.previewFile,
+          shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
         SafeArea(
           child: Column(
@@ -140,12 +140,12 @@ class PostImageFailedView extends StatelessWidget {
 class PostImageLoadingView extends StatelessWidget {
   const PostImageLoadingView({
     super.key,
-    required this.booru,
+    required this.post,
     required this.state,
     this.shouldBlur = false,
   });
 
-  final BooruPost booru;
+  final Post post;
   final ExtendedImageState state;
   final bool shouldBlur;
 
@@ -164,8 +164,8 @@ class PostImageLoadingView extends StatelessWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: booru.previewFile,
-          shouldBlur: shouldBlur && booru.rating == PostRating.explicit,
+          url: post.previewFile,
+          shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
         Center(
           child: ClipRRect(

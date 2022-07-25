@@ -10,10 +10,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../model/booru_post.dart';
 import '../model/download_entry.dart';
 import '../model/download_progress.dart';
 import '../model/download_status.dart';
+import '../model/post.dart';
 
 final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref));
 
@@ -151,7 +151,7 @@ class Downloader extends ChangeNotifier {
         .lastWhere((it) => it.contains(RegExp(r'.+\..+')));
   }
 
-  Future<void> download(BooruPost post, {String? url}) async {
+  Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
     final downloadPath = await platformDownloadPath;
 
@@ -159,23 +159,23 @@ class Downloader extends ChangeNotifier {
       await Permission.storage.request();
     }
 
-    final booruDir = Directory('$downloadPath/$_booruDirname');
-    final booruDirExists = await booruDir.exists();
-    if (await _isDirWritable(downloadPath) && !booruDirExists) {
-      await booruDir.create();
+    final postDir = Directory('$downloadPath/$_postDirname');
+    final postDirExists = await postDir.exists();
+    if (await _isDirWritable(downloadPath) && !postDirExists) {
+      await postDir.create();
     }
 
     final taskId = await FlutterDownloader.enqueue(
         url: fileUrl,
-        savedDir: booruDir.absolute.path,
+        savedDir: postDir.absolute.path,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
       final destination =
-          '${booruDir.absolute.path}/${getFileNameFromUrl(fileUrl)}';
+          '${postDir.absolute.path}/${getFileNameFromUrl(fileUrl)}';
       final entry =
-          DownloadEntry(id: taskId, booru: post, destination: destination);
+          DownloadEntry(id: taskId, post: post, destination: destination);
       _addEntry(entry: entry);
       notifyListeners();
     }
@@ -209,7 +209,7 @@ class Downloader extends ChangeNotifier {
   }
 
   DownloadProgress getProgressByURL(String url) {
-    final entry = entries.firstWhere((it) => it.booru.originalFile == url,
+    final entry = entries.firstWhere((it) => it.post.originalFile == url,
         orElse: () => DownloadEntry.empty);
     return getProgress(entry.id);
   }
@@ -222,5 +222,5 @@ class Downloader extends ChangeNotifier {
   static const _portName = 'downloaderPort';
   static const _platformPath =
       MethodChannel('io.chaldeaprjkt.boorusphere/path');
-  static const _booruDirname = 'Boorusphere';
+  static const _postDirname = 'Boorusphere';
 }

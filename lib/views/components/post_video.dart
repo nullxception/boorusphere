@@ -8,7 +8,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/downloader.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/video_player.dart';
@@ -57,14 +57,14 @@ final _playerControllerProvider = FutureProvider.autoDispose
 });
 
 class PostVideoDisplay extends HookConsumerWidget {
-  const PostVideoDisplay({super.key, required this.booru});
+  const PostVideoDisplay({super.key, required this.post});
 
-  final BooruPost booru;
+  final Post post;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController =
-        ref.watch(_playerControllerProvider(booru.contentFile));
+        ref.watch(_playerControllerProvider(post.contentFile));
     final playerMute = ref.watch(videoPlayerMuteProvider);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
@@ -81,7 +81,7 @@ class PostVideoDisplay extends HookConsumerWidget {
     final toggleFullscreen = useCallback(() {
       isFullscreen.state = !isFullscreen.state;
       SystemChrome.setPreferredOrientations(isFullscreen.state &&
-              booru.width > booru.height
+              post.width > post.height
           ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
           : []);
       SystemChrome.setEnabledSystemUIMode(
@@ -125,7 +125,7 @@ class PostVideoDisplay extends HookConsumerWidget {
           ...playerController.maybeWhen(
             data: (controller) => [
               AspectRatio(
-                aspectRatio: booru.width / booru.height,
+                aspectRatio: post.width / post.height,
                 child: VideoPlayer(controller),
               ),
               GestureDetector(
@@ -139,7 +139,7 @@ class PostVideoDisplay extends HookConsumerWidget {
               ),
               if (showToolbox.value)
                 _PlayerToolbox(
-                  booru: booru,
+                  post: post,
                   controller: controller,
                   onFullscreenTap: (_) {
                     toggleFullscreen();
@@ -148,11 +148,11 @@ class PostVideoDisplay extends HookConsumerWidget {
             ],
             orElse: () => [
               AspectRatio(
-                aspectRatio: booru.aspectRatio,
+                aspectRatio: post.aspectRatio,
                 child: PostPlaceholderImage(
-                  url: booru.previewFile,
+                  url: post.previewFile,
                   shouldBlur:
-                      blurExplicitPost && booru.rating == PostRating.explicit,
+                      blurExplicitPost && post.rating == PostRating.explicit,
                 ),
               ),
               GestureDetector(
@@ -164,7 +164,7 @@ class PostVideoDisplay extends HookConsumerWidget {
               ),
               if (showToolbox.value)
                 _PlayerToolbox(
-                  booru: booru,
+                  post: post,
                   onFullscreenTap: (_) {
                     toggleFullscreen();
                   },
@@ -209,12 +209,12 @@ class _PlayerOverlay extends StatelessWidget {
 
 class _PlayerToolbox extends HookConsumerWidget {
   const _PlayerToolbox({
-    required this.booru,
+    required this.post,
     this.controller,
     this.onFullscreenTap,
   });
 
-  final BooruPost booru;
+  final Post post;
   final VideoPlayerController? controller;
   final Function(bool isFullscreen)? onFullscreenTap;
 
@@ -224,7 +224,7 @@ class _PlayerToolbox extends HookConsumerWidget {
     final isMuted = ref.watch(videoPlayerMuteProvider);
     final playerMuteNotifier = ref.watch(videoPlayerMuteProvider.notifier);
     final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(booru.originalFile);
+    final downloadProgress = downloader.getProgressByURL(post.originalFile);
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -253,7 +253,7 @@ class _PlayerToolbox extends HookConsumerWidget {
                         ? Icons.download_done
                         : Icons.download),
                     onPressed: () {
-                      DownloaderDialog.show(context: context, booru: booru);
+                      DownloaderDialog.show(context: context, post: post);
                     },
                     color: Colors.white,
                     disabledColor: Theme.of(context).colorScheme.primary,
@@ -277,7 +277,7 @@ class _PlayerToolbox extends HookConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PostDetailsPage(booru: booru),
+                      builder: (context) => PostDetailsPage(post: post),
                     ),
                   );
                 },

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'booru_post.dart';
+part of 'post.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$BooruPost {
+mixin _$Post {
   @HiveField(0, defaultValue: -1)
   int get id => throw _privateConstructorUsedError;
   @HiveField(1, defaultValue: '')
@@ -46,14 +46,13 @@ mixin _$BooruPost {
   int get previewHeight => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $BooruPostCopyWith<BooruPost> get copyWith =>
-      throw _privateConstructorUsedError;
+  $PostCopyWith<Post> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BooruPostCopyWith<$Res> {
-  factory $BooruPostCopyWith(BooruPost value, $Res Function(BooruPost) then) =
-      _$BooruPostCopyWithImpl<$Res>;
+abstract class $PostCopyWith<$Res> {
+  factory $PostCopyWith(Post value, $Res Function(Post) then) =
+      _$PostCopyWithImpl<$Res>;
   $Res call(
       {@HiveField(0, defaultValue: -1) int id,
       @HiveField(1, defaultValue: '') String originalFile,
@@ -72,12 +71,12 @@ abstract class $BooruPostCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
-  _$BooruPostCopyWithImpl(this._value, this._then);
+class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
+  _$PostCopyWithImpl(this._value, this._then);
 
-  final BooruPost _value;
+  final Post _value;
   // ignore: unused_field
-  final $Res Function(BooruPost) _then;
+  final $Res Function(Post) _then;
 
   @override
   $Res call({
@@ -158,10 +157,9 @@ class _$BooruPostCopyWithImpl<$Res> implements $BooruPostCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
-  factory _$$_BooruPostCopyWith(
-          _$_BooruPost value, $Res Function(_$_BooruPost) then) =
-      __$$_BooruPostCopyWithImpl<$Res>;
+abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
+  factory _$$_PostCopyWith(_$_Post value, $Res Function(_$_Post) then) =
+      __$$_PostCopyWithImpl<$Res>;
   @override
   $Res call(
       {@HiveField(0, defaultValue: -1) int id,
@@ -181,14 +179,13 @@ abstract class _$$_BooruPostCopyWith<$Res> implements $BooruPostCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
-    implements _$$_BooruPostCopyWith<$Res> {
-  __$$_BooruPostCopyWithImpl(
-      _$_BooruPost _value, $Res Function(_$_BooruPost) _then)
-      : super(_value, (v) => _then(v as _$_BooruPost));
+class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
+    implements _$$_PostCopyWith<$Res> {
+  __$$_PostCopyWithImpl(_$_Post _value, $Res Function(_$_Post) _then)
+      : super(_value, (v) => _then(v as _$_Post));
 
   @override
-  _$_BooruPost get _value => super._value as _$_BooruPost;
+  _$_Post get _value => super._value as _$_Post;
 
   @override
   $Res call({
@@ -207,7 +204,7 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
     Object? previewWidth = freezed,
     Object? previewHeight = freezed,
   }) {
-    return _then(_$_BooruPost(
+    return _then(_$_Post(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -270,9 +267,9 @@ class __$$_BooruPostCopyWithImpl<$Res> extends _$BooruPostCopyWithImpl<$Res>
 
 /// @nodoc
 
-@HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
-class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
-  const _$_BooruPost(
+@HiveType(typeId: 3, adapterName: 'PostAdapter')
+class _$_Post extends _Post with DiagnosticableTreeMixin {
+  const _$_Post(
       {@HiveField(0, defaultValue: -1) required this.id,
       @HiveField(1, defaultValue: '') required this.originalFile,
       @HiveField(2, defaultValue: '') required this.sampleFile,
@@ -345,14 +342,14 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BooruPost(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight)';
+    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BooruPost'))
+      ..add(DiagnosticsProperty('type', 'Post'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('originalFile', originalFile))
       ..add(DiagnosticsProperty('sampleFile', sampleFile))
@@ -373,7 +370,7 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BooruPost &&
+            other is _$_Post &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
                 .equals(other.originalFile, originalFile) &&
@@ -418,12 +415,12 @@ class _$_BooruPost extends _BooruPost with DiagnosticableTreeMixin {
 
   @JsonKey(ignore: true)
   @override
-  _$$_BooruPostCopyWith<_$_BooruPost> get copyWith =>
-      __$$_BooruPostCopyWithImpl<_$_BooruPost>(this, _$identity);
+  _$$_PostCopyWith<_$_Post> get copyWith =>
+      __$$_PostCopyWithImpl<_$_Post>(this, _$identity);
 }
 
-abstract class _BooruPost extends BooruPost {
-  const factory _BooruPost(
+abstract class _Post extends Post {
+  const factory _Post(
       {@HiveField(0, defaultValue: -1) required final int id,
       @HiveField(1, defaultValue: '') required final String originalFile,
       @HiveField(2, defaultValue: '') required final String sampleFile,
@@ -437,8 +434,8 @@ abstract class _BooruPost extends BooruPost {
       @HiveField(10, defaultValue: -1) final int sampleWidth,
       @HiveField(11, defaultValue: -1) final int sampleHeight,
       @HiveField(12, defaultValue: -1) final int previewWidth,
-      @HiveField(13, defaultValue: -1) final int previewHeight}) = _$_BooruPost;
-  const _BooruPost._() : super._();
+      @HiveField(13, defaultValue: -1) final int previewHeight}) = _$_Post;
+  const _Post._() : super._();
 
   @override
   @HiveField(0, defaultValue: -1)
@@ -484,6 +481,5 @@ abstract class _BooruPost extends BooruPost {
   int get previewHeight;
   @override
   @JsonKey(ignore: true)
-  _$$_BooruPostCopyWith<_$_BooruPost> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_PostCopyWith<_$_Post> get copyWith => throw _privateConstructorUsedError;
 }

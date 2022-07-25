@@ -84,7 +84,7 @@ class _DownloadEntryPopupMenu extends ConsumerWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PostDetailsPage(booru: entry.booru)),
+                  builder: (context) => PostDetailsPage(post: entry.post)),
             );
             break;
           default:
@@ -145,7 +145,7 @@ class _DownloadList extends ConsumerWidget {
         ? GroupedListView<DownloadEntry, String>(
             elements: entries,
             padding: const EdgeInsets.only(bottom: 48),
-            groupBy: (entry) => entry.booru.serverName,
+            groupBy: (entry) => entry.post.serverName,
             groupSeparatorBuilder: (serverName) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -192,13 +192,13 @@ class _DownloadEntryView extends ConsumerWidget {
           [
             if (progress.status.isDownloading) '${progress.progress}%',
             progress.status.name,
-            if (!groupByServer) '• ${entry.booru.serverName}',
+            if (!groupByServer) '• ${entry.post.serverName}',
           ].join(' '),
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
       leading: ExtendedImage.network(
-        entry.booru.previewFile,
+        entry.post.previewFile,
         width: 42,
         shape: BoxShape.rectangle,
         borderRadius: const BorderRadius.all(Radius.circular(5)),

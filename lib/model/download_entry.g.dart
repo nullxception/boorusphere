@@ -18,7 +18,7 @@ class DownloadEntryAdapter extends TypeAdapter<_$_DownloadEntry> {
     };
     return _$_DownloadEntry(
       id: fields[0] == null ? '' : fields[0] as String,
-      booru: fields[1] == null ? BooruPost.empty : fields[1] as BooruPost,
+      post: fields[1] == null ? Post.empty : fields[1] as Post,
       destination: fields[2] == null ? '' : fields[2] as String,
     );
   }
@@ -30,7 +30,7 @@ class DownloadEntryAdapter extends TypeAdapter<_$_DownloadEntry> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.booru)
+      ..write(obj.post)
       ..writeByte(2)
       ..write(obj.destination);
   }

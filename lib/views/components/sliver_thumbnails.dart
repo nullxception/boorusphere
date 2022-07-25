@@ -8,7 +8,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/page_manager.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/grid.dart';
@@ -44,7 +44,7 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: GestureDetector(
-            child: Thumbnail(booru: pageManager.posts[index]),
+            child: Thumbnail(post: pageManager.posts[index]),
             onTap: () {
               // invalidate the state first so we can use it for checking mechanism too
               lastOpenedIndex.state = -1;
@@ -68,8 +68,8 @@ class SliverThumbnails extends HookConsumerWidget {
 }
 
 class Thumbnail extends HookConsumerWidget {
-  const Thumbnail({super.key, required this.booru});
-  final BooruPost booru;
+  const Thumbnail({super.key, required this.post});
+  final Post post;
 
   FilterQuality _thumbnailQuality(int gridExtra) {
     switch (gridExtra) {
@@ -88,22 +88,22 @@ class Thumbnail extends HookConsumerWidget {
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
 
     return ExtendedImage.network(
-      booru.previewFile,
+      post.previewFile,
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.fill,
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return _ThumbnailShimmer(aspectRatio: booru.aspectRatio);
+            return _ThumbnailShimmer(aspectRatio: post.aspectRatio);
           case LoadState.failed:
             return Material(
               child: AspectRatio(
-                aspectRatio: booru.aspectRatio,
+                aspectRatio: post.aspectRatio,
                 child: const Icon(Icons.broken_image_outlined),
               ),
             );
           default:
-            return blurExplicitPost && booru.rating == PostRating.explicit
+            return blurExplicitPost && post.rating == PostRating.explicit
                 ? ImageFiltered(
                     imageFilter: ImageFilter.blur(
                       sigmaX: 8,

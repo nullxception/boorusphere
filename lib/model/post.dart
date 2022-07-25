@@ -5,8 +5,8 @@ import 'package:hive/hive.dart';
 import '../util/string_ext.dart';
 import 'pixel_size.dart';
 
-part 'booru_post.freezed.dart';
-part 'booru_post.g.dart';
+part 'post.freezed.dart';
+part 'post.g.dart';
 
 enum PostType {
   video,
@@ -21,11 +21,11 @@ enum PostRating {
 }
 
 @freezed
-class BooruPost with _$BooruPost {
-  const BooruPost._();
+class Post with _$Post {
+  const Post._();
 
-  @HiveType(typeId: 3, adapterName: 'BooruPostAdapter')
-  const factory BooruPost({
+  @HiveType(typeId: 3, adapterName: 'PostAdapter')
+  const factory Post({
     @HiveField(0, defaultValue: -1) required int id,
     @HiveField(1, defaultValue: '') required String originalFile,
     @HiveField(2, defaultValue: '') required String sampleFile,
@@ -40,7 +40,7 @@ class BooruPost with _$BooruPost {
     @HiveField(11, defaultValue: -1) @Default(-1) int sampleHeight,
     @HiveField(12, defaultValue: -1) @Default(-1) int previewWidth,
     @HiveField(13, defaultValue: -1) @Default(-1) int previewHeight,
-  }) = _BooruPost;
+  }) = _Post;
 
   String get contentFile => sampleFile.isEmpty ? originalFile : sampleFile;
 
@@ -85,7 +85,7 @@ class BooruPost with _$BooruPost {
     }
   }
 
-  static const empty = BooruPost(
+  static const empty = Post(
     id: -1,
     originalFile: '',
     sampleFile: '',

@@ -5,7 +5,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../model/booru_post.dart';
+import '../../model/post.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/page_manager.dart';
 import '../../util/string_ext.dart';
@@ -13,8 +13,8 @@ import '../components/tag.dart';
 import 'home.dart';
 
 class PostDetailsPage extends HookConsumerWidget {
-  const PostDetailsPage({super.key, required this.booru});
-  final BooruPost booru;
+  const PostDetailsPage({super.key, required this.post});
+  final Post post;
 
   void copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
@@ -43,13 +43,13 @@ class PostDetailsPage extends HookConsumerWidget {
         children: [
           ListTile(
             title: const Text('Type'),
-            subtitle: Text(booru.contentFile.mimeType),
+            subtitle: Text(post.contentFile.mimeType),
           ),
           ListTile(
             title: const Text('Rating'),
-            subtitle: Text(booru.rating.name),
+            subtitle: Text(post.rating.name),
           ),
-          if (booru.postUrl.isNotEmpty)
+          if (post.postUrl.isNotEmpty)
             ListTile(
               title: const Text('Location'),
               subtitle: TextButton(
@@ -59,19 +59,19 @@ class PostDetailsPage extends HookConsumerWidget {
                     EdgeInsets.zero,
                   ),
                 ),
-                onPressed: () => launchUrlString(booru.postUrl,
+                onPressed: () => launchUrlString(post.postUrl,
                     mode: LaunchMode.externalApplication),
-                child: Text(booru.postUrl.toString()),
+                child: Text(post.postUrl.toString()),
               ),
               trailing: IconButton(
                 iconSize: 18,
                 onPressed: () {
-                  copyToClipboard(context, booru.postUrl.toString());
+                  copyToClipboard(context, post.postUrl.toString());
                 },
                 icon: const Icon(Icons.copy),
               ),
             ),
-          if (booru.sampleFile.isNotEmpty)
+          if (post.sampleFile.isNotEmpty)
             ListTile(
               title: const Text('Sample file (displayed)'),
               subtitle: Column(
@@ -79,7 +79,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(booru.sampleSize.toString()),
+                    child: Text(post.sampleSize.toString()),
                   ),
                   TextButton(
                     style: ButtonStyle(
@@ -88,16 +88,16 @@ class PostDetailsPage extends HookConsumerWidget {
                         EdgeInsets.zero,
                       ),
                     ),
-                    onPressed: () => launchUrlString(booru.sampleFile,
+                    onPressed: () => launchUrlString(post.sampleFile,
                         mode: LaunchMode.externalApplication),
-                    child: Text(booru.sampleFile),
+                    child: Text(post.sampleFile),
                   ),
                 ],
               ),
               trailing: IconButton(
                 iconSize: 18,
                 onPressed: () {
-                  copyToClipboard(context, booru.sampleFile);
+                  copyToClipboard(context, post.sampleFile);
                 },
                 icon: const Icon(Icons.copy),
               ),
@@ -109,7 +109,7 @@ class PostDetailsPage extends HookConsumerWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Text(booru.originalSize.toString()),
+                  child: Text(post.originalSize.toString()),
                 ),
                 TextButton(
                   style: ButtonStyle(
@@ -118,16 +118,16 @@ class PostDetailsPage extends HookConsumerWidget {
                       EdgeInsets.zero,
                     ),
                   ),
-                  onPressed: () => launchUrlString(booru.originalFile,
+                  onPressed: () => launchUrlString(post.originalFile,
                       mode: LaunchMode.externalApplication),
-                  child: Text(booru.originalFile),
+                  child: Text(post.originalFile),
                 ),
               ],
             ),
             trailing: IconButton(
               iconSize: 18,
               onPressed: () {
-                copyToClipboard(context, booru.originalFile);
+                copyToClipboard(context, post.originalFile);
               },
               icon: const Icon(Icons.copy),
             ),
@@ -137,7 +137,7 @@ class PostDetailsPage extends HookConsumerWidget {
           ),
           ListTile(
             title: Wrap(
-                children: booru.tags.map((tag) {
+                children: post.tags.map((tag) {
               return Tag(
                 onPressed: () {
                   if (!selectedtag.value.contains(tag)) {

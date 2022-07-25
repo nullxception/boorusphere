@@ -18,8 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DownloadEntry {
   @HiveField(0, defaultValue: '')
   String get id => throw _privateConstructorUsedError;
-  @HiveField(1, defaultValue: BooruPost.empty)
-  BooruPost get booru => throw _privateConstructorUsedError;
+  @HiveField(1, defaultValue: Post.empty)
+  Post get post => throw _privateConstructorUsedError;
   @HiveField(2, defaultValue: '')
   String get destination => throw _privateConstructorUsedError;
 
@@ -35,10 +35,10 @@ abstract class $DownloadEntryCopyWith<$Res> {
       _$DownloadEntryCopyWithImpl<$Res>;
   $Res call(
       {@HiveField(0, defaultValue: '') String id,
-      @HiveField(1, defaultValue: BooruPost.empty) BooruPost booru,
+      @HiveField(1, defaultValue: Post.empty) Post post,
       @HiveField(2, defaultValue: '') String destination});
 
-  $BooruPostCopyWith<$Res> get booru;
+  $PostCopyWith<$Res> get post;
 }
 
 /// @nodoc
@@ -53,7 +53,7 @@ class _$DownloadEntryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? booru = freezed,
+    Object? post = freezed,
     Object? destination = freezed,
   }) {
     return _then(_value.copyWith(
@@ -61,10 +61,10 @@ class _$DownloadEntryCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      booru: booru == freezed
-          ? _value.booru
-          : booru // ignore: cast_nullable_to_non_nullable
-              as BooruPost,
+      post: post == freezed
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
       destination: destination == freezed
           ? _value.destination
           : destination // ignore: cast_nullable_to_non_nullable
@@ -73,9 +73,9 @@ class _$DownloadEntryCopyWithImpl<$Res>
   }
 
   @override
-  $BooruPostCopyWith<$Res> get booru {
-    return $BooruPostCopyWith<$Res>(_value.booru, (value) {
-      return _then(_value.copyWith(booru: value));
+  $PostCopyWith<$Res> get post {
+    return $PostCopyWith<$Res>(_value.post, (value) {
+      return _then(_value.copyWith(post: value));
     });
   }
 }
@@ -89,11 +89,11 @@ abstract class _$$_DownloadEntryCopyWith<$Res>
   @override
   $Res call(
       {@HiveField(0, defaultValue: '') String id,
-      @HiveField(1, defaultValue: BooruPost.empty) BooruPost booru,
+      @HiveField(1, defaultValue: Post.empty) Post post,
       @HiveField(2, defaultValue: '') String destination});
 
   @override
-  $BooruPostCopyWith<$Res> get booru;
+  $PostCopyWith<$Res> get post;
 }
 
 /// @nodoc
@@ -110,7 +110,7 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? booru = freezed,
+    Object? post = freezed,
     Object? destination = freezed,
   }) {
     return _then(_$_DownloadEntry(
@@ -118,10 +118,10 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      booru: booru == freezed
-          ? _value.booru
-          : booru // ignore: cast_nullable_to_non_nullable
-              as BooruPost,
+      post: post == freezed
+          ? _value.post
+          : post // ignore: cast_nullable_to_non_nullable
+              as Post,
       destination: destination == freezed
           ? _value.destination
           : destination // ignore: cast_nullable_to_non_nullable
@@ -136,22 +136,22 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
 class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
   const _$_DownloadEntry(
       {@HiveField(0, defaultValue: '') required this.id,
-      @HiveField(1, defaultValue: BooruPost.empty) required this.booru,
+      @HiveField(1, defaultValue: Post.empty) required this.post,
       @HiveField(2, defaultValue: '') required this.destination});
 
   @override
   @HiveField(0, defaultValue: '')
   final String id;
   @override
-  @HiveField(1, defaultValue: BooruPost.empty)
-  final BooruPost booru;
+  @HiveField(1, defaultValue: Post.empty)
+  final Post post;
   @override
   @HiveField(2, defaultValue: '')
   final String destination;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'DownloadEntry(id: $id, booru: $booru, destination: $destination)';
+    return 'DownloadEntry(id: $id, post: $post, destination: $destination)';
   }
 
   @override
@@ -160,7 +160,7 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
     properties
       ..add(DiagnosticsProperty('type', 'DownloadEntry'))
       ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('booru', booru))
+      ..add(DiagnosticsProperty('post', post))
       ..add(DiagnosticsProperty('destination', destination));
   }
 
@@ -170,7 +170,7 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
         (other.runtimeType == runtimeType &&
             other is _$_DownloadEntry &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.booru, booru) &&
+            const DeepCollectionEquality().equals(other.post, post) &&
             const DeepCollectionEquality()
                 .equals(other.destination, destination));
   }
@@ -179,7 +179,7 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(booru),
+      const DeepCollectionEquality().hash(post),
       const DeepCollectionEquality().hash(destination));
 
   @JsonKey(ignore: true)
@@ -190,19 +190,17 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
 
 abstract class _DownloadEntry implements DownloadEntry {
   const factory _DownloadEntry(
-      {@HiveField(0, defaultValue: '')
-          required final String id,
-      @HiveField(1, defaultValue: BooruPost.empty)
-          required final BooruPost booru,
-      @HiveField(2, defaultValue: '')
-          required final String destination}) = _$_DownloadEntry;
+          {@HiveField(0, defaultValue: '') required final String id,
+          @HiveField(1, defaultValue: Post.empty) required final Post post,
+          @HiveField(2, defaultValue: '') required final String destination}) =
+      _$_DownloadEntry;
 
   @override
   @HiveField(0, defaultValue: '')
   String get id;
   @override
-  @HiveField(1, defaultValue: BooruPost.empty)
-  BooruPost get booru;
+  @HiveField(1, defaultValue: Post.empty)
+  Post get post;
   @override
   @HiveField(2, defaultValue: '')
   String get destination;

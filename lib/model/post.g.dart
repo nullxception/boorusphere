@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'booru_post.dart';
+part of 'post.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
+class PostAdapter extends TypeAdapter<_$_Post> {
   @override
   final int typeId = 3;
 
   @override
-  _$_BooruPost read(BinaryReader reader) {
+  _$_Post read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_BooruPost(
+    return _$_Post(
       id: fields[0] == null ? -1 : fields[0] as int,
       originalFile: fields[1] == null ? '' : fields[1] as String,
       sampleFile: fields[2] == null ? '' : fields[2] as String,
@@ -35,7 +35,7 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_BooruPost obj) {
+  void write(BinaryWriter writer, _$_Post obj) {
     writer
       ..writeByte(14)
       ..writeByte(0)
@@ -74,7 +74,7 @@ class BooruPostAdapter extends TypeAdapter<_$_BooruPost> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BooruPostAdapter &&
+      other is PostAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
