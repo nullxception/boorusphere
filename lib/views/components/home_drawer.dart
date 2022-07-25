@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../model/server_data.dart';
 import '../../provider/app_version.dart';
 import '../../provider/page_manager.dart';
-import '../../provider/query.dart';
 import '../../provider/server_data.dart';
 import '../../provider/settings/active_server.dart';
 import '../../provider/settings/theme.dart';
@@ -160,19 +159,16 @@ class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.watch(pageManagerProvider);
-    final query = ref.watch(queryProvider);
-    final queryNotifier = ref.watch(queryProvider.notifier);
+    final pageQuery = ref.watch(pageQueryProvider);
 
     return Visibility(
-      visible: query.tags != ServerData.defaultTag,
+      visible: pageQuery != ServerData.defaultTag,
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          queryNotifier.setTag(query: ServerData.defaultTag);
-          pageManager.posts.clear();
-          pageManager.fetch();
+          pageManager.fetch(query: ServerData.defaultTag, clear: true);
           Navigator.pop(context);
         },
       ),
@@ -212,8 +208,7 @@ class _ServerSelection extends HookConsumerWidget {
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
               activeServerNotifier.use(it);
-              pageManager.posts.clear();
-              pageManager.fetch();
+              pageManager.fetch(clear: true);
               Navigator.pop(context);
             },
           ),

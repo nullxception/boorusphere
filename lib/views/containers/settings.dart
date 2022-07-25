@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../provider/query.dart';
 import '../../provider/settings/blur_explicit_post.dart';
+import '../../provider/settings/safe_mode.dart';
 import '../../provider/settings/theme.dart';
 
 class SettingsPage extends HookConsumerWidget {
@@ -11,8 +11,8 @@ class SettingsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final query = ref.watch(queryProvider);
-    final queryNotifier = ref.watch(queryProvider.notifier);
+    final safeMode = ref.watch(safeModeProvider);
+    final safeModeNotifier = ref.watch(safeModeProvider.notifier);
     final darkerTheme = ref.watch(darkerThemeProvider);
     final darkerThemeNotifier = ref.watch(darkerThemeProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
@@ -62,9 +62,9 @@ class SettingsPage extends HookConsumerWidget {
                 description: const Text(
                     'Only fetch content that rated as safe. Note that rated as safe doesn\'t guarantee "safe for work"'),
                 leading: const Icon(Icons.phonelink_lock),
-                initialValue: query.safeMode,
+                initialValue: safeMode,
                 onToggle: (value) {
-                  queryNotifier.setSafeMode(value);
+                  safeModeNotifier.enable(value);
                 },
               ),
             ],

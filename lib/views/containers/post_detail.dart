@@ -9,7 +9,6 @@ import '../../model/booru_post.dart';
 import '../../model/server_data.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/page_manager.dart';
-import '../../provider/query.dart';
 import '../../util/string_ext.dart';
 import '../components/tag.dart';
 import 'home.dart';
@@ -32,8 +31,7 @@ class PostDetailsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
     final pageManager = ref.watch(pageManagerProvider);
-    final query = ref.watch(queryProvider);
-    final queryNotifier = ref.watch(queryProvider.notifier);
+    final pageQuery = ref.watch(pageQueryProvider);
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
@@ -198,18 +196,16 @@ class PostDetailsPage extends HookConsumerWidget {
               }
             },
           ),
-          if (query.tags != ServerData.defaultTag)
+          if (pageQuery != ServerData.defaultTag)
             SpeedDialChild(
               child: const Icon(Icons.search),
               label: 'Add tag to current search',
               onTap: () {
                 final selectedTags = selectedtag.value;
                 if (selectedTags.isNotEmpty) {
-                  final tags = Set<String>.from(query.tags.split(' '));
+                  final tags = Set<String>.from(pageQuery.split(' '));
                   tags.addAll(selectedTags);
-                  queryNotifier.setTag(query: tags.join(' '));
-                  pageManager.posts.clear();
-                  pageManager.fetch();
+                  pageManager.fetch(query: tags.join(' '), clear: true);
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const HomePage()),
@@ -224,9 +220,7 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
-                queryNotifier.setTag(query: tags);
-                pageManager.posts.clear();
-                pageManager.fetch();
+                pageManager.fetch(query: tags, clear: true);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const HomePage()),

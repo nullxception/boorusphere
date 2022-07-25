@@ -12,13 +12,15 @@ import '../model/server_data.dart';
 import '../util/map_ext.dart';
 import '../util/retry_future.dart';
 import 'blocked_tags.dart';
-import 'query.dart';
+import 'search_history_manager.dart';
 import 'server_data.dart';
 import 'settings/active_server.dart';
+import 'settings/safe_mode.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => '');
 final pageManagerProvider = Provider((ref) => PageManager(ref));
+final pageQueryProvider = StateProvider((_) => '');
 
 class PageManager {
   PageManager(this.ref);
@@ -29,7 +31,7 @@ class PageManager {
   int _page = 1;
 
   List<BooruPost> _parse(ServerData server, http.Response res) {
-    final query = ref.read(queryProvider);
+    final pageQuery = ref.read(pageQueryProvider);
     final blockedTags = ref.read(blockedTagsProvider);
 
     if (res.statusCode != 200) {
@@ -37,8 +39,8 @@ class PageManager {
     } else if (!res.body.contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
       throw HttpException(posts.isNotEmpty
-          ? 'No more result for "${query.tags}"'
-          : 'No result for "${query.tags}"');
+          ? 'No more result for "$pageQuery"'
+          : 'No result for "$pageQuery"');
     }
 
     List<dynamic> entries;
@@ -136,24 +138,25 @@ class PageManager {
       .join(':')
       .trim();
 
-  void fetch() async {
+  Future<void> fetch({String? query, bool clear = false}) async {
     final pageLoading = ref.read(pageLoadingProvider.state);
-    final query = ref.read(queryProvider);
+    final pageQuery = ref.read(pageQueryProvider);
     final errorMessage = ref.read(pageErrorProvider.state);
     final activeServer = ref.read(activeServerProvider);
+    final safeMode = ref.read(safeModeProvider);
 
-    if (posts.isEmpty) {
-      _page = 1;
-    }
-    if (!pageLoading.state) {
-      pageLoading.state = true;
-    }
-    if (errorMessage.state.isNotEmpty) {
-      errorMessage.state = '';
+    if (query != null && pageQuery != query) {
+      ref.read(pageQueryProvider.notifier).state = query;
+      ref.read(searchHistoryProvider).push(query);
     }
 
+    if (clear) posts.clear();
+    if (posts.isEmpty) _page = 1;
+    pageLoading.state = true;
+    errorMessage.state = '';
     try {
-      final url = activeServer.composeSearchUrl(query, _page);
+      final url =
+          activeServer.composeSearchUrl(query ?? pageQuery, _page, safeMode);
       Fimber.d('Fetching $url');
       final res = await retryFuture(
         () => http.get(url).timeout(const Duration(seconds: 5)),
@@ -164,7 +167,7 @@ class PageManager {
     } on Exception catch (e) {
       Fimber.d('Caught Exception', ex: e);
       final msg = _getExceptionMessage(e);
-      errorMessage.state = query.safeMode ? '(Safe Mode) $msg' : msg;
+      errorMessage.state = safeMode ? '(Safe Mode) $msg' : msg;
     }
 
     pageLoading.state = false;

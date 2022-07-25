@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'server_query.dart';
 
 part 'server_data.freezed.dart';
 part 'server_data.g.dart';
@@ -24,14 +23,14 @@ class ServerData with _$ServerData {
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
-  Uri composeSearchUrl(ServerQuery query, int page) {
+  Uri composeSearchUrl(String query, int page, safeMode) {
     return Uri.parse(
       '$homepage/$searchUrl'
           .replaceAll(
               '{tags}',
-              query.safeMode && !homepage.contains('//safe')
-                  ? '${query.tags} rating:safe'
-                  : query.tags)
+              safeMode && !homepage.contains('//safe')
+                  ? '$query rating:safe'
+                  : query)
           .replaceAll('{page-id}', page.toString())
           .replaceAll('{post-limit}', '40'),
     );

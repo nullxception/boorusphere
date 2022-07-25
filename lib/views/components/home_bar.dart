@@ -5,7 +5,6 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../model/server_data.dart';
 import '../../provider/page_manager.dart';
-import '../../provider/query.dart';
 import '../../provider/search_history_manager.dart';
 import '../../provider/settings/active_server.dart';
 import '../../provider/settings/grid.dart';
@@ -21,7 +20,6 @@ class HomeBar extends HookConsumerWidget {
   void _searchForTag({
     required String value,
     required FloatingSearchBarController controller,
-    required QueryState searchTagHandler,
     required PageManager pageManager,
     required String searchTag,
   }) {
@@ -35,9 +33,7 @@ class HomeBar extends HookConsumerWidget {
       return;
     }
 
-    searchTagHandler.setTag(query: query);
-    pageManager.posts.clear();
-    pageManager.fetch();
+    pageManager.fetch(query: query, clear: true);
     controller.close();
   }
 
@@ -47,8 +43,7 @@ class HomeBar extends HookConsumerWidget {
     final gridHandler = ref.watch(gridProvider.notifier);
     final grid = ref.watch(gridProvider);
     final pageManager = ref.watch(pageManagerProvider);
-    final query = ref.watch(queryProvider);
-    final queryNotifier = ref.watch(queryProvider.notifier);
+    final pageQuery = ref.watch(pageQueryProvider);
     final searchHistory = ref.watch(searchHistoryProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider.state);
     final activeServer = ref.watch(activeServerProvider);
@@ -58,8 +53,8 @@ class HomeBar extends HookConsumerWidget {
 
     useEffect(() {
       // Populate search tag on first build
-      controller.query = query.tags == ServerData.defaultTag ? '' : query.tags;
-    }, [query]);
+      controller.query = pageQuery == ServerData.defaultTag ? '' : pageQuery;
+    }, [pageQuery]);
 
     useEffect(() {
       // Populate suggestion history on first build
@@ -87,8 +82,7 @@ class HomeBar extends HookConsumerWidget {
           value: value,
           pageManager: pageManager,
           controller: controller,
-          searchTag: query.tags,
-          searchTagHandler: queryNotifier,
+          searchTag: pageQuery,
         );
       },
       onQueryChanged: (value) async {
@@ -115,8 +109,8 @@ class HomeBar extends HookConsumerWidget {
         FloatingSearchBarAction.icon(
           icon: const Icon(Icons.rotate_left),
           onTap: () {
-            if (controller.query != query.tags) {
-              controller.query = '${query.tags} ';
+            if (controller.query != pageQuery) {
+              controller.query = '$pageQuery ';
             }
           },
           showIfOpened: true,
@@ -147,8 +141,7 @@ class HomeBar extends HookConsumerWidget {
                 value: value,
                 pageManager: pageManager,
                 controller: controller,
-                searchTag: query.tags,
-                searchTagHandler: queryNotifier,
+                searchTag: pageQuery,
               );
             });
       },
