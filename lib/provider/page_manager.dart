@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -55,8 +56,15 @@ class PageManager {
       xjson.parse(res.body.replaceAll('\\', ''));
 
       final jsonObj = jsonDecode(xjson.toGData());
-      if (jsonObj.values.first.keys.contains('post')) {
-        entries = jsonObj.values.first['post'];
+      if (!jsonObj.values.first.keys.contains('post')) {
+        throw cantParse;
+      }
+
+      final posts = jsonObj.values.first['post'];
+      if (posts is LinkedHashMap) {
+        entries = [posts];
+      } else if (posts is List) {
+        entries = posts;
       } else {
         throw cantParse;
       }
