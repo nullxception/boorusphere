@@ -29,7 +29,7 @@ class PageManager {
   final Ref ref;
   final List<Post> posts = [];
 
-  int _page = 1;
+  int _page = 0;
 
   List<Post> _parse(ServerData server, http.Response res) {
     final blockedTags = ref.read(blockedTagsProvider);
@@ -137,7 +137,7 @@ class PageManager {
     }
 
     if (clear) posts.clear();
-    if (posts.isEmpty) _page = 1;
+    if (posts.isEmpty) _page = 0;
     pageLoading.state = true;
     pageError.state = [];
     try {
