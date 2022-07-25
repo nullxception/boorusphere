@@ -6,6 +6,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../../model/search_history.dart';
 import '../../provider/settings/active_server.dart';
 import '../../provider/suggestion_manager.dart';
+import 'exception_info.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {
   const SearchSuggestionResult({
@@ -158,11 +159,9 @@ class SearchSuggestionResult extends HookConsumerWidget {
                       color: Theme.of(context).colorScheme.onBackground),
                 ),
               ),
-              error: (ex, _) => SizedBox(
-                height: 128,
-                child: Center(
-                  child: Text(ex.toString().split(':')[1]),
-                ),
+              error: (ex, trace) => Padding(
+                padding: const EdgeInsets.all(16),
+                child: ExceptionInfo(exception: ex),
               ),
             )
         ],

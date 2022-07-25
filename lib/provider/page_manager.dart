@@ -18,7 +18,7 @@ import 'settings/active_server.dart';
 import 'settings/safe_mode.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
-final pageErrorProvider = StateProvider((_) => '');
+final pageErrorProvider = StateProvider((_) => []);
 final pageManagerProvider = Provider((ref) => PageManager(ref));
 final pageQueryProvider = StateProvider((_) => '');
 
@@ -122,17 +122,10 @@ class PageManager {
     return result;
   }
 
-  String _getExceptionMessage(Exception e) => e
-      .toString()
-      .split(':')
-      .skipWhile((it) => it.contains(RegExp(r'xception$')))
-      .join(':')
-      .trim();
-
   Future<void> fetch({String? query, bool clear = false}) async {
     final pageLoading = ref.read(pageLoadingProvider.state);
     final pageQuery = ref.read(pageQueryProvider);
-    final errorMessage = ref.read(pageErrorProvider.state);
+    final pageError = ref.read(pageErrorProvider.state);
     final activeServer = ref.read(activeServerProvider);
     final safeMode = ref.read(safeModeProvider);
 
@@ -144,7 +137,7 @@ class PageManager {
     if (clear) posts.clear();
     if (posts.isEmpty) _page = 1;
     pageLoading.state = true;
-    errorMessage.state = '';
+    pageError.state = [];
     try {
       final url = activeServer.searchUrlOf(query ?? pageQuery, _page, safeMode);
       Fimber.d('Fetching $url');
@@ -154,10 +147,8 @@ class PageManager {
       );
       final data = _parse(activeServer, res);
       posts.addAll(data);
-    } on Exception catch (e) {
-      Fimber.d('Caught Exception', ex: e);
-      final msg = _getExceptionMessage(e);
-      errorMessage.state = safeMode ? '(Safe Mode) $msg' : msg;
+    } catch (e, s) {
+      pageError.state = [e, s];
     }
 
     pageLoading.state = false;
