@@ -42,10 +42,6 @@ class PostDetailsPage extends HookConsumerWidget {
         padding: EdgeInsets.zero,
         children: [
           ListTile(
-            title: const Text('Type'),
-            subtitle: Text(post.contentFile.mimeType),
-          ),
-          ListTile(
             title: const Text('Rating'),
             subtitle: Text(post.rating.name),
           ),
@@ -101,7 +97,8 @@ class PostDetailsPage extends HookConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(post.sampleSize.toString()),
+                    child: Text(
+                        '${post.sampleSize.toString()}, ${post.sampleFile.ext}'),
                   ),
                   TextButton(
                     style: ButtonStyle(
@@ -131,7 +128,8 @@ class PostDetailsPage extends HookConsumerWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Text(post.originalSize.toString()),
+                  child: Text(
+                      '${post.originalSize.toString()}, ${post.originalFile.ext}'),
                 ),
                 TextButton(
                   style: ButtonStyle(
