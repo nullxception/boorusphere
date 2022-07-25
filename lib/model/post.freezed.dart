@@ -44,6 +44,8 @@ mixin _$Post {
   int get previewWidth => throw _privateConstructorUsedError;
   @HiveField(13, defaultValue: -1)
   int get previewHeight => throw _privateConstructorUsedError;
+  @HiveField(14, defaultValue: '')
+  String get source => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PostCopyWith<Post> get copyWith => throw _privateConstructorUsedError;
@@ -67,7 +69,8 @@ abstract class $PostCopyWith<$Res> {
       @HiveField(10, defaultValue: -1) int sampleWidth,
       @HiveField(11, defaultValue: -1) int sampleHeight,
       @HiveField(12, defaultValue: -1) int previewWidth,
-      @HiveField(13, defaultValue: -1) int previewHeight});
+      @HiveField(13, defaultValue: -1) int previewHeight,
+      @HiveField(14, defaultValue: '') String source});
 }
 
 /// @nodoc
@@ -94,6 +97,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? sampleHeight = freezed,
     Object? previewWidth = freezed,
     Object? previewHeight = freezed,
+    Object? source = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -152,6 +156,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.previewHeight
           : previewHeight // ignore: cast_nullable_to_non_nullable
               as int,
+      source: source == freezed
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -175,7 +183,8 @@ abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       @HiveField(10, defaultValue: -1) int sampleWidth,
       @HiveField(11, defaultValue: -1) int sampleHeight,
       @HiveField(12, defaultValue: -1) int previewWidth,
-      @HiveField(13, defaultValue: -1) int previewHeight});
+      @HiveField(13, defaultValue: -1) int previewHeight,
+      @HiveField(14, defaultValue: '') String source});
 }
 
 /// @nodoc
@@ -203,6 +212,7 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? sampleHeight = freezed,
     Object? previewWidth = freezed,
     Object? previewHeight = freezed,
+    Object? source = freezed,
   }) {
     return _then(_$_Post(
       id: id == freezed
@@ -261,6 +271,10 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.previewHeight
           : previewHeight // ignore: cast_nullable_to_non_nullable
               as int,
+      source: source == freezed
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -283,7 +297,8 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
       @HiveField(10, defaultValue: -1) this.sampleWidth = -1,
       @HiveField(11, defaultValue: -1) this.sampleHeight = -1,
       @HiveField(12, defaultValue: -1) this.previewWidth = -1,
-      @HiveField(13, defaultValue: -1) this.previewHeight = -1})
+      @HiveField(13, defaultValue: -1) this.previewHeight = -1,
+      @HiveField(14, defaultValue: '') this.source = ''})
       : _tags = tags,
         super._();
 
@@ -339,10 +354,14 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
   @JsonKey()
   @HiveField(13, defaultValue: -1)
   final int previewHeight;
+  @override
+  @JsonKey()
+  @HiveField(14, defaultValue: '')
+  final String source;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight)';
+    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight, source: $source)';
   }
 
   @override
@@ -363,7 +382,8 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('sampleWidth', sampleWidth))
       ..add(DiagnosticsProperty('sampleHeight', sampleHeight))
       ..add(DiagnosticsProperty('previewWidth', previewWidth))
-      ..add(DiagnosticsProperty('previewHeight', previewHeight));
+      ..add(DiagnosticsProperty('previewHeight', previewHeight))
+      ..add(DiagnosticsProperty('source', source));
   }
 
   @override
@@ -392,7 +412,8 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
             const DeepCollectionEquality()
                 .equals(other.previewWidth, previewWidth) &&
             const DeepCollectionEquality()
-                .equals(other.previewHeight, previewHeight));
+                .equals(other.previewHeight, previewHeight) &&
+            const DeepCollectionEquality().equals(other.source, source));
   }
 
   @override
@@ -411,7 +432,8 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(sampleWidth),
       const DeepCollectionEquality().hash(sampleHeight),
       const DeepCollectionEquality().hash(previewWidth),
-      const DeepCollectionEquality().hash(previewHeight));
+      const DeepCollectionEquality().hash(previewHeight),
+      const DeepCollectionEquality().hash(source));
 
   @JsonKey(ignore: true)
   @override
@@ -434,7 +456,8 @@ abstract class _Post extends Post {
       @HiveField(10, defaultValue: -1) final int sampleWidth,
       @HiveField(11, defaultValue: -1) final int sampleHeight,
       @HiveField(12, defaultValue: -1) final int previewWidth,
-      @HiveField(13, defaultValue: -1) final int previewHeight}) = _$_Post;
+      @HiveField(13, defaultValue: -1) final int previewHeight,
+      @HiveField(14, defaultValue: '') final String source}) = _$_Post;
   const _Post._() : super._();
 
   @override
@@ -479,6 +502,9 @@ abstract class _Post extends Post {
   @override
   @HiveField(13, defaultValue: -1)
   int get previewHeight;
+  @override
+  @HiveField(14, defaultValue: '')
+  String get source;
   @override
   @JsonKey(ignore: true)
   _$$_PostCopyWith<_$_Post> get copyWith => throw _privateConstructorUsedError;

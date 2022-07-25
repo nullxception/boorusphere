@@ -31,13 +31,14 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       sampleHeight: fields[11] == null ? -1 : fields[11] as int,
       previewWidth: fields[12] == null ? -1 : fields[12] as int,
       previewHeight: fields[13] == null ? -1 : fields[13] as int,
+      source: fields[14] == null ? '' : fields[14] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_Post obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -64,6 +65,8 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       ..write(obj.previewWidth)
       ..writeByte(13)
       ..write(obj.previewHeight)
+      ..writeByte(14)
+      ..write(obj.source)
       ..writeByte(4)
       ..write(obj.tags);
   }

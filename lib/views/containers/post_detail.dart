@@ -71,6 +71,28 @@ class PostDetailsPage extends HookConsumerWidget {
                 icon: const Icon(Icons.copy),
               ),
             ),
+          if (post.source.isNotEmpty)
+            ListTile(
+              title: const Text('Source'),
+              subtitle: TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.centerLeft,
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.zero,
+                  ),
+                ),
+                onPressed: () => launchUrlString(post.source,
+                    mode: LaunchMode.externalApplication),
+                child: Text(post.source.toString()),
+              ),
+              trailing: IconButton(
+                iconSize: 18,
+                onPressed: () {
+                  copyToClipboard(context, post.source.toString());
+                },
+                icon: const Icon(Icons.copy),
+              ),
+            ),
           if (post.sampleFile.isNotEmpty)
             ListTile(
               title: const Text('Sample file (displayed)'),

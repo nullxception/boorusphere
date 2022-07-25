@@ -40,6 +40,7 @@ class Post with _$Post {
     @HiveField(11, defaultValue: -1) @Default(-1) int sampleHeight,
     @HiveField(12, defaultValue: -1) @Default(-1) int previewWidth,
     @HiveField(13, defaultValue: -1) @Default(-1) int previewHeight,
+    @HiveField(14, defaultValue: '') @Default('') String source,
   }) = _Post;
 
   String get contentFile => sampleFile.isEmpty ? originalFile : sampleFile;

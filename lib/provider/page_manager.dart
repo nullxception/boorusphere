@@ -85,6 +85,7 @@ class PageManager {
     final sampleHeightKey = ['sample_height'];
     final previewWidthKey = ['preview_width'];
     final previewHeightKey = ['preview_height'];
+    final sourceKey = ['source'];
 
     final ratingKey = ['rating'];
 
@@ -101,6 +102,7 @@ class PageManager {
       final previewWidth = post.take(previewWidthKey, orElse: -1);
       final previewHeight = post.take(previewHeightKey, orElse: -1);
       final rating = post.take(ratingKey, orElse: 'q');
+      final source = post.take(sourceKey, orElse: '');
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -124,6 +126,7 @@ class PageManager {
             serverName: server.name,
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
+            source: source,
           ),
         );
       }
