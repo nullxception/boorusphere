@@ -23,29 +23,36 @@ class ServerData with _$ServerData {
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
-  Uri composeSearchUrl(String query, int page, safeMode) {
-    return Uri.parse(
-      '$homepage/$searchUrl'
-          .replaceAll(
-              '{tags}',
-              safeMode && !homepage.contains('//safe')
-                  ? '$query rating:safe'
-                  : query)
-          .replaceAll('{page-id}', page.toString())
-          .replaceAll('{post-limit}', '40'),
-    );
+  String searchUrlOf(String query, int page, safeMode) {
+    return '$homepage/$searchUrl'
+        .replaceAll(
+            '{tags}',
+            safeMode && !homepage.contains('//safe')
+                ? '$query rating:safe'
+                : query)
+        .replaceAll('{page-id}', page.toString())
+        .replaceAll('{post-limit}', '40');
   }
 
-  Uri composeSuggestionUrl(String query) {
+  String suggestionUrlOf(String query) {
     final url = '$homepage/$tagSuggestionUrl';
     if (canSuggestTags) {
       if (query.isEmpty) {
-        return Uri.parse(url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), ''));
+        return url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), '');
       }
-      return Uri.parse(url.replaceAll('{tag-part}', query));
+      return url.replaceAll('{tag-part}', query);
     } else {
       throw Exception('no suggestion config for server $name');
     }
+  }
+
+  String postUrlOf(int id) {
+    if (postUrl.isEmpty) {
+      return '';
+    }
+
+    final query = postUrl.replaceAll('{post-id}', id.toString());
+    return '$homepage/$query';
   }
 
   static const ServerData empty =

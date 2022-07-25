@@ -71,9 +71,9 @@ class SuggestionManager {
     final activeServer = ref.read(activeServerProvider);
 
     try {
-      final url = activeServer.composeSuggestionUrl(queries.last);
+      final url = activeServer.suggestionUrlOf(queries.last);
       final res = await retryFuture(
-        () => http.get(url).timeout(const Duration(seconds: 5)),
+        () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
 

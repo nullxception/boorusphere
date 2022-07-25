@@ -95,7 +95,7 @@ class PageManager {
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
       final notBlocked = !tags.any(blockedTags.listedEntries.contains);
-      final postUrl = id < 0 ? '' : _composePostUrl(server, id);
+      final postUrl = id < 0 ? '' : server.postUrlOf(id);
 
       if (hasFile && hasContent && notBlocked) {
         result.add(
@@ -122,15 +122,6 @@ class PageManager {
     return result;
   }
 
-  String _composePostUrl(ServerData server, int id) {
-    if (server.postUrl.isEmpty) {
-      return '';
-    }
-
-    final query = server.postUrl.replaceAll('{post-id}', id.toString());
-    return '${server.homepage}/$query';
-  }
-
   String _getExceptionMessage(Exception e) => e
       .toString()
       .split(':')
@@ -155,11 +146,10 @@ class PageManager {
     pageLoading.state = true;
     errorMessage.state = '';
     try {
-      final url =
-          activeServer.composeSearchUrl(query ?? pageQuery, _page, safeMode);
+      final url = activeServer.searchUrlOf(query ?? pageQuery, _page, safeMode);
       Fimber.d('Fetching $url');
       final res = await retryFuture(
-        () => http.get(url).timeout(const Duration(seconds: 5)),
+        () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
       final data = _parse(activeServer, res);
