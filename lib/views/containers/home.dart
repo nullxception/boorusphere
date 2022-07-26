@@ -6,6 +6,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../provider/page_manager.dart';
+import '../../util/app_theme.dart';
 import '../components/home_bar.dart';
 import '../components/home_drawer.dart';
 import '../components/sliver_page_state.dart';
@@ -63,35 +64,43 @@ class HomePage extends HookConsumerWidget {
         }
         isDrawerOpened.value = isOpened;
       },
-      body: DoubleBack(
-        condition: !isDrawerOpened.value,
-        onConditionFail: () {
-          messenger.hideCurrentSnackBar();
-        },
-        onFirstBackPress: (context) {
-          messenger.showSnackBar(
-              const SnackBar(content: Text('Press back again to exit')));
-        },
-        child: HomeBar(
-          body: Stack(
-            fit: StackFit.expand,
-            children: [
-              FloatingSearchBarScrollNotifier(
-                child: CustomScrollView(
-                  controller: scrollController,
-                  slivers: [
-                    SliverPadding(
-                      padding: EdgeInsets.fromLTRB(10,
-                          MediaQuery.of(context).viewPadding.top + 72, 10, 10),
-                      sliver: SliverThumbnails(
-                        autoScrollController: scrollController,
+      body: AnnotatedRegion(
+        value: AppTheme.systemUiOverlayStyleof(context).copyWith(
+          statusBarColor: Colors.transparent,
+        ),
+        child: DoubleBack(
+          condition: !isDrawerOpened.value,
+          onConditionFail: () {
+            messenger.hideCurrentSnackBar();
+          },
+          onFirstBackPress: (context) {
+            messenger.showSnackBar(
+                const SnackBar(content: Text('Press back again to exit')));
+          },
+          child: HomeBar(
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                FloatingSearchBarScrollNotifier(
+                  child: CustomScrollView(
+                    controller: scrollController,
+                    slivers: [
+                      SliverPadding(
+                        padding: EdgeInsets.fromLTRB(
+                            10,
+                            MediaQuery.of(context).viewPadding.top + 72,
+                            10,
+                            10),
+                        sliver: SliverThumbnails(
+                          autoScrollController: scrollController,
+                        ),
                       ),
-                    ),
-                    const SliverPageState()
-                  ],
+                      const SliverPageState()
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

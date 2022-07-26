@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 enum AppThemeVariant {
@@ -80,4 +81,9 @@ mixin AppTheme {
         scaffoldBackgroundColor: Colors.black,
         toggleableActiveColor: seededScheme.primary,
       );
+
+  static SystemUiOverlayStyle systemUiOverlayStyleof(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark;
 }
