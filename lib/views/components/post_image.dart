@@ -91,6 +91,7 @@ class PostImageFailedView extends StatelessWidget {
   final Post post;
   final ExtendedImageState state;
   final bool shouldBlur;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -101,32 +102,31 @@ class PostImageFailedView extends StatelessWidget {
           url: post.previewFile,
           shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
-        SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                color: Colors.black38,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Failed to load image'),
-                      const SizedBox(width: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          state.reLoadImage();
-                        },
-                        child: const Text('Try Again'),
-                      ),
-                    ],
-                  ),
-                ),
+        Positioned(
+          bottom: MediaQuery.of(context).padding.bottom,
+          child: Transform.scale(
+            scale: 0.9,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
+                color: Theme.of(context).cardColor,
               ),
-            ],
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16),
+                    child: Text('Failed to load image'),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(elevation: 0),
+                    onPressed: state.reLoadImage,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
