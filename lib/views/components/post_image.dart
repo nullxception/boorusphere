@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,7 +18,7 @@ class PostImageDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFullscreen = ref.watch(postFullscreenProvider.state);
+    final fullscreenNotifier = ref.watch(postFullscreenProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final zoomController =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -29,10 +28,7 @@ class PostImageDisplay extends HookConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        SystemChrome.setEnabledSystemUIMode(isFullscreen.state
-            ? SystemUiMode.edgeToEdge
-            : SystemUiMode.immersive);
-        isFullscreen.state = !isFullscreen.state;
+        fullscreenNotifier.toggle();
       },
       child: PostImageBlurExplicitView(
         post: post,
