@@ -58,24 +58,30 @@ class PostPage extends HookConsumerWidget {
           title: '#${page.value + 1} of ${pageManager.posts.length}',
         ),
       ),
-      body: ExtendedImageGesturePageView.builder(
-        controller: pageController,
-        onPageChanged: (index) {
-          page.value = index;
-          lastOpenedIndex.state = index;
-        },
-        itemCount: pageManager.posts.length,
-        itemBuilder: (_, index) {
-          final post = pageManager.posts[index];
-          switch (post.contentType) {
-            case PostType.photo:
-              return PostImageDisplay(post: post);
-            case PostType.video:
-              return PostVideoDisplay(post: post);
-            default:
-              return PostErrorDisplay(post: post);
-          }
-        },
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+        ),
+        child: ExtendedImageGesturePageView.builder(
+          controller: pageController,
+          onPageChanged: (index) {
+            page.value = index;
+            lastOpenedIndex.state = index;
+          },
+          itemCount: pageManager.posts.length,
+          itemBuilder: (_, index) {
+            final post = pageManager.posts[index];
+            switch (post.contentType) {
+              case PostType.photo:
+                return PostImageDisplay(post: post);
+              case PostType.video:
+                return PostVideoDisplay(post: post);
+              default:
+                return PostErrorDisplay(post: post);
+            }
+          },
+        ),
       ),
       bottomNavigationBar: isNotVideo
           ? BottomBarVisibility(
