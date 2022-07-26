@@ -33,50 +33,116 @@ class PostImageDisplay extends HookConsumerWidget {
             : SystemUiMode.immersive);
         isFullscreen.state = !isFullscreen.state;
       },
-      child: ExtendedImage.network(
-        post.contentFile,
-        fit: BoxFit.contain,
-        mode: ExtendedImageMode.gesture,
-        initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
-        handleLoadingProgress: true,
-        loadStateChanged: (state) {
-          switch (state.extendedImageLoadState) {
-            case LoadState.loading:
-              return PostImageLoadingView(
-                post: post,
-                state: state,
-                shouldBlur: blurExplicitPost,
-              );
-            case LoadState.failed:
-              return PostImageFailedView(
-                post: post,
-                state: state,
-                shouldBlur: blurExplicitPost,
-              );
-            default:
-              return state.completedWidget;
-          }
-        },
-        onDoubleTap: (state) {
-          final downOffset = state.pointerDownPosition;
-          final begin = state.gestureDetails?.totalScale ?? 1;
-          zoomAnimation.value?.removeListener(zoomStateCallback.value!);
+      child: PostImageBlurExplicitView(
+        post: post,
+        shouldBlur: blurExplicitPost,
+        children: ExtendedImage.network(
+          post.contentFile,
+          fit: BoxFit.contain,
+          mode: ExtendedImageMode.gesture,
+          initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
+          handleLoadingProgress: true,
+          loadStateChanged: (state) {
+            switch (state.extendedImageLoadState) {
+              case LoadState.loading:
+                return PostImageLoadingView(
+                  post: post,
+                  state: state,
+                  shouldBlur: blurExplicitPost,
+                );
+              case LoadState.failed:
+                return PostImageFailedView(
+                  post: post,
+                  state: state,
+                  shouldBlur: blurExplicitPost,
+                );
+              default:
+                return state.completedWidget;
+            }
+          },
+          onDoubleTap: (state) {
+            final downOffset = state.pointerDownPosition;
+            final begin = state.gestureDetails?.totalScale ?? 1;
+            zoomAnimation.value?.removeListener(zoomStateCallback.value!);
 
-          zoomController.stop();
-          zoomController.reset();
+            zoomController.stop();
+            zoomController.reset();
 
-          zoomStateCallback.value = () {
-            state.handleDoubleTap(
-                scale: zoomAnimation.value?.value,
-                doubleTapPosition: downOffset);
-          };
-          zoomAnimation.value = zoomController
-              .drive(Tween<double>(begin: begin, end: begin == 1 ? 2 : 1));
-          zoomAnimation.value?.addListener(zoomStateCallback.value!);
-          zoomController.forward();
-        },
+            zoomStateCallback.value = () {
+              state.handleDoubleTap(
+                  scale: zoomAnimation.value?.value,
+                  doubleTapPosition: downOffset);
+            };
+            zoomAnimation.value = zoomController
+                .drive(Tween<double>(begin: begin, end: begin == 1 ? 2 : 1));
+            zoomAnimation.value?.addListener(zoomStateCallback.value!);
+            zoomController.forward();
+          },
+        ),
       ),
     );
+  }
+}
+
+class PostImageBlurExplicitView extends HookWidget {
+  const PostImageBlurExplicitView({
+    super.key,
+    required this.post,
+    required this.shouldBlur,
+    required this.children,
+  });
+
+  final Post post;
+  final bool shouldBlur;
+  final Widget children;
+
+  @override
+  Widget build(BuildContext context) {
+    final isBlur = useState(post.rating == PostRating.explicit && shouldBlur);
+    return isBlur.value
+        ? Stack(
+            alignment: Alignment.center,
+            fit: StackFit.passthrough,
+            children: [
+              AspectRatio(
+                aspectRatio: post.aspectRatio,
+                child: PostPlaceholderImage(
+                  url: post.previewFile,
+                  shouldBlur: true,
+                ),
+              ),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    color: Theme.of(context).cardColor,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(left: 32, right: 32),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
+                        child: Text(
+                          'This media may contain material that is not safe for public viewing.',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(elevation: 0),
+                        onPressed: () {
+                          isBlur.value = false;
+                        },
+                        child: const Text('Show me'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )
+        : children;
   }
 }
 
