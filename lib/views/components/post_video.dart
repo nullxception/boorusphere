@@ -213,9 +213,16 @@ class _PlayerOverlay extends HookWidget {
           isPaused.value = !isPaused.value;
           onTap?.call(isPaused.value);
         },
-        child: Icon(
-          !isPaused.value ? Icons.pause_outlined : Icons.play_arrow,
-          size: 64.0,
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.black54,
+            shape: BoxShape.circle,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Icon(
+            !isPaused.value ? Icons.pause_outlined : Icons.play_arrow,
+            size: 64.0,
+          ),
         ),
       ),
     );
