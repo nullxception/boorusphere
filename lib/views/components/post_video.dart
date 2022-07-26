@@ -144,6 +144,7 @@ class PostVideoDisplay extends HookConsumerWidget {
                             controller.pause();
                           } else {
                             controller.play();
+                            autoHideToolbox();
                           }
                         },
                       )
@@ -176,6 +177,9 @@ class PostVideoDisplay extends HookConsumerWidget {
                     ? _PlayerOverlay(
                         onTap: (isPaused) {
                           startPaused.value = isPaused;
+                          if (!isPaused) {
+                            autoHideToolbox();
+                          }
                         },
                       )
                     : Container(),
