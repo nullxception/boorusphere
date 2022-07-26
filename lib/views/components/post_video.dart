@@ -257,7 +257,7 @@ class _PlayerToolbox extends HookConsumerWidget {
         16,
         MediaQuery.of(context).padding.top,
         16,
-        MediaQuery.of(context).padding.bottom + (isFullscreen.state ? 24 : 56),
+        MediaQuery.of(context).padding.bottom + 32,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -332,11 +332,14 @@ class _PlayerProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return controller == null || !(controller?.value.isInitialized ?? false)
-        ? LinearProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Colors.redAccent.shade700,
+        ? Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 16),
+            child: LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Colors.redAccent.shade700,
+              ),
+              backgroundColor: Colors.white.withAlpha(20),
             ),
-            backgroundColor: Colors.white.withAlpha(20),
           )
         : VideoProgressIndicator(
             controller!,
@@ -345,6 +348,7 @@ class _PlayerProgress extends StatelessWidget {
               backgroundColor: Colors.white.withAlpha(20),
             ),
             allowScrubbing: true,
+            padding: const EdgeInsets.only(top: 16, bottom: 16),
           );
   }
 }
