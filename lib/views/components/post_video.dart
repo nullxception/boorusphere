@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,21 @@ final _playerControllerProvider = FutureProvider.autoDispose
 
 class PostVideoDisplay extends HookConsumerWidget {
   const PostVideoDisplay({super.key, required this.post});
+  final Post post;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
+    return PostVideoBlurExplicitView(
+      post: post,
+      shouldBlur: blurExplicitPost,
+      children: PostVideoPlayer(post: post),
+    );
+  }
+}
+
+class PostVideoPlayer extends HookConsumerWidget {
+  const PostVideoPlayer({super.key, required this.post});
 
   final Post post;
 
@@ -199,6 +215,69 @@ class PostVideoDisplay extends HookConsumerWidget {
   }
 }
 
+class PostVideoBlurExplicitView extends HookWidget {
+  const PostVideoBlurExplicitView({
+    super.key,
+    required this.post,
+    required this.shouldBlur,
+    required this.children,
+  });
+
+  final Post post;
+  final bool shouldBlur;
+  final Widget children;
+
+  @override
+  Widget build(BuildContext context) {
+    final isBlur = useState(post.rating == PostRating.explicit && shouldBlur);
+    return isBlur.value
+        ? Stack(
+            alignment: Alignment.center,
+            fit: StackFit.passthrough,
+            children: [
+              AspectRatio(
+                aspectRatio: post.aspectRatio,
+                child: PostPlaceholderImage(
+                  url: post.previewFile,
+                  shouldBlur: true,
+                ),
+              ),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    color: Theme.of(context).cardColor,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(left: 32, right: 32),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
+                        child: Text(
+                          'This media may contain material that is not safe for public viewing.',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(elevation: 0),
+                        onPressed: () {
+                          isBlur.value = false;
+                        },
+                        child: const Text('Show me'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              _PlayerToolbox(post: post, disableProgressBar: true)
+            ],
+          )
+        : children;
+  }
+}
+
 class _PlayerOverlay extends HookWidget {
   const _PlayerOverlay({this.initialValue = false, this.onTap});
 
@@ -238,11 +317,13 @@ class _PlayerToolbox extends HookConsumerWidget {
     required this.post,
     this.controller,
     this.onFullscreenTap,
+    this.disableProgressBar = false,
   });
 
   final Post post;
   final VideoPlayerController? controller;
   final Function(bool isFullscreen)? onFullscreenTap;
+  final bool disableProgressBar;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -305,19 +386,20 @@ class _PlayerToolbox extends HookConsumerWidget {
                   );
                 },
               ),
-              IconButton(
-                icon: Icon(
-                  isFullscreen.state
-                      ? Icons.fullscreen_exit
-                      : Icons.fullscreen_outlined,
+              if (onFullscreenTap != null)
+                IconButton(
+                  icon: Icon(
+                    isFullscreen.state
+                        ? Icons.fullscreen_exit
+                        : Icons.fullscreen_outlined,
+                  ),
+                  onPressed: () {
+                    onFullscreenTap?.call(isFullscreen.state);
+                  },
                 ),
-                onPressed: () {
-                  onFullscreenTap?.call(isFullscreen.state);
-                },
-              ),
             ],
           ),
-          _PlayerProgress(controller: controller),
+          if (!disableProgressBar) _PlayerProgress(controller: controller),
         ],
       ),
     );
