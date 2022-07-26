@@ -69,6 +69,7 @@ class PostVideoDisplay extends HookConsumerWidget {
     final isFullscreen = ref.watch(postFullscreenProvider.state);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final showToolbox = useState(true);
+    final startPaused = useState(false);
     final refresh = useRefresher();
     final isMounted = useIsMounted();
 
@@ -101,8 +102,10 @@ class PostVideoDisplay extends HookConsumerWidget {
 
           it.addListener(onFirstFrame);
           it.setVolume(playerMute ? 0 : 1);
-          it.play();
-          autoHideToolbox();
+          if (!startPaused.value) {
+            it.play();
+            autoHideToolbox();
+          }
         });
       });
     }, [playerController]);
@@ -134,7 +137,16 @@ class PostVideoDisplay extends HookConsumerWidget {
                   showToolbox.value = !showToolbox.value;
                 },
                 child: showToolbox.value
-                    ? _PlayerOverlay(controller: controller)
+                    ? _PlayerOverlay(
+                        initialValue: !controller.value.isPlaying,
+                        onTap: (isPaused) {
+                          if (isPaused) {
+                            controller.pause();
+                          } else {
+                            controller.play();
+                          }
+                        },
+                      )
                     : Container(),
               ),
               if (showToolbox.value)
@@ -160,7 +172,13 @@ class PostVideoDisplay extends HookConsumerWidget {
                 onTap: () {
                   showToolbox.value = !showToolbox.value;
                 },
-                child: showToolbox.value ? const _PlayerOverlay() : Container(),
+                child: showToolbox.value
+                    ? _PlayerOverlay(
+                        onTap: (isPaused) {
+                          startPaused.value = isPaused;
+                        },
+                      )
+                    : Container(),
               ),
               if (showToolbox.value)
                 _PlayerToolbox(
@@ -177,28 +195,26 @@ class PostVideoDisplay extends HookConsumerWidget {
   }
 }
 
-class _PlayerOverlay extends StatelessWidget {
-  const _PlayerOverlay({this.controller});
+class _PlayerOverlay extends HookWidget {
+  const _PlayerOverlay({this.initialValue = false, this.onTap});
 
-  final VideoPlayerController? controller;
+  final Function(bool isPlaying)? onTap;
+  final bool initialValue;
 
   @override
   Widget build(BuildContext context) {
+    final isPaused = useState(initialValue);
+
     return Container(
       color: Colors.black38,
       alignment: Alignment.center,
       child: InkWell(
         onTap: () {
-          if (controller?.value.isPlaying ?? false) {
-            controller?.pause();
-          } else {
-            controller?.play();
-          }
+          isPaused.value = !isPaused.value;
+          onTap?.call(isPaused.value);
         },
         child: Icon(
-          (controller?.value.isPlaying ?? false)
-              ? Icons.pause_outlined
-              : Icons.play_arrow,
+          !isPaused.value ? Icons.pause_outlined : Icons.play_arrow,
           size: 64.0,
         ),
       ),
