@@ -6,11 +6,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/post.dart';
 import '../../provider/page_manager.dart';
+import '../components/appbar_visibility.dart';
 import '../components/post_error.dart';
 import '../components/post_image.dart';
 import '../components/post_toolbox.dart';
 import '../components/post_video.dart';
-import '../components/preferred_visibility.dart';
 import '../hooks/extended_page_controller.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
@@ -22,12 +22,13 @@ class PostPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
-
     final pageController = useExtendedPageController(initialPage: beginPage);
     final pageManager = ref.watch(pageManagerProvider);
     final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final page = useState(beginPage);
     final isFullscreen = ref.watch(postFullscreenProvider.state);
+    final appbarAnimController =
+        useAnimationController(duration: const Duration(milliseconds: 300));
 
     final isNotVideo =
         pageManager.posts[page.value].contentType != PostType.video;
@@ -49,7 +50,8 @@ class PostPage extends HookConsumerWidget {
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       extendBody: true,
-      appBar: PreferredVisibility(
+      appBar: AppbarVisibility(
+        controller: appbarAnimController,
         visible: !isFullscreen.state,
         child: _PostAppBar(
           subtitle: pageManager.posts[page.value].tags.join(' '),
@@ -75,10 +77,13 @@ class PostPage extends HookConsumerWidget {
           }
         },
       ),
-      bottomNavigationBar: Visibility(
-        visible: !isFullscreen.state && isNotVideo,
-        child: PostToolbox(pageManager.posts[page.value]),
-      ),
+      bottomNavigationBar: isNotVideo
+          ? BottomBarVisibility(
+              controller: appbarAnimController,
+              visible: !isFullscreen.state,
+              child: PostToolbox(pageManager.posts[page.value]),
+            )
+          : null,
     );
   }
 }
