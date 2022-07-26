@@ -10,11 +10,11 @@ import 'model/download_entry.dart';
 import 'model/post.dart';
 import 'model/search_history.dart';
 import 'model/server_data.dart';
+import 'provider/app_theme.dart';
 import 'provider/downloader.dart';
 import 'provider/page_manager.dart';
 import 'provider/settings/theme.dart';
 import 'routes.dart';
-import 'util/app_theme.dart';
 import 'views/components/bouncing_scroll.dart';
 
 class Boorusphere extends HookConsumerWidget {
@@ -23,6 +23,7 @@ class Boorusphere extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final appTheme = ref.watch(appThemeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
     final downloadNotifier = ref.watch(downloadProvider.notifier);
     final pageManager = ref.read(pageManagerProvider);
@@ -36,20 +37,23 @@ class Boorusphere extends HookConsumerWidget {
     }, []);
 
     return DynamicColorBuilder(
-      builder: (ColorScheme? maybeLight, ColorScheme? maybeDark) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Boorusphere',
-        theme: AppTheme.schemeFrom(maybeLight, AppThemeVariant.light),
-        darkTheme: AppTheme.schemeFrom(maybeDark,
-            isDarkerTheme ? AppThemeVariant.darker : AppThemeVariant.dark),
-        themeMode: themeMode,
-        initialRoute: Routes.home,
-        routes: Routes.of(context),
-        builder: (context, widget) => ScrollConfiguration(
-          behavior: const BouncingScrollBehavior(),
-          child: widget ?? const SizedBox.shrink(),
-        ),
-      ),
+      builder: (ColorScheme? maybeLight, ColorScheme? maybeDark) {
+        appTheme.overrideWith(light: maybeLight, dark: maybeDark);
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Boorusphere',
+          theme: appTheme.data.day,
+          darkTheme:
+              isDarkerTheme ? appTheme.data.midnight : appTheme.data.night,
+          themeMode: themeMode,
+          initialRoute: Routes.home,
+          routes: Routes.of(context),
+          builder: (context, widget) => ScrollConfiguration(
+            behavior: const BouncingScrollBehavior(),
+            child: widget ?? const SizedBox.shrink(),
+          ),
+        );
+      },
     );
   }
 }

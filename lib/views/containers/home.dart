@@ -6,7 +6,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../provider/page_manager.dart';
-import '../../util/app_theme.dart';
+import '../../util/app_theme/app_theme.dart';
 import '../components/home_bar.dart';
 import '../components/home_drawer.dart';
 import '../components/sliver_page_state.dart';
