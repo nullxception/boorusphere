@@ -47,7 +47,6 @@ class PostToolbox extends HookConsumerWidget {
                 onPressed: () {
                   DownloaderDialog.show(context: context, post: post);
                 },
-                color: Colors.white,
                 disabledColor: Theme.of(context).colorScheme.primary,
               ),
             ],
@@ -57,12 +56,10 @@ class PostToolbox extends HookConsumerWidget {
             icon: const Icon(Icons.link_outlined),
             onPressed: () => launchUrlString(post.originalFile,
                 mode: LaunchMode.externalApplication),
-            color: Colors.white,
           ),
           IconButton(
             padding: const EdgeInsets.all(16),
             icon: const Icon(Icons.info),
-            color: Colors.white,
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(

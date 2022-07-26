@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/post.dart';
+import '../../provider/app_theme.dart';
 import '../../provider/page_manager.dart';
 import '../components/appbar_visibility.dart';
 import '../components/post_error.dart';
@@ -46,50 +47,53 @@ class PostPage extends HookConsumerWidget {
       };
     }, const []);
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      appBar: AppbarVisibility(
-        controller: appbarAnimController,
-        visible: !isFullscreen.state,
-        child: _PostAppBar(
-          subtitle: pageManager.posts[page.value].tags.join(' '),
-          title: '#${page.value + 1} of ${pageManager.posts.length}',
+    return Theme(
+      data: ref.read(appThemeProvider).data.night,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        extendBodyBehindAppBar: true,
+        extendBody: true,
+        appBar: AppbarVisibility(
+          controller: appbarAnimController,
+          visible: !isFullscreen.state,
+          child: _PostAppBar(
+            subtitle: pageManager.posts[page.value].tags.join(' '),
+            title: '#${page.value + 1} of ${pageManager.posts.length}',
+          ),
         ),
+        body: AnnotatedRegion(
+          value: SystemUiOverlayStyle.light.copyWith(
+            statusBarColor: Colors.transparent,
+            systemNavigationBarColor: Colors.transparent,
+          ),
+          child: ExtendedImageGesturePageView.builder(
+            controller: pageController,
+            onPageChanged: (index) {
+              page.value = index;
+              lastOpenedIndex.state = index;
+            },
+            itemCount: pageManager.posts.length,
+            itemBuilder: (_, index) {
+              final post = pageManager.posts[index];
+              switch (post.contentType) {
+                case PostType.photo:
+                  return PostImageDisplay(post: post);
+                case PostType.video:
+                  return PostVideoDisplay(post: post);
+                default:
+                  return PostErrorDisplay(post: post);
+              }
+            },
+          ),
+        ),
+        bottomNavigationBar: isNotVideo
+            ? BottomBarVisibility(
+                controller: appbarAnimController,
+                visible: !isFullscreen.state,
+                child: PostToolbox(pageManager.posts[page.value]),
+              )
+            : null,
       ),
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle.light.copyWith(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Colors.transparent,
-        ),
-        child: ExtendedImageGesturePageView.builder(
-          controller: pageController,
-          onPageChanged: (index) {
-            page.value = index;
-            lastOpenedIndex.state = index;
-          },
-          itemCount: pageManager.posts.length,
-          itemBuilder: (_, index) {
-            final post = pageManager.posts[index];
-            switch (post.contentType) {
-              case PostType.photo:
-                return PostImageDisplay(post: post);
-              case PostType.video:
-                return PostVideoDisplay(post: post);
-              default:
-                return PostErrorDisplay(post: post);
-            }
-          },
-        ),
-      ),
-      bottomNavigationBar: isNotVideo
-          ? BottomBarVisibility(
-              controller: appbarAnimController,
-              visible: !isFullscreen.state,
-              child: PostToolbox(pageManager.posts[page.value]),
-            )
-          : null,
     );
   }
 }
@@ -115,7 +119,6 @@ class _PostAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: AppBar(
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

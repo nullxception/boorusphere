@@ -114,10 +114,7 @@ class PostImageFailedView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Failed to load image',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      const Text('Failed to load image'),
                       const SizedBox(width: 16),
                       ElevatedButton(
                         onPressed: () {

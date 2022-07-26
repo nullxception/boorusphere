@@ -199,7 +199,6 @@ class _PlayerOverlay extends StatelessWidget {
           (controller?.value.isPlaying ?? false)
               ? Icons.pause_outlined
               : Icons.play_arrow,
-          color: Colors.white,
           size: 64.0,
         ),
       ),
@@ -255,7 +254,6 @@ class _PlayerToolbox extends HookConsumerWidget {
                     onPressed: () {
                       DownloaderDialog.show(context: context, post: post);
                     },
-                    color: Colors.white,
                     disabledColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],
@@ -268,11 +266,9 @@ class _PlayerToolbox extends HookConsumerWidget {
                 icon: Icon(
                   isMuted ? Icons.volume_mute : Icons.volume_up,
                 ),
-                color: Colors.white,
               ),
               IconButton(
                 icon: const Icon(Icons.info),
-                color: Colors.white,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -288,7 +284,6 @@ class _PlayerToolbox extends HookConsumerWidget {
                       ? Icons.fullscreen_exit
                       : Icons.fullscreen_outlined,
                 ),
-                color: Colors.white,
                 onPressed: () {
                   onFullscreenTap?.call(isFullscreen.state);
                 },
