@@ -67,6 +67,7 @@ class HomePage extends HookConsumerWidget {
       body: AnnotatedRegion(
         value: AppTheme.systemUiOverlayStyleof(context).copyWith(
           statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
         ),
         child: DoubleBack(
           condition: !isDrawerOpened.value,
