@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../model/post.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../containers/post.dart';
+import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
@@ -112,33 +113,9 @@ class PostImageBlurExplicitView extends HookWidget {
                 ),
               ),
               Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                    color: Theme.of(context).cardColor,
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.only(left: 32, right: 32),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
-                        child: Text(
-                          'This media may contain material that is not safe for public viewing.',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(elevation: 0),
-                        onPressed: () {
-                          isBlur.value = false;
-                        },
-                        child: const Text('Show me'),
-                      )
-                    ],
-                  ),
-                ),
+                child: PostExplicitWarningCard(onConfirm: () {
+                  isBlur.value = false;
+                }),
               ),
             ],
           )

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ import '../containers/post.dart';
 import '../containers/post_detail.dart';
 import '../hooks/refresher.dart';
 import 'download_dialog.dart';
+import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 
 final _videoCacheProvider = Provider((_) => DefaultCacheManager());
@@ -243,33 +243,9 @@ class PostVideoBlurExplicitView extends HookWidget {
                 ),
               ),
               Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                    color: Theme.of(context).cardColor,
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.only(left: 32, right: 32),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
-                        child: Text(
-                          'This media may contain material that is not safe for public viewing.',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(elevation: 0),
-                        onPressed: () {
-                          isBlur.value = false;
-                        },
-                        child: const Text('Show me'),
-                      )
-                    ],
-                  ),
-                ),
+                child: PostExplicitWarningCard(onConfirm: () {
+                  isBlur.value = false;
+                }),
               ),
               _PlayerToolbox(post: post, disableProgressBar: true)
             ],
