@@ -101,6 +101,7 @@ class HomePage extends HookConsumerWidget {
                   ),
                 ),
                 _EdgeTopShadow(),
+                _EdgeBottomShadow(),
               ],
             ),
           ),
@@ -125,6 +126,29 @@ class _EdgeTopShadow extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomLeft,
               colors: [tint.withOpacity(0.8), tint.withOpacity(0)],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EdgeBottomShadow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final tint = Theme.of(context).scaffoldBackgroundColor;
+    return Positioned(
+      bottom: 0,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).padding.bottom * 1.8,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topLeft,
+              colors: [tint.withOpacity(0.5), tint.withOpacity(0)],
             ),
           ),
         ),
