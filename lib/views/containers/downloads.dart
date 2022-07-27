@@ -1,8 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:separated_row/separated_row.dart';
 
 import '../../model/download_entry.dart';
+import '../../model/download_status.dart';
 import '../../provider/downloader.dart';
 import '../../provider/settings/downloads/group_by_server.dart';
 import '../components/expandable_group_list_view.dart';
@@ -156,6 +158,32 @@ class _DownloadEntryView extends ConsumerWidget {
 
   final DownloadEntry entry;
 
+  IconData downloadStatusIconOf(DownloadStatus status) {
+    switch (status) {
+      case DownloadStatus.downloaded:
+        return Icons.download_done_rounded;
+      case DownloadStatus.downloading:
+        return Icons.downloading_rounded;
+      case DownloadStatus.canceled:
+      case DownloadStatus.failed:
+        return Icons.cancel_rounded;
+      default:
+        return Icons.file_open;
+    }
+  }
+
+  Color downloadStatusColorOf(DownloadStatus status, ColorScheme scheme) {
+    switch (status) {
+      case DownloadStatus.downloaded:
+        return Colors.lightBlueAccent;
+      case DownloadStatus.canceled:
+      case DownloadStatus.failed:
+        return Colors.pinkAccent;
+      default:
+        return scheme.onSurface;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
@@ -170,13 +198,34 @@ class _DownloadEntryView extends ConsumerWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 8),
-        child: Text(
-          [
-            if (progress.status.isDownloading) '${progress.progress}%',
-            progress.status.name,
-            if (!groupByServer) '• ${entry.post.serverName}',
-          ].join(' '),
-          style: Theme.of(context).textTheme.bodyMedium,
+        child: SeparatedRow(
+          separatorBuilder: (_, __) => const SizedBox(width: 6),
+          children: [
+            if (progress.status.isDownloading) ...[
+              SizedBox(
+                height: 18,
+                width: 18,
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: CircularProgressIndicator(
+                    value: (1 * progress.progress) / 100,
+                    strokeWidth: 2.5,
+                  ),
+                ),
+              ),
+              Text('${progress.progress}%'),
+            ] else
+              Icon(
+                downloadStatusIconOf(progress.status),
+                color: downloadStatusColorOf(
+                    progress.status, Theme.of(context).colorScheme),
+                size: 18,
+              ),
+            if (!groupByServer) ...[
+              const Text('•'),
+              Text(entry.post.serverName),
+            ],
+          ],
         ),
       ),
       leading: ExtendedImage.network(
