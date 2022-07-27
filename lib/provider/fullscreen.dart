@@ -13,7 +13,6 @@ class FullscreenManager extends StateNotifier<bool> {
 
   Future<void> toggle({bool shouldLandscape = false}) async {
     state = !state;
-    final mode = state ? SystemUiMode.immersive : SystemUiMode.edgeToEdge;
     final orientations = state && shouldLandscape
         ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
         : <DeviceOrientation>[];
@@ -28,12 +27,25 @@ class FullscreenManager extends StateNotifier<bool> {
       await SystemChrome.setPreferredOrientations(orientations);
     }
 
-    await SystemChrome.setEnabledSystemUIMode(mode);
+    await _fullscreen(state);
+  }
+
+  Future<void> _fullscreen(bool isFullscreen) async {
+    if (isFullscreen) {
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    } else {
+      // SDK 28 and below ignores edgeToEdge, so we have to manually reenable them
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ]);
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
   }
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    _fullscreen(false);
     SystemChrome.setPreferredOrientations([]);
     super.dispose();
   }
