@@ -9,8 +9,11 @@ class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({
     Key? key,
     required this.post,
+    this.onItemClick,
   }) : super(key: key);
+
   final Post post;
+  final Function(String type)? onItemClick;
 
   IconData _getFileIcon(String url) {
     if (url.mimeType.startsWith('video')) {
@@ -40,6 +43,7 @@ class DownloaderDialog extends HookConsumerWidget {
                     '${post.sampleSize.toString()}, ${post.sampleFile.ext}'),
                 leading: Icon(_getFileIcon(post.sampleFile)),
                 onTap: () {
+                  onItemClick?.call('sample');
                   Navigator.of(context).pop();
                   downloader.download(post, url: post.sampleFile);
                 },
@@ -50,6 +54,7 @@ class DownloaderDialog extends HookConsumerWidget {
                   '${post.originalSize.toString()}, ${post.originalFile.ext}'),
               leading: Icon(_getFileIcon(post.originalFile)),
               onTap: () {
+                onItemClick?.call('original');
                 Navigator.of(context).pop();
                 downloader.download(post);
               },
@@ -60,8 +65,13 @@ class DownloaderDialog extends HookConsumerWidget {
     );
   }
 
-  static void show({required BuildContext context, required Post post}) {
+  static void show({
+    required BuildContext context,
+    required Post post,
+    Function(String type)? onItemClick,
+  }) {
     showModalBottomSheet(
-        context: context, builder: (_) => DownloaderDialog(post: post));
+        context: context,
+        builder: (_) => DownloaderDialog(post: post, onItemClick: onItemClick));
   }
 }

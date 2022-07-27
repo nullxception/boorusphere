@@ -7,6 +7,7 @@ import '../../model/download_entry.dart';
 import '../../model/download_status.dart';
 import '../../provider/downloader.dart';
 import '../../provider/settings/downloads/group_by_server.dart';
+import '../components/download_dialog.dart';
 import '../components/expandable_group_list_view.dart';
 import '../components/notice_card.dart';
 import 'post_detail.dart';
@@ -73,6 +74,15 @@ class _DownloadEntryPopupMenu extends ConsumerWidget {
     return PopupMenuButton(
       onSelected: (value) {
         switch (value) {
+          case 'redownload':
+            DownloaderDialog.show(
+              context: context,
+              post: entry.post,
+              onItemClick: (type) async {
+                await downloader.clearEntry(id: entry.id);
+              },
+            );
+            break;
           case 'retry':
             downloader.retryEntry(id: entry.id);
             break;
@@ -95,6 +105,11 @@ class _DownloadEntryPopupMenu extends ConsumerWidget {
       },
       itemBuilder: (BuildContext context) {
         return [
+          if (progress.status.isDownloaded && !entry.isFileExists)
+            const PopupMenuItem(
+              value: 'redownload',
+              child: Text('Redownload'),
+            ),
           if (progress.status.isCanceled || progress.status.isFailed)
             const PopupMenuItem(
               value: 'retry',
@@ -206,15 +221,19 @@ class _DownloadEntryView extends ConsumerWidget {
         child: SeparatedRow(
           separatorBuilder: (_, __) => const SizedBox(width: 6),
           children: [
-            if (progress.status.isDownloading) ...[
+            if (progress.status.isDownloading || progress.status.isPending) ...[
               SizedBox(
                 height: 18,
                 width: 18,
                 child: Padding(
                   padding: const EdgeInsets.all(3),
                   child: CircularProgressIndicator(
-                    value: (1 * progress.progress) / 100,
+                    value: progress.status.isPending
+                        ? null
+                        : (1 * progress.progress) / 100,
                     strokeWidth: 2.5,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
                   ),
                 ),
               ),
