@@ -30,13 +30,18 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
       itemBuilder: (context, index) {
         return ungroup
             ? itemBuilder(items[index])
-            : ExpansionTile(
-                title: groupTitle(groupedItems[index].key),
-                initiallyExpanded: expanded,
-                children: groupedItems[index]
-                    .value
-                    .map((it) => itemBuilder(it))
-                    .toList(),
+            : Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  title: groupTitle(groupedItems[index].key),
+                  initiallyExpanded: expanded,
+                  textColor: Theme.of(context).colorScheme.onBackground,
+                  children: groupedItems[index]
+                      .value
+                      .map((it) => itemBuilder(it))
+                      .toList(),
+                ),
               );
       },
     );
