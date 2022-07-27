@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -249,7 +250,9 @@ class _DownloadEntryView extends ConsumerWidget {
                 size: 18,
               ),
             if (progress.status.isDownloaded && !entry.isFileExists)
-              const Text('File moved or missing'),
+              const Text('File moved or missing')
+            else
+              Text(progress.status.name.capitalize()),
             if (!groupByServer) ...[
               const Text('•'),
               Text(entry.post.serverName),
