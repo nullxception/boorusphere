@@ -1,11 +1,11 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/download_entry.dart';
 import '../../provider/downloader.dart';
 import '../../provider/settings/downloads/group_by_server.dart';
+import '../components/expandable_group_list_view.dart';
 import '../components/notice_card.dart';
 import 'post_detail.dart';
 
@@ -141,31 +141,13 @@ class _DownloadList extends ConsumerWidget {
     final groupByServer = ref.watch(groupByServerProvider);
     final entries = downloader.entries.reversed.toList();
 
-    return groupByServer
-        ? GroupedListView<DownloadEntry, String>(
-            elements: entries,
-            padding: const EdgeInsets.only(bottom: 48),
-            groupBy: (entry) => entry.post.serverName,
-            groupSeparatorBuilder: (serverName) {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: Text(
-                  serverName,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              );
-            },
-            itemBuilder: (context, entry) {
-              return _DownloadEntryView(entry: entry);
-            },
-          )
-        : ListView.builder(
-            padding: const EdgeInsets.only(bottom: 48),
-            itemCount: entries.length,
-            itemBuilder: (context, id) {
-              return _DownloadEntryView(entry: entries[id]);
-            },
-          );
+    return ExpandableGroupListView<DownloadEntry, String>(
+      entries: entries,
+      groupedBy: (entry) => entry.post.serverName,
+      groupTitle: (key) => Text(key),
+      itemBuilder: (entry) => _DownloadEntryView(entry: entry),
+      ungroup: !groupByServer,
+    );
   }
 }
 
