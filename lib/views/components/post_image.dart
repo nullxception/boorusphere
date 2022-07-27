@@ -6,8 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/post.dart';
+import '../../provider/fullscreen.dart';
 import '../../provider/settings/blur_explicit_post.dart';
-import '../containers/post.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 
@@ -18,7 +18,7 @@ class PostImageDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fullscreenNotifier = ref.watch(postFullscreenProvider.notifier);
+    final fullscreenNotifier = ref.watch(fullscreenProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final zoomController =
         useAnimationController(duration: const Duration(milliseconds: 150));

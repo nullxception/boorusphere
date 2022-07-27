@@ -9,9 +9,9 @@ import 'package:video_player/video_player.dart';
 
 import '../../model/post.dart';
 import '../../provider/downloader.dart';
+import '../../provider/fullscreen.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/video_player.dart';
-import '../containers/post.dart';
 import '../containers/post_detail.dart';
 import '../hooks/refresher.dart';
 import 'download_dialog.dart';
@@ -81,7 +81,7 @@ class PostVideoPlayer extends HookConsumerWidget {
     final playerController =
         ref.watch(_playerControllerProvider(post.contentFile));
     final playerMute = ref.watch(videoPlayerMuteProvider);
-    final fullscreenNotifier = ref.watch(postFullscreenProvider.notifier);
+    final fullscreenNotifier = ref.watch(fullscreenProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final showToolbox = useState(true);
     final startPaused = useState(false);
@@ -296,7 +296,7 @@ class _PlayerToolbox extends HookConsumerWidget {
     final playerMuteNotifier = ref.watch(videoPlayerMuteProvider.notifier);
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(post.originalFile);
-    final fullscreen = ref.watch(postFullscreenProvider);
+    final fullscreen = ref.watch(fullscreenProvider);
 
     return Padding(
       padding: EdgeInsets.fromLTRB(

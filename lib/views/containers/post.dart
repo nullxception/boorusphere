@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../model/post.dart';
 import '../../provider/app_theme.dart';
+import '../../provider/fullscreen.dart';
 import '../../provider/page_manager.dart';
 import '../components/appbar_visibility.dart';
 import '../components/post_error.dart';
@@ -15,40 +16,6 @@ import '../components/post_video.dart';
 import '../hooks/extended_page_controller.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
-final postFullscreenProvider =
-    StateNotifierProvider.autoDispose<_PostFullscreenManager, bool>((ref) {
-  return _PostFullscreenManager();
-});
-
-class _PostFullscreenManager extends StateNotifier<bool> {
-  _PostFullscreenManager() : super(false);
-
-  final _lastPreferredOrientations = <DeviceOrientation>[];
-
-  Future<void> toggle({bool shouldLandscape = false}) async {
-    state = !state;
-    final mode = state ? SystemUiMode.immersive : SystemUiMode.edgeToEdge;
-    final orientations = state && shouldLandscape
-        ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
-        : <DeviceOrientation>[];
-    _lastPreferredOrientations
-      ..clear()
-      ..addAll(orientations);
-
-    await Future.wait([
-      if (_lastPreferredOrientations != orientations)
-        SystemChrome.setPreferredOrientations(orientations),
-      SystemChrome.setEnabledSystemUIMode(mode)
-    ]);
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setPreferredOrientations([]);
-    super.dispose();
-  }
-}
 
 class PostPage extends HookConsumerWidget {
   const PostPage({super.key});
@@ -60,7 +27,7 @@ class PostPage extends HookConsumerWidget {
     final pageManager = ref.watch(pageManagerProvider);
     final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final page = useState(beginPage);
-    final fullscreen = ref.watch(postFullscreenProvider);
+    final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
 
