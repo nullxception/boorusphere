@@ -142,7 +142,7 @@ class _DownloadList extends ConsumerWidget {
     final entries = downloader.entries.reversed.toList();
 
     return ExpandableGroupListView<DownloadEntry, String>(
-      entries: entries,
+      items: entries,
       groupedBy: (entry) => entry.post.serverName,
       groupTitle: (key) => Text(key),
       itemBuilder: (entry) => _DownloadEntryView(entry: entry),
