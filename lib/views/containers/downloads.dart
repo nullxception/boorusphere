@@ -158,10 +158,12 @@ class _DownloadEntryView extends ConsumerWidget {
 
   final DownloadEntry entry;
 
-  IconData downloadStatusIconOf(DownloadStatus status) {
+  IconData downloadStatusIconOf(DownloadEntry entry, DownloadStatus status) {
     switch (status) {
       case DownloadStatus.downloaded:
-        return Icons.download_done_rounded;
+        return entry.isFileExists
+            ? Icons.download_done_rounded
+            : Icons.error_outline_rounded;
       case DownloadStatus.downloading:
         return Icons.downloading_rounded;
       case DownloadStatus.canceled:
@@ -172,10 +174,13 @@ class _DownloadEntryView extends ConsumerWidget {
     }
   }
 
-  Color downloadStatusColorOf(DownloadStatus status, ColorScheme scheme) {
+  Color downloadStatusColorOf(
+      DownloadEntry entry, DownloadStatus status, ColorScheme scheme) {
     switch (status) {
       case DownloadStatus.downloaded:
-        return Colors.lightBlueAccent;
+        return entry.isFileExists
+            ? Colors.lightBlueAccent
+            : scheme.onBackground.withAlpha(125);
       case DownloadStatus.canceled:
       case DownloadStatus.failed:
         return Colors.pinkAccent;
@@ -216,11 +221,16 @@ class _DownloadEntryView extends ConsumerWidget {
               Text('${progress.progress}%'),
             ] else
               Icon(
-                downloadStatusIconOf(progress.status),
+                downloadStatusIconOf(entry, progress.status),
                 color: downloadStatusColorOf(
-                    progress.status, Theme.of(context).colorScheme),
+                  entry,
+                  progress.status,
+                  Theme.of(context).colorScheme,
+                ),
                 size: 18,
               ),
+            if (progress.status.isDownloaded && !entry.isFileExists)
+              const Text('File moved or missing'),
             if (!groupByServer) ...[
               const Text('•'),
               Text(entry.post.serverName),
@@ -238,7 +248,7 @@ class _DownloadEntryView extends ConsumerWidget {
       trailing: _DownloadEntryPopupMenu(entry: entry),
       dense: true,
       contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      onTap: !progress.status.isDownloaded
+      onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
           : () => downloader.openEntryFile(id: entry.id),
     );

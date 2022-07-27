@@ -133,11 +133,12 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(typeId: 4, adapterName: 'DownloadEntryAdapter')
-class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
+class _$_DownloadEntry extends _DownloadEntry with DiagnosticableTreeMixin {
   const _$_DownloadEntry(
       {@HiveField(0, defaultValue: '') required this.id,
       @HiveField(1, defaultValue: Post.empty) required this.post,
-      @HiveField(2, defaultValue: '') required this.destination});
+      @HiveField(2, defaultValue: '') required this.destination})
+      : super._();
 
   @override
   @HiveField(0, defaultValue: '')
@@ -188,12 +189,13 @@ class _$_DownloadEntry with DiagnosticableTreeMixin implements _DownloadEntry {
       __$$_DownloadEntryCopyWithImpl<_$_DownloadEntry>(this, _$identity);
 }
 
-abstract class _DownloadEntry implements DownloadEntry {
+abstract class _DownloadEntry extends DownloadEntry {
   const factory _DownloadEntry(
           {@HiveField(0, defaultValue: '') required final String id,
           @HiveField(1, defaultValue: Post.empty) required final Post post,
           @HiveField(2, defaultValue: '') required final String destination}) =
       _$_DownloadEntry;
+  const _DownloadEntry._() : super._();
 
   @override
   @HiveField(0, defaultValue: '')
