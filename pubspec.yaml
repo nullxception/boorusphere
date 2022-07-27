@@ -32,6 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   async: ^2.8.2
+  collection: ^1.16.0
   cupertino_icons: ^1.0.2
   device_info_plus: ^4.0.1
   double_back_to_close: ^2.0.0
