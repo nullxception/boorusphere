@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/post.dart';
+import '../../hooks/extended_page_controller.dart';
 import '../../provider/app_theme.dart';
 import '../../provider/fullscreen.dart';
 import '../../provider/page_manager.dart';
@@ -13,7 +14,6 @@ import '../components/post_error.dart';
 import '../components/post_image.dart';
 import '../components/post_toolbox.dart';
 import '../components/post_video.dart';
-import '../hooks/extended_page_controller.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
 
