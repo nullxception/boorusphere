@@ -9,8 +9,8 @@ import '../../../data/post.dart';
 import '../../../providers/blocked_tags.dart';
 import '../../../providers/page_manager.dart';
 import '../../../utils/string_ext.dart';
-import '../../../widgets/tag.dart';
 import '../home/home.dart';
+import 'tag.dart';
 
 class PostDetailsPage extends HookConsumerWidget {
   const PostDetailsPage({super.key, required this.post});

@@ -3,10 +3,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import '../../data/search_history.dart';
-import '../../providers/settings/active_server.dart';
-import '../../providers/suggestion_manager.dart';
-import 'exception_info.dart';
+import '../../../data/search_history.dart';
+import '../../../providers/settings/active_server.dart';
+import '../../../providers/suggestion_manager.dart';
+import '../../widgets/exception_info.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {
   const SearchSuggestionResult({

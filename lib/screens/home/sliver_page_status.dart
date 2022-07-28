@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../providers/page_manager.dart';
-import 'exception_info.dart';
-import 'notice_card.dart';
+import '../../../providers/page_manager.dart';
+import '../../widgets/exception_info.dart';
+import '../../widgets/notice_card.dart';
 
-class Sliverscreenstate extends HookConsumerWidget {
-  const Sliverscreenstate({super.key});
+class SliverPageStatus extends HookConsumerWidget {
+  const SliverPageStatus({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

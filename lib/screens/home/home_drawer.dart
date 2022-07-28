@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../providers/app_version.dart';
-import '../../providers/page_manager.dart';
-import '../../providers/server_data.dart';
-import '../../providers/settings/active_server.dart';
-import '../../providers/settings/theme.dart';
-import '../../routes.dart';
-import 'favicon.dart';
+import '../../../providers/app_version.dart';
+import '../../../providers/page_manager.dart';
+import '../../../providers/server_data.dart';
+import '../../../providers/settings/active_server.dart';
+import '../../../providers/settings/theme.dart';
+import '../../../routes.dart';
+import '../../widgets/favicon.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
