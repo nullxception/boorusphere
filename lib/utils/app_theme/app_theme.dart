@@ -20,8 +20,14 @@ class AppTheme {
   static final darkColorsDefault = ColorScheme.fromSeed(
       seedColor: AppTheme.idAccent, brightness: Brightness.dark);
 
-  static SystemUiOverlayStyle systemUiOverlayStyleof(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-          ? SystemUiOverlayStyle.light
-          : SystemUiOverlayStyle.dark;
+  static SystemUiOverlayStyle systemUiStyle({bool forNight = false}) {
+    return SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      statusBarIconBrightness: forNight ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness:
+          forNight ? Brightness.light : Brightness.dark,
+      systemNavigationBarContrastEnforced: false,
+    );
+  }
 }

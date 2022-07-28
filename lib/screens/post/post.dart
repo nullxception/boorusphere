@@ -1,6 +1,5 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -9,6 +8,7 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../../providers/app_theme.dart';
 import '../../../providers/fullscreen.dart';
 import '../../providers/page.dart';
+import '../../utils/app_theme/app_theme.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
 import 'post_image.dart';
@@ -49,10 +49,7 @@ class PostPage extends HookConsumerWidget {
           ),
         ),
         body: AnnotatedRegion(
-          value: SystemUiOverlayStyle.light.copyWith(
-            statusBarColor: Colors.transparent,
-            systemNavigationBarColor: Colors.transparent,
-          ),
+          value: AppTheme.systemUiStyle(forNight: true),
           child: ExtendedImageGesturePageView.builder(
             controller: pageController,
             onPageChanged: (index) {

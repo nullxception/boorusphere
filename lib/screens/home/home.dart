@@ -7,6 +7,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../../utils/app_theme/app_theme.dart';
 import '../../providers/page.dart';
+import '../../utils/buildcontext_ext.dart';
 import 'home_bar.dart';
 import 'home_drawer.dart';
 import 'sliver_page_status.dart';
@@ -64,10 +65,7 @@ class HomePage extends HookConsumerWidget {
         isDrawerOpened.value = isOpened;
       },
       body: AnnotatedRegion(
-        value: AppTheme.systemUiOverlayStyleof(context).copyWith(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Colors.transparent,
-        ),
+        value: AppTheme.systemUiStyle(forNight: context.isDarkThemed),
         child: DoubleBack(
           condition: !isDrawerOpened.value,
           onConditionFail: () {
