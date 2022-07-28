@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../provider/settings/blur_explicit_post.dart';
-import '../../provider/settings/safe_mode.dart';
-import '../../provider/settings/theme.dart';
+import '../../providers/settings/blur_explicit_post.dart';
+import '../../providers/settings/safe_mode.dart';
+import '../../providers/settings/theme.dart';
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});

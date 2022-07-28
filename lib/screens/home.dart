@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-import '../../provider/page_manager.dart';
+import '../../providers/page_manager.dart';
 import '../../utils/app_theme/app_theme.dart';
 import '../../widgets/home_bar.dart';
 import '../../widgets/home_drawer.dart';

@@ -9,9 +9,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 import '../../data/post.dart';
-import '../../provider/page_manager.dart';
-import '../../provider/settings/blur_explicit_post.dart';
-import '../../provider/settings/grid.dart';
+import '../../providers/page_manager.dart';
+import '../../providers/settings/blur_explicit_post.dart';
+import '../../providers/settings/grid.dart';
 import '../../routes.dart';
 import '../../screens/post.dart';
 

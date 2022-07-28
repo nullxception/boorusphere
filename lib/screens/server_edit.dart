@@ -4,8 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/server_data.dart';
-import '../../provider/server_data.dart';
-import '../../provider/server_scanner.dart';
+import '../../providers/server_data.dart';
+import '../../providers/server_scanner.dart';
 import '../../widgets/server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {

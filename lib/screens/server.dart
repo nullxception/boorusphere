@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../provider/server_data.dart';
+import '../../providers/server_data.dart';
 import '../../widgets/favicon.dart';
 import 'server_edit.dart';
 

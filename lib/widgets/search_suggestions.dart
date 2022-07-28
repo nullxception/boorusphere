@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../data/search_history.dart';
-import '../../provider/settings/active_server.dart';
-import '../../provider/suggestion_manager.dart';
+import '../../providers/settings/active_server.dart';
+import '../../providers/suggestion_manager.dart';
 import 'exception_info.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {

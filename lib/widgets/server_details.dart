@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/server_data.dart';
-import '../../provider/server_data.dart';
+import '../../providers/server_data.dart';
 import '../../screens/server_payloads.dart';
 
 class ServerDetails extends HookConsumerWidget {

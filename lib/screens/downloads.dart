@@ -6,8 +6,8 @@ import 'package:separated_row/separated_row.dart';
 
 import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
-import '../../provider/downloader.dart';
-import '../../provider/settings/downloads/group_by_server.dart';
+import '../../providers/downloader.dart';
+import '../../providers/settings/downloads/group_by_server.dart';
 import '../../widgets/download_dialog.dart';
 import '../../widgets/expandable_group_list_view.dart';
 import '../../widgets/notice_card.dart';

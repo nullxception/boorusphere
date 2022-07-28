@@ -3,11 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../providers/page_manager.dart';
+import '../../providers/search_history_manager.dart';
+import '../../providers/settings/active_server.dart';
+import '../../providers/settings/grid.dart';
 import '../../hooks/floating_searchbar_controller.dart';
-import '../../provider/page_manager.dart';
-import '../../provider/search_history_manager.dart';
-import '../../provider/settings/active_server.dart';
-import '../../provider/settings/grid.dart';
 import '../../screens/home.dart';
 import 'search_suggestions.dart';
 

@@ -10,10 +10,10 @@ import 'data/download_entry.dart';
 import 'data/post.dart';
 import 'data/search_history.dart';
 import 'data/server_data.dart';
-import 'provider/app_theme.dart';
-import 'provider/downloader.dart';
-import 'provider/page_manager.dart';
-import 'provider/settings/theme.dart';
+import 'providers/app_theme.dart';
+import 'providers/downloader.dart';
+import 'providers/page_manager.dart';
+import 'providers/settings/theme.dart';
 import 'routes.dart';
 import 'widgets/bouncing_scroll.dart';
 

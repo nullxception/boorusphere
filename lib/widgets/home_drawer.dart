@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../provider/app_version.dart';
-import '../../provider/page_manager.dart';
-import '../../provider/server_data.dart';
-import '../../provider/settings/active_server.dart';
-import '../../provider/settings/theme.dart';
+import '../../providers/app_version.dart';
+import '../../providers/page_manager.dart';
+import '../../providers/server_data.dart';
+import '../../providers/settings/active_server.dart';
+import '../../providers/settings/theme.dart';
 import '../../routes.dart';
 import 'favicon.dart';
 

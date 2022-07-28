@@ -6,8 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/post.dart';
-import '../../provider/fullscreen.dart';
-import '../../provider/settings/blur_explicit_post.dart';
+import '../../providers/fullscreen.dart';
+import '../../providers/settings/blur_explicit_post.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 

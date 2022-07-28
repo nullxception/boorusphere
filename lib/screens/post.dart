@@ -5,10 +5,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/post.dart';
+import '../../providers/app_theme.dart';
+import '../../providers/fullscreen.dart';
+import '../../providers/page_manager.dart';
 import '../../hooks/extended_page_controller.dart';
-import '../../provider/app_theme.dart';
-import '../../provider/fullscreen.dart';
-import '../../provider/page_manager.dart';
 import '../../widgets/appbar_visibility.dart';
 import '../../widgets/post_error.dart';
 import '../../widgets/post_image.dart';
