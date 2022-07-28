@@ -1,19 +1,16 @@
-import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:media_scanner/media_scanner.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../data/download_entry.dart';
 import '../data/download_progress.dart';
 import '../data/download_status.dart';
 import '../data/post.dart';
+import '../utils/download.dart';
 
 final downloadProvider = ChangeNotifierProvider((ref) => DownloadManager(ref));
 
@@ -56,26 +53,14 @@ class DownloadManager extends ChangeNotifier {
   void _updateDownloadProgress(DownloadProgress prog) {
     progresses.removeWhere((el) => el.id == prog.id);
     progresses.add(prog);
-    notifyListeners();
     if (prog.status.isDownloaded) {
-      final entry = entries.firstWhere((it) => it.id == prog.id,
-          orElse: () => DownloadEntry.empty);
-      _rescanMediaAndroid(entry);
+      DownloadUtils.rescanMedia();
     }
-  }
-
-  void _rescanMediaAndroid(DownloadEntry entry) {
-    if (Platform.isAndroid && entry.destination.isNotEmpty) {
-      MediaScanner.loadMedia(path: entry.destination);
-    }
+    notifyListeners();
   }
 
   void unregister() {
     IsolateNameServer.removePortNameMapping(_portName);
-  }
-
-  Future<String> get platformDownloadPath async {
-    return await _platformPath.invokeMethod('getDownload');
   }
 
   Future<void> _populateDownloadEntries() async {
@@ -129,21 +114,6 @@ class DownloadManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> _isDirWritable(String dirPath) async {
-    final f = File('$dirPath/.boorusphere.tmp');
-    try {
-      await f.writeAsString('', mode: FileMode.append, flush: true);
-      if (!await f.exists()) {
-        return false;
-      }
-
-      await f.delete();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
   String getFileNameFromUrl(String src) {
     return Uri.parse(src)
         .path
@@ -153,27 +123,18 @@ class DownloadManager extends ChangeNotifier {
 
   Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
-    final downloadPath = await platformDownloadPath;
+    final dir = await DownloadUtils.downloadDir;
 
-    if (!await _isDirWritable(downloadPath)) {
-      await Permission.storage.request();
-    }
-
-    final postDir = Directory('$downloadPath/$_postDirname');
-    final postDirExists = await postDir.exists();
-    if (await _isDirWritable(downloadPath) && !postDirExists) {
-      await postDir.create();
-    }
+    await DownloadUtils.createDownloadDir();
 
     final taskId = await FlutterDownloader.enqueue(
         url: fileUrl,
-        savedDir: postDir.absolute.path,
+        savedDir: dir.absolute.path,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
-      final destination =
-          '${postDir.absolute.path}/${getFileNameFromUrl(fileUrl)}';
+      final destination = '${dir.absolute.path}/${getFileNameFromUrl(fileUrl)}';
       final entry =
           DownloadEntry(id: taskId, post: post, destination: destination);
       _addEntry(entry: entry);
@@ -203,9 +164,6 @@ class DownloadManager extends ChangeNotifier {
 
   void openEntryFile({required String id}) {
     FlutterDownloader.open(taskId: id);
-    final entry = entries.firstWhere((it) => it.id == id,
-        orElse: () => DownloadEntry.empty);
-    _rescanMediaAndroid(entry);
   }
 
   DownloadProgress getProgressByURL(String url) {
@@ -220,7 +178,4 @@ class DownloadManager extends ChangeNotifier {
   }
 
   static const _portName = 'downloaderPort';
-  static const _platformPath =
-      MethodChannel('io.chaldeaprjkt.boorusphere/path');
-  static const _postDirname = 'Boorusphere';
 }
