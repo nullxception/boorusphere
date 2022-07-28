@@ -23,7 +23,6 @@ class HomePage extends HookConsumerWidget {
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
-    final pageManager = ref.watch(pageManagerProvider);
     final pageLoading = ref.watch(pageLoadingProvider);
     final errorMessage = ref.watch(pageErrorProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
@@ -31,7 +30,7 @@ class HomePage extends HookConsumerWidget {
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
-        pageManager.loadMore();
+        ref.read(pageManagerProvider).loadMore();
       }
     }, [key]);
 

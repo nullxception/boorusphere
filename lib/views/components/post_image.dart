@@ -18,7 +18,6 @@ class PostImageDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fullscreenNotifier = ref.watch(fullscreenProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final zoomController =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -28,7 +27,7 @@ class PostImageDisplay extends HookConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        fullscreenNotifier.toggle();
+        ref.read(fullscreenProvider.notifier).toggle();
       },
       child: PostImageBlurExplicitView(
         post: post,

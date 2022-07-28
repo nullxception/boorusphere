@@ -11,7 +11,6 @@ class ServerPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataProvider);
-    final serverDataNotifier = ref.watch(serverDataProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +39,9 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                         ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            serverDataNotifier.resetToDefault();
+                            ref
+                                .read(serverDataProvider.notifier)
+                                .resetToDefault();
                           },
                           child: const Text('Reset'),
                         )
@@ -91,7 +92,9 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                           break;
                         }
 
-                        serverDataNotifier.removeServer(data: it);
+                        ref
+                            .read(serverDataProvider.notifier)
+                            .removeServer(data: it);
                         break;
                       default:
                         break;

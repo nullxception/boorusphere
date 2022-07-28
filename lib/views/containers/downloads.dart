@@ -20,7 +20,6 @@ class DownloadsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
     final groupByServer = ref.watch(groupByServerProvider);
-    final groupByServerNotifier = ref.watch(groupByServerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,7 +33,9 @@ class DownloadsPage extends ConsumerWidget {
                     downloader.clearEntries();
                     break;
                   case 'group-by-server':
-                    groupByServerNotifier.enable(!groupByServer);
+                    ref
+                        .read(groupByServerProvider.notifier)
+                        .enable(!groupByServer);
                     break;
                   default:
                     break;

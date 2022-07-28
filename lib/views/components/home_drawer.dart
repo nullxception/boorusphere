@@ -157,7 +157,6 @@ class AppVersionTile extends HookConsumerWidget {
 class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageManager = ref.watch(pageManagerProvider);
     final pageQuery = ref.watch(pageQueryProvider);
 
     return Visibility(
@@ -167,7 +166,7 @@ class _BackToHomeTile extends HookConsumerWidget {
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          pageManager.fetch(query: '', clear: true);
+          ref.watch(pageManagerProvider).fetch(query: '', clear: true);
           Navigator.pop(context);
         },
       ),
@@ -178,10 +177,8 @@ class _BackToHomeTile extends HookConsumerWidget {
 class _ServerSelection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageManager = ref.watch(pageManagerProvider);
     final serverData = ref.watch(serverDataProvider);
     final activeServer = ref.watch(activeServerProvider);
-    final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     final theme = Theme.of(context);
 
@@ -206,8 +203,8 @@ class _ServerSelection extends HookConsumerWidget {
             selectedTileColor: theme.colorScheme.primary
                 .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
             onTap: () {
-              activeServerNotifier.use(it);
-              pageManager.fetch(clear: true);
+              ref.read(activeServerProvider.notifier).use(it);
+              ref.read(pageManagerProvider).fetch(clear: true);
               Navigator.pop(context);
             },
           ),

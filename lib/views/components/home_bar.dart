@@ -39,9 +39,7 @@ class HomeBar extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useFloatingSearchBarController();
-    final gridHandler = ref.watch(gridProvider.notifier);
     final grid = ref.watch(gridProvider);
-    final pageManager = ref.watch(pageManagerProvider);
     final pageQuery = ref.watch(pageQueryProvider);
     final searchHistory = ref.watch(searchHistoryProvider);
     final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider.state);
@@ -79,7 +77,7 @@ class HomeBar extends HookConsumerWidget {
       onSubmitted: (value) {
         _searchForTag(
           value: value,
-          pageManager: pageManager,
+          pageManager: ref.watch(pageManagerProvider),
           controller: controller,
           searchTag: pageQuery,
         );
@@ -102,7 +100,7 @@ class HomeBar extends HookConsumerWidget {
               Icons.grid_view,
               size: (IconTheme.of(context).size ?? 24) + 4 - (4 * (grid + 1)),
             ),
-            onPressed: gridHandler.rotate,
+            onPressed: ref.read(gridProvider.notifier).rotate,
           ),
         ),
         FloatingSearchBarAction.icon(
@@ -138,7 +136,7 @@ class HomeBar extends HookConsumerWidget {
             onSearchTag: (value) {
               _searchForTag(
                 value: value,
-                pageManager: pageManager,
+                pageManager: ref.watch(pageManagerProvider),
                 controller: controller,
                 searchTag: pageQuery,
               );

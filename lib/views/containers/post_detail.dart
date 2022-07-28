@@ -29,7 +29,6 @@ class PostDetailsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
-    final pageManager = ref.watch(pageManagerProvider);
     final pageQuery = ref.watch(pageQueryProvider);
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
@@ -223,7 +222,9 @@ class PostDetailsPage extends HookConsumerWidget {
               if (selectedTags.isNotEmpty) {
                 final tags = Set<String>.from(pageQuery.split(' '));
                 tags.addAll(selectedTags);
-                pageManager.fetch(query: tags.join(' '), clear: true);
+                ref
+                    .read(pageManagerProvider)
+                    .fetch(query: tags.join(' '), clear: true);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const HomePage()),
@@ -238,7 +239,7 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
-                pageManager.fetch(query: tags, clear: true);
+                ref.read(pageManagerProvider).fetch(query: tags, clear: true);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const HomePage()),

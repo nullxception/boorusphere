@@ -81,7 +81,6 @@ class PostVideoPlayer extends HookConsumerWidget {
     final playerController =
         ref.watch(_playerControllerProvider(post.contentFile));
     final playerMute = ref.watch(videoPlayerMuteProvider);
-    final fullscreenNotifier = ref.watch(fullscreenProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final showToolbox = useState(true);
     final startPaused = useState(false);
@@ -95,7 +94,9 @@ class PostVideoPlayer extends HookConsumerWidget {
     }, [key]);
 
     final toggleFullscreen = useCallback(() {
-      fullscreenNotifier.toggle(shouldLandscape: post.width > post.height);
+      ref
+          .read(fullscreenProvider.notifier)
+          .toggle(shouldLandscape: post.width > post.height);
       autoHideToolbox();
     }, [key]);
 
@@ -125,7 +126,7 @@ class PostVideoPlayer extends HookConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        fullscreenNotifier.toggle();
+        ref.read(fullscreenProvider.notifier).toggle();
       },
       child: Stack(
         alignment: Alignment.center,
@@ -293,7 +294,6 @@ class _PlayerToolbox extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isMuted = ref.watch(videoPlayerMuteProvider);
-    final playerMuteNotifier = ref.watch(videoPlayerMuteProvider.notifier);
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(post.originalFile);
     final fullscreen = ref.watch(fullscreenProvider);
@@ -333,7 +333,8 @@ class _PlayerToolbox extends HookConsumerWidget {
               ),
               IconButton(
                 onPressed: () {
-                  final mute = playerMuteNotifier.toggle();
+                  final mute =
+                      ref.read(videoPlayerMuteProvider.notifier).toggle();
                   controller?.setVolume(mute ? 0 : 1);
                 },
                 icon: Icon(

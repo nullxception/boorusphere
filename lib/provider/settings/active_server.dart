@@ -16,9 +16,8 @@ class ActiveServerState extends StateNotifier<ServerData> {
   Box get _box => Hive.box('settings');
 
   void restoreFromPreference() {
-    final serverDataNotifier = ref.read(serverDataProvider.notifier);
     final name = _box.get(boxKey, defaultValue: '');
-    state = serverDataNotifier.select(name);
+    state = ref.read(serverDataProvider.notifier).select(name);
   }
 
   Future<void> use(ServerData data) async {

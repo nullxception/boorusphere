@@ -25,14 +25,12 @@ class Boorusphere extends HookConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final appTheme = ref.watch(appThemeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
-    final downloadNotifier = ref.watch(downloadProvider.notifier);
-    final pageManager = ref.read(pageManagerProvider);
 
     useEffect(() {
-      pageManager.initialize();
-      downloadNotifier.register();
+      ref.read(pageManagerProvider).initialize();
+      ref.read(downloadProvider.notifier).register();
       return () {
-        downloadNotifier.unregister();
+        ref.read(downloadProvider.notifier).unregister();
       };
     }, []);
 

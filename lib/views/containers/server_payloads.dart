@@ -9,13 +9,12 @@ class ServerPayloadsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverDataNotifier = ref.watch(serverDataProvider.notifier);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Select Server')),
       body: SingleChildScrollView(
         child: Column(
-          children: serverDataNotifier.allWithDefaults.map((it) {
+          children:
+              ref.read(serverDataProvider.notifier).allWithDefaults.map((it) {
             return ListTile(
               title: Text(it.name),
               subtitle: Text(it.homepage),

@@ -55,7 +55,6 @@ class ServersState extends StateNotifier<List<ServerData>> {
   }
 
   void removeServer({required ServerData data}) {
-    final activeServerNotifier = ref.read(activeServerProvider.notifier);
     final activeServer = ref.read(activeServerProvider);
 
     if (state.length == 1) {
@@ -64,20 +63,18 @@ class ServersState extends StateNotifier<List<ServerData>> {
     _box.delete(data.homepage);
     state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data) {
-      activeServerNotifier.use(state.first);
+      ref.read(activeServerProvider.notifier).use(state.first);
     }
   }
 
   Future<void> resetToDefault() async {
-    final activeServerNotifier = ref.read(activeServerProvider.notifier);
-
     final fromAssets = await _defaultServersAssets();
 
     await _box.deleteAll(_box.keys);
     await _box.putAll(fromAssets);
     state = _box.values.map((it) => it as ServerData).toList();
 
-    activeServerNotifier.use(state.first);
+    ref.read(activeServerProvider.notifier).use(state.first);
   }
 
   Future<void> editServer({
@@ -85,13 +82,12 @@ class ServersState extends StateNotifier<List<ServerData>> {
     required ServerData newData,
   }) async {
     final activeServer = ref.read(activeServerProvider);
-    final activeServerNotifier = ref.read(activeServerProvider.notifier);
 
     await _box.delete(data.homepage);
     await _box.put(data.homepage, newData);
     state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data && newData.name != activeServer.name) {
-      activeServerNotifier.use(newData);
+      ref.read(activeServerProvider.notifier).use(newData);
     }
   }
 }

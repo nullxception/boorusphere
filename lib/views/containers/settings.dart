@@ -12,12 +12,8 @@ class SettingsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final safeMode = ref.watch(safeModeProvider);
-    final safeModeNotifier = ref.watch(safeModeProvider.notifier);
     final darkerTheme = ref.watch(darkerThemeProvider);
-    final darkerThemeNotifier = ref.watch(darkerThemeProvider.notifier);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    final blurExplicitPostNotifier =
-        ref.watch(blurExplicitPostProvider.notifier);
 
     final themeSettings = SettingsThemeData(
         titleTextColor: Theme.of(context).colorScheme.primary,
@@ -39,7 +35,7 @@ class SettingsPage extends HookConsumerWidget {
                 leading: const Icon(Icons.brightness_3),
                 initialValue: darkerTheme,
                 onToggle: (value) {
-                  darkerThemeNotifier.enable(value);
+                  ref.read(darkerThemeProvider.notifier).enable(value);
                 },
               ),
             ],
@@ -54,7 +50,7 @@ class SettingsPage extends HookConsumerWidget {
                 leading: const Icon(Icons.phonelink_lock),
                 initialValue: blurExplicitPost,
                 onToggle: (value) {
-                  blurExplicitPostNotifier.enable(value);
+                  ref.read(blurExplicitPostProvider.notifier).enable(value);
                 },
               ),
               SettingsTile.switchTile(
@@ -64,7 +60,7 @@ class SettingsPage extends HookConsumerWidget {
                 leading: const Icon(Icons.phonelink_lock),
                 initialValue: safeMode,
                 onToggle: (value) {
-                  safeModeNotifier.enable(value);
+                  ref.read(safeModeProvider.notifier).enable(value);
                 },
               ),
             ],
