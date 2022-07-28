@@ -1,25 +1,30 @@
+import 'dart:io';
+
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 extension StringExt on String {
   String get mimeType {
-    const unkown = 'application/octet-stream';
-    if (contains('/')) {
-      final part = split('/');
-      final name = part.isEmpty ? '' : part.last;
-      return lookupMimeType(name) ?? unkown;
-    }
-    return lookupMimeType(this) ?? unkown;
-  }
-
-  String get ext {
-    try {
-      return split('/').last.split('.').last;
-    } catch (e) {
-      return '';
-    }
+    return lookupMimeType(fileName) ?? 'application/octet-stream';
   }
 
   String get capitalized {
     return isEmpty ? this : this[0].toUpperCase() + substring(1);
+  }
+
+  Uri get asUri {
+    return Uri.parse(this);
+  }
+
+  String get asDecoded {
+    return Uri.decodeFull(this);
+  }
+
+  String get fileName {
+    return basename(File(this).path);
+  }
+
+  String get fileExtension {
+    return extension(File(this).path).replaceFirst('.', '');
   }
 }

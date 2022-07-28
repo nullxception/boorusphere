@@ -10,6 +10,7 @@ import 'package:xml2json/xml2json.dart';
 import '../data/sphere_exception.dart';
 import '../utils/map_ext.dart';
 import '../utils/retry_future.dart';
+import '../utils/string_ext.dart';
 import 'blocked_tags.dart';
 import 'settings/active_server.dart';
 
@@ -86,7 +87,7 @@ class SuggestionManager {
     final url = activeServer.suggestionUrlOf(queries.last);
     try {
       final res = await retryFuture(
-        () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
+        () => http.get(url.asUri).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
 

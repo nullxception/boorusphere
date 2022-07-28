@@ -13,6 +13,7 @@ import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/video_player.dart';
 import '../../providers/download.dart';
+import '../../utils/number_ext.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
 import 'post_explicit_warning.dart';
@@ -317,7 +318,7 @@ class _PlayerToolbox extends HookConsumerWidget {
                 children: [
                   CircularProgressIndicator(
                     value: downloadProgress.status.isDownloading
-                        ? (1 * downloadProgress.progress) / 100
+                        ? downloadProgress.progress.ratio
                         : 0,
                   ),
                   IconButton(

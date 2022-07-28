@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/post.dart';
 import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
+import '../../utils/number_ext.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 
@@ -184,14 +185,6 @@ class PostImageLoadingView extends StatelessWidget {
   final ExtendedImageState state;
   final bool shouldBlur;
 
-  double calcProgress(ImageChunkEvent? chunk) =>
-      chunk != null && chunk.expectedTotalBytes != null
-          ? chunk.cumulativeBytesLoaded / (chunk.expectedTotalBytes ?? 1)
-          : 0;
-
-  int calcPercentage(ImageChunkEvent? chunk) =>
-      (100 * calcProgress(chunk)).round();
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -221,11 +214,11 @@ class PostImageLoadingView extends StatelessWidget {
                         valueColor: const AlwaysStoppedAnimation(
                           Colors.white54,
                         ),
-                        value: calcProgress(state.loadingProgress),
+                        value: state.loadingProgress?.progressRatio,
                       ),
                     ),
                     Text(
-                      '${calcPercentage(state.loadingProgress)}%',
+                      '${state.loadingProgress?.progressPercentage ?? 0}%',
                       style: const TextStyle(
                         color: Colors.white70,
                         fontWeight: FontWeight.bold,

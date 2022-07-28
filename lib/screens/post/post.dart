@@ -62,6 +62,7 @@ class PostPage extends HookConsumerWidget {
             itemCount: pageManager.posts.length,
             itemBuilder: (_, index) {
               final post = pageManager.posts[index];
+
               switch (post.contentType) {
                 case PostType.photo:
                   return PostImageDisplay(post: post);

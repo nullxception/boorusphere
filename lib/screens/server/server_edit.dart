@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/server_data.dart';
 import '../../../providers/server_data.dart';
 import '../../../providers/server_scanner.dart';
+import '../../utils/string_ext.dart';
 import 'server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {
@@ -77,7 +78,7 @@ class ServerEditorPage extends HookConsumerWidget {
                           } catch (e) {
                             errorMessage.value = e.toString();
                             data.value = ServerData.empty.copyWith(
-                              name: Uri.parse(scanText.text).host,
+                              name: scanText.text.asUri.host,
                               homepage: scanText.text,
                             );
                           }

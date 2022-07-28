@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../data/post.dart';
 import '../../providers/download.dart';
+import '../../utils/number_ext.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
 
@@ -36,7 +37,7 @@ class PostToolbox extends HookConsumerWidget {
             children: [
               CircularProgressIndicator(
                 value: downloadProgress.status.isDownloading
-                    ? (1 * downloadProgress.progress) / 100
+                    ? downloadProgress.progress.ratio
                     : 0,
               ),
               IconButton(

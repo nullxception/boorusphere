@@ -11,6 +11,7 @@ import '../data/download_progress.dart';
 import '../data/download_status.dart';
 import '../data/post.dart';
 import '../utils/download.dart';
+import '../utils/string_ext.dart';
 
 final downloadProvider = ChangeNotifierProvider((ref) => DownloadManager(ref));
 
@@ -114,13 +115,6 @@ class DownloadManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  String getFileNameFromUrl(String src) {
-    return Uri.parse(src)
-        .path
-        .split('/')
-        .lastWhere((it) => it.contains(RegExp(r'.+\..+')));
-  }
-
   Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
     final dir = await DownloadUtils.downloadDir;
@@ -134,7 +128,7 @@ class DownloadManager extends ChangeNotifier {
         openFileFromNotification: true);
 
     if (taskId != null) {
-      final destination = '${dir.absolute.path}/${getFileNameFromUrl(fileUrl)}';
+      final destination = '${dir.absolute.path}/${fileUrl.fileName}';
       final entry =
           DownloadEntry(id: taskId, post: post, destination: destination);
       _addEntry(entry: entry);

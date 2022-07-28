@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../data/server_data.dart';
 import '../data/server_payload.dart';
 import '../utils/retry_future.dart';
+import '../utils/string_ext.dart';
 
 final serverScannerProvider = Provider((ref) => ServerScanner(ref));
 
@@ -25,9 +26,9 @@ class ServerScanner {
             .replaceAll('{post-limit}', '3')
             .replaceAll('{page-id}', '1')
             .replaceAll('{post-id}', '100');
-        final url = Uri.parse('$host/$test');
         final res = await retryFuture(
-          () => http.get(url).timeout(const Duration(seconds: 5)),
+          () =>
+              http.get('$host/$test'.asUri).timeout(const Duration(seconds: 5)),
           retryIf: (e) => e is SocketException || e is TimeoutException,
         );
 
@@ -72,7 +73,7 @@ class ServerScanner {
     }
 
     return ServerData(
-        name: Uri.parse(url).host,
+        name: url.asUri.host,
         homepage: url,
         postUrl: post,
         searchUrl: search,

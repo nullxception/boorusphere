@@ -40,7 +40,7 @@ class DownloaderDialog extends HookConsumerWidget {
               ListTile(
                 title: const Text('Sample'),
                 subtitle: Text(
-                    '${post.sampleSize.toString()}, ${post.sampleFile.ext}'),
+                    '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
                 leading: Icon(_getFileIcon(post.sampleFile)),
                 onTap: () {
                   onItemClick?.call('sample');
@@ -51,7 +51,7 @@ class DownloaderDialog extends HookConsumerWidget {
             ListTile(
               title: const Text('Original'),
               subtitle: Text(
-                  '${post.originalSize.toString()}, ${post.originalFile.ext}'),
+                  '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
               leading: Icon(_getFileIcon(post.originalFile)),
               onTap: () {
                 onItemClick?.call('original');

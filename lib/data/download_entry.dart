@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
+import '../utils/string_ext.dart';
 import 'post.dart';
 
 part 'download_entry.freezed.dart';
@@ -22,5 +23,5 @@ class DownloadEntry with _$DownloadEntry {
 
   static const empty = DownloadEntry(id: '', post: Post.empty, destination: '');
 
-  bool get isFileExists => File(Uri.decodeFull(destination)).existsSync();
+  bool get isFileExists => File(destination.asDecoded).existsSync();
 }

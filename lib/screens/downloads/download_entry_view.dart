@@ -7,6 +7,7 @@ import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
 import '../../providers/download.dart';
 import '../../providers/settings/downloads/group_by_server.dart';
+import '../../utils/number_ext.dart';
 import '../../utils/string_ext.dart';
 import '../../widgets/download_dialog.dart';
 import '../post/post_detail.dart';
@@ -55,7 +56,7 @@ class DownloadEntryView extends ConsumerWidget {
 
     return ListTile(
       title: Text(
-        Uri.decodeFull(downloader.getFileNameFromUrl(entry.destination)),
+        entry.destination.fileName.asDecoded,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
@@ -73,7 +74,7 @@ class DownloadEntryView extends ConsumerWidget {
                   child: CircularProgressIndicator(
                     value: progress.status.isPending
                         ? null
-                        : (1 * progress.progress) / 100,
+                        : progress.progress.ratio,
                     strokeWidth: 2.5,
                     backgroundColor:
                         Theme.of(context).colorScheme.surfaceVariant,

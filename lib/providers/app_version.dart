@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
+import '../utils/string_ext.dart';
+
 final appVersionProvider =
     ChangeNotifierProvider((ref) => AppVersionManager(ref));
 
@@ -61,7 +63,7 @@ class AppVersionManager extends ChangeNotifier {
       _isChecking = true;
       notifyListeners();
 
-      final res = await http.get(Uri.parse(pubspecUrl));
+      final res = await http.get(pubspecUrl.asUri);
       if (res.statusCode == 200) {
         final version = loadYaml(res.body)['version'];
         if (version is String && version.contains('+')) {

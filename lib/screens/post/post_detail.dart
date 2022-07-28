@@ -97,7 +97,7 @@ class PostDetailsPage extends HookConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8, bottom: 8),
                     child: Text(
-                        '${post.sampleSize.toString()}, ${post.sampleFile.ext}'),
+                        '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
                   ),
                   TextButton(
                     style: ButtonStyle(
@@ -128,7 +128,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Text(
-                      '${post.originalSize.toString()}, ${post.originalFile.ext}'),
+                      '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
                 ),
                 TextButton(
                   style: ButtonStyle(
