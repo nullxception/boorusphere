@@ -24,13 +24,13 @@ Yet another booru imageboards viewer for Android
 This projects uses several code generator :
 - [`freezed`](https://github.com/rrousselGit/freezed)
 - [`json_serializable`](https://github.com/google/json_serializable.dart)
-- [`license_generator`](https://github.com/icapps/flutter-icapps-license)
+- [`flutter_oss_licenses`](https://github.com/espresso3389/flutter_oss_licenses)
 
-So if you're editing some areas that needs a code generator (such as `lib/model`) or add/removing packages, make sure run the particular codegens before. for example:
+So if you're editing some areas that needs a code generator (such as `lib/data`) or add/removing packages, make sure run the particular codegens before. for example:
 
 ```bash
 $ flutter pub run build_runner build --delete-conflicting-outputs
-$ flutter pub run license_generator generate
+$ flutter pub run flutter_oss_licenses:generate.dart -o lib/generated_licenses.dart
 $ flutter build apk
 ```
 

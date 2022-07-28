@@ -15,8 +15,7 @@ analyzer:
     - lib/**/*.config.dart
     - lib/**/*.g.dart
     - lib/**/*.freezed.dart
-    - lib/utils/license.dart
-    - lib/generated_plugin_registrant.dart
+    - lib/generated_*.dart
 
   errors:
     public_member_api_docs: ignore
