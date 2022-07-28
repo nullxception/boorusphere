@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-import '../utils/string_ext.dart';
+import '../utils/extensions/string.dart';
 import 'post.dart';
 
 part 'download_entry.freezed.dart';

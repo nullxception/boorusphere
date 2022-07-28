@@ -4,8 +4,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../data/post.dart';
 import '../../providers/download.dart';
-import '../../utils/buildcontext_ext.dart';
-import '../../utils/number_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
 

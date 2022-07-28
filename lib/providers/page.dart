@@ -11,7 +11,7 @@ import 'package:xml2json/xml2json.dart';
 import '../data/post.dart';
 import '../data/server_data.dart';
 import '../data/sphere_exception.dart';
-import '../utils/map_ext.dart';
+import '../utils/extensions/map.dart';
 import '../utils/retry_future.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';

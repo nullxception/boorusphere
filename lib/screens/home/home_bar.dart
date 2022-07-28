@@ -8,7 +8,7 @@ import '../../../providers/settings/active_server.dart';
 import '../../../providers/settings/grid.dart';
 import '../../providers/page.dart';
 import '../../providers/search_history.dart';
-import '../../utils/buildcontext_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
 import 'home.dart';
 import 'search_suggestions.dart';
 

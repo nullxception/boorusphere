@@ -6,7 +6,7 @@ import '../../../providers/server_data.dart';
 import '../../../providers/settings/active_server.dart';
 import '../../../providers/settings/theme.dart';
 import '../../providers/page.dart';
-import '../../utils/buildcontext_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
 import '../routes.dart';
 

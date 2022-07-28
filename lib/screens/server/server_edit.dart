@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/server_data.dart';
 import '../../../providers/server_data.dart';
 import '../../../providers/server_scanner.dart';
-import '../../utils/buildcontext_ext.dart';
-import '../../utils/string_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/string.dart';
 import 'server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {

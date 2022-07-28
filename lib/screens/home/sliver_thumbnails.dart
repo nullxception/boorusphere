@@ -12,7 +12,7 @@ import '../../../data/post.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/grid.dart';
 import '../../providers/page.dart';
-import '../../utils/buildcontext_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../post/post.dart';
 import '../routes.dart';
 

@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 
 import '../data/server_data.dart';
 import '../data/server_payload.dart';
+import '../utils/extensions/string.dart';
 import '../utils/retry_future.dart';
-import '../utils/string_ext.dart';
 
 final serverScannerProvider = Provider((ref) => ServerScanner(ref));
 

@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../providers/server_data.dart';
 import '../../../widgets/favicon.dart';
-import '../../utils/buildcontext_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
 import 'server_edit.dart';
 
 class ServerPage extends HookConsumerWidget {

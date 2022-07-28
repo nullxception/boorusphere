@@ -7,9 +7,9 @@ import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
 import '../../providers/download.dart';
 import '../../providers/settings/downloads/group_by_server.dart';
-import '../../utils/buildcontext_ext.dart';
-import '../../utils/number_ext.dart';
-import '../../utils/string_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/number.dart';
+import '../../utils/extensions/string.dart';
 import '../../widgets/download_dialog.dart';
 import '../post/post_detail.dart';
 

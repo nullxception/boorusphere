@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/buildcontext_ext.dart';
+import '../utils/extensions/buildcontext.dart';
 
 class ExpandableGroupListView<T, E> extends StatelessWidget {
   const ExpandableGroupListView({

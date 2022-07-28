@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/post.dart';
-import '../../utils/string_ext.dart';
 import '../providers/download.dart';
+import '../utils/extensions/string.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({

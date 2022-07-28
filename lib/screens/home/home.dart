@@ -7,7 +7,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../../utils/app_theme/app_theme.dart';
 import '../../providers/page.dart';
-import '../../utils/buildcontext_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
 import 'home_bar.dart';
 import 'home_drawer.dart';
 import 'sliver_page_status.dart';

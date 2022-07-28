@@ -11,7 +11,7 @@ import '../data/download_progress.dart';
 import '../data/download_status.dart';
 import '../data/post.dart';
 import '../utils/download.dart';
-import '../utils/string_ext.dart';
+import '../utils/extensions/string.dart';
 
 final downloadProvider = ChangeNotifierProvider((ref) => DownloadManager(ref));
 

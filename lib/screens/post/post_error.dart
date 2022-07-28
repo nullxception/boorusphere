@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/post.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
-import '../../../utils/string_ext.dart';
+import '../../utils/extensions/string.dart';
 import 'post_placeholder_image.dart';
 
 class PostErrorDisplay extends HookConsumerWidget {

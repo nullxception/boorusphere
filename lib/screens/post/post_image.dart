@@ -8,8 +8,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/post.dart';
 import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
-import '../../utils/buildcontext_ext.dart';
-import '../../utils/number_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/number.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 

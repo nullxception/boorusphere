@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/buildcontext_ext.dart';
+import '../utils/extensions/buildcontext.dart';
 
 class NoticeCard extends StatelessWidget {
   const NoticeCard({

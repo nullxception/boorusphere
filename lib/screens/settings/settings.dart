@@ -6,8 +6,8 @@ import 'package:settings_ui/settings_ui.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/safe_mode.dart';
 import '../../../providers/settings/theme.dart';
-import '../../utils/buildcontext_ext.dart';
 import '../../utils/download.dart';
+import '../../utils/extensions/buildcontext.dart';
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});

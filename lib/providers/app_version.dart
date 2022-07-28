@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
-import '../utils/string_ext.dart';
+import '../utils/extensions/string.dart';
 
 final appVersionProvider =
     ChangeNotifierProvider((ref) => AppVersionManager(ref));

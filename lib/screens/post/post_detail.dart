@@ -7,9 +7,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../data/post.dart';
 import '../../../providers/blocked_tags.dart';
-import '../../../utils/string_ext.dart';
 import '../../providers/page.dart';
-import '../../utils/buildcontext_ext.dart';
+import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/string.dart';
 import '../home/home.dart';
 import 'tag.dart';
 
