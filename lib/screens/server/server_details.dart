@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/server_data.dart';
 import '../../../providers/server_data.dart';
+import '../../utils/buildcontext_ext.dart';
 import 'server_payloads.dart';
 
 class ServerDetails extends HookConsumerWidget {
@@ -42,7 +43,7 @@ class ServerDetails extends HookConsumerWidget {
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Text(
                     'Details',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: context.theme.textTheme.titleMedium,
                   ),
                 ),
                 TextFormField(
@@ -74,7 +75,7 @@ class ServerDetails extends HookConsumerWidget {
                     children: [
                       Text(
                         'Payload',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: context.theme.textTheme.titleMedium,
                       ),
                       ElevatedButton(
                         onPressed: () async {

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../providers/app_version.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../routes.dart';
 
 class AboutPage extends HookConsumerWidget {
@@ -21,7 +22,7 @@ class AboutPage extends HookConsumerWidget {
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: context.colorScheme.onBackground,
               ),
               padding: const EdgeInsets.all(32),
               margin: const EdgeInsets.symmetric(vertical: 16),
@@ -32,18 +33,14 @@ class AboutPage extends HookConsumerWidget {
             ),
             Text(
               'Boorusphere',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6
+              style: context.theme.textTheme.headline6
                   ?.copyWith(fontWeight: FontWeight.w300),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
                 'Version ${version.version} - ${version.variant}',
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle2
+                style: context.theme.textTheme.subtitle2
                     ?.copyWith(fontWeight: FontWeight.w400),
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../data/post.dart';
 import '../../providers/download.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../utils/number_ext.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
@@ -48,7 +49,7 @@ class PostToolbox extends HookConsumerWidget {
                 onPressed: () {
                   DownloaderDialog.show(context: context, post: post);
                 },
-                disabledColor: Theme.of(context).colorScheme.primary,
+                disabledColor: context.colorScheme.primary,
               ),
             ],
           ),

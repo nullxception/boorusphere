@@ -8,6 +8,7 @@ import '../../../providers/settings/active_server.dart';
 import '../../../providers/settings/grid.dart';
 import '../../providers/page.dart';
 import '../../providers/search_history.dart';
+import '../../utils/buildcontext_ext.dart';
 import 'home.dart';
 import 'search_suggestions.dart';
 
@@ -61,7 +62,7 @@ class HomeBar extends HookConsumerWidget {
     }, [suggestionHistory]);
 
     return FloatingSearchBar(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: context.theme.cardColor,
       elevation: 2,
       implicitDuration: Duration.zero,
       autocorrect: false,

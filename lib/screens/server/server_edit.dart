@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/server_data.dart';
 import '../../../providers/server_data.dart';
 import '../../../providers/server_scanner.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../utils/string_ext.dart';
 import 'server_details.dart';
 
@@ -95,18 +96,17 @@ class ServerEditorPage extends HookConsumerWidget {
                   height: 64,
                   alignment: Alignment.center,
                   child: SpinKitThreeBounce(
-                      size: 32, color: Theme.of(context).colorScheme.primary),
+                      size: 32, color: context.colorScheme.primary),
                 ),
               ),
               if (errorMessage.value.isNotEmpty)
                 Container(
                   margin: const EdgeInsets.only(top: 8),
-                  color: Theme.of(context).colorScheme.error,
+                  color: context.colorScheme.error,
                   padding: const EdgeInsets.all(16),
                   child: Text(
                     errorMessage.value,
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.onError),
+                    style: TextStyle(color: context.colorScheme.onError),
                   ),
                 ),
               if (data.value.name.isNotEmpty)

@@ -6,6 +6,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../../../data/search_history.dart';
 import '../../../providers/settings/active_server.dart';
 import '../../providers/suggestion.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../widgets/exception_info.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {
@@ -64,7 +65,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
                     child: Text(
                       'Clear all',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: context.colorScheme.onBackground,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
@@ -155,8 +156,7 @@ class SearchSuggestionResult extends HookConsumerWidget {
                 height: 128,
                 child: Center(
                   child: SpinKitThreeBounce(
-                      size: 32,
-                      color: Theme.of(context).colorScheme.onBackground),
+                      size: 32, color: context.colorScheme.onBackground),
                 ),
               ),
               error: (ex, trace) => Padding(

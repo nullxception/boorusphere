@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/buildcontext_ext.dart';
+
 class NoticeCard extends StatelessWidget {
   const NoticeCard({
     super.key,
@@ -17,7 +19,7 @@ class NoticeCard extends StatelessWidget {
     return Card(
       elevation: 0,
       margin: margin,
-      color: Theme.of(context).cardColor,
+      color: context.theme.cardColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),

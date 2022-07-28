@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/post.dart';
 import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../utils/number_ext.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
@@ -148,7 +149,7 @@ class PostImageFailedView extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(30)),
-                color: Theme.of(context).cardColor,
+                color: context.theme.cardColor,
               ),
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
               child: Row(

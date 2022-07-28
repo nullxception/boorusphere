@@ -13,6 +13,7 @@ import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/video_player.dart';
 import '../../providers/download.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../utils/number_ext.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
@@ -328,7 +329,7 @@ class _PlayerToolbox extends HookConsumerWidget {
                     onPressed: () {
                       DownloaderDialog.show(context: context, post: post);
                     },
-                    disabledColor: Theme.of(context).colorScheme.primary,
+                    disabledColor: context.colorScheme.primary,
                   ),
                 ],
               ),

@@ -6,6 +6,7 @@ import '../../../providers/server_data.dart';
 import '../../../providers/settings/active_server.dart';
 import '../../../providers/settings/theme.dart';
 import '../../providers/page.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../widgets/favicon.dart';
 import '../routes.dart';
 
@@ -180,8 +181,6 @@ class _ServerSelection extends HookConsumerWidget {
     final serverData = ref.watch(serverDataProvider);
     final activeServer = ref.watch(activeServerProvider);
 
-    final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -200,8 +199,8 @@ class _ServerSelection extends HookConsumerWidget {
               ),
             ),
             selected: it.name == activeServer.name,
-            selectedTileColor: theme.colorScheme.primary
-                .withAlpha(theme.brightness == Brightness.light ? 50 : 25),
+            selectedTileColor: context.colorScheme.primary
+                .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(activeServerProvider.notifier).use(it);
               ref.read(pageManagerProvider).fetch(clear: true);

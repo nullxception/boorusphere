@@ -7,6 +7,7 @@ import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
 import '../../providers/download.dart';
 import '../../providers/settings/downloads/group_by_server.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../utils/number_ext.dart';
 import '../../utils/string_ext.dart';
 import '../../widgets/download_dialog.dart';
@@ -76,8 +77,7 @@ class DownloadEntryView extends ConsumerWidget {
                         ? null
                         : progress.progress.ratio,
                     strokeWidth: 2.5,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surfaceVariant,
+                    backgroundColor: context.colorScheme.surfaceVariant,
                   ),
                 ),
               ),
@@ -88,7 +88,7 @@ class DownloadEntryView extends ConsumerWidget {
                 color: downloadStatusColorOf(
                   entry,
                   progress.status,
-                  Theme.of(context).colorScheme,
+                  context.colorScheme,
                 ),
                 size: 18,
               ),

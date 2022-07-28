@@ -111,7 +111,7 @@ class HomePage extends HookConsumerWidget {
 class _EdgeTopShadow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tint = Theme.of(context).scaffoldBackgroundColor;
+    final tint = context.theme.scaffoldBackgroundColor;
     return Positioned(
       top: 0,
       child: SizedBox(
@@ -134,7 +134,7 @@ class _EdgeTopShadow extends StatelessWidget {
 class _EdgeBottomShadow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tint = Theme.of(context).scaffoldBackgroundColor;
+    final tint = context.theme.scaffoldBackgroundColor;
     return Positioned(
       bottom: 0,
       child: SizedBox(

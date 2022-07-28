@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../../utils/buildcontext_ext.dart';
+
 class Tag extends HookWidget {
   final String tag;
   final bool Function()? active;
@@ -16,7 +18,7 @@ class Tag extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isClicked = useState(active?.call() ?? false);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 4, 8, 4),
       child: SizedBox(

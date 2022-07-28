@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/buildcontext_ext.dart';
+
 class ExpandableGroupListView<T, E> extends StatelessWidget {
   const ExpandableGroupListView({
     Key? key,
@@ -31,12 +33,11 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
         return ungroup
             ? itemBuilder(items[index])
             : Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                data: context.theme.copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   title: groupTitle(groupedItems[index].key),
                   initiallyExpanded: expanded,
-                  textColor: Theme.of(context).colorScheme.onBackground,
+                  textColor: context.colorScheme.onBackground,
                   children: groupedItems[index]
                       .value
                       .map((it) => itemBuilder(it))

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/buildcontext_ext.dart';
+
 class PostExplicitWarningCard extends StatelessWidget {
   const PostExplicitWarningCard({super.key, required this.onConfirm});
 
@@ -10,7 +12,7 @@ class PostExplicitWarningCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(16)),
-        color: Theme.of(context).cardColor,
+        color: context.theme.cardColor,
       ),
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(left: 32, right: 32),

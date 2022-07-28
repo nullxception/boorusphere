@@ -9,6 +9,7 @@ import '../../../data/post.dart';
 import '../../../providers/blocked_tags.dart';
 import '../../../utils/string_ext.dart';
 import '../../providers/page.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../home/home.dart';
 import 'tag.dart';
 
@@ -185,8 +186,8 @@ class PostDetailsPage extends HookConsumerWidget {
       ),
       floatingActionButton: SpeedDial(
         icon: Icons.tag,
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        foregroundColor: Theme.of(context).colorScheme.onTertiary,
+        backgroundColor: context.colorScheme.tertiary,
+        foregroundColor: context.colorScheme.onTertiary,
         visible: showFAB.value,
         children: [
           SpeedDialChild(

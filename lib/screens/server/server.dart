@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../providers/server_data.dart';
 import '../../../widgets/favicon.dart';
+import '../../utils/buildcontext_ext.dart';
 import 'server_edit.dart';
 
 class ServerPage extends HookConsumerWidget {
@@ -23,7 +24,7 @@ class ServerPage extends HookConsumerWidget {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      backgroundColor: Theme.of(context).colorScheme.background,
+                      backgroundColor: context.colorScheme.background,
                       title: const Text('Server'),
                       content: const Text(
                         '''

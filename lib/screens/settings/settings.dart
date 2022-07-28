@@ -6,6 +6,7 @@ import 'package:settings_ui/settings_ui.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/safe_mode.dart';
 import '../../../providers/settings/theme.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../utils/download.dart';
 
 class SettingsPage extends HookConsumerWidget {
@@ -18,7 +19,7 @@ class SettingsPage extends HookConsumerWidget {
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final dotnomediaStatus = useFuture(DownloadUtils.hasDotnomedia);
     final themeSettings = SettingsThemeData(
-        titleTextColor: Theme.of(context).colorScheme.primary,
+        titleTextColor: context.colorScheme.primary,
         settingsListBackground: Colors.transparent);
 
     return Scaffold(

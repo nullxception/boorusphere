@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../providers/page.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../../widgets/exception_info.dart';
 import '../../widgets/notice_card.dart';
 
@@ -46,7 +47,7 @@ class SliverPageStatus extends HookConsumerWidget {
               height: 90,
               alignment: Alignment.center,
               child: SpinKitThreeBounce(
-                  size: 32, color: Theme.of(context).colorScheme.primary),
+                  size: 32, color: context.colorScheme.primary),
             ),
           if (pageError.isEmpty && !pageLoading && pageManager.posts.isNotEmpty)
             Container(

@@ -12,6 +12,7 @@ import '../../../data/post.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/grid.dart';
 import '../../providers/page.dart';
+import '../../utils/buildcontext_ext.dart';
 import '../post/post.dart';
 import '../routes.dart';
 
@@ -126,13 +127,12 @@ class _ThumbnailShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final baseColor = theme.brightness == Brightness.light
-        ? theme.colorScheme.background.desaturate(50).darken(2)
-        : theme.colorScheme.surface;
-    final highlightColor = theme.brightness == Brightness.light
-        ? theme.colorScheme.background.desaturate(50).lighten(2)
-        : theme.colorScheme.surface.lighten(5);
+    final baseColor = context.isLightThemed
+        ? context.colorScheme.background.desaturate(50).darken(2)
+        : context.colorScheme.surface;
+    final highlightColor = context.isLightThemed
+        ? context.colorScheme.background.desaturate(50).lighten(2)
+        : context.colorScheme.surface.lighten(5);
 
     return Shimmer(
       gradient: LinearGradient(
