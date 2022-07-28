@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/server_data.dart';
 import '../../provider/server_data.dart';
-import '../../views/containers/server_payloads.dart';
+import '../../screens/server_payloads.dart';
 
 class ServerDetails extends HookConsumerWidget {
   const ServerDetails({
@@ -59,8 +59,8 @@ class ServerDetails extends HookConsumerWidget {
                     labelText: 'Homepage',
                   ),
                   validator: (value) {
-                    final homepages = serverData.map((it) => it.homepage);
-                    if (!isEditing && homepages.contains(value)) {
+                    final homescreens = serverData.map((it) => it.homepage);
+                    if (!isEditing && homescreens.contains(value)) {
                       return 'Server data for $value already exists';
                     }
 

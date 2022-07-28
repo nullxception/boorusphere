@@ -6,8 +6,8 @@ import '../../provider/page_manager.dart';
 import 'exception_info.dart';
 import 'notice_card.dart';
 
-class SliverPageState extends HookConsumerWidget {
-  const SliverPageState({super.key});
+class Sliverscreenstate extends HookConsumerWidget {
+  const Sliverscreenstate({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

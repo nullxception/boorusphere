@@ -13,7 +13,7 @@ import '../../provider/downloader.dart';
 import '../../provider/fullscreen.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/video_player.dart';
-import '../../views/containers/post_detail.dart';
+import '../../screens/post_detail.dart';
 import 'download_dialog.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';

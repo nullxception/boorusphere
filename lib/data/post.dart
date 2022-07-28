@@ -73,12 +73,12 @@ class Post with _$Post {
   PixelSize get sampleSize =>
       PixelSize(width: sampleWidth, height: sampleHeight);
 
-  PixelSize get previewSize =>
+  PixelSize get prescreensize =>
       PixelSize(width: previewWidth, height: previewHeight);
 
   double get aspectRatio {
-    if (previewSize.hasPixels) {
-      return previewSize.aspectRatio;
+    if (prescreensize.hasPixels) {
+      return prescreensize.aspectRatio;
     } else if (sampleSize.hasPixels) {
       return sampleSize.aspectRatio;
     } else {

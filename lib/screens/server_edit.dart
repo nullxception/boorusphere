@@ -46,8 +46,8 @@ class ServerEditorPage extends HookConsumerWidget {
                     labelText: 'Example: https://abc.com',
                   ),
                   validator: (value) {
-                    final homepages = serverData.map((it) => it.homepage);
-                    if (!isEditing && homepages.contains(value)) {
+                    final homescreens = serverData.map((it) => it.homepage);
+                    if (!isEditing && homescreens.contains(value)) {
                       return 'Server data for $value already exists';
                     }
                     if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
