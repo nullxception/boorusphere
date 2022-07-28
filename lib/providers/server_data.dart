@@ -8,11 +8,11 @@ import '../data/server_data.dart';
 import 'settings/active_server.dart';
 
 final serverDataProvider =
-    StateNotifierProvider<ServersState, List<ServerData>>(
-        (ref) => ServersState(ref));
+    StateNotifierProvider<ServerManager, List<ServerData>>(
+        (ref) => ServerManager(ref));
 
-class ServersState extends StateNotifier<List<ServerData>> {
-  ServersState(this.ref) : super([]);
+class ServerManager extends StateNotifier<List<ServerData>> {
+  ServerManager(this.ref) : super([]);
 
   final Ref ref;
   final _defaultServerList = <ServerData>[];

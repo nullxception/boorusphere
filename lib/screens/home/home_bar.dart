@@ -4,10 +4,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../../hooks/floating_searchbar_controller.dart';
-import '../../../providers/page_manager.dart';
-import '../../../providers/search_history_manager.dart';
 import '../../../providers/settings/active_server.dart';
 import '../../../providers/settings/grid.dart';
+import '../../providers/page.dart';
+import '../../providers/search_history.dart';
 import 'home.dart';
 import 'search_suggestions.dart';
 

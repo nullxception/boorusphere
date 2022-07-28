@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../data/post.dart';
-import '../../../providers/downloader.dart';
+import '../../providers/download.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/download_entry.dart';
-import '../../providers/downloader.dart';
+import '../../providers/download.dart';
 import '../../providers/settings/downloads/group_by_server.dart';
 import '../../widgets/expandable_group_list_view.dart';
 import '../../widgets/notice_card.dart';

@@ -9,9 +9,9 @@ import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
 final appVersionProvider =
-    ChangeNotifierProvider((ref) => AppVersionNotifier(ref));
+    ChangeNotifierProvider((ref) => AppVersionManager(ref));
 
-class AppVersionNotifier extends ChangeNotifier {
+class AppVersionManager extends ChangeNotifier {
   final Ref ref;
 
   String version = '0.0.0';
@@ -24,7 +24,7 @@ class AppVersionNotifier extends ChangeNotifier {
   bool get isChecking => _isChecking;
   bool get isChecked => _isChecked;
 
-  AppVersionNotifier(this.ref) {
+  AppVersionManager(this.ref) {
     _init();
   }
 

@@ -6,7 +6,7 @@ import 'package:separated_row/separated_row.dart';
 
 import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
-import '../../providers/downloader.dart';
+import '../../providers/download.dart';
 import '../../providers/settings/downloads/group_by_server.dart';
 import '../../widgets/download_dialog.dart';
 import '../post/post_detail.dart';

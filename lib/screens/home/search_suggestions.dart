@@ -5,7 +5,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../../data/search_history.dart';
 import '../../../providers/settings/active_server.dart';
-import '../../../providers/suggestion_manager.dart';
+import '../../providers/suggestion.dart';
 import '../../widgets/exception_info.dart';
 
 class SearchSuggestionResult extends HookConsumerWidget {

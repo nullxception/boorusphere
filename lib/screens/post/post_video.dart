@@ -9,10 +9,10 @@ import 'package:video_player/video_player.dart';
 
 import '../../../data/post.dart';
 import '../../../hooks/refresher.dart';
-import '../../../providers/downloader.dart';
 import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/video_player.dart';
+import '../../providers/download.dart';
 import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
 import 'post_explicit_warning.dart';

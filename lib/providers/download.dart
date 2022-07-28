@@ -15,10 +15,10 @@ import '../data/download_progress.dart';
 import '../data/download_status.dart';
 import '../data/post.dart';
 
-final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref));
+final downloadProvider = ChangeNotifierProvider((ref) => DownloadManager(ref));
 
-class Downloader extends ChangeNotifier {
-  Downloader(this.ref);
+class DownloadManager extends ChangeNotifier {
+  DownloadManager(this.ref);
 
   final Ref ref;
   final _port = ReceivePort();

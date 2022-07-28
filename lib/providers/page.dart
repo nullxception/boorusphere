@@ -14,7 +14,7 @@ import '../data/sphere_exception.dart';
 import '../utils/map_ext.dart';
 import '../utils/retry_future.dart';
 import 'blocked_tags.dart';
-import 'search_history_manager.dart';
+import 'search_history.dart';
 import 'server_data.dart';
 import 'settings/active_server.dart';
 import 'settings/safe_mode.dart';

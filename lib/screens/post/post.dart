@@ -8,7 +8,7 @@ import '../../../data/post.dart';
 import '../../../hooks/extended_page_controller.dart';
 import '../../../providers/app_theme.dart';
 import '../../../providers/fullscreen.dart';
-import '../../../providers/page_manager.dart';
+import '../../providers/page.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
 import 'post_image.dart';

@@ -89,7 +89,7 @@ class AboutPage extends HookConsumerWidget {
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),
               title: const Text('GitHub'),
               leading: const FaIcon(FontAwesomeIcons.github),
-              onTap: () => launchUrlString(AppVersionNotifier.gitUrl,
+              onTap: () => launchUrlString(AppVersionManager.gitUrl,
                   mode: LaunchMode.externalApplication),
             ),
             ListTile(
