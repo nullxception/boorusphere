@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,26 +28,29 @@ class FullscreenManager extends StateNotifier<bool> {
       await SystemChrome.setPreferredOrientations(orientations);
     }
 
-    await _fullscreen(state);
+    state
+        ? await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive)
+        : await unfullscreen();
   }
 
-  Future<void> _fullscreen(bool isFullscreen) async {
-    if (isFullscreen) {
-      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    } else {
+  Future<void> unfullscreen() async {
+    final info = await DeviceInfoPlugin().androidInfo;
+    final sdkInt = info.version.sdkInt ?? 0;
+    if (sdkInt < 29) {
       // SDK 28 and below ignores edgeToEdge, so we have to manually reenable them
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
         SystemUiOverlay.top,
         SystemUiOverlay.bottom,
       ]);
+    } else {
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
   }
 
   @override
   void dispose() {
-    _fullscreen(false);
     SystemChrome.setPreferredOrientations([]);
+    unfullscreen();
     super.dispose();
   }
 }
