@@ -5,9 +5,9 @@ import '../../../providers/app_version.dart';
 import '../../../providers/server_data.dart';
 import '../../../providers/settings/active_server.dart';
 import '../../../providers/settings/theme.dart';
-import '../../../routes.dart';
 import '../../providers/page.dart';
 import '../../widgets/favicon.dart';
+import '../routes.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});

@@ -11,9 +11,9 @@ import 'package:tinycolor2/tinycolor2.dart';
 import '../../../data/post.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/grid.dart';
-import '../../../routes.dart';
 import '../../providers/page.dart';
 import '../post/post.dart';
+import '../routes.dart';
 
 class SliverThumbnails extends HookConsumerWidget {
   final AutoScrollController autoScrollController;
