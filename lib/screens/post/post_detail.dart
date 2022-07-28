@@ -5,12 +5,12 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../data/post.dart';
-import '../../providers/blocked_tags.dart';
-import '../../providers/page_manager.dart';
-import '../../utils/string_ext.dart';
-import '../../widgets/tag.dart';
-import 'home.dart';
+import '../../../data/post.dart';
+import '../../../providers/blocked_tags.dart';
+import '../../../providers/page_manager.dart';
+import '../../../utils/string_ext.dart';
+import '../../../widgets/tag.dart';
+import '../home/home.dart';
 
 class PostDetailsPage extends HookConsumerWidget {
   const PostDetailsPage({super.key, required this.post});

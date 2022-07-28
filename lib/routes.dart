@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'screens/about.dart';
-import 'screens/downloads.dart';
-import 'screens/home.dart';
-import 'screens/licenses.dart';
-import 'screens/post.dart';
-import 'screens/server.dart';
-import 'screens/settings.dart';
-import 'screens/tags_blocker.dart';
+import 'screens/about/about.dart';
+import 'screens/about/licenses.dart';
+import 'screens/downloads/downloads.dart';
+import 'screens/home/home.dart';
+import 'screens/post/post.dart';
+import 'screens/server/server.dart';
+import 'screens/settings/settings.dart';
+import 'screens/tags_blocker/tags_blocker.dart';
 
 mixin Routes {
   static const home = '';

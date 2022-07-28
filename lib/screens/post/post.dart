@@ -4,16 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/post.dart';
-import '../../providers/app_theme.dart';
-import '../../providers/fullscreen.dart';
-import '../../providers/page_manager.dart';
-import '../../hooks/extended_page_controller.dart';
-import '../../widgets/appbar_visibility.dart';
-import '../../widgets/post_error.dart';
-import '../../widgets/post_image.dart';
-import '../../widgets/post_toolbox.dart';
-import '../../widgets/post_video.dart';
+import '../../../data/post.dart';
+import '../../../hooks/extended_page_controller.dart';
+import '../../../providers/app_theme.dart';
+import '../../../providers/fullscreen.dart';
+import '../../../providers/page_manager.dart';
+import '../../../widgets/appbar_visibility.dart';
+import '../../../widgets/post_error.dart';
+import '../../../widgets/post_image.dart';
+import '../../../widgets/post_toolbox.dart';
+import '../../../widgets/post_video.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
 

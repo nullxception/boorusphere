@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/license.dart';
+import '../../../utils/license.dart';
 
 class LicensesPage extends StatelessWidget {
   const LicensesPage({super.key});

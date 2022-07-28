@@ -11,7 +11,7 @@ import '../../providers/settings/downloads/group_by_server.dart';
 import '../../widgets/download_dialog.dart';
 import '../../widgets/expandable_group_list_view.dart';
 import '../../widgets/notice_card.dart';
-import 'post_detail.dart';
+import '../post/post_detail.dart';
 
 class DownloadsPage extends ConsumerWidget {
   const DownloadsPage({super.key});

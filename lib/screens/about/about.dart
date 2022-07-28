@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../providers/app_version.dart';
-import '../../routes.dart';
+import '../../../providers/app_version.dart';
+import '../../../routes.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});

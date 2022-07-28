@@ -8,12 +8,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../data/post.dart';
+import '../../hooks/refresher.dart';
 import '../../providers/downloader.dart';
 import '../../providers/fullscreen.dart';
 import '../../providers/settings/blur_explicit_post.dart';
 import '../../providers/settings/video_player.dart';
-import '../../hooks/refresher.dart';
-import '../../screens/post_detail.dart';
+import '../screens/post/post_detail.dart';
 import 'download_dialog.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';

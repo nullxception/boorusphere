@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../data/post.dart';
 import '../../providers/downloader.dart';
-import '../../screens/post_detail.dart';
+import '../screens/post/post_detail.dart';
 import 'download_dialog.dart';
 
 class PostToolbox extends HookConsumerWidget {
