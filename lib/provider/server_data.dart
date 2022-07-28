@@ -4,7 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-import '../model/server_data.dart';
+import '../data/server_data.dart';
 import 'settings/active_server.dart';
 
 final serverDataProvider =

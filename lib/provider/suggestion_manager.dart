@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
-import '../model/sphere_exception.dart';
+import '../data/sphere_exception.dart';
 import '../util/map_ext.dart';
 import '../util/retry_future.dart';
 import 'blocked_tags.dart';

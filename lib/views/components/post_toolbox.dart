@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../model/post.dart';
+import '../../data/post.dart';
 import '../../provider/downloader.dart';
 import '../containers/post_detail.dart';
 import 'download_dialog.dart';

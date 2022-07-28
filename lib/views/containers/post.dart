@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/post.dart';
+import '../../data/post.dart';
 import '../../provider/app_theme.dart';
 import '../../provider/fullscreen.dart';
 import '../../provider/page_manager.dart';

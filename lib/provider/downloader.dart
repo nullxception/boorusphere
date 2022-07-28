@@ -10,10 +10,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../model/download_entry.dart';
-import '../model/download_progress.dart';
-import '../model/download_status.dart';
-import '../model/post.dart';
+import '../data/download_entry.dart';
+import '../data/download_progress.dart';
+import '../data/download_status.dart';
+import '../data/post.dart';
 
 final downloadProvider = ChangeNotifierProvider((ref) => Downloader(ref));
 

@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../model/search_history.dart';
+import '../data/search_history.dart';
 import 'settings/active_server.dart';
 
 final searchHistoryProvider = Provider((ref) => SearchHistoryManager(ref));

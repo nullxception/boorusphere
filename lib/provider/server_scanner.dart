@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../model/server_data.dart';
-import '../model/server_payload.dart';
+import '../data/server_data.dart';
+import '../data/server_payload.dart';
 import '../util/retry_future.dart';
 
 final serverScannerProvider = Provider((ref) => ServerScanner(ref));

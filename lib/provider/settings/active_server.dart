@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-import '../../model/server_data.dart';
+import '../../data/server_data.dart';
 import '../server_data.dart';
 
 final activeServerProvider =

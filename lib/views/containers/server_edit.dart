@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/server_data.dart';
+import '../../data/server_data.dart';
 import '../../provider/server_data.dart';
 import '../../provider/server_scanner.dart';
 import '../components/server_details.dart';

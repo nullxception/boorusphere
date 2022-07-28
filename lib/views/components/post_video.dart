@@ -7,7 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../model/post.dart';
+import '../../data/post.dart';
 import '../../provider/downloader.dart';
 import '../../provider/fullscreen.dart';
 import '../../provider/settings/blur_explicit_post.dart';

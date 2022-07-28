@@ -8,7 +8,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-import '../../model/post.dart';
+import '../../data/post.dart';
 import '../../provider/page_manager.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/grid.dart';

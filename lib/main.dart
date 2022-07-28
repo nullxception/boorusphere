@@ -6,10 +6,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'model/download_entry.dart';
-import 'model/post.dart';
-import 'model/search_history.dart';
-import 'model/server_data.dart';
+import 'data/download_entry.dart';
+import 'data/post.dart';
+import 'data/search_history.dart';
+import 'data/server_data.dart';
 import 'provider/app_theme.dart';
 import 'provider/downloader.dart';
 import 'provider/page_manager.dart';

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
-import '../../model/download_entry.dart';
-import '../../model/download_status.dart';
+import '../../data/download_entry.dart';
+import '../../data/download_status.dart';
 import '../../provider/downloader.dart';
 import '../../provider/settings/downloads/group_by_server.dart';
 import '../components/download_dialog.dart';

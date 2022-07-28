@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../model/post.dart';
+import '../../data/post.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../util/string_ext.dart';
 import 'post_placeholder_image.dart';
