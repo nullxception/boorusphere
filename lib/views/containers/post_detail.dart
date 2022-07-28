@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../data/post.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/page_manager.dart';
-import '../../util/string_ext.dart';
+import '../../utils/string_ext.dart';
 import '../components/tag.dart';
 import 'home.dart';
 

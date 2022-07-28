@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-import '../util/string_ext.dart';
+import '../utils/string_ext.dart';
 import 'pixel_size.dart';
 
 part 'post.freezed.dart';

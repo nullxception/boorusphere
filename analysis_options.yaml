@@ -15,7 +15,7 @@ analyzer:
     - lib/**/*.config.dart
     - lib/**/*.g.dart
     - lib/**/*.freezed.dart
-    - lib/util/license.dart
+    - lib/utils/license.dart
     - lib/generated_plugin_registrant.dart
 
   errors:
