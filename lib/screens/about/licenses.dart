@@ -7,13 +7,15 @@ class LicensesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final licenses = ossLicenses.where((it) => it.isDirectDependency).toList();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Open Source Licenses')),
       body: ListView.builder(
         padding: EdgeInsets.zero,
-        itemCount: ossLicenses.length,
+        itemCount: licenses.length,
         itemBuilder: (context, index) {
-          final item = ossLicenses[index];
+          final item = licenses[index];
           return ExpansionTile(
             title: Text('${item.name} v${item.version}'),
             children: [
