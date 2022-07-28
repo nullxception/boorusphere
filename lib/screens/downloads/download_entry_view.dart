@@ -1,4 +1,3 @@
-import 'package:dartx/dartx.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +7,7 @@ import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
 import '../../providers/download.dart';
 import '../../providers/settings/downloads/group_by_server.dart';
+import '../../utils/string_ext.dart';
 import '../../widgets/download_dialog.dart';
 import '../post/post_detail.dart';
 
@@ -94,7 +94,7 @@ class DownloadEntryView extends ConsumerWidget {
             if (progress.status.isDownloaded && !entry.isFileExists)
               const Text('File moved or missing')
             else
-              Text(progress.status.name.capitalize()),
+              Text(progress.status.name.capitalized),
             if (!groupByServer) ...[
               const Text('•'),
               Text(entry.post.serverName),
