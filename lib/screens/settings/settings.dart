@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/safe_mode.dart';
 import '../../../providers/settings/theme.dart';
+import '../../utils/download.dart';
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});
@@ -14,7 +16,7 @@ class SettingsPage extends HookConsumerWidget {
     final safeMode = ref.watch(safeModeProvider);
     final darkerTheme = ref.watch(darkerThemeProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-
+    final dotnomediaStatus = useFuture(DownloadUtils.hasDotnomedia);
     final themeSettings = SettingsThemeData(
         titleTextColor: Theme.of(context).colorScheme.primary,
         settingsListBackground: Colors.transparent);
@@ -25,6 +27,23 @@ class SettingsPage extends HookConsumerWidget {
         lightTheme: themeSettings,
         darkTheme: themeSettings,
         sections: [
+          SettingsSection(
+            title: const Text('Downloads'),
+            tiles: [
+              SettingsTile.switchTile(
+                title: const Text('Hide downloaded media'),
+                description: const Text(
+                    'Prevent external gallery app from showing downloaded files'),
+                leading: const Icon(Icons.security_rounded),
+                initialValue: dotnomediaStatus.data,
+                onToggle: (isEnabled) {
+                  isEnabled
+                      ? DownloadUtils.createDotnomedia()
+                      : DownloadUtils.removeDotnomedia();
+                },
+              ),
+            ],
+          ),
           SettingsSection(
             title: const Text('Interface'),
             tiles: [

@@ -17,6 +17,11 @@ class DownloadUtils {
     return Directory('$fromPlatform/$dirName');
   }
 
+  static Future<File> get dotnomediaFile async {
+    final dir = await downloadDir;
+    return File('${dir.absolute.path}/.nomedia');
+  }
+
   static Future<bool> canWriteTo(String dirPath) async {
     final f = File('$dirPath/.boorusphere.tmp');
     try {
@@ -30,6 +35,11 @@ class DownloadUtils {
     } catch (e) {
       return false;
     }
+  }
+
+  static Future<bool> get hasDotnomedia async {
+    final file = await dotnomediaFile;
+    return await file.exists();
   }
 
   static Future<void> createDownloadDir() async {
@@ -51,5 +61,21 @@ class DownloadUtils {
     if (Platform.isAndroid) {
       MediaScanner.loadMedia(path: dir.absolute.path);
     }
+  }
+
+  static Future<void> createDotnomedia() async {
+    final file = await dotnomediaFile;
+    if (!await file.exists()) {
+      await file.create();
+    }
+    MediaScanner.loadMedia(path: file.parent.absolute.path);
+  }
+
+  static Future<void> removeDotnomedia() async {
+    final file = await dotnomediaFile;
+    if (await file.exists()) {
+      await file.delete();
+    }
+    MediaScanner.loadMedia(path: file.parent.absolute.path);
   }
 }
