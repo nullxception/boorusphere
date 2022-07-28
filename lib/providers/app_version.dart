@@ -41,14 +41,9 @@ class AppVersionManager extends ChangeNotifier {
     Future.delayed(const Duration(seconds: 3), checkForUpdate);
   }
 
-  Future<Map<String, dynamic>> getAndroidInfo() async {
-    final info = await DeviceInfoPlugin().androidInfo;
-    return info.toMap();
-  }
-
   Future<String> guessBestVariant() async {
-    final info = await getAndroidInfo();
-    final abis = List.from(info['supportedAbis']);
+    final info = await DeviceInfoPlugin().androidInfo;
+    final abis = List.from(info.supportedAbis);
     if (abis.contains('x86_64')) {
       return 'x86_64';
     } else if (abis.contains('arm64-v8a')) {
