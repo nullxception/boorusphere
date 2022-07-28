@@ -9,7 +9,7 @@ import '../../data/post.dart';
 import '../../provider/blocked_tags.dart';
 import '../../provider/page_manager.dart';
 import '../../utils/string_ext.dart';
-import '../components/tag.dart';
+import '../../widgets/tag.dart';
 import 'home.dart';
 
 class PostDetailsPage extends HookConsumerWidget {

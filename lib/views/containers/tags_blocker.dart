@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../provider/blocked_tags.dart';
-import '../components/notice_card.dart';
+import '../../widgets/notice_card.dart';
 
 class TagsBlockerPage extends HookConsumerWidget {
   const TagsBlockerPage({super.key});

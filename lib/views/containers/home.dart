@@ -7,10 +7,10 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../provider/page_manager.dart';
 import '../../utils/app_theme/app_theme.dart';
-import '../components/home_bar.dart';
-import '../components/home_drawer.dart';
-import '../components/sliver_page_state.dart';
-import '../components/sliver_thumbnails.dart';
+import '../../widgets/home_bar.dart';
+import '../../widgets/home_drawer.dart';
+import '../../widgets/sliver_page_state.dart';
+import '../../widgets/sliver_thumbnails.dart';
 
 final homeDrawerSwipeableProvider = StateProvider((_) => true);
 

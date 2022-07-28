@@ -9,11 +9,11 @@ import '../../hooks/extended_page_controller.dart';
 import '../../provider/app_theme.dart';
 import '../../provider/fullscreen.dart';
 import '../../provider/page_manager.dart';
-import '../components/appbar_visibility.dart';
-import '../components/post_error.dart';
-import '../components/post_image.dart';
-import '../components/post_toolbox.dart';
-import '../components/post_video.dart';
+import '../../widgets/appbar_visibility.dart';
+import '../../widgets/post_error.dart';
+import '../../widgets/post_image.dart';
+import '../../widgets/post_toolbox.dart';
+import '../../widgets/post_video.dart';
 
 final lastOpenedPostProvider = StateProvider((_) => -1);
 

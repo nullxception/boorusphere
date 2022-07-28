@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/server_data.dart';
 import '../../provider/server_data.dart';
-import '../containers/server_payloads.dart';
+import '../../views/containers/server_payloads.dart';
 
 class ServerDetails extends HookConsumerWidget {
   const ServerDetails({

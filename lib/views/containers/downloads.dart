@@ -8,9 +8,9 @@ import '../../data/download_entry.dart';
 import '../../data/download_status.dart';
 import '../../provider/downloader.dart';
 import '../../provider/settings/downloads/group_by_server.dart';
-import '../components/download_dialog.dart';
-import '../components/expandable_group_list_view.dart';
-import '../components/notice_card.dart';
+import '../../widgets/download_dialog.dart';
+import '../../widgets/expandable_group_list_view.dart';
+import '../../widgets/notice_card.dart';
 import 'post_detail.dart';
 
 class DownloadsPage extends ConsumerWidget {

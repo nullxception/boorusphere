@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../data/server_data.dart';
 import '../../provider/server_data.dart';
 import '../../provider/server_scanner.dart';
-import '../components/server_details.dart';
+import '../../widgets/server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {
   const ServerEditorPage({super.key, this.server = ServerData.empty});

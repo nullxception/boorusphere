@@ -8,7 +8,7 @@ import '../../provider/page_manager.dart';
 import '../../provider/search_history_manager.dart';
 import '../../provider/settings/active_server.dart';
 import '../../provider/settings/grid.dart';
-import '../containers/home.dart';
+import '../../views/containers/home.dart';
 import 'search_suggestions.dart';
 
 class HomeBar extends HookConsumerWidget {

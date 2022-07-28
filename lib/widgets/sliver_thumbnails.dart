@@ -13,7 +13,7 @@ import '../../provider/page_manager.dart';
 import '../../provider/settings/blur_explicit_post.dart';
 import '../../provider/settings/grid.dart';
 import '../../routes.dart';
-import '../containers/post.dart';
+import '../../views/containers/post.dart';
 
 class SliverThumbnails extends HookConsumerWidget {
   final AutoScrollController autoScrollController;

@@ -15,7 +15,7 @@ import 'provider/downloader.dart';
 import 'provider/page_manager.dart';
 import 'provider/settings/theme.dart';
 import 'routes.dart';
-import 'views/components/bouncing_scroll.dart';
+import 'widgets/bouncing_scroll.dart';
 
 class Boorusphere extends HookConsumerWidget {
   const Boorusphere({super.key});
