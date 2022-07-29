@@ -6,10 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../data/post.dart';
 import '../../../providers/fullscreen.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
-import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
+import 'quickbar.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
   const PostImageDisplay({super.key, required this.post});
@@ -133,7 +133,7 @@ class PostImageFailedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: AlignmentDirectional.center,
+      alignment: Alignment.center,
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
@@ -142,29 +142,10 @@ class PostImageFailedView extends StatelessWidget {
         ),
         Positioned(
           bottom: MediaQuery.of(context).padding.bottom,
-          child: Transform.scale(
-            scale: 0.9,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(30)),
-                color: context.theme.cardColor,
-              ),
-              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16),
-                    child: Text('Failed to load image'),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(elevation: 0),
-                    onPressed: state.reLoadImage,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            ),
+          child: QuickBar.action(
+            title: const Text('Failed to load image'),
+            actionTitle: const Text('Retry'),
+            onPressed: state.reLoadImage,
           ),
         ),
       ],
@@ -197,45 +178,9 @@ class PostImageLoadingView extends StatelessWidget {
         ),
         Positioned(
           bottom: MediaQuery.of(context).padding.bottom,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(30)),
-              color: context.theme.cardColor,
-            ),
-            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(30)),
-                    color: context.theme.colorScheme.background,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.all(2),
-                  child: SizedBox(
-                    width: 21,
-                    height: 21,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                      valueColor: const AlwaysStoppedAnimation(
-                        Colors.white54,
-                      ),
-                      value: state.loadingProgress?.progressRatio,
-                    ),
-                  ),
-                ),
-                if (progressPercentage > 1)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 12),
-                    child: Text(
-                      '$progressPercentage%',
-                      style: context.theme.textTheme.bodySmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-              ],
-            ),
+          child: QuickBar.progress(
+            title: progressPercentage > 1 ? Text('$progressPercentage%') : null,
+            progress: state.loadingProgress?.progressRatio,
           ),
         ),
       ],
