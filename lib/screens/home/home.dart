@@ -64,12 +64,15 @@ class HomePage extends HookConsumerWidget {
       body: SystemUIStyle(
         child: DoubleBack(
           condition: isFocused.value,
+          waitForSecondBackPress: 2,
           onConditionFail: () {
             messenger.hideCurrentSnackBar();
           },
           onFirstBackPress: (context) {
-            messenger.showSnackBar(
-                const SnackBar(content: Text('Press back again to exit')));
+            messenger.showSnackBar(const SnackBar(
+              content: Text('Press back again to exit'),
+              duration: Duration(seconds: 2),
+            ));
           },
           child: HomeBar(
             onFocusChanged: (focusOnSearching) {
