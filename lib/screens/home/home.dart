@@ -73,6 +73,9 @@ class HomePage extends HookConsumerWidget {
           },
           child: HomeBar(
             onFocusChanged: (focusOnSearching) {
+              if (focusOnSearching) {
+                messenger.hideCurrentSnackBar();
+              }
               isFocused.value = !focusOnSearching;
             },
             body: Stack(
