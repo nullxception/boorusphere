@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -197,42 +195,49 @@ class PostImageLoadingView extends StatelessWidget {
           url: post.previewFile,
           shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
-        Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.black54,
-                padding: const EdgeInsets.all(24),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 64,
-                      height: 64,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 5,
-                        valueColor: const AlwaysStoppedAnimation(
-                          Colors.white54,
-                        ),
-                        value: state.loadingProgress?.progressRatio,
+        Positioned(
+          bottom: MediaQuery.of(context).padding.bottom,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
+              color: context.theme.cardColor,
+            ),
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
+                    color: context.theme.colorScheme.background,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(2),
+                  child: SizedBox(
+                    width: 21,
+                    height: 21,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: const AlwaysStoppedAnimation(
+                        Colors.white54,
                       ),
+                      value: state.loadingProgress?.progressRatio,
                     ),
-                    if (progressPercentage > 1)
-                      Text(
-                        '$progressPercentage%',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                  ],
+                  ),
                 ),
-              ),
+                if (progressPercentage > 1)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 12),
+                    child: Text(
+                      '$progressPercentage%',
+                      style: context.theme.textTheme.bodySmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+              ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
