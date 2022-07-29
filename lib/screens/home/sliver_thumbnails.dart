@@ -17,9 +17,14 @@ import '../post/post.dart';
 import '../routes.dart';
 
 class SliverThumbnails extends HookConsumerWidget {
-  final AutoScrollController autoScrollController;
+  const SliverThumbnails({
+    super.key,
+    required this.autoScrollController,
+    this.onTap,
+  });
 
-  const SliverThumbnails({super.key, required this.autoScrollController});
+  final AutoScrollController autoScrollController;
+  final Function(int index)? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,6 +52,7 @@ class SliverThumbnails extends HookConsumerWidget {
           child: GestureDetector(
             child: Thumbnail(post: pageManager.posts[index]),
             onTap: () {
+              onTap?.call(index);
               // invalidate the state first so we can use it for checking mechanism too
               lastOpenedIndex.state = -1;
               Navigator.pushNamed(context, Routes.post, arguments: index)

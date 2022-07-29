@@ -93,6 +93,9 @@ class HomePage extends HookConsumerWidget {
                             10),
                         sliver: SliverThumbnails(
                           autoScrollController: scrollController,
+                          onTap: (index) {
+                            messenger.hideCurrentSnackBar();
+                          },
                         ),
                       ),
                       const SliverPageStatus()
