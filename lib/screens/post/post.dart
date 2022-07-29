@@ -50,25 +50,30 @@ class PostPage extends HookConsumerWidget {
         ),
         body: SystemUIStyle(
           nightMode: true,
-          child: ExtendedImageGesturePageView.builder(
-            controller: pageController,
-            onPageChanged: (index) {
-              page.value = index;
-              lastOpenedIndex.state = index;
-            },
-            itemCount: pageManager.posts.length,
-            itemBuilder: (_, index) {
-              final post = pageManager.posts[index];
+          child: Padding(
+            // android back gesture is not ignored by PageView
+            // add tiny padding to avoid it
+            padding: const EdgeInsets.symmetric(horizontal: 1),
+            child: ExtendedImageGesturePageView.builder(
+              controller: pageController,
+              onPageChanged: (index) {
+                page.value = index;
+                lastOpenedIndex.state = index;
+              },
+              itemCount: pageManager.posts.length,
+              itemBuilder: (_, index) {
+                final post = pageManager.posts[index];
 
-              switch (post.contentType) {
-                case PostType.photo:
-                  return PostImageDisplay(post: post);
-                case PostType.video:
-                  return PostVideoDisplay(post: post);
-                default:
-                  return PostErrorDisplay(post: post);
-              }
-            },
+                switch (post.contentType) {
+                  case PostType.photo:
+                    return PostImageDisplay(post: post);
+                  case PostType.video:
+                    return PostVideoDisplay(post: post);
+                  default:
+                    return PostErrorDisplay(post: post);
+                }
+              },
+            ),
           ),
         ),
         bottomNavigationBar: isNotVideo
