@@ -1,15 +1,17 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'device_info.dart';
+
 final fullscreenProvider =
     StateNotifierProvider.autoDispose<FullscreenManager, bool>((ref) {
-  return FullscreenManager();
+  return FullscreenManager(ref);
 });
 
 class FullscreenManager extends StateNotifier<bool> {
-  FullscreenManager() : super(false);
+  FullscreenManager(this.ref) : super(false);
 
+  final Ref ref;
   final lastOrientations = <DeviceOrientation>[];
 
   Future<void> toggle({bool shouldLandscape = false}) async {
@@ -34,9 +36,8 @@ class FullscreenManager extends StateNotifier<bool> {
   }
 
   Future<void> unfullscreen() async {
-    final info = await DeviceInfoPlugin().androidInfo;
-    final sdkInt = info.version.sdkInt ?? 0;
-    if (sdkInt < 29) {
+    final info = ref.read(deviceInfoProvider);
+    if (info.sdkInt < 29) {
       // SDK 28 and below ignores edgeToEdge, so we have to manually reenable them
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
         SystemUiOverlay.top,

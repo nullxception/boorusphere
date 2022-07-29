@@ -11,6 +11,7 @@ import 'data/post.dart';
 import 'data/search_history.dart';
 import 'data/server_data.dart';
 import 'providers/app_theme.dart';
+import 'providers/device_info.dart';
 import 'providers/download.dart';
 import 'providers/page.dart';
 import 'providers/settings/theme.dart';
@@ -25,10 +26,15 @@ class Boorusphere extends HookConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final appTheme = ref.watch(appThemeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
+    final deviceInfo = ref.watch(deviceInfoProvider);
+    if (deviceInfo.sdkInt > 28) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
 
     useEffect(() {
       ref.read(pageManagerProvider).initialize();
       ref.read(downloadProvider.notifier).register();
+
       return () {
         ref.read(downloadProvider.notifier).unregister();
       };
@@ -72,6 +78,6 @@ void main() async {
   Hive.registerAdapter(PostAdapter());
   Hive.registerAdapter(DownloadEntryAdapter());
   await Future.wait(boxes.map((box) => Hive.openBox(box)));
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   runApp(const ProviderScope(child: Boorusphere()));
 }

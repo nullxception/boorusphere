@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
 import '../utils/extensions/string.dart';
+import 'device_info.dart';
 
 final appVersionProvider =
     ChangeNotifierProvider((ref) => AppVersionManager(ref));
@@ -42,11 +42,11 @@ class AppVersionManager extends ChangeNotifier {
   }
 
   Future<String> guessBestVariant() async {
-    final info = await DeviceInfoPlugin().androidInfo;
-    final abis = List.from(info.supportedAbis);
-    if (abis.contains('x86_64')) {
+    final info = ref.read(deviceInfoProvider);
+
+    if (info.abis.contains('x86_64')) {
       return 'x86_64';
-    } else if (abis.contains('arm64-v8a')) {
+    } else if (info.abis.contains('arm64-v8a')) {
       return 'arm64-v8a';
     } else {
       return 'armeabi-v7a';
