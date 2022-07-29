@@ -13,7 +13,6 @@ import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/grid.dart';
 import '../../providers/page.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../post/post.dart';
 import '../routes.dart';
 
 class SliverThumbnails extends HookConsumerWidget {
@@ -29,7 +28,6 @@ class SliverThumbnails extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
-    final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final pageManager = ref.watch(pageManagerProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
@@ -51,21 +49,18 @@ class SliverThumbnails extends HookConsumerWidget {
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: GestureDetector(
             child: Thumbnail(post: pageManager.posts[index]),
-            onTap: () {
+            onTap: () async {
               onTap?.call(index);
-              // invalidate the state first so we can use it for checking mechanism too
-              lastOpenedIndex.state = -1;
-              Navigator.pushNamed(context, Routes.post, arguments: index)
-                  .then((_) {
-                // don't scroll it unless it's mutated (by PageView's onPageChanged)
-                if (lastOpenedIndex.state != -1) {
-                  autoScrollController.scrollToIndex(
-                    lastOpenedIndex.state,
-                    duration: const Duration(milliseconds: 600),
-                    preferPosition: AutoScrollPosition.middle,
-                  );
-                }
-              });
+
+              final result = await Navigator.pushNamed(context, Routes.post,
+                  arguments: index) as int;
+              if (result != index) {
+                autoScrollController.scrollToIndex(
+                  result,
+                  duration: const Duration(milliseconds: 600),
+                  preferPosition: AutoScrollPosition.middle,
+                );
+              }
             },
           ),
         ),

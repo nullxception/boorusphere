@@ -25,7 +25,6 @@ class PostPage extends HookConsumerWidget {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
     final pageController = useExtendedPageController(initialPage: beginPage);
     final pageManager = ref.watch(pageManagerProvider);
-    final lastOpenedIndex = ref.watch(lastOpenedPostProvider.state);
     final page = useState(beginPage);
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
@@ -48,31 +47,36 @@ class PostPage extends HookConsumerWidget {
             title: '#${page.value + 1} of ${pageManager.posts.length}',
           ),
         ),
-        body: SystemUIStyle(
-          nightMode: true,
-          child: Padding(
-            // android back gesture is not ignored by PageView
-            // add tiny padding to avoid it
-            padding: const EdgeInsets.symmetric(horizontal: 1),
-            child: ExtendedImageGesturePageView.builder(
-              controller: pageController,
-              onPageChanged: (index) {
-                page.value = index;
-                lastOpenedIndex.state = index;
-              },
-              itemCount: pageManager.posts.length,
-              itemBuilder: (_, index) {
-                final post = pageManager.posts[index];
+        body: WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, page.value);
+            return false;
+          },
+          child: SystemUIStyle(
+            nightMode: true,
+            child: Padding(
+              // android back gesture is not ignored by PageView
+              // add tiny padding to avoid it
+              padding: const EdgeInsets.symmetric(horizontal: 1),
+              child: ExtendedImageGesturePageView.builder(
+                controller: pageController,
+                onPageChanged: (index) {
+                  page.value = index;
+                },
+                itemCount: pageManager.posts.length,
+                itemBuilder: (_, index) {
+                  final post = pageManager.posts[index];
 
-                switch (post.contentType) {
-                  case PostType.photo:
-                    return PostImageDisplay(post: post);
-                  case PostType.video:
-                    return PostVideoDisplay(post: post);
-                  default:
-                    return PostErrorDisplay(post: post);
-                }
-              },
+                  switch (post.contentType) {
+                    case PostType.photo:
+                      return PostImageDisplay(post: post);
+                    case PostType.video:
+                      return PostVideoDisplay(post: post);
+                    default:
+                      return PostErrorDisplay(post: post);
+                  }
+                },
+              ),
             ),
           ),
         ),
