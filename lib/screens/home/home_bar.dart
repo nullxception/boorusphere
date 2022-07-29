@@ -9,13 +9,13 @@ import '../../../providers/settings/grid.dart';
 import '../../providers/page.dart';
 import '../../providers/search_history.dart';
 import '../../utils/extensions/buildcontext.dart';
-import 'home.dart';
 import 'search_suggestions.dart';
 
 class HomeBar extends HookConsumerWidget {
-  const HomeBar({super.key, this.body});
+  const HomeBar({super.key, this.body, this.onFocusChanged});
 
   final Widget? body;
+  final Function(bool focused)? onFocusChanged;
 
   void _searchForTag({
     required String value,
@@ -43,7 +43,6 @@ class HomeBar extends HookConsumerWidget {
     final grid = ref.watch(gridProvider);
     final pageQuery = ref.watch(pageQueryProvider);
     final searchHistory = ref.watch(searchHistoryProvider);
-    final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider.state);
     final activeServer = ref.watch(activeServerProvider);
 
     final suggestionHistory = useState({});
@@ -90,7 +89,7 @@ class HomeBar extends HookConsumerWidget {
         suggestionHistory.value = searchHistory.composeSuggestion(query: value);
       },
       onFocusChanged: (focused) {
-        homeDrawerSwipeable.state = !focused;
+        onFocusChanged?.call(focused);
       },
       clearQueryOnClose: false,
       actions: [

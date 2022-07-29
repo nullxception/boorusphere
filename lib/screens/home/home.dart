@@ -13,8 +13,6 @@ import 'home_drawer.dart';
 import 'sliver_page_status.dart';
 import 'sliver_thumbnails.dart';
 
-final homeDrawerSwipeableProvider = StateProvider((_) => true);
-
 class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
 
@@ -26,8 +24,7 @@ class HomePage extends HookConsumerWidget {
     });
     final pageLoading = ref.watch(pageLoadingProvider);
     final errorMessage = ref.watch(pageErrorProvider);
-    final homeDrawerSwipeable = ref.watch(homeDrawerSwipeableProvider);
-    final isDrawerOpened = useState(false);
+    final isFocused = useState(true);
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
@@ -57,16 +54,16 @@ class HomePage extends HookConsumerWidget {
     return Scaffold(
       drawer: const HomeDrawer(),
       drawerEdgeDragWidth:
-          homeDrawerSwipeable ? MediaQuery.of(context).size.width : 30,
-      onDrawerChanged: (isOpened) {
-        if (isOpened) {
+          isFocused.value ? MediaQuery.of(context).size.width : 30,
+      onDrawerChanged: (focusOnDrawer) {
+        if (focusOnDrawer) {
           messenger.hideCurrentSnackBar();
         }
-        isDrawerOpened.value = isOpened;
+        isFocused.value = !focusOnDrawer;
       },
       body: SystemUIStyle(
         child: DoubleBack(
-          condition: !isDrawerOpened.value,
+          condition: isFocused.value,
           onConditionFail: () {
             messenger.hideCurrentSnackBar();
           },
@@ -75,6 +72,9 @@ class HomePage extends HookConsumerWidget {
                 const SnackBar(content: Text('Press back again to exit')));
           },
           child: HomeBar(
+            onFocusChanged: (focusOnSearching) {
+              isFocused.value = !focusOnSearching;
+            },
             body: Stack(
               fit: StackFit.expand,
               children: [
