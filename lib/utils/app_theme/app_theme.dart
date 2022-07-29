@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'app_theme_data.dart';
 
@@ -19,15 +18,4 @@ class AppTheme {
 
   static final darkColorsDefault = ColorScheme.fromSeed(
       seedColor: AppTheme.idAccent, brightness: Brightness.dark);
-
-  static SystemUiOverlayStyle systemUiStyle({bool forNight = false}) {
-    return SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
-      statusBarIconBrightness: forNight ? Brightness.light : Brightness.dark,
-      systemNavigationBarIconBrightness:
-          forNight ? Brightness.light : Brightness.dark,
-      systemNavigationBarContrastEnforced: false,
-    );
-  }
 }

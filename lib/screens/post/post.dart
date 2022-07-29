@@ -8,7 +8,7 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../../providers/app_theme.dart';
 import '../../../providers/fullscreen.dart';
 import '../../providers/page.dart';
-import '../../utils/app_theme/app_theme.dart';
+import '../../widgets/systemuistyle.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
 import 'post_image.dart';
@@ -48,8 +48,8 @@ class PostPage extends HookConsumerWidget {
             title: '#${page.value + 1} of ${pageManager.posts.length}',
           ),
         ),
-        body: AnnotatedRegion(
-          value: AppTheme.systemUiStyle(forNight: true),
+        body: SystemUIStyle(
+          nightMode: true,
           child: ExtendedImageGesturePageView.builder(
             controller: pageController,
             onPageChanged: (index) {
