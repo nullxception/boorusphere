@@ -86,11 +86,15 @@ class PageManager {
     final previewWidthKey = ['preview_width'];
     final previewHeightKey = ['preview_height'];
     final sourceKey = ['source'];
-
     final ratingKey = ['rating'];
 
     for (final Map<String, dynamic> post in entries) {
       final id = post.take(idKey, orElse: -1);
+      if ([...posts, ...result].any((it) => it.id == id)) {
+        // duplicated result, skipping
+        continue;
+      }
+
       final originalFile = post.take(originalFileKey, orElse: '');
       final sampleFile = post.take(sampleFileKey, orElse: '');
       final previewFile = post.take(previewFileKey, orElse: '');
