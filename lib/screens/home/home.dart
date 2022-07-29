@@ -77,7 +77,7 @@ class HomePage extends HookConsumerWidget {
           child: HomeBar(
             onFocusChanged: (focusOnSearching) {
               if (focusOnSearching) {
-                messenger.hideCurrentSnackBar();
+                messenger.removeCurrentSnackBar();
               }
               isFocused.value = !focusOnSearching;
             },
@@ -97,7 +97,7 @@ class HomePage extends HookConsumerWidget {
                         sliver: SliverThumbnails(
                           autoScrollController: scrollController,
                           onTap: (index) {
-                            messenger.hideCurrentSnackBar();
+                            messenger.removeCurrentSnackBar();
                           },
                         ),
                       ),
