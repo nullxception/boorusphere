@@ -99,18 +99,22 @@ class Thumbnail extends HookConsumerWidget {
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.fill,
       loadStateChanged: (state) {
+        Widget widget;
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return _ThumbnailShimmer(aspectRatio: post.aspectRatio);
+            widget = _ThumbnailShimmer(aspectRatio: post.aspectRatio);
+            break;
+
           case LoadState.failed:
-            return Material(
+            widget = Material(
               child: AspectRatio(
                 aspectRatio: post.aspectRatio,
                 child: const Icon(Icons.broken_image_outlined),
               ),
             );
+            break;
           default:
-            return blurExplicitPost && post.rating == PostRating.explicit
+            widget = blurExplicitPost && post.rating == PostRating.explicit
                 ? ImageFiltered(
                     imageFilter: ImageFilter.blur(
                       sigmaX: 8,
@@ -120,7 +124,22 @@ class Thumbnail extends HookConsumerWidget {
                     child: state.completedWidget,
                   )
                 : state.completedWidget;
+            break;
         }
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 150),
+          child: widget,
+          layoutBuilder: (currentChild, previousChildren) {
+            return Stack(
+              alignment: Alignment.center,
+              fit: StackFit.passthrough,
+              children: [
+                ...previousChildren,
+                if (currentChild != null) currentChild,
+              ],
+            );
+          },
+        );
       },
     );
   }
