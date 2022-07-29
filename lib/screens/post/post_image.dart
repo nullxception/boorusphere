@@ -188,8 +188,9 @@ class PostImageLoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final progressPercentage = state.loadingProgress?.progressPercentage ?? 0;
     return Stack(
-      alignment: AlignmentDirectional.center,
+      alignment: Alignment.center,
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
@@ -218,13 +219,14 @@ class PostImageLoadingView extends StatelessWidget {
                         value: state.loadingProgress?.progressRatio,
                       ),
                     ),
-                    Text(
-                      '${state.loadingProgress?.progressPercentage ?? 0}%',
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
+                    if (progressPercentage > 1)
+                      Text(
+                        '$progressPercentage%',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
                   ],
                 ),
               ),
