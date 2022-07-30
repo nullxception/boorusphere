@@ -105,6 +105,7 @@ class DownloadEntryView extends ConsumerWidget {
       ),
       leading: ExtendedImage.network(
         entry.post.previewFile,
+        headers: {'Referer': entry.post.postUrl},
         width: 42,
         shape: BoxShape.rectangle,
         borderRadius: const BorderRadius.all(Radius.circular(5)),

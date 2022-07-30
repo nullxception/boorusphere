@@ -91,6 +91,7 @@ class Thumbnail extends HookConsumerWidget {
 
     return ExtendedImage.network(
       post.previewFile,
+      headers: {'Referer': post.postUrl},
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.fill,
       loadStateChanged: (state) {

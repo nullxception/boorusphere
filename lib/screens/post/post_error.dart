@@ -21,7 +21,7 @@ class PostErrorDisplay extends HookConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: post.previewFile,
+          post: post,
           shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
         Positioned(

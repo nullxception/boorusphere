@@ -34,6 +34,7 @@ class PostImageDisplay extends HookConsumerWidget {
         shouldBlur: blurExplicitPost,
         children: ExtendedImage.network(
           post.contentFile,
+          headers: {'Referer': post.postUrl},
           fit: BoxFit.contain,
           mode: ExtendedImageMode.gesture,
           initGestureConfigHandler: (state) => GestureConfig(inPageView: true),
@@ -102,10 +103,7 @@ class PostImageBlurExplicitView extends HookWidget {
             children: [
               AspectRatio(
                 aspectRatio: post.aspectRatio,
-                child: PostPlaceholderImage(
-                  url: post.previewFile,
-                  shouldBlur: true,
-                ),
+                child: PostPlaceholderImage(post: post, shouldBlur: true),
               ),
               Center(
                 child: PostExplicitWarningCard(onConfirm: () {
@@ -137,7 +135,7 @@ class PostImageFailedView extends StatelessWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: post.previewFile,
+          post: post,
           shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
         Positioned(
@@ -173,7 +171,7 @@ class PostImageLoadingView extends StatelessWidget {
       fit: StackFit.passthrough,
       children: [
         PostPlaceholderImage(
-          url: post.previewFile,
+          post: post,
           shouldBlur: shouldBlur && post.rating == PostRating.explicit,
         ),
         Positioned(

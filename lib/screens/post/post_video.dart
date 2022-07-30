@@ -171,7 +171,7 @@ class PostVideoPlayer extends HookConsumerWidget {
               AspectRatio(
                 aspectRatio: post.aspectRatio,
                 child: PostPlaceholderImage(
-                  url: post.previewFile,
+                  post: post,
                   shouldBlur:
                       blurExplicitPost && post.rating == PostRating.explicit,
                 ),
@@ -229,10 +229,7 @@ class PostVideoBlurExplicitView extends HookWidget {
             children: [
               AspectRatio(
                 aspectRatio: post.aspectRatio,
-                child: PostPlaceholderImage(
-                  url: post.previewFile,
-                  shouldBlur: true,
-                ),
+                child: PostPlaceholderImage(post: post, shouldBlur: true),
               ),
               Center(
                 child: PostExplicitWarningCard(onConfirm: () {
