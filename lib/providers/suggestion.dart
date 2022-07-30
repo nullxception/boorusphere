@@ -12,10 +12,6 @@ import 'settings/active_server.dart';
 
 final suggestionProvider =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
-  if (query.endsWith(' ')) {
-    return [];
-  }
-
   final manager = SuggestionManager(ref);
   return await manager.fetch(query: query);
 });
@@ -26,11 +22,10 @@ class SuggestionManager {
   final Ref ref;
 
   Future<List<String>> fetch({required String query}) async {
-    final queries = query.trim().split(' ');
     final activeServer = ref.read(activeServerProvider);
     final blockedTags = ref.read(blockedTagsProvider);
 
-    final url = activeServer.suggestionUrlOf(queries.last);
+    final url = activeServer.suggestionUrlOf(query.split(' ').last);
     try {
       final res = await retryFuture(
         () => http.get(url.asUri).timeout(const Duration(seconds: 5)),
