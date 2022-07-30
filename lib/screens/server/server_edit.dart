@@ -5,9 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../data/server_data.dart';
 import '../../../providers/server_data.dart';
-import '../../../providers/server_scanner.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
+import '../../utils/server/scanner.dart';
 import 'server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {
@@ -19,7 +19,6 @@ class ServerEditorPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverScanner = ref.watch(serverScannerProvider);
     final serverData = ref.watch(serverDataProvider);
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final data = useState(server);
@@ -74,7 +73,7 @@ class ServerEditorPage extends HookConsumerWidget {
                           isLoading.value = true;
                           errorMessage.value = '';
                           try {
-                            final res = await serverScanner.scan(scanText.text);
+                            final res = await ServerScanner.scan(scanText.text);
                             data.value = res;
                           } catch (e) {
                             errorMessage.value = e.toString();

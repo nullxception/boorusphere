@@ -1,22 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../data/server_data.dart';
-import '../data/server_payload.dart';
-import '../utils/extensions/string.dart';
-import '../utils/retry_future.dart';
-
-final serverScannerProvider = Provider((ref) => ServerScanner(ref));
+import '../../data/server_data.dart';
+import '../../data/server_payload.dart';
+import '../extensions/string.dart';
+import '../retry_future.dart';
 
 class ServerScanner {
-  ServerScanner(this.ref);
-
-  final Ref ref;
-
-  Future<ServerPayload> _queryTest(
+  static Future<ServerPayload> _queryTest(
       String host, List<String> queries, ServerPayloadType type) async {
     final result = await Future.wait(
       queries.map((query) async {
@@ -46,7 +38,7 @@ class ServerScanner {
         type: type);
   }
 
-  Future<ServerData> scan(String url) async {
+  static Future<ServerData> scan(String url) async {
     String post = '', search = '', suggestion = '';
     final tests = await Future.wait(
       [
