@@ -93,21 +93,15 @@ class Thumbnail extends HookConsumerWidget {
       post.previewFile,
       headers: {'Referer': post.postUrl},
       filterQuality: _thumbnailQuality(gridExtra),
-      fit: BoxFit.fill,
+      fit: BoxFit.cover,
       loadStateChanged: (state) {
         Widget widget;
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            widget = _ThumbnailShimmer(aspectRatio: post.aspectRatio);
+            widget = const _ThumbnailShimmer();
             break;
-
           case LoadState.failed:
-            widget = Material(
-              child: AspectRatio(
-                aspectRatio: post.aspectRatio,
-                child: const Icon(Icons.broken_image_outlined),
-              ),
-            );
+            widget = const Material(child: Icon(Icons.broken_image_outlined));
             break;
           default:
             widget = blurExplicitPost && post.rating == PostRating.explicit
@@ -122,19 +116,22 @@ class Thumbnail extends HookConsumerWidget {
                 : state.completedWidget;
             break;
         }
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 150),
-          child: widget,
-          layoutBuilder: (currentChild, previousChildren) {
-            return Stack(
-              alignment: Alignment.center,
-              fit: StackFit.passthrough,
-              children: [
-                ...previousChildren,
-                if (currentChild != null) currentChild,
-              ],
-            );
-          },
+        return AspectRatio(
+          aspectRatio: post.aspectRatio,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            child: widget,
+            layoutBuilder: (currentChild, previousChildren) {
+              return Stack(
+                alignment: Alignment.center,
+                fit: StackFit.passthrough,
+                children: [
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -142,9 +139,7 @@ class Thumbnail extends HookConsumerWidget {
 }
 
 class _ThumbnailShimmer extends StatelessWidget {
-  const _ThumbnailShimmer({required this.aspectRatio});
-
-  final double aspectRatio;
+  const _ThumbnailShimmer();
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +169,9 @@ class _ThumbnailShimmer extends StatelessWidget {
             1.0
           ]),
       period: const Duration(milliseconds: 700),
-      child: AspectRatio(
-        aspectRatio: aspectRatio,
-        child: Container(color: Colors.black, child: const SizedBox.expand()),
+      child: Container(
+        color: Colors.black,
+        child: const SizedBox.expand(),
       ),
     );
   }
