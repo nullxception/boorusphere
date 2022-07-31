@@ -22,16 +22,17 @@ class PostPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const loadMoreThreshold = 90;
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
     final pageController = useExtendedPageController(initialPage: beginPage);
     final pageManager = ref.watch(pageManagerProvider);
+    final pageLoading = ref.watch(pageLoadingProvider);
     final page = useState(beginPage);
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
-
-    final isNotVideo =
-        pageManager.posts[page.value].contentType != PostType.video;
+    final isVideo = pageManager.posts[page.value].contentType == PostType.video;
+    final totalPost = pageManager.posts.length;
 
     return Theme(
       data: ref.read(appThemeProvider).data.night,
@@ -44,7 +45,9 @@ class PostPage extends HookConsumerWidget {
           visible: !fullscreen,
           child: _PostAppBar(
             subtitle: pageManager.posts[page.value].tags.join(' '),
-            title: '#${page.value + 1} of ${pageManager.posts.length}',
+            title: pageLoading
+                ? '#${page.value + 1} of (loading...)'
+                : '#${page.value + 1} of ${pageManager.posts.length}',
           ),
         ),
         body: WillPopScope(
@@ -62,8 +65,12 @@ class PostPage extends HookConsumerWidget {
                 controller: pageController,
                 onPageChanged: (index) {
                   page.value = index;
+                  final threshold = totalPost / 100 * (100 - loadMoreThreshold);
+                  if (index > totalPost - threshold) {
+                    pageManager.loadMore();
+                  }
                 },
-                itemCount: pageManager.posts.length,
+                itemCount: totalPost,
                 itemBuilder: (_, index) {
                   final post = pageManager.posts[index];
 
@@ -80,7 +87,7 @@ class PostPage extends HookConsumerWidget {
             ),
           ),
         ),
-        bottomNavigationBar: isNotVideo
+        bottomNavigationBar: !isVideo
             ? BottomBarVisibility(
                 controller: appbarAnimController,
                 visible: !fullscreen,
