@@ -1,22 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+import '../../../utils/settings.dart';
 
 final groupByServerProvider =
     StateNotifierProvider<GroupByServerState, bool>((ref) {
-  final box = Hive.box('settings');
-  final fromSettings = box.get(GroupByServerState.boxKey, defaultValue: false);
-  return GroupByServerState(ref, fromSettings);
+  final fromSettings = Settings.download_group_by_server.read(or: false);
+  return GroupByServerState(fromSettings);
 });
 
 class GroupByServerState extends StateNotifier<bool> {
-  GroupByServerState(this.ref, bool initState) : super(initState);
-
-  final Ref ref;
+  GroupByServerState(bool initState) : super(initState);
 
   void enable(bool value) {
     state = value;
-    Hive.box('settings').put(boxKey, value);
+    Settings.download_group_by_server.save(value);
   }
-
-  static const boxKey = 'download_group_by_server';
 }

@@ -91,8 +91,10 @@ class PageManager {
   }
 
   void initialize() async {
-    await ref.read(serverDataProvider.notifier).populateData();
-    ref.read(activeServerProvider.notifier).restoreFromPreference();
+    final serverData = ref.read(serverDataProvider.notifier);
+
+    await serverData.populateData();
+    ref.read(activeServerProvider.notifier).restore(serverData);
 
     posts.clear();
     fetch();

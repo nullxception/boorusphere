@@ -1,21 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+
+import '../../utils/settings.dart';
 
 final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
-  final box = Hive.box('settings');
-  final fromSettings = box.get(SafeModeState.boxKey, defaultValue: true);
-  return SafeModeState(ref, fromSettings);
+  final fromSettings = Settings.server_safe_mode.read(or: true);
+  return SafeModeState(fromSettings);
 });
 
 class SafeModeState extends StateNotifier<bool> {
-  SafeModeState(this.ref, initData) : super(initData);
-
-  final Ref ref;
+  SafeModeState(bool initData) : super(initData);
 
   void enable(bool value) {
     state = value;
-    Hive.box('settings').put(boxKey, value);
+    Settings.server_safe_mode.save(value);
   }
-
-  static const boxKey = 'server_safe_mode';
 }
