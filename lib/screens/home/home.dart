@@ -101,7 +101,12 @@ class HomePage extends HookConsumerWidget {
                           },
                         ),
                       ),
-                      const SliverPageStatus()
+                      SliverPadding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom * 1.8,
+                        ),
+                        sliver: const SliverPageStatus(),
+                      )
                     ],
                   ),
                 ),
@@ -145,15 +150,17 @@ class _EdgeBottomShadow extends StatelessWidget {
     final tint = context.theme.scaffoldBackgroundColor;
     return Positioned(
       bottom: 0,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).padding.bottom * 1.8,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topLeft,
-              colors: [tint.withOpacity(0.5), tint.withOpacity(0)],
+      child: IgnorePointer(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).padding.bottom * 1.8,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topLeft,
+                colors: [tint.withOpacity(0.5), tint.withOpacity(0)],
+              ),
             ),
           ),
         ),
