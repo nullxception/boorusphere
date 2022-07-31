@@ -1,8 +1,8 @@
-<img src="assets/icons/exported/legacy-circle.png" alt="boorusphere icon" height="128" align="right">
+<img src="assets/icons/exported/legacy-circle.png" alt="boorusphere icon" height="92" align="right">
 
 # Boorusphere
 
-Yet another booru imageboards viewer for Android
+Simple, content-focused booru viewer for Android
 
 <a href="https://github.com/nullxception/boorusphere/releases">
     <img src="assets/button-GHReleases.png" alt="github release page" width="170">
@@ -13,10 +13,10 @@ Yet another booru imageboards viewer for Android
 
 # Preview
 <p align="center">
-    <img width="24%" src="assets/previews/screen0.jpg" alt="screenshot of application menu"/>
-    <img width="24%" src="assets/previews/screen1.jpg" alt="screenshot of search result"/>
-    <img width="24%" src="assets/previews/screen2.jpg" alt="screenshot of photo preview"/>
-    <img width="24%" src="assets/previews/screen3.jpg" alt="screenshot of video preview"/>
+    <img width="23%" src="assets/previews/screen0.jpg" alt="screenshot of application menu"/>
+    <img width="23%" src="assets/previews/screen1.jpg" alt="screenshot of search result"/>
+    <img width="23%" src="assets/previews/screen2.jpg" alt="screenshot of photo preview"/>
+    <img width="23%" src="assets/previews/screen3.jpg" alt="screenshot of video preview"/>
 </p>
 
 # Building
