@@ -93,9 +93,9 @@ class SettingsPage extends HookConsumerWidget {
             title: const Text('Server'),
             tiles: [
               SettingsTile(
-                title: const Text('Max result'),
-                description: const Text(
-                    'The number of results per page load. Default is ${ServerPostLimitState.defaultLimit}'),
+                title: const Text('Max content per-load'),
+                description: const Text('''
+Result might less than expected (caused by blocked tags or invalid data)'''),
                 leading: const Icon(Icons.list),
                 trailing: DropdownButton(
                   menuMaxHeight: 178,
