@@ -44,14 +44,17 @@ class SliverPageStatus extends HookConsumerWidget {
             ),
           if (pageLoading)
             Container(
-              height: 90,
+              height: 50,
               alignment: Alignment.topCenter,
-              child: SpinKitThreeBounce(
-                  size: 32, color: context.colorScheme.primary),
+              child: SpinKitFoldingCube(
+                size: 24,
+                color: context.colorScheme.primary,
+                duration: const Duration(seconds: 1),
+              ),
             ),
           if (pageError.isEmpty && !pageLoading && pageManager.posts.isNotEmpty)
             Container(
-              height: 90,
+              height: 50,
               alignment: Alignment.topCenter,
               child: ElevatedButton(
                   onPressed: pageManager.loadMore,
