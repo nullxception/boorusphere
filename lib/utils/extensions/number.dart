@@ -13,11 +13,13 @@ extension DoubleExt on double {
 }
 
 extension ImageChunkEventExt on ImageChunkEvent {
-  double get progressRatio {
-    return cumulativeBytesLoaded / (expectedTotalBytes ?? 1);
+  double? get progressRatio {
+    if (expectedTotalBytes != null) {
+      return cumulativeBytesLoaded / expectedTotalBytes!;
+    }
   }
 
-  int get progressPercentage {
-    return progressRatio.percentage;
+  int? get progressPercentage {
+    return progressRatio?.percentage;
   }
 }
