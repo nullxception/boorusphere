@@ -14,6 +14,7 @@ import 'search_history.dart';
 import 'server_data.dart';
 import 'settings/active_server.dart';
 import 'settings/safe_mode.dart';
+import 'settings/server/post_limit.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => []);
@@ -48,6 +49,7 @@ class PageManager {
     final activeServer = ref.read(activeServerProvider);
     final safeMode = ref.read(safeModeProvider);
     final blockedTags = ref.read(blockedTagsProvider);
+    final postLimit = ref.read(serverPostLimitProvider);
 
     if (query != null && pageQuery != query) {
       ref.read(pageQueryProvider.notifier).state = query;
@@ -59,7 +61,12 @@ class PageManager {
     pageLoading.state = true;
     pageError.state = [];
     try {
-      final url = activeServer.searchUrlOf(query ?? pageQuery, _page, safeMode);
+      final url = activeServer.searchUrlOf(
+        query ?? pageQuery,
+        _page,
+        safeMode,
+        postLimit,
+      );
       Fimber.d('Fetching $url');
       final res = await retryFuture(
         () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),

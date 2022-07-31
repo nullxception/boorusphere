@@ -7,6 +7,7 @@ import 'package:settings_ui/settings_ui.dart';
 import '../../../providers/settings/blur_explicit_post.dart';
 import '../../../providers/settings/safe_mode.dart';
 import '../../../providers/settings/theme.dart';
+import '../../providers/settings/server/post_limit.dart';
 import '../../utils/download.dart';
 import '../../utils/extensions/buildcontext.dart';
 
@@ -18,6 +19,7 @@ class SettingsPage extends HookConsumerWidget {
     final safeMode = ref.watch(safeModeProvider);
     final darkerTheme = ref.watch(darkerThemeProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
+    final postLimit = ref.watch(serverPostLimitProvider);
     final dotnomediaStatus = useFuture(DownloadUtils.hasDotnomedia);
     final themeSettings = SettingsThemeData(
         titleTextColor: context.colorScheme.primary,
@@ -84,6 +86,30 @@ class SettingsPage extends HookConsumerWidget {
                 onToggle: (value) {
                   ref.read(safeModeProvider.notifier).enable(value);
                 },
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: const Text('Server'),
+            tiles: [
+              SettingsTile(
+                title: const Text('Max result'),
+                description: const Text(
+                    'The number of results per page load. Default is ${ServerPostLimitState.defaultLimit}'),
+                leading: const Icon(Icons.list),
+                trailing: DropdownButton(
+                  menuMaxHeight: 178,
+                  value: postLimit,
+                  items: List<DropdownMenuItem<int>>.generate(10, (i) {
+                    final x = i * 10 + 10;
+                    return DropdownMenuItem(value: x, child: Text('$x'));
+                  }),
+                  onChanged: (value) {
+                    ref
+                        .read(serverPostLimitProvider.notifier)
+                        .save(value as int);
+                  },
+                ),
               ),
             ],
           ),
