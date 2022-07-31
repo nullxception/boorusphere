@@ -67,6 +67,13 @@ class HomeBar extends HookConsumerWidget {
       autocorrect: false,
       margins: EdgeInsets.fromLTRB(
           10.5, MediaQuery.of(context).viewPadding.top + 12, 10, 0),
+      padding: EdgeInsets.zero,
+      insets: EdgeInsets.zero,
+      automaticallyImplyDrawerHamburger: false,
+      automaticallyImplyBackButton: false,
+      leadingActions: [
+        SearchBarLeadingButton(searchBarController: controller),
+      ],
       borderRadius: BorderRadius.circular(8),
       hint: 'Search...',
       controller: controller,
@@ -93,29 +100,33 @@ class HomeBar extends HookConsumerWidget {
       },
       clearQueryOnClose: false,
       actions: [
-        FloatingSearchBarAction(
-          showIfOpened: false,
-          child: CircularButton(
+        if (controller.isClosed)
+          IconButton(
             icon: Icon(
               Icons.grid_view,
               size: (IconTheme.of(context).size ?? 24) + 4 - (4 * (grid + 1)),
             ),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             onPressed: ref.read(gridProvider.notifier).rotate,
           ),
-        ),
-        FloatingSearchBarAction.icon(
-          icon: const Icon(Icons.rotate_left),
-          onTap: () {
-            if (controller.query != pageQuery) {
-              controller.query = '$pageQuery ';
-            }
-          },
-          showIfOpened: true,
-          showIfClosed: false,
-        ),
-        FloatingSearchBarAction.searchToClear(
-          showIfClosed: false,
-        ),
+        if (controller.isOpen)
+          IconButton(
+            icon: const Icon(Icons.rotate_left),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            onPressed: () {
+              if (controller.query != pageQuery) {
+                controller.query = '$pageQuery ';
+              }
+            },
+          ),
+        if (controller.isOpen)
+          IconButton(
+            icon: const Icon(Icons.close_rounded),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            onPressed: () {
+              controller.clear();
+            },
+          ),
       ],
       builder: (context, transition) {
         return SearchSuggestionResult(
@@ -143,6 +154,40 @@ class HomeBar extends HookConsumerWidget {
             });
       },
       body: body,
+    );
+  }
+}
+
+class SearchBarLeadingButton extends HookWidget {
+  const SearchBarLeadingButton({
+    super.key,
+    required this.searchBarController,
+    this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 8),
+  });
+
+  final FloatingSearchBarController searchBarController;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final animController =
+        useAnimationController(duration: const Duration(milliseconds: 300));
+    searchBarController.isOpen
+        ? animController.reverse()
+        : animController.forward();
+    return IconButton(
+      icon: AnimatedIcon(
+        progress: animController,
+        icon: AnimatedIcons.arrow_menu,
+      ),
+      padding: padding,
+      onPressed: () {
+        if (searchBarController.isOpen) {
+          searchBarController.close();
+        } else {
+          Scaffold.of(context).openDrawer();
+        }
+      },
     );
   }
 }
