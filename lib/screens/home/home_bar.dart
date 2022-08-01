@@ -20,8 +20,8 @@ class HomeBar extends HookConsumerWidget {
   void _searchForTag({
     required String value,
     required FloatingSearchBarController controller,
-    required PageDataSource pageData,
     required String searchTag,
+    required Function(String value) onSearch,
   }) {
     final query = value.trim();
 
@@ -33,7 +33,7 @@ class HomeBar extends HookConsumerWidget {
       return;
     }
 
-    pageData.fetch(query: query, clear: true);
+    onSearch.call(query);
     controller.close();
   }
 
@@ -83,11 +83,14 @@ class HomeBar extends HookConsumerWidget {
       transitionDuration: const Duration(milliseconds: 250),
       onSubmitted: (value) {
         _searchForTag(
-          value: value,
-          pageData: ref.watch(pageDataProvider),
-          controller: controller,
-          searchTag: pageQuery,
-        );
+            value: value,
+            controller: controller,
+            searchTag: pageQuery,
+            onSearch: (value) {
+              return ref
+                  .read(pageDataProvider)
+                  .fetch(query: value, clear: true);
+            });
       },
       onQueryChanged: (value) async {
         if (activeServer.canSuggestTags) {
@@ -146,11 +149,14 @@ class HomeBar extends HookConsumerWidget {
             },
             onSearchTag: (value) {
               _searchForTag(
-                value: value,
-                pageData: ref.watch(pageDataProvider),
-                controller: controller,
-                searchTag: pageQuery,
-              );
+                  value: value,
+                  controller: controller,
+                  searchTag: pageQuery,
+                  onSearch: (value) {
+                    return ref
+                        .read(pageDataProvider)
+                        .fetch(query: value, clear: true);
+                  });
             });
       },
       body: body,
