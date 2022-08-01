@@ -42,13 +42,8 @@ class PostImageDisplay extends HookConsumerWidget {
           loadStateChanged: (state) {
             switch (state.extendedImageLoadState) {
               case LoadState.loading:
-                return PostImageLoadingView(
-                  post: post,
-                  state: state,
-                  shouldBlur: blurExplicitPost,
-                );
               case LoadState.failed:
-                return PostImageFailedView(
+                return PostImageStatusView(
                   post: post,
                   state: state,
                   shouldBlur: blurExplicitPost,
@@ -116,8 +111,8 @@ class PostImageBlurExplicitView extends HookWidget {
   }
 }
 
-class PostImageFailedView extends StatelessWidget {
-  const PostImageFailedView({
+class PostImageStatusView extends StatelessWidget {
+  const PostImageStatusView({
     super.key,
     required this.post,
     required this.state,
@@ -130,41 +125,7 @@ class PostImageFailedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      fit: StackFit.passthrough,
-      children: [
-        PostPlaceholderImage(
-          post: post,
-          shouldBlur: shouldBlur && post.rating == PostRating.explicit,
-        ),
-        Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
-          child: QuickBar.action(
-            title: const Text('Failed to load image'),
-            actionTitle: const Text('Retry'),
-            onPressed: state.reLoadImage,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class PostImageLoadingView extends StatelessWidget {
-  const PostImageLoadingView({
-    super.key,
-    required this.post,
-    required this.state,
-    this.shouldBlur = false,
-  });
-
-  final Post post;
-  final ExtendedImageState state;
-  final bool shouldBlur;
-
-  @override
-  Widget build(BuildContext context) {
+    final isFailed = state.extendedImageLoadState == LoadState.failed;
     final progressPercentage = state.loadingProgress?.progressPercentage ?? 0;
     return Stack(
       alignment: Alignment.center,
@@ -176,9 +137,20 @@ class PostImageLoadingView extends StatelessWidget {
         ),
         Positioned(
           bottom: MediaQuery.of(context).padding.bottom,
-          child: QuickBar.progress(
-            title: progressPercentage > 1 ? Text('$progressPercentage%') : null,
-            progress: state.loadingProgress?.progressRatio,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            child: isFailed
+                ? QuickBar.action(
+                    title: const Text('Failed to load image'),
+                    actionTitle: const Text('Retry'),
+                    onPressed: state.reLoadImage,
+                  )
+                : QuickBar.progress(
+                    title: progressPercentage > 1
+                        ? Text('$progressPercentage%')
+                        : null,
+                    progress: state.loadingProgress?.progressRatio,
+                  ),
           ),
         ),
       ],
