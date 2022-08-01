@@ -97,8 +97,11 @@ class ServerEditorPage extends HookConsumerWidget {
                   child: Container(
                     height: 64,
                     alignment: Alignment.center,
-                    child: SpinKitThreeBounce(
-                        size: 32, color: context.colorScheme.primary),
+                    child: SpinKitFoldingCube(
+                      size: 24,
+                      color: context.colorScheme.primary,
+                      duration: const Duration(seconds: 1),
+                    ),
                   ),
                 ),
                 if (errorMessage.value.isNotEmpty)

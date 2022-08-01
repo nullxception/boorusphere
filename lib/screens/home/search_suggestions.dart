@@ -142,8 +142,11 @@ class SearchSuggestionResult extends HookConsumerWidget {
             loading: () => SizedBox(
               height: 128,
               child: Center(
-                child: SpinKitThreeBounce(
-                    size: 32, color: context.colorScheme.onBackground),
+                child: SpinKitFoldingCube(
+                  size: 24,
+                  color: context.colorScheme.primary,
+                  duration: const Duration(seconds: 1),
+                ),
               ),
             ),
             error: (ex, trace) => Padding(
