@@ -76,15 +76,10 @@ class VersionDataSource extends ChangeNotifier {
   }
 
   String get apkUrl {
-    return _releaseApkUrl
-        .replaceAll('{ver}', lastestVersion)
-        .replaceAll('{arch}', _variant);
+    return '$releasePageUrl/download/$lastestVersion/boorusphere-$lastestVersion-$_variant.apk';
   }
 
   static const gitUrl = 'https://github.com/nullxception/boorusphere';
   static const releasePageUrl = '$gitUrl/releases';
-  static const _releaseApkUrl =
-      '$releasePageUrl/download/{ver}/boorusphere-{ver}-{arch}.apk';
-  static const pubspecUrl =
-      'https://raw.githubusercontent.com/nullxception/boorusphere/main/pubspec.yaml';
+  static const pubspecUrl = '$gitUrl/raw/main/pubspec.yaml';
 }
