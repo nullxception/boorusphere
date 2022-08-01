@@ -100,6 +100,20 @@ class AboutPage extends HookConsumerWidget {
             const Divider(height: 32),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              title: const Text('Changelog'),
+              leading: const Icon(Icons.list_alt_rounded),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return ChangelogPage(
+                        dataSource: ChangelogUtils.allFromAssets());
+                  }),
+                );
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24),
               title: const Text('GitHub'),
               leading: const FaIcon(FontAwesomeIcons.github),
               onTap: () => launchUrlString(AppVersionManager.gitUrl,
