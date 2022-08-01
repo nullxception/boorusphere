@@ -45,127 +45,113 @@ class SearchSuggestionResult extends HookConsumerWidget {
     final activeServer = ref.watch(activeServerProvider);
 
     final suggester = ref.watch(suggestionProvider(query));
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Visibility(
-            visible: history.isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Recently'),
-                  TextButton(
-                    onPressed: () {
-                      onClearHistory?.call();
-                    },
-                    child: Text(
-                      'Clear all',
-                      style: TextStyle(
-                        color: context.colorScheme.onBackground,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (history.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Recently'),
+                TextButton(
+                  onPressed: onClearHistory?.call,
+                  child: const Text('Clear all'),
+                ),
+              ],
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            padding: const EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              final rIndex = history.length - 1 - index;
-              final key = history.keys.elementAt(rIndex);
-              return Column(
-                children: [
-                  Dismissible(
-                    key: Key(key.toString()),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      onRemoveHistory?.call(key);
-                    },
-                    background: Container(
-                      color: Colors.red,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text('Remove'),
-                          Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Icon(Icons.delete, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                    child: _SuggestionEntry(
-                      query: history.values.elementAt(rIndex) as SearchHistory,
-                      onTap: _searchTag,
-                      onAdded: _addToInput,
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          padding: const EdgeInsets.all(0),
+          itemBuilder: (context, index) {
+            final rIndex = history.length - 1 - index;
+            final key = history.keys.elementAt(rIndex);
+            return Column(
+              children: [
+                Dismissible(
+                  key: Key(key.toString()),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    onRemoveHistory?.call(key);
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text('Remove'),
+                        Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                  child: _SuggestionEntry(
+                    query: history.values.elementAt(rIndex) as SearchHistory,
+                    onTap: _searchTag,
+                    onAdded: _addToInput,
+                  ),
+                ),
+              ],
+            );
+          },
+          itemCount: history.length,
+        ),
+        if (!activeServer.canSuggestTags)
+          Center(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Icon(Icons.search_off),
+                ),
+                Text('${activeServer.name} did not support search suggestion'),
+              ],
+            ),
+          ),
+        if (activeServer.canSuggestTags)
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
+            child: Text('Suggested at ${activeServer.name}'),
+          ),
+        if (activeServer.canSuggestTags)
+          suggester.when(
+            data: (value) {
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      _SuggestionEntry(
+                        query: value[index],
+                        onTap: _searchTag,
+                        onAdded: _addToInput,
+                      )
+                    ],
+                  );
+                },
+                itemCount: value.length,
               );
             },
-            itemCount: history.length,
-          ),
-          if (!activeServer.canSuggestTags)
-            Center(
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(Icons.search_off),
-                  ),
-                  Text(
-                      '${activeServer.name} did not support search suggestion'),
-                ],
+            loading: () => SizedBox(
+              height: 128,
+              child: Center(
+                child: SpinKitThreeBounce(
+                    size: 32, color: context.colorScheme.onBackground),
               ),
             ),
-          if (activeServer.canSuggestTags)
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, history.isEmpty ? 18 : 8, 16, 8),
-              child: Text('Suggested at ${activeServer.name}'),
+            error: (ex, trace) => Padding(
+              padding: const EdgeInsets.all(16),
+              child: ExceptionInfo(exception: ex),
             ),
-          if (activeServer.canSuggestTags)
-            suggester.when(
-              data: (value) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  padding: const EdgeInsets.all(0),
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        _SuggestionEntry(
-                          query: value[index],
-                          onTap: _searchTag,
-                          onAdded: _addToInput,
-                        )
-                      ],
-                    );
-                  },
-                  itemCount: value.length,
-                );
-              },
-              loading: () => SizedBox(
-                height: 128,
-                child: Center(
-                  child: SpinKitThreeBounce(
-                      size: 32, color: context.colorScheme.onBackground),
-                ),
-              ),
-              error: (ex, trace) => Padding(
-                padding: const EdgeInsets.all(16),
-                child: ExceptionInfo(exception: ex),
-              ),
-            )
-        ],
-      ),
+          )
+      ],
     );
   }
 }
