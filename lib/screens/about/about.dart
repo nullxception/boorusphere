@@ -4,8 +4,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../providers/app_version.dart';
+import '../../utils/changelog.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../routes.dart';
+import 'changelog.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});
@@ -56,6 +58,20 @@ class AboutPage extends HookConsumerWidget {
                         mode: LaunchMode.externalApplication),
                     style: ElevatedButton.styleFrom(elevation: 0),
                     child: Text('Download v${version.lastestVersion}'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return ChangelogPage(
+                            title: 'Version ${version.lastestVersion}',
+                            dataSource: ChangelogUtils.latestFromGit(),
+                          );
+                        },
+                      ));
+                    },
+                    style: ElevatedButton.styleFrom(elevation: 0),
+                    child: const Text('View changes'),
                   ),
                 ],
               )
