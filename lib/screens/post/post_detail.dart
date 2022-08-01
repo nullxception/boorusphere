@@ -42,11 +42,11 @@ class PostDetailsPage extends HookConsumerWidget {
       body: SystemUIStyle(
         child: SafeArea(
           child: ListView(
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(bottom: 72),
             children: [
               ListTile(
                 title: const Text('Rating'),
-                subtitle: Text(post.rating.name),
+                subtitle: Text(post.rating.name.capitalized),
               ),
               if (post.postUrl.isNotEmpty)
                 ListTile(
@@ -185,7 +185,6 @@ class PostDetailsPage extends HookConsumerWidget {
                   );
                 }).toList()),
               ),
-              SizedBox.fromSize(size: const Size(0, 72)),
             ],
           ),
         ),
