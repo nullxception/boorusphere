@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/notice_card.dart';
 
 class ChangelogPage extends HookWidget {
@@ -26,11 +28,17 @@ class ChangelogPage extends HookWidget {
           : Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Center(
-                  child: NoticeCard(
-                      icon: Icon(Icons.cancel_rounded),
-                      children: Text('No changelog available')),
+                  child: changelog.hasError
+                      ? const NoticeCard(
+                          icon: Icon(Icons.cancel_rounded),
+                          children: Text('No changelog available'))
+                      : SpinKitFoldingCube(
+                          size: 24,
+                          color: context.colorScheme.primary,
+                          duration: const Duration(seconds: 1),
+                        ),
                 ),
               ],
             ),
