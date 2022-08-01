@@ -17,8 +17,8 @@ mixin Routes {
   static const server = 'server';
   static const licenses = 'licenses';
   static const downloads = 'downloads';
-
   static const about = 'about';
+  static const changelog = 'changelog';
 
   static Map<String, WidgetBuilder> of(BuildContext context) => {
         home: (context) => const HomePage(),
