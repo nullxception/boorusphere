@@ -7,12 +7,17 @@ import 'package:http/http.dart' as http;
 import '../providers/app_version.dart';
 import 'retry_future.dart';
 
+enum ChangelogType {
+  assets,
+  git,
+}
+
 class ChangelogUtils {
-  static Future<String> allFromAssets() async {
+  static Future<String> _loadFromAssets() async {
     return await rootBundle.loadString(fileName);
   }
 
-  static Future<String> allFromGit() async {
+  static Future<String> _fetchFromGit() async {
     final res = await retryFuture(
       () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
       retryIf: (e) => e is SocketException || e is TimeoutException,
@@ -20,14 +25,18 @@ class ChangelogUtils {
     return res.body.contains('## 1') ? res.body : '';
   }
 
-  static Future<String> latestFromAssets() async {
-    final data = await allFromAssets();
-    return getLatest(data);
-  }
+  static Future<String> from(ChangelogType type) async {
+    String data;
+    switch (type) {
+      case ChangelogType.git:
+        data = await _fetchFromGit();
+        break;
+      default:
+        data = await _loadFromAssets();
+        break;
+    }
 
-  static Future<String> latestFromGit() async {
-    final data = await allFromGit();
-    return getLatest(data);
+    return data;
   }
 
   static String getLatest(String data) {

@@ -65,7 +65,10 @@ class AboutPage extends HookConsumerWidget {
                         builder: (context) {
                           return ChangelogPage(
                             title: 'Version ${version.lastestVersion}',
-                            dataSource: ChangelogUtils.latestFromGit(),
+                            option: const ChangelogPageOption(
+                              type: ChangelogType.git,
+                              latestOnly: true,
+                            ),
                           );
                         },
                       ));
@@ -106,8 +109,9 @@ class AboutPage extends HookConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return ChangelogPage(
-                        dataSource: ChangelogUtils.allFromAssets());
+                    return const ChangelogPage(
+                      option: ChangelogPageOption(type: ChangelogType.assets),
+                    );
                   }),
                 );
               },
