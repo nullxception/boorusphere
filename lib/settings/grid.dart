@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/settings.dart';
+import '../utils/settings.dart';
 
 final gridProvider = StateNotifierProvider<GridState, int>((ref) {
   final fromSettings = Settings.timeline_grid_number.read(or: 0);

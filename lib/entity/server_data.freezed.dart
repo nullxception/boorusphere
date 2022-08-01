@@ -229,7 +229,9 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ServerDataToJson(this);
+    return _$$_ServerDataToJson(
+      this,
+    );
   }
 }
 

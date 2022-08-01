@@ -5,9 +5,9 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../data/post.dart';
-import '../../../providers/blocked_tags.dart';
-import '../../providers/page.dart';
+import '../../../entity/post.dart';
+import '../../source/blocked_tags.dart';
+import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
 import '../home/home.dart';
@@ -224,7 +224,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 final tags = Set<String>.from(pageQuery.split(' '));
                 tags.addAll(selectedTags);
                 ref
-                    .read(pageManagerProvider)
+                    .read(pageDataProvider)
                     .fetch(query: tags.join(' '), clear: true);
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -240,7 +240,7 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
-                ref.read(pageManagerProvider).fetch(query: tags, clear: true);
+                ref.read(pageDataProvider).fetch(query: tags, clear: true);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const HomePage()),

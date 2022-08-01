@@ -7,13 +7,13 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
-import '../utils/extensions/string.dart';
+import '../../utils/extensions/string.dart';
 import 'device_info.dart';
 
-final appVersionProvider =
-    ChangeNotifierProvider((ref) => AppVersionManager(ref));
+final versionDataProvider =
+    ChangeNotifierProvider((ref) => VersionDataSource(ref));
 
-class AppVersionManager extends ChangeNotifier {
+class VersionDataSource extends ChangeNotifier {
   final Ref ref;
 
   String version = '0.0.0';
@@ -26,7 +26,7 @@ class AppVersionManager extends ChangeNotifier {
   bool get isChecking => _isChecking;
   bool get isChecked => _isChecked;
 
-  AppVersionManager(this.ref) {
+  VersionDataSource(this.ref) {
     _init();
   }
 

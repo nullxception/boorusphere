@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../providers/server_data.dart';
 import '../../../widgets/favicon.dart';
+import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import 'server_edit.dart';
 

@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/server_data.dart';
-import '../../../providers/server_data.dart';
+import '../../../entity/server_data.dart';
+import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
 import '../../utils/server/scanner.dart';

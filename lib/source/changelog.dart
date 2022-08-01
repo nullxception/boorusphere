@@ -2,17 +2,33 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../providers/app_version.dart';
-import 'retry_future.dart';
+import '../utils/retry_future.dart';
+import 'version.dart';
+
+final changelogProvider =
+    FutureProvider.family<String, ChangelogOption>((ref, arg) async {
+  final data = await ChangelogDataSource.from(arg.type);
+  return arg.latestOnly ? ChangelogDataSource.getLatest(data) : data;
+});
 
 enum ChangelogType {
   assets,
   git,
 }
 
-class ChangelogUtils {
+class ChangelogOption {
+  const ChangelogOption({
+    required this.type,
+    this.latestOnly = false,
+  });
+  final ChangelogType type;
+  final bool latestOnly;
+}
+
+class ChangelogDataSource {
   static Future<String> _loadFromAssets() async {
     return await rootBundle.loadString(fileName);
   }
@@ -45,5 +61,5 @@ class ChangelogUtils {
   }
 
   static const fileName = 'CHANGELOG.md';
-  static const url = '${AppVersionManager.gitUrl}/raw/main/CHANGELOG.md';
+  static const url = '${VersionDataSource.gitUrl}/raw/main/CHANGELOG.md';
 }

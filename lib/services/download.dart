@@ -6,17 +6,17 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/download_entry.dart';
-import '../data/download_progress.dart';
-import '../data/download_status.dart';
-import '../data/post.dart';
+import '../entity/download_entry.dart';
+import '../entity/download_progress.dart';
+import '../entity/download_status.dart';
+import '../entity/post.dart';
 import '../utils/download.dart';
 import '../utils/extensions/string.dart';
 
-final downloadProvider = ChangeNotifierProvider((ref) => DownloadManager(ref));
+final downloadProvider = ChangeNotifierProvider((ref) => DownloadService(ref));
 
-class DownloadManager extends ChangeNotifier {
-  DownloadManager(this.ref);
+class DownloadService extends ChangeNotifier {
+  DownloadService(this.ref);
 
   final Ref ref;
   final _port = ReceivePort();

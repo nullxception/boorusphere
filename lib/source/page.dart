@@ -5,24 +5,24 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../data/post.dart';
-import '../data/sphere_exception.dart';
-import '../utils/retry_future.dart';
-import '../utils/server/response_parser.dart';
+import '../../settings/active_server.dart';
+import '../../settings/safe_mode.dart';
+import '../../settings/server/post_limit.dart';
+import '../../utils/retry_future.dart';
+import '../../utils/server/response_parser.dart';
+import '../entity/post.dart';
+import '../entity/sphere_exception.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
-import 'server_data.dart';
-import 'settings/active_server.dart';
-import 'settings/safe_mode.dart';
-import 'settings/server/post_limit.dart';
+import 'server.dart';
 
 final pageLoadingProvider = StateProvider((_) => false);
 final pageErrorProvider = StateProvider((_) => []);
-final pageManagerProvider = Provider((ref) => PageManager(ref));
+final pageDataProvider = Provider((ref) => PageDataSource(ref));
 final pageQueryProvider = StateProvider((_) => '');
 
-class PageManager {
-  PageManager(this.ref);
+class PageDataSource {
+  PageDataSource(this.ref);
 
   final Ref ref;
   final List<Post> posts = [];

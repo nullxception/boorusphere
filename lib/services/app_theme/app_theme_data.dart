@@ -20,9 +20,10 @@ class AppThemeData with _$AppThemeData {
 
   factory AppThemeData.harmonize({ColorScheme? light, ColorScheme? dark}) {
     return AppThemeData(
-      day: _lightOf(light?.harmonized() ?? AppTheme.lightColorsDefault),
-      night: _nightOf(dark?.harmonized() ?? AppTheme.darkColorsDefault),
-      midnight: _midnightOf(dark?.harmonized() ?? AppTheme.darkColorsDefault),
+      day: _lightOf(light?.harmonized() ?? AppThemeService.lightColorsDefault),
+      night: _nightOf(dark?.harmonized() ?? AppThemeService.darkColorsDefault),
+      midnight:
+          _midnightOf(dark?.harmonized() ?? AppThemeService.darkColorsDefault),
     );
   }
 

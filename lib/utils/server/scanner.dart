@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-import '../../data/server_data.dart';
-import '../../data/server_payload.dart';
+import '../../entity/server_data.dart';
+import '../../entity/server_payload.dart';
 import '../extensions/string.dart';
 import '../retry_future.dart';
 

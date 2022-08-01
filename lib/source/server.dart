@@ -4,15 +4,15 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-import '../data/server_data.dart';
-import 'settings/active_server.dart';
+import '../../settings/active_server.dart';
+import '../entity/server_data.dart';
 
 final serverDataProvider =
-    StateNotifierProvider<ServerManager, List<ServerData>>(
-        (ref) => ServerManager(ref));
+    StateNotifierProvider<ServerDataSource, List<ServerData>>(
+        (ref) => ServerDataSource(ref));
 
-class ServerManager extends StateNotifier<List<ServerData>> {
-  ServerManager(this.ref) : super([]);
+class ServerDataSource extends StateNotifier<List<ServerData>> {
+  ServerDataSource(this.ref) : super([]);
 
   final Ref ref;
   final _defaultServerList = <ServerData>[];

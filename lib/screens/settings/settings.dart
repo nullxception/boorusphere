@@ -4,10 +4,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../../providers/settings/blur_explicit_post.dart';
-import '../../../providers/settings/safe_mode.dart';
-import '../../../providers/settings/theme.dart';
-import '../../providers/settings/server/post_limit.dart';
+import '../../settings/blur_explicit_post.dart';
+import '../../settings/safe_mode.dart';
+import '../../settings/server/post_limit.dart';
+import '../../settings/theme.dart';
 import '../../utils/download.dart';
 import '../../utils/extensions/buildcontext.dart';
 

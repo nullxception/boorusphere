@@ -5,16 +5,16 @@ final _androidInfo =
     FutureProvider((ref) async => await DeviceInfoPlugin().androidInfo);
 
 final deviceInfoProvider = Provider((ref) => ref.watch(_androidInfo).maybeWhen(
-      data: (info) => DeviceInfo(ref, info),
-      orElse: () => DeviceInfo.fromMap(ref, {}),
+      data: (info) => DeviceInfoSource(ref, info),
+      orElse: () => DeviceInfoSource.fromMap(ref, {}),
     ));
 
-class DeviceInfo {
-  DeviceInfo(Ref ref, this.androidInfo);
+class DeviceInfoSource {
+  DeviceInfoSource(Ref ref, this.androidInfo);
 
-  factory DeviceInfo.fromMap(Ref ref, Map<String, dynamic> mappedInfo) {
+  factory DeviceInfoSource.fromMap(Ref ref, Map<String, dynamic> mappedInfo) {
     final info = AndroidDeviceInfo.fromMap(mappedInfo);
-    return DeviceInfo(ref, info);
+    return DeviceInfoSource(ref, info);
   }
 
   final AndroidDeviceInfo androidInfo;

@@ -1,12 +1,12 @@
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final blockedTagsProvider = Provider((ref) => BlockedTagsManager(ref));
+final blockedTagsProvider = Provider((ref) => BlockedTagsSource(ref));
 
-class BlockedTagsManager {
+class BlockedTagsSource {
   final Ref ref;
 
-  BlockedTagsManager(this.ref);
+  BlockedTagsSource(this.ref);
 
   Box get _box => Hive.box('blockedTags');
 

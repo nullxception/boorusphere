@@ -1,15 +1,15 @@
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/search_history.dart';
-import 'settings/active_server.dart';
+import '../../settings/active_server.dart';
+import '../entity/search_history.dart';
 
-final searchHistoryProvider = Provider((ref) => SearchHistoryManager(ref));
+final searchHistoryProvider = Provider((ref) => SearchHistorySource(ref));
 
-class SearchHistoryManager {
+class SearchHistorySource {
   final Ref ref;
 
-  SearchHistoryManager(this.ref);
+  SearchHistorySource(this.ref);
 
   Box get _box => Hive.box('searchHistory');
 
@@ -42,11 +42,11 @@ class SearchHistoryManager {
   bool checkExists({required String value}) {
     if (_box.isEmpty) return false;
 
-    final pageManager = _box.values.firstWhere(
+    final pageData = _box.values.firstWhere(
       (it) => it.query == value,
       orElse: () => const SearchHistory(),
     );
-    return pageManager.query == value;
+    return pageData.query == value;
   }
 
   void push(String value) {

@@ -4,10 +4,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../../hooks/floating_searchbar_controller.dart';
-import '../../../providers/settings/active_server.dart';
-import '../../../providers/settings/grid.dart';
-import '../../providers/page.dart';
-import '../../providers/search_history.dart';
+import '../../settings/active_server.dart';
+import '../../settings/grid.dart';
+import '../../source/page.dart';
+import '../../source/search_history.dart';
 import '../../utils/extensions/buildcontext.dart';
 import 'search_suggestions.dart';
 
@@ -20,7 +20,7 @@ class HomeBar extends HookConsumerWidget {
   void _searchForTag({
     required String value,
     required FloatingSearchBarController controller,
-    required PageManager pageManager,
+    required PageDataSource pageData,
     required String searchTag,
   }) {
     final query = value.trim();
@@ -33,7 +33,7 @@ class HomeBar extends HookConsumerWidget {
       return;
     }
 
-    pageManager.fetch(query: query, clear: true);
+    pageData.fetch(query: query, clear: true);
     controller.close();
   }
 
@@ -84,7 +84,7 @@ class HomeBar extends HookConsumerWidget {
       onSubmitted: (value) {
         _searchForTag(
           value: value,
-          pageManager: ref.watch(pageManagerProvider),
+          pageData: ref.watch(pageDataProvider),
           controller: controller,
           searchTag: pageQuery,
         );
@@ -147,7 +147,7 @@ class HomeBar extends HookConsumerWidget {
             onSearchTag: (value) {
               _searchForTag(
                 value: value,
-                pageManager: ref.watch(pageManagerProvider),
+                pageData: ref.watch(pageDataProvider),
                 controller: controller,
                 searchTag: pageQuery,
               );

@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
-import '../../data/post.dart';
-import '../../data/server_data.dart';
-import '../../data/sphere_exception.dart';
+import '../../entity/post.dart';
+import '../../entity/server_data.dart';
+import '../../entity/sphere_exception.dart';
 import '../extensions/map.dart';
 
 class ServerResponseParser {

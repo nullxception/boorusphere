@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../providers/page.dart';
+import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/exception_info.dart';
 import '../../widgets/notice_card.dart';
@@ -12,7 +12,7 @@ class SliverPageStatus extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageManager = ref.watch(pageManagerProvider);
+    final pageData = ref.watch(pageDataProvider);
     final pageLoading = ref.watch(pageLoadingProvider);
     final pageError = ref.watch(pageErrorProvider);
 
@@ -33,7 +33,7 @@ class SliverPageStatus extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 24),
                       child: ElevatedButton(
-                        onPressed: pageManager.fetch,
+                        onPressed: pageData.fetch,
                         style: ElevatedButton.styleFrom(elevation: 0),
                         child: const Text('Try again'),
                       ),
@@ -52,13 +52,12 @@ class SliverPageStatus extends HookConsumerWidget {
                 duration: const Duration(seconds: 1),
               ),
             ),
-          if (pageError.isEmpty && !pageLoading && pageManager.posts.isNotEmpty)
+          if (pageError.isEmpty && !pageLoading && pageData.posts.isNotEmpty)
             Container(
               height: 50,
               alignment: Alignment.topCenter,
               child: ElevatedButton(
-                  onPressed: pageManager.loadMore,
-                  child: const Text('Load more')),
+                  onPressed: pageData.loadMore, child: const Text('Load more')),
             )
         ],
       ),

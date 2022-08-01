@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/server_data.dart';
-import '../../../providers/server_data.dart';
+import '../../../entity/server_data.dart';
+import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import 'server_payloads.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/settings.dart';
+import '../utils/settings.dart';
 
 final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
   final fromSettings = Settings.server_safe_mode.read(or: true);

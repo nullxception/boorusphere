@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../providers/app_version.dart';
-import '../../../providers/server_data.dart';
-import '../../../providers/settings/active_server.dart';
-import '../../../providers/settings/theme.dart';
-import '../../providers/page.dart';
+import '../../settings/active_server.dart';
+import '../../settings/theme.dart';
+import '../../source/page.dart';
+import '../../source/server.dart';
+import '../../source/version.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
 import '../routes.dart';
@@ -140,7 +140,7 @@ class AppVersionTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final version = ref.watch(appVersionProvider);
+    final version = ref.watch(versionDataProvider);
     return ListTile(
       title: Text(version.shouldUpdate
           ? 'Update available: ${version.lastestVersion}'
@@ -167,7 +167,7 @@ class _BackToHomeTile extends HookConsumerWidget {
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          ref.watch(pageManagerProvider).fetch(query: '', clear: true);
+          ref.watch(pageDataProvider).fetch(query: '', clear: true);
           Navigator.pop(context);
         },
       ),
@@ -203,7 +203,7 @@ class _ServerSelection extends HookConsumerWidget {
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(activeServerProvider.notifier).use(it);
-              ref.read(pageManagerProvider).fetch(clear: true);
+              ref.read(pageDataProvider).fetch(clear: true);
               Navigator.pop(context);
             },
           ),

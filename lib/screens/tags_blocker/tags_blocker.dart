@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../providers/blocked_tags.dart';
 import '../../../widgets/notice_card.dart';
+import '../../source/blocked_tags.dart';
 
 class TagsBlockerPage extends HookConsumerWidget {
   const TagsBlockerPage({super.key});
 
-  void updateTags(BlockedTagsManager repo, ValueNotifier storage) {
+  void updateTags(BlockedTagsSource repo, ValueNotifier storage) {
     storage.value = repo.mapped;
   }
 

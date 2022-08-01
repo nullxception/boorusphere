@@ -3,24 +3,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../utils/changelog.dart';
+import '../../source/changelog.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/notice_card.dart';
-
-final _changelogProvider =
-    FutureProvider.family<String, ChangelogPageOption>((ref, arg) async {
-  final data = await ChangelogUtils.from(arg.type);
-  return arg.latestOnly ? ChangelogUtils.getLatest(data) : data;
-});
-
-class ChangelogPageOption {
-  const ChangelogPageOption({
-    required this.type,
-    this.latestOnly = false,
-  });
-  final ChangelogType type;
-  final bool latestOnly;
-}
 
 class ChangelogPage extends ConsumerWidget {
   const ChangelogPage({
@@ -29,12 +14,12 @@ class ChangelogPage extends ConsumerWidget {
     this.title = 'Changelog',
   });
 
-  final ChangelogPageOption option;
+  final ChangelogOption option;
   final String title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final changelog = ref.watch(_changelogProvider(option));
+    final changelog = ref.watch(changelogProvider(option));
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: changelog.when(

@@ -7,12 +7,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../data/post.dart';
+import '../../../entity/post.dart';
 import '../../../hooks/refresher.dart';
-import '../../../providers/fullscreen.dart';
-import '../../../providers/settings/blur_explicit_post.dart';
-import '../../../providers/settings/video_player.dart';
-import '../../providers/download.dart';
+import '../../services/download.dart';
+import '../../services/fullscreen.dart';
+import '../../settings/blur_explicit_post.dart';
+import '../../settings/video_player.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';

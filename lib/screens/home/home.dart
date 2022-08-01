@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-import '../../providers/page.dart';
+import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/systemuistyle.dart';
 import 'home_bar.dart';
@@ -28,7 +28,7 @@ class HomePage extends HookConsumerWidget {
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
-        ref.read(pageManagerProvider).loadMore();
+        ref.read(pageDataProvider).loadMore();
       }
     }, [key]);
 

@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_theme_data.dart';
 
-class AppTheme {
+final appThemeProvider = Provider((_) => AppThemeService());
+
+enum AppThemeVariant {
+  light,
+  dark,
+  darker;
+}
+
+class AppThemeService {
   late AppThemeData _data = AppThemeData.harmonize();
 
   AppThemeData get data => _data;
@@ -14,8 +23,8 @@ class AppTheme {
   static const idAccent = Color.fromARGB(255, 149, 30, 229);
 
   static final lightColorsDefault =
-      ColorScheme.fromSeed(seedColor: AppTheme.idAccent);
+      ColorScheme.fromSeed(seedColor: AppThemeService.idAccent);
 
   static final darkColorsDefault = ColorScheme.fromSeed(
-      seedColor: AppTheme.idAccent, brightness: Brightness.dark);
+      seedColor: AppThemeService.idAccent, brightness: Brightness.dark);
 }

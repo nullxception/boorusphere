@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../data/post.dart';
-import '../../providers/download.dart';
+import '../../../entity/post.dart';
+import '../../services/download.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';

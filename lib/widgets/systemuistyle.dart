@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/device_info.dart';
+import '../source/device_info.dart';
 import '../utils/extensions/buildcontext.dart';
 
 class SystemUIStyle extends ConsumerWidget {

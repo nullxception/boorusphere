@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../providers/app_version.dart';
-import '../../utils/changelog.dart';
+import '../../source/changelog.dart';
+import '../../source/version.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../routes.dart';
 import 'changelog.dart';
@@ -14,7 +14,7 @@ class AboutPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final version = ref.watch(appVersionProvider);
+    final version = ref.watch(versionDataProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -65,7 +65,7 @@ class AboutPage extends HookConsumerWidget {
                         builder: (context) {
                           return ChangelogPage(
                             title: 'Version ${version.lastestVersion}',
-                            option: const ChangelogPageOption(
+                            option: const ChangelogOption(
                               type: ChangelogType.git,
                               latestOnly: true,
                             ),
@@ -110,7 +110,7 @@ class AboutPage extends HookConsumerWidget {
                   context,
                   MaterialPageRoute(builder: (context) {
                     return const ChangelogPage(
-                      option: ChangelogPageOption(type: ChangelogType.assets),
+                      option: ChangelogOption(type: ChangelogType.assets),
                     );
                   }),
                 );
@@ -120,7 +120,7 @@ class AboutPage extends HookConsumerWidget {
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),
               title: const Text('GitHub'),
               leading: const FaIcon(FontAwesomeIcons.github),
-              onTap: () => launchUrlString(AppVersionManager.gitUrl,
+              onTap: () => launchUrlString(VersionDataSource.gitUrl,
                   mode: LaunchMode.externalApplication),
             ),
             ListTile(

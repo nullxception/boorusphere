@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/post.dart';
+import '../../../entity/post.dart';
 import '../../../hooks/extended_page_controller.dart';
-import '../../../providers/app_theme.dart';
-import '../../../providers/fullscreen.dart';
-import '../../providers/page.dart';
+import '../../services/app_theme/app_theme.dart';
+import '../../services/fullscreen.dart';
+import '../../source/page.dart';
 import '../../widgets/systemuistyle.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
@@ -25,14 +25,14 @@ class PostPage extends HookConsumerWidget {
     const loadMoreThreshold = 90;
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
     final pageController = useExtendedPageController(initialPage: beginPage);
-    final pageManager = ref.watch(pageManagerProvider);
+    final pageData = ref.watch(pageDataProvider);
     final pageLoading = ref.watch(pageLoadingProvider);
     final page = useState(beginPage);
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
-    final isVideo = pageManager.posts[page.value].contentType == PostType.video;
-    final totalPost = pageManager.posts.length;
+    final isVideo = pageData.posts[page.value].contentType == PostType.video;
+    final totalPost = pageData.posts.length;
 
     return Theme(
       data: ref.read(appThemeProvider).data.night,
@@ -44,10 +44,10 @@ class PostPage extends HookConsumerWidget {
           controller: appbarAnimController,
           visible: !fullscreen,
           child: _PostAppBar(
-            subtitle: pageManager.posts[page.value].tags.join(' '),
+            subtitle: pageData.posts[page.value].tags.join(' '),
             title: pageLoading
                 ? '#${page.value + 1} of (loading...)'
-                : '#${page.value + 1} of ${pageManager.posts.length}',
+                : '#${page.value + 1} of ${pageData.posts.length}',
           ),
         ),
         body: WillPopScope(
@@ -67,12 +67,12 @@ class PostPage extends HookConsumerWidget {
                   page.value = index;
                   final threshold = totalPost / 100 * (100 - loadMoreThreshold);
                   if (totalPost - threshold < index) {
-                    pageManager.loadMore();
+                    pageData.loadMore();
                   }
                 },
                 itemCount: totalPost,
                 itemBuilder: (_, index) {
-                  final post = pageManager.posts[index];
+                  final post = pageData.posts[index];
 
                   switch (post.contentType) {
                     case PostType.photo:
@@ -91,7 +91,7 @@ class PostPage extends HookConsumerWidget {
             ? BottomBarVisibility(
                 controller: appbarAnimController,
                 visible: !fullscreen,
-                child: PostToolbox(pageManager.posts[page.value]),
+                child: PostToolbox(pageData.posts[page.value]),
               )
             : null,
       ),

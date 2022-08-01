@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/post.dart';
-import '../../../providers/fullscreen.dart';
-import '../../../providers/settings/blur_explicit_post.dart';
+import '../../../entity/post.dart';
+import '../../services/fullscreen.dart';
+import '../../settings/blur_explicit_post.dart';
 import '../../utils/extensions/number.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';

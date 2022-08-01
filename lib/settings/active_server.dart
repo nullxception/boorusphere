@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/server_data.dart';
-import '../../utils/settings.dart';
-import '../server_data.dart';
+import '../entity/server_data.dart';
+import '../source/server.dart';
+import '../utils/settings.dart';
 
 final activeServerProvider =
     StateNotifierProvider<ActiveServerState, ServerData>((ref) {
@@ -12,7 +12,7 @@ final activeServerProvider =
 class ActiveServerState extends StateNotifier<ServerData> {
   ActiveServerState() : super(ServerData.empty);
 
-  void restore(ServerManager serverData) {
+  void restore(ServerDataSource serverData) {
     final name = Settings.active_server.read(or: '');
     state = serverData.select(name);
   }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../data/post.dart';
-import '../../../providers/settings/blur_explicit_post.dart';
+import '../../../entity/post.dart';
+import '../../settings/blur_explicit_post.dart';
 import '../../utils/extensions/string.dart';
 import 'post_placeholder_image.dart';
 import 'quickbar.dart';

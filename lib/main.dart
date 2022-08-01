@@ -6,16 +6,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'data/download_entry.dart';
-import 'data/post.dart';
-import 'data/search_history.dart';
-import 'data/server_data.dart';
-import 'providers/app_theme.dart';
-import 'providers/device_info.dart';
-import 'providers/download.dart';
-import 'providers/page.dart';
-import 'providers/settings/theme.dart';
+import 'entity/download_entry.dart';
+import 'entity/post.dart';
+import 'entity/search_history.dart';
+import 'entity/server_data.dart';
 import 'screens/routes.dart';
+import 'services/app_theme/app_theme.dart';
+import 'services/download.dart';
+import 'settings/theme.dart';
+import 'source/device_info.dart';
+import 'source/page.dart';
 import 'widgets/bouncing_scroll.dart';
 
 class Boorusphere extends HookConsumerWidget {
@@ -32,7 +32,7 @@ class Boorusphere extends HookConsumerWidget {
     }
 
     useEffect(() {
-      ref.read(pageManagerProvider).initialize();
+      ref.read(pageDataProvider).initialize();
       ref.read(downloadProvider.notifier).register();
 
       return () {

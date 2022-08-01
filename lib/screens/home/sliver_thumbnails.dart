@@ -8,10 +8,10 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-import '../../../data/post.dart';
-import '../../../providers/settings/blur_explicit_post.dart';
-import '../../../providers/settings/grid.dart';
-import '../../providers/page.dart';
+import '../../../entity/post.dart';
+import '../../settings/blur_explicit_post.dart';
+import '../../settings/grid.dart';
+import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../routes.dart';
 
@@ -28,7 +28,7 @@ class SliverThumbnails extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
-    final pageManager = ref.watch(pageManagerProvider);
+    final pageData = ref.watch(pageDataProvider);
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
@@ -37,7 +37,7 @@ class SliverThumbnails extends HookConsumerWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      childCount: pageManager.posts.length,
+      childCount: pageData.posts.length,
       itemBuilder: (context, index) => AutoScrollTag(
         key: ValueKey(index),
         controller: autoScrollController,
@@ -48,7 +48,7 @@ class SliverThumbnails extends HookConsumerWidget {
           ),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: GestureDetector(
-            child: Thumbnail(post: pageManager.posts[index]),
+            child: Thumbnail(post: pageData.posts[index]),
             onTap: () async {
               onTap?.call(index);
 

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
-import '../../data/download_entry.dart';
-import '../../data/download_status.dart';
-import '../../providers/download.dart';
-import '../../providers/settings/downloads/group_by_server.dart';
+import '../../entity/download_entry.dart';
+import '../../entity/download_status.dart';
+import '../../services/download.dart';
+import '../../settings/download/group_by_server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../utils/extensions/string.dart';

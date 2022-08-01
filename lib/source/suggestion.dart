@@ -4,20 +4,20 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/extensions/string.dart';
-import '../utils/retry_future.dart';
-import '../utils/server/response_parser.dart';
+import '../../settings/active_server.dart';
+import '../../utils/extensions/string.dart';
+import '../../utils/retry_future.dart';
+import '../../utils/server/response_parser.dart';
 import 'blocked_tags.dart';
-import 'settings/active_server.dart';
 
 final suggestionProvider =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
-  final manager = SuggestionManager(ref);
-  return await manager.fetch(query: query);
+  final source = SuggestionSource(ref);
+  return await source.fetch(query: query);
 });
 
-class SuggestionManager {
-  SuggestionManager(this.ref);
+class SuggestionSource {
+  SuggestionSource(this.ref);
 
   final Ref ref;
 

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/settings.dart';
+import '../utils/settings.dart';
 
 final videoPlayerMuteProvider =
     StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
