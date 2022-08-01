@@ -227,10 +227,7 @@ class PostVideoBlurExplicitView extends HookWidget {
             alignment: Alignment.center,
             fit: StackFit.passthrough,
             children: [
-              AspectRatio(
-                aspectRatio: post.aspectRatio,
-                child: PostPlaceholderImage(post: post, shouldBlur: true),
-              ),
+              PostPlaceholderImage(post: post, shouldBlur: true),
               Center(
                 child: PostExplicitWarningCard(onConfirm: () {
                   isBlur.value = false;
