@@ -22,35 +22,37 @@ class ChangelogPage extends ConsumerWidget {
     final changelog = ref.watch(changelogProvider(option));
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: changelog.when(
-        data: (data) => Markdown(
-          data: data,
-          selectable: true,
-        ),
-        error: (e, s) => Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Center(
-              child: NoticeCard(
-                icon: Icon(Icons.cancel_rounded),
-                children: Text('No changelog available'),
+      body: SafeArea(
+        child: changelog.when(
+          data: (data) => Markdown(
+            data: data,
+            selectable: true,
+          ),
+          error: (e, s) => Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Center(
+                child: NoticeCard(
+                  icon: Icon(Icons.cancel_rounded),
+                  children: Text('No changelog available'),
+                ),
               ),
-            ),
-          ],
-        ),
-        loading: () => Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: SpinKitFoldingCube(
-                size: 24,
-                color: context.colorScheme.primary,
-                duration: const Duration(seconds: 1),
+            ],
+          ),
+          loading: () => Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: SpinKitFoldingCube(
+                  size: 24,
+                  color: context.colorScheme.primary,
+                  duration: const Duration(seconds: 1),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

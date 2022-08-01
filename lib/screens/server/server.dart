@@ -65,70 +65,72 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ...serverData.map((it) {
-              return ListTile(
-                title: Text(it.name),
-                subtitle: Text(it.homepage),
-                leading: Favicon(url: '${it.homepage}/favicon.ico'),
-                trailing: PopupMenuButton(
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'edit':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ServerEditorPage(server: it)));
-                        break;
-                      case 'remove':
-                        if (serverData.length == 1) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  content: Text(
-                                      'The last server cannot be removed')));
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ...serverData.map((it) {
+                return ListTile(
+                  title: Text(it.name),
+                  subtitle: Text(it.homepage),
+                  leading: Favicon(url: '${it.homepage}/favicon.ico'),
+                  trailing: PopupMenuButton(
+                    onSelected: (value) {
+                      switch (value) {
+                        case 'edit':
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ServerEditorPage(server: it)));
                           break;
-                        }
+                        case 'remove':
+                          if (serverData.length == 1) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    content: Text(
+                                        'The last server cannot be removed')));
+                            break;
+                          }
 
-                        ref
-                            .read(serverDataProvider.notifier)
-                            .removeServer(data: it);
-                        break;
-                      default:
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Edit'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'remove',
-                        child: Text('Remove'),
-                      ),
-                    ];
-                  },
+                          ref
+                              .read(serverDataProvider.notifier)
+                              .removeServer(data: it);
+                          break;
+                        default:
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Edit'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'remove',
+                          child: Text('Remove'),
+                        ),
+                      ];
+                    },
+                  ),
+                  dense: true,
+                  contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  onTap: null,
+                );
+              }).toList(),
+              ListTile(
+                title: const Text('Add'),
+                leading: const Icon(Icons.add),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ServerEditorPage()),
                 ),
-                dense: true,
-                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                onTap: null,
-              );
-            }).toList(),
-            ListTile(
-              title: const Text('Add'),
-              leading: const Icon(Icons.add),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ServerEditorPage()),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

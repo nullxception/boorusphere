@@ -11,28 +11,30 @@ class LicensesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Open Source Licenses')),
-      body: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: licenses.length,
-        itemBuilder: (context, index) {
-          final item = licenses[index];
-          return ExpansionTile(
-            title: Text('${item.name} v${item.version}'),
-            children: [
-              if (item.license?.isNotEmpty ?? false)
-                SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item.license ?? ''),
-                    ],
-                  ),
-                )
-            ],
-          );
-        },
+      body: SafeArea(
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: licenses.length,
+          itemBuilder: (context, index) {
+            final item = licenses[index];
+            return ExpansionTile(
+              title: Text('${item.name} v${item.version}'),
+              children: [
+                if (item.license?.isNotEmpty ?? false)
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(item.license ?? ''),
+                      ],
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

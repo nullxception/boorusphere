@@ -31,101 +31,105 @@ class ServerEditorPage extends HookConsumerWidget {
       appBar: AppBar(
         title: Text(isEditing ? 'Edit ${server.name}' : 'Add new server'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: TextFormField(
-                  controller: scanText,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Example: https://abc.com',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: TextFormField(
+                    controller: scanText,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Example: https://abc.com',
+                    ),
+                    validator: (value) {
+                      final homescreens = serverData.map((it) => it.homepage);
+                      if (!isEditing && homescreens.contains(value)) {
+                        return 'Server data for $value already exists';
+                      }
+                      if (value?.contains(RegExp(r'https?://.+\..+')) ==
+                          false) {
+                        return 'not a valid url';
+                      }
+
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    final homescreens = serverData.map((it) => it.homepage);
-                    if (!isEditing && homescreens.contains(value)) {
-                      return 'Server data for $value already exists';
-                    }
-                    if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
-                      return 'not a valid url';
-                    }
-
-                    return null;
-                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: ElevatedButton(
-                  onPressed: !isLoading.value
-                      ? () async {
-                          if (formKey.currentState?.validate() != true) {
-                            return;
-                          }
-
-                          FocusScope.of(context).unfocus();
-                          data.value = ServerData.empty;
-                          isLoading.value = true;
-                          errorMessage.value = '';
-                          try {
-                            final res = await ServerScanner.scan(scanText.text);
-                            data.value = res;
-                          } catch (e) {
-                            errorMessage.value = e.toString();
-                            data.value = ServerData.empty.copyWith(
-                              name: scanText.text.asUri.host,
-                              homepage: scanText.text,
-                            );
-                          }
-
-                          isLoading.value = false;
-                        }
-                      : null,
-                  child: const Text('Scan'),
-                ),
-              ),
-              Visibility(
-                visible: isLoading.value,
-                child: Container(
-                  height: 64,
-                  alignment: Alignment.center,
-                  child: SpinKitThreeBounce(
-                      size: 32, color: context.colorScheme.primary),
-                ),
-              ),
-              if (errorMessage.value.isNotEmpty)
-                Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  color: context.colorScheme.error,
+                Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(
-                    errorMessage.value,
-                    style: TextStyle(color: context.colorScheme.onError),
+                  child: ElevatedButton(
+                    onPressed: !isLoading.value
+                        ? () async {
+                            if (formKey.currentState?.validate() != true) {
+                              return;
+                            }
+
+                            FocusScope.of(context).unfocus();
+                            data.value = ServerData.empty;
+                            isLoading.value = true;
+                            errorMessage.value = '';
+                            try {
+                              final res =
+                                  await ServerScanner.scan(scanText.text);
+                              data.value = res;
+                            } catch (e) {
+                              errorMessage.value = e.toString();
+                              data.value = ServerData.empty.copyWith(
+                                name: scanText.text.asUri.host,
+                                homepage: scanText.text,
+                              );
+                            }
+
+                            isLoading.value = false;
+                          }
+                        : null,
+                    child: const Text('Scan'),
                   ),
                 ),
-              if (data.value.name.isNotEmpty)
-                ServerDetails(
-                  data: data.value,
-                  isEditing: isEditing,
-                  onSubmitted: (data) {
-                    final serverDataNotifier =
-                        ref.read(serverDataProvider.notifier);
-
-                    if (isEditing) {
-                      serverDataNotifier.editServer(
-                          data: server, newData: data);
-                    } else {
-                      serverDataNotifier.addServer(data: data);
-                    }
-                    Navigator.pop(context);
-                  },
+                Visibility(
+                  visible: isLoading.value,
+                  child: Container(
+                    height: 64,
+                    alignment: Alignment.center,
+                    child: SpinKitThreeBounce(
+                        size: 32, color: context.colorScheme.primary),
+                  ),
                 ),
-            ],
+                if (errorMessage.value.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    color: context.colorScheme.error,
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      errorMessage.value,
+                      style: TextStyle(color: context.colorScheme.onError),
+                    ),
+                  ),
+                if (data.value.name.isNotEmpty)
+                  ServerDetails(
+                    data: data.value,
+                    isEditing: isEditing,
+                    onSubmitted: (data) {
+                      final serverDataNotifier =
+                          ref.read(serverDataProvider.notifier);
+
+                      if (isEditing) {
+                        serverDataNotifier.editServer(
+                            data: server, newData: data);
+                      } else {
+                        serverDataNotifier.addServer(data: data);
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+              ],
+            ),
           ),
         ),
       ),

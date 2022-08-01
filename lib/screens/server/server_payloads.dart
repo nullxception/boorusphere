@@ -11,20 +11,22 @@ class ServerPayloadsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Select Server')),
-      body: SingleChildScrollView(
-        child: Column(
-          children:
-              ref.read(serverDataProvider.notifier).allWithDefaults.map((it) {
-            return ListTile(
-              title: Text(it.name),
-              subtitle: Text(it.homepage),
-              leading: Favicon(url: '${it.homepage}/favicon.ico'),
-              dense: true,
-              onTap: () {
-                Navigator.pop(context, it);
-              },
-            );
-          }).toList(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children:
+                ref.read(serverDataProvider.notifier).allWithDefaults.map((it) {
+              return ListTile(
+                title: Text(it.name),
+                subtitle: Text(it.homepage),
+                leading: Favicon(url: '${it.homepage}/favicon.ico'),
+                dense: true,
+                onTap: () {
+                  Navigator.pop(context, it);
+                },
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

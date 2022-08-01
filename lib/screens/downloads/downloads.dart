@@ -51,25 +51,27 @@ class DownloadsPage extends ConsumerWidget {
             )
         ],
       ),
-      body: downloader.entries.isEmpty
-          ? Column(
-              children: const [
-                Center(
-                  child: NoticeCard(
-                    icon: Icon(Icons.cloud_download),
-                    margin: EdgeInsets.only(top: 64),
-                    children: Text('Your downloaded files will appear here'),
+      body: SafeArea(
+        child: downloader.entries.isEmpty
+            ? Column(
+                children: const [
+                  Center(
+                    child: NoticeCard(
+                      icon: Icon(Icons.cloud_download),
+                      margin: EdgeInsets.only(top: 64),
+                      children: Text('Your downloaded files will appear here'),
+                    ),
                   ),
-                ),
-              ],
-            )
-          : ExpandableGroupListView<DownloadEntry, String>(
-              items: downloader.entries.reversed.toList(),
-              groupedBy: (entry) => entry.post.serverName,
-              groupTitle: (key) => Text(key),
-              itemBuilder: (entry) => DownloadEntryView(entry: entry),
-              ungroup: !groupByServer,
-            ),
+                ],
+              )
+            : ExpandableGroupListView<DownloadEntry, String>(
+                items: downloader.entries.reversed.toList(),
+                groupedBy: (entry) => entry.post.serverName,
+                groupTitle: (key) => Text(key),
+                itemBuilder: (entry) => DownloadEntryView(entry: entry),
+                ungroup: !groupByServer,
+              ),
+      ),
     );
   }
 }
