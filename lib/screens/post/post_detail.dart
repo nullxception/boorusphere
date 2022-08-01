@@ -10,6 +10,7 @@ import '../../source/blocked_tags.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
+import '../../widgets/systemuistyle.dart';
 import '../home/home.dart';
 import 'tag.dart';
 
@@ -38,68 +39,101 @@ class PostDetailsPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detail')),
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              title: const Text('Rating'),
-              subtitle: Text(post.rating.name),
-            ),
-            if (post.postUrl.isNotEmpty)
+      body: SystemUIStyle(
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
               ListTile(
-                title: const Text('Location'),
-                subtitle: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.zero,
-                    ),
-                  ),
-                  onPressed: () => launchUrlString(post.postUrl,
-                      mode: LaunchMode.externalApplication),
-                  child: Text(post.postUrl.toString()),
-                ),
-                trailing: IconButton(
-                  iconSize: 18,
-                  onPressed: () {
-                    copyToClipboard(context, post.postUrl.toString());
-                  },
-                  icon: const Icon(Icons.copy),
-                ),
+                title: const Text('Rating'),
+                subtitle: Text(post.rating.name),
               ),
-            if (post.source.isNotEmpty)
-              ListTile(
-                title: const Text('Source'),
-                subtitle: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      EdgeInsets.zero,
+              if (post.postUrl.isNotEmpty)
+                ListTile(
+                  title: const Text('Location'),
+                  subtitle: TextButton(
+                    style: ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.zero,
+                      ),
                     ),
+                    onPressed: () => launchUrlString(post.postUrl,
+                        mode: LaunchMode.externalApplication),
+                    child: Text(post.postUrl.toString()),
                   ),
-                  onPressed: () => launchUrlString(post.source,
-                      mode: LaunchMode.externalApplication),
-                  child: Text(post.source.toString()),
+                  trailing: IconButton(
+                    iconSize: 18,
+                    onPressed: () {
+                      copyToClipboard(context, post.postUrl.toString());
+                    },
+                    icon: const Icon(Icons.copy),
+                  ),
                 ),
-                trailing: IconButton(
-                  iconSize: 18,
-                  onPressed: () {
-                    copyToClipboard(context, post.source.toString());
-                  },
-                  icon: const Icon(Icons.copy),
+              if (post.source.isNotEmpty)
+                ListTile(
+                  title: const Text('Source'),
+                  subtitle: TextButton(
+                    style: ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.zero,
+                      ),
+                    ),
+                    onPressed: () => launchUrlString(post.source,
+                        mode: LaunchMode.externalApplication),
+                    child: Text(post.source.toString()),
+                  ),
+                  trailing: IconButton(
+                    iconSize: 18,
+                    onPressed: () {
+                      copyToClipboard(context, post.source.toString());
+                    },
+                    icon: const Icon(Icons.copy),
+                  ),
                 ),
-              ),
-            if (post.sampleFile.isNotEmpty)
+              if (post.sampleFile.isNotEmpty)
+                ListTile(
+                  title: const Text('Sample file (displayed)'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        child: Text(
+                            '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
+                      ),
+                      TextButton(
+                        style: ButtonStyle(
+                          alignment: Alignment.centerLeft,
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.zero,
+                          ),
+                        ),
+                        onPressed: () => launchUrlString(post.sampleFile,
+                            mode: LaunchMode.externalApplication),
+                        child: Text(post.sampleFile),
+                      ),
+                    ],
+                  ),
+                  trailing: IconButton(
+                    iconSize: 18,
+                    onPressed: () {
+                      copyToClipboard(context, post.sampleFile);
+                    },
+                    icon: const Icon(Icons.copy),
+                  ),
+                ),
               ListTile(
-                title: const Text('Sample file (displayed)'),
+                title: const Text('Original file'),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 8),
                       child: Text(
-                          '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
+                          '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
                     ),
                     TextButton(
                       style: ButtonStyle(
@@ -108,82 +142,52 @@ class PostDetailsPage extends HookConsumerWidget {
                           EdgeInsets.zero,
                         ),
                       ),
-                      onPressed: () => launchUrlString(post.sampleFile,
+                      onPressed: () => launchUrlString(post.originalFile,
                           mode: LaunchMode.externalApplication),
-                      child: Text(post.sampleFile),
+                      child: Text(post.originalFile),
                     ),
                   ],
                 ),
                 trailing: IconButton(
                   iconSize: 18,
                   onPressed: () {
-                    copyToClipboard(context, post.sampleFile);
+                    copyToClipboard(context, post.originalFile);
                   },
                   icon: const Icon(Icons.copy),
                 ),
               ),
-            ListTile(
-              title: const Text('Original file'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: Text(
-                        '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      alignment: Alignment.centerLeft,
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.zero,
-                      ),
-                    ),
-                    onPressed: () => launchUrlString(post.originalFile,
-                        mode: LaunchMode.externalApplication),
-                    child: Text(post.originalFile),
-                  ),
-                ],
+              const ListTile(
+                title: Text('Tags'),
               ),
-              trailing: IconButton(
-                iconSize: 18,
-                onPressed: () {
-                  copyToClipboard(context, post.originalFile);
-                },
-                icon: const Icon(Icons.copy),
-              ),
-            ),
-            const ListTile(
-              title: Text('Tags'),
-            ),
-            ListTile(
-              title: Wrap(
-                  children: post.tags.map((tag) {
-                return Tag(
-                  onPressed: () {
-                    if (!selectedtag.value.contains(tag)) {
-                      // display FAB on first select
-                      if (selectedtag.value.isEmpty) {
-                        fabController.forward();
+              ListTile(
+                title: Wrap(
+                    children: post.tags.map((tag) {
+                  return Tag(
+                    onPressed: () {
+                      if (!selectedtag.value.contains(tag)) {
+                        // display FAB on first select
+                        if (selectedtag.value.isEmpty) {
+                          fabController.forward();
+                        }
+                        selectedtag.value.add(tag);
+                      } else {
+                        selectedtag.value.remove(tag);
+                        // display FAB on last removal
+                        if (selectedtag.value.isEmpty) {
+                          fabController.reverse();
+                        }
                       }
-                      selectedtag.value.add(tag);
-                    } else {
-                      selectedtag.value.remove(tag);
-                      // display FAB on last removal
-                      if (selectedtag.value.isEmpty) {
-                        fabController.reverse();
-                      }
-                    }
 
-                    showFAB.value = selectedtag.value.isNotEmpty;
-                  },
-                  tag: tag,
-                  active: () => selectedtag.value.contains(tag),
-                );
-              }).toList()),
-            ),
-            SizedBox.fromSize(size: const Size(0, 72)),
-          ],
+                      showFAB.value = selectedtag.value.isNotEmpty;
+                    },
+                    tag: tag,
+                    active: () => selectedtag.value.contains(tag),
+                  );
+                }).toList()),
+              ),
+              SizedBox.fromSize(size: const Size(0, 72)),
+            ],
+          ),
         ),
       ),
       floatingActionButton: SpeedDial(
