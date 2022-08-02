@@ -35,6 +35,7 @@ class DownloadService extends ChangeNotifier {
         id: message[0],
         status: DownloadStatus.fromIndex(status.value),
         progress: message[2],
+        timestamp: DateTime.now().millisecondsSinceEpoch,
       );
       _updateDownloadProgress(newProg);
     });
@@ -72,6 +73,7 @@ class DownloadService extends ChangeNotifier {
                 id: e.taskId,
                 status: DownloadStatus.fromIndex(e.status.value),
                 progress: e.progress,
+                timestamp: e.timeCreated,
               ))
           .toList());
       if (_box.values.isNotEmpty) {

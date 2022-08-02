@@ -19,6 +19,7 @@ mixin _$DownloadProgress {
   String get id => throw _privateConstructorUsedError;
   DownloadStatus get status => throw _privateConstructorUsedError;
   int get progress => throw _privateConstructorUsedError;
+  int get timestamp => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DownloadProgressCopyWith<DownloadProgress> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $DownloadProgressCopyWith<$Res> {
   factory $DownloadProgressCopyWith(
           DownloadProgress value, $Res Function(DownloadProgress) then) =
       _$DownloadProgressCopyWithImpl<$Res>;
-  $Res call({String id, DownloadStatus status, int progress});
+  $Res call({String id, DownloadStatus status, int progress, int timestamp});
 }
 
 /// @nodoc
@@ -47,6 +48,7 @@ class _$DownloadProgressCopyWithImpl<$Res>
     Object? id = freezed,
     Object? status = freezed,
     Object? progress = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -61,6 +63,10 @@ class _$DownloadProgressCopyWithImpl<$Res>
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as int,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -72,7 +78,7 @@ abstract class _$$_DownloadProgressCopyWith<$Res>
           _$_DownloadProgress value, $Res Function(_$_DownloadProgress) then) =
       __$$_DownloadProgressCopyWithImpl<$Res>;
   @override
-  $Res call({String id, DownloadStatus status, int progress});
+  $Res call({String id, DownloadStatus status, int progress, int timestamp});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$_DownloadProgressCopyWithImpl<$Res>
     Object? id = freezed,
     Object? status = freezed,
     Object? progress = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_$_DownloadProgress(
       id: id == freezed
@@ -105,6 +112,10 @@ class __$$_DownloadProgressCopyWithImpl<$Res>
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as int,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -113,7 +124,10 @@ class __$$_DownloadProgressCopyWithImpl<$Res>
 
 class _$_DownloadProgress implements _DownloadProgress {
   const _$_DownloadProgress(
-      {required this.id, required this.status, required this.progress});
+      {required this.id,
+      required this.status,
+      required this.progress,
+      required this.timestamp});
 
   @override
   final String id;
@@ -121,10 +135,12 @@ class _$_DownloadProgress implements _DownloadProgress {
   final DownloadStatus status;
   @override
   final int progress;
+  @override
+  final int timestamp;
 
   @override
   String toString() {
-    return 'DownloadProgress(id: $id, status: $status, progress: $progress)';
+    return 'DownloadProgress(id: $id, status: $status, progress: $progress, timestamp: $timestamp)';
   }
 
   @override
@@ -134,7 +150,8 @@ class _$_DownloadProgress implements _DownloadProgress {
             other is _$_DownloadProgress &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality().equals(other.progress, progress));
+            const DeepCollectionEquality().equals(other.progress, progress) &&
+            const DeepCollectionEquality().equals(other.timestamp, timestamp));
   }
 
   @override
@@ -142,7 +159,8 @@ class _$_DownloadProgress implements _DownloadProgress {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(progress));
+      const DeepCollectionEquality().hash(progress),
+      const DeepCollectionEquality().hash(timestamp));
 
   @JsonKey(ignore: true)
   @override
@@ -154,7 +172,8 @@ abstract class _DownloadProgress implements DownloadProgress {
   const factory _DownloadProgress(
       {required final String id,
       required final DownloadStatus status,
-      required final int progress}) = _$_DownloadProgress;
+      required final int progress,
+      required final int timestamp}) = _$_DownloadProgress;
 
   @override
   String get id;
@@ -162,6 +181,8 @@ abstract class _DownloadProgress implements DownloadProgress {
   DownloadStatus get status;
   @override
   int get progress;
+  @override
+  int get timestamp;
   @override
   @JsonKey(ignore: true)
   _$$_DownloadProgressCopyWith<_$_DownloadProgress> get copyWith =>

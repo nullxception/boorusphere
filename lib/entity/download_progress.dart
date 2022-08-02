@@ -10,8 +10,13 @@ class DownloadProgress with _$DownloadProgress {
     required String id,
     required DownloadStatus status,
     required int progress,
+    required int timestamp,
   }) = _DownloadProgress;
 
-  static const DownloadProgress none =
-      DownloadProgress(id: '', status: DownloadStatus.empty, progress: 0);
+  static const DownloadProgress none = DownloadProgress(
+    id: '',
+    status: DownloadStatus.empty,
+    progress: 0,
+    timestamp: 0,
+  );
 }
