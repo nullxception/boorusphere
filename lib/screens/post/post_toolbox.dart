@@ -62,8 +62,7 @@ class PostToolbox extends HookConsumerWidget {
           IconButton(
             padding: const EdgeInsets.all(16),
             icon: const Icon(Icons.info),
-            onPressed: () => Navigator.push(
-              context,
+            onPressed: () => context.navigator.push(
               MaterialPageRoute(
                   builder: (context) => PostDetailsPage(post: post)),
             ),

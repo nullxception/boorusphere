@@ -231,8 +231,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 ref
                     .read(pageDataProvider)
                     .fetch(query: tags.join(' '), clear: true);
-                Navigator.pushAndRemoveUntil(
-                  context,
+                context.navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const HomePage()),
                   (route) => false,
                 );
@@ -246,8 +245,7 @@ class PostDetailsPage extends HookConsumerWidget {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
                 ref.read(pageDataProvider).fetch(query: tags, clear: true);
-                Navigator.pushAndRemoveUntil(
-                  context,
+                context.navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const HomePage()),
                   (route) => false,
                 );

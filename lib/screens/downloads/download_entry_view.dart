@@ -153,8 +153,7 @@ class _EntryPopupMenu extends ConsumerWidget {
             downloader.clearEntry(id: entry.id);
             break;
           case 'show-detail':
-            Navigator.push(
-              context,
+            context.navigator.push(
               MaterialPageRoute(
                   builder: (context) => PostDetailsPage(post: entry.post)),
             );

@@ -62,7 +62,7 @@ class AboutPage extends HookConsumerWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
+                        context.navigator.push(MaterialPageRoute(
                           builder: (context) {
                             return ChangelogPage(
                               title: 'Version ${version.lastestVersion}',
@@ -107,8 +107,7 @@ class AboutPage extends HookConsumerWidget {
                 title: const Text('Changelog'),
                 leading: const Icon(Icons.list_alt_rounded),
                 onTap: () {
-                  Navigator.push(
-                    context,
+                  context.navigator.push(
                     MaterialPageRoute(builder: (context) {
                       return const ChangelogPage(
                         option: ChangelogOption(type: ChangelogType.assets),
@@ -128,7 +127,7 @@ class AboutPage extends HookConsumerWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 title: const Text('Open source licenses'),
                 leading: const Icon(Icons.collections_bookmark),
-                onTap: () => Navigator.pushNamed(context, Routes.licenses),
+                onTap: () => context.goTo(Routes.licenses),
               ),
             ],
           ),

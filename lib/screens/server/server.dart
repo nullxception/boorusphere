@@ -33,13 +33,13 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            context.navigator.pop();
                           },
                           child: const Text('Cancel'),
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            context.navigator.pop();
                             ref
                                 .read(serverDataProvider.notifier)
                                 .resetToDefault();
@@ -78,11 +78,9 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                     onSelected: (value) {
                       switch (value) {
                         case 'edit':
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ServerEditorPage(server: it)));
+                          context.navigator.push(MaterialPageRoute(
+                              builder: (context) =>
+                                  ServerEditorPage(server: it)));
                           break;
                         case 'remove':
                           if (serverData.length == 1) {
@@ -123,8 +121,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
               ListTile(
                 title: const Text('Add'),
                 leading: const Icon(Icons.add),
-                onTap: () => Navigator.push(
-                  context,
+                onTap: () => context.navigator.push(
                   MaterialPageRoute(
                       builder: (context) => const ServerEditorPage()),
                 ),

@@ -52,11 +52,10 @@ class SliverThumbnails extends HookConsumerWidget {
             onTap: () async {
               onTap?.call(index);
 
-              final result = await Navigator.pushNamed(context, Routes.post,
-                  arguments: index) as int;
+              final result = await context.goTo(Routes.post, args: index);
               if (result != index) {
                 autoScrollController.scrollToIndex(
-                  result,
+                  result ?? index,
                   duration: const Duration(milliseconds: 600),
                   preferPosition: AutoScrollPosition.middle,
                 );

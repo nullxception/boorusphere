@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/post.dart';
 import '../services/download.dart';
+import '../utils/extensions/buildcontext.dart';
 import '../utils/extensions/string.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
@@ -44,7 +45,7 @@ class DownloaderDialog extends HookConsumerWidget {
                 leading: Icon(_getFileIcon(post.sampleFile)),
                 onTap: () {
                   onItemClick?.call('sample');
-                  Navigator.of(context).pop();
+                  context.navigator.pop();
                   downloader.download(post, url: post.sampleFile);
                 },
               ),
@@ -55,7 +56,7 @@ class DownloaderDialog extends HookConsumerWidget {
               leading: Icon(_getFileIcon(post.originalFile)),
               onTap: () {
                 onItemClick?.call('original');
-                Navigator.of(context).pop();
+                context.navigator.pop();
                 downloader.download(post);
               },
             ),

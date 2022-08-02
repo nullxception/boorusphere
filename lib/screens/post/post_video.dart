@@ -340,8 +340,7 @@ class _PlayerToolbox extends HookConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.info),
                 onPressed: () {
-                  Navigator.push(
-                    context,
+                  context.navigator.push(
                     MaterialPageRoute(
                       builder: (context) => PostDetailsPage(post: post),
                     ),

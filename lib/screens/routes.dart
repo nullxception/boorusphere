@@ -9,25 +9,27 @@ import 'server/server.dart';
 import 'settings/settings.dart';
 import 'tags_blocker/tags_blocker.dart';
 
-mixin Routes {
-  static const home = '';
-  static const post = 'post';
-  static const tagsBlocker = 'tagsBlocker';
-  static const settings = 'settings';
-  static const server = 'server';
-  static const licenses = 'licenses';
-  static const downloads = 'downloads';
-  static const about = 'about';
-  static const changelog = 'changelog';
+enum Routes {
+  home,
+  post,
+  tagsBlocker,
+  settings,
+  server,
+  licenses,
+  downloads,
+  about,
+  changelog;
 
-  static Map<String, WidgetBuilder> of(BuildContext context) => {
-        home: (context) => const HomePage(),
-        post: (context) => const PostPage(),
-        tagsBlocker: (context) => const TagsBlockerPage(),
-        settings: (context) => const SettingsPage(),
-        licenses: (context) => const LicensesPage(),
-        server: (context) => const ServerPage(),
-        downloads: (context) => const DownloadsPage(),
-        about: (context) => const AboutPage(),
+  static String initialPage = Routes.home.name;
+
+  static Map<String, WidgetBuilder> builder(BuildContext context) => {
+        home.name: (context) => const HomePage(),
+        post.name: (context) => const PostPage(),
+        tagsBlocker.name: (context) => const TagsBlockerPage(),
+        settings.name: (context) => const SettingsPage(),
+        licenses.name: (context) => const LicensesPage(),
+        server.name: (context) => const ServerPage(),
+        downloads.name: (context) => const DownloadsPage(),
+        about.name: (context) => const AboutPage(),
       };
 }

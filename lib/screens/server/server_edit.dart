@@ -128,7 +128,7 @@ class ServerEditorPage extends HookConsumerWidget {
                       } else {
                         serverDataNotifier.addServer(data: data);
                       }
-                      Navigator.pop(context);
+                      context.navigator.pop();
                     },
                   ),
               ],

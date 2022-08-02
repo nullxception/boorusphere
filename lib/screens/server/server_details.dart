@@ -79,8 +79,8 @@ class ServerDetails extends HookConsumerWidget {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          final result = await Navigator.push<ServerData>(
-                            context,
+                          final result =
+                              await context.navigator.push<ServerData>(
                             MaterialPageRoute(
                               builder: (context) => const ServerPayloadsPage(),
                             ),

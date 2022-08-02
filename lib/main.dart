@@ -50,8 +50,8 @@ class Boorusphere extends HookConsumerWidget {
           darkTheme:
               isDarkerTheme ? appTheme.data.midnight : appTheme.data.night,
           themeMode: themeMode,
-          initialRoute: Routes.home,
-          routes: Routes.of(context),
+          initialRoute: Routes.initialPage,
+          routes: Routes.builder(context),
           builder: (context, widget) => ScrollConfiguration(
             behavior: const BouncingScrollBehavior(),
             child: widget ?? const SizedBox.shrink(),
