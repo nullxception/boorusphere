@@ -284,15 +284,15 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 @HiveType(typeId: 3, adapterName: 'PostAdapter')
 class _$_Post extends _Post with DiagnosticableTreeMixin {
   const _$_Post(
-      {@HiveField(0, defaultValue: -1) required this.id,
-      @HiveField(1, defaultValue: '') required this.originalFile,
-      @HiveField(2, defaultValue: '') required this.sampleFile,
-      @HiveField(3, defaultValue: '') required this.previewFile,
-      @HiveField(4, defaultValue: []) required final List<String> tags,
-      @HiveField(5, defaultValue: -1) required this.width,
-      @HiveField(6, defaultValue: -1) required this.height,
-      @HiveField(7, defaultValue: '') required this.serverName,
-      @HiveField(8, defaultValue: '') required this.postUrl,
+      {@HiveField(0, defaultValue: -1) this.id = -1,
+      @HiveField(1, defaultValue: '') this.originalFile = '',
+      @HiveField(2, defaultValue: '') this.sampleFile = '',
+      @HiveField(3, defaultValue: '') this.previewFile = '',
+      @HiveField(4, defaultValue: []) final List<String> tags = const [],
+      @HiveField(5, defaultValue: -1) this.width = -1,
+      @HiveField(6, defaultValue: -1) this.height = -1,
+      @HiveField(7, defaultValue: '') this.serverName = '',
+      @HiveField(8, defaultValue: '') this.postUrl = '',
       @HiveField(9, defaultValue: 'q') this.rateValue = 'q',
       @HiveField(10, defaultValue: -1) this.sampleWidth = -1,
       @HiveField(11, defaultValue: -1) this.sampleHeight = -1,
@@ -303,19 +303,24 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
         super._();
 
   @override
+  @JsonKey()
   @HiveField(0, defaultValue: -1)
   final int id;
   @override
+  @JsonKey()
   @HiveField(1, defaultValue: '')
   final String originalFile;
   @override
+  @JsonKey()
   @HiveField(2, defaultValue: '')
   final String sampleFile;
   @override
+  @JsonKey()
   @HiveField(3, defaultValue: '')
   final String previewFile;
   final List<String> _tags;
   @override
+  @JsonKey()
   @HiveField(4, defaultValue: [])
   List<String> get tags {
     // ignore: implicit_dynamic_type
@@ -323,15 +328,19 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
   }
 
   @override
+  @JsonKey()
   @HiveField(5, defaultValue: -1)
   final int width;
   @override
+  @JsonKey()
   @HiveField(6, defaultValue: -1)
   final int height;
   @override
+  @JsonKey()
   @HiveField(7, defaultValue: '')
   final String serverName;
   @override
+  @JsonKey()
   @HiveField(8, defaultValue: '')
   final String postUrl;
   @override
@@ -443,15 +452,15 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
 
 abstract class _Post extends Post {
   const factory _Post(
-      {@HiveField(0, defaultValue: -1) required final int id,
-      @HiveField(1, defaultValue: '') required final String originalFile,
-      @HiveField(2, defaultValue: '') required final String sampleFile,
-      @HiveField(3, defaultValue: '') required final String previewFile,
-      @HiveField(4, defaultValue: []) required final List<String> tags,
-      @HiveField(5, defaultValue: -1) required final int width,
-      @HiveField(6, defaultValue: -1) required final int height,
-      @HiveField(7, defaultValue: '') required final String serverName,
-      @HiveField(8, defaultValue: '') required final String postUrl,
+      {@HiveField(0, defaultValue: -1) final int id,
+      @HiveField(1, defaultValue: '') final String originalFile,
+      @HiveField(2, defaultValue: '') final String sampleFile,
+      @HiveField(3, defaultValue: '') final String previewFile,
+      @HiveField(4, defaultValue: []) final List<String> tags,
+      @HiveField(5, defaultValue: -1) final int width,
+      @HiveField(6, defaultValue: -1) final int height,
+      @HiveField(7, defaultValue: '') final String serverName,
+      @HiveField(8, defaultValue: '') final String postUrl,
       @HiveField(9, defaultValue: 'q') final String rateValue,
       @HiveField(10, defaultValue: -1) final int sampleWidth,
       @HiveField(11, defaultValue: -1) final int sampleHeight,

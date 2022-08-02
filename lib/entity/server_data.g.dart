@@ -58,10 +58,10 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
 
 _$_ServerData _$$_ServerDataFromJson(Map<String, dynamic> json) =>
     _$_ServerData(
-      name: json['name'] as String,
-      homepage: json['homepage'] as String,
+      name: json['name'] as String? ?? '',
+      homepage: json['homepage'] as String? ?? '',
       postUrl: json['postUrl'] as String? ?? '',
-      searchUrl: json['searchUrl'] as String,
+      searchUrl: json['searchUrl'] as String? ?? '',
       tagSuggestionUrl: json['tagSuggestionUrl'] as String? ?? '',
     );
 

@@ -154,10 +154,10 @@ class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
 @HiveType(typeId: 2, adapterName: 'ServersAdapter')
 class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   const _$_ServerData(
-      {@HiveField(0, defaultValue: '') required this.name,
-      @HiveField(1, defaultValue: '') required this.homepage,
+      {@HiveField(0, defaultValue: '') this.name = '',
+      @HiveField(1, defaultValue: '') this.homepage = '',
       @HiveField(2, defaultValue: '') this.postUrl = '',
-      @HiveField(3, defaultValue: '') required this.searchUrl,
+      @HiveField(3, defaultValue: '') this.searchUrl = '',
       @HiveField(7, defaultValue: '') this.tagSuggestionUrl = ''})
       : super._();
 
@@ -165,9 +165,11 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       _$$_ServerDataFromJson(json);
 
   @override
+  @JsonKey()
   @HiveField(0, defaultValue: '')
   final String name;
   @override
+  @JsonKey()
   @HiveField(1, defaultValue: '')
   final String homepage;
   @override
@@ -175,6 +177,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   @HiveField(2, defaultValue: '')
   final String postUrl;
   @override
+  @JsonKey()
   @HiveField(3, defaultValue: '')
   final String searchUrl;
   @override
@@ -237,10 +240,10 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
 
 abstract class _ServerData extends ServerData {
   const factory _ServerData(
-          {@HiveField(0, defaultValue: '') required final String name,
-          @HiveField(1, defaultValue: '') required final String homepage,
+          {@HiveField(0, defaultValue: '') final String name,
+          @HiveField(1, defaultValue: '') final String homepage,
           @HiveField(2, defaultValue: '') final String postUrl,
-          @HiveField(3, defaultValue: '') required final String searchUrl,
+          @HiveField(3, defaultValue: '') final String searchUrl,
           @HiveField(7, defaultValue: '') final String tagSuggestionUrl}) =
       _$_ServerData;
   const _ServerData._() : super._();

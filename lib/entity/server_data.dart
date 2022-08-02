@@ -9,10 +9,10 @@ part 'server_data.g.dart';
 class ServerData with _$ServerData {
   @HiveType(typeId: 2, adapterName: 'ServersAdapter')
   const factory ServerData({
-    @HiveField(0, defaultValue: '') required String name,
-    @HiveField(1, defaultValue: '') required String homepage,
+    @HiveField(0, defaultValue: '') @Default('') String name,
+    @HiveField(1, defaultValue: '') @Default('') String homepage,
     @HiveField(2, defaultValue: '') @Default('') String postUrl,
-    @HiveField(3, defaultValue: '') required String searchUrl,
+    @HiveField(3, defaultValue: '') @Default('') String searchUrl,
     @HiveField(7, defaultValue: '') @Default('') String tagSuggestionUrl,
   }) = _ServerData;
 

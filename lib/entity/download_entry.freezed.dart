@@ -135,18 +135,21 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
 @HiveType(typeId: 4, adapterName: 'DownloadEntryAdapter')
 class _$_DownloadEntry extends _DownloadEntry with DiagnosticableTreeMixin {
   const _$_DownloadEntry(
-      {@HiveField(0, defaultValue: '') required this.id,
-      @HiveField(1, defaultValue: Post.empty) required this.post,
-      @HiveField(2, defaultValue: '') required this.destination})
+      {@HiveField(0, defaultValue: '') this.id = '',
+      @HiveField(1, defaultValue: Post.empty) this.post = Post.empty,
+      @HiveField(2, defaultValue: '') this.destination = ''})
       : super._();
 
   @override
+  @JsonKey()
   @HiveField(0, defaultValue: '')
   final String id;
   @override
+  @JsonKey()
   @HiveField(1, defaultValue: Post.empty)
   final Post post;
   @override
+  @JsonKey()
   @HiveField(2, defaultValue: '')
   final String destination;
 
@@ -191,9 +194,9 @@ class _$_DownloadEntry extends _DownloadEntry with DiagnosticableTreeMixin {
 
 abstract class _DownloadEntry extends DownloadEntry {
   const factory _DownloadEntry(
-          {@HiveField(0, defaultValue: '') required final String id,
-          @HiveField(1, defaultValue: Post.empty) required final Post post,
-          @HiveField(2, defaultValue: '') required final String destination}) =
+          {@HiveField(0, defaultValue: '') final String id,
+          @HiveField(1, defaultValue: Post.empty) final Post post,
+          @HiveField(2, defaultValue: '') final String destination}) =
       _$_DownloadEntry;
   const _DownloadEntry._() : super._();
 
