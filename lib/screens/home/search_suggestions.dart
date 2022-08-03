@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../../entity/page_option.dart';
 import '../../settings/active_server.dart';
 import '../../source/page.dart';
 import '../../source/search_history.dart';
@@ -35,7 +36,9 @@ class SearchSuggestionView extends HookConsumerWidget {
 
     final searchTag = useCallback((String query) {
       controller.query = query;
-      ref.read(pageDataProvider).fetch(query: query, clear: true);
+      ref
+          .read(pageOptionProvider.notifier)
+          .update((state) => PageOption(query: query, clear: true));
       controller.close();
     }, []);
 

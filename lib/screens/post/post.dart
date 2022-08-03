@@ -26,7 +26,7 @@ class PostPage extends HookConsumerWidget {
     final beginPage = ModalRoute.of(context)?.settings.arguments as int;
     final pageController = useExtendedPageController(initialPage: beginPage);
     final pageData = ref.watch(pageDataProvider);
-    final pageLoading = ref.watch(pageLoadingProvider);
+    final pageState = ref.watch(pageStateProvider);
     final page = useState(beginPage);
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
@@ -45,9 +45,10 @@ class PostPage extends HookConsumerWidget {
           visible: !fullscreen,
           child: _PostAppBar(
             subtitle: pageData.posts[page.value].tags.join(' '),
-            title: pageLoading
-                ? '#${page.value + 1} of (loading...)'
-                : '#${page.value + 1} of ${pageData.posts.length}',
+            title: pageState.maybeWhen(
+              loading: () => '#${page.value + 1} of (loading...)',
+              orElse: () => '#${page.value + 1} of ${pageData.posts.length}',
+            ),
           ),
         ),
         body: WillPopScope(

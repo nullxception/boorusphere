@@ -10,16 +10,21 @@ import '../../settings/safe_mode.dart';
 import '../../settings/server/post_limit.dart';
 import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
+import '../entity/page_option.dart';
 import '../entity/post.dart';
+import '../entity/server_data.dart';
 import '../entity/sphere_exception.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
 import 'server.dart';
 
-final pageLoadingProvider = StateProvider((_) => false);
-final pageErrorProvider = StateProvider((_) => []);
 final pageDataProvider = Provider((ref) => PageDataSource(ref));
-final pageQueryProvider = StateProvider((_) => '');
+final pageOptionProvider = StateProvider((_) => const PageOption());
+final pageStateProvider = FutureProvider((ref) {
+  ref.watch(activeServerProvider);
+  ref.watch(pageOptionProvider);
+  return ref.read(pageDataProvider)._fetch();
+});
 
 class PageDataSource {
   PageDataSource(this.ref);
@@ -30,39 +35,36 @@ class PageDataSource {
   int _page = 0;
 
   String _buildErrorMessage(String message) {
-    final pageQuery = ref.read(pageQueryProvider);
+    final pageOption = ref.read(pageOptionProvider);
     final safeMode = ref.read(safeModeProvider);
     final words = <String>[];
 
     words.add(posts.isNotEmpty
         ? message.replaceFirst('No result found', 'No more result found')
         : message);
-    if (pageQuery.isNotEmpty) words.add('for $pageQuery');
+    if (pageOption.query.isNotEmpty) words.add('for ${pageOption.query}');
     if (safeMode) words.add('in safe mode');
     return words.join(' ');
   }
 
-  Future<void> fetch({String? query, bool clear = false}) async {
-    final pageLoading = ref.read(pageLoadingProvider.state);
-    final pageQuery = ref.read(pageQueryProvider);
-    final pageError = ref.read(pageErrorProvider.state);
+  Future<void> _fetch() async {
+    final pageOption = ref.read(pageOptionProvider);
     final activeServer = ref.read(activeServerProvider);
     final safeMode = ref.read(safeModeProvider);
     final blockedTags = ref.read(blockedTagsProvider);
     final postLimit = ref.read(serverPostLimitProvider);
+    if (activeServer == ServerData.empty) return;
 
-    if (query != null && pageQuery != query) {
-      ref.read(pageQueryProvider.notifier).state = query;
-      ref.read(searchHistoryProvider.notifier).push(query);
+    if (pageOption.query.isNotEmpty) {
+      ref.read(searchHistoryProvider.notifier).push(pageOption.query);
     }
 
-    if (clear) posts.clear();
+    if (pageOption.clear) posts.clear();
     if (posts.isEmpty) _page = 0;
-    pageLoading.state = true;
-    pageError.state = [];
+
     try {
       final url = activeServer.searchUrlOf(
-        query ?? pageQuery,
+        pageOption.query,
         _page,
         safeMode,
         postLimit,
@@ -76,24 +78,24 @@ class PageDataSource {
       posts.addAll(data.where((it) =>
           !it.tags.any(blockedTags.listedEntries.contains) &&
           !posts.any((post) => post.id == it.id)));
-    } catch (exception, stackTrace) {
+
+      _page++;
+    } catch (exception) {
       if (exception is SphereException) {
         final message = _buildErrorMessage(exception.message);
-        pageError.state = [exception.copyWith(message: message), stackTrace];
+        throw SphereException(message: message);
       } else {
-        pageError.state = [exception, stackTrace];
+        rethrow;
       }
     }
-
-    pageLoading.state = false;
   }
 
   void loadMore() {
-    final pageLoading = ref.read(pageLoadingProvider);
-    final pageError = ref.read(pageErrorProvider);
-    if (pageError.isEmpty && !pageLoading) {
-      _page++;
-      fetch();
+    final pageState = ref.read(pageStateProvider);
+    if (pageState.asData != null) {
+      ref
+          .read(pageOptionProvider.notifier)
+          .update((state) => state.copyWith(clear: false));
     }
   }
 
@@ -104,6 +106,5 @@ class PageDataSource {
     ref.read(activeServerProvider.notifier).restore(serverData);
 
     posts.clear();
-    fetch();
   }
 }

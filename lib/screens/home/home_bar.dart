@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../../hooks/floating_searchbar_controller.dart';
+import '../../entity/page_option.dart';
 import '../../settings/active_server.dart';
 import '../../settings/grid.dart';
 import '../../source/page.dart';
@@ -20,13 +21,13 @@ class HomeBar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useFloatingSearchBarController();
     final grid = ref.watch(gridProvider);
-    final pageQuery = ref.watch(pageQueryProvider);
+    final pageOption = ref.watch(pageOptionProvider);
     final serverActive = ref.watch(activeServerProvider);
 
     useEffect(() {
       // Populate search tag on first build
-      controller.query = pageQuery;
-    }, [pageQuery, controller]);
+      controller.query = pageOption.query;
+    }, [controller]);
 
     return FloatingSearchBar(
       backgroundColor: context.theme.cardColor,
@@ -53,14 +54,14 @@ class HomeBar extends HookConsumerWidget {
       onSubmitted: (value) {
         final query = value.trim();
         // restore title when user cancels search by submitting a blank input
-        if (query.isEmpty) {
-          if (controller.query != pageQuery) {
-            controller.query = '$pageQuery ';
-          }
+        if (query.isEmpty && controller.query.trim() != pageOption.query) {
+          controller.query = '${pageOption.query} ';
           return;
         }
 
-        ref.read(pageDataProvider).fetch(query: query, clear: true);
+        ref
+            .read(pageOptionProvider.notifier)
+            .update((state) => PageOption(query: query, clear: true));
         controller.close();
       },
       onFocusChanged: (focused) {
@@ -82,8 +83,8 @@ class HomeBar extends HookConsumerWidget {
             icon: const Icon(Icons.rotate_left),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             onPressed: () {
-              if (controller.query != pageQuery) {
-                controller.query = '$pageQuery ';
+              if (controller.query.trim() != pageOption.query) {
+                controller.query = '${pageOption.query} ';
               }
             },
           ),
@@ -93,7 +94,7 @@ class HomeBar extends HookConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             onPressed: () {
               if (controller.query.isEmpty) {
-                controller.query = pageQuery;
+                controller.query = pageOption.query;
                 controller.close();
               } else {
                 controller.clear();

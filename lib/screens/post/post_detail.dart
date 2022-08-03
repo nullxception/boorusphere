@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../entity/post.dart';
+import '../../entity/page_option.dart';
 import '../../source/blocked_tags.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
@@ -31,7 +32,7 @@ class PostDetailsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
-    final pageQuery = ref.watch(pageQueryProvider);
+    final pageOption = ref.watch(pageOptionProvider);
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
@@ -226,11 +227,10 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
-                final tags = Set<String>.from(pageQuery.split(' '));
+                final tags = Set<String>.from(pageOption.query.split(' '));
                 tags.addAll(selectedTags);
-                ref
-                    .read(pageDataProvider)
-                    .fetch(query: tags.join(' '), clear: true);
+                ref.read(pageOptionProvider.notifier).update(
+                    (state) => PageOption(query: tags.join(' '), clear: true));
                 context.navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const HomePage()),
                   (route) => false,
@@ -244,7 +244,9 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final tags = selectedtag.value.join(' ');
               if (tags.isNotEmpty) {
-                ref.read(pageDataProvider).fetch(query: tags, clear: true);
+                ref
+                    .read(pageOptionProvider.notifier)
+                    .update((state) => PageOption(query: tags, clear: true));
                 context.navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const HomePage()),
                   (route) => false,

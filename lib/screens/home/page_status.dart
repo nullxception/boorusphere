@@ -13,26 +13,25 @@ class PageStatus extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageData = ref.watch(pageDataProvider);
-    final pageLoading = ref.watch(pageLoadingProvider);
-    final pageError = ref.watch(pageErrorProvider);
+    final pageState = ref.watch(pageStateProvider);
 
     return Column(
       children: [
-        if (pageError.isNotEmpty)
-          Center(
+        pageState.maybeWhen(
+          error: (error, stackTrace) => Center(
             child: NoticeCard(
               icon: const Icon(Icons.search),
               margin: const EdgeInsets.all(16),
               children: Column(
                 children: [
                   ExceptionInfo(
-                    exception: pageError.first,
-                    stackTrace: pageError.last,
+                    exception: error,
+                    stackTrace: stackTrace,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 24),
                     child: ElevatedButton(
-                      onPressed: pageData.fetch,
+                      onPressed: () => ref.refresh(pageStateProvider),
                       style: ElevatedButton.styleFrom(elevation: 0),
                       child: const Text('Try again'),
                     ),
@@ -41,8 +40,7 @@ class PageStatus extends HookConsumerWidget {
               ),
             ),
           ),
-        if (pageLoading)
-          Container(
+          loading: () => Container(
             height: 50,
             alignment: Alignment.topCenter,
             child: SpinKitFoldingCube(
@@ -51,13 +49,13 @@ class PageStatus extends HookConsumerWidget {
               duration: const Duration(seconds: 1),
             ),
           ),
-        if (pageError.isEmpty && !pageLoading && pageData.posts.isNotEmpty)
-          Container(
+          orElse: () => Container(
             height: 50,
             alignment: Alignment.topCenter,
             child: ElevatedButton(
                 onPressed: pageData.loadMore, child: const Text('Load more')),
-          )
+          ),
+        ),
       ],
     );
   }

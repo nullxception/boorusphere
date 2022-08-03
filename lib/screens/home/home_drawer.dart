@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../entity/page_option.dart';
 import '../../settings/active_server.dart';
 import '../../settings/theme.dart';
 import '../../source/page.dart';
@@ -150,16 +151,18 @@ class AppVersionTile extends HookConsumerWidget {
 class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageQuery = ref.watch(pageQueryProvider);
+    final pageOption = ref.watch(pageOptionProvider);
 
     return Visibility(
-      visible: pageQuery.isNotEmpty,
+      visible: pageOption.query.isNotEmpty,
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),
         dense: true,
         onTap: () {
-          ref.watch(pageDataProvider).fetch(query: '', clear: true);
+          ref
+              .read(pageOptionProvider.notifier)
+              .update((state) => const PageOption(clear: true));
           context.navigator.pop();
         },
       ),
@@ -195,7 +198,9 @@ class _ServerSelection extends HookConsumerWidget {
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(activeServerProvider.notifier).use(it);
-              ref.read(pageDataProvider).fetch(clear: true);
+              ref
+                  .read(pageOptionProvider.notifier)
+                  .update((state) => state.copyWith(clear: true));
               context.navigator.pop();
             },
           ),

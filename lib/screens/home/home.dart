@@ -22,26 +22,25 @@ class HomePage extends HookConsumerWidget {
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
-    final pageLoading = ref.watch(pageLoadingProvider);
-    final errorMessage = ref.watch(pageErrorProvider);
+    final pageState = ref.watch(pageStateProvider);
     final isFocused = useState(true);
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
         ref.read(pageDataProvider).loadMore();
       }
-    }, [key]);
+    }, [scrollController]);
 
     useEffect(() {
       scrollController.addListener(loadMoreCall);
       return () => scrollController.removeListener(loadMoreCall);
     }, [scrollController]);
 
-    if (!pageLoading) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final current = scrollController.position.pixels;
-        final estimatedFloor = scrollController.position.maxScrollExtent - 200;
-        if (errorMessage.isNotEmpty && current >= estimatedFloor) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final current = scrollController.position.pixels;
+      final estimatedFloor = scrollController.position.maxScrollExtent - 300;
+      pageState.whenOrNull(error: (error, stackTrace) {
+        if (current >= estimatedFloor) {
           scrollController.animateTo(
             scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 250),
@@ -49,7 +48,7 @@ class HomePage extends HookConsumerWidget {
           );
         }
       });
-    }
+    });
 
     return Scaffold(
       drawer: const HomeDrawer(),
