@@ -4,10 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../../hooks/floating_searchbar_controller.dart';
-import '../../settings/active_server.dart';
 import '../../settings/grid.dart';
 import '../../source/page.dart';
-import '../../source/search_history.dart';
 import '../../utils/extensions/buildcontext.dart';
 import 'search_suggestions.dart';
 
@@ -17,48 +15,16 @@ class HomeBar extends HookConsumerWidget {
   final Widget? body;
   final Function(bool focused)? onFocusChanged;
 
-  void _searchForTag({
-    required String value,
-    required FloatingSearchBarController controller,
-    required String searchTag,
-    required Function(String value) onSearch,
-  }) {
-    final query = value.trim();
-
-    // restore title when user cancels search by submitting a blank input
-    if (query.isEmpty) {
-      if (controller.query != searchTag) {
-        controller.query = '$searchTag ';
-      }
-      return;
-    }
-
-    onSearch.call(query);
-    controller.close();
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useFloatingSearchBarController();
     final grid = ref.watch(gridProvider);
     final pageQuery = ref.watch(pageQueryProvider);
-    final searchHistory = ref.watch(searchHistoryProvider);
-    final activeServer = ref.watch(activeServerProvider);
-
-    final suggestionHistory = useState({});
-    final typedQuery = useState('');
 
     useEffect(() {
       // Populate search tag on first build
       controller.query = pageQuery;
-    }, [pageQuery]);
-
-    useEffect(() {
-      // Populate suggestion history on first build
-      if (searchHistory.mapped.isNotEmpty) {
-        suggestionHistory.value = searchHistory.mapped;
-      }
-    }, [suggestionHistory]);
+    }, [pageQuery, controller]);
 
     return FloatingSearchBar(
       backgroundColor: context.theme.cardColor,
@@ -68,6 +34,7 @@ class HomeBar extends HookConsumerWidget {
       margins: EdgeInsets.fromLTRB(
           10.5, MediaQuery.of(context).viewPadding.top + 12, 10, 0),
       padding: EdgeInsets.zero,
+      scrollPadding: EdgeInsets.zero,
       insets: EdgeInsets.zero,
       automaticallyImplyDrawerHamburger: false,
       automaticallyImplyBackButton: false,
@@ -82,21 +49,17 @@ class HomeBar extends HookConsumerWidget {
       transition: ExpandingFloatingSearchBarTransition(),
       transitionDuration: const Duration(milliseconds: 250),
       onSubmitted: (value) {
-        _searchForTag(
-            value: value,
-            controller: controller,
-            searchTag: pageQuery,
-            onSearch: (value) {
-              return ref
-                  .read(pageDataProvider)
-                  .fetch(query: value, clear: true);
-            });
-      },
-      onQueryChanged: (value) async {
-        if (activeServer.canSuggestTags) {
-          typedQuery.value = value;
+        final query = value.trim();
+        // restore title when user cancels search by submitting a blank input
+        if (query.isEmpty) {
+          if (controller.query != pageQuery) {
+            controller.query = '$pageQuery ';
+          }
+          return;
         }
-        suggestionHistory.value = searchHistory.composeSuggestion(query: value);
+
+        ref.read(pageDataProvider).fetch(query: query, clear: true);
+        controller.close();
       },
       onFocusChanged: (focused) {
         onFocusChanged?.call(focused);
@@ -127,37 +90,17 @@ class HomeBar extends HookConsumerWidget {
             icon: const Icon(Icons.close_rounded),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             onPressed: () {
-              controller.clear();
+              if (controller.query.isEmpty) {
+                controller.query = pageQuery;
+                controller.close();
+              } else {
+                controller.clear();
+              }
             },
           ),
       ],
       builder: (context, transition) {
-        return SearchSuggestionResult(
-            query: typedQuery.value,
-            controller: controller,
-            history: suggestionHistory.value,
-            onClearHistory: () async {
-              searchHistory.clear();
-              suggestionHistory.value = {};
-            },
-            onRemoveHistory: (key) async {
-              searchHistory.delete(key);
-              // rebuild history suggestion
-              suggestionHistory.value = searchHistory.composeSuggestion(
-                query: controller.query.trim(),
-              );
-            },
-            onSearchTag: (value) {
-              _searchForTag(
-                  value: value,
-                  controller: controller,
-                  searchTag: pageQuery,
-                  onSearch: (value) {
-                    return ref
-                        .read(pageDataProvider)
-                        .fetch(query: value, clear: true);
-                  });
-            });
+        return SearchSuggestionView(controller: controller);
       },
       body: body,
     );

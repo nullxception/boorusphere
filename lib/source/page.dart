@@ -53,7 +53,7 @@ class PageDataSource {
 
     if (query != null && pageQuery != query) {
       ref.read(pageQueryProvider.notifier).state = query;
-      ref.read(searchHistoryProvider).push(query);
+      ref.read(searchHistoryProvider.notifier).push(query);
     }
 
     if (clear) posts.clear();
