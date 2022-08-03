@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../../../hooks/floating_searchbar_controller.dart';
+import '../../settings/active_server.dart';
 import '../../settings/grid.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
@@ -20,6 +21,7 @@ class HomeBar extends HookConsumerWidget {
     final controller = useFloatingSearchBarController();
     final grid = ref.watch(gridProvider);
     final pageQuery = ref.watch(pageQueryProvider);
+    final serverActive = ref.watch(activeServerProvider);
 
     useEffect(() {
       // Populate search tag on first build
@@ -42,7 +44,7 @@ class HomeBar extends HookConsumerWidget {
         SearchBarLeadingButton(searchBarController: controller),
       ],
       borderRadius: BorderRadius.circular(8),
-      hint: 'Search...',
+      hint: 'Search on ${serverActive.name}...',
       controller: controller,
       debounceDelay: const Duration(milliseconds: 250),
       transitionCurve: Curves.easeInCirc,
