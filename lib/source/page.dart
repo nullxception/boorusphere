@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:fimber/fimber.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -69,7 +68,6 @@ class PageDataSource {
         safeMode,
         postLimit,
       );
-      Fimber.d('Fetching $url');
       final res = await retryFuture(
         () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,

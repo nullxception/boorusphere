@@ -1,5 +1,4 @@
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -63,7 +62,6 @@ class Boorusphere extends HookConsumerWidget {
 }
 
 void main() async {
-  Fimber.plantTree(DebugTree());
   const boxes = [
     'searchHistory',
     'settings',

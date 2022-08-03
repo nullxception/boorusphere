@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -65,11 +62,10 @@ class VersionDataSource extends ChangeNotifier {
           lastestVersion = version.split('+').first;
         }
       }
-    } on HttpException catch (e) {
-      Fimber.d('Caught a network exception', ex: e);
-    } on SocketException catch (e) {
-      Fimber.d('Caught a network exception', ex: e);
-    }
+
+      // ignore: empty_catches
+    } catch (e) {}
+
     _isChecking = false;
     _isChecked = true;
     notifyListeners();
