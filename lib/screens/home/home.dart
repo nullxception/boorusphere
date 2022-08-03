@@ -82,7 +82,6 @@ class HomePage extends HookConsumerWidget {
               isFocused.value = !focusOnSearching;
             },
             body: Stack(
-              fit: StackFit.expand,
               children: [
                 FloatingSearchBarScrollNotifier(
                   child: CustomScrollView(
@@ -110,8 +109,7 @@ class HomePage extends HookConsumerWidget {
                     ],
                   ),
                 ),
-                _EdgeTopShadow(),
-                _EdgeBottomShadow(),
+                const _EdgeShadow(),
               ],
             ),
           ),
@@ -121,48 +119,42 @@ class HomePage extends HookConsumerWidget {
   }
 }
 
-class _EdgeTopShadow extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final tint = context.theme.scaffoldBackgroundColor;
-    return Positioned(
-      top: 0,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).padding.top * 1.8,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomLeft,
-              colors: [tint.withOpacity(0.8), tint.withOpacity(0)],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+class _EdgeShadow extends StatelessWidget {
+  const _EdgeShadow();
 
-class _EdgeBottomShadow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tint = context.theme.scaffoldBackgroundColor;
-    return Positioned(
-      bottom: 0,
+    return Positioned.fill(
       child: IgnorePointer(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).padding.bottom * 1.8,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topLeft,
-                colors: [tint.withOpacity(0.5), tint.withOpacity(0)],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).padding.top * 1.8,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomLeft,
+                    colors: [tint.withOpacity(0.8), tint.withOpacity(0)],
+                  ),
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              height: MediaQuery.of(context).padding.bottom * 1.8,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topLeft,
+                    colors: [tint.withOpacity(0.5), tint.withOpacity(0)],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
