@@ -8,7 +8,7 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../services/app_theme/app_theme.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
-import '../../widgets/systemuistyle.dart';
+import '../../widgets/styled_overlay_region.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
 import 'post_image.dart';
@@ -55,7 +55,7 @@ class PostPage extends HookConsumerWidget {
             Navigator.pop(context, page.value);
             return false;
           },
-          child: SystemUIStyle(
+          child: StyledOverlayRegion(
             nightMode: true,
             child: Padding(
               // android back gesture is not ignored by PageView

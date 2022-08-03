@@ -10,7 +10,7 @@ import '../../source/blocked_tags.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
-import '../../widgets/systemuistyle.dart';
+import '../../widgets/styled_overlay_region.dart';
 import '../home/home.dart';
 import 'tag.dart';
 
@@ -39,7 +39,7 @@ class PostDetailsPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detail')),
-      body: SystemUIStyle(
+      body: StyledOverlayRegion(
         child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.only(bottom: 72),

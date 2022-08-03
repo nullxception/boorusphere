@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../source/device_info.dart';
 import '../utils/extensions/buildcontext.dart';
 
-class SystemUIStyle extends ConsumerWidget {
-  const SystemUIStyle({super.key, required this.child, this.nightMode});
+class StyledOverlayRegion extends ConsumerWidget {
+  const StyledOverlayRegion({super.key, required this.child, this.nightMode});
   final Widget child;
   final bool? nightMode;
 

@@ -7,7 +7,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../../widgets/systemuistyle.dart';
+import '../../widgets/styled_overlay_region.dart';
 import 'home_bar.dart';
 import 'home_drawer.dart';
 import 'page_status.dart';
@@ -61,7 +61,7 @@ class HomePage extends HookConsumerWidget {
         }
         isFocused.value = !focusOnDrawer;
       },
-      body: SystemUIStyle(
+      body: StyledOverlayRegion(
         child: DoubleBack(
           condition: isFocused.value,
           waitForSecondBackPress: 2,
