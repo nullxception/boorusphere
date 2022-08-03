@@ -106,7 +106,7 @@ class SearchSuggestionView extends HookConsumerWidget {
         if (activeServer.canSuggestTags)
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Suggested at ${activeServer.name}'),
+            child: Text('Suggested on ${activeServer.name}'),
           ),
         if (activeServer.canSuggestTags)
           ...suggester.when(
