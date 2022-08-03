@@ -10,7 +10,7 @@ import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/systemuistyle.dart';
 import 'home_bar.dart';
 import 'home_drawer.dart';
-import 'sliver_page_status.dart';
+import 'page_status.dart';
 import 'sliver_thumbnails.dart';
 
 class HomePage extends HookConsumerWidget {
@@ -105,7 +105,7 @@ class HomePage extends HookConsumerWidget {
                         padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).padding.bottom * 1.8,
                         ),
-                        sliver: const SliverPageStatus(),
+                        sliver: const SliverToBoxAdapter(child: PageStatus()),
                       )
                     ],
                   ),
