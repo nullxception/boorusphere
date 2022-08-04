@@ -102,6 +102,7 @@ class HomeBar extends HookConsumerWidget {
             },
           ),
       ],
+      isScrollControlled: true,
       builder: (context, transition) {
         return SearchSuggestionView(controller: controller);
       },

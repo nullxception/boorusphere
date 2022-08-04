@@ -46,88 +46,98 @@ class SearchSuggestionView extends HookConsumerWidget {
       ref.read(searchHistoryProvider.notifier).rebuild(controller.query);
     });
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return CustomScrollView(
+      slivers: [
         if (history.isNotEmpty)
-          Padding(
+          SliverPadding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Recently'),
-                TextButton(
-                  onPressed: ref.read(searchHistoryProvider.notifier).clear,
-                  child: const Text('Clear all'),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Recently'),
+                  TextButton(
+                    onPressed: ref.read(searchHistoryProvider.notifier).clear,
+                    child: const Text('Clear all'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final entry = history.entries.elementAt(index);
+              return Dismissible(
+                key: Key(entry.key.toString()),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) {
+                  ref.read(searchHistoryProvider.notifier)
+                    ..delete(entry.key)
+                    ..rebuild(controller.query.trim());
+                },
+                background: Container(
+                  color: Colors.red,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text('Remove'),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Icon(Icons.delete, color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
+                child: _SuggestionEntryTile(
+                  data: SuggestionEntry(
+                    isHistory: true,
+                    text: entry.value.query,
+                    server: entry.value.server,
+                  ),
+                  onTap: searchTag,
+                  onAdded: addToInput,
+                ),
+              );
+            },
+            childCount: history.entries.length,
+          ),
+        ),
+        if (!activeServer.canSuggestTags)
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Icon(Icons.search_off),
+                ),
+                Text('${activeServer.name} did not support search suggestion'),
               ],
             ),
           ),
-        ...history.entries
-            .map((entry) => Dismissible(
-                  key: Key(entry.key.toString()),
-                  direction: DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    ref.read(searchHistoryProvider.notifier)
-                      ..delete(entry.key)
-                      ..rebuild(controller.query.trim());
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text('Remove'),
-                        Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Icon(Icons.delete, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                  child: _SuggestionEntryTile(
-                    data: SuggestionEntry(
-                      isHistory: true,
-                      text: entry.value.query,
-                      server: entry.value.server,
-                    ),
-                    onTap: searchTag,
-                    onAdded: addToInput,
-                  ),
-                ))
-            .toList(),
-        if (!activeServer.canSuggestTags)
-          Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
-                child: Icon(Icons.search_off),
-              ),
-              Text('${activeServer.name} did not support search suggestion'),
-            ],
-          ),
         if (activeServer.canSuggestTags)
-          Padding(
+          SliverPadding(
             padding: const EdgeInsets.all(16),
-            child: Text('Suggested on ${activeServer.name}'),
+            sliver: SliverToBoxAdapter(
+                child: Text('Suggested on ${activeServer.name}')),
           ),
         if (activeServer.canSuggestTags)
-          ...suggester.when(
-            data: (value) => value.map(
-              (text) {
+          suggester.when(
+            data: (value) => SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
                 return _SuggestionEntryTile(
                   data: SuggestionEntry(
                     isHistory: false,
-                    text: text,
+                    text: value[index],
                     server: activeServer.name,
                   ),
                   onTap: searchTag,
                   onAdded: addToInput,
                 );
-              },
-            ).toList(),
-            loading: () => [
-              SizedBox(
+              }, childCount: value.length),
+            ),
+            loading: () => SliverToBoxAdapter(
+              child: SizedBox(
                 height: 128,
                 child: Center(
                   child: SpinKitFoldingCube(
@@ -136,14 +146,12 @@ class SearchSuggestionView extends HookConsumerWidget {
                     duration: const Duration(seconds: 1),
                   ),
                 ),
-              )
-            ],
-            error: (ex, trace) => [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: ExceptionInfo(exception: ex),
-              )
-            ],
+              ),
+            ),
+            error: (ex, trace) => SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverToBoxAdapter(child: ExceptionInfo(exception: ex)),
+            ),
           )
       ],
     );
