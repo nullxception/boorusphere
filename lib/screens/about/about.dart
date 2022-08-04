@@ -14,7 +14,8 @@ class AboutPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final version = ref.watch(versionDataProvider);
+    final versionData = ref.watch(versionDataProvider);
+    final versionUpdate = ref.watch(versionUpdateProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -42,65 +43,68 @@ class AboutPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  'Version ${version.version} - ${version.variant}',
+                  'Version ${versionData.version} - ${versionData.arch}',
                   style: context.theme.textTheme.subtitle2
                       ?.copyWith(fontWeight: FontWeight.w400),
                 ),
               ),
-              if (version.shouldUpdate && version.isChecked)
-                Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text('New update is available'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => launchUrlString(version.apkUrl,
-                          mode: LaunchMode.externalApplication),
-                      style: ElevatedButton.styleFrom(elevation: 0),
-                      child: Text('Download v${version.lastestVersion}'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.navigator.push(MaterialPageRoute(
-                          builder: (context) {
-                            return ChangelogPage(
-                              title: 'Version ${version.lastestVersion}',
-                              option: const ChangelogOption(
-                                type: ChangelogType.git,
-                                latestOnly: true,
-                              ),
-                            );
-                          },
-                        ));
-                      },
-                      style: ElevatedButton.styleFrom(elevation: 0),
-                      child: const Text('View changes'),
-                    ),
-                  ],
-                )
-              else
-                ElevatedButton.icon(
-                  onPressed: version.checkForUpdate,
+              versionUpdate.when(
+                data: (data) => data.shouldUpdate
+                    ? Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text('New update is available'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => launchUrlString(data.apkUrl,
+                                mode: LaunchMode.externalApplication),
+                            style: ElevatedButton.styleFrom(elevation: 0),
+                            child: Text('Download v${data.newVersion}'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.navigator.push(MaterialPageRoute(
+                                builder: (context) {
+                                  return ChangelogPage(
+                                    title: 'Version ${data.newVersion}',
+                                    option: const ChangelogOption(
+                                      type: ChangelogType.git,
+                                      latestOnly: true,
+                                    ),
+                                  );
+                                },
+                              ));
+                            },
+                            style: ElevatedButton.styleFrom(elevation: 0),
+                            child: const Text('View changes'),
+                          ),
+                        ],
+                      )
+                    : ElevatedButton.icon(
+                        onPressed: () => ref.refresh(versionUpdateProvider),
+                        style: ElevatedButton.styleFrom(elevation: 0),
+                        icon: const Icon(Icons.done),
+                        label: const Text('You\'re on latest version'),
+                      ),
+                loading: () => ElevatedButton.icon(
+                  onPressed: null,
                   style: ElevatedButton.styleFrom(elevation: 0),
-                  icon: version.isChecking
-                      ? Container(
-                          width: 24,
-                          height: 24,
-                          padding: const EdgeInsets.all(2.0),
-                          child: const CircularProgressIndicator(),
-                        )
-                      : Icon(
-                          !version.shouldUpdate && version.isChecked
-                              ? Icons.done
-                              : Icons.update,
-                        ),
-                  label: Text(
-                    !version.shouldUpdate && version.isChecked
-                        ? 'You\'re on latest version'
-                        : 'Check for update',
+                  icon: Container(
+                    width: 24,
+                    height: 24,
+                    padding: const EdgeInsets.all(2.0),
+                    child: const CircularProgressIndicator(),
                   ),
+                  label: const Text('Checking for update...'),
                 ),
+                error: (e, s) => ElevatedButton.icon(
+                  onPressed: () => ref.refresh(versionUpdateProvider),
+                  style: ElevatedButton.styleFrom(elevation: 0),
+                  icon: const Icon(Icons.update),
+                  label: const Text('Check for update'),
+                ),
+              ),
               const Divider(height: 32),
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),

@@ -22,4 +22,14 @@ class DeviceInfoSource {
   int get sdkInt => androidInfo.version.sdkInt ?? 0;
   List<String> get abis =>
       List.from(androidInfo.supportedAbis.whereType<String>());
+
+  String guessCompatibleAbi() {
+    if (abis.contains('x86_64')) {
+      return 'x86_64';
+    } else if (abis.contains('arm64-v8a')) {
+      return 'arm64-v8a';
+    } else {
+      return 'armeabi-v7a';
+    }
+  }
 }

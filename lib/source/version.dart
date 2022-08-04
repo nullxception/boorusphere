@@ -5,77 +5,54 @@ import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../utils/extensions/string.dart';
+import '../entity/app_update_data.dart';
+import '../entity/app_version.dart';
 import 'device_info.dart';
 
 final versionDataProvider =
     ChangeNotifierProvider((ref) => VersionDataSource(ref));
 
+final versionUpdateProvider = FutureProvider((ref) async {
+  final versionData = ref.watch(versionDataProvider);
+  return await versionData._checkForUpdate();
+});
+
 class VersionDataSource extends ChangeNotifier {
   final Ref ref;
 
-  String version = '0.0.0';
-  String lastestVersion = '0.0.0';
-  bool _isChecking = false;
-  bool _isChecked = false;
-  String _variant = 'armeabi-v7a';
+  AppVersion _version = AppVersion.zero;
 
-  bool get shouldUpdate => version != lastestVersion;
-  bool get isChecking => _isChecking;
-  bool get isChecked => _isChecked;
+  AppVersion get version => _version;
+  String get arch => ref.read(deviceInfoProvider).guessCompatibleAbi();
 
   VersionDataSource(this.ref) {
     _init();
   }
 
-  get variant => _variant;
-
   void _init() async {
-    final info = await PackageInfo.fromPlatform();
-    version = info.version;
-    lastestVersion = info.version;
-    _variant = await guessBestVariant();
+    final pkg = await PackageInfo.fromPlatform();
+    _version = AppVersion.fromString(pkg.version);
     notifyListeners();
-    Future.delayed(const Duration(seconds: 3), checkForUpdate);
   }
 
-  Future<String> guessBestVariant() async {
-    final info = ref.read(deviceInfoProvider);
-
-    if (info.abis.contains('x86_64')) {
-      return 'x86_64';
-    } else if (info.abis.contains('arm64-v8a')) {
-      return 'arm64-v8a';
-    } else {
-      return 'armeabi-v7a';
-    }
-  }
-
-  Future<void> checkForUpdate() async {
-    try {
-      _isChecking = true;
-      notifyListeners();
-
-      final res = await http.get(pubspecUrl.asUri);
-      if (res.statusCode == 200) {
-        final version = loadYaml(res.body)['version'];
-        if (version is String && version.contains('+')) {
-          lastestVersion = version.split('+').first;
-        }
+  Future<AppUpdateData> _checkForUpdate() async {
+    AppVersion latest = _version;
+    final res = await http.get(pubspecUrl.asUri);
+    if (res.statusCode == 200) {
+      final version = loadYaml(res.body)['version'];
+      if (version is String && version.contains('+')) {
+        latest = AppVersion.fromString(version);
       }
+    }
 
-      // ignore: empty_catches
-    } catch (e) {}
-
-    _isChecking = false;
-    _isChecked = true;
-    notifyListeners();
-  }
-
-  String get apkUrl {
-    return '$releasePageUrl/download/$lastestVersion/boorusphere-$lastestVersion-$_variant.apk';
+    return AppUpdateData(
+      arch: arch,
+      currentVersion: _version,
+      newVersion: latest,
+      apkUrl: '$gitUrl/releases/download/$latest/boorusphere-$latest-$arch.apk',
+    );
   }
 
   static const gitUrl = 'https://github.com/nullxception/boorusphere';
-  static const releasePageUrl = '$gitUrl/releases';
   static const pubspecUrl = '$gitUrl/raw/main/pubspec.yaml';
 }

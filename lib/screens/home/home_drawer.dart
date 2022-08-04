@@ -137,17 +137,28 @@ class AppVersionTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final version = ref.watch(versionDataProvider);
-    return ListTile(
-      title: Text(version.shouldUpdate
-          ? 'Update available: ${version.lastestVersion}'
-          : 'Boorusphere ${version.version}'),
-      leading: Icon(
-        Icons.info_outline,
-        color: version.shouldUpdate ? Colors.pink.shade300 : null,
+    final versionData = ref.watch(versionDataProvider);
+    final versionUpdate = ref.watch(versionUpdateProvider);
+    return versionUpdate.maybeWhen(
+      data: (data) {
+        return ListTile(
+          title: Text(data.shouldUpdate
+              ? 'Update available: ${data.newVersion}'
+              : 'Boorusphere ${data.currentVersion}'),
+          leading: Icon(
+            Icons.info_outline,
+            color: data.shouldUpdate ? Colors.pink.shade300 : null,
+          ),
+          dense: true,
+          onTap: () => context.goNamed('about'),
+        );
+      },
+      orElse: () => ListTile(
+        title: Text('Boorusphere ${versionData.version}'),
+        leading: const Icon(Icons.info_outline),
+        dense: true,
+        onTap: () => context.goNamed('about'),
       ),
-      dense: true,
-      onTap: () => context.goNamed('about'),
     );
   }
 }
