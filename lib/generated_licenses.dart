@@ -8,7 +8,7 @@ const ossLicenses = <Package>[
     description: 'Logic that is shared between the front_end and analyzer packages.',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/_fe_analyzer_shared',
     authors: [],
-    version: '41.0.0',
+    version: '43.0.0',
     license: '''Copyright 2019, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'This package provides a library that performs static analysis of Dart code.',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/analyzer',
     authors: [],
-    version: '4.2.0',
+    version: '4.3.1',
     license: '''Copyright 2013, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
@@ -82,7 +82,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Provides encoders and decoders for various archive and compression formats such as zip, tar, bzip2, gzip, and zlib.',
     repository: 'https://github.com/brendan-duncan/archive',
     authors: [],
-    version: '3.3.0',
+    version: '3.3.1',
     license: '''The MIT License
 
 Copyright (c) 2013-2021 Brendan Duncan.
@@ -842,9 +842,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'code_builder',
     description: 'A fluent, builder-based library for generating valid Dart code',
-    homepage: 'https://github.com/dart-lang/code_builder',
+    repository: 'https://github.com/dart-lang/code_builder',
     authors: [],
-    version: '4.1.0',
+    version: '4.2.0',
     license: '''Copyright 2016, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
@@ -2754,9 +2754,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   Package(
     name: 'http',
     description: 'A composable, multi-platform, Future-based API for HTTP requests.',
-    homepage: 'https://github.com/dart-lang/http',
+    repository: 'https://github.com/dart-lang/http/tree/master/pkgs/http',
     authors: [],
-    version: '0.13.4',
+    version: '0.13.5',
     license: '''Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
@@ -2793,7 +2793,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'A Flutter plugin for http request with cancel and retry fuctions.',
     homepage: 'https://github.com/fluttercandies/http_client_helper',
     authors: [],
-    version: '2.0.2',
+    version: '2.0.3',
     license: '''MIT License
 
 Copyright (c) 2018 zmtzawqlp
@@ -3076,7 +3076,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'An opinionated, community-driven set of lint rules for Dart and Flutter projects. Like pedantic but stricter',
     homepage: 'https://github.com/passsy/dart-lint',
     authors: [],
-    version: '1.8.2',
+    version: '1.10.0',
     license: '''Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -3927,7 +3927,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Android implementation of the path_provider plugin.',
     repository: 'https://github.com/flutter/plugins/tree/main/packages/path_provider/path_provider_android',
     authors: [],
-    version: '2.0.16',
+    version: '2.0.17',
     license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -3962,7 +3962,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'iOS implementation of the path_provider plugin.',
     repository: 'https://github.com/flutter/plugins/tree/main/packages/path_provider/path_provider_ios',
     authors: [],
-    version: '2.0.10',
+    version: '2.0.11',
     license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -4102,7 +4102,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Windows implementation of the path_provider plugin',
     repository: 'https://github.com/flutter/plugins/tree/main/packages/path_provider/path_provider_windows',
     authors: [],
-    version: '2.1.0',
+    version: '2.1.1',
     license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -5152,7 +5152,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.''',
 ''',
     repository: 'https://github.com/dart-lang/shelf/tree/master/pkgs/shelf',
     authors: [],
-    version: '1.3.1',
+    version: '1.3.2',
     license: '''Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
@@ -6590,7 +6590,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Android implementation of the video_player plugin.',
     repository: 'https://github.com/flutter/plugins/tree/main/packages/video_player/video_player_android',
     authors: [],
-    version: '2.3.7',
+    version: '2.3.8',
     license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -6695,7 +6695,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     description: 'Web platform implementation of video_player.',
     repository: 'https://github.com/flutter/plugins/tree/main/packages/video_player/video_player_web',
     authors: [],
-    version: '2.0.10',
+    version: '2.0.12',
     license: '''Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -6908,7 +6908,7 @@ THE SOFTWARE.''',
     description: 'An XML to JSON conversion package. Supports Badgerfish, GData and Parker conversions.',
     homepage: 'https://github.com/shamblett/xml2json',
     authors: [],
-    version: '5.3.3',
+    version: '5.3.4',
     license: '''MIT License
 
 Copyright (c) 2019 Steve Hamblett<steve.hamblett@linux.com>

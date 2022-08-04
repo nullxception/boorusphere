@@ -1,4 +1,17 @@
 
+## 1.1.2
+* Add option to clear image cache at settings
+* Add option to hide downloaded media from gallery at settings
+* Add option to set posts limit per load at settings
+* Add changelogs viewer at about page
+* Auto-load-more content on post viewer
+* Downloads: Add option to redownload media when the file is missing
+* Fix content loading issues 3dbooru (make sure to clear cache at settings after updating)
+* Fix duplicated content issues while parsing api result
+* Fix fullscreen restoration issues on Android 9 and below
+* Improve search suggestion handling
+* Various UI fixes and improvement
+
 ## 1.1.1
 * Add download dialog and allow for downloading sample image (if exists)
 * Add option to group downloaded files by server on Downloads page
