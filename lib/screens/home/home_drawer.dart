@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/page_option.dart';
@@ -9,7 +10,6 @@ import '../../source/server.dart';
 import '../../source/version.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
-import '../routes.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -69,26 +69,29 @@ class HomeDrawer extends StatelessWidget {
                               const Divider(),
                               _BackToHomeTile(),
                               ListTile(
-                                  title: const Text('Downloads'),
-                                  leading: const Icon(Icons.cloud_download),
-                                  dense: true,
-                                  onTap: () => context.goTo(Routes.downloads)),
+                                title: const Text('Downloads'),
+                                leading: const Icon(Icons.cloud_download),
+                                dense: true,
+                                onTap: () => context.goNamed('downloads'),
+                              ),
                               ListTile(
-                                  title: const Text('Server'),
-                                  leading: const Icon(Icons.public),
-                                  dense: true,
-                                  onTap: () => context.goTo(Routes.server)),
+                                title: const Text('Server'),
+                                leading: const Icon(Icons.public),
+                                dense: true,
+                                onTap: () => context.goNamed('servers'),
+                              ),
                               ListTile(
-                                  title: const Text('Tags Blocker'),
-                                  leading: const Icon(Icons.block),
-                                  dense: true,
-                                  onTap: () =>
-                                      context.goTo(Routes.tagsBlocker)),
+                                title: const Text('Tags Blocker'),
+                                leading: const Icon(Icons.block),
+                                dense: true,
+                                onTap: () => context.goNamed('tags-blocker'),
+                              ),
                               ListTile(
-                                  title: const Text('Settings'),
-                                  leading: const Icon(Icons.settings),
-                                  dense: true,
-                                  onTap: () => context.goTo(Routes.settings)),
+                                title: const Text('Settings'),
+                                leading: const Icon(Icons.settings),
+                                dense: true,
+                                onTap: () => context.goNamed('settings'),
+                              ),
                               const AppVersionTile(),
                             ],
                           ),
@@ -136,15 +139,16 @@ class AppVersionTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final version = ref.watch(versionDataProvider);
     return ListTile(
-        title: Text(version.shouldUpdate
-            ? 'Update available: ${version.lastestVersion}'
-            : 'Boorusphere ${version.version}'),
-        leading: Icon(
-          Icons.info_outline,
-          color: version.shouldUpdate ? Colors.pink.shade300 : null,
-        ),
-        dense: true,
-        onTap: () => context.goTo(Routes.about));
+      title: Text(version.shouldUpdate
+          ? 'Update available: ${version.lastestVersion}'
+          : 'Boorusphere ${version.version}'),
+      leading: Icon(
+        Icons.info_outline,
+        color: version.shouldUpdate ? Colors.pink.shade300 : null,
+      ),
+      dense: true,
+      onTap: () => context.goNamed('about'),
+    );
   }
 }
 

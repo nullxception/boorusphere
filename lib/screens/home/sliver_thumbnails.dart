@@ -13,7 +13,7 @@ import '../../settings/blur_explicit_post.dart';
 import '../../settings/grid.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../routes.dart';
+import '../post/post.dart';
 
 class SliverThumbnails extends HookConsumerWidget {
   const SliverThumbnails({
@@ -51,8 +51,11 @@ class SliverThumbnails extends HookConsumerWidget {
             child: Thumbnail(post: pageData.posts[index]),
             onTap: () async {
               onTap?.call(index);
-
-              final result = await context.goTo(Routes.post, args: index);
+              final result = await context.navigator.push(
+                MaterialPageRoute(builder: (context) {
+                  return PostPage(beginPage: index);
+                }),
+              );
               if (result != index) {
                 autoScrollController.scrollToIndex(
                   result ?? index,

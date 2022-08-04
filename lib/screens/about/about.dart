@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../source/changelog.dart';
 import '../../source/version.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../routes.dart';
 import 'changelog.dart';
 
 class AboutPage extends HookConsumerWidget {
@@ -127,7 +127,7 @@ class AboutPage extends HookConsumerWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 title: const Text('Open source licenses'),
                 leading: const Icon(Icons.collections_bookmark),
-                onTap: () => context.goTo(Routes.licenses),
+                onTap: () => context.goNamed('licenses'),
               ),
             ],
           ),

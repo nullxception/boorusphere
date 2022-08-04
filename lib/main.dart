@@ -26,6 +26,8 @@ class Boorusphere extends HookConsumerWidget {
     final appTheme = ref.watch(appThemeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
     final deviceInfo = ref.watch(deviceInfoProvider);
+    final route = ref.watch(routeProvider);
+
     if (deviceInfo.sdkInt > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
@@ -42,15 +44,16 @@ class Boorusphere extends HookConsumerWidget {
     return DynamicColorBuilder(
       builder: (ColorScheme? maybeLight, ColorScheme? maybeDark) {
         appTheme.overrideWith(light: maybeLight, dark: maybeDark);
-        return MaterialApp(
+        return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Boorusphere',
           theme: appTheme.data.day,
           darkTheme:
               isDarkerTheme ? appTheme.data.midnight : appTheme.data.night,
           themeMode: themeMode,
-          initialRoute: Routes.initialPage,
-          routes: Routes.builder(context),
+          routeInformationProvider: route.routeInformationProvider,
+          routeInformationParser: route.routeInformationParser,
+          routerDelegate: route.routerDelegate,
           builder: (context, widget) => ScrollConfiguration(
             behavior: const BouncingScrollBehavior(),
             child: widget ?? const SizedBox.shrink(),

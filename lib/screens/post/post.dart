@@ -8,6 +8,7 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../services/app_theme/app_theme.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/styled_overlay_region.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
@@ -15,15 +16,12 @@ import 'post_image.dart';
 import 'post_toolbox.dart';
 import 'post_video.dart';
 
-final lastOpenedPostProvider = StateProvider((_) => -1);
-
 class PostPage extends HookConsumerWidget {
-  const PostPage({super.key});
-
+  const PostPage({super.key, required this.beginPage});
+  final int beginPage;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
-    final beginPage = ModalRoute.of(context)?.settings.arguments as int;
     final pageController = useExtendedPageController(initialPage: beginPage);
     final pageData = ref.watch(pageDataProvider);
     final pageState = ref.watch(pageStateProvider);
@@ -53,7 +51,7 @@ class PostPage extends HookConsumerWidget {
         ),
         body: WillPopScope(
           onWillPop: () async {
-            Navigator.pop(context, page.value);
+            context.navigator.pop(page.value);
             return false;
           },
           child: StyledOverlayRegion(
