@@ -58,7 +58,7 @@ class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
     return pageData.query == value;
   }
 
-  void push(String value) {
+  void save(String value) {
     final query = value.trim();
     if (query.isEmpty) return;
 
@@ -67,7 +67,6 @@ class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
     if (!checkExists(value: query)) {
       final newEntry = SearchHistory(query: query, server: activeServer.name);
       _box.add(newEntry);
-      rebuild(query);
     }
   }
 }
