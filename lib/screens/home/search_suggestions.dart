@@ -35,7 +35,6 @@ class SearchSuggestionView extends HookConsumerWidget {
     }, []);
 
     final searchTag = useCallback((String query) {
-      controller.query = query;
       ref
           .read(pageOptionProvider.notifier)
           .update((state) => PageOption(query: query, clear: true));

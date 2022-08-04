@@ -25,9 +25,9 @@ class HomeBar extends HookConsumerWidget {
     final serverActive = ref.watch(activeServerProvider);
 
     useEffect(() {
-      // Populate search tag on first build
+      // Populate search bar query
       controller.query = pageOption.query;
-    }, [controller]);
+    }, [pageOption]);
 
     return FloatingSearchBar(
       backgroundColor: context.theme.cardColor,
