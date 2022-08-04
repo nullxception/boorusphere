@@ -16,6 +16,8 @@ class PageStatus extends HookConsumerWidget {
     final pageState = ref.watch(pageStateProvider);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         pageState.maybeWhen(
           error: (error, stackTrace) => Center(

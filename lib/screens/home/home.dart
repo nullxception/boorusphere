@@ -23,6 +23,7 @@ class HomePage extends HookConsumerWidget {
       return AutoScrollController(axis: Axis.vertical);
     });
     final pageState = ref.watch(pageStateProvider);
+    final pageData = ref.watch(pageDataProvider);
     final isFocused = useState(true);
 
     final loadMoreCall = useCallback(() {
@@ -81,6 +82,7 @@ class HomePage extends HookConsumerWidget {
               isFocused.value = !focusOnSearching;
             },
             body: Stack(
+              alignment: Alignment.center,
               children: [
                 FloatingSearchBarScrollNotifier(
                   child: CustomScrollView(
@@ -99,15 +101,17 @@ class HomePage extends HookConsumerWidget {
                           },
                         ),
                       ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom * 1.8,
-                        ),
-                        sliver: const SliverToBoxAdapter(child: PageStatus()),
-                      )
+                      if (pageData.posts.isNotEmpty)
+                        SliverPadding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).padding.bottom * 1.8,
+                          ),
+                          sliver: const SliverToBoxAdapter(child: PageStatus()),
+                        )
                     ],
                   ),
                 ),
+                if (pageData.posts.isEmpty) const PageStatus(),
                 const _EdgeShadow(),
               ],
             ),
