@@ -32,7 +32,8 @@ class PostDetailsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
-    final pageOption = ref.watch(pageOptionProvider);
+    final pageQuery =
+        ref.watch(pageOptionProvider.select((value) => value.query));
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
@@ -227,7 +228,7 @@ class PostDetailsPage extends HookConsumerWidget {
             onTap: () {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
-                final tags = Set<String>.from(pageOption.query.split(' '));
+                final tags = Set<String>.from(pageQuery.split(' '));
                 tags.addAll(selectedTags);
                 ref.read(pageOptionProvider.notifier).update(
                     (state) => PageOption(query: tags.join(' '), clear: true));

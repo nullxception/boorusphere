@@ -21,13 +21,14 @@ class HomeBar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useFloatingSearchBarController();
     final grid = ref.watch(gridProvider);
-    final pageOption = ref.watch(pageOptionProvider);
+    final pageQuery =
+        ref.watch(pageOptionProvider.select((value) => value.query));
     final serverActive = ref.watch(activeServerProvider);
 
     useEffect(() {
       // Populate search bar query
-      controller.query = pageOption.query;
-    }, [pageOption]);
+      controller.query = pageQuery;
+    }, [pageQuery]);
 
     return FloatingSearchBar(
       backgroundColor: context.theme.cardColor,
@@ -54,8 +55,8 @@ class HomeBar extends HookConsumerWidget {
       onSubmitted: (value) {
         final query = value.trim();
         // restore title when user cancels search by submitting a blank input
-        if (query.isEmpty && controller.query.trim() != pageOption.query) {
-          controller.query = '${pageOption.query} ';
+        if (query.isEmpty && controller.query.trim() != pageQuery) {
+          controller.query = '$pageQuery ';
           return;
         }
 
@@ -83,8 +84,8 @@ class HomeBar extends HookConsumerWidget {
             icon: const Icon(Icons.rotate_left),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             onPressed: () {
-              if (controller.query.trim() != pageOption.query) {
-                controller.query = '${pageOption.query} ';
+              if (controller.query.trim() != pageQuery) {
+                controller.query = '$pageQuery ';
               }
             },
           ),
@@ -94,7 +95,7 @@ class HomeBar extends HookConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             onPressed: () {
               if (controller.query.isEmpty) {
-                controller.query = pageOption.query;
+                controller.query = pageQuery;
                 controller.close();
               } else {
                 controller.clear();
