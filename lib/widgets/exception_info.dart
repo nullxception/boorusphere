@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,8 @@ class ExceptionInfo extends HookWidget {
       return e.address != null
           ? 'Failed to connect to ${e.address?.host}'
           : 'Connection failed';
+    } else if (e is TimeoutException) {
+      return 'Connection timeout';
     }
     try {
       // let's try to obtain exception message
@@ -39,6 +42,8 @@ class ExceptionInfo extends HookWidget {
     }
   }
 
+  bool get allowToggled => stackTrace == null || exception is TimeoutException;
+
   @override
   Widget build(BuildContext context) {
     final showTrace = useState(false);
@@ -47,7 +52,7 @@ class ExceptionInfo extends HookWidget {
     }
 
     return InkWell(
-      onTap: stackTrace == null ? null : toggleStacktrace,
+      onTap: allowToggled ? null : toggleStacktrace,
       child: Column(
         crossAxisAlignment: crossAxisAlignment,
         children: [
