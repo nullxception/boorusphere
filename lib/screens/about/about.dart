@@ -66,9 +66,8 @@ class AboutPage extends HookConsumerWidget {
                             onPressed: () {
                               context.navigator.push(MaterialPageRoute(
                                 builder: (context) {
-                                  return ChangelogPage(
-                                    title: 'Version ${data.newVersion}',
-                                    option: const ChangelogOption(
+                                  return const ChangelogPage(
+                                    option: ChangelogOption(
                                       type: ChangelogType.git,
                                       latestOnly: true,
                                     ),

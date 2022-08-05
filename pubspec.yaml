@@ -41,7 +41,6 @@ dependencies:
   flutter_cache_manager: ^3.0.0-nullsafety.1
   flutter_downloader: ^1.8.1
   flutter_hooks: ^0.18.5+1
-  flutter_markdown: ^0.6.10+3
   flutter_riverpod: ^1.0.4
   flutter_speed_dial: ^6.0.0
   flutter_spinkit: ^5.1.0

@@ -5,13 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../entity/changelog_data.dart';
 import '../utils/retry_future.dart';
 import 'version.dart';
 
 final changelogProvider =
-    FutureProvider.family<String, ChangelogOption>((ref, arg) async {
+    FutureProvider.family<List<ChangelogData>, ChangelogOption>(
+        (ref, arg) async {
   final data = await ChangelogDataSource.from(arg.type);
-  return arg.latestOnly ? ChangelogDataSource.getLatest(data) : data;
+  return ChangelogData.fromString(data);
 });
 
 enum ChangelogType {
@@ -53,11 +55,6 @@ class ChangelogDataSource {
     }
 
     return data;
-  }
-
-  static String getLatest(String data) {
-    final logs = data.split(RegExp(r'## ([.0-9]+)'));
-    return logs.isEmpty ? '' : logs[1];
   }
 
   static const fileName = 'CHANGELOG.md';
