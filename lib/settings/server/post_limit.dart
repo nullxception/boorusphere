@@ -10,7 +10,7 @@ final serverPostLimitProvider =
 });
 
 class ServerPostLimitState extends StateNotifier<int> {
-  ServerPostLimitState(int initData) : super(initData);
+  ServerPostLimitState(super.initData);
 
   void save(int value) {
     state = value;

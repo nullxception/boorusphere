@@ -57,7 +57,7 @@ class SliverThumbnails extends HookConsumerWidget {
                 }),
               );
               if (result != index) {
-                autoScrollController.scrollToIndex(
+                await autoScrollController.scrollToIndex(
                   result ?? index,
                   duration: const Duration(milliseconds: 600),
                   preferPosition: AutoScrollPosition.middle,

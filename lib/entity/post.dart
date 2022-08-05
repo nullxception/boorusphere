@@ -22,8 +22,6 @@ enum PostRating {
 
 @freezed
 class Post with _$Post {
-  const Post._();
-
   @HiveType(typeId: 3, adapterName: 'PostAdapter')
   const factory Post({
     @HiveField(0, defaultValue: -1) @Default(-1) int id,
@@ -42,6 +40,7 @@ class Post with _$Post {
     @HiveField(13, defaultValue: -1) @Default(-1) int previewHeight,
     @HiveField(14, defaultValue: '') @Default('') String source,
   }) = _Post;
+  const Post._();
 
   String get contentFile => sampleFile.isEmpty ? originalFile : sampleFile;
 

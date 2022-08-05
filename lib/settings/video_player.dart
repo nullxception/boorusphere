@@ -9,7 +9,7 @@ final videoPlayerMuteProvider =
 });
 
 class VideoPlayerMuteState extends StateNotifier<bool> {
-  VideoPlayerMuteState(bool initState) : super(initState);
+  VideoPlayerMuteState(super.initState);
 
   bool toggle() {
     final result = !state;

@@ -6,6 +6,7 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_print
 
 import 'dart:io';
+
 import 'package:path/path.dart' as path;
 import 'package:yaml/yaml.dart';
 
@@ -47,14 +48,14 @@ Future<void> renameOutputApks(
   final fromPath = path.normalize(path.join(outDir, from));
   final toPath = path.normalize(path.join(outDir, to));
   final apk = File(fromPath);
-  if (await apk.exists()) {
+  if (apk.existsSync()) {
     print(':: Renaming $from to $to');
     await apk.rename(toPath);
   }
 }
 
 void main(List<String> args) async {
-  if (!await Directory(outputDir).exists()) {
+  if (!Directory(outputDir).existsSync()) {
     throw FileSystemException('Directory is not exists', outputDir);
   }
 

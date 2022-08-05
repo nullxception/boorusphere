@@ -5,14 +5,14 @@ import '../utils/extensions/buildcontext.dart';
 
 class ExpandableGroupListView<T, E> extends StatelessWidget {
   const ExpandableGroupListView({
-    Key? key,
+    super.key,
     required this.items,
     required this.groupedBy,
     required this.groupTitle,
     required this.itemBuilder,
     this.expanded = true,
     this.ungroup = false,
-  }) : super(key: key);
+  });
 
   final List<T> items;
   final E Function(T entry) groupedBy;
@@ -38,10 +38,7 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
                   title: groupTitle(groupedItems[index].key),
                   initiallyExpanded: expanded,
                   textColor: context.colorScheme.onBackground,
-                  children: groupedItems[index]
-                      .value
-                      .map((it) => itemBuilder(it))
-                      .toList(),
+                  children: groupedItems[index].value.map(itemBuilder).toList(),
                 ),
               );
       },

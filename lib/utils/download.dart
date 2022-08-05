@@ -26,7 +26,7 @@ class DownloadUtils {
     final f = File('$dirPath/.boorusphere.tmp');
     try {
       await f.writeAsString('', mode: FileMode.append, flush: true);
-      if (!await f.exists()) {
+      if (!f.existsSync()) {
         return false;
       }
 
@@ -39,7 +39,7 @@ class DownloadUtils {
 
   static Future<bool> get hasDotnomedia async {
     final file = await dotnomediaFile;
-    return await file.exists();
+    return file.existsSync();
   }
 
   static Future<void> createDownloadDir() async {
@@ -50,32 +50,32 @@ class DownloadUtils {
     }
 
     final dir = await downloadDir;
-    final dirExists = await dir.exists();
+    final dirExists = dir.existsSync();
     if (await canWriteTo(downloadPath) && !dirExists) {
       await dir.create();
     }
   }
 
-  static void rescanMedia() async {
+  static Future<void> rescanMedia() async {
     final dir = await downloadDir;
     if (Platform.isAndroid) {
-      MediaScanner.loadMedia(path: dir.absolute.path);
+      await MediaScanner.loadMedia(path: dir.absolute.path);
     }
   }
 
   static Future<void> createDotnomedia() async {
     final file = await dotnomediaFile;
-    if (!await file.exists()) {
+    if (!file.existsSync()) {
       await file.create();
     }
-    MediaScanner.loadMedia(path: file.parent.absolute.path);
+    await MediaScanner.loadMedia(path: file.parent.absolute.path);
   }
 
   static Future<void> removeDotnomedia() async {
     final file = await dotnomediaFile;
-    if (await file.exists()) {
+    if (file.existsSync()) {
       await file.delete();
     }
-    MediaScanner.loadMedia(path: file.parent.absolute.path);
+    await MediaScanner.loadMedia(path: file.parent.absolute.path);
   }
 }

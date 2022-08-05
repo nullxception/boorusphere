@@ -6,7 +6,7 @@ import '../entity/search_history.dart';
 
 final searchHistoryProvider =
     StateNotifierProvider<SearchHistorySource, Map<int, SearchHistory>>(
-        (ref) => SearchHistorySource(ref));
+        SearchHistorySource.new);
 
 class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
   SearchHistorySource(this.ref) : super({});
@@ -15,8 +15,7 @@ class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
 
   Box get _box => Hive.box('searchHistory');
 
-  Map<int, SearchHistory> get all =>
-      _box.toMap().map((key, value) => MapEntry(key, value));
+  Map<int, SearchHistory> get all => Map.castFrom(_box.toMap());
 
   void rebuild(String query) {
     final queries = query.split(' ');

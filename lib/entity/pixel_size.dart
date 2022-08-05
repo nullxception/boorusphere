@@ -4,12 +4,11 @@ part 'pixel_size.freezed.dart';
 
 @freezed
 class PixelSize with _$PixelSize {
-  const PixelSize._();
-
   const factory PixelSize({
     @Default(-1) int width,
     @Default(-1) int height,
   }) = _PixelSize;
+  const PixelSize._();
 
   bool get hasPixels => width + height > 0;
 

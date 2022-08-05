@@ -9,7 +9,7 @@ import '../entity/server_data.dart';
 
 final serverDataProvider =
     StateNotifierProvider<ServerDataSource, List<ServerData>>(
-        (ref) => ServerDataSource(ref));
+        ServerDataSource.new);
 
 class ServerDataSource extends StateNotifier<List<ServerData>> {
   ServerDataSource(this.ref) : super([]);
@@ -74,7 +74,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     await _box.putAll(fromAssets);
     state = _box.values.map((it) => it as ServerData).toList();
 
-    ref.read(activeServerProvider.notifier).use(state.first);
+    await ref.read(activeServerProvider.notifier).use(state.first);
   }
 
   Future<void> editServer({
@@ -87,7 +87,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     await _box.put(data.homepage, newData);
     state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data && newData.name != activeServer.name) {
-      ref.read(activeServerProvider.notifier).use(newData);
+      await ref.read(activeServerProvider.notifier).use(newData);
     }
   }
 }

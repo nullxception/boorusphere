@@ -54,7 +54,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                   break;
               }
             },
-            itemBuilder: (BuildContext context) {
+            itemBuilder: (context) {
               return [
                 const PopupMenuItem(
                   value: 'reset',
@@ -98,7 +98,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                           break;
                       }
                     },
-                    itemBuilder: (BuildContext context) {
+                    itemBuilder: (context) {
                       return [
                         const PopupMenuItem(
                           value: 'edit',

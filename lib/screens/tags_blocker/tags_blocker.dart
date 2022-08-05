@@ -14,7 +14,7 @@ class TagsBlockerPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = useMemoized(() => GlobalKey<FormState>());
+    final formKey = useMemoized(GlobalKey<FormState>.new);
     final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final blockedTags = useState({});
     final blockedTagsController = useTextEditingController();

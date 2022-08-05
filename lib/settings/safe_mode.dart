@@ -8,7 +8,7 @@ final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
 });
 
 class SafeModeState extends StateNotifier<bool> {
-  SafeModeState(bool initData) : super(initData);
+  SafeModeState(super.initData);
 
   void enable(bool value) {
     state = value;

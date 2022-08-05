@@ -18,8 +18,8 @@ class _FloatingSearchBarControllerHook
     extends Hook<FloatingSearchBarController> {
   const _FloatingSearchBarControllerHook({
     this.debugLabel,
-    List<Object?>? keys,
-  }) : super(keys: keys);
+    super.keys,
+  });
 
   final String? debugLabel;
 

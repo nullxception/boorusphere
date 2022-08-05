@@ -8,7 +8,7 @@ final groupByServerProvider =
 });
 
 class GroupByServerState extends StateNotifier<bool> {
-  GroupByServerState(bool initState) : super(initState);
+  GroupByServerState(super.initState);
 
   void enable(bool value) {
     state = value;

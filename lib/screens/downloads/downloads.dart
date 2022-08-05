@@ -36,7 +36,7 @@ class DownloadsPage extends ConsumerWidget {
                     break;
                 }
               },
-              itemBuilder: (BuildContext context) {
+              itemBuilder: (context) {
                 return [
                   PopupMenuItem(
                     value: 'group-by-server',
@@ -67,7 +67,7 @@ class DownloadsPage extends ConsumerWidget {
             : ExpandableGroupListView<DownloadEntry, String>(
                 items: downloader.entries.reversed.toList(),
                 groupedBy: (entry) => entry.post.serverName,
-                groupTitle: (key) => Text(key),
+                groupTitle: Text.new,
                 itemBuilder: (entry) => DownloadEntryView(entry: entry),
                 ungroup: !groupByServer,
               ),

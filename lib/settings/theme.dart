@@ -16,7 +16,7 @@ final darkerThemeProvider =
 });
 
 class ThemeModeState extends StateNotifier<ThemeMode> {
-  ThemeModeState(ThemeMode initState) : super(initState);
+  ThemeModeState(super.initState);
 
   void setMode({required ThemeMode mode}) {
     state = mode;
@@ -39,7 +39,7 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
 }
 
 class DarkerThemeState extends StateNotifier<bool> {
-  DarkerThemeState(bool initState) : super(initState);
+  DarkerThemeState(super.initState);
 
   void enable(bool value) {
     state = value;

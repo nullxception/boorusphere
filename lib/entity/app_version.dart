@@ -4,13 +4,12 @@ part 'app_version.freezed.dart';
 
 @freezed
 class AppVersion with _$AppVersion {
-  const AppVersion._();
-
   const factory AppVersion({
     @Default(0) int major,
     @Default(0) int minor,
     @Default(0) int patch,
   }) = _AppVersion;
+  const AppVersion._();
 
   factory AppVersion.fromString(String string) {
     final n =

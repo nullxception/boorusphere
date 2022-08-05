@@ -13,7 +13,7 @@ import '../entity/post.dart';
 import '../utils/download.dart';
 import '../utils/extensions/string.dart';
 
-final downloadProvider = ChangeNotifierProvider((ref) => DownloadService(ref));
+final downloadProvider = ChangeNotifierProvider(DownloadService.new);
 
 class DownloadService extends ChangeNotifier {
   DownloadService(this.ref);
@@ -40,7 +40,7 @@ class DownloadService extends ChangeNotifier {
       _updateDownloadProgress(newProg);
     });
     FlutterDownloader.registerCallback(flutterDownloaderCallback);
-    _populateDownloadEntries();
+    await _populateDownloadEntries();
   }
 
   @pragma('vm:entry-point')
@@ -90,7 +90,7 @@ class DownloadService extends ChangeNotifier {
 
   Future<void> _updateEntry(
       {required String id, required DownloadEntry newEntry}) async {
-    _removeEntry(id: id);
+    await _removeEntry(id: id);
     entries.add(newEntry);
     await _box.put(newEntry.id, newEntry);
   }
@@ -109,7 +109,7 @@ class DownloadService extends ChangeNotifier {
     }
 
     if (_box.values.isNotEmpty) {
-      _box.deleteAll(_box.keys);
+      await _box.deleteAll(_box.keys);
     }
 
     progresses.clear();
@@ -133,7 +133,7 @@ class DownloadService extends ChangeNotifier {
       final destination = '${dir.absolute.path}/${fileUrl.fileName}';
       final entry =
           DownloadEntry(id: taskId, post: post, destination: destination);
-      _addEntry(entry: entry);
+      await _addEntry(entry: entry);
       notifyListeners();
     }
   }
@@ -143,7 +143,7 @@ class DownloadService extends ChangeNotifier {
     if (newId != null) {
       final newEntry =
           entries.firstWhere((it) => it.id == id).copyWith(id: newId);
-      _updateEntry(id: id, newEntry: newEntry);
+      await _updateEntry(id: id, newEntry: newEntry);
       notifyListeners();
     }
   }
@@ -154,7 +154,7 @@ class DownloadService extends ChangeNotifier {
 
   Future<void> clearEntry({required String id}) async {
     await FlutterDownloader.remove(taskId: id, shouldDeleteContent: false);
-    _removeEntry(id: id);
+    await _removeEntry(id: id);
     notifyListeners();
   }
 

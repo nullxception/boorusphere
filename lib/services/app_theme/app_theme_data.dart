@@ -10,13 +10,12 @@ part 'app_theme_data.freezed.dart';
 
 @freezed
 class AppThemeData with _$AppThemeData {
-  const AppThemeData._();
-
   const factory AppThemeData({
     required ThemeData day,
     required ThemeData night,
     required ThemeData midnight,
   }) = _AppThemeData;
+  const AppThemeData._();
 
   factory AppThemeData.harmonize({ColorScheme? light, ColorScheme? dark}) {
     return AppThemeData(

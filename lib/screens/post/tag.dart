@@ -4,16 +4,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../utils/extensions/buildcontext.dart';
 
 class Tag extends HookWidget {
-  final String tag;
-  final bool Function()? active;
-  final Function() onPressed;
-
   const Tag({
-    Key? key,
+    super.key,
     required this.tag,
     required this.onPressed,
     this.active,
-  }) : super(key: key);
+  });
+  final String tag;
+  final bool Function()? active;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {

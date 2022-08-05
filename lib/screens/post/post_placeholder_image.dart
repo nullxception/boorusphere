@@ -7,10 +7,10 @@ import '../../entity/post.dart';
 
 class PostPlaceholderImage extends StatelessWidget {
   const PostPlaceholderImage({
-    Key? key,
+    super.key,
     required this.post,
     required this.shouldBlur,
-  }) : super(key: key);
+  });
 
   final Post post;
   final bool shouldBlur;

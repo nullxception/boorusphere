@@ -9,7 +9,7 @@ final blurExplicitPostProvider =
 });
 
 class BlurExplicitPostState extends StateNotifier<bool> {
-  BlurExplicitPostState(bool initData) : super(initData);
+  BlurExplicitPostState(super.initData);
 
   void enable(bool value) {
     state = value;

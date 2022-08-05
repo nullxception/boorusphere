@@ -17,7 +17,7 @@ import 'blocked_tags.dart';
 import 'search_history.dart';
 import 'server.dart';
 
-final pageDataProvider = Provider((ref) => PageDataSource(ref));
+final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption());
 final pageStateProvider = FutureProvider((ref) {
   ref.watch(activeServerProvider);
@@ -97,7 +97,7 @@ class PageDataSource {
     }
   }
 
-  void initialize() async {
+  Future<void> initialize() async {
     final serverData = ref.read(serverDataProvider.notifier);
 
     await serverData.populateData();

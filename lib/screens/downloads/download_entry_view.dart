@@ -162,7 +162,7 @@ class _EntryPopupMenu extends ConsumerWidget {
             break;
         }
       },
-      itemBuilder: (BuildContext context) {
+      itemBuilder: (context) {
         return [
           if (progress.status.isDownloaded && !entry.isFileExists)
             const PopupMenuItem(

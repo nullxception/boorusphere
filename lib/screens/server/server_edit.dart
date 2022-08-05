@@ -21,7 +21,7 @@ class ServerEditorPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataProvider);
-    final formKey = useMemoized(() => GlobalKey<FormState>());
+    final formKey = useMemoized(GlobalKey<FormState>.new);
     final data = useState(server);
     final isLoading = useState(false);
     final errorMessage = useState('');

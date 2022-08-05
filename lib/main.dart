@@ -42,7 +42,7 @@ class Boorusphere extends HookConsumerWidget {
     }, []);
 
     return DynamicColorBuilder(
-      builder: (ColorScheme? maybeLight, ColorScheme? maybeDark) {
+      builder: (maybeLight, maybeDark) {
         appTheme.overrideWith(light: maybeLight, dark: maybeDark);
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
@@ -78,7 +78,7 @@ void main() async {
   Hive.registerAdapter(SearchHistoryAdapter());
   Hive.registerAdapter(PostAdapter());
   Hive.registerAdapter(DownloadEntryAdapter());
-  await Future.wait(boxes.map((box) => Hive.openBox(box)));
+  await Future.wait(boxes.map(Hive.openBox));
 
   runApp(const ProviderScope(child: Boorusphere()));
 }

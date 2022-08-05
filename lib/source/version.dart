@@ -9,8 +9,7 @@ import '../entity/app_update_data.dart';
 import '../entity/app_version.dart';
 import 'device_info.dart';
 
-final versionDataProvider =
-    ChangeNotifierProvider((ref) => VersionDataSource(ref));
+final versionDataProvider = ChangeNotifierProvider(VersionDataSource.new);
 
 final versionUpdateProvider = FutureProvider((ref) async {
   final versionData = ref.watch(versionDataProvider);
@@ -18,6 +17,9 @@ final versionUpdateProvider = FutureProvider((ref) async {
 });
 
 class VersionDataSource extends ChangeNotifier {
+  VersionDataSource(this.ref) {
+    _init();
+  }
   final Ref ref;
 
   AppVersion _version = AppVersion.zero;
@@ -25,11 +27,7 @@ class VersionDataSource extends ChangeNotifier {
   AppVersion get version => _version;
   String get arch => ref.read(deviceInfoProvider).guessCompatibleAbi();
 
-  VersionDataSource(this.ref) {
-    _init();
-  }
-
-  void _init() async {
+  Future<void> _init() async {
     final pkg = await PackageInfo.fromPlatform();
     _version = AppVersion.fromString(pkg.version);
     notifyListeners();

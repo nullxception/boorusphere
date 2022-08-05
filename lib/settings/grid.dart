@@ -8,7 +8,7 @@ final gridProvider = StateNotifierProvider<GridState, int>((ref) {
 });
 
 class GridState extends StateNotifier<int> {
-  GridState(int initState) : super(initState);
+  GridState(super.initState);
 
   void rotate() {
     state = state < 2 ? state + 1 : 0;

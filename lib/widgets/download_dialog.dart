@@ -8,10 +8,10 @@ import '../utils/extensions/string.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({
-    Key? key,
+    super.key,
     required this.post,
     this.onItemClick,
-  }) : super(key: key);
+  });
 
   final Post post;
   final Function(String type)? onItemClick;

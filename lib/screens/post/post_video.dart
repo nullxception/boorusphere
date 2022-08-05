@@ -121,9 +121,7 @@ class PostVideoPlayer extends HookConsumerWidget {
       });
     }, [playerController]);
 
-    useEffect(() {
-      autoHideToolbox();
-    }, [key]);
+    useEffect(autoHideToolbox, [key]);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

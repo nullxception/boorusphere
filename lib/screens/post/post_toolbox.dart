@@ -10,7 +10,7 @@ import '../../widgets/download_dialog.dart';
 import 'post_detail.dart';
 
 class PostToolbox extends HookConsumerWidget {
-  const PostToolbox(this.post, {Key? key}) : super(key: key);
+  const PostToolbox(this.post, {super.key});
 
   final Post post;
 

@@ -3,15 +3,6 @@ import 'package:flutter/material.dart';
 import '../../utils/extensions/buildcontext.dart';
 
 class QuickBar extends StatelessWidget {
-  const QuickBar._({
-    super.key,
-    this.title,
-    this.actionTitle,
-    this.onPressed,
-    this.useProgressBar = false,
-    this.progress,
-  });
-
   factory QuickBar({
     Key? key,
     Widget? title,
@@ -20,6 +11,14 @@ class QuickBar extends StatelessWidget {
         key: key,
         title: title,
       );
+  const QuickBar._({
+    super.key,
+    this.title,
+    this.actionTitle,
+    this.onPressed,
+    this.useProgressBar = false,
+    this.progress,
+  });
 
   factory QuickBar.action({
     Key? key,

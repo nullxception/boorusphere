@@ -14,7 +14,7 @@ extension LinkedHashMapExt on LinkedHashMap {
 extension MapStringExt on Map<String, dynamic> {
   T take<T>(List<String> listOfKey, {required T orElse}) {
     try {
-      final tKey = listOfKey.where((it) => containsKey(it)).first;
+      final tKey = listOfKey.where(containsKey).first;
       final data = this[tKey];
       if (data is LinkedHashMap) {
         final g = data.toGDataString().trim();

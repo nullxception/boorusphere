@@ -23,8 +23,8 @@ class _ExtendedPageControllerHook extends Hook<ExtendedPageController> {
     required this.initialPage,
     required this.keepPage,
     required this.viewportFraction,
-    List<Object?>? keys,
-  }) : super(keys: keys);
+    super.keys,
+  });
 
   final int initialPage;
   final bool keepPage;

@@ -26,7 +26,7 @@ class SearchSuggestionView extends HookConsumerWidget {
     final suggester = ref.watch(suggestionProvider(controller.query));
     final history = ref.watch(searchHistoryProvider);
 
-    final addToInput = useCallback((String suggested) {
+    final addToInput = useCallback((suggested) {
       final queries = controller.query.replaceAll('  ', ' ').split(' ');
       final result = queries.sublist(0, queries.length - 1).toSet()
         ..addAll(suggested.split(' '));
@@ -34,7 +34,7 @@ class SearchSuggestionView extends HookConsumerWidget {
       controller.query = '${result.join(' ')} ';
     }, []);
 
-    final searchTag = useCallback((String query) {
+    final searchTag = useCallback((query) {
       ref
           .read(pageOptionProvider.notifier)
           .update((state) => PageOption(query: query, clear: true));
