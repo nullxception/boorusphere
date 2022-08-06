@@ -20,12 +20,22 @@ class AppbarVisibility extends StatelessWidget implements PreferredSize {
   @override
   Widget build(BuildContext context) {
     visible ? controller.reverse() : controller.forward();
+    final anim = CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInCubic,
+    );
     return SlideTransition(
-      position:
-          Tween<Offset>(begin: Offset.zero, end: const Offset(0, -1)).animate(
-        CurvedAnimation(parent: controller, curve: Curves.easeInQuint),
+      position: Tween<Offset>(
+        begin: Offset.zero,
+        end: const Offset(0, -0.3),
+      ).animate(anim),
+      child: FadeTransition(
+        opacity: Tween<double>(
+          begin: 1.0,
+          end: 0,
+        ).animate(anim),
+        child: child,
       ),
-      child: child,
     );
   }
 }
@@ -45,12 +55,19 @@ class BottomBarVisibility extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     visible ? controller.reverse() : controller.forward();
+    final anim = CurvedAnimation(parent: controller, curve: Curves.easeInCubic);
     return SlideTransition(
-      position:
-          Tween<Offset>(begin: Offset.zero, end: const Offset(0, 1)).animate(
-        CurvedAnimation(parent: controller, curve: Curves.easeInQuint),
+      position: Tween<Offset>(
+        begin: Offset.zero,
+        end: const Offset(0, 0.3),
+      ).animate(anim),
+      child: FadeTransition(
+        opacity: Tween<double>(
+          begin: 1.0,
+          end: 0,
+        ).animate(anim),
+        child: child,
       ),
-      child: child,
     );
   }
 }

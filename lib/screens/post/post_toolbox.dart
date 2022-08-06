@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -18,7 +19,12 @@ class PostToolbox extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(post.originalFile);
-    final safeBottom = MediaQuery.of(context).padding.bottom;
+    final viewPadding = MediaQuery.of(context).viewPadding;
+    final safePaddingBottom = useState(viewPadding.bottom);
+    if (viewPadding.bottom > safePaddingBottom.value) {
+      safePaddingBottom.value = viewPadding.bottom;
+    }
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -27,9 +33,9 @@ class PostToolbox extends HookConsumerWidget {
           colors: [Colors.black54, Colors.transparent],
         ),
       ),
-      height: 86 + safeBottom,
-      padding: EdgeInsets.only(bottom: safeBottom + 8, right: 8),
+      height: safePaddingBottom.value + 86,
       alignment: Alignment.bottomRight,
+      padding: EdgeInsets.only(bottom: safePaddingBottom.value + 8, right: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
