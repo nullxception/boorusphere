@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -32,41 +33,81 @@ class SliverThumbnails extends HookConsumerWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
+    final autoScrollTo = useCallback<Function(int)>((dest) {
+      if (autoScrollController.isAutoScrolling) return;
+      if (autoScrollController.isIndexStateInLayoutRange(dest)) {
+        autoScrollController.scrollToIndex(
+          dest,
+          duration: const Duration(milliseconds: 16),
+          preferPosition: AutoScrollPosition.middle,
+        );
+      } else {
+        autoScrollController
+            .scrollToIndex(
+              dest,
+              duration: const Duration(milliseconds: 800),
+              preferPosition: AutoScrollPosition.middle,
+            )
+            .whenComplete(() => autoScrollController.highlight(dest,
+                highlightDuration: const Duration(milliseconds: 150)));
+      }
+    }, []);
+
     return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
       childCount: pageData.posts.length,
-      itemBuilder: (context, index) => AutoScrollTag(
-        key: ValueKey(index),
-        controller: autoScrollController,
-        index: index,
-        child: Card(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: GestureDetector(
-            child: Thumbnail(post: pageData.posts[index]),
-            onTap: () async {
-              onTap?.call(index);
-              final result = await context.navigator.push(
-                MaterialPageRoute(builder: (context) {
-                  return PostPage(beginPage: index);
-                }),
-              );
-              if (result != index) {
-                await autoScrollController.scrollToIndex(
-                  result ?? index,
-                  duration: const Duration(milliseconds: 600),
-                  preferPosition: AutoScrollPosition.middle,
+      itemBuilder: (context, index) {
+        final post = pageData.posts[index];
+        return AutoScrollTag(
+          key: ValueKey(index),
+          controller: autoScrollController,
+          index: index,
+          highlightColor: context.theme.colorScheme.surfaceTint,
+          child: Card(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: GestureDetector(
+              child: Hero(
+                tag: post.id,
+                child: Thumbnail(post: post),
+                flightShuttleBuilder: (flightContext, animation,
+                    flightDirection, fromHeroContext, toHeroContext) {
+                  final Hero toHero = toHeroContext.widget as Hero;
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: post.aspectRatio,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
+                          child: toHero.child,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              onTap: () async {
+                onTap?.call(index);
+                final dest = await context.navigator.push(
+                  ChillMaterialRoute(
+                    builder: (context) {
+                      return PostPage(beginPage: index);
+                    },
+                  ),
                 );
-              }
-            },
+                autoScrollTo(dest);
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -177,4 +218,19 @@ class _ThumbnailShimmer extends StatelessWidget {
       ),
     );
   }
+}
+
+class ChillMaterialRoute extends MaterialPageRoute {
+  ChillMaterialRoute({
+    required super.builder,
+    this.duration = const Duration(milliseconds: 400),
+  });
+
+  final Duration duration;
+
+  @override
+  Duration get transitionDuration => duration;
+
+  @override
+  Duration get reverseTransitionDuration => duration;
 }

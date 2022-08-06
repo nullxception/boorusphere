@@ -22,10 +22,10 @@ class PostPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
-    final pageController = useExtendedPageController(initialPage: beginPage);
+    final page = useState(beginPage);
+    final pageController = useExtendedPageController(initialPage: page.value);
     final pageData = ref.watch(pageDataProvider);
     final pageState = ref.watch(pageStateProvider);
-    final page = useState(beginPage);
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
@@ -72,15 +72,25 @@ class PostPage extends HookConsumerWidget {
                 itemCount: totalPost,
                 itemBuilder: (_, index) {
                   final post = pageData.posts[index];
-
+                  final Widget widget;
                   switch (post.contentType) {
                     case PostType.photo:
-                      return PostImageDisplay(post: post);
+                      widget = PostImageDisplay(
+                        post: post,
+                        isFromHome: index == beginPage,
+                      );
+                      break;
                     case PostType.video:
-                      return PostVideoDisplay(post: post);
+                      widget = PostVideoDisplay(post: post);
+                      break;
                     default:
-                      return PostErrorDisplay(post: post);
+                      widget = PostErrorDisplay(post: post);
+                      break;
                   }
+                  return HeroMode(
+                    enabled: index == page.value,
+                    child: widget,
+                  );
                 },
               ),
             ),
