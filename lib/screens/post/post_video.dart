@@ -345,20 +345,24 @@ class _PlayerToolbox extends HookConsumerWidget {
                   );
                 },
               ),
-              if (onFullscreenTap != null)
-                IconButton(
-                  icon: Icon(
-                    fullscreen
-                        ? Icons.fullscreen_exit
-                        : Icons.fullscreen_outlined,
-                  ),
-                  onPressed: () {
-                    onFullscreenTap?.call(fullscreen);
-                  },
+              IconButton(
+                icon: Icon(
+                  fullscreen
+                      ? Icons.fullscreen_exit
+                      : Icons.fullscreen_outlined,
                 ),
+                onPressed: onFullscreenTap == null
+                    ? null
+                    : () {
+                        onFullscreenTap?.call(fullscreen);
+                      },
+              ),
             ],
           ),
-          if (!disableProgressBar) _PlayerProgress(controller: controller),
+          _PlayerProgress(
+            controller: controller,
+            enabled: !disableProgressBar,
+          ),
         ],
       ),
     );
@@ -366,30 +370,44 @@ class _PlayerToolbox extends HookConsumerWidget {
 }
 
 class _PlayerProgress extends StatelessWidget {
-  const _PlayerProgress({this.controller});
+  const _PlayerProgress({this.controller, this.enabled = true});
 
   final VideoPlayerController? controller;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return controller == null || !(controller?.value.isInitialized ?? false)
-        ? Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 16),
-            child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.redAccent.shade700,
-              ),
-              backgroundColor: Colors.white.withAlpha(20),
-            ),
-          )
-        : VideoProgressIndicator(
-            controller!,
-            colors: VideoProgressColors(
-              playedColor: Colors.redAccent.shade700,
-              backgroundColor: Colors.white.withAlpha(20),
-            ),
-            allowScrubbing: true,
-            padding: const EdgeInsets.only(top: 16, bottom: 16),
-          );
+    if (!enabled) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 16, bottom: 16),
+        child: LinearProgressIndicator(
+          value: 0,
+          backgroundColor: Colors.white.withAlpha(20),
+        ),
+      );
+    }
+
+    final player = controller;
+    if (player == null || !player.value.isInitialized) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 16, bottom: 16),
+        child: LinearProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Colors.redAccent.shade700,
+          ),
+          backgroundColor: Colors.white.withAlpha(20),
+        ),
+      );
+    }
+
+    return VideoProgressIndicator(
+      player,
+      colors: VideoProgressColors(
+        playedColor: Colors.redAccent.shade700,
+        backgroundColor: Colors.white.withAlpha(20),
+      ),
+      allowScrubbing: true,
+      padding: const EdgeInsets.only(top: 16, bottom: 16),
+    );
   }
 }
