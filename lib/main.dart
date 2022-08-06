@@ -6,11 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'entity/app_version.dart';
 import 'entity/download_entry.dart';
 import 'entity/post.dart';
 import 'entity/search_history.dart';
 import 'entity/server_data.dart';
 import 'screens/about/about.dart';
+import 'screens/about/changelog.dart';
 import 'screens/about/licenses.dart';
 import 'screens/downloads/downloads.dart';
 import 'screens/home/home.dart';
@@ -21,6 +23,7 @@ import 'screens/tags_blocker/tags_blocker.dart';
 import 'services/app_theme/app_theme.dart';
 import 'services/download.dart';
 import 'settings/theme.dart';
+import 'source/changelog.dart';
 import 'source/device_info.dart';
 import 'source/page.dart';
 import 'widgets/bouncing_scroll.dart';
@@ -72,6 +75,34 @@ class Boorusphere extends HookConsumerWidget {
             path: 'about',
             builder: (context, state) => const AboutPage(),
             routes: [
+              GoRoute(
+                name: 'changelog',
+                path: 'changelog',
+                builder: (context, state) {
+                  return const ChangelogPage(
+                    option: ChangelogOption(
+                      type: ChangelogType.assets,
+                    ),
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    name: 'changelog/ver',
+                    path: ':ver',
+                    builder: (context, state) {
+                      final ver = state.params['ver'];
+                      final git = state.queryParams['git'] == '1';
+                      return ChangelogPage(
+                        option: ChangelogOption(
+                          type: git ? ChangelogType.git : ChangelogType.assets,
+                          version:
+                              ver != null ? AppVersion.fromString(ver) : null,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
               GoRoute(
                 name: 'licenses',
                 path: 'licenses',

@@ -4,10 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../source/changelog.dart';
 import '../../source/version.dart';
 import '../../utils/extensions/buildcontext.dart';
-import 'changelog.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});
@@ -64,16 +62,8 @@ class AboutPage extends HookConsumerWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              context.navigator.push(MaterialPageRoute(
-                                builder: (context) {
-                                  return const ChangelogPage(
-                                    option: ChangelogOption(
-                                      type: ChangelogType.git,
-                                      latestOnly: true,
-                                    ),
-                                  );
-                                },
-                              ));
+                              context.push(
+                                  '/about/changelog/${data.newVersion}?git=1');
                             },
                             style: ElevatedButton.styleFrom(elevation: 0),
                             child: const Text('View changes'),
@@ -110,13 +100,7 @@ class AboutPage extends HookConsumerWidget {
                 title: const Text('Changelog'),
                 leading: const Icon(Icons.list_alt_rounded),
                 onTap: () {
-                  context.navigator.push(
-                    MaterialPageRoute(builder: (context) {
-                      return const ChangelogPage(
-                        option: ChangelogOption(type: ChangelogType.assets),
-                      );
-                    }),
-                  );
+                  context.pushNamed('changelog');
                 },
               ),
               ListTile(

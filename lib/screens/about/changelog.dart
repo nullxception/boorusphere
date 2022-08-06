@@ -22,10 +22,10 @@ class ChangelogPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          !option.latestOnly
+          option.version == null
               ? 'Changelog'
               : changelog.maybeWhen(
-                  data: (value) => 'Version ${value.first.version}',
+                  data: (value) => 'Version ${option.version}',
                   orElse: () => 'Changelog',
                 ),
         ),
@@ -38,9 +38,11 @@ class ChangelogPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (option.latestOnly)
+                if (option.version != null)
                   ChangelogDataView(
-                    changelog: data.first,
+                    changelog: data.firstWhere(
+                      (it) => it.version == option.version,
+                    ),
                     showVersion: false,
                   )
                 else

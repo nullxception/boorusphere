@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../entity/app_version.dart';
 import '../entity/changelog_data.dart';
 import '../utils/retry_future.dart';
 import 'version.dart';
@@ -24,10 +25,10 @@ enum ChangelogType {
 class ChangelogOption {
   const ChangelogOption({
     required this.type,
-    this.latestOnly = false,
+    this.version,
   });
   final ChangelogType type;
-  final bool latestOnly;
+  final AppVersion? version;
 }
 
 class ChangelogDataSource {
