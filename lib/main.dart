@@ -128,6 +128,8 @@ class Boorusphere extends HookConsumerWidget {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   const boxes = [
     'searchHistory',
     'settings',
