@@ -20,12 +20,15 @@ class PostErrorDisplay extends HookConsumerWidget {
       alignment: Alignment.center,
       fit: StackFit.passthrough,
       children: [
-        PostPlaceholderImage(
-          post: post,
-          shouldBlur: shouldBlur && post.rating == PostRating.explicit,
+        Hero(
+          tag: post.id,
+          child: PostPlaceholderImage(
+            post: post,
+            shouldBlur: shouldBlur && post.rating == PostRating.explicit,
+          ),
         ),
         Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: MediaQuery.of(context).viewPadding.bottom + 32,
           child: QuickBar.action(
             title: Text('${post.contentFile.fileExtension} is not supported'),
             actionTitle: const Text('Open externally'),
