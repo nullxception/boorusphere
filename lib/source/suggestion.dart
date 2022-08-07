@@ -8,12 +8,14 @@ import '../../settings/active_server.dart';
 import '../../utils/extensions/string.dart';
 import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
+import '../entity/server_data.dart';
 import 'blocked_tags.dart';
 
-final suggestionProvider =
+final suggestionFuture =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
+  final serverActive = ref.watch(activeServerProvider);
   final source = SuggestionSource(ref);
-  return await source.fetch(query: query);
+  return await source.fetch(query: query, server: serverActive);
 });
 
 class SuggestionSource {
@@ -21,11 +23,13 @@ class SuggestionSource {
 
   final Ref ref;
 
-  Future<List<String>> fetch({required String query}) async {
-    final activeServer = ref.read(activeServerProvider);
+  Future<List<String>> fetch({
+    required String query,
+    required ServerData server,
+  }) async {
     final blockedTags = ref.read(blockedTagsProvider);
 
-    final url = activeServer.suggestionUrlOf(query.split(' ').last);
+    final url = server.suggestionUrlOf(query.split(' ').last);
     try {
       final res = await retryFuture(
         () => http.get(url.asUri).timeout(const Duration(seconds: 5)),

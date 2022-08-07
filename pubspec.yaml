@@ -55,7 +55,6 @@ dependencies:
   http: ^0.13.1
   json_annotation: ^4.6.0
   json_serializable: ^6.0.1
-  material_floating_search_bar: ^0.3.4
   media_scanner: ^2.1.0
   mime: ^1.0.0
   package_info: ^2.0.0
