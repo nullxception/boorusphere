@@ -42,12 +42,19 @@ final _playerControllerProvider = FutureProvider.autoDispose
 
   final cache = ref.watch(_videoCacheProvider);
   final fromCache = await cache.getFileFromCache(arg);
+  final option = VideoPlayerOptions(mixWithOthers: true);
   if (fromCache != null) {
-    controller = VideoPlayerController.file(fromCache.file);
+    controller = VideoPlayerController.file(
+      fromCache.file,
+      videoPlayerOptions: option,
+    );
   } else {
     final fetcher = ref.watch(_fetcherProvider(arg));
     final fromNet = await fetcher.value;
-    controller = VideoPlayerController.file(fromNet.file);
+    controller = VideoPlayerController.file(
+      fromNet.file,
+      videoPlayerOptions: option,
+    );
   }
 
   ref.onDispose(() {
@@ -58,36 +65,142 @@ final _playerControllerProvider = FutureProvider.autoDispose
   return controller;
 });
 
+final _playerPlayState = StateProvider((ref) => false);
+
 class PostVideoDisplay extends HookConsumerWidget {
-  const PostVideoDisplay({super.key, required this.post});
-  final Post post;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    return PostVideoBlurExplicitView(
-      post: post,
-      shouldBlur: blurExplicitPost,
-      children: PostVideoPlayer(post: post),
-    );
-  }
-}
-
-class PostVideoPlayer extends HookConsumerWidget {
-  const PostVideoPlayer({super.key, required this.post});
+  const PostVideoDisplay({
+    super.key,
+    required this.post,
+    this.isFromHome = false,
+  });
 
   final Post post;
+  final bool isFromHome;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController =
         ref.watch(_playerControllerProvider(post.contentFile));
-    final playerMute = ref.watch(videoPlayerMuteProvider);
-    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    final showToolbox = useState(true);
-    final startPaused = useState(false);
-    final refresh = useRefresher();
+    final blurExplicit = ref.watch(blurExplicitPostProvider);
     final isMounted = useIsMounted();
+    final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
+
+    final heroKey = useMemoized(GlobalKey.new);
+    final asHero = useCallback<Widget Function(Widget)>((child) {
+      return Hero(key: heroKey, tag: post.id, child: child);
+    }, []);
+
+    final blurNoticeAnimator =
+        useAnimationController(duration: const Duration(milliseconds: 200));
+    useEffect(() {
+      if (post.rating != PostRating.explicit || !blurExplicit) {
+        return;
+      }
+
+      if (!isFromHome) {
+        blurNoticeAnimator.forward();
+        return;
+      }
+
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (isMounted()) {
+          blurNoticeAnimator.forward();
+        }
+      });
+    }, []);
+
+    return Stack(
+      alignment: Alignment.center,
+      fit: StackFit.passthrough,
+      children: [
+        if (isBlur.value)
+          asHero(AspectRatio(
+            aspectRatio: post.aspectRatio,
+            child: PostPlaceholderImage(
+              post: post,
+              shouldBlur: true,
+            ),
+          ))
+        else
+          asHero(
+            Center(
+              child: AspectRatio(
+                aspectRatio: post.aspectRatio,
+                child: playerController.maybeWhen(
+                  data: (controller) => Stack(
+                    fit: StackFit.passthrough,
+                    children: [
+                      PostPlaceholderImage(
+                        post: post,
+                        shouldBlur: false,
+                      ),
+                      VideoPlayer(controller),
+                    ],
+                  ),
+                  orElse: () => PostPlaceholderImage(
+                    post: post,
+                    shouldBlur: false,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        _Toolbox(
+          post: post,
+          controllerAsync: playerController,
+          disableProgressBar: isBlur.value,
+        ),
+        if (post.rating == PostRating.explicit && blurExplicit)
+          FadeTransition(
+            opacity: Tween<double>(begin: 0, end: 1).animate(
+              CurvedAnimation(
+                parent: blurNoticeAnimator,
+                curve: Curves.easeInCubic,
+              ),
+            ),
+            child: Center(
+              child: PostExplicitWarningCard(
+                onConfirm: () {
+                  blurNoticeAnimator.reverse();
+                  isBlur.value = false;
+                },
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _Toolbox extends HookConsumerWidget {
+  const _Toolbox({
+    required this.post,
+    this.controllerAsync,
+    this.disableProgressBar = false,
+  });
+
+  final Post post;
+  final AsyncValue<VideoPlayerController>? controllerAsync;
+  final bool disableProgressBar;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = controllerAsync?.asData?.value;
+    final isMuted = ref.watch(videoPlayerMuteProvider);
+    final downloader = ref.watch(downloadProvider);
+    final downloadProgress = downloader.getProgressByURL(post.originalFile);
+    final fullscreen = ref.watch(fullscreenProvider);
+    final refresh = useRefresher();
+    final playerMute = ref.watch(videoPlayerMuteProvider);
+    final isPlaying = ref.watch(_playerPlayState);
+    final isMounted = useIsMounted();
+    final showToolbox = useState(true);
+
+    ref.listen<bool>(_playerPlayState, (previous, next) {
+      if (controller != null) {
+        next ? controller.play() : controller.pause();
+      }
+    });
 
     final autoHideToolbox = useCallback(() {
       Future.delayed(const Duration(seconds: 2), () {
@@ -95,15 +208,8 @@ class PostVideoPlayer extends HookConsumerWidget {
       });
     }, [key]);
 
-    final toggleFullscreen = useCallback(() {
-      ref
-          .read(fullscreenProvider.notifier)
-          .toggle(shouldLandscape: post.width > post.height);
-      autoHideToolbox();
-    }, [key]);
-
     useEffect(() {
-      playerController.whenData((it) {
+      controllerAsync?.whenData((it) {
         it.setLooping(true);
         it.initialize().whenComplete(() {
           onFirstFrame() {
@@ -113,270 +219,137 @@ class PostVideoPlayer extends HookConsumerWidget {
 
           it.addListener(onFirstFrame);
           it.setVolume(playerMute ? 0 : 1);
-          if (!startPaused.value) {
+          if (isPlaying) {
             it.play();
             autoHideToolbox();
           }
         });
       });
-    }, [playerController]);
-
-    useEffect(autoHideToolbox, [key]);
+    }, [controllerAsync]);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        ref.read(fullscreenProvider.notifier).toggle();
+        showToolbox.value = !showToolbox.value;
       },
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          ...playerController.maybeWhen(
-            data: (controller) => [
-              AspectRatio(
-                aspectRatio: post.width / post.height,
-                child: VideoPlayer(controller),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  showToolbox.value = !showToolbox.value;
-                },
-                child: showToolbox.value
-                    ? _PlayerOverlay(
-                        initialValue: !controller.value.isPlaying,
-                        onTap: (isPaused) {
-                          if (isPaused) {
-                            controller.pause();
-                          } else {
-                            controller.play();
-                            autoHideToolbox();
-                          }
-                        },
-                      )
-                    : Container(),
-              ),
-              if (showToolbox.value)
-                _PlayerToolbox(
-                  post: post,
-                  controller: controller,
-                  onFullscreenTap: (_) {
-                    toggleFullscreen();
-                  },
-                )
-            ],
-            orElse: () => [
-              AspectRatio(
-                aspectRatio: post.aspectRatio,
-                child: PostPlaceholderImage(
-                  post: post,
-                  shouldBlur:
-                      blurExplicitPost && post.rating == PostRating.explicit,
-                ),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  showToolbox.value = !showToolbox.value;
-                },
-                child: showToolbox.value
-                    ? _PlayerOverlay(
-                        onTap: (isPaused) {
-                          startPaused.value = isPaused;
-                          if (!isPaused) {
-                            autoHideToolbox();
-                          }
-                        },
-                      )
-                    : Container(),
-              ),
-              if (showToolbox.value)
-                _PlayerToolbox(
-                  post: post,
-                  onFullscreenTap: (_) {
-                    toggleFullscreen();
-                  },
-                )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PostVideoBlurExplicitView extends HookWidget {
-  const PostVideoBlurExplicitView({
-    super.key,
-    required this.post,
-    required this.shouldBlur,
-    required this.children,
-  });
-
-  final Post post;
-  final bool shouldBlur;
-  final Widget children;
-
-  @override
-  Widget build(BuildContext context) {
-    final isBlur = useState(post.rating == PostRating.explicit && shouldBlur);
-    return isBlur.value
-        ? Stack(
-            alignment: Alignment.center,
-            fit: StackFit.passthrough,
-            children: [
-              PostPlaceholderImage(post: post, shouldBlur: true),
-              Center(
-                child: PostExplicitWarningCard(onConfirm: () {
-                  isBlur.value = false;
-                }),
-              ),
-              _PlayerToolbox(post: post, disableProgressBar: true)
-            ],
-          )
-        : children;
-  }
-}
-
-class _PlayerOverlay extends HookWidget {
-  const _PlayerOverlay({this.initialValue = false, this.onTap});
-
-  final Function(bool isPlaying)? onTap;
-  final bool initialValue;
-
-  @override
-  Widget build(BuildContext context) {
-    final isPaused = useState(initialValue);
-
-    return Container(
-      color: Colors.black38,
-      alignment: Alignment.center,
-      child: InkWell(
-        onTap: () {
-          isPaused.value = !isPaused.value;
-          onTap?.call(isPaused.value);
-        },
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.black54,
-            shape: BoxShape.circle,
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Icon(
-            !isPaused.value ? Icons.pause_outlined : Icons.play_arrow,
-            size: 64.0,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _PlayerToolbox extends HookConsumerWidget {
-  const _PlayerToolbox({
-    required this.post,
-    this.controller,
-    this.onFullscreenTap,
-    this.disableProgressBar = false,
-  });
-
-  final Post post;
-  final VideoPlayerController? controller;
-  final Function(bool isFullscreen)? onFullscreenTap;
-  final bool disableProgressBar;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isMuted = ref.watch(videoPlayerMuteProvider);
-    final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(post.originalFile);
-    final fullscreen = ref.watch(fullscreenProvider);
-
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        MediaQuery.of(context).padding.top,
-        16,
-        MediaQuery.of(context).padding.bottom + 32,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Stack(
+      child: Container(
+        color: showToolbox.value ? Colors.black38 : Colors.transparent,
+        child: !showToolbox.value
+            ? const SizedBox.expand()
+            : Stack(
                 alignment: Alignment.center,
                 children: [
-                  CircularProgressIndicator(
-                    value: downloadProgress.status.isDownloading
-                        ? downloadProgress.progress.ratio
-                        : 0,
+                  DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.black38,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      padding: const EdgeInsets.all(8.0),
+                      iconSize: 72,
+                      icon: Icon(
+                        isPlaying ? Icons.pause_outlined : Icons.play_arrow,
+                      ),
+                      onPressed: () {
+                        ref
+                            .read(_playerPlayState.state)
+                            .update((state) => !isPlaying);
+                      },
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(downloadProgress.status.isDownloaded
-                        ? Icons.download_done
-                        : Icons.download),
-                    onPressed: () {
-                      DownloaderDialog.show(context: context, post: post);
-                    },
-                    disabledColor: context.colorScheme.primary,
+                  SafeArea(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  value: downloadProgress.status.isDownloading
+                                      ? downloadProgress.progress.ratio
+                                      : 0,
+                                ),
+                                IconButton(
+                                  padding: const EdgeInsets.all(16),
+                                  icon: Icon(
+                                      downloadProgress.status.isDownloaded
+                                          ? Icons.download_done
+                                          : Icons.download),
+                                  onPressed: () {
+                                    DownloaderDialog.show(
+                                        context: context, post: post);
+                                  },
+                                  disabledColor: context.colorScheme.primary,
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              padding: const EdgeInsets.all(16),
+                              onPressed: () {
+                                final mute = ref
+                                    .read(videoPlayerMuteProvider.notifier)
+                                    .toggle();
+                                controller?.setVolume(mute ? 0 : 1);
+                              },
+                              icon: Icon(
+                                isMuted ? Icons.volume_mute : Icons.volume_up,
+                              ),
+                            ),
+                            IconButton(
+                              padding: const EdgeInsets.all(16),
+                              icon: const Icon(Icons.info),
+                              onPressed: () {
+                                context.navigator.push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        PostDetailsPage(post: post),
+                                  ),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                fullscreen
+                                    ? Icons.fullscreen_exit
+                                    : Icons.fullscreen_outlined,
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              onPressed: () {
+                                ref.read(fullscreenProvider.notifier).toggle(
+                                    shouldLandscape: post.width > post.height);
+                                autoHideToolbox();
+                              },
+                            ),
+                          ],
+                        ),
+                        _Progress(
+                          controller: controller,
+                          enabled: !disableProgressBar,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: () {
-                  final mute =
-                      ref.read(videoPlayerMuteProvider.notifier).toggle();
-                  controller?.setVolume(mute ? 0 : 1);
-                },
-                icon: Icon(
-                  isMuted ? Icons.volume_mute : Icons.volume_up,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.info),
-                onPressed: () {
-                  context.navigator.push(
-                    MaterialPageRoute(
-                      builder: (context) => PostDetailsPage(post: post),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  fullscreen
-                      ? Icons.fullscreen_exit
-                      : Icons.fullscreen_outlined,
-                ),
-                onPressed: onFullscreenTap == null
-                    ? null
-                    : () {
-                        onFullscreenTap?.call(fullscreen);
-                      },
-              ),
-            ],
-          ),
-          _PlayerProgress(
-            controller: controller,
-            enabled: !disableProgressBar,
-          ),
-        ],
       ),
     );
   }
 }
 
-class _PlayerProgress extends StatelessWidget {
-  const _PlayerProgress({this.controller, this.enabled = true});
+class _Progress extends StatelessWidget {
+  const _Progress({this.controller, this.enabled = true});
 
   final VideoPlayerController? controller;
   final bool enabled;
 
   @override
   Widget build(BuildContext context) {
+    final player = controller;
+
     if (!enabled) {
       return Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 16),
@@ -387,7 +360,6 @@ class _PlayerProgress extends StatelessWidget {
       );
     }
 
-    final player = controller;
     if (player == null || !player.value.isInitialized) {
       return Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 16),
