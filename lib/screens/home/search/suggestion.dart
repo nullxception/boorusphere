@@ -42,7 +42,8 @@ class _SearchSuggestion extends HookConsumerWidget {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        final entry = history.entries.elementAt(index);
+                        final reversed = history.entries.length - 1 - index;
+                        final entry = history.entries.elementAt(reversed);
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Dismissible(
