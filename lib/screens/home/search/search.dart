@@ -34,14 +34,16 @@ class SearchableView extends HookConsumerWidget {
     final threshold = _SearchBar.innerHeight;
 
     final onScrolling = useCallback(() {
-      final current = scrollController.position.pixels;
+      final position = scrollController.position;
+      if (position.extentBefore < threshold ||
+          position.extentAfter < threshold) {
+        return;
+      }
+
+      final current = position.pixels;
       final offset = (delta.value.first + current - delta.value.last);
       final boundary = offset.clamp(-threshold, threshold);
-      if (scrollController.position.extentBefore >= threshold) {
-        delta.value = [boundary, current];
-      } else {
-        delta.value = [0, current];
-      }
+      delta.value = [boundary, current];
     }, [scrollController.position.pixels]);
 
     useEffect(() {
