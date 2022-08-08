@@ -27,8 +27,6 @@ class PostImageDisplay extends HookConsumerWidget {
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
-    final zoomAnimation = useState<Animation<double>?>(null);
-    final zoomStateCallback = useState<VoidCallback?>(null);
     // GlobalKey to keep the hero state across blur and ExtendedImage's loadState changes
     final imageHeroKey = useMemoized(GlobalKey.new);
     final blurNoticeAnimator =
@@ -102,23 +100,30 @@ class PostImageDisplay extends HookConsumerWidget {
                     );
                 }
               },
-              onDoubleTap: (state) {
+              onDoubleTap: (state) async {
+                if (zoomAnimator.isAnimating) {
+                  // It should be impossible for human to do quadruple-tap
+                  // at 150 ms. Still, better than no guards at all
+                  return;
+                }
+
                 final downOffset = state.pointerDownPosition;
                 final begin = state.gestureDetails?.totalScale ?? 1;
-                zoomAnimation.value?.removeListener(zoomStateCallback.value!);
+                final animation = zoomAnimator.drive(
+                  Tween<double>(begin: begin, end: begin == 1 ? 2 : 1),
+                );
 
-                zoomAnimator.stop();
-                zoomAnimator.reset();
-
-                zoomStateCallback.value = () {
+                void onAnimating() {
                   state.handleDoubleTap(
-                      scale: zoomAnimation.value?.value,
-                      doubleTapPosition: downOffset);
-                };
-                zoomAnimation.value = zoomAnimator.drive(
-                    Tween<double>(begin: begin, end: begin == 1 ? 2 : 1));
-                zoomAnimation.value?.addListener(zoomStateCallback.value!);
-                zoomAnimator.forward();
+                      scale: animation.value, doubleTapPosition: downOffset);
+                }
+
+                if (zoomAnimator.isCompleted) {
+                  zoomAnimator.reset();
+                }
+                animation.addListener(onAnimating);
+                await zoomAnimator.forward();
+                animation.removeListener(onAnimating);
               },
             ),
           if (post.rating == PostRating.explicit && blurExplicit)
