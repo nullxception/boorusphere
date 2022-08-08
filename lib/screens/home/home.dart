@@ -39,10 +39,8 @@ class HomePage extends HookConsumerWidget {
     }, [scrollController]);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final current = scrollController.position.pixels;
-      final estimatedFloor = scrollController.position.maxScrollExtent - 300;
       pageState.whenOrNull(error: (error, stackTrace) {
-        if (current >= estimatedFloor) {
+        if (scrollController.position.extentAfter < 300) {
           scrollController.animateTo(
             scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 250),
