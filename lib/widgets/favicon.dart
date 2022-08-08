@@ -5,15 +5,18 @@ class Favicon extends StatelessWidget {
   const Favicon({
     super.key,
     required this.url,
+    this.size,
   });
 
   final String url;
+  final double? size;
+
   @override
   Widget build(BuildContext context) {
     return ExtendedImage.network(
       url,
-      width: IconTheme.of(context).size,
-      height: IconTheme.of(context).size,
+      width: size ?? IconTheme.of(context).size,
+      height: size ?? IconTheme.of(context).size,
       shape: BoxShape.circle,
       fit: BoxFit.contain,
       loadStateChanged: (state) =>
