@@ -73,8 +73,15 @@ android {
                signingConfig signingConfigs.release
             }
         }
+        profile {
+            if (keystoreProperties.containsKey('keyAlias')) {
+               signingConfig signingConfigs.release
+            }
+        }
         release {
-           signingConfig signingConfigs.release
+            if (keystoreProperties.containsKey('keyAlias')) {
+               signingConfig signingConfigs.release
+            }
         }
     }
 }
