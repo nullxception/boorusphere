@@ -141,14 +141,31 @@ class _LeadingButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final animController =
-        useAnimationController(duration: const Duration(milliseconds: 300));
+    final serverActive = ref.watch(activeServerProvider);
     final searchBar = ref.watch(searchBarController);
-    searchBar.isOpen ? animController.reverse() : animController.forward();
+
     return IconButton(
-      icon: AnimatedIcon(
-        progress: animController,
-        icon: AnimatedIcons.arrow_menu,
+      icon: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (child, animator) {
+          final animation = Tween<double>(
+            begin: 0,
+            end: 1,
+          ).animate(CurvedAnimation(
+            parent: animator,
+            curve: Curves.easeInOutCubic,
+          ));
+          return RotationTransition(
+            turns: animation,
+            child: ScaleTransition(
+              scale: animation,
+              child: child,
+            ),
+          );
+        },
+        child: searchBar.isOpen
+            ? const Icon(Icons.arrow_back_rounded)
+            : Favicon(url: '${serverActive.homepage}/favicon.ico', size: 21),
       ),
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       onPressed: () {
