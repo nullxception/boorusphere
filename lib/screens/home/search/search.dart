@@ -39,19 +39,17 @@ class SearchableView extends HookConsumerWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          ClipRect(
-            child: FadeTransition(
-              opacity: Tween<double>(
-                begin: 0,
-                end: 1,
+          FadeTransition(
+            opacity: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(animation),
+            child: SlideTransition(
+              position: Tween(
+                begin: const Offset(0, 1),
+                end: const Offset(0, 0),
               ).animate(animation),
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 1),
-                  end: const Offset(0, 0),
-                ).animate(animation),
-                child: const _SearchSuggestion(),
-              ),
+              child: const _SearchSuggestion(),
             ),
           ),
           _SearchBar(scrollController: scrollController),

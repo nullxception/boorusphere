@@ -61,7 +61,6 @@ class _SearchBar extends HookConsumerWidget {
                   color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
                   borderRadius: const BorderRadius.all(Radius.circular(15)),
                 ),
-                clipBehavior: Clip.hardEdge,
                 margin: collapsed
                     ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
                     : const EdgeInsets.fromLTRB(16, 11, 16, 11),
