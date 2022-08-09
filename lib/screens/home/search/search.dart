@@ -35,6 +35,12 @@ class SearchableView extends HookConsumerWidget {
 
     final onScrolling = useCallback(() {
       final position = scrollController.position;
+      if (delta.value.first > 0 &&
+          position.viewportDimension > position.maxScrollExtent) {
+        delta.value = [0, 0];
+        return;
+      }
+
       if (position.extentBefore < threshold ||
           position.extentAfter < threshold) {
         return;
