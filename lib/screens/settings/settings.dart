@@ -2,7 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../hooks/refresher.dart';
+import '../../hooks/markmayneedrebuild.dart';
 import '../../settings/blur_explicit_post.dart';
 import '../../settings/safe_mode.dart';
 import '../../settings/server/post_limit.dart';
@@ -19,7 +19,7 @@ class SettingsPage extends HookConsumerWidget {
     final darkerTheme = ref.watch(darkerThemeProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final postLimit = ref.watch(serverPostLimitProvider);
-    final refresh = useRefresher();
+    final markMayNeedRebuild = useMarkMayNeedRebuild();
 
     const sectionPadding = EdgeInsets.fromLTRB(18, 12, 18, 12);
     final sectionStyle = context.theme.textTheme.subtitle2!
@@ -63,7 +63,7 @@ class SettingsPage extends HookConsumerWidget {
                       isEnabled
                           ? await DownloadUtils.createDotnomedia()
                           : await DownloadUtils.removeDotnomedia();
-                      refresh();
+                      markMayNeedRebuild();
                     },
                   );
                 },

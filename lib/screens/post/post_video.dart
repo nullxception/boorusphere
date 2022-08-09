@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../entity/post.dart';
-import '../../../hooks/refresher.dart';
+import '../../hooks/markmayneedrebuild.dart';
 import '../../services/download.dart';
 import '../../services/fullscreen.dart';
 import '../../settings/blur_explicit_post.dart';
@@ -190,7 +190,7 @@ class _Toolbox extends HookConsumerWidget {
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(post.originalFile);
     final fullscreen = ref.watch(fullscreenProvider);
-    final refresh = useRefresher();
+    final markMayNeedRebuild = useMarkMayNeedRebuild();
     final playerMute = ref.watch(videoPlayerMuteProvider);
     final isPlaying = ref.watch(_playerPlayState);
     final isMounted = useIsMounted();
@@ -213,7 +213,7 @@ class _Toolbox extends HookConsumerWidget {
         it.setLooping(true);
         it.initialize().whenComplete(() {
           onFirstFrame() {
-            refresh();
+            markMayNeedRebuild();
             it.removeListener(onFirstFrame);
           }
 
