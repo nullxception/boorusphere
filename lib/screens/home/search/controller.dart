@@ -6,16 +6,15 @@ final searchBarController = ChangeNotifierProvider((ref) {
 });
 
 class SearchBarController extends ChangeNotifier {
-  SearchBarController(this.ref, this.initialValue);
+  SearchBarController(this.ref, this.initialText);
+
   final Ref ref;
+  final String initialText;
+  late final _textController = TextEditingController(text: initialText);
+  bool _isOpen = false;
 
-  bool isOpen = false;
+  bool get isOpen => _isOpen;
 
-  final String initialValue;
-
-  late final _textController = TextEditingController(text: initialValue);
-
-  String get text => _textController.text;
   String get hint {
     final serverActive = ref.watch(activeServerProvider);
     return _textController.text.isEmpty
@@ -23,7 +22,9 @@ class SearchBarController extends ChangeNotifier {
         : _textController.text;
   }
 
-  set query(String value) {
+  String get text => _textController.value.text;
+
+  set text(String value) {
     _textController.value = TextEditingValue(
       text: value,
       selection: TextSelection.collapsed(offset: value.length),
@@ -32,7 +33,7 @@ class SearchBarController extends ChangeNotifier {
   }
 
   void submit(String value) {
-    query = value;
+    text = value;
     close();
     ref
         .read(pageOptionProvider.notifier)
@@ -43,11 +44,11 @@ class SearchBarController extends ChangeNotifier {
     final queries = _textController.text.replaceAll('  ', ' ').split(' ');
     final result = queries.sublist(0, queries.length - 1).toSet()
       ..addAll(suggested.split(' '));
-    query = '${result.join(' ')} ';
+    text = '${result.join(' ')} ';
   }
 
   void reset() {
-    query = initialValue;
+    text = initialText;
   }
 
   void clear() {
@@ -61,13 +62,13 @@ class SearchBarController extends ChangeNotifier {
 
   void open() {
     rebuildHistory();
-    isOpen = true;
+    _isOpen = true;
     notifyListeners();
     _textController.addListener(rebuildHistory);
   }
 
   void close() {
-    isOpen = false;
+    _isOpen = false;
     notifyListeners();
     _textController.removeListener(rebuildHistory);
   }
