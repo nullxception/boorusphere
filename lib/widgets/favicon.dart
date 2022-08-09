@@ -8,23 +8,31 @@ class Favicon extends StatelessWidget {
     super.key,
     required this.url,
     this.size,
+    this.iconSize,
   });
 
   final String url;
   final double? size;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
-    return ExtendedImage.network(
-      url,
+    return SizedBox(
       width: size ?? context.iconTheme.size,
       height: size ?? context.iconTheme.size,
-      shape: BoxShape.circle,
-      fit: BoxFit.contain,
-      loadStateChanged: (state) =>
-          state.extendedImageLoadState == LoadState.completed
-              ? state.completedWidget
-              : const Icon(Icons.public),
+      child: Center(
+        child: ExtendedImage.network(
+          url,
+          width: iconSize ?? context.iconTheme.size,
+          height: iconSize ?? context.iconTheme.size,
+          shape: BoxShape.circle,
+          fit: BoxFit.contain,
+          loadStateChanged: (state) =>
+              state.extendedImageLoadState == LoadState.completed
+                  ? state.completedWidget
+                  : const Icon(Icons.public),
+        ),
+      ),
     );
   }
 }
