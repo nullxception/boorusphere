@@ -40,6 +40,16 @@ class AppThemeData with _$AppThemeData {
       cardColor: seededScheme.surface.darken(2),
       scaffoldBackgroundColor: seededScheme.surface,
       toggleableActiveColor: seededScheme.primary,
+      snackBarTheme: ThemeData.light().snackBarTheme.copyWith(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(11),
+                topRight: Radius.circular(11),
+              ),
+            ),
+            backgroundColor: seededScheme.primaryContainer,
+            contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+          ),
     );
   }
 
@@ -57,6 +67,16 @@ class AppThemeData with _$AppThemeData {
       cardColor: seededScheme.surface.lighten(3),
       scaffoldBackgroundColor: seededScheme.surface.darken(2),
       toggleableActiveColor: seededScheme.primary,
+      snackBarTheme: ThemeData.dark().snackBarTheme.copyWith(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(11),
+                topRight: Radius.circular(11),
+              ),
+            ),
+            backgroundColor: seededScheme.primaryContainer,
+            contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+          ),
     );
   }
 
@@ -79,6 +99,16 @@ class AppThemeData with _$AppThemeData {
       cardColor: seededScheme.background.darken(3),
       scaffoldBackgroundColor: Colors.black,
       toggleableActiveColor: seededScheme.primary,
+      snackBarTheme: ThemeData.dark().snackBarTheme.copyWith(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(11),
+                topRight: Radius.circular(11),
+              ),
+            ),
+            backgroundColor: seededScheme.primaryContainer,
+            contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+          ),
     );
   }
 }
