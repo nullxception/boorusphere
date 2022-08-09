@@ -1,9 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:settings_ui/settings_ui.dart';
 
+import '../../hooks/refresher.dart';
 import '../../settings/blur_explicit_post.dart';
 import '../../settings/safe_mode.dart';
 import '../../settings/server/post_limit.dart';
@@ -20,119 +19,164 @@ class SettingsPage extends HookConsumerWidget {
     final darkerTheme = ref.watch(darkerThemeProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
     final postLimit = ref.watch(serverPostLimitProvider);
-    final dotnomediaStatus = useFuture(DownloadUtils.hasDotnomedia);
-    final themeSettings = SettingsThemeData(
-        titleTextColor: context.colorScheme.primary,
-        settingsListBackground: Colors.transparent);
-    final messenger = ScaffoldMessenger.of(context);
+    final refresh = useRefresher();
+
+    const sectionPadding = EdgeInsets.fromLTRB(18, 12, 18, 12);
+    final sectionStyle = context.theme.textTheme.subtitle2!
+        .copyWith(color: context.colorScheme.primary);
+    const subtitlePadding = EdgeInsets.only(top: 8, bottom: 8);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
-      body: SafeArea(
-        child: SettingsList(
-          lightTheme: themeSettings,
-          darkTheme: themeSettings,
-          sections: [
-            SettingsSection(
-              title: const Text('Downloads'),
-              tiles: [
-                SettingsTile.switchTile(
-                  title: const Text('Hide downloaded media'),
-                  description: const Text(
-                      'Prevent external gallery app from showing downloaded files'),
-                  leading: const Icon(Icons.security_rounded),
-                  initialValue: dotnomediaStatus.data,
-                  onToggle: (isEnabled) {
-                    isEnabled
-                        ? DownloadUtils.createDotnomedia()
-                        : DownloadUtils.removeDotnomedia();
-                  },
+      body: Theme(
+        data: context.theme.copyWith(
+          listTileTheme: context.theme.listTileTheme.copyWith(
+            minVerticalPadding: 12,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+          ),
+        ),
+        child: SafeArea(
+          child: ListView(
+            children: [
+              Padding(
+                padding: sectionPadding,
+                child: Text(
+                  'Downloads',
+                  style: sectionStyle,
                 ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text('Interface'),
-              tiles: [
-                SettingsTile.switchTile(
-                  title: const Text('Darker Theme'),
-                  description:
-                      const Text('Use deeper dark color for the dark mode'),
-                  leading: const Icon(Icons.brightness_3),
-                  initialValue: darkerTheme,
-                  onToggle: (value) {
-                    ref.read(darkerThemeProvider.notifier).enable(value);
-                  },
+              ),
+              FutureBuilder(
+                future: DownloadUtils.hasDotnomedia,
+                initialData: false,
+                builder: (context, snapshot) {
+                  final data = snapshot.data;
+                  final value = data is bool ? data : false;
+                  return SwitchListTile(
+                    title: const Text('Hide downloaded media'),
+                    subtitle: const Padding(
+                      padding: subtitlePadding,
+                      child: Text(
+                          'Prevent external gallery app from showing downloaded files'),
+                    ),
+                    value: value,
+                    onChanged: (isEnabled) async {
+                      isEnabled
+                          ? await DownloadUtils.createDotnomedia()
+                          : await DownloadUtils.removeDotnomedia();
+                      refresh();
+                    },
+                  );
+                },
+              ),
+              Padding(
+                padding: sectionPadding,
+                child: Text(
+                  'Interface',
+                  style: sectionStyle,
                 ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text('Safe Mode'),
-              tiles: [
-                SettingsTile.switchTile(
-                  title: const Text('Blur explicit content'),
-                  description:
-                      const Text('Content rated as explicit will be blurred'),
-                  leading: const Icon(Icons.phonelink_lock),
-                  initialValue: blurExplicitPost,
-                  onToggle: (value) {
-                    ref.read(blurExplicitPostProvider.notifier).enable(value);
-                  },
+              ),
+              SwitchListTile(
+                title: const Text('Darker Theme'),
+                subtitle: const Padding(
+                  padding: subtitlePadding,
+                  child: Text('Use deeper dark color for the dark mode'),
                 ),
-                SettingsTile.switchTile(
-                  title: const Text('Rated safe only'),
-                  description: const Text(
+                value: darkerTheme,
+                onChanged: (value) {
+                  ref.read(darkerThemeProvider.notifier).enable(value);
+                },
+              ),
+              Padding(
+                padding: sectionPadding,
+                child: Text(
+                  'Safe mode',
+                  style: sectionStyle,
+                ),
+              ),
+              SwitchListTile(
+                title: const Text('Blur explicit content'),
+                subtitle: const Padding(
+                  padding: subtitlePadding,
+                  child: Text('Content rated as explicit will be blurred'),
+                ),
+                value: blurExplicitPost,
+                onChanged: (value) {
+                  ref.read(blurExplicitPostProvider.notifier).enable(value);
+                },
+              ),
+              SwitchListTile(
+                title: const Text('Rated safe only'),
+                subtitle: const Padding(
+                  padding: subtitlePadding,
+                  child: Text(
                       'Only fetch content that rated as safe. Note that rated as safe doesn\'t guarantee "safe for work"'),
-                  leading: const Icon(Icons.phonelink_lock),
-                  initialValue: safeMode,
-                  onToggle: (value) {
-                    ref.read(safeModeProvider.notifier).enable(value);
-                  },
                 ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text('Server'),
-              tiles: [
-                SettingsTile(
-                  title: const Text('Max content per-load'),
-                  description: const Text(
+                value: safeMode,
+                onChanged: (value) {
+                  ref.read(safeModeProvider.notifier).enable(value);
+                },
+              ),
+              Padding(
+                padding: sectionPadding,
+                child: Text(
+                  'Server',
+                  style: sectionStyle,
+                ),
+              ),
+              ListTile(
+                title: const Text('Max content per-load'),
+                subtitle: const Padding(
+                  padding: subtitlePadding,
+                  child: Text(
                       'Result might less than expected (caused by blocked tags or invalid data)'),
-                  leading: const Icon(Icons.list),
-                  trailing: DropdownButton(
-                    menuMaxHeight: 178,
-                    value: postLimit,
-                    items: List<DropdownMenuItem<int>>.generate(10, (i) {
+                ),
+                trailing: DropdownButton(
+                  menuMaxHeight: 178,
+                  value: postLimit,
+                  elevation: 0,
+                  underline: const SizedBox.shrink(),
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  items: List<DropdownMenuItem<int>>.generate(
+                    10,
+                    (i) {
                       final x = i * 10 + 10;
-                      return DropdownMenuItem(value: x, child: Text('$x'));
-                    }),
-                    onChanged: (value) {
-                      ref
-                          .read(serverPostLimitProvider.notifier)
-                          .save(value as int);
+                      return DropdownMenuItem(
+                        value: x,
+                        child: Text('$x'),
+                      );
                     },
                   ),
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text('Miscellaneous'),
-              tiles: [
-                SettingsTile(
-                  title: const Text('Clear cache'),
-                  description: const Text('Clear loaded content from cache'),
-                  leading: const Icon(Icons.delete),
-                  onPressed: (context) async {
-                    messenger.showSnackBar(const SnackBar(
-                      content: Text('Clearing...'),
-                      duration: Duration(seconds: 1),
-                    ));
-                    await clearDiskCachedImages();
-                    clearMemoryImageCache();
+                  onChanged: (value) {
+                    ref
+                        .read(serverPostLimitProvider.notifier)
+                        .save(value as int);
                   },
                 ),
-              ],
-            ),
-          ],
+              ),
+              Padding(
+                padding: sectionPadding,
+                child: Text(
+                  'Miscellaneous',
+                  style: sectionStyle,
+                ),
+              ),
+              ListTile(
+                title: const Text('Clear cache'),
+                subtitle: const Padding(
+                  padding: subtitlePadding,
+                  child: Text('Clear loaded content from cache'),
+                ),
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Clearing...'),
+                    duration: Duration(seconds: 1),
+                  ));
+                  clearDiskCachedImages()
+                      .then((value) => clearMemoryImageCache());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
