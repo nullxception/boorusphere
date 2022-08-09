@@ -76,7 +76,10 @@ class SearchableView extends HookConsumerWidget {
               ),
             ),
           ),
-          _SearchBar(collapsed: !isOpen && delta.value.first > 0),
+          _SearchBar(
+            collapsed: !isOpen && delta.value.first > 0,
+            scrollController: scrollController,
+          ),
         ],
       ),
     );

@@ -1,12 +1,14 @@
 part of 'search.dart';
 
-class _SearchBar extends StatelessWidget {
-  const _SearchBar({this.collapsed = false});
+class _SearchBar extends ConsumerWidget {
+  const _SearchBar({this.collapsed = false, this.scrollController});
 
   final bool collapsed;
+  final ScrollController? scrollController;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchBar = ref.watch(searchBarController);
     return RepaintBoundary(
       child: ClipRect(
         child: BackdropFilter(
@@ -29,9 +31,56 @@ class _SearchBar extends StatelessWidget {
                 ),
                 clipBehavior: Clip.hardEdge,
                 margin: collapsed
-                    ? const EdgeInsets.all(2)
-                    : const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                child: collapsed ? const _CollapsedBar() : const _ExpandedBar(),
+                    ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
+                    : const EdgeInsets.fromLTRB(16, 11, 16, 11),
+                child: Row(
+                  children: [
+                    _LeadingButton(collapsed: collapsed),
+                    Expanded(
+                      child: TextField(
+                        autofocus: true,
+                        controller: searchBar._textController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: searchBar.hint,
+                          isDense: true,
+                        ),
+                        textAlign: searchBar.isOpen
+                            ? TextAlign.start
+                            : TextAlign.center,
+                        readOnly: !searchBar.isOpen,
+                        onSubmitted: searchBar.submit,
+                        onTap: searchBar.isOpen ? null : searchBar.open,
+                        style: DefaultTextStyle.of(context)
+                            .style
+                            .copyWith(fontSize: 13),
+                      ),
+                    ),
+                    if (!searchBar.isOpen)
+                      _TrailingButton(
+                          collapsed: collapsed,
+                          scrollController: scrollController),
+                    if (searchBar.isOpen)
+                      IconButton(
+                        icon: const Icon(Icons.rotate_left),
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        onPressed: searchBar.reset,
+                      ),
+                    if (searchBar.isOpen)
+                      IconButton(
+                        icon: const Icon(Icons.close_rounded),
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        onPressed: () {
+                          if (searchBar.text.isEmpty) {
+                            searchBar.reset();
+                            searchBar.close();
+                          } else {
+                            searchBar.clear();
+                          }
+                        },
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -43,93 +92,30 @@ class _SearchBar extends StatelessWidget {
   static double innerHeight = kBottomNavigationBarHeight + 12;
 }
 
-class _ExpandedBar extends ConsumerWidget {
-  const _ExpandedBar();
+class _CollapsibleButton extends StatelessWidget {
+  const _CollapsibleButton({
+    this.collapsed = false,
+    required this.onTap,
+    this.child,
+  });
+
+  final bool collapsed;
+  final void Function() onTap;
+  final Widget? child;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final searchBar = ref.watch(searchBarController);
-    final grid = ref.watch(gridProvider);
-    return Row(
-      children: [
-        const _LeadingButton(),
-        Expanded(
-          child: TextField(
-            autofocus: true,
-            controller: searchBar._textController,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: searchBar.hint,
-            ),
-            textAlign: searchBar.isOpen ? TextAlign.start : TextAlign.center,
-            readOnly: !searchBar.isOpen,
-            onSubmitted: searchBar.submit,
-            onTap: searchBar.isOpen ? null : searchBar.open,
-            style: DefaultTextStyle.of(context).style,
-          ),
-        ),
-        if (!searchBar.isOpen)
-          IconButton(
-            icon: Icon(
-              Icons.grid_view,
-              size: (IconTheme.of(context).size ?? 24) + 4 - (4 * (grid + 1)),
-            ),
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            onPressed: ref.read(gridProvider.notifier).rotate,
-          ),
-        if (searchBar.isOpen)
-          IconButton(
-            icon: const Icon(Icons.rotate_left),
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            onPressed: searchBar.reset,
-          ),
-        if (searchBar.isOpen)
-          IconButton(
-            icon: const Icon(Icons.close_rounded),
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            onPressed: () {
-              if (searchBar.text.isEmpty) {
-                searchBar.reset();
-                searchBar.close();
-              } else {
-                searchBar.clear();
-              }
-            },
-          ),
-      ],
-    );
-  }
-}
-
-class _CollapsedBar extends ConsumerWidget {
-  const _CollapsedBar();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final searchBar = ref.watch(searchBarController);
-    final serverActive = ref.watch(activeServerProvider);
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: searchBar.open,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Favicon(
-              url: '${serverActive.homepage}/favicon.ico',
-              size: 14,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Text(
-                searchBar.text.isEmpty
-                    ? 'Search on ${serverActive.name}...'
-                    : searchBar.text,
-                style: context.theme.textTheme.bodySmall,
-              ),
-            ),
-            const Icon(Icons.search, size: 14),
-          ],
+      onTap: onTap,
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 300),
+        padding: collapsed
+            ? const EdgeInsets.fromLTRB(16, 6, 16, 6)
+            : const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 300),
+          scale: collapsed ? 0.75 : 1,
+          child: child,
         ),
       ),
     );
@@ -137,15 +123,25 @@ class _CollapsedBar extends ConsumerWidget {
 }
 
 class _LeadingButton extends HookConsumerWidget {
-  const _LeadingButton();
+  const _LeadingButton({this.collapsed = false});
+
+  final bool collapsed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverActive = ref.watch(activeServerProvider);
     final searchBar = ref.watch(searchBarController);
 
-    return IconButton(
-      icon: AnimatedSwitcher(
+    return _CollapsibleButton(
+      collapsed: collapsed,
+      onTap: () {
+        if (searchBar.isOpen) {
+          searchBar.close();
+        } else {
+          Scaffold.of(context).openDrawer();
+        }
+      },
+      child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         transitionBuilder: (child, animator) {
           final animation = Tween<double>(
@@ -167,14 +163,42 @@ class _LeadingButton extends HookConsumerWidget {
             ? const Icon(Icons.arrow_back_rounded)
             : Favicon(url: '${serverActive.homepage}/favicon.ico', size: 21),
       ),
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      onPressed: () {
-        if (searchBar.isOpen) {
-          searchBar.close();
-        } else {
-          Scaffold.of(context).openDrawer();
-        }
-      },
+    );
+  }
+}
+
+class _TrailingButton extends ConsumerWidget {
+  const _TrailingButton({this.collapsed = false, this.scrollController});
+
+  final bool collapsed;
+  final ScrollController? scrollController;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final size = IconTheme.of(context).size ?? 24;
+    final grid = ref.watch(gridProvider);
+
+    backToTop() {
+      scrollController?.animateTo(0,
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeInOutCubic);
+    }
+
+    return _CollapsibleButton(
+      onTap: collapsed ? backToTop : ref.read(gridProvider.notifier).rotate,
+      collapsed: collapsed,
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: collapsed
+            ? const Icon(Icons.arrow_upward_rounded)
+            : Center(
+                child: Icon(
+                  Icons.grid_view,
+                  size: size - (grid + 1) * 2,
+                ),
+              ),
+      ),
     );
   }
 }
