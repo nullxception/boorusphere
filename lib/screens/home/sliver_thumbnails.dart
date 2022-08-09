@@ -70,6 +70,8 @@ class SliverThumbnails extends HookConsumerWidget {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
+            // saveLayer() is used here to avoid artifacts that frequently
+            // happened while scrolling
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: GestureDetector(
               child: Hero(
@@ -83,11 +85,11 @@ class SliverThumbnails extends HookConsumerWidget {
                     children: [
                       AspectRatio(
                         aspectRatio: post.aspectRatio,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5)),
-                          child: toHero.child,
-                        ),
+                        // clip incoming child to avoid overflow that might be
+                        // caused by blurExplicit enabled
+                        child: flightDirection == HeroFlightDirection.pop
+                            ? ClipRect(child: toHero.child)
+                            : toHero.child,
                       ),
                     ],
                   );
