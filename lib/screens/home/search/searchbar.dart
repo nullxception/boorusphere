@@ -60,7 +60,7 @@ class _SearchBar extends ConsumerWidget {
                       _TrailingButton(
                           collapsed: collapsed,
                           scrollController: scrollController),
-                    if (searchBar.isOpen)
+                    if (searchBar.isOpen && searchBar.isTextChanged)
                       IconButton(
                         icon: const Icon(Icons.rotate_left),
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),

@@ -14,6 +14,7 @@ class SearchBarController extends ChangeNotifier {
   bool _isOpen = false;
 
   bool get isOpen => _isOpen;
+  bool get isTextChanged => _textController.value.text != initialText;
 
   String get hint {
     final serverActive = ref.watch(activeServerProvider);
@@ -49,6 +50,7 @@ class SearchBarController extends ChangeNotifier {
 
   void reset() {
     text = initialText;
+    notifyListeners();
   }
 
   void clear() {
