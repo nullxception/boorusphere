@@ -30,38 +30,10 @@ class SearchableView extends HookConsumerWidget {
         useAnimationController(duration: const Duration(milliseconds: 300));
     final animation =
         CurvedAnimation(parent: animator, curve: Curves.easeInOutCubic);
-    final delta = useState([0.0, 0.0]);
-    final threshold = _SearchBar.innerHeight;
-
-    final onScrolling = useCallback(() {
-      final position = scrollController.position;
-      if (delta.value.first > 0 &&
-          position.viewportDimension > position.maxScrollExtent) {
-        delta.value = [0, 0];
-        return;
-      }
-
-      if (position.extentBefore < threshold ||
-          position.extentAfter < threshold) {
-        return;
-      }
-
-      final current = position.pixels;
-      final offset = (delta.value.first + current - delta.value.last);
-      final boundary = offset.clamp(-threshold, threshold);
-      delta.value = [boundary, current];
-    }, [scrollController.position.pixels]);
 
     useEffect(() {
       isOpen ? animator.forward(from: 0.4) : animator.reverse();
     }, [isOpen]);
-
-    useEffect(() {
-      scrollController.addListener(onScrolling);
-      return () {
-        scrollController.removeListener(onScrolling);
-      };
-    }, [scrollController]);
 
     return SizedBox.expand(
       child: Stack(
@@ -82,10 +54,7 @@ class SearchableView extends HookConsumerWidget {
               ),
             ),
           ),
-          _SearchBar(
-            collapsed: !isOpen && delta.value.first > 0,
-            scrollController: scrollController,
-          ),
+          _SearchBar(scrollController: scrollController),
         ],
       ),
     );

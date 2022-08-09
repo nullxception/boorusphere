@@ -1,14 +1,46 @@
 part of 'search.dart';
 
-class _SearchBar extends ConsumerWidget {
-  const _SearchBar({this.collapsed = false, this.scrollController});
+class _SearchBar extends HookConsumerWidget {
+  const _SearchBar({required this.scrollController});
 
-  final bool collapsed;
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarController);
+    final delta = useState([0.0, 0.0]);
+    final collapsed = !searchBar.isOpen && delta.value.first > 0;
+
+    final onScrolling = useCallback(() {
+      final position = scrollController.position;
+      final threshold = _SearchBar.innerHeight;
+      if (delta.value.first > 0 &&
+          position.viewportDimension > position.maxScrollExtent) {
+        // reset back to default (!collapsed) because there's nothing to scroll
+        delta.value = [0, 0];
+        return;
+      }
+
+      if (position.extentBefore < threshold ||
+          position.extentAfter < threshold) {
+        // we're already at the edge of the scrollable content
+        // there's no need to change the collapsed state
+        return;
+      }
+
+      final current = position.pixels;
+      final offset = (delta.value.first + current - delta.value.last);
+      final boundary = offset.clamp(-threshold, threshold);
+      delta.value = [boundary, current];
+    }, [scrollController.position.pixels]);
+
+    useEffect(() {
+      scrollController.addListener(onScrolling);
+      return () {
+        scrollController.removeListener(onScrolling);
+      };
+    }, [scrollController]);
+
     return RepaintBoundary(
       child: ClipRect(
         child: BackdropFilter(
