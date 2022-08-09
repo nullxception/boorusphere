@@ -19,7 +19,7 @@ class PostToolbox extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
     final downloadProgress = downloader.getProgressByURL(post.originalFile);
-    final viewPadding = MediaQuery.of(context).viewPadding;
+    final viewPadding = context.mediaQuery.viewPadding;
     final safePaddingBottom = useState(viewPadding.bottom);
     if (viewPadding.bottom > safePaddingBottom.value) {
       safePaddingBottom.value = viewPadding.bottom;

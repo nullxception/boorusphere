@@ -21,7 +21,7 @@ class PostDetailsPage extends HookConsumerWidget {
 
   void copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
+    context.scaffoldMessenger.showSnackBar(
       const SnackBar(
         content: Text('Copied to clipboard'),
         duration: Duration(seconds: 1),
@@ -213,7 +213,7 @@ class PostDetailsPage extends HookConsumerWidget {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
                 blockedTagsHandler.pushAll(selectedTags);
-                ScaffoldMessenger.of(context).showSnackBar(
+                context.scaffoldMessenger.showSnackBar(
                   const SnackBar(
                     content: Text('Added to tags blocker list'),
                     duration: Duration(seconds: 1),

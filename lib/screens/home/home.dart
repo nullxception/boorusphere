@@ -17,7 +17,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messenger = ScaffoldMessenger.of(context);
+    final messenger = context.scaffoldMessenger;
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
@@ -53,7 +53,7 @@ class HomePage extends HookConsumerWidget {
     return Scaffold(
       extendBody: true,
       drawer: const HomeDrawer(),
-      drawerEdgeDragWidth: atHomeScreen ? MediaQuery.of(context).size.width : 0,
+      drawerEdgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
       onDrawerChanged: (focusOnDrawer) {
         drawerFocused.value = focusOnDrawer;
         if (focusOnDrawer) {
@@ -83,8 +83,8 @@ class HomePage extends HookConsumerWidget {
                 controller: scrollController,
                 slivers: [
                   SliverPadding(
-                    padding: EdgeInsets.fromLTRB(10,
-                        MediaQuery.of(context).viewPadding.top + 10, 10, 10),
+                    padding: EdgeInsets.fromLTRB(
+                        10, context.mediaQuery.viewPadding.top + 10, 10, 10),
                     sliver: SliverThumbnails(
                       autoScrollController: scrollController,
                       onTap: (index) {
@@ -96,8 +96,7 @@ class HomePage extends HookConsumerWidget {
                     SliverPadding(
                       padding: EdgeInsets.only(
                         bottom:
-                            MediaQuery.of(context).viewPadding.bottom * 1.8 +
-                                92,
+                            context.mediaQuery.viewPadding.bottom * 1.8 + 92,
                       ),
                       sliver: const SliverToBoxAdapter(child: PageStatus()),
                     )
@@ -126,7 +125,7 @@ class _EdgeShadow extends StatelessWidget {
       right: 0,
       child: IgnorePointer(
         child: SizedBox(
-          height: MediaQuery.of(context).padding.top * 1.8,
+          height: context.mediaQuery.padding.top * 1.8,
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(

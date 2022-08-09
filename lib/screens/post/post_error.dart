@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../entity/post.dart';
 import '../../settings/blur_explicit_post.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
 import 'post_placeholder_image.dart';
 import 'quickbar.dart';
@@ -28,7 +29,7 @@ class PostErrorDisplay extends HookConsumerWidget {
           ),
         ),
         Positioned(
-          bottom: MediaQuery.of(context).viewPadding.bottom + 32,
+          bottom: context.mediaQuery.viewPadding.bottom + 32,
           child: QuickBar.action(
             title: Text('${post.contentFile.fileExtension} is not supported'),
             actionTitle: const Text('Open externally'),

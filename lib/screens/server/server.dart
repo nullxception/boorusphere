@@ -82,7 +82,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                           break;
                         case 'remove':
                           if (serverData.length == 1) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            context.scaffoldMessenger.showSnackBar(
                                 const SnackBar(
                                     duration: Duration(seconds: 1),
                                     content: Text(

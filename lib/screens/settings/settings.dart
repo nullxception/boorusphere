@@ -167,7 +167,7 @@ class SettingsPage extends HookConsumerWidget {
                   child: Text('Clear loaded content from cache'),
                 ),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  context.scaffoldMessenger.showSnackBar(const SnackBar(
                     content: Text('Clearing...'),
                     duration: Duration(seconds: 1),
                   ));

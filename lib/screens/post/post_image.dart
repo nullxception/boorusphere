@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../entity/post.dart';
 import '../../services/fullscreen.dart';
 import '../../settings/blur_explicit_post.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
@@ -169,7 +170,7 @@ class PostImageStatusView extends StatelessWidget {
       children: [
         child,
         Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: context.mediaQuery.padding.bottom,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
             child: isFailed

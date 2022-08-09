@@ -1,6 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/extensions/buildcontext.dart';
+
 class Favicon extends StatelessWidget {
   const Favicon({
     super.key,
@@ -15,8 +17,8 @@ class Favicon extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExtendedImage.network(
       url,
-      width: size ?? IconTheme.of(context).size,
-      height: size ?? IconTheme.of(context).size,
+      width: size ?? context.iconTheme.size,
+      height: size ?? context.iconTheme.size,
       shape: BoxShape.circle,
       fit: BoxFit.contain,
       loadStateChanged: (state) =>

@@ -30,7 +30,7 @@ class SliverThumbnails extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
     final pageData = ref.watch(pageDataProvider);
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
     final autoScrollTo = useCallback<Function(int)>((dest) {

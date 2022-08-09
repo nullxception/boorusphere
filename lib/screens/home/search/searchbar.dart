@@ -207,7 +207,7 @@ class _TrailingButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = IconTheme.of(context).size ?? 24;
+    final size = context.iconTheme.size ?? 24;
     final grid = ref.watch(gridProvider);
 
     backToTop() {
