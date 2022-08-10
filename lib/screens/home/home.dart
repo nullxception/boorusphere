@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -37,10 +36,15 @@ class HomePage extends HookConsumerWidget {
     final atHomeScreen = !drawerFocused.value && !searchBar.isOpen;
     final isMounted = useIsMounted();
     final allowPop = useState(false);
-    final allowPopTimeout = useCallback(() {
-      if (isMounted()) {
-        allowPop.value = false;
-      }
+    const maybePopTimeout = Duration(seconds: 2);
+    final maybePopTimer = useMemoized(
+      () => RestartableTimer(maybePopTimeout, () {
+        if (isMounted()) allowPop.value = false;
+      }),
+    );
+    final clearMaybePop = useCallback(() {
+      allowPop.value = false;
+      maybePopTimer.cancel();
     }, []);
 
     final loadMoreCall = useCallback(() {
@@ -74,6 +78,7 @@ class HomePage extends HookConsumerWidget {
             if (!isMounted()) return true;
 
             if (!atHomeScreen) {
+              maybePopTimer.cancel();
               context.scaffoldMessenger.hideCurrentSnackBar();
               if (searchBar.isOpen) {
                 searchBar.close();
@@ -83,13 +88,12 @@ class HomePage extends HookConsumerWidget {
 
             if (!allowPop.value) {
               allowPop.value = true;
-              const timeout = Duration(seconds: 2);
               context.scaffoldMessenger.showSnackBar(const SnackBar(
                 content: Text('Press back again to exit'),
-                duration: timeout,
+                duration: maybePopTimeout,
               ));
-
-              Timer(timeout, allowPopTimeout);
+              maybePopTimer.cancel();
+              maybePopTimer.reset();
               return false;
             }
 
@@ -100,6 +104,7 @@ class HomePage extends HookConsumerWidget {
             onSlide: (open) {
               drawerFocused.value = open;
               if (open) {
+                clearMaybePop();
                 context.scaffoldMessenger.hideCurrentSnackBar();
               }
             },
@@ -115,6 +120,7 @@ class HomePage extends HookConsumerWidget {
                       sliver: SliverThumbnails(
                         autoScrollController: scrollController,
                         onTap: (index) {
+                          clearMaybePop();
                           context.scaffoldMessenger.removeCurrentSnackBar();
                         },
                       ),
