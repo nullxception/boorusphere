@@ -1370,38 +1370,6 @@ SOFTWARE.''',
     isDirectDependency: false,
   ),
   Package(
-    name: 'double_back_to_close',
-    description:
-        'Flutter package for request double back pressed before close app/route/screen. Wrap any widget with it to use.',
-    homepage: 'https://github.com/fuadarradhi/double_back_to_close',
-    authors: [],
-    version: '2.0.0',
-    license: '''MIT License
-
-Copyright (c) 2020 Fuad Ar-Radhi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.''',
-    isMarkdown: false,
-    isSdk: false,
-    isDirectDependency: true,
-  ),
-  Package(
     name: 'dynamic_color',
     description:
         'A Flutter package to create Material color schemes based on a platform\'s implementation of dynamic color.',

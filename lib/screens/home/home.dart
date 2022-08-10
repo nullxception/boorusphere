@@ -1,4 +1,5 @@
-import 'package:double_back_to_close/double_back_to_close.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,6 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messenger = context.scaffoldMessenger;
     final scrollController = useMemoized(() {
       return AutoScrollController(axis: Axis.vertical);
     });
@@ -35,6 +35,13 @@ class HomePage extends HookConsumerWidget {
     final pageData = ref.watch(pageDataProvider);
     final drawerFocused = useState(false);
     final atHomeScreen = !drawerFocused.value && !searchBar.isOpen;
+    final isMounted = useIsMounted();
+    final allowPop = useState(false);
+    final allowPopTimeout = useCallback(() {
+      if (isMounted()) {
+        allowPop.value = false;
+      }
+    }, []);
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
@@ -62,27 +69,38 @@ class HomePage extends HookConsumerWidget {
     return Scaffold(
       extendBody: true,
       body: StyledOverlayRegion(
-        child: DoubleBack(
-          condition: atHomeScreen,
-          waitForSecondBackPress: 2,
-          onConditionFail: () {
-            messenger.hideCurrentSnackBar();
-            if (searchBar.isOpen) {
-              searchBar.close();
+        child: WillPopScope(
+          onWillPop: () async {
+            if (!isMounted()) return true;
+
+            if (!atHomeScreen) {
+              context.scaffoldMessenger.hideCurrentSnackBar();
+              if (searchBar.isOpen) {
+                searchBar.close();
+              }
+              return false;
             }
-          },
-          onFirstBackPress: (context) {
-            messenger.showSnackBar(const SnackBar(
-              content: Text('Press back again to exit'),
-              duration: Duration(seconds: 2),
-            ));
+
+            if (!allowPop.value) {
+              allowPop.value = true;
+              const timeout = Duration(seconds: 2);
+              context.scaffoldMessenger.showSnackBar(const SnackBar(
+                content: Text('Press back again to exit'),
+                duration: timeout,
+              ));
+
+              Timer(timeout, allowPopTimeout);
+              return false;
+            }
+
+            return true;
           },
           child: _SlidableContainer(
             edgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
             onSlide: (open) {
               drawerFocused.value = open;
               if (open) {
-                messenger.hideCurrentSnackBar();
+                context.scaffoldMessenger.hideCurrentSnackBar();
               }
             },
             body: Stack(
@@ -97,7 +115,7 @@ class HomePage extends HookConsumerWidget {
                       sliver: SliverThumbnails(
                         autoScrollController: scrollController,
                         onTap: (index) {
-                          messenger.removeCurrentSnackBar();
+                          context.scaffoldMessenger.removeCurrentSnackBar();
                         },
                       ),
                     ),
