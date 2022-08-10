@@ -218,7 +218,11 @@ class _ServerSelection extends HookConsumerWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           child: ListTile(
             title: Text(it.name),
-            leading: Favicon(url: '${it.homepage}/favicon.ico'),
+            leading: Favicon(
+              url: '${it.homepage}/favicon.ico',
+              shape: BoxShape.circle,
+              iconSize: 21,
+            ),
             dense: true,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
