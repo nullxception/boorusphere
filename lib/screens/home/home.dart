@@ -220,7 +220,10 @@ class _SlidableContainer extends HookConsumerWidget {
       },
       child: AnimatedBuilder(
         animation: tween,
-        child: body,
+        child: Material(
+          color: context.theme.scaffoldBackgroundColor,
+          child: body,
+        ),
         builder: (context, child) {
           final slide = maxDrawerWidth * tween.value;
           return Stack(
@@ -240,10 +243,7 @@ class _SlidableContainer extends HookConsumerWidget {
                   onTap: animator.isCompleted ? slidingDrawer.close : null,
                   child: IgnorePointer(
                     ignoring: animator.isCompleted,
-                    child: Material(
-                      color: context.theme.scaffoldBackgroundColor,
-                      child: child,
-                    ),
+                    child: child,
                   ),
                 ),
               ),
