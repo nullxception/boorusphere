@@ -133,7 +133,7 @@ class SettingsPage extends HookConsumerWidget {
                 trailing: DropdownButton(
                   menuMaxHeight: 178,
                   value: postLimit,
-                  elevation: 0,
+                  elevation: 1,
                   underline: const SizedBox.shrink(),
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
                   items: List<DropdownMenuItem<int>>.generate(
