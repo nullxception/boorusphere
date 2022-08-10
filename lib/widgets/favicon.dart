@@ -9,11 +9,13 @@ class Favicon extends StatelessWidget {
     required this.url,
     this.size,
     this.iconSize,
+    this.shape,
   });
 
   final String url;
   final double? size;
   final double? iconSize;
+  final BoxShape? shape;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class Favicon extends StatelessWidget {
           url,
           width: iconSize ?? context.iconTheme.size,
           height: iconSize ?? context.iconTheme.size,
-          shape: BoxShape.circle,
+          shape: shape,
           fit: BoxFit.contain,
           loadStateChanged: (state) =>
               state.extendedImageLoadState == LoadState.completed
