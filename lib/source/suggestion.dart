@@ -14,6 +14,10 @@ import 'blocked_tags.dart';
 final suggestionFuture =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
   final serverActive = ref.watch(activeServerProvider);
+  if (serverActive == ServerData.empty) {
+    return [];
+  }
+
   final source = SuggestionSource(ref);
   return await source.fetch(query: query, server: serverActive);
 });
