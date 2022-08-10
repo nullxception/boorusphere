@@ -194,7 +194,10 @@ class _LeadingButton extends HookConsumerWidget {
         child: searchBar.isOpen
             ? const Icon(Icons.arrow_back_rounded)
             : Favicon(
-                url: '${serverActive.homepage}/favicon.ico', iconSize: 18),
+                key: ValueKey(serverActive.homepage),
+                url: '${serverActive.homepage}/favicon.ico',
+                iconSize: 18,
+              ),
       ),
     );
   }
