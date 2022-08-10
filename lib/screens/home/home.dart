@@ -165,7 +165,11 @@ class _SlidableContainer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final slidingDrawer = ref.watch(slidingDrawerController);
-    final animator = useAnimationController(duration: kThemeAnimationDuration);
+    final animator =
+        useAnimationController(duration: const Duration(milliseconds: 300));
+    final tween = useMemoized(
+        () => CurveTween(curve: Curves.easeInOutSine).animate(animator),
+        [animator]);
     final maxDrawerWidth = context.mediaQuery.size.width - 84;
     final canBeDragged = useState(true);
     final drawerKey = useMemoized(GlobalKey.new);
@@ -187,10 +191,9 @@ class _SlidableContainer extends HookConsumerWidget {
     return GestureDetector(
       onHorizontalDragStart: (details) {
         final dragWidth = edgeDragWidth ?? context.mediaQuery.size.width / 2;
-        final isOpen =
-            animator.isDismissed && details.globalPosition.dx < dragWidth;
-        final isClose =
-            animator.isCompleted && details.globalPosition.dx > dragWidth;
+        final dx = details.globalPosition.dx;
+        final isOpen = animator.isDismissed && dx < dragWidth;
+        final isClose = animator.isCompleted && dx > dragWidth;
         canBeDragged.value = isOpen || isClose;
       },
       onHorizontalDragUpdate: (details) {
@@ -216,16 +219,16 @@ class _SlidableContainer extends HookConsumerWidget {
         }
       },
       child: AnimatedBuilder(
-        animation: animator,
+        animation: tween,
         child: body,
         builder: (context, child) {
-          final slide = maxDrawerWidth * animator.value;
+          final slide = maxDrawerWidth * tween.value;
           return Stack(
             children: [
               Transform(
                 transform: Matrix4.identity()
                   ..setTranslationRaw(
-                      (1 - animator.value) * (maxDrawerWidth / 2), 0, 0)
+                      (1 - tween.value) * (maxDrawerWidth / 2), 0, 0)
                   ..translate(slide - maxDrawerWidth),
                 alignment: Alignment.centerLeft,
                 child: _Drawer(key: drawerKey, maxWidth: maxDrawerWidth),
