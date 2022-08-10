@@ -170,7 +170,7 @@ class _LeadingButton extends HookConsumerWidget {
         if (searchBar.isOpen) {
           searchBar.close();
         } else {
-          Scaffold.of(context).openDrawer();
+          ref.read(slidingDrawerController).toggle();
         }
       },
       child: AnimatedSwitcher(

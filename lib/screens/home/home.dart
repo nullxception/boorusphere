@@ -1,16 +1,25 @@
 import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+import '../../entity/page_option.dart';
+import '../../settings/active_server.dart';
+import '../../settings/theme.dart';
 import '../../source/page.dart';
+import '../../source/server.dart';
+import '../../source/version.dart';
 import '../../utils/extensions/buildcontext.dart';
+import '../../widgets/favicon.dart';
 import '../../widgets/styled_overlay_region.dart';
-import 'home_drawer.dart';
 import 'page_status.dart';
 import 'search/search.dart';
 import 'sliver_thumbnails.dart';
+
+part 'controller.dart';
+part 'drawer.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
@@ -52,14 +61,6 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       extendBody: true,
-      drawer: const HomeDrawer(),
-      drawerEdgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
-      onDrawerChanged: (focusOnDrawer) {
-        drawerFocused.value = focusOnDrawer;
-        if (focusOnDrawer) {
-          messenger.hideCurrentSnackBar();
-        }
-      },
       body: StyledOverlayRegion(
         child: DoubleBack(
           condition: atHomeScreen,
@@ -76,36 +77,45 @@ class HomePage extends HookConsumerWidget {
               duration: Duration(seconds: 2),
             ));
           },
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CustomScrollView(
-                controller: scrollController,
-                slivers: [
-                  SliverPadding(
-                    padding: EdgeInsets.fromLTRB(
-                        10, context.mediaQuery.viewPadding.top + 10, 10, 10),
-                    sliver: SliverThumbnails(
-                      autoScrollController: scrollController,
-                      onTap: (index) {
-                        messenger.removeCurrentSnackBar();
-                      },
-                    ),
-                  ),
-                  if (pageData.posts.isNotEmpty)
+          child: _SlidableContainer(
+            edgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
+            onSlide: (open) {
+              drawerFocused.value = open;
+              if (open) {
+                messenger.hideCurrentSnackBar();
+              }
+            },
+            body: Stack(
+              alignment: Alignment.center,
+              children: [
+                CustomScrollView(
+                  controller: scrollController,
+                  slivers: [
                     SliverPadding(
-                      padding: EdgeInsets.only(
-                        bottom:
-                            context.mediaQuery.viewPadding.bottom * 1.8 + 92,
+                      padding: EdgeInsets.fromLTRB(
+                          10, context.mediaQuery.viewPadding.top + 10, 10, 10),
+                      sliver: SliverThumbnails(
+                        autoScrollController: scrollController,
+                        onTap: (index) {
+                          messenger.removeCurrentSnackBar();
+                        },
                       ),
-                      sliver: const SliverToBoxAdapter(child: PageStatus()),
-                    )
-                ],
-              ),
-              if (pageData.posts.isEmpty) const PageStatus(),
-              const _EdgeShadow(),
-              SearchableView(scrollController: scrollController),
-            ],
+                    ),
+                    if (pageData.posts.isNotEmpty)
+                      SliverPadding(
+                        padding: EdgeInsets.only(
+                          bottom:
+                              context.mediaQuery.viewPadding.bottom * 1.8 + 92,
+                        ),
+                        sliver: const SliverToBoxAdapter(child: PageStatus()),
+                      )
+                  ],
+                ),
+                if (pageData.posts.isEmpty) const PageStatus(),
+                const _EdgeShadow(),
+                SearchableView(scrollController: scrollController),
+              ],
+            ),
           ),
         ),
       ),
@@ -136,6 +146,107 @@ class _EdgeShadow extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SlidableContainer extends HookConsumerWidget {
+  const _SlidableContainer({
+    required this.body,
+    this.edgeDragWidth,
+    this.onSlide,
+  });
+
+  final Widget body;
+  final double? edgeDragWidth;
+  final void Function(bool open)? onSlide;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final slidingDrawer = ref.watch(slidingDrawerController);
+    final animator = useAnimationController(duration: kThemeAnimationDuration);
+    final maxDrawerWidth = context.mediaQuery.size.width - 84;
+    final canBeDragged = useState(true);
+    final drawerKey = useMemoized(GlobalKey.new);
+
+    final animationListener = useCallback(() {
+      if (animator.isAnimating) return;
+
+      onSlide?.call(animator.isCompleted);
+    }, []);
+
+    useEffect(() {
+      slidingDrawer.setAnimator(animator);
+      animator.addListener(animationListener);
+      return () {
+        animator.removeListener(animationListener);
+      };
+    }, []);
+
+    return GestureDetector(
+      onHorizontalDragStart: (details) {
+        final dragWidth = edgeDragWidth ?? context.mediaQuery.size.width / 2;
+        final isOpen =
+            animator.isDismissed && details.globalPosition.dx < dragWidth;
+        final isClose =
+            animator.isCompleted && details.globalPosition.dx > dragWidth;
+        canBeDragged.value = isOpen || isClose;
+      },
+      onHorizontalDragUpdate: (details) {
+        if (!canBeDragged.value) return;
+
+        final delta = details.primaryDelta;
+        if (delta == null) return;
+
+        animator.value += delta / maxDrawerWidth;
+      },
+      onHorizontalDragEnd: (details) async {
+        if (animator.isCompleted || animator.isDismissed) return;
+
+        if (details.velocity.pixelsPerSecond.dx.abs() >= 365) {
+          final visualVelocity = details.velocity.pixelsPerSecond.dx /
+              context.mediaQuery.size.width;
+
+          await animator.fling(velocity: visualVelocity);
+        } else if (animator.value < 0.5) {
+          await animator.reverse();
+        } else {
+          await animator.forward();
+        }
+      },
+      child: AnimatedBuilder(
+        animation: animator,
+        child: body,
+        builder: (context, child) {
+          final slide = maxDrawerWidth * animator.value;
+          return Stack(
+            children: [
+              Transform(
+                transform: Matrix4.identity()
+                  ..setTranslationRaw(
+                      (1 - animator.value) * (maxDrawerWidth / 2), 0, 0)
+                  ..translate(slide - maxDrawerWidth),
+                alignment: Alignment.centerLeft,
+                child: _Drawer(key: drawerKey, maxWidth: maxDrawerWidth),
+              ),
+              Transform.translate(
+                offset: Offset(slide, 0),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: animator.isCompleted ? slidingDrawer.close : null,
+                  child: IgnorePointer(
+                    ignoring: animator.isCompleted,
+                    child: Material(
+                      color: context.theme.scaffoldBackgroundColor,
+                      child: child,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

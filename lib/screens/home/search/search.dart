@@ -15,6 +15,7 @@ import '../../../source/suggestion.dart';
 import '../../../utils/extensions/buildcontext.dart';
 import '../../../widgets/exception_info.dart';
 import '../../../widgets/favicon.dart';
+import '../home.dart';
 
 part 'controller.dart';
 part 'searchbar.dart';

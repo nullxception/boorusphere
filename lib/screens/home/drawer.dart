@@ -1,22 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+part of 'home.dart';
 
-import '../../entity/page_option.dart';
-import '../../settings/active_server.dart';
-import '../../settings/theme.dart';
-import '../../source/page.dart';
-import '../../source/server.dart';
-import '../../source/version.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../widgets/favicon.dart';
-
-class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({super.key});
-
+class _Drawer extends StatelessWidget {
+  const _Drawer({super.key, required this.maxWidth});
+  final double maxWidth;
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    return Container(
+      color: context.theme.drawerTheme.backgroundColor,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -25,6 +15,7 @@ class HomeDrawer extends StatelessWidget {
               constraints: constraints.copyWith(
                 minHeight: constraints.maxHeight,
                 maxHeight: double.infinity,
+                maxWidth: maxWidth,
               ),
               child: IntrinsicHeight(
                 child: SafeArea(
@@ -179,7 +170,7 @@ class _BackToHomeTile extends HookConsumerWidget {
           ref
               .read(pageOptionProvider.notifier)
               .update((state) => const PageOption(clear: true));
-          context.navigator.pop();
+          ref.read(slidingDrawerController).close();
         },
       ),
     );
@@ -217,7 +208,7 @@ class _ServerSelection extends HookConsumerWidget {
               ref
                   .read(pageOptionProvider.notifier)
                   .update((state) => state.copyWith(clear: true));
-              context.navigator.pop();
+              ref.read(slidingDrawerController).close();
             },
           ),
         );
