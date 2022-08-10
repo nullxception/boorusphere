@@ -101,9 +101,10 @@ class HomePage extends HookConsumerWidget {
           },
           child: _SlidableContainer(
             edgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
-            onSlide: (open) {
-              drawerFocused.value = open;
-              if (open) {
+            onSlideStatus: (status) {
+              final focused = status != AnimationStatus.dismissed;
+              drawerFocused.value = focused;
+              if (focused) {
                 clearMaybePop();
                 context.scaffoldMessenger.hideCurrentSnackBar();
               }
@@ -179,12 +180,12 @@ class _SlidableContainer extends HookConsumerWidget {
   const _SlidableContainer({
     required this.body,
     this.edgeDragWidth,
-    this.onSlide,
+    this.onSlideStatus,
   });
 
   final Widget body;
   final double? edgeDragWidth;
-  final void Function(bool open)? onSlide;
+  final void Function(AnimationStatus open)? onSlideStatus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -201,7 +202,7 @@ class _SlidableContainer extends HookConsumerWidget {
     final animationListener = useCallback(() {
       if (animator.isAnimating) return;
 
-      onSlide?.call(animator.isCompleted);
+      onSlideStatus?.call(animator.status);
     }, []);
 
     useEffect(() {
