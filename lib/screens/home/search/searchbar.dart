@@ -14,18 +14,17 @@ class _SearchBar extends HookConsumerWidget {
     final onScrolling = useCallback(() {
       final position = scrollController.position;
       final threshold = _SearchBar.innerHeight;
-
-      // reset back to default (!collapsed) because there's nothing to scroll
       if (delta.value.first > 0 &&
           position.viewportDimension > position.maxScrollExtent) {
+        // reset back to default (!collapsed) because there's nothing to scroll
         delta.value = [0, 0];
         return;
       }
 
-      // keep the state when it's in the edge or idle that may caused by pop()
       if (position.extentBefore < threshold ||
-          position.extentAfter < threshold ||
-          position.userScrollDirection == ScrollDirection.idle) {
+          position.extentAfter < threshold) {
+        // we're already at the edge of the scrollable content
+        // there's no need to change the collapsed state
         return;
       }
 
@@ -33,7 +32,7 @@ class _SearchBar extends HookConsumerWidget {
       final offset = (delta.value.first + current - delta.value.last);
       final boundary = offset.clamp(-threshold, threshold);
       delta.value = [boundary, current];
-    }, [scrollController.position.pixels]);
+    }, []);
 
     useEffect(() {
       scrollController.addListener(onScrolling);
