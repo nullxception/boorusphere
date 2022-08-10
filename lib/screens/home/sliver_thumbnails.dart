@@ -104,7 +104,9 @@ class SliverThumbnails extends HookConsumerWidget {
                     },
                   ),
                 );
-                autoScrollTo(dest);
+                if (dest is int) {
+                  autoScrollTo(dest);
+                }
               },
             ),
           ),

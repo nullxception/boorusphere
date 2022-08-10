@@ -29,8 +29,11 @@ class PostPage extends HookConsumerWidget {
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
-    final isVideo = pageData.posts[page.value].contentType == PostType.video;
-    final totalPost = pageData.posts.length;
+
+    final posts = pageData.posts;
+    final post = posts.isEmpty ? Post.empty : posts[page.value];
+    final isVideo = post.contentType == PostType.video;
+    final totalPost = posts.length;
 
     return Theme(
       data: ref.read(appThemeProvider).data.night,
@@ -42,10 +45,10 @@ class PostPage extends HookConsumerWidget {
           controller: appbarAnimController,
           visible: !fullscreen,
           child: _PostAppBar(
-            subtitle: pageData.posts[page.value].tags.join(' '),
+            subtitle: post.tags.join(' '),
             title: pageState.maybeWhen(
               loading: () => '#${page.value + 1} of (loading...)',
-              orElse: () => '#${page.value + 1} of ${pageData.posts.length}',
+              orElse: () => '#${page.value + 1} of ${posts.length}',
             ),
           ),
         ),
@@ -71,7 +74,7 @@ class PostPage extends HookConsumerWidget {
                 },
                 itemCount: totalPost,
                 itemBuilder: (_, index) {
-                  final post = pageData.posts[index];
+                  final post = posts[index];
                   final Widget widget;
                   switch (post.contentType) {
                     case PostType.photo:
@@ -100,7 +103,7 @@ class PostPage extends HookConsumerWidget {
             ? BottomBarVisibility(
                 controller: appbarAnimController,
                 visible: !fullscreen,
-                child: PostToolbox(pageData.posts[page.value]),
+                child: PostToolbox(post),
               )
             : null,
       ),
