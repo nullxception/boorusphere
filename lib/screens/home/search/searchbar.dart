@@ -226,14 +226,28 @@ class _TrailingButton extends ConsumerWidget {
       child: SizedBox(
         width: size,
         height: size,
-        child: collapsed
-            ? const Icon(Icons.arrow_upward_rounded)
-            : Center(
-                child: Icon(
-                  Icons.grid_view,
-                  size: size - (grid + 1) * 2,
-                ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animator) {
+            final animation = Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(CurvedAnimation(
+              parent: animator,
+              curve: Curves.easeInOutCubic,
+            ));
+            return RotationTransition(
+              turns: animation,
+              child: ScaleTransition(
+                scale: animation,
+                child: child,
               ),
+            );
+          },
+          child: collapsed
+              ? const Icon(Icons.arrow_upward_rounded)
+              : Icon(key: ValueKey(grid), Icons.grid_view, size: 20),
+        ),
       ),
     );
   }
