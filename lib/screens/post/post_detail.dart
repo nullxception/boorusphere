@@ -12,7 +12,6 @@ import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
 import '../../widgets/styled_overlay_region.dart';
-import '../home/home.dart';
 import 'tag.dart';
 
 class PostDetailsPage extends HookConsumerWidget {
@@ -232,10 +231,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 tags.addAll(selectedTags);
                 ref.read(pageOptionProvider.notifier).update(
                     (state) => PageOption(query: tags.join(' '), clear: true));
-                context.navigator.pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                  (route) => false,
-                );
+                context.navigator.popUntil(ModalRoute.withName('/'));
               }
             },
           ),
@@ -248,10 +244,7 @@ class PostDetailsPage extends HookConsumerWidget {
                 ref
                     .read(pageOptionProvider.notifier)
                     .update((state) => PageOption(query: tags, clear: true));
-                context.navigator.pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                  (route) => false,
-                );
+                context.navigator.popUntil(ModalRoute.withName('/'));
               }
             },
           ),
