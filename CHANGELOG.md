@@ -1,4 +1,12 @@
 
+## 1.1.3
+* Revamp several UI elements
+* Fix app cannot be closed after using "search tag" or "add tag to current search"
+* Fix search history did not sorted properly
+* Fix placeholder image did not get de-blurred after clicking show button
+* Fix video player state inconsistency issues
+* Improve double-back to close consistency
+
 ## 1.1.2
 * Add option to clear image cache at settings
 * Add option to hide downloaded media from gallery at settings
