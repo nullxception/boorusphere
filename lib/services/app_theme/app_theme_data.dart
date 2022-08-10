@@ -27,7 +27,8 @@ class AppThemeData with _$AppThemeData {
   }
 
   static ThemeData _lightOf(ColorScheme seededScheme) {
-    return ThemeData.light().copyWith(
+    final origin = ThemeData.light();
+    return origin.copyWith(
       useMaterial3: true,
       colorScheme: seededScheme,
       appBarTheme: AppBarTheme(
@@ -39,22 +40,26 @@ class AppThemeData with _$AppThemeData {
       canvasColor: seededScheme.surface,
       cardColor: seededScheme.surface.darken(2),
       scaffoldBackgroundColor: seededScheme.surface,
+      drawerTheme: origin.drawerTheme.copyWith(
+        backgroundColor: seededScheme.surface.shade(3),
+      ),
       toggleableActiveColor: seededScheme.primary,
-      snackBarTheme: ThemeData.light().snackBarTheme.copyWith(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(11),
-                topRight: Radius.circular(11),
-              ),
-            ),
-            backgroundColor: seededScheme.primaryContainer,
-            contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      snackBarTheme: origin.snackBarTheme.copyWith(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(11),
+            topRight: Radius.circular(11),
           ),
+        ),
+        backgroundColor: seededScheme.primaryContainer,
+        contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      ),
     );
   }
 
   static ThemeData _nightOf(ColorScheme seededScheme) {
-    return ThemeData.dark().copyWith(
+    final origin = ThemeData.dark();
+    return origin.copyWith(
       useMaterial3: true,
       colorScheme: seededScheme,
       appBarTheme: AppBarTheme(
@@ -66,22 +71,26 @@ class AppThemeData with _$AppThemeData {
       canvasColor: seededScheme.surface,
       cardColor: seededScheme.surface.lighten(3),
       scaffoldBackgroundColor: seededScheme.surface.darken(2),
+      drawerTheme: origin.drawerTheme.copyWith(
+        backgroundColor: seededScheme.surface.shade(40),
+      ),
       toggleableActiveColor: seededScheme.primary,
-      snackBarTheme: ThemeData.dark().snackBarTheme.copyWith(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(11),
-                topRight: Radius.circular(11),
-              ),
-            ),
-            backgroundColor: seededScheme.primaryContainer,
-            contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      snackBarTheme: origin.snackBarTheme.copyWith(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(11),
+            topRight: Radius.circular(11),
           ),
+        ),
+        backgroundColor: seededScheme.primaryContainer,
+        contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      ),
     );
   }
 
   static ThemeData _midnightOf(ColorScheme seededScheme) {
-    return ThemeData.dark().copyWith(
+    final origin = ThemeData.dark();
+    return origin.copyWith(
       useMaterial3: true,
       colorScheme: seededScheme.copyWith(
         brightness: Brightness.dark,
@@ -97,18 +106,21 @@ class AppThemeData with _$AppThemeData {
       backgroundColor: Colors.black,
       canvasColor: Colors.black,
       cardColor: seededScheme.background.darken(3),
+      drawerTheme: origin.drawerTheme.copyWith(
+        backgroundColor: Colors.black.brighten(6),
+      ),
       scaffoldBackgroundColor: Colors.black,
       toggleableActiveColor: seededScheme.primary,
-      snackBarTheme: ThemeData.dark().snackBarTheme.copyWith(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(11),
-                topRight: Radius.circular(11),
-              ),
-            ),
-            backgroundColor: seededScheme.primaryContainer,
-            contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      snackBarTheme: origin.snackBarTheme.copyWith(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(11),
+            topRight: Radius.circular(11),
           ),
+        ),
+        backgroundColor: seededScheme.primaryContainer,
+        contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      ),
     );
   }
 }

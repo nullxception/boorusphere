@@ -5,8 +5,12 @@ class _Drawer extends StatelessWidget {
   final double maxWidth;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Material(
       color: context.theme.drawerTheme.backgroundColor,
+      borderRadius: const BorderRadius.only(
+        topRight: Radius.circular(25),
+        bottomRight: Radius.circular(25),
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -19,82 +23,103 @@ class _Drawer extends StatelessWidget {
               ),
               child: IntrinsicHeight(
                 child: SafeArea(
-                  child: Flex(
-                    direction: Axis.vertical,
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(15, 30, 15, 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Boorusphere!',
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                  ),
-                                  _ThemeSwitcherButton(),
-                                ],
-                              ),
-                            ),
-                            _ServerSelection(),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.bottomLeft,
+                  child: ListTileTheme(
+                    data: context.theme.listTileTheme.copyWith(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 24),
+                    ),
+                    child: Flex(
+                      direction: Axis.vertical,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Divider(),
-                              _BackToHomeTile(),
-                              ListTile(
-                                title: const Text('Downloads'),
-                                leading: const Icon(Icons.cloud_download),
-                                dense: true,
-                                onTap: () => context.goNamed('downloads'),
-                              ),
-                              ListTile(
-                                title: const Text('Server'),
-                                leading: const Icon(Icons.public),
-                                dense: true,
-                                onTap: () => context.goNamed('servers'),
-                              ),
-                              ListTile(
-                                title: const Text('Tags Blocker'),
-                                leading: const Icon(Icons.block),
-                                dense: true,
-                                onTap: () => context.goNamed('tags-blocker'),
-                              ),
-                              ListTile(
-                                title: const Text('Settings'),
-                                leading: const Icon(Icons.settings),
-                                dense: true,
-                                onTap: () => context.goNamed('settings'),
-                              ),
-                              const AppVersionTile(),
+                            children: const [
+                              _Header(),
+                              _ServerSelection(),
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                        const Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: _Footer(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _Footer extends StatelessWidget {
+  const _Footer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _BackToHomeTile(),
+        ListTile(
+          title: const Text('Downloads'),
+          leading: const Icon(Icons.cloud_download),
+          dense: true,
+          onTap: () => context.goNamed('downloads'),
+        ),
+        ListTile(
+          title: const Text('Server'),
+          leading: const Icon(Icons.public),
+          dense: true,
+          onTap: () => context.goNamed('servers'),
+        ),
+        ListTile(
+          title: const Text('Tags Blocker'),
+          leading: const Icon(Icons.block),
+          dense: true,
+          onTap: () => context.goNamed('tags-blocker'),
+        ),
+        ListTile(
+          title: const Text('Settings'),
+          leading: const Icon(Icons.settings),
+          dense: true,
+          onTap: () => context.goNamed('settings'),
+        ),
+        const AppVersionTile(),
+      ],
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Boorusphere!',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
+          _ThemeSwitcherButton(),
+        ],
       ),
     );
   }
@@ -178,6 +203,8 @@ class _BackToHomeTile extends HookConsumerWidget {
 }
 
 class _ServerSelection extends HookConsumerWidget {
+  const _ServerSelection();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataProvider);
@@ -193,7 +220,6 @@ class _ServerSelection extends HookConsumerWidget {
             title: Text(it.name),
             leading: Favicon(url: '${it.homepage}/favicon.ico'),
             dense: true,
-            contentPadding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(30),
