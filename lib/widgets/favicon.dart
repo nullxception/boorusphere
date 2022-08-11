@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/extensions/buildcontext.dart';
+import '../utils/extensions/string.dart';
 
 class Favicon extends StatelessWidget {
   const Favicon({
@@ -19,21 +20,27 @@ class Favicon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fallbackWidget = Icon(
+      Icons.public,
+      size: iconSize ?? context.iconTheme.size,
+    );
     return SizedBox(
       width: size ?? context.iconTheme.size,
       height: size ?? context.iconTheme.size,
       child: Center(
-        child: ExtendedImage.network(
-          url,
-          width: iconSize ?? context.iconTheme.size,
-          height: iconSize ?? context.iconTheme.size,
-          shape: shape,
-          fit: BoxFit.contain,
-          loadStateChanged: (state) =>
-              state.extendedImageLoadState == LoadState.completed
-                  ? state.completedWidget
-                  : const Icon(Icons.public),
-        ),
+        child: url.asUri.hasAuthority
+            ? ExtendedImage.network(
+                url,
+                width: iconSize ?? context.iconTheme.size,
+                height: iconSize ?? context.iconTheme.size,
+                shape: shape,
+                fit: BoxFit.contain,
+                loadStateChanged: (state) =>
+                    state.extendedImageLoadState == LoadState.completed
+                        ? state.completedWidget
+                        : fallbackWidget,
+              )
+            : fallbackWidget,
       ),
     );
   }
