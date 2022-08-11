@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 
@@ -21,11 +19,11 @@ extension StringExt on String {
   }
 
   String get fileName {
-    return basename(File(this).path);
+    return basename(asUri.path);
   }
 
   String get fileExtension {
-    return extension(File(this).path).replaceFirst('.', '');
+    return extension(asUri.path).replaceFirst('.', '');
   }
 
   List<String> toWordList() {
