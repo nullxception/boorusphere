@@ -101,9 +101,9 @@ class ServerResponseParser {
         result.add(
           Post(
             id: id,
-            originalFile: originalFile,
-            sampleFile: sampleFile,
-            previewFile: previewFile,
+            originalFile: normalizeUrl(server, originalFile),
+            sampleFile: normalizeUrl(server, sampleFile),
+            previewFile: normalizeUrl(server, previewFile),
             tags: tags,
             width: width,
             height: height,
@@ -173,5 +173,28 @@ class ServerResponseParser {
     }
 
     return result;
+  }
+
+  static String normalizeUrl(ServerData serverData, String urlString) {
+    try {
+      final uri = Uri.parse(urlString);
+      if (uri.hasScheme && uri.hasAuthority && uri.hasAbsolutePath) {
+        // valid url, there's nothing to do
+        return urlString;
+      }
+
+      if (uri.hasAuthority && uri.hasAbsolutePath && !uri.hasScheme) {
+        final origin = Uri.parse(serverData.homepage);
+        final scheme = origin.scheme == 'https' ? Uri.https : Uri.http;
+        return scheme(uri.authority, uri.path,
+                uri.hasQuery ? uri.queryParametersAll : null)
+            .toString();
+      }
+
+      // nothing we can do when there's no authority and path
+      return '';
+    } catch (e) {
+      return '';
+    }
   }
 }
