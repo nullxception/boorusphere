@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'string.dart';
+
 extension LinkedHashMapExt on LinkedHashMap {
   String toGDataString() {
     try {
@@ -21,7 +23,7 @@ extension MapStringExt on Map<String, dynamic> {
         if (orElse is int) {
           return int.parse(g) as T;
         } else if (orElse is List) {
-          return g.trim().split(' ') as T;
+          return g.toWordList() as T;
         }
         return g as T;
       }
@@ -29,7 +31,7 @@ extension MapStringExt on Map<String, dynamic> {
       if (orElse is int && data is! int) {
         return int.parse(data) as T;
       } else if (orElse is List && data is String) {
-        return data.trim().split(' ') as T;
+        return data.toWordList() as T;
       }
       return data as T;
     } catch (e) {

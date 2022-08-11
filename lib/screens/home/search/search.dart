@@ -12,6 +12,7 @@ import '../../../source/page.dart';
 import '../../../source/search_history.dart';
 import '../../../source/suggestion.dart';
 import '../../../utils/extensions/buildcontext.dart';
+import '../../../utils/extensions/string.dart';
 import '../../../widgets/exception_info.dart';
 import '../../../widgets/favicon.dart';
 import '../home.dart';

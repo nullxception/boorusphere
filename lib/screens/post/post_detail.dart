@@ -235,7 +235,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
             onTap: () {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
-                final tags = Set<String>.from(pageQuery.split(' '));
+                final tags = Set<String>.from(pageQuery.toWordList());
                 tags.addAll(selectedTags);
                 ref.read(pageOptionProvider.notifier).update(
                     (state) => PageOption(query: tags.join(' '), clear: true));

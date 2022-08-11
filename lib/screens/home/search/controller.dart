@@ -42,9 +42,9 @@ class SearchBarController extends ChangeNotifier {
   }
 
   void append(String suggested) {
-    final queries = _textController.text.replaceAll('  ', ' ').split(' ');
+    final queries = _textController.text.toWordList();
     final result = queries.sublist(0, queries.length - 1).toSet()
-      ..addAll(suggested.split(' '));
+      ..addAll(suggested.toWordList());
     text = '${result.join(' ')} ';
   }
 

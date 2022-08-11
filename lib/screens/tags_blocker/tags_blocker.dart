@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../widgets/notice_card.dart';
 import '../../source/blocked_tags.dart';
+import '../../utils/extensions/string.dart';
 
 class TagsBlockerPage extends HookConsumerWidget {
   const TagsBlockerPage({super.key});
@@ -43,7 +44,7 @@ class TagsBlockerPage extends HookConsumerWidget {
                   child: TextFormField(
                     controller: blockedTagsController,
                     onFieldSubmitted: (value) {
-                      final values = value.trim().split(' ');
+                      final values = value.toWordList();
                       blockedTagsHandler.pushAll(values);
                       updateTags(blockedTagsHandler, blockedTags);
                       blockedTagsController.clear();

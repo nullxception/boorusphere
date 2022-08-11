@@ -27,4 +27,8 @@ extension StringExt on String {
   String get fileExtension {
     return extension(File(this).path).replaceFirst('.', '');
   }
+
+  List<String> toWordList() {
+    return replaceAll(RegExp('\\s+'), ' ').trim().split(' ');
+  }
 }

@@ -33,7 +33,7 @@ class SuggestionSource {
   }) async {
     final blockedTags = ref.read(blockedTagsProvider);
 
-    final url = server.suggestionUrlOf(query.split(' ').last);
+    final url = server.suggestionUrlOf(query.toWordList().last);
     try {
       final res = await retryFuture(
         () => http.get(url.asUri).timeout(const Duration(seconds: 5)),

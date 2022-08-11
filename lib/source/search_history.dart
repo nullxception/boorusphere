@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../settings/active_server.dart';
 import '../entity/search_history.dart';
+import '../utils/extensions/string.dart';
 
 final searchHistoryProvider =
     StateNotifierProvider<SearchHistorySource, Map<int, SearchHistory>>(
@@ -18,7 +19,7 @@ class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
   Map<int, SearchHistory> get all => Map.castFrom(_box.toMap());
 
   void rebuild(String query) {
-    final queries = query.split(' ');
+    final queries = query.toWordList();
 
     if (query.endsWith(' ') || query.isEmpty) {
       state = all;
