@@ -28,6 +28,8 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
 
     if (_box.isEmpty) {
       await _box.putAll(fromAssets);
+    } else {
+      await validateAndMigrateKeys();
     }
     state = _box.values.map((it) => it as ServerData).toList();
   }
@@ -38,7 +40,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
 
     return Map.fromEntries(servers.map((it) {
       final value = ServerData.fromJson(it);
-      return MapEntry(value.homepage, value);
+      return MapEntry(value.key, value);
     }));
   }
 
@@ -50,7 +52,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   }
 
   Future<void> addServer({required ServerData data}) async {
-    await _box.put(data.homepage, data);
+    await _box.put(data.key, data);
     state = _box.values.map((it) => it as ServerData).toList();
   }
 
@@ -60,7 +62,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
-    _box.delete(data.homepage);
+    _box.delete(data.key);
     state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data) {
       ref.read(activeServerProvider.notifier).use(state.first);
@@ -83,11 +85,23 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   }) async {
     final activeServer = ref.read(activeServerProvider);
 
-    await _box.delete(data.homepage);
-    await _box.put(data.homepage, newData);
+    await _box.delete(data.key);
+    await _box.put(data.key, newData);
     state = _box.values.map((it) => it as ServerData).toList();
-    if (activeServer == data && newData.name != activeServer.name) {
+    if (activeServer == data && newData.key != activeServer.key) {
       await ref.read(activeServerProvider.notifier).use(newData);
     }
+  }
+
+  Future<void> validateAndMigrateKeys() async {
+    final mapped = Map<String, ServerData>.from(_box.toMap());
+    for (final data in mapped.entries) {
+      if (data.key.startsWith('@')) {
+        continue;
+      }
+      await _box.delete(data.key);
+      await _box.put(data.value.key, data.value);
+    }
+    await _box.flush();
   }
 }

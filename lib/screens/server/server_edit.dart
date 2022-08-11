@@ -20,7 +20,6 @@ class ServerEditorPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataProvider);
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final data = useState(server);
     final isLoading = useState(false);
@@ -46,13 +45,10 @@ class ServerEditorPage extends HookConsumerWidget {
                     controller: scanText,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'Example: https://abc.com',
+                      labelText:
+                          'Homepage address, example: https://abcbooru.org',
                     ),
                     validator: (value) {
-                      final homescreens = serverData.map((it) => it.homepage);
-                      if (!isEditing && homescreens.contains(value)) {
-                        return 'Server data for $value already exists';
-                      }
                       if (value?.contains(RegExp(r'https?://.+\..+')) ==
                           false) {
                         return 'not a valid url';

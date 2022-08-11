@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stringr/stringr.dart';
 
 part 'server_data.freezed.dart';
 part 'server_data.g.dart';
@@ -56,6 +57,9 @@ class ServerData with _$ServerData {
     final query = postUrl.replaceAll('{post-id}', id.toString());
     return '$homepage/$query';
   }
+
+  // Key used in hive box
+  String get key => '@${name.camelCase()}';
 
   static const ServerData empty =
       ServerData(name: '', homepage: '', searchUrl: '');

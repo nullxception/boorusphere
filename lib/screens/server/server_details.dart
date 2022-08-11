@@ -52,6 +52,14 @@ class ServerDetails extends HookConsumerWidget {
                     border: UnderlineInputBorder(),
                     labelText: 'Name',
                   ),
+                  validator: (value) {
+                    final serverName = serverData.map((it) => it.name);
+                    if (!isEditing && serverName.contains(value)) {
+                      return 'Server data for $value already exists';
+                    }
+
+                    return null;
+                  },
                 ),
                 TextFormField(
                   controller: cHomepage,
@@ -59,14 +67,6 @@ class ServerDetails extends HookConsumerWidget {
                     border: UnderlineInputBorder(),
                     labelText: 'Homepage',
                   ),
-                  validator: (value) {
-                    final homescreens = serverData.map((it) => it.homepage);
-                    if (!isEditing && homescreens.contains(value)) {
-                      return 'Server data for $value already exists';
-                    }
-
-                    return null;
-                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
