@@ -112,7 +112,6 @@ class _SearchSuggestion extends HookConsumerWidget {
                               data: SuggestionEntry(
                                 isHistory: false,
                                 text: value[index],
-                                server: activeServer.name,
                               ),
                               onTap: searchBar.submit,
                               onAdded: searchBar.append,
