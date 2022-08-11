@@ -62,6 +62,11 @@ class ServerResponseParser {
     final previewHeightKey = ['preview_height'];
     final sourceKey = ['source'];
     final ratingKey = ['rating'];
+    final tagsArtistKey = ['tag_string_artist'];
+    final tagsCharacterKey = ['tag_string_character'];
+    final tagsCopyrightKey = ['tag_string_copyright'];
+    final tagsGeneralKey = ['tag_string_general'];
+    final tagsMetaKey = ['tag_string_meta'];
 
     for (final Map<String, dynamic> post in entries) {
       final id = post.take(idKey, orElse: -1);
@@ -82,6 +87,11 @@ class ServerResponseParser {
       final previewHeight = post.take(previewHeightKey, orElse: -1);
       final rating = post.take(ratingKey, orElse: 'q');
       final source = post.take(sourceKey, orElse: '');
+      final tagsArtist = post.take(tagsArtistKey, orElse: <String>[]);
+      final tagsCharacter = post.take(tagsCharacterKey, orElse: <String>[]);
+      final tagsCopyright = post.take(tagsCopyrightKey, orElse: <String>[]);
+      final tagsGeneral = post.take(tagsGeneralKey, orElse: <String>[]);
+      final tagsMeta = post.take(tagsMetaKey, orElse: <String>[]);
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -105,6 +115,11 @@ class ServerResponseParser {
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
+            tagsArtist: tagsArtist,
+            tagsCharacter: tagsCharacter,
+            tagsCopyright: tagsCopyright,
+            tagsGeneral: tagsGeneral,
+            tagsMeta: tagsMeta,
           ),
         );
       }

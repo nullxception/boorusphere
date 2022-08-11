@@ -46,6 +46,16 @@ mixin _$Post {
   int get previewHeight => throw _privateConstructorUsedError;
   @HiveField(14, defaultValue: '')
   String get source => throw _privateConstructorUsedError;
+  @HiveField(15, defaultValue: [])
+  List<String> get tagsArtist => throw _privateConstructorUsedError;
+  @HiveField(16, defaultValue: [])
+  List<String> get tagsCharacter => throw _privateConstructorUsedError;
+  @HiveField(17, defaultValue: [])
+  List<String> get tagsCopyright => throw _privateConstructorUsedError;
+  @HiveField(18, defaultValue: [])
+  List<String> get tagsGeneral => throw _privateConstructorUsedError;
+  @HiveField(19, defaultValue: [])
+  List<String> get tagsMeta => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PostCopyWith<Post> get copyWith => throw _privateConstructorUsedError;
@@ -70,7 +80,12 @@ abstract class $PostCopyWith<$Res> {
       @HiveField(11, defaultValue: -1) int sampleHeight,
       @HiveField(12, defaultValue: -1) int previewWidth,
       @HiveField(13, defaultValue: -1) int previewHeight,
-      @HiveField(14, defaultValue: '') String source});
+      @HiveField(14, defaultValue: '') String source,
+      @HiveField(15, defaultValue: []) List<String> tagsArtist,
+      @HiveField(16, defaultValue: []) List<String> tagsCharacter,
+      @HiveField(17, defaultValue: []) List<String> tagsCopyright,
+      @HiveField(18, defaultValue: []) List<String> tagsGeneral,
+      @HiveField(19, defaultValue: []) List<String> tagsMeta});
 }
 
 /// @nodoc
@@ -98,6 +113,11 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? previewWidth = freezed,
     Object? previewHeight = freezed,
     Object? source = freezed,
+    Object? tagsArtist = freezed,
+    Object? tagsCharacter = freezed,
+    Object? tagsCopyright = freezed,
+    Object? tagsGeneral = freezed,
+    Object? tagsMeta = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -160,6 +180,26 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
               as String,
+      tagsArtist: tagsArtist == freezed
+          ? _value.tagsArtist
+          : tagsArtist // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsCharacter: tagsCharacter == freezed
+          ? _value.tagsCharacter
+          : tagsCharacter // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsCopyright: tagsCopyright == freezed
+          ? _value.tagsCopyright
+          : tagsCopyright // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsGeneral: tagsGeneral == freezed
+          ? _value.tagsGeneral
+          : tagsGeneral // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsMeta: tagsMeta == freezed
+          ? _value.tagsMeta
+          : tagsMeta // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -184,7 +224,12 @@ abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       @HiveField(11, defaultValue: -1) int sampleHeight,
       @HiveField(12, defaultValue: -1) int previewWidth,
       @HiveField(13, defaultValue: -1) int previewHeight,
-      @HiveField(14, defaultValue: '') String source});
+      @HiveField(14, defaultValue: '') String source,
+      @HiveField(15, defaultValue: []) List<String> tagsArtist,
+      @HiveField(16, defaultValue: []) List<String> tagsCharacter,
+      @HiveField(17, defaultValue: []) List<String> tagsCopyright,
+      @HiveField(18, defaultValue: []) List<String> tagsGeneral,
+      @HiveField(19, defaultValue: []) List<String> tagsMeta});
 }
 
 /// @nodoc
@@ -213,6 +258,11 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? previewWidth = freezed,
     Object? previewHeight = freezed,
     Object? source = freezed,
+    Object? tagsArtist = freezed,
+    Object? tagsCharacter = freezed,
+    Object? tagsCopyright = freezed,
+    Object? tagsGeneral = freezed,
+    Object? tagsMeta = freezed,
   }) {
     return _then(_$_Post(
       id: id == freezed
@@ -275,6 +325,26 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
               as String,
+      tagsArtist: tagsArtist == freezed
+          ? _value._tagsArtist
+          : tagsArtist // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsCharacter: tagsCharacter == freezed
+          ? _value._tagsCharacter
+          : tagsCharacter // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsCopyright: tagsCopyright == freezed
+          ? _value._tagsCopyright
+          : tagsCopyright // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsGeneral: tagsGeneral == freezed
+          ? _value._tagsGeneral
+          : tagsGeneral // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      tagsMeta: tagsMeta == freezed
+          ? _value._tagsMeta
+          : tagsMeta // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -282,24 +352,54 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(typeId: 3, adapterName: 'PostAdapter')
-class _$_Post extends _Post with DiagnosticableTreeMixin {
+class _$_Post extends _Post {
   const _$_Post(
-      {@HiveField(0, defaultValue: -1) this.id = -1,
-      @HiveField(1, defaultValue: '') this.originalFile = '',
-      @HiveField(2, defaultValue: '') this.sampleFile = '',
-      @HiveField(3, defaultValue: '') this.previewFile = '',
-      @HiveField(4, defaultValue: []) final List<String> tags = const [],
-      @HiveField(5, defaultValue: -1) this.width = -1,
-      @HiveField(6, defaultValue: -1) this.height = -1,
-      @HiveField(7, defaultValue: '') this.serverName = '',
-      @HiveField(8, defaultValue: '') this.postUrl = '',
-      @HiveField(9, defaultValue: 'q') this.rateValue = 'q',
-      @HiveField(10, defaultValue: -1) this.sampleWidth = -1,
-      @HiveField(11, defaultValue: -1) this.sampleHeight = -1,
-      @HiveField(12, defaultValue: -1) this.previewWidth = -1,
-      @HiveField(13, defaultValue: -1) this.previewHeight = -1,
-      @HiveField(14, defaultValue: '') this.source = ''})
+      {@HiveField(0, defaultValue: -1)
+          this.id = -1,
+      @HiveField(1, defaultValue: '')
+          this.originalFile = '',
+      @HiveField(2, defaultValue: '')
+          this.sampleFile = '',
+      @HiveField(3, defaultValue: '')
+          this.previewFile = '',
+      @HiveField(4, defaultValue: [])
+          final List<String> tags = const [],
+      @HiveField(5, defaultValue: -1)
+          this.width = -1,
+      @HiveField(6, defaultValue: -1)
+          this.height = -1,
+      @HiveField(7, defaultValue: '')
+          this.serverName = '',
+      @HiveField(8, defaultValue: '')
+          this.postUrl = '',
+      @HiveField(9, defaultValue: 'q')
+          this.rateValue = 'q',
+      @HiveField(10, defaultValue: -1)
+          this.sampleWidth = -1,
+      @HiveField(11, defaultValue: -1)
+          this.sampleHeight = -1,
+      @HiveField(12, defaultValue: -1)
+          this.previewWidth = -1,
+      @HiveField(13, defaultValue: -1)
+          this.previewHeight = -1,
+      @HiveField(14, defaultValue: '')
+          this.source = '',
+      @HiveField(15, defaultValue: [])
+          final List<String> tagsArtist = const [],
+      @HiveField(16, defaultValue: [])
+          final List<String> tagsCharacter = const [],
+      @HiveField(17, defaultValue: [])
+          final List<String> tagsCopyright = const [],
+      @HiveField(18, defaultValue: [])
+          final List<String> tagsGeneral = const [],
+      @HiveField(19, defaultValue: [])
+          final List<String> tagsMeta = const []})
       : _tags = tags,
+        _tagsArtist = tagsArtist,
+        _tagsCharacter = tagsCharacter,
+        _tagsCopyright = tagsCopyright,
+        _tagsGeneral = tagsGeneral,
+        _tagsMeta = tagsMeta,
         super._();
 
   @override
@@ -367,32 +467,54 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
   @JsonKey()
   @HiveField(14, defaultValue: '')
   final String source;
-
+  final List<String> _tagsArtist;
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight, source: $source)';
+  @JsonKey()
+  @HiveField(15, defaultValue: [])
+  List<String> get tagsArtist {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tagsArtist);
+  }
+
+  final List<String> _tagsCharacter;
+  @override
+  @JsonKey()
+  @HiveField(16, defaultValue: [])
+  List<String> get tagsCharacter {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tagsCharacter);
+  }
+
+  final List<String> _tagsCopyright;
+  @override
+  @JsonKey()
+  @HiveField(17, defaultValue: [])
+  List<String> get tagsCopyright {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tagsCopyright);
+  }
+
+  final List<String> _tagsGeneral;
+  @override
+  @JsonKey()
+  @HiveField(18, defaultValue: [])
+  List<String> get tagsGeneral {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tagsGeneral);
+  }
+
+  final List<String> _tagsMeta;
+  @override
+  @JsonKey()
+  @HiveField(19, defaultValue: [])
+  List<String> get tagsMeta {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tagsMeta);
   }
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'Post'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('originalFile', originalFile))
-      ..add(DiagnosticsProperty('sampleFile', sampleFile))
-      ..add(DiagnosticsProperty('previewFile', previewFile))
-      ..add(DiagnosticsProperty('tags', tags))
-      ..add(DiagnosticsProperty('width', width))
-      ..add(DiagnosticsProperty('height', height))
-      ..add(DiagnosticsProperty('serverName', serverName))
-      ..add(DiagnosticsProperty('postUrl', postUrl))
-      ..add(DiagnosticsProperty('rateValue', rateValue))
-      ..add(DiagnosticsProperty('sampleWidth', sampleWidth))
-      ..add(DiagnosticsProperty('sampleHeight', sampleHeight))
-      ..add(DiagnosticsProperty('previewWidth', previewWidth))
-      ..add(DiagnosticsProperty('previewHeight', previewHeight))
-      ..add(DiagnosticsProperty('source', source));
+  String toString() {
+    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight, source: $source, tagsArtist: $tagsArtist, tagsCharacter: $tagsCharacter, tagsCopyright: $tagsCopyright, tagsGeneral: $tagsGeneral, tagsMeta: $tagsMeta)';
   }
 
   @override
@@ -422,27 +544,42 @@ class _$_Post extends _Post with DiagnosticableTreeMixin {
                 .equals(other.previewWidth, previewWidth) &&
             const DeepCollectionEquality()
                 .equals(other.previewHeight, previewHeight) &&
-            const DeepCollectionEquality().equals(other.source, source));
+            const DeepCollectionEquality().equals(other.source, source) &&
+            const DeepCollectionEquality()
+                .equals(other._tagsArtist, _tagsArtist) &&
+            const DeepCollectionEquality()
+                .equals(other._tagsCharacter, _tagsCharacter) &&
+            const DeepCollectionEquality()
+                .equals(other._tagsCopyright, _tagsCopyright) &&
+            const DeepCollectionEquality()
+                .equals(other._tagsGeneral, _tagsGeneral) &&
+            const DeepCollectionEquality().equals(other._tagsMeta, _tagsMeta));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(originalFile),
-      const DeepCollectionEquality().hash(sampleFile),
-      const DeepCollectionEquality().hash(previewFile),
-      const DeepCollectionEquality().hash(_tags),
-      const DeepCollectionEquality().hash(width),
-      const DeepCollectionEquality().hash(height),
-      const DeepCollectionEquality().hash(serverName),
-      const DeepCollectionEquality().hash(postUrl),
-      const DeepCollectionEquality().hash(rateValue),
-      const DeepCollectionEquality().hash(sampleWidth),
-      const DeepCollectionEquality().hash(sampleHeight),
-      const DeepCollectionEquality().hash(previewWidth),
-      const DeepCollectionEquality().hash(previewHeight),
-      const DeepCollectionEquality().hash(source));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(id),
+        const DeepCollectionEquality().hash(originalFile),
+        const DeepCollectionEquality().hash(sampleFile),
+        const DeepCollectionEquality().hash(previewFile),
+        const DeepCollectionEquality().hash(_tags),
+        const DeepCollectionEquality().hash(width),
+        const DeepCollectionEquality().hash(height),
+        const DeepCollectionEquality().hash(serverName),
+        const DeepCollectionEquality().hash(postUrl),
+        const DeepCollectionEquality().hash(rateValue),
+        const DeepCollectionEquality().hash(sampleWidth),
+        const DeepCollectionEquality().hash(sampleHeight),
+        const DeepCollectionEquality().hash(previewWidth),
+        const DeepCollectionEquality().hash(previewHeight),
+        const DeepCollectionEquality().hash(source),
+        const DeepCollectionEquality().hash(_tagsArtist),
+        const DeepCollectionEquality().hash(_tagsCharacter),
+        const DeepCollectionEquality().hash(_tagsCopyright),
+        const DeepCollectionEquality().hash(_tagsGeneral),
+        const DeepCollectionEquality().hash(_tagsMeta)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -466,7 +603,12 @@ abstract class _Post extends Post {
       @HiveField(11, defaultValue: -1) final int sampleHeight,
       @HiveField(12, defaultValue: -1) final int previewWidth,
       @HiveField(13, defaultValue: -1) final int previewHeight,
-      @HiveField(14, defaultValue: '') final String source}) = _$_Post;
+      @HiveField(14, defaultValue: '') final String source,
+      @HiveField(15, defaultValue: []) final List<String> tagsArtist,
+      @HiveField(16, defaultValue: []) final List<String> tagsCharacter,
+      @HiveField(17, defaultValue: []) final List<String> tagsCopyright,
+      @HiveField(18, defaultValue: []) final List<String> tagsGeneral,
+      @HiveField(19, defaultValue: []) final List<String> tagsMeta}) = _$_Post;
   const _Post._() : super._();
 
   @override
@@ -514,6 +656,21 @@ abstract class _Post extends Post {
   @override
   @HiveField(14, defaultValue: '')
   String get source;
+  @override
+  @HiveField(15, defaultValue: [])
+  List<String> get tagsArtist;
+  @override
+  @HiveField(16, defaultValue: [])
+  List<String> get tagsCharacter;
+  @override
+  @HiveField(17, defaultValue: [])
+  List<String> get tagsCopyright;
+  @override
+  @HiveField(18, defaultValue: [])
+  List<String> get tagsGeneral;
+  @override
+  @HiveField(19, defaultValue: [])
+  List<String> get tagsMeta;
   @override
   @JsonKey(ignore: true)
   _$$_PostCopyWith<_$_Post> get copyWith => throw _privateConstructorUsedError;

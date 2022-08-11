@@ -32,13 +32,21 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       previewWidth: fields[12] == null ? -1 : fields[12] as int,
       previewHeight: fields[13] == null ? -1 : fields[13] as int,
       source: fields[14] == null ? '' : fields[14] as String,
+      tagsArtist: fields[15] == null ? [] : (fields[15] as List).cast<String>(),
+      tagsCharacter:
+          fields[16] == null ? [] : (fields[16] as List).cast<String>(),
+      tagsCopyright:
+          fields[17] == null ? [] : (fields[17] as List).cast<String>(),
+      tagsGeneral:
+          fields[18] == null ? [] : (fields[18] as List).cast<String>(),
+      tagsMeta: fields[19] == null ? [] : (fields[19] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_Post obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(20)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -68,7 +76,17 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       ..writeByte(14)
       ..write(obj.source)
       ..writeByte(4)
-      ..write(obj.tags);
+      ..write(obj.tags)
+      ..writeByte(15)
+      ..write(obj.tagsArtist)
+      ..writeByte(16)
+      ..write(obj.tagsCharacter)
+      ..writeByte(17)
+      ..write(obj.tagsCopyright)
+      ..writeByte(18)
+      ..write(obj.tagsGeneral)
+      ..writeByte(19)
+      ..write(obj.tagsMeta);
   }
 
   @override

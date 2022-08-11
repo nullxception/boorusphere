@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -39,6 +38,11 @@ class Post with _$Post {
     @HiveField(12, defaultValue: -1) @Default(-1) int previewWidth,
     @HiveField(13, defaultValue: -1) @Default(-1) int previewHeight,
     @HiveField(14, defaultValue: '') @Default('') String source,
+    @HiveField(15, defaultValue: []) @Default([]) List<String> tagsArtist,
+    @HiveField(16, defaultValue: []) @Default([]) List<String> tagsCharacter,
+    @HiveField(17, defaultValue: []) @Default([]) List<String> tagsCopyright,
+    @HiveField(18, defaultValue: []) @Default([]) List<String> tagsGeneral,
+    @HiveField(19, defaultValue: []) @Default([]) List<String> tagsMeta,
   }) = _Post;
   const Post._();
 
