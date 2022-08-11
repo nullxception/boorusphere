@@ -14,19 +14,9 @@ import '../../utils/extensions/string.dart';
 import '../../widgets/styled_overlay_region.dart';
 import 'tag.dart';
 
-class PostDetailsPage extends HookConsumerWidget {
+class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
   const PostDetailsPage({super.key, required this.post});
   final Post post;
-
-  void copyToClipboard(BuildContext context, String text) {
-    Clipboard.setData(ClipboardData(text: text));
-    context.scaffoldMessenger.showSnackBar(
-      const SnackBar(
-        content: Text('Copied to clipboard'),
-        duration: Duration(seconds: 1),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,46 +60,14 @@ class PostDetailsPage extends HookConsumerWidget {
               if (post.postUrl.isNotEmpty)
                 ListTile(
                   title: const Text('Location'),
-                  subtitle: TextButton(
-                    style: ButtonStyle(
-                      alignment: Alignment.centerLeft,
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.zero,
-                      ),
-                    ),
-                    onPressed: () => launchUrlString(post.postUrl,
-                        mode: LaunchMode.externalApplication),
-                    child: Text(post.postUrl.toString()),
-                  ),
-                  trailing: IconButton(
-                    iconSize: 18,
-                    onPressed: () {
-                      copyToClipboard(context, post.postUrl.toString());
-                    },
-                    icon: const Icon(Icons.copy),
-                  ),
+                  subtitle: _LinkText(post.postUrl),
+                  trailing: _CopyButton(post.postUrl),
                 ),
               if (post.source.isNotEmpty)
                 ListTile(
                   title: const Text('Source'),
-                  subtitle: TextButton(
-                    style: ButtonStyle(
-                      alignment: Alignment.centerLeft,
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        EdgeInsets.zero,
-                      ),
-                    ),
-                    onPressed: () => launchUrlString(post.source,
-                        mode: LaunchMode.externalApplication),
-                    child: Text(post.source.toString()),
-                  ),
-                  trailing: IconButton(
-                    iconSize: 18,
-                    onPressed: () {
-                      copyToClipboard(context, post.source.toString());
-                    },
-                    icon: const Icon(Icons.copy),
-                  ),
+                  subtitle: _LinkText(post.source),
+                  trailing: _CopyButton(post.source),
                 ),
               if (post.sampleFile.isNotEmpty)
                 ListTile(
@@ -122,27 +80,10 @@ class PostDetailsPage extends HookConsumerWidget {
                         child: Text(
                             '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
                       ),
-                      TextButton(
-                        style: ButtonStyle(
-                          alignment: Alignment.centerLeft,
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.zero,
-                          ),
-                        ),
-                        onPressed: () => launchUrlString(post.sampleFile,
-                            mode: LaunchMode.externalApplication),
-                        child: Text(post.sampleFile),
-                      ),
+                      _LinkText(post.sampleFile),
                     ],
                   ),
-                  trailing: IconButton(
-                    iconSize: 18,
-                    onPressed: () {
-                      copyToClipboard(context, post.sampleFile);
-                    },
-                    icon: const Icon(Icons.copy),
-                  ),
+                  trailing: _CopyButton(post.sampleFile),
                 ),
               ListTile(
                 title: const Text('Original file'),
@@ -154,26 +95,10 @@ class PostDetailsPage extends HookConsumerWidget {
                       child: Text(
                           '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
                     ),
-                    TextButton(
-                      style: ButtonStyle(
-                        alignment: Alignment.centerLeft,
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.zero,
-                        ),
-                      ),
-                      onPressed: () => launchUrlString(post.originalFile,
-                          mode: LaunchMode.externalApplication),
-                      child: Text(post.originalFile),
-                    ),
+                    _LinkText(post.originalFile),
                   ],
                 ),
-                trailing: IconButton(
-                  iconSize: 18,
-                  onPressed: () {
-                    copyToClipboard(context, post.originalFile);
-                  },
-                  icon: const Icon(Icons.copy),
-                ),
+                trailing: _CopyButton(post.originalFile),
               ),
               const ListTile(title: Text('Tags')),
               if (post.hasCategorizedTags && post.tagsMeta.isNotEmpty)
@@ -185,14 +110,11 @@ class PostDetailsPage extends HookConsumerWidget {
                         padding: EdgeInsets.all(8),
                         child: Text('Meta'),
                       ),
-                      Wrap(
-                          children: post.tagsMeta.map((tag) {
-                        return Tag(
-                          tag: tag,
-                          onPressed: () => onTagPressed(tag),
-                          active: () => selectedtag.value.contains(tag),
-                        );
-                      }).toList())
+                      _TagsView(
+                        tags: post.tagsMeta,
+                        isSelected: selectedtag.value.contains,
+                        onSelected: onTagPressed,
+                      ),
                     ],
                   ),
                 ),
@@ -205,14 +127,11 @@ class PostDetailsPage extends HookConsumerWidget {
                         padding: EdgeInsets.all(8),
                         child: Text('Artist'),
                       ),
-                      Wrap(
-                          children: post.tagsArtist.map((tag) {
-                        return Tag(
-                          tag: tag,
-                          onPressed: () => onTagPressed(tag),
-                          active: () => selectedtag.value.contains(tag),
-                        );
-                      }).toList())
+                      _TagsView(
+                        tags: post.tagsArtist,
+                        isSelected: selectedtag.value.contains,
+                        onSelected: onTagPressed,
+                      ),
                     ],
                   ),
                 ),
@@ -225,14 +144,11 @@ class PostDetailsPage extends HookConsumerWidget {
                         padding: EdgeInsets.all(8),
                         child: Text('Character'),
                       ),
-                      Wrap(
-                          children: post.tagsCharacter.map((tag) {
-                        return Tag(
-                          tag: tag,
-                          onPressed: () => onTagPressed(tag),
-                          active: () => selectedtag.value.contains(tag),
-                        );
-                      }).toList())
+                      _TagsView(
+                        tags: post.tagsCharacter,
+                        isSelected: selectedtag.value.contains,
+                        onSelected: onTagPressed,
+                      ),
                     ],
                   ),
                 ),
@@ -245,14 +161,11 @@ class PostDetailsPage extends HookConsumerWidget {
                         padding: EdgeInsets.all(8),
                         child: Text('Copyright'),
                       ),
-                      Wrap(
-                          children: post.tagsCopyright.map((tag) {
-                        return Tag(
-                          tag: tag,
-                          onPressed: () => onTagPressed(tag),
-                          active: () => selectedtag.value.contains(tag),
-                        );
-                      }).toList())
+                      _TagsView(
+                        tags: post.tagsCopyright,
+                        isSelected: selectedtag.value.contains,
+                        onSelected: onTagPressed,
+                      ),
                     ],
                   ),
                 ),
@@ -265,27 +178,21 @@ class PostDetailsPage extends HookConsumerWidget {
                         padding: EdgeInsets.all(8),
                         child: Text('General'),
                       ),
-                      Wrap(
-                          children: post.tagsGeneral.map((tag) {
-                        return Tag(
-                          tag: tag,
-                          onPressed: () => onTagPressed(tag),
-                          active: () => selectedtag.value.contains(tag),
-                        );
-                      }).toList())
+                      _TagsView(
+                        tags: post.tagsGeneral,
+                        isSelected: selectedtag.value.contains,
+                        onSelected: onTagPressed,
+                      ),
                     ],
                   ),
                 ),
               if (!post.hasCategorizedTags)
                 ListTile(
-                  subtitle: Wrap(
-                      children: post.tags.map((tag) {
-                    return Tag(
-                      tag: tag,
-                      onPressed: () => onTagPressed(tag),
-                      active: () => selectedtag.value.contains(tag),
-                    );
-                  }).toList()),
+                  subtitle: _TagsView(
+                    tags: post.tags,
+                    isSelected: selectedtag.value.contains,
+                    onSelected: onTagPressed,
+                  ),
                 ),
             ],
           ),
@@ -303,7 +210,7 @@ class PostDetailsPage extends HookConsumerWidget {
               onTap: () {
                 final tags = selectedtag.value.join(' ');
                 if (tags.isNotEmpty) {
-                  copyToClipboard(context, tags);
+                  clip(context, tags);
                 }
               }),
           SpeedDialChild(
@@ -350,6 +257,77 @@ class PostDetailsPage extends HookConsumerWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TagsView extends StatelessWidget {
+  const _TagsView({
+    required this.tags,
+    this.isSelected,
+    this.onSelected,
+  });
+  final List<String> tags;
+  final bool Function(String tag)? isSelected;
+  final void Function(String tag)? onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: tags
+          .map((tag) => Tag(
+                tag: tag,
+                onPressed: () => onSelected?.call(tag),
+                active: () => isSelected?.call(tag) ?? false,
+              ))
+          .toList(),
+    );
+  }
+}
+
+class _LinkText extends StatelessWidget {
+  const _LinkText(this.url);
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.zero,
+      ),
+      onPressed: () =>
+          launchUrlString(url, mode: LaunchMode.externalApplication),
+      child: Text(url),
+    );
+  }
+}
+
+class _CopyButton extends StatelessWidget with ClipboardMixins {
+  const _CopyButton(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      iconSize: 18,
+      onPressed: () {
+        clip(context, text);
+      },
+      icon: const Icon(Icons.copy),
+    );
+  }
+}
+
+mixin ClipboardMixins {
+  void clip(BuildContext context, String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    context.scaffoldMessenger.showSnackBar(
+      const SnackBar(
+        content: Text('Copied to clipboard'),
+        duration: Duration(seconds: 1),
       ),
     );
   }
