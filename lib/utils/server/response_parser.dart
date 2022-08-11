@@ -184,7 +184,7 @@ class ServerResponseParser {
       }
 
       if (uri.hasAuthority && uri.hasAbsolutePath && !uri.hasScheme) {
-        final origin = Uri.parse(serverData.homepage);
+        final origin = Uri.parse(serverData.apiAddress);
         final scheme = origin.scheme == 'https' ? Uri.https : Uri.http;
         return scheme(uri.authority, uri.path,
                 uri.hasQuery ? uri.queryParametersAll : null)

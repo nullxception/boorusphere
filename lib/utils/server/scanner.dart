@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:http/http.dart' as http;
 
 import '../../entity/server_data.dart';
@@ -38,13 +39,13 @@ class ServerScanner {
         type: type);
   }
 
-  static Future<ServerData> scan(String url) async {
+  static Future<ServerData> scan(String homeUrl, String apiUrl) async {
     String post = '', search = '', suggestion = '';
     final tests = await Future.wait(
       [
-        _queryTest(url, searchQueries, ServerPayloadType.search),
-        _queryTest(url, tagSuggestionQueries, ServerPayloadType.suggestion),
-        _queryTest(url, webPostUrls, ServerPayloadType.post),
+        _queryTest(apiUrl, searchQueries, ServerPayloadType.search),
+        _queryTest(apiUrl, tagSuggestionQueries, ServerPayloadType.suggestion),
+        _queryTest(homeUrl, webPostUrls, ServerPayloadType.post),
       ],
     );
 
@@ -65,11 +66,13 @@ class ServerScanner {
     }
 
     return ServerData(
-        name: url.asUri.host,
-        homepage: url,
-        postUrl: post,
-        searchUrl: search,
-        tagSuggestionUrl: suggestion);
+      name: homeUrl.asUri.host,
+      homepage: homeUrl,
+      postUrl: post,
+      searchUrl: search,
+      tagSuggestionUrl: suggestion,
+      apiAddr: apiUrl,
+    );
   }
 
   static const searchQueries = [

@@ -14,6 +14,7 @@ class ServerData with _$ServerData {
     @HiveField(1, defaultValue: '') @Default('') String homepage,
     @HiveField(2, defaultValue: '') @Default('') String postUrl,
     @HiveField(3, defaultValue: '') @Default('') String searchUrl,
+    @HiveField(4, defaultValue: '') @Default('') String apiAddr,
     @HiveField(7, defaultValue: '') @Default('') String tagSuggestionUrl,
   }) = _ServerData;
 
@@ -60,6 +61,8 @@ class ServerData with _$ServerData {
 
   // Key used in hive box
   String get key => '@${name.camelCase()}';
+
+  String get apiAddress => apiAddr.isEmpty ? homepage : apiAddr;
 
   static const ServerData empty =
       ServerData(name: '', homepage: '', searchUrl: '');

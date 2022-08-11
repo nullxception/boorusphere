@@ -23,9 +23,20 @@ class ServerEditorPage extends HookConsumerWidget {
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final data = useState(server);
     final isLoading = useState(false);
+    final useApiAddr = useState(false);
     final errorMessage = useState('');
-    final scanText = useTextEditingController(
+    final scanHomepageText = useTextEditingController(
         text: isEditing ? server.homepage : 'https://');
+    final scanApiAddrText =
+        useTextEditingController(text: isEditing ? server.apiAddr : 'https://');
+
+    final validateAddress = useCallback((value) {
+      if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
+        return 'not a valid address';
+      }
+
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,22 +53,43 @@ class ServerEditorPage extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: TextFormField(
-                    controller: scanText,
+                    controller: scanHomepageText,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText:
-                          'Homepage address, example: https://abcbooru.org',
+                      labelText: 'Homepage, example: https://verycoolbooru.com',
                     ),
-                    validator: (value) {
-                      if (value?.contains(RegExp(r'https?://.+\..+')) ==
-                          false) {
-                        return 'not a valid url';
-                      }
-
-                      return null;
-                    },
+                    validator: validateAddress,
                   ),
                 ),
+                CheckboxListTile(
+                  value: useApiAddr.value,
+                  title: const Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Text('Use custom API address')),
+                  subtitle: const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                        'Useful if server has different API address than the homepage'),
+                  ),
+                  onChanged: (isChecked) {
+                    if (isChecked != null) {
+                      useApiAddr.value = isChecked;
+                    }
+                  },
+                ),
+                if (useApiAddr.value)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: TextFormField(
+                      controller: scanApiAddrText,
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText:
+                            'API address, example: https://api-v69.verycoolbooru.com',
+                      ),
+                      validator: validateAddress,
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: ElevatedButton(
@@ -71,15 +103,19 @@ class ServerEditorPage extends HookConsumerWidget {
                             data.value = ServerData.empty;
                             isLoading.value = true;
                             errorMessage.value = '';
+                            final homeAddr = scanHomepageText.text;
+                            final apiAddr = useApiAddr.value
+                                ? scanApiAddrText.text
+                                : homeAddr;
                             try {
                               final res =
-                                  await ServerScanner.scan(scanText.text);
+                                  await ServerScanner.scan(homeAddr, apiAddr);
                               data.value = res;
                             } catch (e) {
                               errorMessage.value = e.toString();
                               data.value = ServerData.empty.copyWith(
-                                name: scanText.text.asUri.host,
-                                homepage: scanText.text,
+                                name: homeAddr.asUri.host,
+                                homepage: homeAddr,
                               );
                             }
 

@@ -25,6 +25,7 @@ class ServerDetails extends HookConsumerWidget {
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final cName = useTextEditingController(text: data.name);
     final cHomepage = useTextEditingController(text: data.homepage);
+    final cApiAddr = useTextEditingController(text: data.apiAddr);
     final cSearchUrl = useTextEditingController(text: data.searchUrl);
     final cSuggestUrl = useTextEditingController(text: data.tagSuggestionUrl);
     final cPostUrl = useTextEditingController(text: data.postUrl);
@@ -66,6 +67,13 @@ class ServerDetails extends HookConsumerWidget {
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Homepage',
+                  ),
+                ),
+                TextFormField(
+                  controller: cApiAddr,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'API Address',
                   ),
                 ),
                 Padding(
@@ -139,6 +147,7 @@ class ServerDetails extends HookConsumerWidget {
               onSubmitted.call(data.copyWith(
                 name: cName.text,
                 homepage: cHomepage.text,
+                apiAddr: cApiAddr.text,
                 searchUrl: cSearchUrl.text,
                 tagSuggestionUrl: cSuggestUrl.text,
                 postUrl: cPostUrl.text,

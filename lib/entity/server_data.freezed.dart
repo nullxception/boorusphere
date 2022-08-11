@@ -28,6 +28,8 @@ mixin _$ServerData {
   String get postUrl => throw _privateConstructorUsedError;
   @HiveField(3, defaultValue: '')
   String get searchUrl => throw _privateConstructorUsedError;
+  @HiveField(4, defaultValue: '')
+  String get apiAddr => throw _privateConstructorUsedError;
   @HiveField(7, defaultValue: '')
   String get tagSuggestionUrl => throw _privateConstructorUsedError;
 
@@ -47,6 +49,7 @@ abstract class $ServerDataCopyWith<$Res> {
       @HiveField(1, defaultValue: '') String homepage,
       @HiveField(2, defaultValue: '') String postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
+      @HiveField(4, defaultValue: '') String apiAddr,
       @HiveField(7, defaultValue: '') String tagSuggestionUrl});
 }
 
@@ -64,6 +67,7 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
     Object? homepage = freezed,
     Object? postUrl = freezed,
     Object? searchUrl = freezed,
+    Object? apiAddr = freezed,
     Object? tagSuggestionUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -82,6 +86,10 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
       searchUrl: searchUrl == freezed
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      apiAddr: apiAddr == freezed
+          ? _value.apiAddr
+          : apiAddr // ignore: cast_nullable_to_non_nullable
               as String,
       tagSuggestionUrl: tagSuggestionUrl == freezed
           ? _value.tagSuggestionUrl
@@ -103,6 +111,7 @@ abstract class _$$_ServerDataCopyWith<$Res>
       @HiveField(1, defaultValue: '') String homepage,
       @HiveField(2, defaultValue: '') String postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
+      @HiveField(4, defaultValue: '') String apiAddr,
       @HiveField(7, defaultValue: '') String tagSuggestionUrl});
 }
 
@@ -122,6 +131,7 @@ class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
     Object? homepage = freezed,
     Object? postUrl = freezed,
     Object? searchUrl = freezed,
+    Object? apiAddr = freezed,
     Object? tagSuggestionUrl = freezed,
   }) {
     return _then(_$_ServerData(
@@ -141,6 +151,10 @@ class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      apiAddr: apiAddr == freezed
+          ? _value.apiAddr
+          : apiAddr // ignore: cast_nullable_to_non_nullable
+              as String,
       tagSuggestionUrl: tagSuggestionUrl == freezed
           ? _value.tagSuggestionUrl
           : tagSuggestionUrl // ignore: cast_nullable_to_non_nullable
@@ -158,6 +172,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       @HiveField(1, defaultValue: '') this.homepage = '',
       @HiveField(2, defaultValue: '') this.postUrl = '',
       @HiveField(3, defaultValue: '') this.searchUrl = '',
+      @HiveField(4, defaultValue: '') this.apiAddr = '',
       @HiveField(7, defaultValue: '') this.tagSuggestionUrl = ''})
       : super._();
 
@@ -182,12 +197,16 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   final String searchUrl;
   @override
   @JsonKey()
+  @HiveField(4, defaultValue: '')
+  final String apiAddr;
+  @override
+  @JsonKey()
   @HiveField(7, defaultValue: '')
   final String tagSuggestionUrl;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ServerData(name: $name, homepage: $homepage, postUrl: $postUrl, searchUrl: $searchUrl, tagSuggestionUrl: $tagSuggestionUrl)';
+    return 'ServerData(name: $name, homepage: $homepage, postUrl: $postUrl, searchUrl: $searchUrl, apiAddr: $apiAddr, tagSuggestionUrl: $tagSuggestionUrl)';
   }
 
   @override
@@ -199,6 +218,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('homepage', homepage))
       ..add(DiagnosticsProperty('postUrl', postUrl))
       ..add(DiagnosticsProperty('searchUrl', searchUrl))
+      ..add(DiagnosticsProperty('apiAddr', apiAddr))
       ..add(DiagnosticsProperty('tagSuggestionUrl', tagSuggestionUrl));
   }
 
@@ -211,6 +231,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
             const DeepCollectionEquality().equals(other.homepage, homepage) &&
             const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
             const DeepCollectionEquality().equals(other.searchUrl, searchUrl) &&
+            const DeepCollectionEquality().equals(other.apiAddr, apiAddr) &&
             const DeepCollectionEquality()
                 .equals(other.tagSuggestionUrl, tagSuggestionUrl));
   }
@@ -223,6 +244,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(homepage),
       const DeepCollectionEquality().hash(postUrl),
       const DeepCollectionEquality().hash(searchUrl),
+      const DeepCollectionEquality().hash(apiAddr),
       const DeepCollectionEquality().hash(tagSuggestionUrl));
 
   @JsonKey(ignore: true)
@@ -244,6 +266,7 @@ abstract class _ServerData extends ServerData {
           @HiveField(1, defaultValue: '') final String homepage,
           @HiveField(2, defaultValue: '') final String postUrl,
           @HiveField(3, defaultValue: '') final String searchUrl,
+          @HiveField(4, defaultValue: '') final String apiAddr,
           @HiveField(7, defaultValue: '') final String tagSuggestionUrl}) =
       _$_ServerData;
   const _ServerData._() : super._();
@@ -263,6 +286,9 @@ abstract class _ServerData extends ServerData {
   @override
   @HiveField(3, defaultValue: '')
   String get searchUrl;
+  @override
+  @HiveField(4, defaultValue: '')
+  String get apiAddr;
   @override
   @HiveField(7, defaultValue: '')
   String get tagSuggestionUrl;
