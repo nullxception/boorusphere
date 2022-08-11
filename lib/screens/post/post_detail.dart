@@ -38,6 +38,24 @@ class PostDetailsPage extends HookConsumerWidget {
         duration: const Duration(milliseconds: 250), initialValue: 0);
     final showFAB = useState(false);
 
+    final onTagPressed = useCallback<void Function(String)>((tag) {
+      if (!selectedtag.value.contains(tag)) {
+        // display FAB on first select
+        if (selectedtag.value.isEmpty) {
+          fabController.forward();
+        }
+        selectedtag.value.add(tag);
+      } else {
+        selectedtag.value.remove(tag);
+        // display FAB on last removal
+        if (selectedtag.value.isEmpty) {
+          fabController.reverse();
+        }
+      }
+
+      showFAB.value = selectedtag.value.isNotEmpty;
+    }, []);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Detail')),
       body: StyledOverlayRegion(
@@ -157,35 +175,118 @@ class PostDetailsPage extends HookConsumerWidget {
                   icon: const Icon(Icons.copy),
                 ),
               ),
-              const ListTile(
-                title: Text('Tags'),
-              ),
-              ListTile(
-                title: Wrap(
-                    children: post.tags.map((tag) {
-                  return Tag(
-                    onPressed: () {
-                      if (!selectedtag.value.contains(tag)) {
-                        // display FAB on first select
-                        if (selectedtag.value.isEmpty) {
-                          fabController.forward();
-                        }
-                        selectedtag.value.add(tag);
-                      } else {
-                        selectedtag.value.remove(tag);
-                        // display FAB on last removal
-                        if (selectedtag.value.isEmpty) {
-                          fabController.reverse();
-                        }
-                      }
-
-                      showFAB.value = selectedtag.value.isNotEmpty;
-                    },
-                    tag: tag,
-                    active: () => selectedtag.value.contains(tag),
-                  );
-                }).toList()),
-              ),
+              const ListTile(title: Text('Tags')),
+              if (post.hasCategorizedTags && post.tagsMeta.isNotEmpty)
+                ListTile(
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text('Meta'),
+                      ),
+                      Wrap(
+                          children: post.tagsMeta.map((tag) {
+                        return Tag(
+                          tag: tag,
+                          onPressed: () => onTagPressed(tag),
+                          active: () => selectedtag.value.contains(tag),
+                        );
+                      }).toList())
+                    ],
+                  ),
+                ),
+              if (post.hasCategorizedTags && post.tagsArtist.isNotEmpty)
+                ListTile(
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text('Artist'),
+                      ),
+                      Wrap(
+                          children: post.tagsArtist.map((tag) {
+                        return Tag(
+                          tag: tag,
+                          onPressed: () => onTagPressed(tag),
+                          active: () => selectedtag.value.contains(tag),
+                        );
+                      }).toList())
+                    ],
+                  ),
+                ),
+              if (post.hasCategorizedTags && post.tagsCharacter.isNotEmpty)
+                ListTile(
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text('Character'),
+                      ),
+                      Wrap(
+                          children: post.tagsCharacter.map((tag) {
+                        return Tag(
+                          tag: tag,
+                          onPressed: () => onTagPressed(tag),
+                          active: () => selectedtag.value.contains(tag),
+                        );
+                      }).toList())
+                    ],
+                  ),
+                ),
+              if (post.hasCategorizedTags && post.tagsCopyright.isNotEmpty)
+                ListTile(
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text('Copyright'),
+                      ),
+                      Wrap(
+                          children: post.tagsCopyright.map((tag) {
+                        return Tag(
+                          tag: tag,
+                          onPressed: () => onTagPressed(tag),
+                          active: () => selectedtag.value.contains(tag),
+                        );
+                      }).toList())
+                    ],
+                  ),
+                ),
+              if (post.hasCategorizedTags && post.tagsGeneral.isNotEmpty)
+                ListTile(
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text('General'),
+                      ),
+                      Wrap(
+                          children: post.tagsGeneral.map((tag) {
+                        return Tag(
+                          tag: tag,
+                          onPressed: () => onTagPressed(tag),
+                          active: () => selectedtag.value.contains(tag),
+                        );
+                      }).toList())
+                    ],
+                  ),
+                ),
+              if (!post.hasCategorizedTags)
+                ListTile(
+                  subtitle: Wrap(
+                      children: post.tags.map((tag) {
+                    return Tag(
+                      tag: tag,
+                      onPressed: () => onTagPressed(tag),
+                      active: () => selectedtag.value.contains(tag),
+                    );
+                  }).toList()),
+                ),
             ],
           ),
         ),

@@ -89,5 +89,13 @@ class Post with _$Post {
     }
   }
 
+  bool get hasCategorizedTags => [
+        ...tagsArtist,
+        ...tagsCharacter,
+        ...tagsCopyright,
+        ...tagsGeneral,
+        ...tagsMeta
+      ].isNotEmpty;
+
   static const empty = Post();
 }
