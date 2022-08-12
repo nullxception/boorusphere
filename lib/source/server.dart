@@ -86,7 +86,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     final activeServer = ref.read(activeServerProvider);
 
     await _box.delete(data.key);
-    await _box.put(data.key, newData);
+    await _box.put(newData.key, newData);
     state = _box.values.map((it) => it as ServerData).toList();
     if (activeServer == data && newData.key != activeServer.key) {
       await ref.read(activeServerProvider.notifier).use(newData);
