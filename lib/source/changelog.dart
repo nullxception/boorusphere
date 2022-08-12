@@ -3,17 +3,20 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../entity/app_version.dart';
 import '../entity/changelog_data.dart';
+import '../services/http.dart';
 import '../utils/retry_future.dart';
 import 'version.dart';
+
+final _dataSourceProvider = Provider(ChangelogDataSource.new);
 
 final changelogProvider =
     FutureProvider.family<List<ChangelogData>, ChangelogOption>(
         (ref, arg) async {
-  final data = await ChangelogDataSource.from(arg.type);
+  final dataSource = ref.watch(_dataSourceProvider);
+  final data = await dataSource.from(arg.type);
   return ChangelogData.fromString(data);
 });
 
@@ -32,19 +35,24 @@ class ChangelogOption {
 }
 
 class ChangelogDataSource {
-  static Future<String> _loadFromAssets() async {
+  ChangelogDataSource(this.ref);
+
+  final Ref ref;
+
+  Future<String> _loadFromAssets() async {
     return await rootBundle.loadString(fileName);
   }
 
-  static Future<String> _fetchFromGit() async {
+  Future<String> _fetchFromGit() async {
+    final client = ref.read(httpProvider);
     final res = await retryFuture(
-      () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
+      () => client.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
       retryIf: (e) => e is SocketException || e is TimeoutException,
     );
     return res.body.contains('## 1') ? res.body : '';
   }
 
-  static Future<String> from(ChangelogType type) async {
+  Future<String> from(ChangelogType type) async {
     String data;
     switch (type) {
       case ChangelogType.git:

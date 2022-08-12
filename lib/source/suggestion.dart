@@ -2,15 +2,16 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../../settings/active_server.dart';
 import '../../utils/extensions/string.dart';
 import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
 import '../entity/server_data.dart';
+import '../services/http.dart';
 import 'blocked_tags.dart';
 
+final _dataSource = Provider(SuggestionSource.new);
 final suggestionFuture =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
   final serverActive = ref.watch(activeServerProvider);
@@ -18,7 +19,7 @@ final suggestionFuture =
     return [];
   }
 
-  final source = SuggestionSource(ref);
+  final source = ref.watch(_dataSource);
   return await source.fetch(query: query, server: serverActive);
 });
 
@@ -32,11 +33,13 @@ class SuggestionSource {
     required ServerData server,
   }) async {
     final blockedTags = ref.read(blockedTagsProvider);
+    final client = ref.read(httpProvider);
+
     final queries = query.toWordList();
     final url = server.suggestionUrlOf(queries.isEmpty ? '' : queries.last);
     try {
       final res = await retryFuture(
-        () => http.get(url.asUri).timeout(const Duration(seconds: 5)),
+        () => client.get(url.asUri).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
 

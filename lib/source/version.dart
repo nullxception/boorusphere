@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../utils/extensions/string.dart';
 import '../entity/app_update_data.dart';
 import '../entity/app_version.dart';
+import '../services/http.dart';
 import 'device_info.dart';
 
 final versionDataProvider = ChangeNotifierProvider(VersionDataSource.new);
@@ -35,7 +35,8 @@ class VersionDataSource extends ChangeNotifier {
 
   Future<AppUpdateData> _checkForUpdate() async {
     AppVersion latest = _version;
-    final res = await http.get(pubspecUrl.asUri);
+    final client = ref.read(httpProvider);
+    final res = await client.get(pubspecUrl.asUri);
     if (res.statusCode == 200) {
       final version = loadYaml(res.body)['version'];
       if (version is String && version.contains('+')) {

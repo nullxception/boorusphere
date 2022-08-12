@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/server_data.dart';
+import '../../services/http.dart';
 import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
@@ -108,9 +109,11 @@ class ServerEditorPage extends HookConsumerWidget {
                                 ? scanApiAddrText.text
                                 : homeAddr;
                             try {
-                              final res =
-                                  await ServerScanner.scan(homeAddr, apiAddr);
-                              data.value = res;
+                              data.value = await ServerScanner.scan(
+                                ref.read(httpProvider),
+                                homeAddr,
+                                apiAddr,
+                              );
                             } catch (e) {
                               errorMessage.value = e.toString();
                               data.value = ServerData.empty.copyWith(

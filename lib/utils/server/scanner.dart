@@ -9,8 +9,12 @@ import '../extensions/string.dart';
 import '../retry_future.dart';
 
 class ServerScanner {
-  static Future<ServerPayload> _queryTest(
-      String host, List<String> queries, ServerPayloadType type) async {
+  static Future<ServerPayload> _testPayload(
+    http.Client client,
+    String host,
+    List<String> queries,
+    ServerPayloadType type,
+  ) async {
     final result = await Future.wait(
       queries.map((query) async {
         final test = query
@@ -20,8 +24,9 @@ class ServerScanner {
             .replaceAll('{page-id}', '1')
             .replaceAll('{post-id}', '100');
         final res = await retryFuture(
-          () =>
-              http.get('$host/$test'.asUri).timeout(const Duration(seconds: 5)),
+          () => client
+              .get('$host/$test'.asUri)
+              .timeout(const Duration(seconds: 5)),
           retryIf: (e) => e is SocketException || e is TimeoutException,
         );
 
@@ -34,18 +39,38 @@ class ServerScanner {
     );
 
     return ServerPayload(
-        host: host,
-        query: result.firstWhere((it) => it.isNotEmpty, orElse: () => ''),
-        type: type);
+      host: host,
+      query: result.firstWhere((it) => it.isNotEmpty, orElse: () => ''),
+      type: type,
+    );
   }
 
-  static Future<ServerData> scan(String homeUrl, String apiUrl) async {
+  static Future<ServerData> scan(
+    http.Client client,
+    String homeUrl,
+    String apiUrl,
+  ) async {
     String post = '', search = '', suggestion = '';
     final tests = await Future.wait(
       [
-        _queryTest(apiUrl, searchQueries, ServerPayloadType.search),
-        _queryTest(apiUrl, tagSuggestionQueries, ServerPayloadType.suggestion),
-        _queryTest(homeUrl, webPostUrls, ServerPayloadType.post),
+        _testPayload(
+          client,
+          apiUrl,
+          searchQueries,
+          ServerPayloadType.search,
+        ),
+        _testPayload(
+          client,
+          apiUrl,
+          suggestionQueries,
+          ServerPayloadType.suggestion,
+        ),
+        _testPayload(
+          client,
+          homeUrl,
+          webPostUrls,
+          ServerPayloadType.post,
+        ),
       ],
     );
 
@@ -84,7 +109,7 @@ class ServerScanner {
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
   ];
 
-  static const tagSuggestionQueries = [
+  static const suggestionQueries = [
     'tag.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
     'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}',

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../../settings/active_server.dart';
 import '../../settings/safe_mode.dart';
@@ -13,6 +12,7 @@ import '../entity/page_option.dart';
 import '../entity/post.dart';
 import '../entity/server_data.dart';
 import '../entity/sphere_exception.dart';
+import '../services/http.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
 import 'server.dart';
@@ -47,6 +47,7 @@ class PageDataSource {
   }
 
   Future<void> _fetch() async {
+    final client = ref.read(httpProvider);
     final pageOption = ref.read(pageOptionProvider);
     final activeServer = ref.read(activeServerProvider);
     final safeMode = ref.read(safeModeProvider);
@@ -69,7 +70,7 @@ class PageDataSource {
         postLimit,
       );
       final res = await retryFuture(
-        () => http.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
+        () => client.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
       final data = ServerResponseParser.parsePage(activeServer, res);
