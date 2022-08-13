@@ -67,8 +67,9 @@ class PostPage extends HookConsumerWidget {
                 controller: pageController,
                 onPageChanged: (index) {
                   page.value = index;
+                  final offset = index + 1;
                   final threshold = totalPost / 100 * (100 - loadMoreThreshold);
-                  if (totalPost - threshold < index) {
+                  if (offset + threshold > totalPost) {
                     pageData.loadMore();
                   }
                 },
