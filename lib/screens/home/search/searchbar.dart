@@ -160,7 +160,7 @@ class _LeadingButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverActive = ref.watch(activeServerProvider);
+    final serverActive = ref.watch(serverActiveProvider);
     final searchBar = ref.watch(searchBarController);
 
     return _CollapsibleButton(

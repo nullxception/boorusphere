@@ -17,7 +17,7 @@ class SearchBarController extends ChangeNotifier {
   bool get isTextChanged => _textController.value.text != initialText;
 
   String get hint {
-    final serverActive = ref.watch(activeServerProvider);
+    final serverActive = ref.watch(serverActiveProvider);
     return _textController.text.isEmpty
         ? 'Search on ${serverActive.name}...'
         : _textController.text;

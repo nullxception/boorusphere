@@ -6,7 +6,7 @@ class _SearchSuggestion extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarController);
-    final activeServer = ref.watch(activeServerProvider);
+    final serverActive = ref.watch(serverActiveProvider);
     final suggester = ref.watch(suggestionFuture(searchBar.text));
     final history = ref.watch(searchHistoryProvider);
 
@@ -83,7 +83,7 @@ class _SearchSuggestion extends HookConsumerWidget {
                       childCount: history.entries.length,
                     ),
                   ),
-                  if (!activeServer.canSuggestTags)
+                  if (!serverActive.canSuggestTags)
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -92,17 +92,17 @@ class _SearchSuggestion extends HookConsumerWidget {
                             child: Icon(Icons.search_off),
                           ),
                           Text(
-                              '${activeServer.name} did not support search suggestion'),
+                              '${serverActive.name} did not support search suggestion'),
                         ],
                       ),
                     ),
-                  if (activeServer.canSuggestTags)
+                  if (serverActive.canSuggestTags)
                     SliverPadding(
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
-                          child: Text('Suggested on ${activeServer.name}')),
+                          child: Text('Suggested on ${serverActive.name}')),
                     ),
-                  if (activeServer.canSuggestTags)
+                  if (serverActive.canSuggestTags)
                     suggester.when(
                       data: (value) => SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {

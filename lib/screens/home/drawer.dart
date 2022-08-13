@@ -208,7 +208,7 @@ class _ServerSelection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataProvider);
-    final activeServer = ref.watch(activeServerProvider);
+    final serverActive = ref.watch(serverActiveProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,11 +230,11 @@ class _ServerSelection extends HookConsumerWidget {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            selected: it.name == activeServer.name,
+            selected: it.name == serverActive.name,
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
-              ref.read(activeServerProvider.notifier).use(it);
+              ref.read(serverActiveProvider.notifier).updateWith(it);
               ref
                   .read(pageOptionProvider.notifier)
                   .update((state) => state.copyWith(clear: true));

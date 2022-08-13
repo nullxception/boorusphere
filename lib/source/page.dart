@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../settings/active_server.dart';
 import '../../settings/safe_mode.dart';
 import '../../settings/server/post_limit.dart';
 import '../../utils/retry_future.dart';
@@ -13,6 +12,7 @@ import '../entity/post.dart';
 import '../entity/server_data.dart';
 import '../entity/sphere_exception.dart';
 import '../services/http.dart';
+import '../settings/server/active.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
 import 'server.dart';
@@ -20,7 +20,7 @@ import 'server.dart';
 final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption());
 final pageStateProvider = FutureProvider((ref) {
-  ref.watch(activeServerProvider);
+  ref.watch(serverActiveProvider);
   ref.watch(pageOptionProvider);
   return ref.read(pageDataProvider)._fetch();
 });
@@ -49,11 +49,11 @@ class PageDataSource {
   Future<void> _fetch() async {
     final client = ref.read(httpProvider);
     final pageOption = ref.read(pageOptionProvider);
-    final activeServer = ref.read(activeServerProvider);
+    final serverActive = ref.read(serverActiveProvider);
     final safeMode = ref.read(safeModeProvider);
     final blockedTags = ref.read(blockedTagsProvider);
     final postLimit = ref.read(serverPostLimitProvider);
-    if (activeServer == ServerData.empty) return;
+    if (serverActive == ServerData.empty) return;
 
     if (pageOption.query.isNotEmpty) {
       ref.read(searchHistoryProvider.notifier).save(pageOption.query);
@@ -63,7 +63,7 @@ class PageDataSource {
     if (posts.isEmpty) _page = 0;
 
     try {
-      final url = activeServer.searchUrlOf(
+      final url = serverActive.searchUrlOf(
         pageOption.query,
         _page,
         safeMode,
@@ -73,7 +73,7 @@ class PageDataSource {
         () => client.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
-      final data = ServerResponseParser.parsePage(activeServer, res);
+      final data = ServerResponseParser.parsePage(serverActive, res);
       posts.addAll(data.where((it) =>
           !it.tags.any(blockedTags.listedEntries.contains) &&
           !posts.any((post) => post.id == it.id)));
@@ -99,10 +99,13 @@ class PageDataSource {
   }
 
   Future<void> initialize() async {
-    final serverData = ref.read(serverDataProvider.notifier);
-
-    await serverData.populateData();
-    ref.read(activeServerProvider.notifier).restore(serverData);
+    final serverActive = ref.read(serverActiveProvider);
+    await ref.read(serverDataProvider.notifier).populateData();
+    if (serverActive == ServerData.empty) {
+      final serverData = ref.read(serverDataProvider);
+      await ref.read(serverActiveProvider.notifier).updateWith(
+          serverData.firstWhere((it) => it.name.startsWith('Safe')));
+    }
 
     posts.clear();
   }

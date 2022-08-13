@@ -3,18 +3,18 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../settings/active_server.dart';
 import '../../utils/extensions/string.dart';
 import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
 import '../entity/server_data.dart';
 import '../services/http.dart';
+import '../settings/server/active.dart';
 import 'blocked_tags.dart';
 
 final _dataSource = Provider(SuggestionSource.new);
 final suggestionFuture =
     FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
-  final serverActive = ref.watch(activeServerProvider);
+  final serverActive = ref.watch(serverActiveProvider);
   if (serverActive == ServerData.empty) {
     return [];
   }

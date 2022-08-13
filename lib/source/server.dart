@@ -4,8 +4,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-import '../../settings/active_server.dart';
 import '../entity/server_data.dart';
+import '../settings/server/active.dart';
 
 final serverDataProvider =
     StateNotifierProvider<ServerDataSource, List<ServerData>>(
@@ -57,15 +57,15 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   }
 
   void removeServer({required ServerData data}) {
-    final activeServer = ref.read(activeServerProvider);
+    final serverActive = ref.read(serverActiveProvider);
 
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
     _box.delete(data.key);
     state = _box.values.map((it) => it as ServerData).toList();
-    if (activeServer == data) {
-      ref.read(activeServerProvider.notifier).use(state.first);
+    if (serverActive == data) {
+      ref.read(serverActiveProvider.notifier).updateWith(state.first);
     }
   }
 
@@ -76,20 +76,20 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     await _box.putAll(fromAssets);
     state = _box.values.map((it) => it as ServerData).toList();
 
-    await ref.read(activeServerProvider.notifier).use(state.first);
+    await ref.read(serverActiveProvider.notifier).updateWith(state.first);
   }
 
   Future<void> editServer({
     required ServerData data,
     required ServerData newData,
   }) async {
-    final activeServer = ref.read(activeServerProvider);
+    final serverActive = ref.read(serverActiveProvider);
 
     await _box.delete(data.key);
     await _box.put(newData.key, newData);
     state = _box.values.map((it) => it as ServerData).toList();
-    if (activeServer == data && newData.key != activeServer.key) {
-      await ref.read(activeServerProvider.notifier).use(newData);
+    if (serverActive == data && newData.key != serverActive.key) {
+      await ref.read(serverActiveProvider.notifier).updateWith(newData);
     }
   }
 

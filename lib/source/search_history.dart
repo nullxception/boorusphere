@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../settings/active_server.dart';
 import '../entity/search_history.dart';
+import '../settings/server/active.dart';
 import '../utils/extensions/string.dart';
 
 final searchHistoryProvider =
@@ -62,10 +62,10 @@ class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
     final query = value.trim();
     if (query.isEmpty) return;
 
-    final activeServer = ref.read(activeServerProvider);
+    final serverActive = ref.read(serverActiveProvider);
 
     if (!checkExists(value: query)) {
-      final newEntry = SearchHistory(query: query, server: activeServer.name);
+      final newEntry = SearchHistory(query: query, server: serverActive.name);
       _box.add(newEntry);
     }
   }

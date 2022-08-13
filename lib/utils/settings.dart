@@ -3,9 +3,9 @@
 import 'package:hive/hive.dart';
 
 enum Settings {
-  active_server,
   blur_explicit_post,
   download_group_by_server,
+  server_active,
   server_safe_mode,
   server_post_limit,
   theme_mode,

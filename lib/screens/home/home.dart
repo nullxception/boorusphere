@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../entity/page_option.dart';
-import '../../settings/active_server.dart';
+import '../../settings/server/active.dart';
 import '../../settings/theme.dart';
 import '../../source/page.dart';
 import '../../source/server.dart';
