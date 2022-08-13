@@ -15,7 +15,6 @@ import '../services/http.dart';
 import '../settings/server/active.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
-import 'server.dart';
 
 final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption());
@@ -96,17 +95,5 @@ class PageDataSource {
           .read(pageOptionProvider.notifier)
           .update((state) => state.copyWith(clear: false));
     }
-  }
-
-  Future<void> initialize() async {
-    final serverActive = ref.read(serverActiveProvider);
-    await ref.read(serverDataProvider.notifier).populateData();
-    if (serverActive == ServerData.empty) {
-      final serverData = ref.read(serverDataProvider);
-      await ref.read(serverActiveProvider.notifier).updateWith(
-          serverData.firstWhere((it) => it.name.startsWith('Safe')));
-    }
-
-    posts.clear();
   }
 }

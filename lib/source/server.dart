@@ -7,34 +7,39 @@ import 'package:hive/hive.dart';
 import '../entity/server_data.dart';
 import '../settings/server/active.dart';
 
+final _defaultData = FutureProvider((ref) => ServerDataLoader.loadDefaults());
+
+final _savedData = FutureProvider((ref) {
+  final defaults = ref.watch(_defaultData);
+  return ServerDataLoader.loadSaved(
+      defaults.maybeWhen(data: (data) => data, orElse: () => {}));
+});
+
 final serverDataProvider =
-    StateNotifierProvider<ServerDataSource, List<ServerData>>(
-        ServerDataSource.new);
+    StateNotifierProvider<ServerDataSource, List<ServerData>>((ref) {
+  final defaults = ref.watch(_defaultData);
+  final saved = ref.watch(_savedData);
+  return ServerDataSource(
+    ref,
+    saved.maybeWhen(data: (data) => data, orElse: () => []),
+    defaults.maybeWhen(data: (data) => data, orElse: () => {}),
+  );
+});
 
-class ServerDataSource extends StateNotifier<List<ServerData>> {
-  ServerDataSource(this.ref) : super([]);
-
-  final Ref ref;
-  final _defaultServerList = <ServerData>[];
-
-  Box get _box => Hive.box('server');
-
-  Set<ServerData> get allWithDefaults =>
-      <ServerData>{..._defaultServerList, ...state};
-
-  Future<void> populateData() async {
-    final fromAssets = await _defaultServersAssets();
-    _defaultServerList.addAll(fromAssets.values);
-
-    if (_box.isEmpty) {
-      await _box.putAll(fromAssets);
-    } else {
-      await validateAndMigrateKeys();
+class ServerDataLoader {
+  static Future<void> validateAndMigrateKeys(Box box) async {
+    final mapped = Map<String, ServerData>.from(box.toMap());
+    for (final data in mapped.entries) {
+      if (data.key.startsWith('@')) {
+        continue;
+      }
+      await box.delete(data.key);
+      await box.put(data.value.key, data.value);
     }
-    state = _box.values.map((it) => it as ServerData).toList();
+    await box.flush();
   }
 
-  Future<Map<String, ServerData>> _defaultServersAssets() async {
+  static Future<Map<String, ServerData>> loadDefaults() async {
     final json = await rootBundle.loadString('assets/servers.json');
     final servers = jsonDecode(json) as List;
 
@@ -44,6 +49,50 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     }));
   }
 
+  static Future<List<ServerData>> loadSaved(defaultServers) async {
+    if (defaultServers.isEmpty) return [];
+
+    final box = Hive.box('server');
+    if (box.isEmpty) {
+      await box.putAll(defaultServers);
+    } else {
+      await validateAndMigrateKeys(box);
+    }
+    return box.values.map((it) => it as ServerData).toList();
+  }
+}
+
+class ServerDataSource extends StateNotifier<List<ServerData>> {
+  ServerDataSource(this.ref, super.state, this.defaults) {
+    if (super.state.isNotEmpty) {
+      // execute it anonymously since we can't update other state
+      // while constructing a state
+      Future.delayed(Duration.zero, () => _initLazily(ref, super.state));
+    }
+  }
+
+  final Ref ref;
+  final Map<String, ServerData> defaults;
+
+  Box get _box => Hive.box('server');
+
+  Set<ServerData> get allWithDefaults => {...defaults.values, ...state};
+
+  ServerData get serverActive => ref.read(serverActiveProvider);
+  ServerActiveState get serverActiveNotifier =>
+      ref.read(serverActiveProvider.notifier);
+
+  Future<void> _initLazily(Ref ref, List<ServerData> servers) async {
+    if (serverActive == ServerData.empty) {
+      await serverActiveNotifier
+          .updateWith(servers.firstWhere((it) => it.name.startsWith('Safe')));
+    }
+  }
+
+  void reloadFromBox() {
+    state = _box.values.map((it) => it as ServerData).toList();
+  }
+
   ServerData select(String name) {
     return state.isEmpty
         ? ServerData.empty
@@ -51,57 +100,38 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
             orElse: () => state.first);
   }
 
-  Future<void> addServer({required ServerData data}) async {
+  Future<void> add({required ServerData data}) async {
     await _box.put(data.key, data);
-    state = _box.values.map((it) => it as ServerData).toList();
+    reloadFromBox();
   }
 
-  void removeServer({required ServerData data}) {
-    final serverActive = ref.read(serverActiveProvider);
-
+  void delete({required ServerData data}) {
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
     _box.delete(data.key);
-    state = _box.values.map((it) => it as ServerData).toList();
+    reloadFromBox();
     if (serverActive == data) {
-      ref.read(serverActiveProvider.notifier).updateWith(state.first);
+      serverActiveNotifier.updateWith(state.first);
     }
   }
 
-  Future<void> resetToDefault() async {
-    final fromAssets = await _defaultServersAssets();
-
-    await _box.deleteAll(_box.keys);
-    await _box.putAll(fromAssets);
-    state = _box.values.map((it) => it as ServerData).toList();
-
-    await ref.read(serverActiveProvider.notifier).updateWith(state.first);
-  }
-
-  Future<void> editServer({
+  Future<void> edit({
     required ServerData data,
     required ServerData newData,
   }) async {
-    final serverActive = ref.read(serverActiveProvider);
-
     await _box.delete(data.key);
     await _box.put(newData.key, newData);
-    state = _box.values.map((it) => it as ServerData).toList();
+    reloadFromBox();
     if (serverActive == data && newData.key != serverActive.key) {
-      await ref.read(serverActiveProvider.notifier).updateWith(newData);
+      await serverActiveNotifier.updateWith(newData);
     }
   }
 
-  Future<void> validateAndMigrateKeys() async {
-    final mapped = Map<String, ServerData>.from(_box.toMap());
-    for (final data in mapped.entries) {
-      if (data.key.startsWith('@')) {
-        continue;
-      }
-      await _box.delete(data.key);
-      await _box.put(data.value.key, data.value);
-    }
-    await _box.flush();
+  Future<void> reset() async {
+    await _box.deleteAll(_box.keys);
+    await _box.putAll(defaults);
+    reloadFromBox();
+    await serverActiveNotifier.updateWith(state.first);
   }
 }

@@ -25,7 +25,6 @@ import 'services/download.dart';
 import 'settings/theme.dart';
 import 'source/changelog.dart';
 import 'source/device_info.dart';
-import 'source/page.dart';
 import 'widgets/bouncing_scroll.dart';
 
 class Boorusphere extends HookConsumerWidget {
@@ -127,7 +126,6 @@ class Boorusphere extends HookConsumerWidget {
     }
 
     useEffect(() {
-      ref.read(pageDataProvider).initialize();
       ref.read(downloadProvider.notifier).register();
 
       return () {

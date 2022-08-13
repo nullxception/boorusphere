@@ -40,9 +40,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
-                            ref
-                                .read(serverDataProvider.notifier)
-                                .resetToDefault();
+                            ref.read(serverDataProvider.notifier).reset();
                           },
                           child: const Text('Reset'),
                         )
@@ -92,7 +90,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
 
                           ref
                               .read(serverDataProvider.notifier)
-                              .removeServer(data: it);
+                              .delete(data: it);
                           break;
                         default:
                           break;

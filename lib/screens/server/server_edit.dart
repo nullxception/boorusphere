@@ -159,10 +159,9 @@ class ServerEditorPage extends HookConsumerWidget {
                           ref.read(serverDataProvider.notifier);
 
                       if (isEditing) {
-                        serverDataNotifier.editServer(
-                            data: server, newData: data);
+                        serverDataNotifier.edit(data: server, newData: data);
                       } else {
-                        serverDataNotifier.addServer(data: data);
+                        serverDataNotifier.add(data: data);
                       }
                       context.pop();
                     },
