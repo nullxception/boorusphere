@@ -11,6 +11,7 @@ import '../../settings/theme.dart';
 import '../../source/page.dart';
 import '../../source/server.dart';
 import '../../source/version.dart';
+import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
 import '../../widgets/styled_overlay_region.dart';
@@ -59,15 +60,13 @@ class HomePage extends HookConsumerWidget {
     }, [scrollController]);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      pageState.whenOrNull(error: (error, stackTrace) {
-        if (scrollController.position.extentAfter < 300) {
-          scrollController.animateTo(
-            scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.fastOutSlowIn,
-          );
-        }
-      });
+      if (pageState.isError && scrollController.position.extentAfter < 300) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.fastOutSlowIn,
+        );
+      }
     });
 
     return Scaffold(

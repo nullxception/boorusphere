@@ -6,24 +6,20 @@ import 'package:hive/hive.dart';
 
 import '../entity/server_data.dart';
 import '../settings/server/active.dart';
+import '../utils/extensions/asyncvalue.dart';
 
 final _defaultData = FutureProvider((ref) => ServerDataLoader.loadDefaults());
 
 final _savedData = FutureProvider((ref) {
   final defaults = ref.watch(_defaultData);
-  return ServerDataLoader.loadSaved(
-      defaults.maybeWhen(data: (data) => data, orElse: () => {}));
+  return ServerDataLoader.loadSaved(defaults.maybeValue ?? {});
 });
 
 final serverDataProvider =
     StateNotifierProvider<ServerDataSource, List<ServerData>>((ref) {
-  final defaults = ref.watch(_defaultData);
-  final saved = ref.watch(_savedData);
-  return ServerDataSource(
-    ref,
-    saved.maybeWhen(data: (data) => data, orElse: () => []),
-    defaults.maybeWhen(data: (data) => data, orElse: () => {}),
-  );
+  final defaults = ref.watch(_defaultData).maybeValue;
+  final saved = ref.watch(_savedData).maybeValue;
+  return ServerDataSource(ref, saved ?? [], defaults ?? {});
 });
 
 class ServerDataLoader {

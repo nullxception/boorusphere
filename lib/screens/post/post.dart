@@ -8,6 +8,7 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../services/app_theme/app_theme.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
+import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/styled_overlay_region.dart';
 import 'appbar_visibility.dart';
@@ -46,10 +47,9 @@ class PostPage extends HookConsumerWidget {
           visible: !fullscreen,
           child: _PostAppBar(
             subtitle: post.tags.join(' '),
-            title: pageState.maybeWhen(
-              loading: () => '#${page.value + 1} of (loading...)',
-              orElse: () => '#${page.value + 1} of ${posts.length}',
-            ),
+            title: pageState.isLoading
+                ? '#${page.value + 1} of (loading...)'
+                : '#${page.value + 1} of ${posts.length}',
           ),
         ),
         body: WillPopScope(
