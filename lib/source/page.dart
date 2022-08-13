@@ -72,12 +72,20 @@ class PageDataSource {
         () => client.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
-      final data = ServerResponseParser.parsePage(serverActive, res);
-      posts.addAll(data.where((it) =>
-          !it.tags.any(blockedTags.listedEntries.contains) &&
-          !posts.any((post) => post.id == it.id)));
 
       _page++;
+      final newPosts = ServerResponseParser.parsePage(serverActive, res)
+          .where((it) =>
+              !it.tags.any(blockedTags.listedEntries.contains) &&
+              !posts.any((post) => post.id == it.id))
+          .toList();
+      if (newPosts.isNotEmpty) {
+        posts.addAll(newPosts);
+        return;
+      }
+
+      await Future.delayed(const Duration(milliseconds: 150));
+      await _fetch();
     } catch (exception) {
       if (exception is SphereException) {
         final message = _buildErrorMessage(exception.message);
