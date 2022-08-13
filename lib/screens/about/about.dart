@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../entity/app_version.dart';
 import '../../source/version.dart';
+import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 
 class AboutPage extends HookConsumerWidget {
@@ -12,8 +14,9 @@ class AboutPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final versionData = ref.watch(versionDataProvider);
-    final versionUpdate = ref.watch(versionUpdateProvider);
+    final currentVer = ref.watch(versionCurrentProvider
+        .select((it) => it.maybeValue ?? AppVersion.zero));
+    final latestVer = ref.watch(versionLatestProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -41,13 +44,13 @@ class AboutPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  'Version ${versionData.version} - ${versionData.arch}',
+                  'Version $currentVer - ${VersionDataSource.arch}',
                   style: context.theme.textTheme.subtitle2
                       ?.copyWith(fontWeight: FontWeight.w400),
                 ),
               ),
-              versionUpdate.when(
-                data: (data) => data.shouldUpdate
+              latestVer.when(
+                data: (data) => data.isNewerThan(currentVer)
                     ? Column(
                         children: [
                           const Padding(
@@ -58,12 +61,11 @@ class AboutPage extends HookConsumerWidget {
                             onPressed: () => launchUrlString(data.apkUrl,
                                 mode: LaunchMode.externalApplication),
                             style: ElevatedButton.styleFrom(elevation: 0),
-                            child: Text('Download v${data.newVersion}'),
+                            child: Text('Download v$data'),
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              context.push(
-                                  '/about/changelog/${data.newVersion}?git=1');
+                              context.push('/about/changelog/$data?git=1');
                             },
                             style: ElevatedButton.styleFrom(elevation: 0),
                             child: const Text('View changes'),
@@ -71,7 +73,7 @@ class AboutPage extends HookConsumerWidget {
                         ],
                       )
                     : ElevatedButton.icon(
-                        onPressed: () => ref.refresh(versionUpdateProvider),
+                        onPressed: () => ref.refresh(versionLatestProvider),
                         style: ElevatedButton.styleFrom(elevation: 0),
                         icon: const Icon(Icons.done),
                         label: const Text('You\'re on latest version'),
@@ -88,7 +90,7 @@ class AboutPage extends HookConsumerWidget {
                   label: const Text('Checking for update...'),
                 ),
                 error: (e, s) => ElevatedButton.icon(
-                  onPressed: () => ref.refresh(versionUpdateProvider),
+                  onPressed: () => ref.refresh(versionLatestProvider),
                   style: ElevatedButton.styleFrom(elevation: 0),
                   icon: const Icon(Icons.update),
                   label: const Text('Check for update'),

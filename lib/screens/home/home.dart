@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+import '../../entity/app_version.dart';
 import '../../entity/page_option.dart';
 import '../../settings/server/active.dart';
 import '../../settings/theme.dart';

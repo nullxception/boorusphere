@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../source/version.dart';
+
 part 'app_version.freezed.dart';
 
 @freezed
@@ -26,6 +28,10 @@ class AppVersion with _$AppVersion {
 
   bool isNewerThan(AppVersion version) =>
       major > version.major || minor > version.minor || patch > version.patch;
+
+  String get apkUrl {
+    return '${VersionDataSource.gitUrl}/releases/download/$this/boorusphere-$this-${VersionDataSource.arch}.apk';
+  }
 
   static const zero = AppVersion();
 }
