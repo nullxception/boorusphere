@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../entity/sphere_exception.dart';
+
 class ExceptionInfo extends HookWidget {
   const ExceptionInfo({
     super.key,
@@ -42,7 +44,10 @@ class ExceptionInfo extends HookWidget {
     }
   }
 
-  bool get allowToggled => stackTrace == null || exception is TimeoutException;
+  bool get traceable =>
+      stackTrace != null &&
+      exception is! TimeoutException &&
+      exception is! SphereException;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +57,7 @@ class ExceptionInfo extends HookWidget {
     }
 
     return InkWell(
-      onTap: allowToggled ? null : toggleStacktrace,
+      onTap: traceable ? toggleStacktrace : null,
       child: Column(
         crossAxisAlignment: crossAxisAlignment,
         children: [
