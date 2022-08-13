@@ -11,13 +11,13 @@ class ExceptionInfo extends HookWidget {
     super.key,
     required this.exception,
     this.stackTrace,
-    this.alignment = Alignment.center,
+    this.textAlign = TextAlign.center,
     this.crossAxisAlignment = CrossAxisAlignment.center,
   });
 
   final Object exception;
   final StackTrace? stackTrace;
-  final Alignment alignment;
+  final TextAlign textAlign;
   final CrossAxisAlignment crossAxisAlignment;
 
   String get description {
@@ -63,7 +63,7 @@ class ExceptionInfo extends HookWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16),
-            child: Text(description),
+            child: Text(description, textAlign: textAlign),
           ),
           if (showTrace.value && stackTrace != null)
             Column(
