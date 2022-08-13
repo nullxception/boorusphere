@@ -13,21 +13,27 @@ import '../entity/post.dart';
 import '../utils/download.dart';
 import '../utils/extensions/string.dart';
 
-final downloadProvider = ChangeNotifierProvider(DownloadService.new);
+final downloadProvider =
+    ChangeNotifierProvider.autoDispose(DownloadService.new);
 
 class DownloadService extends ChangeNotifier {
-  DownloadService(this.ref);
+  DownloadService(this.ref) {
+    _initLazily();
+  }
 
   final Ref ref;
-  final _port = ReceivePort();
   final entries = <DownloadEntry>[];
   final progresses = <DownloadProgress>{};
+  late final _port = ReceivePort();
 
   Box get _box => Hive.box('downloads');
 
-  Future<void> register() async {
-    await FlutterDownloader.initialize();
-    IsolateNameServer.removePortNameMapping(_portName);
+  Future<void> _initLazily() async {
+    if (!FlutterDownloader.initialized) {
+      await FlutterDownloader.initialize();
+      FlutterDownloader.registerCallback(flutterDownloaderCallback);
+    }
+    await _populateDownloadEntries();
     IsolateNameServer.registerPortWithName(_port.sendPort, _portName);
     _port.listen((message) {
       final DownloadTaskStatus status = message[1];
@@ -39,8 +45,6 @@ class DownloadService extends ChangeNotifier {
       );
       _updateDownloadProgress(newProg);
     });
-    FlutterDownloader.registerCallback(flutterDownloaderCallback);
-    await _populateDownloadEntries();
   }
 
   @pragma('vm:entry-point')
@@ -61,8 +65,10 @@ class DownloadService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void unregister() {
+  @override
+  void dispose() {
     IsolateNameServer.removePortNameMapping(_portName);
+    super.dispose();
   }
 
   Future<void> _populateDownloadEntries() async {

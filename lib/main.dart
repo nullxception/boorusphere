@@ -1,7 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +20,6 @@ import 'screens/server/server_edit.dart';
 import 'screens/settings/settings.dart';
 import 'screens/tags_blocker/tags_blocker.dart';
 import 'services/app_theme/app_theme.dart';
-import 'services/download.dart';
 import 'settings/theme.dart';
 import 'source/changelog.dart';
 import 'source/device_info.dart';
@@ -124,14 +122,6 @@ class Boorusphere extends HookConsumerWidget {
     if (deviceInfo.sdkInt > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
-
-    useEffect(() {
-      ref.read(downloadProvider.notifier).register();
-
-      return () {
-        ref.read(downloadProvider.notifier).unregister();
-      };
-    }, []);
 
     return DynamicColorBuilder(
       builder: (maybeLight, maybeDark) {
