@@ -137,11 +137,16 @@ class ServerResponseParser {
     final noTagsError =
         SphereException(message: 'No tags that matches \'$query\'');
 
-    List<dynamic> entries = [];
+    final entries = [];
     if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
-      entries = res.body.contains('@attributes')
+      final json = res.body.contains('@attributes')
           ? jsonDecode(res.body)['tag']
           : jsonDecode(res.body);
+      if (json is List) {
+        entries.addAll(json);
+      } else {
+        throw noTagsError;
+      }
     } else if (res.body.isEmpty) {
       return [];
     } else if (res.body.contains('<?xml')) {
@@ -155,9 +160,9 @@ class ServerResponseParser {
 
       final tags = jsonObj.values.first['tag'];
       if (tags is LinkedHashMap) {
-        entries = [tags];
+        entries.add(tags);
       } else if (tags is List) {
-        entries = tags;
+        entries.addAll(tags);
       } else {
         throw noTagsError;
       }
