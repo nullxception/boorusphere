@@ -129,3 +129,18 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+# Task definition for derry
+scripts:
+  check:
+    - flutter format --output=none --set-exit-if-changed .
+    - flutter analyze
+  gen:
+    - flutter pub run build_runner build --delete-conflicting-outputs
+    - flutter pub run flutter_oss_licenses:generate -o lib/constants/licenses.g.dart
+    - flutter format --fix lib/constants/licenses.g.dart
+  release:
+    - flutter clean
+    - flutter pub get
+    - flutter build apk --split-per-abi
+    - flutter pub run boorusphere:renameapk

@@ -1,7 +1,7 @@
 //
 // Script for renaming apks for release purposes
 // usage:
-// $ flutter pub run renameapks
+// $ flutter pub run :renameapk
 //
 // ignore_for_file: depend_on_referenced_packages, avoid_print
 

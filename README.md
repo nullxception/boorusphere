@@ -26,18 +26,14 @@ This projects uses several code generator :
 - [`json_serializable`](https://github.com/google/json_serializable.dart)
 - [`flutter_oss_licenses`](https://github.com/espresso3389/flutter_oss_licenses)
 
-So if you're editing some areas that needs a code generator (such as `lib/data`) or add/removing packages, make sure run the particular codegens before. for example:
+So if you're editing some areas that needs a code generator (such as `lib/data`) or add/removing packages, make sure run the particular codegens before building.
 
 ```bash
-# Run code generator for the data entities
-$ flutter pub run build_runner build --delete-conflicting-outputs
-
-# Generate licenses
-$ flutter pub run flutter_oss_licenses:generate.dart -o lib/generated_licenses.dart
-$ dart format --fix lib/generated_licenses.dart
+# Run code generator
+$ derry gen
 
 # Build production-ready apks
-$ flutter build apk --split-per-abi
+$ derry release
 ```
 
 # License
