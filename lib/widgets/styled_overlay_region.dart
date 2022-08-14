@@ -6,9 +6,15 @@ import '../source/device_info.dart';
 import '../utils/extensions/buildcontext.dart';
 
 class StyledOverlayRegion extends ConsumerWidget {
-  const StyledOverlayRegion({super.key, required this.child, this.nightMode});
+  const StyledOverlayRegion({
+    super.key,
+    required this.child,
+    this.nightMode,
+    this.theme,
+  });
   final Widget child;
   final bool? nightMode;
+  final ThemeData? theme;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +38,7 @@ class StyledOverlayRegion extends ConsumerWidget {
       // opt-out SDK 28 and below from transparent navigationBar
       // due to lack of SystemUiMode.edgeToEdge
       value: deviceInfo.sdkInt > 28 ? style : defStyle,
-      child: child,
+      child: theme != null ? Theme(data: theme!, child: child) : child,
     );
   }
 }
