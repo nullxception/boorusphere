@@ -32,27 +32,21 @@ class ChangelogPage extends ConsumerWidget {
       ),
       body: SafeArea(
         child: changelog.when(
-          data: (data) => SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (option.version != null)
-                  ChangelogDataView(
-                    changelog: data.firstWhere(
-                      (it) => it.version == option.version,
-                    ),
+          data: (data) => data.length == 1
+              ? Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: ChangelogDataView(
+                    changelog: data.first,
                     showVersion: false,
-                  )
-                else
-                  ...data
-                      .map((changelog) =>
-                          ChangelogDataView(changelog: changelog))
-                      .toList(),
-              ],
-            ),
-          ),
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return ChangelogDataView(changelog: data[index]);
+                  },
+                ),
           error: (e, s) => Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,

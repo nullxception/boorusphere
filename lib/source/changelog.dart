@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,8 +17,17 @@ final changelogProvider =
     FutureProvider.family<List<ChangelogData>, ChangelogOption>(
         (ref, arg) async {
   final dataSource = ref.watch(_dataSourceProvider);
-  final data = await dataSource.from(arg.type);
-  return ChangelogData.fromString(data);
+  final rawString = await dataSource.from(arg.type);
+  final parsed = await compute(ChangelogData.fromString, rawString);
+  if (arg.version != null) {
+    return [
+      parsed.firstWhere(
+        (it) => it.version == arg.version,
+        orElse: () => ChangelogData.empty,
+      )
+    ];
+  }
+  return parsed;
 });
 
 enum ChangelogType {
