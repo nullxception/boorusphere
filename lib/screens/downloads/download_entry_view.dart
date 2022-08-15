@@ -113,7 +113,6 @@ class DownloadEntryView extends ConsumerWidget {
       ),
       trailing: _EntryPopupMenu(entry: entry),
       dense: true,
-      contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
           : () => downloader.openEntryFile(id: entry.id),

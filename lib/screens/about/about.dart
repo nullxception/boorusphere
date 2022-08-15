@@ -98,7 +98,6 @@ class AboutPage extends HookConsumerWidget {
               ),
               const Divider(height: 32),
               ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 title: const Text('Changelog'),
                 leading: const Icon(Icons.list_alt_rounded),
                 onTap: () {
@@ -106,14 +105,12 @@ class AboutPage extends HookConsumerWidget {
                 },
               ),
               ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 title: const Text('GitHub'),
                 leading: const FaIcon(FontAwesomeIcons.github),
                 onTap: () => launchUrlString(VersionDataSource.gitUrl,
                     mode: LaunchMode.externalApplication),
               ),
               ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 title: const Text('Open source licenses'),
                 leading: const Icon(Icons.collections_bookmark),
                 onTap: () => context.goNamed('licenses'),

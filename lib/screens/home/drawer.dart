@@ -25,17 +25,16 @@ class _Drawer extends StatelessWidget {
                 child: SafeArea(
                   child: ListTileTheme(
                     data: context.theme.listTileTheme.copyWith(
+                      dense: true,
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 24),
                     ),
-                    child: Flex(
-                      direction: Axis.vertical,
+                    child: Column(
                       children: [
                         Align(
                           alignment: Alignment.topLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
                             children: const [
                               _Header(),
                               _ServerSelection(),
@@ -74,25 +73,21 @@ class _Footer extends StatelessWidget {
         ListTile(
           title: const Text('Downloads'),
           leading: const Icon(Icons.cloud_download),
-          dense: true,
           onTap: () => context.goNamed('downloads'),
         ),
         ListTile(
           title: const Text('Server'),
           leading: const Icon(Icons.public),
-          dense: true,
           onTap: () => context.goNamed('servers'),
         ),
         ListTile(
           title: const Text('Tags Blocker'),
           leading: const Icon(Icons.block),
-          dense: true,
           onTap: () => context.goNamed('tags-blocker'),
         ),
         ListTile(
           title: const Text('Settings'),
           leading: const Icon(Icons.settings),
-          dense: true,
           onTap: () => context.goNamed('settings'),
         ),
         const AppVersionTile(),
@@ -167,14 +162,12 @@ class AppVersionTile extends HookConsumerWidget {
             Icons.info_outline,
             color: data.isNewerThan(currentVer) ? Colors.pink.shade300 : null,
           ),
-          dense: true,
           onTap: () => context.goNamed('about'),
         );
       },
       orElse: () => ListTile(
         title: Text('Boorusphere $currentVer'),
         leading: const Icon(Icons.info_outline),
-        dense: true,
         onTap: () => context.goNamed('about'),
       ),
     );
@@ -192,7 +185,6 @@ class _BackToHomeTile extends HookConsumerWidget {
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),
-        dense: true,
         onTap: () {
           ref
               .read(pageOptionProvider.notifier)
@@ -225,7 +217,6 @@ class _ServerSelection extends HookConsumerWidget {
               shape: BoxShape.circle,
               iconSize: 21,
             ),
-            dense: true,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(30),

@@ -54,6 +54,10 @@ class AppThemeData with _$AppThemeData {
         backgroundColor: seededScheme.primaryContainer,
         contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
       ),
+      listTileTheme: origin.listTileTheme.copyWith(
+        minVerticalPadding: 12,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 22),
+      ),
     );
   }
 
@@ -84,6 +88,10 @@ class AppThemeData with _$AppThemeData {
         ),
         backgroundColor: seededScheme.primaryContainer,
         contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      ),
+      listTileTheme: origin.listTileTheme.copyWith(
+        minVerticalPadding: 12,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 22),
       ),
     );
   }
@@ -120,6 +128,10 @@ class AppThemeData with _$AppThemeData {
         ),
         backgroundColor: seededScheme.primaryContainer,
         contentTextStyle: TextStyle(color: seededScheme.onPrimaryContainer),
+      ),
+      listTileTheme: origin.listTileTheme.copyWith(
+        minVerticalPadding: 12,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 22),
       ),
     );
   }

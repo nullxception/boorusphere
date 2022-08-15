@@ -110,8 +110,6 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                     },
                   ),
                   dense: true,
-                  contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  onTap: null,
                 );
               }).toList(),
               ListTile(
