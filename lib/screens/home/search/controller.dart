@@ -57,20 +57,21 @@ class SearchBarController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void rebuildHistory() {
-    ref.read(searchHistoryProvider.notifier).rebuild(text);
-  }
-
   void open() {
-    rebuildHistory();
     _isOpen = true;
     notifyListeners();
-    _textController.addListener(rebuildHistory);
   }
 
   void close() {
     _isOpen = false;
     notifyListeners();
-    _textController.removeListener(rebuildHistory);
+  }
+
+  void addTextListener(Function() cb) {
+    _textController.addListener(cb);
+  }
+
+  void removeTextListener(Function() cb) {
+    _textController.removeListener(cb);
   }
 }

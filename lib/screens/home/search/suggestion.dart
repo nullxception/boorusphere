@@ -7,8 +7,20 @@ class _SearchSuggestion extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarController);
     final serverActive = ref.watch(serverActiveProvider);
-    final suggester = ref.watch(suggestionFuture(searchBar.text));
-    final history = ref.watch(searchHistoryProvider);
+    final searchQuery = useState('');
+    final suggester = ref.watch(suggestionFuture(searchQuery.value));
+    final history = ref.watch(searchHistoryFinder(searchQuery.value));
+
+    final updateQuery = useCallback(() {
+      searchQuery.value = searchBar.text;
+    }, [searchBar]);
+
+    useEffect(() {
+      searchBar.addTextListener(updateQuery);
+      return () {
+        searchBar.removeTextListener(updateQuery);
+      };
+    }, [searchBar]);
 
     return Container(
       color: context.theme.scaffoldBackgroundColor.withOpacity(0.9),
@@ -50,9 +62,9 @@ class _SearchSuggestion extends HookConsumerWidget {
                             key: Key(entry.key.toString()),
                             direction: DismissDirection.endToStart,
                             onDismissed: (direction) {
-                              ref.read(searchHistoryProvider.notifier)
-                                ..delete(entry.key)
-                                ..rebuild(searchBar.text.trim());
+                              ref
+                                  .read(searchHistoryProvider.notifier)
+                                  .delete(entry.key);
                             },
                             background: Container(
                               color: Colors.red,

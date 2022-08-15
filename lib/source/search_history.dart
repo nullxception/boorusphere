@@ -6,67 +6,60 @@ import '../settings/server/active.dart';
 import '../utils/extensions/string.dart';
 
 final searchHistoryProvider =
-    StateNotifierProvider<SearchHistorySource, Map<int, SearchHistory>>(
-        SearchHistorySource.new);
+    StateNotifierProvider<SearchHistorySource, Map<int, SearchHistory>>((ref) {
+  final storage = SearchHistorySource._storage;
+  return SearchHistorySource(ref, Map.from(storage.toMap()));
+});
+
+final searchHistoryFinder =
+    Provider.family<Map<int, SearchHistory>, String>((ref, query) {
+  final history = ref.watch(searchHistoryProvider);
+  if (query.endsWith(' ') || query.isEmpty) {
+    return history;
+  }
+
+  final queries = query.toWordList();
+  // Filtering history that contains last word from any state (either incomplete
+  // or already contains multiple words)
+  final filtered = Map<int, SearchHistory>.from(history);
+  filtered.removeWhere((key, value) =>
+      !value.query.contains(queries.last) ||
+      queries.take(queries.length).contains(value.query));
+
+  return filtered;
+});
 
 class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
-  SearchHistorySource(this.ref) : super({});
+  SearchHistorySource(this.ref, super.state);
 
   final Ref ref;
 
-  Box get _box => Hive.box('searchHistory');
-
-  Map<int, SearchHistory> get all => Map.castFrom(_box.toMap());
-
-  void rebuild(String query) {
-    final queries = query.toWordList();
-
-    if (query.endsWith(' ') || query.isEmpty) {
-      state = all;
-      return;
-    }
-
-    // Filtering history that contains last word from any state (either incomplete
-    // or already contains multiple words)
-    final filtered = all;
-
-    filtered.removeWhere((key, value) =>
-        !value.query.contains(queries.last) ||
-        queries.sublist(0, queries.length - 1).contains(value.query));
-    state = filtered;
+  void _refresh() {
+    state = Map.from(_storage.toMap());
   }
 
-  void clear() {
-    _box.clear();
-    state = {};
+  Future<void> clear() async {
+    await _storage.clear();
+    _refresh();
   }
 
-  void delete(key) {
-    final newState = all;
-    newState.remove(key);
-    _box.delete(key);
-    state = newState;
+  Future<void> delete(key) async {
+    await _storage.delete(key);
+    _refresh();
   }
 
-  bool checkExists({required String value}) {
-    if (_box.isEmpty) return false;
-    final values = _box.values.cast<SearchHistory>();
-    final pageData = values.firstWhere(
-      (it) => it.query == value,
-      orElse: () => const SearchHistory(),
-    );
-    return pageData.query == value;
+  bool checkExists(String value) {
+    return state.values.map((e) => e.query).contains(value);
   }
 
-  void save(String value) {
+  Future<void> save(String value) async {
     final query = value.trim();
-    if (query.isEmpty) return;
+    if (query.isEmpty || checkExists(query)) return;
 
     final serverActive = ref.read(serverActiveProvider);
-
-    if (!checkExists(value: query)) {
-      final newEntry = SearchHistory(query: query, server: serverActive.name);
-      _box.add(newEntry);
-    }
+    await _storage.add(SearchHistory(query: query, server: serverActive.name));
+    _refresh();
   }
+
+  static Box get _storage => Hive.box('searchHistory');
 }

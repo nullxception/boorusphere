@@ -55,7 +55,7 @@ class PageDataSource {
     if (serverActive == ServerData.empty) return;
 
     if (pageOption.query.isNotEmpty) {
-      ref.read(searchHistoryProvider.notifier).save(pageOption.query);
+      await ref.read(searchHistoryProvider.notifier).save(pageOption.query);
     }
 
     if (pageOption.clear) posts.clear();
