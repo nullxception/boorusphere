@@ -1,7 +1,7 @@
 part of 'home.dart';
 
 class _Drawer extends StatelessWidget {
-  const _Drawer({super.key, required this.maxWidth});
+  const _Drawer({required this.maxWidth});
   final double maxWidth;
   @override
   Widget build(BuildContext context) {

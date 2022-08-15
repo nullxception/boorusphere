@@ -197,7 +197,6 @@ class _SlidableContainer extends HookConsumerWidget {
         [animator]);
     final maxDrawerWidth = context.mediaQuery.size.width - 84;
     final canBeDragged = useState(true);
-    final drawerKey = useMemoized(GlobalKey.new);
 
     final animationListener = useCallback(() {
       if (animator.isAnimating) return;
@@ -259,7 +258,7 @@ class _SlidableContainer extends HookConsumerWidget {
                       (1 - tween.value) * (maxDrawerWidth / 2), 0, 0)
                   ..translate(slide - maxDrawerWidth),
                 alignment: Alignment.centerLeft,
-                child: _Drawer(key: drawerKey, maxWidth: maxDrawerWidth),
+                child: _Drawer(maxWidth: maxDrawerWidth),
               ),
               Transform.translate(
                 offset: Offset(slide, 0),
