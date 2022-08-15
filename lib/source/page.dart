@@ -76,7 +76,7 @@ class PageDataSource {
       _page++;
       final newPosts = ServerResponseParser.parsePage(serverActive, res)
           .where((it) =>
-              !it.tags.any(blockedTags.listedEntries.contains) &&
+              !it.tags.any(blockedTags.values.contains) &&
               !posts.any((post) => post.id == it.id))
           .toList();
       if (newPosts.isNotEmpty) {

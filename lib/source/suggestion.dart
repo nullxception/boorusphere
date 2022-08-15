@@ -44,7 +44,7 @@ class SuggestionSource {
       );
 
       return ServerResponseParser.parseTagSuggestion(res, query)
-          .where((it) => !blockedTags.listedEntries.contains(it))
+          .where((it) => !blockedTags.values.contains(it))
           .toList();
     } catch (e) {
       if (query.isEmpty) {

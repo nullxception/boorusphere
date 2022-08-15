@@ -13,7 +13,7 @@ class TagsBlockerPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tags blocker')),
-      body: SafeArea(
+      body: const SafeArea(
         child: _TagsBlockerContent(),
       ),
     );
@@ -21,20 +21,11 @@ class TagsBlockerPage extends HookConsumerWidget {
 }
 
 class _TagsBlockerContent extends HookConsumerWidget {
-  void updateTags(BlockedTagsSource repo, ValueNotifier storage) {
-    storage.value = repo.mapped;
-  }
-
+  const _TagsBlockerContent();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blockedTagsHandler = ref.watch(blockedTagsProvider);
-    final blockedTags = useState({});
+    final blockedTags = ref.watch(blockedTagsProvider);
     final controller = useTextEditingController();
-
-    useEffect(() {
-      // Populate suggestion history on first build
-      updateTags(blockedTagsHandler, blockedTags);
-    }, []);
 
     return ListView(
       children: [
@@ -48,8 +39,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
                 controller: controller,
                 onSubmitted: (value) {
                   final values = value.toWordList();
-                  blockedTagsHandler.pushAll(values);
-                  updateTags(blockedTagsHandler, blockedTags);
+                  ref.read(blockedTagsProvider.notifier).pushAll(values);
                   controller.clear();
                 },
                 decoration: const InputDecoration(
@@ -60,7 +50,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
             ],
           ),
         ),
-        if (blockedTags.value.isEmpty)
+        if (blockedTags.isEmpty)
           const Center(
             child: NoticeCard(
               icon: Icon(Icons.tag),
@@ -68,14 +58,13 @@ class _TagsBlockerContent extends HookConsumerWidget {
               children: Text('No blocked tags yet'),
             ),
           ),
-        for (final tag in blockedTags.value.entries)
+        for (final tag in blockedTags.entries)
           ListTile(
             title: Text(tag.value),
             leading: const Icon(Icons.block),
             trailing: IconButton(
               onPressed: () {
-                blockedTagsHandler.delete(tag.key);
-                updateTags(blockedTagsHandler, blockedTags);
+                ref.read(blockedTagsProvider.notifier).delete(tag.key);
               },
               icon: const Icon(Icons.close),
             ),

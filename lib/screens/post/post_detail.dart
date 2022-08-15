@@ -23,7 +23,6 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     final selectedtag = useState(<String>[]);
     final pageQuery =
         ref.watch(pageOptionProvider.select((value) => value.query));
-    final blockedTagsHandler = ref.watch(blockedTagsProvider);
     final fabController = useAnimationController(
         duration: const Duration(milliseconds: 250), initialValue: 0);
     final showFAB = useState(false);
@@ -219,7 +218,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
             onTap: () {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
-                blockedTagsHandler.pushAll(selectedTags);
+                ref.watch(blockedTagsProvider.notifier).pushAll(selectedTags);
                 context.scaffoldMessenger.showSnackBar(
                   const SnackBar(
                     content: Text('Added to tags blocker list'),

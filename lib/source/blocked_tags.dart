@@ -1,43 +1,42 @@
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final blockedTagsProvider = Provider(BlockedTagsSource.new);
+final blockedTagsProvider =
+    StateNotifierProvider<BlockedTagsSource, Map<int, String>>((ref) {
+  final storage = BlockedTagsSource._storage;
+  return BlockedTagsSource(ref, Map.from(storage.toMap()));
+});
 
-class BlockedTagsSource {
-  BlockedTagsSource(this.ref);
+class BlockedTagsSource extends StateNotifier<Map<int, String>> {
+  BlockedTagsSource(this.ref, super.state);
+
   final Ref ref;
 
-  Box get _box => Hive.box('blockedTags');
-
-  Map get mapped => _box.toMap();
-
-  List<String> get listedEntries {
-    return _box.values.map((it) => it.toString()).toList();
+  void _refresh() {
+    state = Map.from(_storage.toMap());
   }
 
-  void delete(key) {
-    _box.delete(key);
+  Future<void> delete(key) async {
+    await _storage.delete(key);
+    _refresh();
   }
 
-  bool checkExists({required String value}) {
-    if (_box.isEmpty) return false;
-
-    return value ==
-        _box.values.firstWhere((it) => it == value, orElse: () => '');
-  }
-
-  void push(String value) {
+  Future<void> push(String value) async {
     final tag = value.trim();
     if (tag.isEmpty) return;
 
-    if (!checkExists(value: tag)) {
-      _box.add(tag);
+    if (!_storage.values.contains(tag)) {
+      await _storage.add(tag);
     }
+    _refresh();
   }
 
-  void pushAll(List<String> values) {
+  Future<void> pushAll(List<String> values) async {
     for (var tag in values) {
-      push(tag);
+      await push(tag);
     }
+    _refresh();
   }
+
+  static Box get _storage => Hive.box('blockedTags');
 }
