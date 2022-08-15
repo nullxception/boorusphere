@@ -41,10 +41,9 @@ class SearchBarController extends ChangeNotifier {
         .update((state) => PageOption(query: value, clear: true));
   }
 
-  void append(String suggested) {
-    final queries = _textController.text.toWordList();
-    final result = queries.sublist(0, queries.length - 1).toSet()
-      ..addAll(suggested.toWordList());
+  void append(String value) {
+    final current = text.toWordList();
+    final result = {...current.take(current.length), ...value.toWordList()};
     text = '${result.join(' ')} ';
   }
 
