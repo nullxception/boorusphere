@@ -1,5 +1,6 @@
-import 'package:extended_image/extended_image.dart';
+import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../hooks/markmayneedrebuild.dart';
@@ -154,13 +155,20 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text('Clear loaded content from cache'),
               ),
-              onTap: () {
+              onTap: () async {
                 context.scaffoldMessenger.showSnackBar(const SnackBar(
                   content: Text('Clearing...'),
-                  duration: Duration(seconds: 1),
+                  duration: Duration(milliseconds: 500),
                 ));
-                clearDiskCachedImages()
-                    .then((value) => clearMemoryImageCache());
+
+                await DefaultCacheManager().emptyCache();
+                await extended_image.clearDiskCachedImages();
+                extended_image.clearMemoryImageCache();
+
+                context.scaffoldMessenger.showSnackBar(const SnackBar(
+                  content: Text('Cache cleared'),
+                  duration: Duration(milliseconds: 500),
+                ));
               },
             ),
           ],
