@@ -138,7 +138,7 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
 
     return IconButton(
       icon: Icon(themeIconOf(themeMode)),
-      onPressed: ref.read(themeModeProvider.notifier).cycleTheme,
+      onPressed: ref.read(themeModeProvider.notifier).cycle,
     );
   }
 }
@@ -227,7 +227,7 @@ class _ServerSelection extends HookConsumerWidget {
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
-              ref.read(serverActiveProvider.notifier).updateWith(it);
+              ref.read(serverActiveProvider.notifier).update(it);
               ref
                   .read(pageOptionProvider.notifier)
                   .update((state) => state.copyWith(clear: true));

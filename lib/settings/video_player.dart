@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/settings.dart';
+import 'settings.dart';
 
 final videoPlayerMuteProvider =
     StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
@@ -9,12 +9,11 @@ final videoPlayerMuteProvider =
 });
 
 class VideoPlayerMuteState extends StateNotifier<bool> {
-  VideoPlayerMuteState(super.initState);
+  VideoPlayerMuteState(super.state);
 
-  bool toggle() {
-    final result = !state;
-    state = result;
-    Settings.videoplayer_mute.save(result);
-    return result;
+  Future<bool> toggle() async {
+    state = !state;
+    await Settings.videoplayer_mute.save(state);
+    return state;
   }
 }

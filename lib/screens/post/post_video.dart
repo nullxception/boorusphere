@@ -289,11 +289,11 @@ class _Toolbox extends HookConsumerWidget {
                             ),
                             IconButton(
                               padding: const EdgeInsets.all(16),
-                              onPressed: () {
-                                final mute = ref
+                              onPressed: () async {
+                                final mute = await ref
                                     .read(videoPlayerMuteProvider.notifier)
                                     .toggle();
-                                controller?.setVolume(mute ? 0 : 1);
+                                await controller?.setVolume(mute ? 0 : 1);
                               },
                               icon: Icon(
                                 isMuted ? Icons.volume_mute : Icons.volume_up,

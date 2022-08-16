@@ -81,7 +81,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   Future<void> _initLazily(Ref ref, List<ServerData> servers) async {
     if (serverActive == ServerData.empty) {
       await serverActiveNotifier
-          .updateWith(servers.firstWhere((it) => it.name.startsWith('Safe')));
+          .update(servers.firstWhere((it) => it.name.startsWith('Safe')));
     }
   }
 
@@ -108,7 +108,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     _box.delete(data.key);
     reloadFromBox();
     if (serverActive == data) {
-      serverActiveNotifier.updateWith(state.first);
+      serverActiveNotifier.update(state.first);
     }
   }
 
@@ -120,7 +120,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     await _box.put(newData.key, newData);
     reloadFromBox();
     if (serverActive == data && newData.key != serverActive.key) {
-      await serverActiveNotifier.updateWith(newData);
+      await serverActiveNotifier.update(newData);
     }
   }
 
@@ -128,6 +128,6 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     await _box.deleteAll(_box.keys);
     await _box.putAll(defaults);
     reloadFromBox();
-    await serverActiveNotifier.updateWith(state.first);
+    await serverActiveNotifier.update(state.first);
   }
 }

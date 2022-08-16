@@ -1,20 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/settings.dart';
+import '../settings.dart';
 
 final serverPostLimitProvider =
     StateNotifierProvider<ServerPostLimitState, int>((ref) {
-  final fromSettings =
+  final saved =
       Settings.server_post_limit.read(or: ServerPostLimitState.defaultLimit);
-  return ServerPostLimitState(fromSettings);
+  return ServerPostLimitState(saved);
 });
 
 class ServerPostLimitState extends StateNotifier<int> {
-  ServerPostLimitState(super.initData);
+  ServerPostLimitState(super.state);
 
-  void save(int value) {
+  Future<void> update(int value) async {
     state = value;
-    Settings.server_post_limit.save(value);
+    await Settings.server_post_limit.save(value);
   }
 
   static const defaultLimit = 40;

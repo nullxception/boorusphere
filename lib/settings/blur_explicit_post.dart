@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/settings.dart';
+import 'settings.dart';
 
 final blurExplicitPostProvider =
     StateNotifierProvider<BlurExplicitPostState, bool>((ref) {
-  final fromSettings = Settings.blur_explicit_post.read(or: true);
-  return BlurExplicitPostState(fromSettings);
+  final saved = Settings.blur_explicit_post.read(or: true);
+  return BlurExplicitPostState(saved);
 });
 
 class BlurExplicitPostState extends StateNotifier<bool> {
-  BlurExplicitPostState(super.initData);
+  BlurExplicitPostState(super.state);
 
-  void enable(bool value) {
+  Future<void> update(bool value) async {
     state = value;
-    Settings.blur_explicit_post.save(value);
+    await Settings.blur_explicit_post.save(value);
   }
 }

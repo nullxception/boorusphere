@@ -220,7 +220,7 @@ class _TrailingButton extends ConsumerWidget {
     }
 
     return _CollapsibleButton(
-      onTap: collapsed ? backToTop : ref.read(gridProvider.notifier).rotate,
+      onTap: collapsed ? backToTop : ref.read(gridProvider.notifier).cycle,
       collapsed: collapsed,
       child: SizedBox(
         width: size,

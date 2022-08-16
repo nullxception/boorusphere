@@ -1,17 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/settings.dart';
+
+import '../settings.dart';
 
 final groupByServerProvider =
     StateNotifierProvider<GroupByServerState, bool>((ref) {
-  final fromSettings = Settings.download_group_by_server.read(or: false);
-  return GroupByServerState(fromSettings);
+  final saved = Settings.download_group_by_server.read(or: false);
+  return GroupByServerState(saved);
 });
 
 class GroupByServerState extends StateNotifier<bool> {
-  GroupByServerState(super.initState);
+  GroupByServerState(super.state);
 
-  void enable(bool value) {
+  Future<void> update(bool value) async {
     state = value;
-    Settings.download_group_by_server.save(value);
+    await Settings.download_group_by_server.save(value);
   }
 }

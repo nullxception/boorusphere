@@ -30,7 +30,7 @@ class DownloadsPage extends ConsumerWidget {
                   case 'group-by-server':
                     ref
                         .read(groupByServerProvider.notifier)
-                        .enable(!groupByServer);
+                        .update(!groupByServer);
                     break;
                   default:
                     break;

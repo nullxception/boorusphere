@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../entity/server_data.dart';
-import '../../utils/settings.dart';
+import '../settings.dart';
 
 final serverActiveProvider =
     StateNotifierProvider<ServerActiveState, ServerData>((ref) {
-  final fromSettings = Settings.server_active.read(or: ServerData.empty);
-  return ServerActiveState(fromSettings);
+  final saved = Settings.server_active.read(or: ServerData.empty);
+  return ServerActiveState(saved);
 });
 
 class ServerActiveState extends StateNotifier<ServerData> {
-  ServerActiveState(super.initData);
+  ServerActiveState(super.state);
 
-  Future<void> updateWith(ServerData data) async {
+  Future<void> update(ServerData data) async {
     state = data;
     await Settings.server_active.save(data);
   }

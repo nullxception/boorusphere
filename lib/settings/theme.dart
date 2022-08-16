@@ -1,48 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/settings.dart';
+import 'settings.dart';
 
 final themeModeProvider =
     StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
-  final fromSettings = Settings.theme_mode.read(or: ThemeMode.system.index);
-  return ThemeModeState(ThemeMode.values[fromSettings]);
+  final saved = Settings.theme_mode.read(or: ThemeMode.system.index);
+  return ThemeModeState(ThemeMode.values[saved]);
 });
 
 final darkerThemeProvider =
     StateNotifierProvider<DarkerThemeState, bool>((ref) {
-  final fromSettings = Settings.ui_theme_darker.read(or: false);
-  return DarkerThemeState(fromSettings);
+  final saved = Settings.ui_theme_darker.read(or: false);
+  return DarkerThemeState(saved);
 });
 
 class ThemeModeState extends StateNotifier<ThemeMode> {
-  ThemeModeState(super.initState);
+  ThemeModeState(super.state);
 
-  void setMode({required ThemeMode mode}) {
+  Future<void> update(ThemeMode mode) async {
     state = mode;
-    Settings.theme_mode.save(mode.index);
+    await Settings.theme_mode.save(mode.index);
   }
 
-  void cycleTheme() {
+  Future<ThemeMode> cycle() async {
     switch (state) {
       case ThemeMode.dark:
-        setMode(mode: ThemeMode.light);
+        await update(ThemeMode.light);
         break;
       case ThemeMode.light:
-        setMode(mode: ThemeMode.system);
+        await update(ThemeMode.system);
         break;
       default:
-        setMode(mode: ThemeMode.dark);
+        await update(ThemeMode.dark);
         break;
     }
+    return state;
   }
 }
 
 class DarkerThemeState extends StateNotifier<bool> {
-  DarkerThemeState(super.initState);
+  DarkerThemeState(super.state);
 
-  void enable(bool value) {
+  Future<void> update(bool value) async {
     state = value;
-    Settings.ui_theme_darker.save(value);
+    await Settings.ui_theme_darker.save(value);
   }
 }

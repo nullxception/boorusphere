@@ -1,17 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/settings.dart';
+import 'settings.dart';
 
 final gridProvider = StateNotifierProvider<GridState, int>((ref) {
-  final fromSettings = Settings.timeline_grid_number.read(or: 0);
-  return GridState(fromSettings);
+  final saved = Settings.timeline_grid_number.read(or: 0);
+  return GridState(saved);
 });
 
 class GridState extends StateNotifier<int> {
-  GridState(super.initState);
+  GridState(super.state);
 
-  void rotate() {
+  Future<int> cycle() async {
     state = state < 2 ? state + 1 : 0;
-    Settings.timeline_grid_number.save(state);
+    await Settings.timeline_grid_number.save(state);
+    return state;
   }
 }

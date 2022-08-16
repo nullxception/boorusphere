@@ -1,17 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/settings.dart';
+import 'settings.dart';
 
 final safeModeProvider = StateNotifierProvider<SafeModeState, bool>((ref) {
-  final fromSettings = Settings.server_safe_mode.read(or: true);
-  return SafeModeState(fromSettings);
+  final saved = Settings.server_safe_mode.read(or: true);
+  return SafeModeState(saved);
 });
 
 class SafeModeState extends StateNotifier<bool> {
-  SafeModeState(super.initData);
+  SafeModeState(super.state);
 
-  void enable(bool value) {
+  Future<void> update(bool value) async {
     state = value;
-    Settings.server_safe_mode.save(value);
+    await Settings.server_safe_mode.save(value);
   }
 }

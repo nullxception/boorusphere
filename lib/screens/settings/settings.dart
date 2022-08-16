@@ -77,7 +77,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               value: darkerTheme,
               onChanged: (value) {
-                ref.read(darkerThemeProvider.notifier).enable(value);
+                ref.read(darkerThemeProvider.notifier).update(value);
               },
             ),
           ],
@@ -93,7 +93,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               value: blurExplicitPost,
               onChanged: (value) {
-                ref.read(blurExplicitPostProvider.notifier).enable(value);
+                ref.read(blurExplicitPostProvider.notifier).update(value);
               },
             ),
             SwitchListTile(
@@ -105,7 +105,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               value: safeMode,
               onChanged: (value) {
-                ref.read(safeModeProvider.notifier).enable(value);
+                ref.read(safeModeProvider.notifier).update(value);
               },
             ),
           ],
@@ -137,7 +137,9 @@ class _SettingsContent extends HookConsumerWidget {
                   },
                 ),
                 onChanged: (value) {
-                  ref.read(serverPostLimitProvider.notifier).save(value as int);
+                  ref
+                      .read(serverPostLimitProvider.notifier)
+                      .update(value as int);
                 },
               ),
             ),
