@@ -35,7 +35,6 @@ class BlockedTagsSource extends StateNotifier<Map<int, String>> {
     for (var tag in values) {
       await push(tag);
     }
-    _refresh();
   }
 
   static Box get _storage => Hive.box('blockedTags');
