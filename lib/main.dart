@@ -23,7 +23,6 @@ import 'services/app_theme/app_theme.dart';
 import 'settings/theme.dart';
 import 'source/changelog.dart';
 import 'source/device_info.dart';
-import 'widgets/bouncing_scroll.dart';
 
 class Boorusphere extends HookConsumerWidget {
   Boorusphere({super.key});
@@ -136,10 +135,6 @@ class Boorusphere extends HookConsumerWidget {
           routeInformationProvider: _route.routeInformationProvider,
           routeInformationParser: _route.routeInformationParser,
           routerDelegate: _route.routerDelegate,
-          builder: (context, widget) => ScrollConfiguration(
-            behavior: const BouncingScrollBehavior(),
-            child: widget ?? const SizedBox.shrink(),
-          ),
         );
       },
     );
