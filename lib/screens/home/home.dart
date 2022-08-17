@@ -31,7 +31,7 @@ class HomePage extends HookConsumerWidget {
     final atHomeScreen = !drawerFocused.value && !searchBar.isOpen;
     final isMounted = useIsMounted();
     final allowPop = useState(false);
-    const maybePopTimeout = Duration(seconds: 2);
+    const maybePopTimeout = Duration(seconds: 1);
     final maybePopTimer = useMemoized(
       () => RestartableTimer(maybePopTimeout, () {
         if (isMounted()) allowPop.value = false;
