@@ -16,14 +16,14 @@ import '../../source/settings/grid.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../post/post.dart';
 
-class SliverThumbnails extends HookConsumerWidget {
-  const SliverThumbnails({
+class ThumbnailsView extends HookConsumerWidget {
+  const ThumbnailsView({
     super.key,
-    required this.autoScrollController,
+    required this.scrollController,
     this.onTap,
   });
 
-  final AutoScrollController autoScrollController;
+  final AutoScrollController scrollController;
   final Function(int index)? onTap;
 
   @override
@@ -34,21 +34,21 @@ class SliverThumbnails extends HookConsumerWidget {
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
     final autoScrollTo = useCallback<Function(int)>((dest) {
-      if (autoScrollController.isAutoScrolling) return;
-      if (autoScrollController.isIndexStateInLayoutRange(dest)) {
-        autoScrollController.scrollToIndex(
+      if (scrollController.isAutoScrolling) return;
+      if (scrollController.isIndexStateInLayoutRange(dest)) {
+        scrollController.scrollToIndex(
           dest,
           duration: const Duration(milliseconds: 16),
           preferPosition: AutoScrollPosition.middle,
         );
       } else {
-        autoScrollController
+        scrollController
             .scrollToIndex(
               dest,
               duration: const Duration(milliseconds: 800),
               preferPosition: AutoScrollPosition.middle,
             )
-            .whenComplete(() => autoScrollController.highlight(dest,
+            .whenComplete(() => scrollController.highlight(dest,
                 highlightDuration: const Duration(milliseconds: 150)));
       }
     }, []);
@@ -63,7 +63,7 @@ class SliverThumbnails extends HookConsumerWidget {
         final post = pageData.posts[index];
         return AutoScrollTag(
           key: ValueKey(index),
-          controller: autoScrollController,
+          controller: scrollController,
           index: index,
           highlightColor: context.theme.colorScheme.surfaceTint,
           child: Card(
@@ -76,7 +76,7 @@ class SliverThumbnails extends HookConsumerWidget {
             child: GestureDetector(
               child: Hero(
                 tag: post.id,
-                child: Thumbnail(post: post),
+                child: _Thumbnail(post: post),
                 flightShuttleBuilder: (flightContext, animation,
                     flightDirection, fromHeroContext, toHeroContext) {
                   final Hero toHero = toHeroContext.widget as Hero;
@@ -116,8 +116,8 @@ class SliverThumbnails extends HookConsumerWidget {
   }
 }
 
-class Thumbnail extends HookConsumerWidget {
-  const Thumbnail({super.key, required this.post});
+class _Thumbnail extends HookConsumerWidget {
+  const _Thumbnail({required this.post});
   final Post post;
 
   FilterQuality _thumbnailQuality(int gridExtra) {
