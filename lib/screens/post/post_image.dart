@@ -170,7 +170,9 @@ class PostImageStatusView extends StatelessWidget {
       children: [
         child,
         Positioned(
-          bottom: context.mediaQuery.padding.bottom,
+          bottom: context.mediaQuery.viewInsets.bottom +
+              kBottomNavigationBarHeight +
+              32,
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
             child: isFailed

@@ -36,77 +36,87 @@ class PostPage extends HookConsumerWidget {
     final isVideo = post.contentType == PostType.video;
     final totalPost = posts.length;
 
-    return Theme(
-      data: ref.read(appThemeProvider).data.night,
+    return WillPopScope(
+      onWillPop: () async {
+        context.navigator.pop(page.value);
+        return false;
+      },
       child: Scaffold(
         backgroundColor: Colors.black,
-        extendBodyBehindAppBar: true,
-        extendBody: true,
-        appBar: AppbarVisibility(
-          controller: appbarAnimController,
-          visible: !fullscreen,
-          child: _PostAppBar(
-            subtitle: post.tags.join(' '),
-            title: pageState.isLoading
-                ? '#${page.value + 1} of (loading...)'
-                : '#${page.value + 1} of ${posts.length}',
-          ),
-        ),
-        body: WillPopScope(
-          onWillPop: () async {
-            context.navigator.pop(page.value);
-            return false;
-          },
-          child: StyledOverlayRegion(
-            nightMode: true,
-            child: Padding(
-              // android back gesture is not ignored by PageView
-              // add tiny padding to avoid it
-              padding: const EdgeInsets.symmetric(horizontal: 1),
-              child: ExtendedImageGesturePageView.builder(
-                controller: pageController,
-                onPageChanged: (index) {
-                  page.value = index;
-                  final offset = index + 1;
-                  final threshold = totalPost / 100 * (100 - loadMoreThreshold);
-                  if (offset + threshold > totalPost) {
-                    pageData.loadMore();
-                  }
-                },
-                itemCount: totalPost,
-                itemBuilder: (_, index) {
-                  final post = posts[index];
-                  final Widget widget;
-                  switch (post.contentType) {
-                    case PostType.photo:
-                      widget = PostImageDisplay(
-                        post: post,
-                        isFromHome: index == beginPage,
-                      );
-                      break;
-                    case PostType.video:
-                      widget = PostVideoDisplay(post: post);
-                      break;
-                    default:
-                      widget = PostErrorDisplay(post: post);
-                      break;
-                  }
-                  return HeroMode(
-                    enabled: index == page.value,
-                    child: widget,
-                  );
-                },
+        body: StyledOverlayRegion(
+          nightMode: true,
+          theme: ref.read(appThemeProvider).data.night,
+          child: Stack(
+            children: [
+              Padding(
+                // android back gesture is not ignored by PageView
+                // add tiny padding to avoid it
+                padding: const EdgeInsets.symmetric(horizontal: 1),
+                child: ExtendedImageGesturePageView.builder(
+                  controller: pageController,
+                  onPageChanged: (index) {
+                    page.value = index;
+                    final offset = index + 1;
+                    final threshold =
+                        totalPost / 100 * (100 - loadMoreThreshold);
+                    if (offset + threshold > totalPost) {
+                      pageData.loadMore();
+                    }
+                  },
+                  itemCount: totalPost,
+                  itemBuilder: (_, index) {
+                    final post = posts[index];
+                    final Widget widget;
+                    switch (post.contentType) {
+                      case PostType.photo:
+                        widget = PostImageDisplay(
+                          post: post,
+                          isFromHome: index == beginPage,
+                        );
+                        break;
+                      case PostType.video:
+                        widget = PostVideoDisplay(post: post);
+                        break;
+                      default:
+                        widget = PostErrorDisplay(post: post);
+                        break;
+                    }
+                    return HeroMode(
+                      enabled: index == page.value,
+                      child: widget,
+                    );
+                  },
+                ),
               ),
-            ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: AppbarVisibility(
+                  controller: appbarAnimController,
+                  visible: !fullscreen,
+                  child: _PostAppBar(
+                    subtitle: post.tags.join(' '),
+                    title: pageState.isLoading
+                        ? '#${page.value + 1} of (loading...)'
+                        : '#${page.value + 1} of ${posts.length}',
+                  ),
+                ),
+              ),
+              if (!isVideo)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: BottomBarVisibility(
+                    controller: appbarAnimController,
+                    visible: !fullscreen,
+                    child: PostToolbox(post),
+                  ),
+                ),
+            ],
           ),
         ),
-        bottomNavigationBar: !isVideo
-            ? BottomBarVisibility(
-                controller: appbarAnimController,
-                visible: !fullscreen,
-                child: PostToolbox(post),
-              )
-            : null,
       ),
     );
   }
