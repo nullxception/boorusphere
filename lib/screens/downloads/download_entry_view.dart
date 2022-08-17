@@ -6,7 +6,7 @@ import 'package:separated_row/separated_row.dart';
 import '../../entity/download_entry.dart';
 import '../../entity/download_status.dart';
 import '../../services/download.dart';
-import '../../settings/download/group_by_server.dart';
+import '../../source/settings/download/group_by_server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../utils/extensions/string.dart';

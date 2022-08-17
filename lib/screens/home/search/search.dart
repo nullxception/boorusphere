@@ -6,10 +6,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/page_option.dart';
-import '../../../settings/grid.dart';
-import '../../../settings/server/active.dart';
 import '../../../source/page.dart';
 import '../../../source/search_history.dart';
+import '../../../source/settings/grid.dart';
+import '../../../source/settings/server/active.dart';
 import '../../../source/suggestion.dart';
 import '../../../utils/extensions/buildcontext.dart';
 import '../../../utils/extensions/string.dart';

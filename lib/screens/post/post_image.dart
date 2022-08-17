@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/post.dart';
 import '../../services/fullscreen.dart';
-import '../../settings/blur_explicit_post.dart';
+import '../../source/settings/blur_explicit_post.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import 'post_explicit_warning.dart';

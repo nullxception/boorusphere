@@ -7,10 +7,10 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../entity/app_version.dart';
 import '../../entity/page_option.dart';
-import '../../settings/server/active.dart';
-import '../../settings/theme.dart';
 import '../../source/page.dart';
 import '../../source/server.dart';
+import '../../source/settings/server/active.dart';
+import '../../source/settings/theme.dart';
 import '../../source/version.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';

@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../entity/post.dart';
-import '../../settings/blur_explicit_post.dart';
+import '../../source/settings/blur_explicit_post.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
 import 'post_placeholder_image.dart';

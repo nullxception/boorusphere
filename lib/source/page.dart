@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../settings/safe_mode.dart';
-import '../../settings/server/post_limit.dart';
 import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
 import '../entity/page_option.dart';
@@ -12,9 +10,11 @@ import '../entity/post.dart';
 import '../entity/server_data.dart';
 import '../entity/sphere_exception.dart';
 import '../services/http.dart';
-import '../settings/server/active.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
+import 'settings/safe_mode.dart';
+import 'settings/server/active.dart';
+import 'settings/server/post_limit.dart';
 
 final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption());

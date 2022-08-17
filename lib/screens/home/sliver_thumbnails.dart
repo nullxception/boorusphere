@@ -10,9 +10,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 import '../../../entity/post.dart';
-import '../../settings/blur_explicit_post.dart';
-import '../../settings/grid.dart';
 import '../../source/page.dart';
+import '../../source/settings/blur_explicit_post.dart';
+import '../../source/settings/grid.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../post/post.dart';
 

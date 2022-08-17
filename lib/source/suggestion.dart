@@ -8,8 +8,8 @@ import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
 import '../entity/server_data.dart';
 import '../services/http.dart';
-import '../settings/server/active.dart';
 import 'blocked_tags.dart';
+import 'settings/server/active.dart';
 
 final _dataSource = Provider(SuggestionSource.new);
 final suggestionFuture =

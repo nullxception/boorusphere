@@ -20,9 +20,9 @@ import 'screens/server/server_edit.dart';
 import 'screens/settings/settings.dart';
 import 'screens/tags_blocker/tags_blocker.dart';
 import 'services/app_theme/app_theme.dart';
-import 'settings/theme.dart';
 import 'source/changelog.dart';
 import 'source/device_info.dart';
+import 'source/settings/theme.dart';
 
 class Boorusphere extends HookConsumerWidget {
   Boorusphere({super.key});

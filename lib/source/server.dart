@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
 import '../entity/server_data.dart';
-import '../settings/server/active.dart';
 import '../utils/extensions/asyncvalue.dart';
+import 'settings/server/active.dart';
 
 final _defaultData = FutureProvider((ref) => ServerDataLoader.loadDefaults());
 

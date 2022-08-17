@@ -2,8 +2,8 @@ import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../entity/search_history.dart';
-import '../settings/server/active.dart';
 import '../utils/extensions/string.dart';
+import 'settings/server/active.dart';
 
 final searchHistoryProvider =
     StateNotifierProvider<SearchHistorySource, Map<int, SearchHistory>>((ref) {

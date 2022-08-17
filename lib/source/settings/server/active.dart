@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../entity/server_data.dart';
+import '../../../entity/server_data.dart';
 import '../settings.dart';
 
 final serverActiveProvider =

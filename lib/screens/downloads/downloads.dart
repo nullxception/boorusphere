@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/download_entry.dart';
 import '../../services/download.dart';
-import '../../settings/download/group_by_server.dart';
+import '../../source/settings/download/group_by_server.dart';
 import '../../widgets/expandable_group_list_view.dart';
 import '../../widgets/notice_card.dart';
 import 'download_entry_view.dart';

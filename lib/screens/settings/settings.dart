@@ -4,10 +4,10 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../hooks/markmayneedrebuild.dart';
-import '../../settings/blur_explicit_post.dart';
-import '../../settings/safe_mode.dart';
-import '../../settings/server/post_limit.dart';
-import '../../settings/theme.dart';
+import '../../source/settings/blur_explicit_post.dart';
+import '../../source/settings/safe_mode.dart';
+import '../../source/settings/server/post_limit.dart';
+import '../../source/settings/theme.dart';
 import '../../utils/download.dart';
 import '../../utils/extensions/buildcontext.dart';
 
