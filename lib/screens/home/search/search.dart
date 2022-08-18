@@ -34,29 +34,27 @@ class SearchableView extends HookConsumerWidget {
         CurvedAnimation(parent: animator, curve: Curves.easeInOutCubic);
 
     useEffect(() {
-      isOpen ? animator.forward(from: 0.4) : animator.reverse();
+      isOpen ? animator.forward() : animator.reverse();
     }, [isOpen]);
 
-    return SizedBox.expand(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          FadeTransition(
-            opacity: Tween<double>(
-              begin: 0,
-              end: 1,
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        FadeTransition(
+          opacity: Tween<double>(
+            begin: 0.5,
+            end: 1,
+          ).animate(animation),
+          child: SlideTransition(
+            position: Tween(
+              begin: const Offset(0, 1),
+              end: const Offset(0, 0),
             ).animate(animation),
-            child: SlideTransition(
-              position: Tween(
-                begin: const Offset(0, 1),
-                end: const Offset(0, 0),
-              ).animate(animation),
-              child: const _SearchSuggestion(),
-            ),
+            child: const _SearchSuggestion(),
           ),
-          _SearchBar(scrollController: scrollController),
-        ],
-      ),
+        ),
+        _SearchBar(scrollController: scrollController),
+      ],
     );
   }
 }
