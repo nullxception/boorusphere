@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:stringr/stringr.dart';
 
 part 'server_data.freezed.dart';
 part 'server_data.g.dart';
@@ -60,7 +59,10 @@ class ServerData with _$ServerData {
   }
 
   // Key used in hive box
-  String get key => '@${name.camelCase()}';
+  String get key {
+    final asKey = name.replaceAll(RegExp('[^A-Za-z0-9]'), '-');
+    return '@${asKey.toLowerCase()}';
+  }
 
   String get apiAddress => apiAddr.isEmpty ? homepage : apiAddr;
 
