@@ -17,7 +17,7 @@ import 'settings/server/active.dart';
 import 'settings/server/post_limit.dart';
 
 final pageDataProvider = Provider(PageDataSource.new);
-final pageOptionProvider = StateProvider((_) => const PageOption());
+final pageOptionProvider = StateProvider((_) => const PageOption(clear: true));
 final pageStateProvider = FutureProvider((ref) {
   ref.watch(serverActiveProvider);
   ref.watch(pageOptionProvider);
