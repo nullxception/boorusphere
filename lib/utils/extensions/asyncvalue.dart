@@ -5,6 +5,10 @@ extension AsyncValueExt<T> on AsyncValue<T> {
     return mapOrNull(data: (d) => d.value);
   }
 
+  bool get isData {
+    return maybeWhen(data: (data) => true, orElse: () => false);
+  }
+
   bool get isLoading {
     return maybeWhen(loading: () => true, orElse: () => false);
   }

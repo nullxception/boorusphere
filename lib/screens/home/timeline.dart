@@ -19,7 +19,7 @@ class TimelineView extends HookConsumerWidget {
       return AutoScrollController(axis: Axis.vertical);
     });
     final pageState = ref.watch(pageStateProvider);
-    final pageData = ref.watch(pageDataProvider);
+    final pageOption = ref.watch(pageOptionProvider);
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
@@ -42,33 +42,36 @@ class TimelineView extends HookConsumerWidget {
       }
     });
 
+    final isNewSearch = !pageState.isData && pageOption.clear;
+
     return Stack(
       alignment: Alignment.center,
       children: [
+        if (isNewSearch) const PageStatus(),
         CustomScrollView(
           controller: scrollController,
-          slivers: [
-            SliverSafeArea(
-              sliver: SliverPadding(
-                padding: const EdgeInsets.all(10),
-                sliver: ThumbnailsView(
-                  scrollController: scrollController,
-                  onTap: (index) {
-                    context.scaffoldMessenger.removeCurrentSnackBar();
-                  },
-                ),
-              ),
-            ),
-            if (pageData.posts.isNotEmpty)
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
-                ),
-                sliver: const SliverToBoxAdapter(child: PageStatus()),
-              )
-          ],
+          slivers: !isNewSearch
+              ? [
+                  SliverSafeArea(
+                    sliver: SliverPadding(
+                      padding: const EdgeInsets.all(10),
+                      sliver: ThumbnailsView(
+                        scrollController: scrollController,
+                        onTap: (index) {
+                          context.scaffoldMessenger.removeCurrentSnackBar();
+                        },
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
+                    ),
+                    sliver: const SliverToBoxAdapter(child: PageStatus()),
+                  ),
+                ]
+              : [],
         ),
-        if (pageData.posts.isEmpty) const PageStatus(),
         const _EdgeShadow(),
         SearchableView(scrollController: scrollController),
       ],
