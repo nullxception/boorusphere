@@ -24,26 +24,15 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     final selectedtag = useState(<String>[]);
     final pageQuery =
         ref.watch(pageOptionProvider.select((value) => value.query));
-    final fabController = useAnimationController(
-        duration: const Duration(milliseconds: 250), initialValue: 0);
-    final showFAB = useState(false);
 
     final onTagPressed = useCallback<void Function(String)>((tag) {
       if (!selectedtag.value.contains(tag)) {
-        // display FAB on first select
-        if (selectedtag.value.isEmpty) {
-          fabController.forward();
-        }
-        selectedtag.value.add(tag);
+        // update the state instead of the list to allow us listening to the
+        // length of list for FAB visibility
+        selectedtag.value = [...selectedtag.value, tag];
       } else {
-        selectedtag.value.remove(tag);
-        // display FAB on last removal
-        if (selectedtag.value.isEmpty) {
-          fabController.reverse();
-        }
+        selectedtag.value = selectedtag.value.where((it) => it != tag).toList();
       }
-
-      showFAB.value = selectedtag.value.isNotEmpty;
     }, []);
 
     return Scaffold(
@@ -202,7 +191,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
         icon: Icons.tag,
         backgroundColor: context.colorScheme.tertiary,
         foregroundColor: context.colorScheme.onTertiary,
-        visible: showFAB.value,
+        visible: selectedtag.value.isNotEmpty,
         children: [
           SpeedDialChild(
               child: const Icon(Icons.copy),
