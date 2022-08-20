@@ -73,22 +73,22 @@ class _Footer extends StatelessWidget {
         ListTile(
           title: const Text('Downloads'),
           leading: const Icon(Icons.cloud_download),
-          onTap: () => context.goNamed('downloads'),
+          onTap: () => context.router.push(const DownloadsRoute()),
         ),
         ListTile(
           title: const Text('Server'),
           leading: const Icon(Icons.public),
-          onTap: () => context.goNamed('servers'),
+          onTap: () => context.router.push(const ServerRoute()),
         ),
         ListTile(
           title: const Text('Tags Blocker'),
           leading: const Icon(Icons.block),
-          onTap: () => context.goNamed('tags-blocker'),
+          onTap: () => context.router.push(const TagsBlockerRoute()),
         ),
         ListTile(
           title: const Text('Settings'),
           leading: const Icon(Icons.settings),
-          onTap: () => context.goNamed('settings'),
+          onTap: () => context.router.push(const SettingsRoute()),
         ),
         const AppVersionTile(),
       ],
@@ -162,13 +162,13 @@ class AppVersionTile extends HookConsumerWidget {
             Icons.info_outline,
             color: data.isNewerThan(currentVer) ? Colors.pink.shade300 : null,
           ),
-          onTap: () => context.goNamed('about'),
+          onTap: () => context.router.push(const AboutRoute()),
         );
       },
       orElse: () => ListTile(
         title: Text('Boorusphere $currentVer'),
         leading: const Icon(Icons.info_outline),
-        onTap: () => context.goNamed('about'),
+        onTap: () => context.router.push(const AboutRoute()),
       ),
     );
   }

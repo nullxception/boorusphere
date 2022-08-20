@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +9,7 @@ import '../../services/download.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';
-import 'post_detail.dart';
+import '../app_router.dart';
 
 class PostToolbox extends HookConsumerWidget {
   const PostToolbox(this.post, {super.key});
@@ -68,10 +69,7 @@ class PostToolbox extends HookConsumerWidget {
           IconButton(
             padding: const EdgeInsets.all(16),
             icon: const Icon(Icons.info),
-            onPressed: () => context.navigator.push(
-              MaterialPageRoute(
-                  builder: (context) => PostDetailsPage(post: post)),
-            ),
+            onPressed: () => context.router.push(PostDetailsRoute(post: post)),
           ),
         ],
       ),

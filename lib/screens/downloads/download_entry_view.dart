@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +12,7 @@ import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../utils/extensions/string.dart';
 import '../../widgets/download_dialog.dart';
-import '../post/post_detail.dart';
+import '../app_router.dart';
 
 class DownloadEntryView extends ConsumerWidget {
   const DownloadEntryView({super.key, required this.entry});
@@ -152,10 +153,7 @@ class _EntryPopupMenu extends ConsumerWidget {
             downloader.clearEntry(id: entry.id);
             break;
           case 'show-detail':
-            context.navigator.push(
-              MaterialPageRoute(
-                  builder: (context) => PostDetailsPage(post: entry.post)),
-            );
+            context.router.push(PostDetailsRoute(post: entry.post));
             break;
           default:
             break;

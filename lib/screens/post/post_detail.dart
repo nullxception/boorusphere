@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -238,7 +239,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                 tags.addAll(selectedTags);
                 ref.read(pageOptionProvider.notifier).update(
                     (state) => PageOption(query: tags.join(' '), clear: true));
-                context.navigator.popUntil(ModalRoute.withName('/'));
+                context.router.popUntilRoot();
               }
             },
           ),
@@ -251,7 +252,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                 ref
                     .read(pageOptionProvider.notifier)
                     .update((state) => PageOption(query: tags, clear: true));
-                context.navigator.popUntil(ModalRoute.withName('/'));
+                context.router.popUntilRoot();
               }
             },
           ),

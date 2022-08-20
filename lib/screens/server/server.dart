@@ -1,10 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../widgets/favicon.dart';
 import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
+import '../app_router.dart';
 
 class ServerPage extends HookConsumerWidget {
   const ServerPage({super.key});
@@ -76,7 +77,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                     onSelected: (value) {
                       switch (value) {
                         case 'edit':
-                          context.goNamed('edit-server', extra: it);
+                          context.router.push(ServerEditorRoute(server: it));
                           break;
                         case 'remove':
                           if (serverData.length == 1) {
@@ -115,7 +116,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
               ListTile(
                 title: const Text('Add'),
                 leading: const Icon(Icons.add),
-                onTap: () => context.goNamed('add-server'),
+                onTap: () => context.router.push(ServerEditorRoute()),
               )
             ],
           ),

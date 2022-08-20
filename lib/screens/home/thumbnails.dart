@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,7 +15,7 @@ import '../../source/page.dart';
 import '../../source/settings/blur_explicit_post.dart';
 import '../../source/settings/grid.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../post/post.dart';
+import '../app_router.dart';
 
 class ThumbnailsView extends HookConsumerWidget {
   const ThumbnailsView({
@@ -33,7 +34,7 @@ class ThumbnailsView extends HookConsumerWidget {
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
-    final autoScrollTo = useCallback<Function(int)>((dest) {
+    final performAutoScroll = useCallback<Function(int)>((dest) {
       if (scrollController.isAutoScrolling) return;
       if (scrollController.isIndexStateInLayoutRange(dest)) {
         scrollController.scrollToIndex(
@@ -95,18 +96,14 @@ class ThumbnailsView extends HookConsumerWidget {
                   );
                 },
               ),
-              onTap: () async {
+              onTap: () {
                 onTap?.call(index);
-                final dest = await context.navigator.push(
-                  ChillMaterialRoute(
-                    builder: (context) {
-                      return PostPage(beginPage: index);
-                    },
+                context.router.push(
+                  PostRoute(
+                    beginPage: index,
+                    onReturned: performAutoScroll,
                   ),
                 );
-                if (dest is int) {
-                  autoScrollTo(dest);
-                }
               },
             ),
           ),
@@ -222,19 +219,4 @@ class _ThumbnailShimmer extends StatelessWidget {
       ),
     );
   }
-}
-
-class ChillMaterialRoute extends MaterialPageRoute {
-  ChillMaterialRoute({
-    required super.builder,
-    this.duration = const Duration(milliseconds: 400),
-  });
-
-  final Duration duration;
-
-  @override
-  Duration get transitionDuration => duration;
-
-  @override
-  Duration get reverseTransitionDuration => duration;
 }

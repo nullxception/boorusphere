@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../entity/app_version.dart';
+import '../../source/changelog.dart';
 import '../../source/version.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
+import '../app_router.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});
@@ -65,7 +67,14 @@ class AboutPage extends HookConsumerWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              context.push('/about/changelog/$data?git=1');
+                              context.router.push(
+                                ChangelogRoute(
+                                  option: ChangelogOption(
+                                    type: ChangelogType.git,
+                                    version: data,
+                                  ),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(elevation: 0),
                             child: const Text('View changes'),
@@ -101,7 +110,11 @@ class AboutPage extends HookConsumerWidget {
                 title: const Text('Changelog'),
                 leading: const Icon(Icons.list_alt_rounded),
                 onTap: () {
-                  context.pushNamed('changelog');
+                  context.router.push(
+                    ChangelogRoute(
+                      option: const ChangelogOption(type: ChangelogType.assets),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -113,7 +126,7 @@ class AboutPage extends HookConsumerWidget {
               ListTile(
                 title: const Text('Open source licenses'),
                 leading: const Icon(Icons.collections_bookmark),
-                onTap: () => context.goNamed('licenses'),
+                onTap: () => context.router.push(const LicensesRoute()),
               ),
             ],
           ),

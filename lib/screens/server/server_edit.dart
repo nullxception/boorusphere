@@ -1,7 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/server_data.dart';
@@ -163,7 +163,7 @@ class ServerEditorPage extends HookConsumerWidget {
                       } else {
                         serverDataNotifier.add(data: data);
                       }
-                      context.pop();
+                      context.router.pop();
                     },
                   ),
               ],

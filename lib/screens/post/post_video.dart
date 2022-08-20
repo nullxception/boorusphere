@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,7 +17,7 @@ import '../../source/settings/video_player.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';
-import 'post_detail.dart';
+import '../app_router.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 
@@ -302,14 +303,8 @@ class _Toolbox extends HookConsumerWidget {
                             IconButton(
                               padding: const EdgeInsets.all(16),
                               icon: const Icon(Icons.info),
-                              onPressed: () {
-                                context.navigator.push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PostDetailsPage(post: post),
-                                  ),
-                                );
-                              },
+                              onPressed: () => context.router
+                                  .push(PostDetailsRoute(post: post)),
                             ),
                             IconButton(
                               icon: Icon(

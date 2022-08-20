@@ -9,7 +9,6 @@ import '../../services/app_theme/app_theme.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/asyncvalue.dart';
-import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/styled_overlay_region.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
@@ -18,8 +17,11 @@ import 'post_toolbox.dart';
 import 'post_video.dart';
 
 class PostPage extends HookConsumerWidget {
-  const PostPage({super.key, required this.beginPage});
+  const PostPage({super.key, required this.beginPage, this.onReturned});
+
   final int beginPage;
+  final void Function(int)? onReturned;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
@@ -38,8 +40,8 @@ class PostPage extends HookConsumerWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        context.navigator.pop(page.value);
-        return false;
+        onReturned?.call(page.value);
+        return true;
       },
       child: Scaffold(
         backgroundColor: Colors.black,
