@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../entity/server_data.dart';
 import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
-import 'server_payloads.dart';
+import '../app_router.dart';
 
 class ServerDetails extends HookConsumerWidget {
   const ServerDetails({
@@ -86,19 +87,16 @@ class ServerDetails extends HookConsumerWidget {
                         style: context.theme.textTheme.titleMedium,
                       ),
                       ElevatedButton(
-                        onPressed: () async {
-                          final result =
-                              await context.navigator.push<ServerData>(
-                            MaterialPageRoute(
-                              builder: (context) => const ServerPayloadsPage(),
+                        onPressed: () {
+                          context.router.push(
+                            ServerPayloadsRoute(
+                              onReturned: (newData) {
+                                cSearchUrl.text = newData.searchUrl;
+                                cSuggestUrl.text = newData.tagSuggestionUrl;
+                                cPostUrl.text = newData.postUrl;
+                              },
                             ),
                           );
-
-                          if (result != null) {
-                            cSearchUrl.text = result.searchUrl;
-                            cSuggestUrl.text = result.tagSuggestionUrl;
-                            cPostUrl.text = result.postUrl;
-                          }
                         },
                         child: const Text('From Preset'),
                       ),

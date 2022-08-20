@@ -55,8 +55,12 @@ class _$AppRouter extends RootStackRouter {
           routeData: routeData, child: const ServerPage());
     },
     ServerPayloadsRoute.name: (routeData) {
+      final args = routeData.argsAs<ServerPayloadsRouteArgs>(
+          orElse: () => const ServerPayloadsRouteArgs());
       return MaterialPageX<dynamic>(
-          routeData: routeData, child: const ServerPayloadsPage());
+          routeData: routeData,
+          child:
+              ServerPayloadsPage(key: args.key, onReturned: args.onReturned));
     },
     TagsBlockerRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
@@ -200,11 +204,26 @@ class ServerRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ServerPayloadsPage]
-class ServerPayloadsRoute extends PageRouteInfo<void> {
-  const ServerPayloadsRoute()
-      : super(ServerPayloadsRoute.name, path: '/server-payloads-page');
+class ServerPayloadsRoute extends PageRouteInfo<ServerPayloadsRouteArgs> {
+  ServerPayloadsRoute({Key? key, void Function(ServerData)? onReturned})
+      : super(ServerPayloadsRoute.name,
+            path: '/server-payloads-page',
+            args: ServerPayloadsRouteArgs(key: key, onReturned: onReturned));
 
   static const String name = 'ServerPayloadsRoute';
+}
+
+class ServerPayloadsRouteArgs {
+  const ServerPayloadsRouteArgs({this.key, this.onReturned});
+
+  final Key? key;
+
+  final void Function(ServerData)? onReturned;
+
+  @override
+  String toString() {
+    return 'ServerPayloadsRouteArgs{key: $key, onReturned: $onReturned}';
+  }
 }
 
 /// generated route for
