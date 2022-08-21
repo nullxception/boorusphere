@@ -1,9 +1,12 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/post.dart';
+import '../entity/pixel_size.dart';
 import '../services/download.dart';
 import '../utils/extensions/buildcontext.dart';
+import '../utils/extensions/imageprovider.dart';
 import '../utils/extensions/string.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
@@ -40,8 +43,20 @@ class DownloaderDialog extends HookConsumerWidget {
             if (post.sampleFile.isNotEmpty)
               ListTile(
                 title: const Text('Sample'),
-                subtitle: Text(
-                    '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
+                subtitle: FutureBuilder<PixelSize>(
+                  future: post.contentType == PostType.photo &&
+                          !post.sampleSize.hasPixels
+                      ? ExtendedNetworkImageProvider(
+                          post.sampleFile,
+                          cache: true,
+                          headers: {'Referer': post.postUrl},
+                        ).resolvePixelSize()
+                      : Future.value(post.sampleSize),
+                  builder: (context, snapshot) {
+                    final size = snapshot.data ?? post.sampleSize;
+                    return Text('$size, ${post.sampleFile.fileExtension}');
+                  },
+                ),
                 leading: Icon(_getFileIcon(post.sampleFile)),
                 onTap: () {
                   onItemClick?.call('sample');

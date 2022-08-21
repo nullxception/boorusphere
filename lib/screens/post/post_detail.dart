@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,9 +9,11 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../entity/post.dart';
 import '../../entity/page_option.dart';
+import '../../entity/pixel_size.dart';
 import '../../source/blocked_tags.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/imageprovider.dart';
 import '../../utils/extensions/string.dart';
 import '../../widgets/styled_overlay_region.dart';
 import 'tag.dart';
@@ -63,10 +66,22 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
               if (post.sampleFile.isNotEmpty)
                 ListTile(
                   title: const Text('Sample file (displayed)'),
-                  subtitle: _LinkSubtitle(
-                    post.sampleFile,
-                    label:
-                        '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}',
+                  subtitle: FutureBuilder<PixelSize>(
+                    future: post.contentType == PostType.photo &&
+                            !post.sampleSize.hasPixels
+                        ? ExtendedNetworkImageProvider(
+                            post.sampleFile,
+                            cache: true,
+                            headers: {'Referer': post.postUrl},
+                          ).resolvePixelSize()
+                        : Future.value(post.sampleSize),
+                    builder: (context, snapshot) {
+                      final size = snapshot.data ?? post.sampleSize;
+                      return _LinkSubtitle(
+                        post.sampleFile,
+                        label: '$size, ${post.sampleFile.fileExtension}',
+                      );
+                    },
                   ),
                   trailing: _CopyButton(post.sampleFile),
                 ),
