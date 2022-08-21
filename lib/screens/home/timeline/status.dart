@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../source/page.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../widgets/exception_info.dart';
-import '../../widgets/notice_card.dart';
+import '../../../source/page.dart';
+import '../../../utils/extensions/buildcontext.dart';
+import '../../../widgets/exception_info.dart';
+import '../../../widgets/notice_card.dart';
 
-class PageStatus extends HookConsumerWidget {
-  const PageStatus({super.key});
+class TimelineStatus extends ConsumerWidget {
+  const TimelineStatus({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

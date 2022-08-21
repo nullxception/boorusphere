@@ -10,15 +10,15 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-import '../../../entity/post.dart';
-import '../../source/page.dart';
-import '../../source/settings/blur_explicit_post.dart';
-import '../../source/settings/grid.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../app_router.dart';
+import '../../../../entity/post.dart';
+import '../../../source/page.dart';
+import '../../../source/settings/blur_explicit_post.dart';
+import '../../../source/settings/grid.dart';
+import '../../../utils/extensions/buildcontext.dart';
+import '../../app_router.dart';
 
-class ThumbnailsView extends HookConsumerWidget {
-  const ThumbnailsView({
+class TimelineContent extends HookConsumerWidget {
+  const TimelineContent({
     super.key,
     required this.scrollController,
     this.onTap,
@@ -142,10 +142,10 @@ class _Thumbnail extends HookConsumerWidget {
         Widget widget;
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            widget = const _ThumbnailShimmer();
+            widget = const _Placeholder();
             break;
           case LoadState.failed:
-            widget = const Material(child: Icon(Icons.broken_image_outlined));
+            widget = const _Placeholder(isFailed: true);
             break;
           default:
             widget = blurExplicitPost && post.rating == PostRating.explicit
@@ -182,11 +182,17 @@ class _Thumbnail extends HookConsumerWidget {
   }
 }
 
-class _ThumbnailShimmer extends StatelessWidget {
-  const _ThumbnailShimmer();
+class _Placeholder extends StatelessWidget {
+  const _Placeholder({this.isFailed = false});
+
+  final bool isFailed;
 
   @override
   Widget build(BuildContext context) {
+    if (isFailed) {
+      return const Material(child: Icon(Icons.broken_image_outlined));
+    }
+
     final baseColor = context.isLightThemed
         ? context.colorScheme.background.desaturate(50).darken(2)
         : context.colorScheme.surface;

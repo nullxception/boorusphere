@@ -17,7 +17,7 @@ import '../../widgets/favicon.dart';
 import '../../widgets/styled_overlay_region.dart';
 import '../app_router.dart';
 import 'search/search.dart';
-import 'timeline.dart';
+import 'timeline/timeline.dart';
 
 part 'controller.dart';
 part 'drawer.dart';
@@ -82,7 +82,7 @@ class HomePage extends HookConsumerWidget {
                 context.scaffoldMessenger.hideCurrentSnackBar();
               }
             },
-            body: const TimelineView(),
+            body: const Timeline(),
           ),
         ),
       ),

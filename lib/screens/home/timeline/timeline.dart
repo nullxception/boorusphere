@@ -3,15 +3,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-import '../../source/page.dart';
-import '../../utils/extensions/asyncvalue.dart';
-import '../../utils/extensions/buildcontext.dart';
-import 'page_status.dart';
-import 'search/search.dart';
-import 'thumbnails.dart';
+import '../../../source/page.dart';
+import '../../../utils/extensions/asyncvalue.dart';
+import '../../../utils/extensions/buildcontext.dart';
+import '../search/search.dart';
+import 'content.dart';
+import 'status.dart';
 
-class TimelineView extends HookConsumerWidget {
-  const TimelineView({super.key});
+class Timeline extends HookConsumerWidget {
+  const Timeline({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,7 +47,7 @@ class TimelineView extends HookConsumerWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (isNewSearch) const PageStatus(),
+        if (isNewSearch) const TimelineStatus(),
         CustomScrollView(
           controller: scrollController,
           slivers: !isNewSearch
@@ -55,7 +55,7 @@ class TimelineView extends HookConsumerWidget {
                   SliverSafeArea(
                     sliver: SliverPadding(
                       padding: const EdgeInsets.all(10),
-                      sliver: ThumbnailsView(
+                      sliver: TimelineContent(
                         scrollController: scrollController,
                         onTap: (index) {
                           context.scaffoldMessenger.removeCurrentSnackBar();
@@ -67,7 +67,7 @@ class TimelineView extends HookConsumerWidget {
                     padding: EdgeInsets.only(
                       bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
                     ),
-                    sliver: const SliverToBoxAdapter(child: PageStatus()),
+                    sliver: const SliverToBoxAdapter(child: TimelineStatus()),
                   ),
                 ]
               : [],
