@@ -87,9 +87,9 @@ class PostVideoDisplay extends HookConsumerWidget {
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
 
     final heroKey = useMemoized(GlobalKey.new);
-    final asHero = useCallback<Widget Function(Widget)>((child) {
+    Widget asHero(Widget child) {
       return Hero(key: heroKey, tag: post.id, child: child);
-    }, []);
+    }
 
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
@@ -203,11 +203,11 @@ class _Toolbox extends HookConsumerWidget {
       }
     });
 
-    final autoHideToolbox = useCallback(() {
+    autoHideToolbox() {
       Future.delayed(const Duration(seconds: 2), () {
         if (isMounted()) showToolbox.value = false;
       });
-    }, [key]);
+    }
 
     useEffect(() {
       controllerAsync?.whenData((it) {

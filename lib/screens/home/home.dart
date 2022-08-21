@@ -38,10 +38,10 @@ class HomePage extends HookConsumerWidget {
         if (isMounted()) allowPop.value = false;
       }),
     );
-    final clearMaybePop = useCallback(() {
+    clearMaybePop() {
       allowPop.value = false;
       maybePopTimer.cancel();
-    }, []);
+    }
 
     return Scaffold(
       extendBody: true,

@@ -28,7 +28,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     final pageQuery =
         ref.watch(pageOptionProvider.select((value) => value.query));
 
-    final onTagPressed = useCallback<void Function(String)>((tag) {
+    onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
         // update the state instead of the list to allow us listening to the
         // length of list for FAB visibility
@@ -36,7 +36,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
       } else {
         selectedtag.value = selectedtag.value.where((it) => it != tag).toList();
       }
-    }, []);
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Details')),

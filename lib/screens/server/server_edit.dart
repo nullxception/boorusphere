@@ -31,13 +31,13 @@ class ServerEditorPage extends HookConsumerWidget {
     final scanApiAddrText =
         useTextEditingController(text: isEditing ? server.apiAddr : 'https://');
 
-    final validateAddress = useCallback((value) {
+    validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
         return 'not a valid address';
       }
 
       return null;
-    }, []);
+    }
 
     return Scaffold(
       appBar: AppBar(
