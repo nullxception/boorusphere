@@ -36,153 +36,103 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     }, []);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail')),
+      appBar: AppBar(title: const Text('Details')),
       body: StyledOverlayRegion(
         child: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.only(bottom: 72),
             children: [
               ListTile(
                 title: const Text('Rating'),
-                subtitle: Text(post.rating.name.capitalized),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(post.rating.name.capitalized),
+                ),
               ),
               if (post.postUrl.isNotEmpty)
                 ListTile(
                   title: const Text('Location'),
-                  subtitle: _LinkText(post.postUrl),
+                  subtitle: _LinkSubtitle(post.postUrl),
                   trailing: _CopyButton(post.postUrl),
                 ),
               if (post.source.isNotEmpty)
                 ListTile(
                   title: const Text('Source'),
-                  subtitle: _LinkText(post.source),
+                  subtitle: _LinkSubtitle(post.source),
                   trailing: _CopyButton(post.source),
                 ),
               if (post.sampleFile.isNotEmpty)
                 ListTile(
                   title: const Text('Sample file (displayed)'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8, bottom: 8),
-                        child: Text(
-                            '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}'),
-                      ),
-                      _LinkText(post.sampleFile),
-                    ],
+                  subtitle: _LinkSubtitle(
+                    post.sampleFile,
+                    label:
+                        '${post.sampleSize.toString()}, ${post.sampleFile.fileExtension}',
                   ),
                   trailing: _CopyButton(post.sampleFile),
                 ),
               ListTile(
                 title: const Text('Original file'),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8, bottom: 8),
-                      child: Text(
-                          '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
-                    ),
-                    _LinkText(post.originalFile),
-                  ],
+                subtitle: _LinkSubtitle(
+                  post.originalFile,
+                  label:
+                      '${post.originalSize.toString()}, ${post.originalFile.fileExtension}',
                 ),
                 trailing: _CopyButton(post.originalFile),
               ),
-              const ListTile(title: Text('Tags')),
-              if (post.hasCategorizedTags && post.tagsMeta.isNotEmpty)
-                ListTile(
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ListTile(
+                title: const Text('Tags'),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 72),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text('Meta'),
-                      ),
-                      _TagsView(
-                        tags: post.tagsMeta,
-                        isSelected: selectedtag.value.contains,
-                        onSelected: onTagPressed,
-                      ),
+                      if (!post.hasCategorizedTags)
+                        _TagsView(
+                          tags: post.tags,
+                          isSelected: selectedtag.value.contains,
+                          onSelected: onTagPressed,
+                        )
+                      else ...[
+                        if (post.tagsMeta.isNotEmpty)
+                          _TagsView(
+                            label: 'Meta',
+                            tags: post.tagsMeta,
+                            isSelected: selectedtag.value.contains,
+                            onSelected: onTagPressed,
+                          ),
+                        if (post.tagsArtist.isNotEmpty)
+                          _TagsView(
+                            label: 'Artist',
+                            tags: post.tagsArtist,
+                            isSelected: selectedtag.value.contains,
+                            onSelected: onTagPressed,
+                          ),
+                        if (post.tagsCharacter.isNotEmpty)
+                          _TagsView(
+                            label: 'Character',
+                            tags: post.tagsCharacter,
+                            isSelected: selectedtag.value.contains,
+                            onSelected: onTagPressed,
+                          ),
+                        if (post.tagsCopyright.isNotEmpty)
+                          _TagsView(
+                            label: 'Copyright',
+                            tags: post.tagsCopyright,
+                            isSelected: selectedtag.value.contains,
+                            onSelected: onTagPressed,
+                          ),
+                        if (post.tagsGeneral.isNotEmpty)
+                          _TagsView(
+                            label: 'General',
+                            tags: post.tagsGeneral,
+                            isSelected: selectedtag.value.contains,
+                            onSelected: onTagPressed,
+                          ),
+                      ],
                     ],
                   ),
                 ),
-              if (post.hasCategorizedTags && post.tagsArtist.isNotEmpty)
-                ListTile(
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text('Artist'),
-                      ),
-                      _TagsView(
-                        tags: post.tagsArtist,
-                        isSelected: selectedtag.value.contains,
-                        onSelected: onTagPressed,
-                      ),
-                    ],
-                  ),
-                ),
-              if (post.hasCategorizedTags && post.tagsCharacter.isNotEmpty)
-                ListTile(
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text('Character'),
-                      ),
-                      _TagsView(
-                        tags: post.tagsCharacter,
-                        isSelected: selectedtag.value.contains,
-                        onSelected: onTagPressed,
-                      ),
-                    ],
-                  ),
-                ),
-              if (post.hasCategorizedTags && post.tagsCopyright.isNotEmpty)
-                ListTile(
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text('Copyright'),
-                      ),
-                      _TagsView(
-                        tags: post.tagsCopyright,
-                        isSelected: selectedtag.value.contains,
-                        onSelected: onTagPressed,
-                      ),
-                    ],
-                  ),
-                ),
-              if (post.hasCategorizedTags && post.tagsGeneral.isNotEmpty)
-                ListTile(
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text('General'),
-                      ),
-                      _TagsView(
-                        tags: post.tagsGeneral,
-                        isSelected: selectedtag.value.contains,
-                        onSelected: onTagPressed,
-                      ),
-                    ],
-                  ),
-                ),
-              if (!post.hasCategorizedTags)
-                ListTile(
-                  subtitle: _TagsView(
-                    tags: post.tags,
-                    isSelected: selectedtag.value.contains,
-                    onSelected: onTagPressed,
-                  ),
-                ),
+              ),
             ],
           ),
         ),
@@ -256,40 +206,74 @@ class _TagsView extends StatelessWidget {
     required this.tags,
     this.isSelected,
     this.onSelected,
+    this.label,
   });
+
   final List<String> tags;
   final bool Function(String tag)? isSelected;
   final void Function(String tag)? onSelected;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: tags
-          .map((tag) => Tag(
+    final labelText = label;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (labelText != null)
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(labelText),
+          ),
+        Wrap(
+          children: [
+            for (final tag in tags)
+              Tag(
                 tag: tag,
                 onPressed: () => onSelected?.call(tag),
                 active: () => isSelected?.call(tag) ?? false,
-              ))
-          .toList(),
+              )
+          ],
+        ),
+      ],
     );
   }
 }
 
-class _LinkText extends StatelessWidget {
-  const _LinkText(this.url);
+class _LinkSubtitle extends StatelessWidget {
+  const _LinkSubtitle(this.url, {this.label});
 
   final String url;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.zero,
+    final labelText = label;
+    return InkWell(
+      onTap: () => launchUrlString(url, mode: LaunchMode.externalApplication),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (labelText != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(labelText),
+            ),
+          DefaultTextStyle(
+            style: DefaultTextStyle.of(context).style.copyWith(
+                  color: context.colorScheme.primary,
+                ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                url,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
       ),
-      onPressed: () =>
-          launchUrlString(url, mode: LaunchMode.externalApplication),
-      child: Text(url),
     );
   }
 }
