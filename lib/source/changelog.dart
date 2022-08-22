@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../entity/app_version.dart';
 import '../entity/changelog_data.dart';
 import '../services/http.dart';
-import '../utils/retry_future.dart';
 import 'version.dart';
 
 final _dataSourceProvider = Provider(ChangelogDataSource.new);
@@ -55,10 +53,7 @@ class ChangelogDataSource {
 
   Future<String> _fetchFromGit() async {
     final client = ref.read(httpProvider);
-    final res = await retryFuture(
-      () => client.get(url).timeout(const Duration(seconds: 5)),
-      retryIf: (e) => e is SocketException || e is TimeoutException,
-    );
+    final res = await client.get(url);
     final data = res.data;
     return data is String && data.contains('## 1') ? data : '';
   }

@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 
 import '../../entity/server_data.dart';
 import '../../entity/server_payload.dart';
 import '../extensions/string.dart';
-import '../retry_future.dart';
 
 class ServerScanner {
   static Future<ServerPayload> _testPayload(
@@ -23,10 +21,7 @@ class ServerScanner {
             .replaceAll('{post-limit}', '3')
             .replaceAll('{page-id}', '1')
             .replaceAll('{post-id}', '100');
-        final res = await retryFuture(
-          () => client.get('$host/$test').timeout(const Duration(seconds: 5)),
-          retryIf: (e) => e is SocketException || e is TimeoutException,
-        );
+        final res = await client.get('$host/$test');
 
         if (res.statusCode != 200) return '';
         if (type == ServerPayloadType.post) return query;

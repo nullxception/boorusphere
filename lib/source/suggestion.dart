@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/extensions/string.dart';
-import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
 import '../entity/server_data.dart';
 import '../services/http.dart';
@@ -38,10 +36,7 @@ class SuggestionSource {
     final queries = query.toWordList();
     final url = server.suggestionUrlOf(queries.isEmpty ? '' : queries.last);
     try {
-      final res = await retryFuture(
-        () => client.get(url).timeout(const Duration(seconds: 5)),
-        retryIf: (e) => e is SocketException || e is TimeoutException,
-      );
+      final res = await client.get(url);
 
       return ServerResponseParser.parseTagSuggestion(res, query)
           .where((it) => !blockedTags.values.contains(it))

@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/retry_future.dart';
 import '../../utils/server/response_parser.dart';
 import '../entity/page_option.dart';
 import '../entity/post.dart';
@@ -68,10 +66,7 @@ class PageDataSource {
         safeMode,
         postLimit,
       );
-      final res = await retryFuture(
-        () => client.get(url).timeout(const Duration(seconds: 5)),
-        retryIf: (e) => e is SocketException || e is TimeoutException,
-      );
+      final res = await client.get(url);
 
       _page++;
       final newPosts = ServerResponseParser.parsePage(serverActive, res)
