@@ -10,6 +10,7 @@ import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/string.dart';
 import '../../utils/server/scanner.dart';
+import '../../widgets/exception_info.dart';
 import 'server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {
@@ -25,7 +26,7 @@ class ServerEditorPage extends HookConsumerWidget {
     final data = useState(server);
     final isLoading = useState(false);
     final useApiAddr = useState(false);
-    final errorMessage = useState('');
+    final error = useState<Object?>(null);
     final scanHomepageText = useTextEditingController(
         text: isEditing ? server.homepage : 'https://');
     final scanApiAddrText =
@@ -103,7 +104,7 @@ class ServerEditorPage extends HookConsumerWidget {
                             FocusScope.of(context).unfocus();
                             data.value = ServerData.empty;
                             isLoading.value = true;
-                            errorMessage.value = '';
+                            error.value = null;
                             final homeAddr = scanHomepageText.text;
                             final apiAddr = useApiAddr.value
                                 ? scanApiAddrText.text
@@ -115,7 +116,7 @@ class ServerEditorPage extends HookConsumerWidget {
                                 apiAddr,
                               );
                             } catch (e) {
-                              errorMessage.value = e.toString();
+                              error.value = e;
                               data.value = ServerData.empty.copyWith(
                                 name: homeAddr.asUri.host,
                                 homepage: homeAddr,
@@ -140,14 +141,15 @@ class ServerEditorPage extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                if (errorMessage.value.isNotEmpty)
+                if (error.value != null)
                   Container(
                     margin: const EdgeInsets.only(top: 8),
                     color: context.colorScheme.error,
                     padding: const EdgeInsets.all(16),
-                    child: Text(
-                      errorMessage.value,
+                    child: ExceptionInfo(
+                      err: error.value,
                       style: TextStyle(color: context.colorScheme.onError),
+                      padding: EdgeInsets.zero,
                     ),
                   ),
                 if (data.value.name.isNotEmpty)
