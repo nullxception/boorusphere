@@ -27,7 +27,7 @@ class TimelineStatus extends ConsumerWidget {
               children: Column(
                 children: [
                   ExceptionInfo(
-                    exception: error,
+                    err: error,
                     stackTrace: stackTrace,
                   ),
                   Padding(

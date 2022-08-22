@@ -148,8 +148,8 @@ class _SearchSuggestion extends HookConsumerWidget {
                         ),
                         error: (ex, trace) => SliverPadding(
                           padding: const EdgeInsets.all(16),
-                          sliver: SliverToBoxAdapter(
-                              child: ExceptionInfo(exception: ex)),
+                          sliver:
+                              SliverToBoxAdapter(child: ExceptionInfo(err: ex)),
                         ),
                       ),
                     const SliverToBoxAdapter(
