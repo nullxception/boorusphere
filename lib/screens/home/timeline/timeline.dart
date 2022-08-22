@@ -47,7 +47,6 @@ class Timeline extends HookConsumerWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (isNewSearch) const TimelineStatus(),
         CustomScrollView(
           controller: scrollController,
           slivers: !isNewSearch
@@ -72,6 +71,7 @@ class Timeline extends HookConsumerWidget {
                 ]
               : [],
         ),
+        if (isNewSearch) const TimelineStatus(),
         const _EdgeShadow(),
         SearchableView(scrollController: scrollController),
       ],
