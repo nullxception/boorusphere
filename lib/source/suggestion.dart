@@ -39,7 +39,7 @@ class SuggestionSource {
     final url = server.suggestionUrlOf(queries.isEmpty ? '' : queries.last);
     try {
       final res = await retryFuture(
-        () => client.get(url.asUri).timeout(const Duration(seconds: 5)),
+        () => client.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
 

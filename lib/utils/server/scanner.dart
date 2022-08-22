@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import '../../entity/server_data.dart';
 import '../../entity/server_payload.dart';
@@ -10,7 +10,7 @@ import '../retry_future.dart';
 
 class ServerScanner {
   static Future<ServerPayload> _testPayload(
-    http.Client client,
+    Dio client,
     String host,
     List<String> queries,
     ServerPayloadType type,
@@ -24,17 +24,14 @@ class ServerScanner {
             .replaceAll('{page-id}', '1')
             .replaceAll('{post-id}', '100');
         final res = await retryFuture(
-          () => client
-              .get('$host/$test'.asUri)
-              .timeout(const Duration(seconds: 5)),
+          () => client.get('$host/$test').timeout(const Duration(seconds: 5)),
           retryIf: (e) => e is SocketException || e is TimeoutException,
         );
 
         if (res.statusCode != 200) return '';
         if (type == ServerPayloadType.post) return query;
-        final contentType = res.headers['content-type'] ?? '';
-
-        return contentType.contains('html') ? '' : query;
+        final contentType = res.headers['content-type'] ?? [];
+        return contentType.any((it) => it.contains('html')) ? '' : query;
       }),
     );
 
@@ -46,7 +43,7 @@ class ServerScanner {
   }
 
   static Future<ServerData> scan(
-    http.Client client,
+    Dio client,
     String homeUrl,
     String apiUrl,
   ) async {

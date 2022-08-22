@@ -1,13 +1,12 @@
 import 'dart:ffi';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
 
 import '../entity/app_version.dart';
 import '../services/http.dart';
-import '../utils/extensions/string.dart';
 
 final versionCurrentProvider = FutureProvider((ref) async {
   final pkgInfo = await PackageInfo.fromPlatform();
@@ -35,10 +34,11 @@ class VersionDataSource {
     }
   }
 
-  static Future<AppVersion> checkLatest(http.Client client) async {
-    final res = await client.get(pubspecUrl.asUri);
-    if (res.statusCode == 200) {
-      final version = loadYaml(res.body)['version'];
+  static Future<AppVersion> checkLatest(Dio client) async {
+    final res = await client.get(pubspecUrl);
+    final data = res.data;
+    if (res.statusCode == 200 && data is String) {
+      final version = loadYaml(data)['version'];
       if (version is String && version.contains('+')) {
         return AppVersion.fromString(version);
       }

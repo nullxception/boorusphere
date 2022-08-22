@@ -56,10 +56,11 @@ class ChangelogDataSource {
   Future<String> _fetchFromGit() async {
     final client = ref.read(httpProvider);
     final res = await retryFuture(
-      () => client.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
+      () => client.get(url).timeout(const Duration(seconds: 5)),
       retryIf: (e) => e is SocketException || e is TimeoutException,
     );
-    return res.body.contains('## 1') ? res.body : '';
+    final data = res.data;
+    return data is String && data.contains('## 1') ? data : '';
   }
 
   Future<String> from(ChangelogType type) async {

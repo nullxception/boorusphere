@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:xml2json/xml2json.dart';
 
 import '../../entity/post.dart';
@@ -10,11 +10,13 @@ import '../../entity/sphere_exception.dart';
 import '../extensions/map.dart';
 
 class ServerResponseParser {
-  static List<Post> parsePage(ServerData server, http.Response res) {
+  static List<Post> parsePage(ServerData server, Response res) {
+    final data = res.data;
+
     if (res.statusCode != 200) {
       throw SphereException(
           message: 'Cannot fetch page (HTTP ${res.statusCode})');
-    } else if (!res.body.contains(RegExp('https?'))) {
+    } else if (!data.toString().contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
       throw const SphereException(message: 'No result found');
     }
@@ -22,13 +24,13 @@ class ServerResponseParser {
     const cantParse = SphereException(message: 'Cannot parse result');
 
     List<dynamic> entries;
-    if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
-      entries = res.body.contains('@attributes')
-          ? jsonDecode(res.body)['post']
-          : jsonDecode(res.body);
-    } else if (res.body.contains('<?xml')) {
+    if (data is List) {
+      entries = res.data;
+    } else if (data is Map && data.keys.contains('post')) {
+      entries = data['post'];
+    } else if (data is String && data.contains('<?xml')) {
       final xjson = Xml2Json();
-      xjson.parse(res.body.replaceAll('\\', ''));
+      xjson.parse(data.replaceAll('\\', ''));
 
       final jsonObj = jsonDecode(xjson.toGData());
       if (!jsonObj.values.first.keys.contains('post')) {
@@ -128,7 +130,8 @@ class ServerResponseParser {
     return result;
   }
 
-  static List<String> parseTagSuggestion(http.Response res, String query) {
+  static List<String> parseTagSuggestion(Response res, String query) {
+    final data = res.data;
     if (res.statusCode != 200) {
       throw SphereException(
           message: 'Cannot fetch data (HTTP ${res.statusCode})');
@@ -138,20 +141,15 @@ class ServerResponseParser {
         SphereException(message: 'No tags that matches \'$query\'');
 
     final entries = [];
-    if (res.body.contains(RegExp('[a-z][\'"]s*:'))) {
-      final json = res.body.contains('@attributes')
-          ? jsonDecode(res.body)['tag']
-          : jsonDecode(res.body);
-      if (json is List) {
-        entries.addAll(json);
-      } else {
-        throw noTagsError;
-      }
-    } else if (res.body.isEmpty) {
+    if (data is List) {
+      entries.addAll(data);
+    } else if (data is Map && data.keys.contains('tag')) {
+      entries.addAll(data['tag']);
+    } else if (data.toString().isEmpty) {
       return [];
-    } else if (res.body.contains('<?xml')) {
+    } else if (data is String && data.contains('<?xml')) {
       final xjson = Xml2Json();
-      xjson.parse(res.body.replaceAll('\\', ''));
+      xjson.parse(data.replaceAll('\\', ''));
 
       final jsonObj = jsonDecode(xjson.toGData());
       if (!jsonObj.values.first.keys.contains('tag')) {

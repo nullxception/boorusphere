@@ -1,18 +1,18 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
-final httpProvider = Provider((ref) => SphereHttpClient(ref, http.Client()));
+final httpProvider = Provider((ref) {
+  final dio = Dio();
 
-class SphereHttpClient extends http.BaseClient {
-  SphereHttpClient(this.ref, this._mainClient);
+  dio.interceptors.add(HeadersInterceptor());
 
-  final Ref ref;
+  return dio;
+});
 
-  final http.Client _mainClient;
-
+class HeadersInterceptor extends Interceptor {
   @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
-    request.headers['Referer'] = request.url.toString();
-    return _mainClient.send(request);
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.headers['Referer'] = options.path;
+    return super.onRequest(options, handler);
   }
 }

@@ -69,7 +69,7 @@ class PageDataSource {
         postLimit,
       );
       final res = await retryFuture(
-        () => client.get(Uri.parse(url)).timeout(const Duration(seconds: 5)),
+        () => client.get(url).timeout(const Duration(seconds: 5)),
         retryIf: (e) => e is SocketException || e is TimeoutException,
       );
 
