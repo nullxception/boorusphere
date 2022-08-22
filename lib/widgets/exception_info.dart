@@ -13,6 +13,7 @@ class ExceptionInfo extends HookWidget {
     required this.err,
     this.stackTrace,
     this.textAlign = TextAlign.center,
+    this.style,
     this.crossAxisAlignment = CrossAxisAlignment.center,
   });
 
@@ -20,6 +21,7 @@ class ExceptionInfo extends HookWidget {
   final StackTrace? stackTrace;
   final TextAlign textAlign;
   final CrossAxisAlignment crossAxisAlignment;
+  final TextStyle? style;
 
   String get description {
     final e = err is DioError ? (err as DioError).error : err;
@@ -62,7 +64,10 @@ class ExceptionInfo extends HookWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16),
-            child: Text(description, textAlign: textAlign),
+            child: DefaultTextStyle(
+              style: style ?? DefaultTextStyle.of(context).style,
+              child: Text(description, textAlign: textAlign),
+            ),
           ),
           if (showTrace.value && stackTrace != null)
             Column(
