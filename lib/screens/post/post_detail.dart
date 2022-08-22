@@ -27,6 +27,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     final selectedtag = useState(<String>[]);
     final pageQuery =
         ref.watch(pageOptionProvider.select((value) => value.query));
+    final currentTags = pageQuery.toWordList();
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -36,6 +37,15 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
       } else {
         selectedtag.value = selectedtag.value.where((it) => it != tag).toList();
       }
+    }
+
+    updateSearch(Iterable<String> tags) {
+      final newQuery = Set.from(tags).join(' ');
+      if (newQuery.isEmpty) return;
+      ref.read(pageOptionProvider.notifier).update((state) {
+        return PageOption(query: newQuery, clear: true);
+      });
+      context.router.popUntilRoot();
     }
 
     return Scaffold(
@@ -187,27 +197,15 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
             child: const Icon(Icons.search),
             label: 'Add tag to current search',
             onTap: () {
-              final selectedTags = selectedtag.value;
-              if (selectedTags.isNotEmpty) {
-                final tags = Set<String>.from(pageQuery.toWordList());
-                tags.addAll(selectedTags);
-                ref.read(pageOptionProvider.notifier).update(
-                    (state) => PageOption(query: tags.join(' '), clear: true));
-                context.router.popUntilRoot();
-              }
+              if (selectedtag.value.isEmpty) return;
+              updateSearch([...pageQuery.toWordList(), ...selectedtag.value]);
             },
           ),
           SpeedDialChild(
             child: const Icon(Icons.search),
             label: 'Search tag',
             onTap: () {
-              final tags = selectedtag.value.join(' ');
-              if (tags.isNotEmpty) {
-                ref
-                    .read(pageOptionProvider.notifier)
-                    .update((state) => PageOption(query: tags, clear: true));
-                context.router.popUntilRoot();
-              }
+              updateSearch(selectedtag.value);
             },
           ),
         ],
