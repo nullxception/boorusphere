@@ -21,12 +21,18 @@ class ServerScanner {
             .replaceAll('{post-limit}', '3')
             .replaceAll('{page-id}', '1')
             .replaceAll('{post-id}', '100');
-        final res = await client.get('$host/$test');
+        try {
+          final res = await client.get(
+            '$host/$test',
+            options: Options(validateStatus: (it) => it == 200),
+          );
 
-        if (res.statusCode != 200) return '';
-        if (type == ServerPayloadType.post) return query;
-        final contentType = res.headers['content-type'] ?? [];
-        return contentType.any((it) => it.contains('html')) ? '' : query;
+          if (type == ServerPayloadType.post) return query;
+          final contentType = res.headers['content-type'] ?? [];
+          return contentType.any((it) => it.contains('html')) ? '' : query;
+        } on DioError {
+          return '';
+        }
       }),
     );
 
