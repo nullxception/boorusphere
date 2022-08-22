@@ -13,8 +13,7 @@ import '../entity/post.dart';
 import '../utils/download.dart';
 import '../utils/extensions/string.dart';
 
-final downloadProvider =
-    ChangeNotifierProvider.autoDispose(DownloadService.new);
+final downloadProvider = ChangeNotifierProvider(DownloadService.new);
 
 class DownloadService extends ChangeNotifier {
   DownloadService(this.ref) {
