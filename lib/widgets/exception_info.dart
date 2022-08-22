@@ -10,18 +10,20 @@ import '../entity/sphere_exception.dart';
 class ExceptionInfo extends HookWidget {
   const ExceptionInfo({
     super.key,
-    required this.err,
+    this.err,
     this.stackTrace,
     this.textAlign = TextAlign.center,
     this.style,
     this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.padding = const EdgeInsets.symmetric(vertical: 16),
   });
 
-  final Object err;
+  final Object? err;
   final StackTrace? stackTrace;
   final TextAlign textAlign;
   final CrossAxisAlignment crossAxisAlignment;
   final TextStyle? style;
+  final EdgeInsets padding;
 
   String get description {
     final e = err is DioError ? (err as DioError).error : err;
@@ -57,30 +59,30 @@ class ExceptionInfo extends HookWidget {
       showTrace.value = !showTrace.value;
     }
 
-    return InkWell(
-      onTap: traceable ? toggleStacktrace : null,
-      child: Column(
-        crossAxisAlignment: crossAxisAlignment,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: DefaultTextStyle(
+    return Padding(
+      padding: padding,
+      child: InkWell(
+        onTap: traceable ? toggleStacktrace : null,
+        child: Column(
+          crossAxisAlignment: crossAxisAlignment,
+          children: [
+            DefaultTextStyle(
               style: style ?? DefaultTextStyle.of(context).style,
               child: Text(description, textAlign: textAlign),
             ),
-          ),
-          if (showTrace.value && stackTrace != null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 16),
-                  child: Text('Stacktrace:'),
-                ),
-                Text(stackTrace.toString()),
-              ],
-            )
-        ],
+            if (showTrace.value && stackTrace != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Stacktrace:'),
+                  ),
+                  Text(stackTrace.toString()),
+                ],
+              )
+          ],
+        ),
       ),
     );
   }
