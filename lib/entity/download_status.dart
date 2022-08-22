@@ -13,6 +13,7 @@ enum DownloadStatus {
   bool get isFailed => this == DownloadStatus.failed;
   bool get isCanceled => this == DownloadStatus.canceled;
   bool get isPaused => this == DownloadStatus.paused;
+  bool get isEmpty => this == DownloadStatus.empty;
 
   static DownloadStatus fromIndex(int index) {
     return DownloadStatus.values.firstWhere((it) => it.index == index,

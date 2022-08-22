@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/app_version.dart';
 import '../../entity/page_option.dart';
+import '../../services/download.dart';
 import '../../source/page.dart';
 import '../../source/server.dart';
 import '../../source/settings/server/active.dart';

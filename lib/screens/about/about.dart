@@ -2,13 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../entity/app_version.dart';
+import '../../services/download.dart';
 import '../../source/changelog.dart';
 import '../../source/version.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
+import '../../utils/extensions/number.dart';
 import '../app_router.dart';
 
 class AboutPage extends HookConsumerWidget {
@@ -53,34 +56,7 @@ class AboutPage extends HookConsumerWidget {
               ),
               latestVer.when(
                 data: (data) => data.isNewerThan(currentVer)
-                    ? Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text('New update is available'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => launchUrlString(data.apkUrl,
-                                mode: LaunchMode.externalApplication),
-                            style: ElevatedButton.styleFrom(elevation: 0),
-                            child: Text('Download v$data'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.router.push(
-                                ChangelogRoute(
-                                  option: ChangelogOption(
-                                    type: ChangelogType.git,
-                                    version: data,
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(elevation: 0),
-                            child: const Text('View changes'),
-                          ),
-                        ],
-                      )
+                    ? _Updater(data)
                     : ElevatedButton.icon(
                         onPressed: () => ref.refresh(versionLatestProvider),
                         style: ElevatedButton.styleFrom(elevation: 0),
@@ -132,6 +108,124 @@ class AboutPage extends HookConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Updater extends HookConsumerWidget {
+  const _Updater(this.data);
+
+  final AppVersion data;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8),
+          child: Text('New update is available'),
+        ),
+        _Downloader(version: data),
+        ElevatedButton(
+          onPressed: () {
+            context.router.push(
+              ChangelogRoute(
+                option: ChangelogOption(
+                  type: ChangelogType.git,
+                  version: data,
+                ),
+              ),
+            );
+          },
+          style: ElevatedButton.styleFrom(elevation: 0),
+          child: const Text('View changes'),
+        ),
+      ],
+    );
+  }
+}
+
+class _Downloader extends HookConsumerWidget {
+  const _Downloader({
+    required this.version,
+  });
+
+  final AppVersion version;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final updater =
+        ref.watch(downloadProvider.select((it) => it.appUpdateProgress));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (updater.status.isCanceled ||
+            updater.status.isFailed ||
+            updater.status.isEmpty)
+          ElevatedButton(
+            onPressed: () {
+              ref
+                  .read(downloadProvider)
+                  .updater(action: UpdaterAction.start, version: version);
+            },
+            style: ElevatedButton.styleFrom(elevation: 0),
+            child: Text('Download v$version'),
+          ),
+        if (updater.status.isDownloading) ...[
+          const SizedBox(width: 16),
+          Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text('${updater.progress}%')),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                children: [
+                  LinearProgressIndicator(
+                    value: updater.progress.ratio,
+                    minHeight: 16,
+                  ),
+                  Shimmer(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        context.colorScheme.primary.withOpacity(0),
+                        context.colorScheme.primary.withOpacity(0.5),
+                        context.colorScheme.primary.withOpacity(0),
+                      ],
+                      stops: const <double>[
+                        0.35,
+                        0.5,
+                        0.65,
+                      ],
+                    ),
+                    period: const Duration(milliseconds: 700),
+                    child: const LinearProgressIndicator(
+                      value: 0,
+                      minHeight: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              ref.read(downloadProvider).updater(action: UpdaterAction.stop);
+            },
+            icon: const Icon(Icons.close),
+          ),
+          const SizedBox(width: 16),
+        ],
+        if (updater.status.isDownloaded)
+          ElevatedButton(
+            onPressed: () {
+              ref.read(downloadProvider).updater(action: UpdaterAction.install);
+            },
+            child: const Text('Install update'),
+          ),
+      ],
     );
   }
 }

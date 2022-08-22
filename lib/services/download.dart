@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -5,15 +6,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path/path.dart' as path;
 
+import '../entity/app_version.dart';
 import '../entity/download_entry.dart';
 import '../entity/download_progress.dart';
 import '../entity/download_status.dart';
 import '../entity/post.dart';
+import '../source/version.dart';
 import '../utils/download.dart';
 import '../utils/extensions/string.dart';
 
 final downloadProvider = ChangeNotifierProvider(DownloadService.new);
+
+enum UpdaterAction {
+  stop,
+  start,
+  install;
+}
 
 class DownloadService extends ChangeNotifier {
   DownloadService(this.ref) {
@@ -176,6 +186,75 @@ class DownloadService extends ChangeNotifier {
   DownloadProgress getProgress(String id) {
     return progresses.firstWhere((it) => it.id == id,
         orElse: () => DownloadProgress.none);
+  }
+
+  String _appUpdateTaskId = '';
+  AppVersion _appUpdateVersion = AppVersion.zero;
+
+  DownloadProgress get appUpdateProgress => getProgress(_appUpdateTaskId);
+
+  Future<void> _startAppUpdate(AppVersion version) async {
+    await _stopAppUpdate();
+    final file = 'boorusphere-$version-${VersionDataSource.arch}.apk';
+    final url = '${VersionDataSource.gitUrl}/releases/download/$version/$file';
+
+    final dir = await DownloadUtils.downloadDir;
+    await DownloadUtils.createDownloadDir();
+    final appDir = Directory(path.join(dir.absolute.path, 'app'));
+    appDir.createSync();
+    final appFile = File(path.join(appDir.absolute.path, file));
+    if (appFile.existsSync()) {
+      appFile.deleteSync();
+    }
+
+    final id = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: appDir.absolute.path,
+      showNotification: true,
+      openFileFromNotification: false,
+    );
+
+    if (id != null) {
+      _appUpdateVersion = version;
+      _appUpdateTaskId = id;
+    }
+  }
+
+  Future<void> _stopAppUpdate() async {
+    if (_appUpdateTaskId.isEmpty) return;
+    await FlutterDownloader.remove(
+      taskId: _appUpdateTaskId,
+      shouldDeleteContent: true,
+    );
+    _appUpdateTaskId = '';
+  }
+
+  _clearAppUpdate() async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
+    if (tasks == null) return;
+    for (var task in tasks) {
+      await FlutterDownloader.remove(taskId: task.taskId);
+    }
+    _appUpdateTaskId = '';
+  }
+
+  Future<void> updater(
+      {required UpdaterAction action, AppVersion? version}) async {
+    if (version != null) _appUpdateVersion = version;
+    switch (action) {
+      case UpdaterAction.start:
+        await _startAppUpdate(_appUpdateVersion);
+        break;
+      case UpdaterAction.stop:
+        await _stopAppUpdate();
+        break;
+      case UpdaterAction.install:
+        await FlutterDownloader.open(taskId: _appUpdateTaskId);
+        await _clearAppUpdate();
+        break;
+    }
+    notifyListeners();
   }
 
   static const _portName = 'downloaderPort';

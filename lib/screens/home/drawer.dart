@@ -151,6 +151,8 @@ class AppVersionTile extends HookConsumerWidget {
     final currentVer = ref.watch(versionCurrentProvider
         .select((it) => it.maybeValue ?? AppVersion.zero));
     final latestVer = ref.watch(versionLatestProvider);
+    final updater =
+        ref.watch(downloadProvider.select((it) => it.appUpdateProgress));
 
     return latestVer.maybeWhen(
       data: (data) {
@@ -158,11 +160,36 @@ class AppVersionTile extends HookConsumerWidget {
           title: Text(data.isNewerThan(currentVer)
               ? 'Update available: $data'
               : 'Boorusphere $currentVer'),
-          leading: Icon(
-            Icons.info_outline,
-            color: data.isNewerThan(currentVer) ? Colors.pink.shade300 : null,
-          ),
-          onTap: () => context.router.push(const AboutRoute()),
+          leading: updater.status.isDownloading
+              ? const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Padding(
+                    padding: EdgeInsets.all(2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                    ),
+                  ),
+                )
+              : Icon(
+                  Icons.info_outline,
+                  color: data.isNewerThan(currentVer)
+                      ? Colors.pink.shade300
+                      : null,
+                ),
+          subtitle: data.isNewerThan(currentVer)
+              ? Text(updater.status.isDownloading
+                  ? 'Downloading ${updater.progress}%'
+                  : updater.status.isDownloaded
+                      ? 'Tap to install'
+                      : 'Tap to view')
+              : null,
+          onTap: () =>
+              data.isNewerThan(currentVer) && updater.status.isDownloaded
+                  ? ref
+                      .read(downloadProvider)
+                      .updater(action: UpdaterAction.install)
+                  : context.router.push(const AboutRoute()),
         );
       },
       orElse: () => ListTile(
