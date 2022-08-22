@@ -30,7 +30,7 @@ So if you're editing some areas that needs a code generator (such as `lib/data`)
 
 ```bash
 # Run code generator
-$ derry gen
+$ derry regenerate
 
 # Build production-ready apks
 $ derry release
