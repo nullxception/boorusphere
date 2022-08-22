@@ -27,7 +27,6 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     final selectedtag = useState(<String>[]);
     final pageQuery =
         ref.watch(pageOptionProvider.select((value) => value.query));
-    final currentTags = pageQuery.toWordList();
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -243,8 +242,8 @@ class _TagsView extends StatelessWidget {
             for (final tag in tags)
               Tag(
                 tag: tag,
-                onPressed: () => onSelected?.call(tag),
-                active: () => isSelected?.call(tag) ?? false,
+                onPressed: (isActive) => onSelected?.call(tag),
+                active: isSelected?.call(tag) ?? false,
               )
           ],
         ),

@@ -7,39 +7,40 @@ class Tag extends HookWidget {
   const Tag({
     super.key,
     required this.tag,
-    required this.onPressed,
-    this.active,
+    this.onPressed,
+    this.active = false,
   });
+
   final String tag;
-  final bool Function()? active;
-  final Function() onPressed;
+  final bool active;
+  final Function(bool isActive)? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final isClicked = useState(active?.call() ?? false);
+    final isClicked = useState(active);
     final colorScheme = context.colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 4, 8, 4),
-      child: SizedBox(
-        height: 28,
-        child: TextButton(
-          onPressed: () {
-            isClicked.value = !isClicked.value;
-            onPressed();
-          },
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-            minimumSize: const Size(1, 1),
-            backgroundColor: isClicked.value
-                ? colorScheme.surfaceVariant
-                : colorScheme.surface,
-            side: BorderSide(width: 1, color: colorScheme.surfaceVariant),
-          ),
-          child: Text(
-            tag,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: colorScheme.onSurface),
-          ),
+      child: TextButton(
+        onPressed: onPressed != null
+            ? () {
+                isClicked.value = !isClicked.value;
+                onPressed?.call(isClicked.value);
+              }
+            : null,
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          minimumSize: const Size(1, 1),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          backgroundColor: isClicked.value
+              ? colorScheme.surfaceVariant
+              : colorScheme.surface,
+          side: BorderSide(width: 1, color: colorScheme.surfaceVariant),
+          elevation: 0,
+        ),
+        child: Text(
+          tag,
+          style: TextStyle(color: colorScheme.onSurface),
         ),
       ),
     );
