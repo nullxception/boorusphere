@@ -1,0 +1,7 @@
+global_options:
+  freezed:freezed:
+    runs_before:
+      - hive_generator:hive_generator
+  hive_generator:hive_generator:
+    runs_before:
+      - json_serializable:json_serializable
