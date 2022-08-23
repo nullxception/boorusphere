@@ -187,7 +187,7 @@ class AppVersionTile extends HookConsumerWidget {
           ),
           onTap: () {
             if (updater.status.isDownloaded) {
-              ref.read(downloadProvider).updater(action: UpdaterAction.install);
+              UpdatePrepareDialog.show(context);
             } else {
               context.router.push(const AboutRoute());
             }

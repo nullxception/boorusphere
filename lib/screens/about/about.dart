@@ -12,6 +12,7 @@ import '../../source/version.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
+import '../../widgets/prepare_update.dart';
 import '../app_router.dart';
 
 class AboutPage extends HookConsumerWidget {
@@ -221,7 +222,7 @@ class _Downloader extends HookConsumerWidget {
         if (updater.status.isDownloaded)
           ElevatedButton(
             onPressed: () {
-              ref.read(downloadProvider).updater(action: UpdaterAction.install);
+              UpdatePrepareDialog.show(context);
             },
             child: const Text('Install update'),
           ),

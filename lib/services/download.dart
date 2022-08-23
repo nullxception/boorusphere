@@ -23,6 +23,7 @@ final downloadProvider = ChangeNotifierProvider(DownloadService.new);
 enum UpdaterAction {
   stop,
   start,
+  exposeAppFile,
   install;
 }
 
@@ -194,9 +195,18 @@ class DownloadService extends ChangeNotifier {
 
   DownloadProgress get appUpdateProgress => getProgress(_appUpdateTaskId);
 
+  String _getAppUpdateFile(AppVersion version) {
+    return 'boorusphere-$version-${VersionDataSource.arch}.apk';
+  }
+
+  Future<Directory> get _appUpdateDir async {
+    final dir = await getApplicationSupportDirectory();
+    return Directory(path.join(dir.absolute.path, 'app-update'));
+  }
+
   Future<void> _startAppUpdate(AppVersion version) async {
     await _stopAppUpdate();
-    final file = 'boorusphere-$version-${VersionDataSource.arch}.apk';
+    final file = _getAppUpdateFile(version);
     final url = '${VersionDataSource.gitUrl}/releases/download/$version/$file';
     final dir = await getApplicationSupportDirectory();
     final appDir = Directory(path.join(dir.absolute.path, 'app-update'));
@@ -238,6 +248,24 @@ class DownloadService extends ChangeNotifier {
     _appUpdateTaskId = '';
   }
 
+  Future<void> _exposeAppUpdateFile() async {
+    final file = _getAppUpdateFile(_appUpdateVersion);
+    final appDir = await _appUpdateDir;
+    final downloadDir = (await DownloadUtils.downloadDir).absolute.path;
+    final extAppDir = Directory(path.join(downloadDir, 'app-update'));
+
+    await DownloadUtils.createDownloadDir();
+    appDir.createSync();
+    extAppDir.createSync();
+
+    final appFile = File(path.join(appDir.absolute.path, file));
+    final extAppFile = File(path.join(extAppDir.absolute.path, file));
+
+    if (appFile.existsSync() && !extAppFile.existsSync()) {
+      await appFile.copy(extAppFile.absolute.path);
+    }
+  }
+
   Future<void> updater(
       {required UpdaterAction action, AppVersion? version}) async {
     if (version != null) _appUpdateVersion = version;
@@ -251,6 +279,9 @@ class DownloadService extends ChangeNotifier {
       case UpdaterAction.install:
         await FlutterDownloader.open(taskId: _appUpdateTaskId);
         await _clearAppUpdate();
+        break;
+      case UpdaterAction.exposeAppFile:
+        await _exposeAppUpdateFile();
         break;
     }
     notifyListeners();

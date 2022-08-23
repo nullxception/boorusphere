@@ -15,6 +15,7 @@ import '../../source/version.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
+import '../../widgets/prepare_update.dart';
 import '../../widgets/styled_overlay_region.dart';
 import '../app_router.dart';
 import 'search/search.dart';
