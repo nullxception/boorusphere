@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:separated_row/separated_row.dart';
 import '../../entity/download_entry.dart';
 import '../../entity/download_status.dart';
 import '../../services/download.dart';
+import '../../source/page.dart';
 import '../../source/settings/download/group_by_server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
@@ -54,6 +56,7 @@ class DownloadEntryView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
     final groupByServer = ref.watch(groupByServerProvider);
+    final pageCookies = ref.watch(pageCookieProvider);
     final progress = downloader.getProgress(entry.id);
 
     return ListTile(
@@ -106,7 +109,10 @@ class DownloadEntryView extends ConsumerWidget {
       ),
       leading: ExtendedImage.network(
         entry.post.previewFile,
-        headers: {'Referer': entry.post.postUrl},
+        headers: {
+          'Referer': entry.post.postUrl,
+          'Cookie': CookieManager.getCookies(pageCookies),
+        },
         width: 42,
         shape: BoxShape.rectangle,
         borderRadius: const BorderRadius.all(Radius.circular(5)),

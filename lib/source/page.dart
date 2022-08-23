@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +9,7 @@ import '../entity/post.dart';
 import '../entity/server_data.dart';
 import '../entity/sphere_exception.dart';
 import '../services/http.dart';
+import '../utils/extensions/string.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
 import 'settings/safe_mode.dart';
@@ -16,6 +18,7 @@ import 'settings/server/post_limit.dart';
 
 final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption(clear: true));
+final pageCookieProvider = StateProvider((_) => <Cookie>[]);
 final pageStateProvider = FutureProvider((ref) {
   ref.watch(serverActiveProvider);
   ref.watch(pageOptionProvider);
@@ -74,7 +77,11 @@ class PageDataSource {
               !it.tags.any(blockedTags.values.contains) &&
               !posts.any((post) => post.id == it.id))
           .toList();
+
       if (newPosts.isNotEmpty) {
+        final cookieJar = ref.watch(cookieProvider);
+        final cookie = await cookieJar.loadForRequest(url.asUri);
+        ref.read(pageCookieProvider.notifier).update((state) => cookie);
         posts.addAll(newPosts);
         return;
       }

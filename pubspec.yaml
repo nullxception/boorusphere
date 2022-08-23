@@ -33,9 +33,11 @@ dependencies:
     sdk: flutter
   async: ^2.8.2
   auto_route: ^5.0.0
+  cookie_jar: ^3.0.1
   collection: ^1.16.0
   cupertino_icons: ^1.0.2
   device_info_plus: ^4.0.1
+  dio_cookie_manager: ^2.0.0
   dio_smart_retry: ^1.3.2
   dio: ^4.0.6
   dynamic_color: ^1.4.0

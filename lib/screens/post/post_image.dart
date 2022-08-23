@@ -1,3 +1,4 @@
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -5,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/post.dart';
 import '../../services/fullscreen.dart';
+import '../../source/page.dart';
 import '../../source/settings/blur_explicit_post.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
@@ -25,6 +27,7 @@ class PostImageDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final blurExplicit = ref.watch(blurExplicitPostProvider);
+    final pageCookies = ref.watch(pageCookieProvider);
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -72,7 +75,10 @@ class PostImageDisplay extends HookConsumerWidget {
           else
             ExtendedImage.network(
               post.contentFile,
-              headers: {'Referer': post.postUrl},
+              headers: {
+                'Referer': post.postUrl,
+                'Cookie': CookieManager.getCookies(pageCookies),
+              },
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
               initGestureConfigHandler: (state) =>

@@ -1,3 +1,4 @@
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../entity/post.dart';
 import '../entity/pixel_size.dart';
 import '../services/download.dart';
+import '../source/page.dart';
 import '../utils/extensions/buildcontext.dart';
 import '../utils/extensions/imageprovider.dart';
 import '../utils/extensions/string.dart';
@@ -32,7 +34,7 @@ class DownloaderDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-
+    final pageCookies = ref.watch(pageCookieProvider);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
@@ -49,7 +51,10 @@ class DownloaderDialog extends HookConsumerWidget {
                       ? ExtendedNetworkImageProvider(
                           post.sampleFile,
                           cache: true,
-                          headers: {'Referer': post.postUrl},
+                          headers: {
+                            'Referer': post.postUrl,
+                            'Cookie': CookieManager.getCookies(pageCookies),
+                          },
                         ).resolvePixelSize()
                       : Future.value(post.sampleSize),
                   builder: (context, snapshot) {

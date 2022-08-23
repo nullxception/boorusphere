@@ -1,11 +1,14 @@
 import 'dart:ui';
 
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../entity/post.dart';
+import '../../source/page.dart';
 
-class PostPlaceholderImage extends StatelessWidget {
+class PostPlaceholderImage extends ConsumerWidget {
   const PostPlaceholderImage({
     super.key,
     required this.post,
@@ -16,10 +19,14 @@ class PostPlaceholderImage extends StatelessWidget {
   final bool shouldBlur;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageCookies = ref.watch(pageCookieProvider);
     return ExtendedImage.network(
       post.previewFile,
-      headers: {'Referer': post.postUrl},
+      headers: {
+        'Referer': post.postUrl,
+        'Cookie': CookieManager.getCookies(pageCookies),
+      },
       fit: BoxFit.contain,
       filterQuality: FilterQuality.high,
       enableLoadState: false,
