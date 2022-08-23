@@ -7,6 +7,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 import '../entity/app_version.dart';
 import '../entity/download_entry.dart';
@@ -197,10 +198,8 @@ class DownloadService extends ChangeNotifier {
     await _stopAppUpdate();
     final file = 'boorusphere-$version-${VersionDataSource.arch}.apk';
     final url = '${VersionDataSource.gitUrl}/releases/download/$version/$file';
-
-    final dir = await DownloadUtils.downloadDir;
-    await DownloadUtils.createDownloadDir();
-    final appDir = Directory(path.join(dir.absolute.path, 'app'));
+    final dir = await getApplicationSupportDirectory();
+    final appDir = Directory(path.join(dir.absolute.path, 'app-update'));
     appDir.createSync();
     final appFile = File(path.join(appDir.absolute.path, file));
     if (appFile.existsSync()) {
