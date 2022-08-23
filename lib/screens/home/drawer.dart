@@ -154,49 +154,47 @@ class AppVersionTile extends HookConsumerWidget {
     final updater =
         ref.watch(downloadProvider.select((it) => it.appUpdateProgress));
 
+    final updateStatus = updater.status;
+    final current = ListTile(
+      title: Text('Boorusphere $currentVer'),
+      leading: const Icon(Icons.info_outline),
+      onTap: () => context.router.push(const AboutRoute()),
+    );
+
     return latestVer.maybeWhen(
       data: (data) {
+        if (!data.isNewerThan(currentVer)) return current;
+        if (updateStatus.isDownloading) {
+          return ListTile(
+            title: Text('Update available: $data'),
+            leading: const SizedBox(
+              height: 24,
+              width: 24,
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: CircularProgressIndicator(strokeWidth: 3),
+              ),
+            ),
+            subtitle: Text('Downloading ${updater.progress}%'),
+            onTap: () => context.router.push(const AboutRoute()),
+          );
+        }
         return ListTile(
-          title: Text(data.isNewerThan(currentVer)
-              ? 'Update available: $data'
-              : 'Boorusphere $currentVer'),
-          leading: updater.status.isDownloading
-              ? const SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: Padding(
-                    padding: EdgeInsets.all(2),
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                    ),
-                  ),
-                )
-              : Icon(
-                  Icons.info_outline,
-                  color: data.isNewerThan(currentVer)
-                      ? Colors.pink.shade300
-                      : null,
-                ),
-          subtitle: data.isNewerThan(currentVer)
-              ? Text(updater.status.isDownloading
-                  ? 'Downloading ${updater.progress}%'
-                  : updater.status.isDownloaded
-                      ? 'Tap to install'
-                      : 'Tap to view')
-              : null,
-          onTap: () =>
-              data.isNewerThan(currentVer) && updater.status.isDownloaded
-                  ? ref
-                      .read(downloadProvider)
-                      .updater(action: UpdaterAction.install)
-                  : context.router.push(const AboutRoute()),
+          title: Text('Update available: $data'),
+          leading: Icon(Icons.info_outline, color: Colors.pink.shade300),
+          subtitle: Text(
+            updater.status.isDownloaded ? 'Tap to install' : 'Tap to view',
+          ),
+          onTap: () {
+            if (updater.status.isDownloaded) {
+              ref.read(downloadProvider).updater(action: UpdaterAction.install);
+            } else {
+              context.router.push(const AboutRoute());
+            }
+          },
         );
       },
-      orElse: () => ListTile(
-        title: Text('Boorusphere $currentVer'),
-        leading: const Icon(Icons.info_outline),
-        onTap: () => context.router.push(const AboutRoute()),
-      ),
+      orElse: () => current,
     );
   }
 }
