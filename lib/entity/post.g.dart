@@ -6,17 +6,17 @@ part of 'post.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PostAdapter extends TypeAdapter<_$_Post> {
+class PostAdapter extends TypeAdapter<Post> {
   @override
   final int typeId = 3;
 
   @override
-  _$_Post read(BinaryReader reader) {
+  Post read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_Post(
+    return Post(
       id: fields[0] == null ? -1 : fields[0] as int,
       originalFile: fields[1] == null ? '' : fields[1] as String,
       sampleFile: fields[2] == null ? '' : fields[2] as String,
@@ -44,7 +44,7 @@ class PostAdapter extends TypeAdapter<_$_Post> {
   }
 
   @override
-  void write(BinaryWriter writer, _$_Post obj) {
+  void write(BinaryWriter writer, Post obj) {
     writer
       ..writeByte(20)
       ..writeByte(0)
@@ -55,6 +55,8 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       ..write(obj.sampleFile)
       ..writeByte(3)
       ..write(obj.previewFile)
+      ..writeByte(4)
+      ..write(obj.tags)
       ..writeByte(5)
       ..write(obj.width)
       ..writeByte(6)
@@ -75,8 +77,6 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       ..write(obj.previewHeight)
       ..writeByte(14)
       ..write(obj.source)
-      ..writeByte(4)
-      ..write(obj.tags)
       ..writeByte(15)
       ..write(obj.tagsArtist)
       ..writeByte(16)

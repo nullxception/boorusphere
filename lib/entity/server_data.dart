@@ -1,26 +1,35 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'server_data.freezed.dart';
 part 'server_data.g.dart';
 
-@freezed
-class ServerData with _$ServerData {
-  @HiveType(typeId: 2, adapterName: 'ServersAdapter')
-  const factory ServerData({
-    @HiveField(0, defaultValue: '') @Default('') String name,
-    @HiveField(1, defaultValue: '') @Default('') String homepage,
-    @HiveField(2, defaultValue: '') @Default('') String postUrl,
-    @HiveField(3, defaultValue: '') @Default('') String searchUrl,
-    @HiveField(4, defaultValue: '') @Default('') String apiAddr,
-    @HiveField(7, defaultValue: '') @Default('') String tagSuggestionUrl,
-  }) = _ServerData;
+@HiveType(typeId: 2, adapterName: 'ServersAdapter')
+@JsonSerializable()
+class ServerData {
+  const ServerData({
+    this.name = '',
+    this.homepage = '',
+    this.postUrl = '',
+    this.searchUrl = '',
+    this.apiAddr = '',
+    this.tagSuggestionUrl = '',
+  });
 
   factory ServerData.fromJson(Map<String, dynamic> json) =>
       _$ServerDataFromJson(json);
 
-  const ServerData._();
+  @HiveField(0, defaultValue: '')
+  final String name;
+  @HiveField(1, defaultValue: '')
+  final String homepage;
+  @HiveField(2, defaultValue: '')
+  final String postUrl;
+  @HiveField(3, defaultValue: '')
+  final String searchUrl;
+  @HiveField(4, defaultValue: '')
+  final String apiAddr;
+  @HiveField(7, defaultValue: '')
+  final String tagSuggestionUrl;
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
@@ -66,7 +75,46 @@ class ServerData with _$ServerData {
 
   String get apiAddress => apiAddr.isEmpty ? homepage : apiAddr;
 
-  static const ServerData empty =
-      ServerData(name: '', homepage: '', searchUrl: '');
+  ServerData copyWith({
+    String? name,
+    String? homepage,
+    String? postUrl,
+    String? searchUrl,
+    String? apiAddr,
+    String? tagSuggestionUrl,
+  }) {
+    return ServerData(
+      name: name ?? this.name,
+      homepage: homepage ?? this.homepage,
+      postUrl: postUrl ?? this.postUrl,
+      searchUrl: searchUrl ?? this.searchUrl,
+      apiAddr: apiAddr ?? this.apiAddr,
+      tagSuggestionUrl: tagSuggestionUrl ?? this.tagSuggestionUrl,
+    );
+  }
+
+  @override
+  bool operator ==(covariant ServerData other) {
+    if (identical(this, other)) return true;
+
+    return other.name == name &&
+        other.homepage == homepage &&
+        other.postUrl == postUrl &&
+        other.searchUrl == searchUrl &&
+        other.apiAddr == apiAddr &&
+        other.tagSuggestionUrl == tagSuggestionUrl;
+  }
+
+  @override
+  int get hashCode {
+    return name.hashCode ^
+        homepage.hashCode ^
+        postUrl.hashCode ^
+        searchUrl.hashCode ^
+        apiAddr.hashCode ^
+        tagSuggestionUrl.hashCode;
+  }
+
+  static const ServerData empty = ServerData();
   static const String defaultTag = '*';
 }

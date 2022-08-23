@@ -6,24 +6,24 @@ part of 'search_history.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SearchHistoryAdapter extends TypeAdapter<_$_SearchHistory> {
+class SearchHistoryAdapter extends TypeAdapter<SearchHistory> {
   @override
   final int typeId = 1;
 
   @override
-  _$_SearchHistory read(BinaryReader reader) {
+  SearchHistory read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_SearchHistory(
+    return SearchHistory(
       query: fields[0] == null ? '' : fields[0] as String,
       server: fields[1] == null ? '' : fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, _$_SearchHistory obj) {
+  void write(BinaryWriter writer, SearchHistory obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
