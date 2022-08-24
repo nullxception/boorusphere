@@ -22,7 +22,7 @@ final pageOptionProvider = StateProvider((_) => const PageOption(clear: true));
 final pageStateProvider = FutureProvider((ref) {
   ref.watch(serverActiveProvider);
   ref.watch(pageOptionProvider);
-  return ref.read(pageDataProvider)._fetch();
+  return ref.watch(pageDataProvider)._fetch();
 });
 
 class PageDataSource {

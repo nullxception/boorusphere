@@ -14,7 +14,7 @@ final versionCurrentProvider = FutureProvider((ref) async {
 });
 
 final versionLatestProvider = FutureProvider((ref) {
-  final http = ref.read(httpProvider);
+  final http = ref.watch(httpProvider);
   return VersionDataSource.checkLatest(http);
 });
 
