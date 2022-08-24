@@ -6,6 +6,7 @@ import 'package:separated_row/separated_row.dart';
 
 import '../../entity/download_entry.dart';
 import '../../entity/download_status.dart';
+import '../../routes/routes.dart';
 import '../../services/download.dart';
 import '../../source/page.dart';
 import '../../source/settings/download/group_by_server.dart';
@@ -13,7 +14,6 @@ import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../utils/extensions/string.dart';
 import '../../widgets/download_dialog.dart';
-import '../app_router.dart';
 
 class DownloadEntryView extends ConsumerWidget {
   const DownloadEntryView({super.key, required this.entry});

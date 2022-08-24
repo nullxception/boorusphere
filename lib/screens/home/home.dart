@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/app_version.dart';
 import '../../entity/page_option.dart';
+import '../../routes/routes.dart';
 import '../../services/download.dart';
 import '../../source/page.dart';
 import '../../source/server.dart';
@@ -17,7 +18,6 @@ import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
 import '../../widgets/prepare_update.dart';
 import '../../widgets/styled_overlay_region.dart';
-import '../app_router.dart';
 import 'search/search.dart';
 import 'timeline/timeline.dart';
 

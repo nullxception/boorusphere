@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../entity/app_version.dart';
+import '../../routes/routes.dart';
 import '../../services/download.dart';
 import '../../source/changelog.dart';
 import '../../source/version.dart';
@@ -13,7 +14,6 @@ import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/prepare_update.dart';
-import '../app_router.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});

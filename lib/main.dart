@@ -8,7 +8,7 @@ import 'entity/download_entry.dart';
 import 'entity/post.dart';
 import 'entity/search_history.dart';
 import 'entity/server_data.dart';
-import 'screens/app_router.dart';
+import 'routes/routes.dart';
 import 'services/app_theme/app_theme.dart';
 import 'source/device_info.dart';
 import 'source/settings/theme.dart';
@@ -16,7 +16,7 @@ import 'source/settings/theme.dart';
 class Boorusphere extends HookConsumerWidget {
   Boorusphere({super.key});
 
-  final _appRouter = AppRouter();
+  final _router = SphereRouter();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,8 +39,8 @@ class Boorusphere extends HookConsumerWidget {
           darkTheme:
               isDarkerTheme ? appTheme.data.midnight : appTheme.data.night,
           themeMode: themeMode,
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
+          routerDelegate: _router.delegate(),
+          routeInformationParser: _router.defaultRouteParser(),
         );
       },
     );

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../widgets/favicon.dart';
+import '../../routes/routes.dart';
 import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../app_router.dart';
 
 class ServerPage extends HookConsumerWidget {
   const ServerPage({super.key});

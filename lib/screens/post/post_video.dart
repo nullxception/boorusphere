@@ -10,6 +10,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../entity/post.dart';
 import '../../hooks/markmayneedrebuild.dart';
+import '../../routes/routes.dart';
 import '../../services/download.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
@@ -18,7 +19,6 @@ import '../../source/settings/video_player.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';
-import '../app_router.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';
 

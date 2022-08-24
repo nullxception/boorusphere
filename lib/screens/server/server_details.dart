@@ -4,9 +4,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/server_data.dart';
+import '../../routes/routes.dart';
 import '../../source/server.dart';
 import '../../utils/extensions/buildcontext.dart';
-import '../app_router.dart';
 
 class ServerDetails extends HookConsumerWidget {
   const ServerDetails({
