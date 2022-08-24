@@ -85,27 +85,17 @@ class PostImageDisplay extends HookConsumerWidget {
                   GestureConfig(inPageView: true),
               handleLoadingProgress: true,
               loadStateChanged: (state) {
-                switch (state.extendedImageLoadState) {
-                  case LoadState.loading:
-                  case LoadState.failed:
-                    return PostImageStatusView(
-                      state: state,
-                      child: Hero(
-                        key: imageHeroKey,
-                        tag: post.id,
-                        child: PostPlaceholderImage(
-                          post: post,
-                          shouldBlur: false,
-                        ),
-                      ),
-                    );
-                  default:
-                    return Hero(
-                      key: imageHeroKey,
-                      tag: post.id,
-                      child: state.completedWidget,
-                    );
-                }
+                return _PostImageStatus(
+                  key: ValueKey(post.id),
+                  state: state,
+                  child: Hero(
+                    key: imageHeroKey,
+                    tag: post.id,
+                    child: LoadState.completed == state.extendedImageLoadState
+                        ? state.completedWidget
+                        : PostPlaceholderImage(post: post, shouldBlur: false),
+                  ),
+                );
               },
               onDoubleTap: (state) async {
                 if (zoomAnimator.isAnimating) {
@@ -156,8 +146,8 @@ class PostImageDisplay extends HookConsumerWidget {
   }
 }
 
-class PostImageStatusView extends StatelessWidget {
-  const PostImageStatusView({
+class _PostImageStatus extends StatelessWidget {
+  const _PostImageStatus({
     super.key,
     required this.child,
     required this.state,
@@ -169,7 +159,9 @@ class PostImageStatusView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFailed = state.extendedImageLoadState == LoadState.failed;
-    final progressPercentage = state.loadingProgress?.progressPercentage ?? 0;
+    final isDone = state.extendedImageLoadState == LoadState.completed;
+    final loadPercent =
+        isDone ? 100 : state.loadingProgress?.progressPercentage ?? 0;
     return Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,
@@ -179,8 +171,10 @@ class PostImageStatusView extends StatelessWidget {
           bottom: context.mediaQuery.viewInsets.bottom +
               kBottomNavigationBarHeight +
               32,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
+          child: AnimatedScale(
+            duration: kThemeChangeDuration,
+            curve: Curves.easeInOutCubic,
+            scale: state.extendedImageLoadState == LoadState.completed ? 0 : 1,
             child: isFailed
                 ? QuickBar.action(
                     title: const Text('Failed to load image'),
@@ -188,10 +182,8 @@ class PostImageStatusView extends StatelessWidget {
                     onPressed: state.reLoadImage,
                   )
                 : QuickBar.progress(
-                    title: progressPercentage > 1
-                        ? Text('$progressPercentage%')
-                        : null,
-                    progress: state.loadingProgress?.progressRatio,
+                    title: loadPercent > 1 ? Text('$loadPercent%') : null,
+                    progress: isDone ? 1 : state.loadingProgress?.progressRatio,
                   ),
           ),
         ),
