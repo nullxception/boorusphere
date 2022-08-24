@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/server/response_parser.dart';
@@ -18,7 +19,6 @@ import 'settings/server/post_limit.dart';
 
 final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption(clear: true));
-final pageCookieProvider = StateProvider((_) => <Cookie>[]);
 final pageStateProvider = FutureProvider((ref) {
   ref.watch(serverActiveProvider);
   ref.watch(pageOptionProvider);
@@ -30,8 +30,11 @@ class PageDataSource {
 
   final Ref ref;
   final List<Post> posts = [];
+  final List<Cookie> _cookies = [];
 
   int _page = 0;
+
+  String get cookies => CookieManager.getCookies(_cookies);
 
   String _buildErrorMessage(String message) {
     final pageOption = ref.read(pageOptionProvider);
@@ -80,8 +83,12 @@ class PageDataSource {
 
       if (newPosts.isNotEmpty) {
         final cookieJar = ref.watch(cookieProvider);
-        final cookie = await cookieJar.loadForRequest(url.asUri);
-        ref.read(pageCookieProvider.notifier).update((state) => cookie);
+        final cookies = await cookieJar.loadForRequest(url.asUri);
+        if (cookies.isNotEmpty) {
+          _cookies
+            ..clear()
+            ..addAll(cookies);
+        }
         posts.addAll(newPosts);
         return;
       }

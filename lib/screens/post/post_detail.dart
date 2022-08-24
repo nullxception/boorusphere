@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +27,8 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     final selectedtag = useState(<String>[]);
     final pageQuery =
         ref.watch(pageOptionProvider.select((value) => value.query));
-    final pageCookies = ref.watch(pageCookieProvider);
+    final pageCookies =
+        ref.watch(pageDataProvider.select((value) => value.cookies));
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -85,7 +85,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                             cache: true,
                             headers: {
                               'Referer': post.postUrl,
-                              'Cookie': CookieManager.getCookies(pageCookies),
+                              'Cookie': pageCookies,
                             },
                           ).resolvePixelSize()
                         : Future.value(post.sampleSize),

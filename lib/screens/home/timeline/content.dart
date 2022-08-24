@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -132,13 +131,14 @@ class _Thumbnail extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    final pageCookies = ref.watch(pageCookieProvider);
+    final pageCookies =
+        ref.watch(pageDataProvider.select((value) => value.cookies));
 
     return ExtendedImage.network(
       post.previewFile,
       headers: {
         'Referer': post.postUrl,
-        'Cookie': CookieManager.getCookies(pageCookies),
+        'Cookie': pageCookies,
       },
       filterQuality: _thumbnailQuality(gridExtra),
       fit: BoxFit.cover,

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,12 +19,13 @@ class PostPlaceholderImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageCookies = ref.watch(pageCookieProvider);
+    final pageCookies =
+        ref.watch(pageDataProvider.select((value) => value.cookies));
     return ExtendedImage.network(
       post.previewFile,
       headers: {
         'Referer': post.postUrl,
-        'Cookie': CookieManager.getCookies(pageCookies),
+        'Cookie': pageCookies,
       },
       fit: BoxFit.contain,
       filterQuality: FilterQuality.high,

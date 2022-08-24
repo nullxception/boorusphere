@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,12 +27,13 @@ final _videoCacheProvider = Provider((_) => DefaultCacheManager());
 final _fetcherProvider =
     Provider.family.autoDispose<CancelableOperation, Post>((ref, arg) {
   final cache = ref.watch(_videoCacheProvider);
-  final pageCookies = ref.watch(pageCookieProvider);
+  final pageCookies =
+      ref.watch(pageDataProvider.select((value) => value.cookies));
   final cancelable = CancelableOperation.fromFuture(cache.downloadFile(
     arg.contentFile,
     authHeaders: {
       'Referer': arg.postUrl,
-      'Cookie': CookieManager.getCookies(pageCookies),
+      'Cookie': pageCookies,
     },
   ));
 

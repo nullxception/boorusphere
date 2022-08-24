@@ -1,4 +1,3 @@
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,7 +33,8 @@ class DownloaderDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final pageCookies = ref.watch(pageCookieProvider);
+    final pageCookies =
+        ref.watch(pageDataProvider.select((value) => value.cookies));
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
@@ -53,7 +53,7 @@ class DownloaderDialog extends HookConsumerWidget {
                           cache: true,
                           headers: {
                             'Referer': post.postUrl,
-                            'Cookie': CookieManager.getCookies(pageCookies),
+                            'Cookie': pageCookies,
                           },
                         ).resolvePixelSize()
                       : Future.value(post.sampleSize),

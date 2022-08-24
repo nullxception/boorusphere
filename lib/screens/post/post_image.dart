@@ -1,4 +1,3 @@
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,7 +26,8 @@ class PostImageDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final blurExplicit = ref.watch(blurExplicitPostProvider);
-    final pageCookies = ref.watch(pageCookieProvider);
+    final pageCookies =
+        ref.watch(pageDataProvider.select((value) => value.cookies));
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -77,7 +77,7 @@ class PostImageDisplay extends HookConsumerWidget {
               post.contentFile,
               headers: {
                 'Referer': post.postUrl,
-                'Cookie': CookieManager.getCookies(pageCookies),
+                'Cookie': pageCookies,
               },
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
