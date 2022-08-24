@@ -23,11 +23,11 @@ class ServerResponseParser {
 
     const cantParse = SphereException(message: 'Cannot parse result');
 
-    List<dynamic> entries;
+    final entries = [];
     if (data is List) {
-      entries = res.data;
+      entries.addAll(res.data);
     } else if (data is Map && data.keys.contains('post')) {
-      entries = data['post'];
+      entries.addAll(data['post']);
     } else if (data is String && data.contains('<?xml')) {
       final xjson = Xml2Json();
       xjson.parse(data.replaceAll('\\', ''));
@@ -39,9 +39,9 @@ class ServerResponseParser {
 
       final posts = jsonObj.values.first['post'];
       if (posts is LinkedHashMap) {
-        entries = [posts];
+        entries.add(posts);
       } else if (posts is List) {
-        entries = posts;
+        entries.addAll(posts);
       } else {
         throw cantParse;
       }
@@ -70,7 +70,12 @@ class ServerResponseParser {
     final tagsGeneralKey = ['tag_string_general'];
     final tagsMetaKey = ['tag_string_meta'];
 
-    for (final Map<String, dynamic> post in entries) {
+    for (final entry in entries) {
+      if (entry is! Map<String, dynamic>) {
+        continue;
+      }
+
+      final post = entry;
       final id = post.take(idKey, orElse: -1);
       if (result.any((it) => it.id == id)) {
         // duplicated result, skipping
