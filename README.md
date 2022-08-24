@@ -21,12 +21,9 @@ Simple, content-focused booru viewer for Android
 
 # Building
 
-This projects uses several code generator :
-- [`freezed`](https://github.com/rrousselGit/freezed)
-- [`json_serializable`](https://github.com/google/json_serializable.dart)
-- [`flutter_oss_licenses`](https://github.com/espresso3389/flutter_oss_licenses)
+This projects uses several code generators such as [freezed](https://github.com/rrousselGit/freezed), [json_serializable](https://github.com/google/json_serializable.dart), [flutter_oss_licenses](https://github.com/espresso3389/flutter_oss_licenses), [hive_generator](https://github.com/hivedb/hive), and [auto_route_generator](https://github.com/Milad-Akarie/auto_route_library).
 
-So if you're editing some areas that needs a code generator (such as `lib/data`) or add/removing packages, make sure run the particular codegens before building.
+So if you're editing some areas that needs a code generator such as entities, routing, or add and removing packages, make sure run the particular codegens before building.
 
 ```bash
 # Run code generator
