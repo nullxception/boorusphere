@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,6 +13,7 @@ import '../../../entity/post.dart';
 import '../../hooks/markmayneedrebuild.dart';
 import '../../services/download.dart';
 import '../../services/fullscreen.dart';
+import '../../source/page.dart';
 import '../../source/settings/blur_explicit_post.dart';
 import '../../source/settings/video_player.dart';
 import '../../utils/extensions/buildcontext.dart';
@@ -24,9 +26,16 @@ import 'post_placeholder_image.dart';
 final _videoCacheProvider = Provider((_) => DefaultCacheManager());
 
 final _fetcherProvider =
-    Provider.family.autoDispose<CancelableOperation, String>((ref, arg) {
+    Provider.family.autoDispose<CancelableOperation, Post>((ref, arg) {
   final cache = ref.watch(_videoCacheProvider);
-  final cancelable = CancelableOperation.fromFuture(cache.downloadFile(arg));
+  final pageCookies = ref.watch(pageCookieProvider);
+  final cancelable = CancelableOperation.fromFuture(cache.downloadFile(
+    arg.contentFile,
+    authHeaders: {
+      'Referer': arg.postUrl,
+      'Cookie': CookieManager.getCookies(pageCookies),
+    },
+  ));
 
   ref.onDispose(() {
     if (!cancelable.isCompleted) {
@@ -38,11 +47,11 @@ final _fetcherProvider =
 });
 
 final _playerControllerProvider = FutureProvider.autoDispose
-    .family<VideoPlayerController, String>((ref, arg) async {
+    .family<VideoPlayerController, Post>((ref, arg) async {
   VideoPlayerController controller;
 
   final cache = ref.watch(_videoCacheProvider);
-  final fromCache = await cache.getFileFromCache(arg);
+  final fromCache = await cache.getFileFromCache(arg.contentFile);
   final option = VideoPlayerOptions(mixWithOthers: true);
   if (fromCache != null) {
     controller = VideoPlayerController.file(
@@ -80,8 +89,7 @@ class PostVideoDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerController =
-        ref.watch(_playerControllerProvider(post.contentFile));
+    final playerController = ref.watch(_playerControllerProvider(post));
     final blurExplicit = ref.watch(blurExplicitPostProvider);
     final isMounted = useIsMounted();
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
