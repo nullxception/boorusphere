@@ -5,7 +5,7 @@ import '../settings.dart';
 
 final serverActiveProvider =
     StateNotifierProvider<ServerActiveState, ServerData>((ref) {
-  final saved = Settings.server_active.read(or: ServerData.empty);
+  final saved = Settings.serverActive.read(or: ServerData.empty);
   return ServerActiveState(saved);
 });
 
@@ -14,6 +14,6 @@ class ServerActiveState extends StateNotifier<ServerData> {
 
   Future<void> update(ServerData data) async {
     state = data;
-    await Settings.server_active.save(data);
+    await Settings.serverActive.save(data);
   }
 }

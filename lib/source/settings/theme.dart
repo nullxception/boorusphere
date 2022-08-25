@@ -5,13 +5,13 @@ import 'settings.dart';
 
 final themeModeProvider =
     StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
-  final saved = Settings.theme_mode.read(or: ThemeMode.system.index);
+  final saved = Settings.uiThemeMode.read(or: ThemeMode.system.index);
   return ThemeModeState(ThemeMode.values[saved]);
 });
 
 final darkerThemeProvider =
     StateNotifierProvider<DarkerThemeState, bool>((ref) {
-  final saved = Settings.ui_theme_darker.read(or: false);
+  final saved = Settings.uiMidnightMode.read(or: false);
   return DarkerThemeState(saved);
 });
 
@@ -20,7 +20,7 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
 
   Future<void> update(ThemeMode mode) async {
     state = mode;
-    await Settings.theme_mode.save(mode.index);
+    await Settings.uiThemeMode.save(mode.index);
   }
 
   Future<ThemeMode> cycle() async {
@@ -44,6 +44,6 @@ class DarkerThemeState extends StateNotifier<bool> {
 
   Future<void> update(bool value) async {
     state = value;
-    await Settings.ui_theme_darker.save(value);
+    await Settings.uiMidnightMode.save(value);
   }
 }

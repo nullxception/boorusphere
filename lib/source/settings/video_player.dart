@@ -4,7 +4,7 @@ import 'settings.dart';
 
 final videoPlayerMuteProvider =
     StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
-  final fromSettings = Settings.videoplayer_mute.read(or: false);
+  final fromSettings = Settings.videoPlayerMuted.read(or: false);
   return VideoPlayerMuteState(fromSettings);
 });
 
@@ -13,7 +13,7 @@ class VideoPlayerMuteState extends StateNotifier<bool> {
 
   Future<bool> toggle() async {
     state = !state;
-    await Settings.videoplayer_mute.save(state);
+    await Settings.videoPlayerMuted.save(state);
     return state;
   }
 }

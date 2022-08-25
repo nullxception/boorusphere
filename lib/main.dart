@@ -10,6 +10,7 @@ import 'entity/search_history.dart';
 import 'entity/server_data.dart';
 import 'routes/routes.dart';
 import 'source/device_info.dart';
+import 'source/settings/settings.dart';
 import 'source/settings/theme.dart';
 import 'widgets/apptheme.dart';
 
@@ -58,6 +59,7 @@ void main() async {
   Hive.registerAdapter(PostAdapter());
   Hive.registerAdapter(DownloadEntryAdapter());
   await Future.wait(boxes.map(Hive.openBox));
+  await Settings.performMigration();
 
   runApp(const ProviderScope(child: Boorusphere()));
 }

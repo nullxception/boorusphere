@@ -4,7 +4,7 @@ import 'settings.dart';
 
 final blurExplicitPostProvider =
     StateNotifierProvider<BlurExplicitPostState, bool>((ref) {
-  final saved = Settings.blur_explicit_post.read(or: true);
+  final saved = Settings.postBlurExplicit.read(or: true);
   return BlurExplicitPostState(saved);
 });
 
@@ -13,6 +13,6 @@ class BlurExplicitPostState extends StateNotifier<bool> {
 
   Future<void> update(bool value) async {
     state = value;
-    await Settings.blur_explicit_post.save(value);
+    await Settings.postBlurExplicit.save(value);
   }
 }

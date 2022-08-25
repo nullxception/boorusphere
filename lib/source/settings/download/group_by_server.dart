@@ -4,7 +4,7 @@ import '../settings.dart';
 
 final groupByServerProvider =
     StateNotifierProvider<GroupByServerState, bool>((ref) {
-  final saved = Settings.download_group_by_server.read(or: false);
+  final saved = Settings.downloadsGroupByServer.read(or: false);
   return GroupByServerState(saved);
 });
 
@@ -13,6 +13,6 @@ class GroupByServerState extends StateNotifier<bool> {
 
   Future<void> update(bool value) async {
     state = value;
-    await Settings.download_group_by_server.save(value);
+    await Settings.downloadsGroupByServer.save(value);
   }
 }
