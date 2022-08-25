@@ -1,4 +1,3 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -9,9 +8,9 @@ import 'entity/post.dart';
 import 'entity/search_history.dart';
 import 'entity/server_data.dart';
 import 'routes/routes.dart';
-import 'services/app_theme/app_theme.dart';
 import 'source/device_info.dart';
 import 'source/settings/theme.dart';
+import 'widgets/apptheme.dart';
 
 class Boorusphere extends HookConsumerWidget {
   Boorusphere({super.key});
@@ -21,7 +20,6 @@ class Boorusphere extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
-    final appTheme = ref.watch(appThemeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
     final deviceInfo = ref.watch(deviceInfoProvider);
 
@@ -29,20 +27,16 @@ class Boorusphere extends HookConsumerWidget {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
 
-    return DynamicColorBuilder(
-      builder: (maybeLight, maybeDark) {
-        appTheme.overrideWith(light: maybeLight, dark: maybeDark);
-        return MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: 'Boorusphere',
-          theme: appTheme.data.day,
-          darkTheme:
-              isDarkerTheme ? appTheme.data.midnight : appTheme.data.night,
-          themeMode: themeMode,
-          routerDelegate: _router.delegate(),
-          routeInformationParser: _router.defaultRouteParser(),
-        );
-      },
+    return AppThemeBuilder(
+      builder: (context, appTheme) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Boorusphere',
+        theme: appTheme.day,
+        darkTheme: isDarkerTheme ? appTheme.midnight : appTheme.night,
+        themeMode: themeMode,
+        routerDelegate: _router.delegate(),
+        routeInformationParser: _router.defaultRouteParser(),
+      ),
     );
   }
 }
