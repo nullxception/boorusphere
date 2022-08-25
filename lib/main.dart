@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -13,15 +14,14 @@ import 'source/settings/theme.dart';
 import 'widgets/apptheme.dart';
 
 class Boorusphere extends HookConsumerWidget {
-  Boorusphere({super.key});
-
-  final _router = SphereRouter();
+  const Boorusphere({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
     final deviceInfo = ref.watch(deviceInfoProvider);
+    final router = useMemoized(SphereRouter.new);
 
     if (deviceInfo.sdkInt > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -34,8 +34,8 @@ class Boorusphere extends HookConsumerWidget {
         theme: appTheme.day,
         darkTheme: isDarkerTheme ? appTheme.midnight : appTheme.night,
         themeMode: themeMode,
-        routerDelegate: _router.delegate(),
-        routeInformationParser: _router.defaultRouteParser(),
+        routerDelegate: router.delegate(),
+        routeInformationParser: router.defaultRouteParser(),
       ),
     );
   }
@@ -59,5 +59,5 @@ void main() async {
   Hive.registerAdapter(DownloadEntryAdapter());
   await Future.wait(boxes.map(Hive.openBox));
 
-  runApp(ProviderScope(child: Boorusphere()));
+  runApp(const ProviderScope(child: Boorusphere()));
 }
