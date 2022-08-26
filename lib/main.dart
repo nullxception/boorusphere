@@ -12,7 +12,7 @@ import 'routes/routes.dart';
 import 'source/device_info.dart';
 import 'source/settings/settings.dart';
 import 'source/settings/theme.dart';
-import 'widgets/apptheme.dart';
+import 'widgets/app_theme_builder.dart';
 
 class Boorusphere extends HookConsumerWidget {
   const Boorusphere({super.key});

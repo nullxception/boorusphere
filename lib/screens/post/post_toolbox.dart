@@ -50,6 +50,7 @@ class PostToolbox extends HookConsumerWidget {
               ),
               IconButton(
                 padding: const EdgeInsets.all(16),
+                color: Colors.white,
                 icon: Icon(downloadProgress.status.isDownloaded
                     ? Icons.download_done
                     : Icons.download),
@@ -62,12 +63,14 @@ class PostToolbox extends HookConsumerWidget {
           ),
           IconButton(
             padding: const EdgeInsets.all(16),
+            color: Colors.white,
             icon: const Icon(Icons.link_outlined),
             onPressed: () => launchUrlString(post.originalFile,
                 mode: LaunchMode.externalApplication),
           ),
           IconButton(
             padding: const EdgeInsets.all(16),
+            color: Colors.white,
             icon: const Icon(Icons.info),
             onPressed: () => context.router.push(PostDetailsRoute(post: post)),
           ),

@@ -255,6 +255,7 @@ class _Toolbox extends HookConsumerWidget {
                     ),
                     child: IconButton(
                       padding: const EdgeInsets.all(8.0),
+                      color: Colors.white,
                       iconSize: 72,
                       icon: Icon(
                         isPlaying ? Icons.pause_outlined : Icons.play_arrow,
@@ -284,6 +285,7 @@ class _Toolbox extends HookConsumerWidget {
                                 ),
                                 IconButton(
                                   padding: const EdgeInsets.all(16),
+                                  color: Colors.white,
                                   icon: Icon(
                                       downloadProgress.status.isDownloaded
                                           ? Icons.download_done
@@ -298,6 +300,7 @@ class _Toolbox extends HookConsumerWidget {
                             ),
                             IconButton(
                               padding: const EdgeInsets.all(16),
+                              color: Colors.white,
                               onPressed: () async {
                                 final mute = await ref
                                     .read(videoPlayerMuteProvider.notifier)
@@ -310,11 +313,13 @@ class _Toolbox extends HookConsumerWidget {
                             ),
                             IconButton(
                               padding: const EdgeInsets.all(16),
+                              color: Colors.white,
                               icon: const Icon(Icons.info),
                               onPressed: () => context.router
                                   .push(PostDetailsRoute(post: post)),
                             ),
                             IconButton(
+                              color: Colors.white,
                               icon: Icon(
                                 fullscreen
                                     ? Icons.fullscreen_exit

@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../entity/post.dart';
 import '../../../hooks/extended_page_controller.dart';
-import '../../services/app_theme/app_theme.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/asyncvalue.dart';
@@ -47,7 +46,6 @@ class PostPage extends HookConsumerWidget {
         backgroundColor: Colors.black,
         body: StyledOverlayRegion(
           nightMode: true,
-          theme: ref.read(appThemeProvider).data.night,
           child: Stack(
             children: [
               Padding(
@@ -145,6 +143,7 @@ class _PostAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: AppBar(
         backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
