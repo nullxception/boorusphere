@@ -33,6 +33,7 @@ class PageDataSource {
   final List<Cookie> _cookies = [];
 
   int _page = 0;
+  int _skipCount = 0;
   bool _isIdle = true;
 
   String get cookies => CookieManager.getCookies(_cookies);
@@ -66,6 +67,7 @@ class PageDataSource {
     if (page.isEmpty) {
       final pageOption = ref.read(pageOptionProvider);
       final safeMode = ref.read(safeModeProvider);
+      _skipCount = 0;
       throw SphereException(
           message: [
         posts.isNotEmpty ? 'No result found' : 'No more result found',
@@ -91,11 +93,15 @@ class PageDataSource {
       }
       posts.addAll(newPosts);
       _isIdle = true;
+      _skipCount = 0;
       return;
     }
 
-    await Future.delayed(const Duration(milliseconds: 150));
-    await _fetch();
+    if (_skipCount < 3) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      _skipCount++;
+      await _fetch();
+    }
   }
 
   void loadMore() {
