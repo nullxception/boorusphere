@@ -33,7 +33,7 @@ class PageDataSource {
   final List<Cookie> _cookies = [];
 
   int _page = 0;
-  bool _isFetching = true;
+  bool _isIdle = true;
 
   String get cookies => CookieManager.getCookies(_cookies);
 
@@ -58,7 +58,7 @@ class PageDataSource {
     final blockedTags = ref.read(blockedTagsProvider);
     final postLimit = ref.read(serverPostLimitProvider);
     if (serverActive == ServerData.empty) return;
-    _isFetching = false;
+    _isIdle = false;
 
     if (pageOption.query.isNotEmpty) {
       await ref.read(searchHistoryProvider.notifier).save(pageOption.query);
@@ -92,14 +92,13 @@ class PageDataSource {
             ..addAll(cookies);
         }
         posts.addAll(newPosts);
-        _isFetching = true;
+        _isIdle = true;
         return;
       }
 
       await Future.delayed(const Duration(milliseconds: 150));
       await _fetch();
     } catch (exception) {
-      _isFetching = true;
       if (exception is SphereException) {
         final message = _buildErrorMessage(exception.message);
         throw SphereException(message: message);
@@ -110,7 +109,7 @@ class PageDataSource {
   }
 
   void loadMore() {
-    if (!_isFetching) return;
+    if (!_isIdle) return;
     ref
         .read(pageOptionProvider.notifier)
         .update((state) => state.copyWith(clear: false));
