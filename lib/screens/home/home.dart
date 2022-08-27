@@ -135,6 +135,13 @@ class _SlidableContainer extends HookConsumerWidget {
         final dx = details.globalPosition.dx;
         final isOpen = animator.isDismissed && dx < dragWidth;
         final isClose = animator.isCompleted && dx > dragWidth;
+        // ignore when gesture started on the edge to avoid conflict
+        // with system back gesture
+        if (dx < 24) {
+          canBeDragged.value = false;
+          return;
+        }
+
         canBeDragged.value = isOpen || isClose;
       },
       onHorizontalDragUpdate: (details) {
