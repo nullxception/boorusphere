@@ -18,7 +18,7 @@ class ServerResponseParser {
           message: 'Cannot fetch page (HTTP ${res.statusCode})');
     } else if (!data.toString().contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
-      throw const SphereException(message: 'No result found');
+      return [];
     }
 
     const cantParse = SphereException(message: 'Cannot parse result');

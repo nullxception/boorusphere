@@ -37,19 +37,6 @@ class PageDataSource {
 
   String get cookies => CookieManager.getCookies(_cookies);
 
-  String _buildErrorMessage(String message) {
-    final pageOption = ref.read(pageOptionProvider);
-    final safeMode = ref.read(safeModeProvider);
-    final words = <String>[];
-
-    words.add(posts.isNotEmpty
-        ? message.replaceFirst('No result found', 'No more result found')
-        : message);
-    if (pageOption.query.isNotEmpty) words.add('for ${pageOption.query}');
-    if (safeMode) words.add('in safe mode');
-    return words.join(' ');
-  }
-
   Future<void> _fetch() async {
     final client = ref.read(httpProvider);
     final pageOption = ref.read(pageOptionProvider);
@@ -67,45 +54,48 @@ class PageDataSource {
     if (pageOption.clear) posts.clear();
     if (posts.isEmpty) _page = 0;
 
-    try {
-      final url = serverActive.searchUrlOf(
-        pageOption.query,
-        _page,
-        safeMode,
-        postLimit,
-      );
-      final res = await client.get(url);
+    final url = serverActive.searchUrlOf(
+      pageOption.query,
+      _page,
+      safeMode,
+      postLimit,
+    );
+    final res = await client.get(url);
+    final page = ServerResponseParser.parsePage(serverActive, res);
 
-      _page++;
-      final newPosts = ServerResponseParser.parsePage(serverActive, res)
-          .where((it) =>
-              !it.tags.any(blockedTags.values.contains) &&
-              !posts.any((post) => post.id == it.id))
-          .toList();
-
-      if (newPosts.isNotEmpty) {
-        final cookieJar = ref.watch(cookieProvider);
-        final cookies = await cookieJar.loadForRequest(url.asUri);
-        if (cookies.isNotEmpty) {
-          _cookies
-            ..clear()
-            ..addAll(cookies);
-        }
-        posts.addAll(newPosts);
-        _isIdle = true;
-        return;
-      }
-
-      await Future.delayed(const Duration(milliseconds: 150));
-      await _fetch();
-    } catch (exception) {
-      if (exception is SphereException) {
-        final message = _buildErrorMessage(exception.message);
-        throw SphereException(message: message);
-      } else {
-        rethrow;
-      }
+    if (page.isEmpty) {
+      final pageOption = ref.read(pageOptionProvider);
+      final safeMode = ref.read(safeModeProvider);
+      throw SphereException(
+          message: [
+        posts.isNotEmpty ? 'No result found' : 'No more result found',
+        if (pageOption.query.isNotEmpty) 'for ${pageOption.query}',
+        if (safeMode) 'in safe mode',
+      ].join(' '));
     }
+
+    _page++;
+    final newPosts = page
+        .where((it) =>
+            !it.tags.any(blockedTags.values.contains) &&
+            !posts.any((post) => post.id == it.id))
+        .toList();
+
+    if (newPosts.isNotEmpty) {
+      final cookieJar = ref.watch(cookieProvider);
+      final cookies = await cookieJar.loadForRequest(url.asUri);
+      if (cookies.isNotEmpty) {
+        _cookies
+          ..clear()
+          ..addAll(cookies);
+      }
+      posts.addAll(newPosts);
+      _isIdle = true;
+      return;
+    }
+
+    await Future.delayed(const Duration(milliseconds: 150));
+    await _fetch();
   }
 
   void loadMore() {
