@@ -1,4 +1,12 @@
 
+## 1.1.4
+* Add support for custom server API address
+* Add support for in-app-update
+* Fix load-more did not work occasionally especially when post limit is at below 40
+* Fix server data editing issues
+* Fix several UI inconsistency
+* Parse categorized tags for server that supports it (like danbooru)
+
 ## 1.1.3
 * Revamp several UI elements
 * Fix app cannot be closed after using "search tag" or "add tag to current search"
