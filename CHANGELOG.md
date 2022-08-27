@@ -1,4 +1,7 @@
 
+## 1.1.5
+* Fixup load more button keep trying to load page endlessly
+
 ## 1.1.4
 * Add support for custom server API address
 * Add support for in-app-update
