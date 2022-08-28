@@ -36,54 +36,89 @@ class _$SphereRouter extends RootStackRouter {
     },
     PostDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<PostDetailsRouteArgs>();
-      return MaterialPageX<dynamic>(
+      return CustomPage<dynamic>(
           routeData: routeData,
-          child: PostDetailsPage(key: args.key, post: args.post));
+          child: PostDetailsPage(key: args.key, post: args.post),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     DownloadsRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-          routeData: routeData, child: const DownloadsPage());
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const DownloadsPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     ServerEditorRoute.name: (routeData) {
       final args = routeData.argsAs<ServerEditorRouteArgs>(
           orElse: () => const ServerEditorRouteArgs());
-      return MaterialPageX<dynamic>(
+      return CustomPage<dynamic>(
           routeData: routeData,
-          child: ServerEditorPage(key: args.key, server: args.server));
+          child: ServerEditorPage(key: args.key, server: args.server),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     ServerRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-          routeData: routeData, child: const ServerPage());
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const ServerPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     ServerPayloadsRoute.name: (routeData) {
       final args = routeData.argsAs<ServerPayloadsRouteArgs>(
           orElse: () => const ServerPayloadsRouteArgs());
-      return MaterialPageX<dynamic>(
+      return CustomPage<dynamic>(
           routeData: routeData,
-          child:
-              ServerPayloadsPage(key: args.key, onReturned: args.onReturned));
+          child: ServerPayloadsPage(key: args.key, onReturned: args.onReturned),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     TagsBlockerRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-          routeData: routeData, child: const TagsBlockerPage());
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const TagsBlockerPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     SettingsRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-          routeData: routeData, child: const SettingsPage());
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const SettingsPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     AboutRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-          routeData: routeData, child: const AboutPage());
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const AboutPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     ChangelogRoute.name: (routeData) {
       final args = routeData.argsAs<ChangelogRouteArgs>();
-      return MaterialPageX<dynamic>(
+      return CustomPage<dynamic>(
           routeData: routeData,
-          child: ChangelogPage(key: args.key, option: args.option));
+          child: ChangelogPage(key: args.key, option: args.option),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     },
     LicensesRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-          routeData: routeData, child: const LicensesPage());
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const LicensesPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     }
   };
 

@@ -17,6 +17,7 @@ import '../screens/settings/settings.dart';
 import '../screens/tags_blocker/tags_blocker.dart';
 import '../source/changelog.dart';
 import 'chill_page.dart';
+import 'slide_page.dart';
 
 part 'routes.gr.dart';
 
@@ -24,17 +25,50 @@ part 'routes.gr.dart';
   replaceInRouteName: 'Page,Route',
   routes: [
     AutoRoute(page: HomePage, initial: true),
-    CustomRoute(page: PostPage, customRouteBuilder: ChillPageRoute.build),
-    AutoRoute(page: PostDetailsPage),
-    AutoRoute(page: DownloadsPage),
-    AutoRoute(page: ServerEditorPage),
-    AutoRoute(page: ServerPage),
-    AutoRoute(page: ServerPayloadsPage),
-    AutoRoute(page: TagsBlockerPage),
-    AutoRoute(page: SettingsPage),
-    AutoRoute(page: AboutPage),
-    AutoRoute(page: ChangelogPage),
-    AutoRoute(page: LicensesPage),
+    CustomRoute(
+      page: PostPage,
+      customRouteBuilder: ChillPageRoute.build,
+    ),
+    CustomRoute(
+      page: PostDetailsPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: DownloadsPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: ServerEditorPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: ServerPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: ServerPayloadsPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: TagsBlockerPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: SettingsPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: AboutPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: ChangelogPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: LicensesPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
   ],
 )
 class SphereRouter extends _$SphereRouter {}
