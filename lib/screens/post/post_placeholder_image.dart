@@ -30,20 +30,15 @@ class PostPlaceholderImage extends ConsumerWidget {
       fit: BoxFit.contain,
       filterQuality: FilterQuality.high,
       enableLoadState: false,
-      loadStateChanged: (state) {
-        final isCompleted = state.extendedImageLoadState == LoadState.completed;
-        if (isCompleted && shouldBlur) {
-          return ImageFiltered(
-            imageFilter: ImageFilter.blur(
-              sigmaX: 8,
-              sigmaY: 8,
-              tileMode: TileMode.decal,
-            ),
-            child: state.completedWidget,
+      beforePaintImage: (canvas, rect, image, paint) {
+        if (shouldBlur) {
+          paint.imageFilter = ImageFilter.blur(
+            sigmaX: 8,
+            sigmaY: 8,
+            tileMode: TileMode.decal,
           );
         }
-
-        return state.completedWidget;
+        return false;
       },
     );
   }

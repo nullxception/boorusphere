@@ -134,41 +134,36 @@ class _Thumbnail extends HookConsumerWidget {
     final pageCookies =
         ref.watch(pageDataProvider.select((value) => value.cookies));
 
-    return ExtendedImage.network(
-      post.previewFile,
-      headers: {
-        'Referer': post.postUrl,
-        'Cookie': pageCookies,
-      },
-      filterQuality: _thumbnailQuality(gridExtra),
-      fit: BoxFit.cover,
-      loadStateChanged: (state) {
-        Widget widget;
-        switch (state.extendedImageLoadState) {
-          case LoadState.loading:
-            widget = const _Placeholder();
-            break;
-          case LoadState.failed:
-            widget = const _Placeholder(isFailed: true);
-            break;
-          default:
-            widget = blurExplicitPost && post.rating == PostRating.explicit
-                ? ImageFiltered(
-                    imageFilter: ImageFilter.blur(
-                      sigmaX: 8,
-                      sigmaY: 8,
-                      tileMode: TileMode.decal,
-                    ),
-                    child: state.completedWidget,
-                  )
-                : state.completedWidget;
-            break;
-        }
-        return AspectRatio(
-          aspectRatio: post.aspectRatio,
-          child: AnimatedSwitcher(
+    return AspectRatio(
+      aspectRatio: post.aspectRatio,
+      child: ExtendedImage.network(
+        post.previewFile,
+        headers: {
+          'Referer': post.postUrl,
+          'Cookie': pageCookies,
+        },
+        filterQuality: _thumbnailQuality(gridExtra),
+        fit: BoxFit.cover,
+        beforePaintImage: (canvas, rect, image, paint) {
+          if (blurExplicitPost && post.rating == PostRating.explicit) {
+            paint.imageFilter = ImageFilter.blur(
+              sigmaX: 8,
+              sigmaY: 8,
+              tileMode: TileMode.decal,
+            );
+          }
+          return false;
+        },
+        enableLoadState: false,
+        loadStateChanged: (state) {
+          return AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
-            child: widget,
+            child: state.extendedImageLoadState == LoadState.completed
+                ? state.completedWidget
+                : _Placeholder(
+                    key: ValueKey(post.id),
+                    isFailed: state.extendedImageLoadState == LoadState.failed,
+                  ),
             layoutBuilder: (currentChild, previousChildren) {
               return Stack(
                 alignment: Alignment.center,
@@ -179,15 +174,18 @@ class _Thumbnail extends HookConsumerWidget {
                 ],
               );
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
 
 class _Placeholder extends StatelessWidget {
-  const _Placeholder({this.isFailed = false});
+  const _Placeholder({
+    super.key,
+    this.isFailed = false,
+  });
 
   final bool isFailed;
 
