@@ -9,6 +9,7 @@ enum Settings {
   serverPostLimit,
   serverSafeMode,
   uiMidnightMode,
+  uiBlur,
   uiThemeMode,
   uiTimelineGrid,
   videoPlayerMuted;

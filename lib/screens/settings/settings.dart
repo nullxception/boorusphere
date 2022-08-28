@@ -8,6 +8,7 @@ import '../../source/settings/blur_explicit_post.dart';
 import '../../source/settings/safe_mode.dart';
 import '../../source/settings/server/post_limit.dart';
 import '../../source/settings/theme.dart';
+import '../../source/settings/ui_blur.dart';
 import '../../utils/download.dart';
 import '../../utils/extensions/buildcontext.dart';
 
@@ -79,6 +80,17 @@ class _SettingsContent extends HookConsumerWidget {
               value: darkerTheme,
               onChanged: (value) {
                 ref.read(darkerThemeProvider.notifier).update(value);
+              },
+            ),
+            SwitchListTile(
+              title: const Text('Enable blur'),
+              subtitle: const Padding(
+                padding: subtitlePadding,
+                child: Text('Enable blur background on various UI elements'),
+              ),
+              value: ref.watch(uiBlurProvider),
+              onChanged: (value) {
+                ref.read(uiBlurProvider.notifier).enable(value);
               },
             ),
           ],
