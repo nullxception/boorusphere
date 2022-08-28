@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,9 +8,11 @@ import '../../../source/page.dart';
 import '../../../source/search_history.dart';
 import '../../../source/settings/grid.dart';
 import '../../../source/settings/server/active.dart';
+import '../../../source/settings/ui_blur.dart';
 import '../../../source/suggestion.dart';
 import '../../../utils/extensions/buildcontext.dart';
 import '../../../utils/extensions/string.dart';
+import '../../../widgets/blur_backdrop.dart';
 import '../../../widgets/exception_info.dart';
 import '../../../widgets/favicon.dart';
 import '../home.dart';

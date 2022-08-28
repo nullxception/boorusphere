@@ -10,6 +10,7 @@ class _SearchBar extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarController);
     final delta = useState([0.0, 0.0]);
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
+    final isBlurAllowed = ref.watch(uiBlurProvider);
 
     final onScrolling = useCallback(() {
       final position = scrollController.position;
@@ -42,76 +43,78 @@ class _SearchBar extends HookConsumerWidget {
     }, [scrollController]);
 
     return RepaintBoundary(
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 8,
-            sigmaY: 8,
-            tileMode: TileMode.clamp,
+      child: BlurBackdrop(
+        sigmaX: 8,
+        sigmaY: 8,
+        blur: isBlurAllowed,
+        child: Container(
+          color: context.theme.scaffoldBackgroundColor.withOpacity(
+            context.isLightThemed
+                ? isBlurAllowed
+                    ? 0.7
+                    : 0.92
+                : isBlurAllowed
+                    ? 0.85
+                    : 0.97,
           ),
-          child: Container(
-            color: context.theme.scaffoldBackgroundColor.withOpacity(
-                context.brightness == Brightness.light ? 0.7 : 0.85),
-            child: SafeArea(
-              top: false,
-              maintainBottomViewPadding: true,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                ),
-                margin: collapsed
-                    ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
-                    : const EdgeInsets.fromLTRB(16, 11, 16, 11),
-                child: Row(
-                  children: [
-                    _LeadingButton(collapsed: collapsed),
-                    Expanded(
-                      child: TextField(
-                        autofocus: true,
-                        controller: searchBar._textController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: searchBar.hint,
-                          isDense: true,
-                        ),
-                        textAlign: searchBar.isOpen
-                            ? TextAlign.start
-                            : TextAlign.center,
-                        readOnly: !searchBar.isOpen,
-                        onSubmitted: searchBar.submit,
-                        onTap: searchBar.isOpen ? null : searchBar.open,
-                        style: DefaultTextStyle.of(context)
-                            .style
-                            .copyWith(fontSize: 13),
+          child: SafeArea(
+            top: false,
+            maintainBottomViewPadding: true,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+              ),
+              margin: collapsed
+                  ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
+                  : const EdgeInsets.fromLTRB(16, 11, 16, 11),
+              child: Row(
+                children: [
+                  _LeadingButton(collapsed: collapsed),
+                  Expanded(
+                    child: TextField(
+                      autofocus: true,
+                      controller: searchBar._textController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: searchBar.hint,
+                        isDense: true,
                       ),
+                      textAlign:
+                          searchBar.isOpen ? TextAlign.start : TextAlign.center,
+                      readOnly: !searchBar.isOpen,
+                      onSubmitted: searchBar.submit,
+                      onTap: searchBar.isOpen ? null : searchBar.open,
+                      style: DefaultTextStyle.of(context)
+                          .style
+                          .copyWith(fontSize: 13),
                     ),
-                    if (!searchBar.isOpen)
-                      _TrailingButton(
-                          collapsed: collapsed,
-                          scrollController: scrollController),
-                    if (searchBar.isOpen && searchBar.isTextChanged)
-                      IconButton(
-                        icon: const Icon(Icons.rotate_left),
-                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        onPressed: searchBar.reset,
-                      ),
-                    if (searchBar.isOpen)
-                      IconButton(
-                        icon: const Icon(Icons.close_rounded),
-                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        onPressed: () {
-                          if (searchBar.text.isEmpty) {
-                            searchBar.reset();
-                            searchBar.close();
-                          } else {
-                            searchBar.clear();
-                          }
-                        },
-                      ),
-                  ],
-                ),
+                  ),
+                  if (!searchBar.isOpen)
+                    _TrailingButton(
+                        collapsed: collapsed,
+                        scrollController: scrollController),
+                  if (searchBar.isOpen && searchBar.isTextChanged)
+                    IconButton(
+                      icon: const Icon(Icons.rotate_left),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      onPressed: searchBar.reset,
+                    ),
+                  if (searchBar.isOpen)
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      onPressed: () {
+                        if (searchBar.text.isEmpty) {
+                          searchBar.reset();
+                          searchBar.close();
+                        } else {
+                          searchBar.clear();
+                        }
+                      },
+                    ),
+                ],
               ),
             ),
           ),

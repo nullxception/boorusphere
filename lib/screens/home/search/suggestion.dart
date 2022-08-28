@@ -10,7 +10,7 @@ class _SearchSuggestion extends HookConsumerWidget {
     final searchQuery = useState('');
     final suggester = ref.watch(suggestionFuture(searchQuery.value));
     final history = ref.watch(searchHistoryFinder(searchQuery.value));
-
+    final isBlurAllowed = ref.watch(uiBlurProvider);
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
     }, [searchBar]);
@@ -23,145 +23,151 @@ class _SearchSuggestion extends HookConsumerWidget {
     }, [searchBar]);
 
     return Container(
-      color: context.theme.scaffoldBackgroundColor.withOpacity(0.9),
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              SafeArea(
-                child: CustomScrollView(
-                  slivers: [
-                    if (history.isNotEmpty)
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        sliver: SliverToBoxAdapter(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Recently'),
-                              TextButton(
-                                onPressed: ref
-                                    .read(searchHistoryProvider.notifier)
-                                    .clear,
-                                child: const Text('Clear all'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final reversed = history.entries.length - 1 - index;
-                          final entry = history.entries.elementAt(reversed);
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Dismissible(
-                              key: Key(entry.key.toString()),
-                              direction: DismissDirection.endToStart,
-                              onDismissed: (direction) {
-                                ref
-                                    .read(searchHistoryProvider.notifier)
-                                    .delete(entry.key);
-                              },
-                              background: Container(
-                                color: Colors.red,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: const [
-                                    Text('Remove'),
-                                    Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: Icon(Icons.delete,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              child: _SuggestionEntryTile(
-                                data: SuggestionEntry(
-                                  isHistory: true,
-                                  text: entry.value.query,
-                                  server: entry.value.server,
-                                ),
-                                onTap: searchBar.submit,
-                                onAdded: searchBar.append,
-                              ),
-                            ),
-                          );
-                        },
-                        childCount: history.entries.length,
-                      ),
-                    ),
-                    if (!serverActive.canSuggestTags)
-                      SliverToBoxAdapter(
-                        child: Column(
+      color: context.theme.scaffoldBackgroundColor.withOpacity(
+        context.isLightThemed
+            ? isBlurAllowed
+                ? 0.9
+                : 0.95
+            : isBlurAllowed
+                ? 0.9
+                : 0.98,
+      ),
+      child: BlurBackdrop(
+        sigmaX: 12,
+        sigmaY: 12,
+        blur: isBlurAllowed,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  if (history.isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Icon(Icons.search_off),
+                            const Text('Recently'),
+                            TextButton(
+                              onPressed: ref
+                                  .read(searchHistoryProvider.notifier)
+                                  .clear,
+                              child: const Text('Clear all'),
                             ),
-                            Text(
-                                '${serverActive.name} did not support search suggestion'),
                           ],
                         ),
                       ),
-                    if (serverActive.canSuggestTags)
-                      SliverPadding(
-                        padding: const EdgeInsets.all(16),
-                        sliver: SliverToBoxAdapter(
-                            child: Text('Suggested on ${serverActive.name}')),
+                    ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final reversed = history.entries.length - 1 - index;
+                        final entry = history.entries.elementAt(reversed);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Dismissible(
+                            key: Key(entry.key.toString()),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {
+                              ref
+                                  .read(searchHistoryProvider.notifier)
+                                  .delete(entry.key);
+                            },
+                            background: Container(
+                              color: Colors.red,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: const [
+                                  Text('Remove'),
+                                  Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child:
+                                        Icon(Icons.delete, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: _SuggestionEntryTile(
+                              data: SuggestionEntry(
+                                isHistory: true,
+                                text: entry.value.query,
+                                server: entry.value.server,
+                              ),
+                              onTap: searchBar.submit,
+                              onAdded: searchBar.append,
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: history.entries.length,
+                    ),
+                  ),
+                  if (!serverActive.canSuggestTags)
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(Icons.search_off),
+                          ),
+                          Text(
+                              '${serverActive.name} did not support search suggestion'),
+                        ],
                       ),
-                    if (serverActive.canSuggestTags)
-                      suggester.when(
-                        data: (value) => SliverList(
-                          delegate:
-                              SliverChildBuilderDelegate((context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: _SuggestionEntryTile(
-                                data: SuggestionEntry(
-                                  isHistory: false,
-                                  text: value[index],
-                                ),
-                                onTap: searchBar.submit,
-                                onAdded: searchBar.append,
+                    ),
+                  if (serverActive.canSuggestTags)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                          child: Text('Suggested on ${serverActive.name}')),
+                    ),
+                  if (serverActive.canSuggestTags)
+                    suggester.when(
+                      data: (value) => SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: _SuggestionEntryTile(
+                              data: SuggestionEntry(
+                                isHistory: false,
+                                text: value[index],
                               ),
-                            );
-                          }, childCount: value.length),
-                        ),
-                        loading: () => SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 128,
-                            child: Center(
-                              child: SpinKitFoldingCube(
-                                size: 24,
-                                color: context.colorScheme.primary,
-                                duration: const Duration(seconds: 1),
-                              ),
+                              onTap: searchBar.submit,
+                              onAdded: searchBar.append,
+                            ),
+                          );
+                        }, childCount: value.length),
+                      ),
+                      loading: () => SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 128,
+                          child: Center(
+                            child: SpinKitFoldingCube(
+                              size: 24,
+                              color: context.colorScheme.primary,
+                              duration: const Duration(seconds: 1),
                             ),
                           ),
                         ),
-                        error: (ex, trace) => SliverPadding(
-                          padding: const EdgeInsets.all(16),
-                          sliver:
-                              SliverToBoxAdapter(child: ExceptionInfo(err: ex)),
-                        ),
                       ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: kBottomNavigationBarHeight + 16,
+                      error: (ex, trace) => SliverPadding(
+                        padding: const EdgeInsets.all(16),
+                        sliver:
+                            SliverToBoxAdapter(child: ExceptionInfo(err: ex)),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: kBottomNavigationBarHeight + 16,
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
