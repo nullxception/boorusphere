@@ -12,7 +12,6 @@ class TimelineStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageData = ref.watch(pageDataProvider);
     final pageState = ref.watch(pageStateProvider);
 
     return Column(
@@ -55,7 +54,9 @@ class TimelineStatus extends ConsumerWidget {
             height: 50,
             alignment: Alignment.topCenter,
             child: ElevatedButton(
-                onPressed: pageData.loadMore, child: const Text('Load more')),
+              onPressed: () => PageDataSource.loadMore(ref),
+              child: const Text('Load more'),
+            ),
           ),
         ),
       ],

@@ -34,7 +34,6 @@ class PageDataSource {
 
   int _page = 0;
   int _skipCount = 0;
-  bool _isIdle = true;
 
   String get cookies => CookieManager.getCookies(_cookies);
 
@@ -46,7 +45,6 @@ class PageDataSource {
     final blockedTags = ref.read(blockedTagsProvider);
     final postLimit = ref.read(serverPostLimitProvider);
     if (serverActive == ServerData.empty) return;
-    _isIdle = false;
 
     if (pageOption.query.isNotEmpty) {
       await ref.read(searchHistoryProvider.notifier).save(pageOption.query);
@@ -67,7 +65,6 @@ class PageDataSource {
     if (page.isEmpty) {
       final pageOption = ref.read(pageOptionProvider);
       final safeMode = ref.read(safeModeProvider);
-      _skipCount = 0;
       throw SphereException(
           message: [
         posts.isNotEmpty ? 'No result found' : 'No more result found',
@@ -83,31 +80,33 @@ class PageDataSource {
             !posts.any((post) => post.id == it.id))
         .toList();
 
-    if (newPosts.isNotEmpty) {
-      final cookieJar = ref.watch(cookieProvider);
-      final cookies = await cookieJar.loadForRequest(url.asUri);
-      if (cookies.isNotEmpty) {
-        _cookies
-          ..clear()
-          ..addAll(cookies);
-      }
-      posts.addAll(newPosts);
-      _isIdle = true;
-      _skipCount = 0;
+    if (newPosts.isEmpty) {
+      _skipToNextPage();
       return;
     }
 
-    if (_skipCount < 3) {
-      await Future.delayed(const Duration(milliseconds: 150));
-      _skipCount++;
-      await _fetch();
+    final cookieJar = ref.watch(cookieProvider);
+    final cookies = await cookieJar.loadForRequest(url.asUri);
+    if (cookies.isNotEmpty) {
+      _cookies
+        ..clear()
+        ..addAll(cookies);
     }
+    posts.addAll(newPosts);
+    _skipCount = 0;
   }
 
-  void loadMore() {
-    if (!_isIdle) return;
+  void _skipToNextPage() {
+    if (_skipCount > 3) return;
+    _skipCount++;
+    Future.delayed(const Duration(milliseconds: 150), _fetch);
+  }
+
+  static void loadMore(WidgetRef ref) {
+    final recentState = ref.read(pageStateProvider);
+    if (recentState.asData == null) return;
     ref
         .read(pageOptionProvider.notifier)
-        .update((state) => state.copyWith(clear: false));
+        .update((it) => it.copyWith(clear: false));
   }
 }

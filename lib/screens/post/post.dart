@@ -60,7 +60,7 @@ class PostPage extends HookConsumerWidget {
                     final threshold =
                         totalPost / 100 * (100 - loadMoreThreshold);
                     if (offset + threshold > totalPost) {
-                      pageData.loadMore();
+                      PageDataSource.loadMore(ref);
                     }
                   },
                   itemCount: totalPost,

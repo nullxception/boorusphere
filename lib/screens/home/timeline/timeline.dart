@@ -23,7 +23,7 @@ class Timeline extends HookConsumerWidget {
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
-        ref.read(pageDataProvider).loadMore();
+        PageDataSource.loadMore(ref);
       }
     }, [scrollController]);
 
