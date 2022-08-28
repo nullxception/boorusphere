@@ -31,10 +31,6 @@ class _SettingsContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final safeMode = ref.watch(safeModeProvider);
-    final darkerTheme = ref.watch(darkerThemeProvider);
-    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    final postLimit = ref.watch(serverPostLimitProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     const subtitlePadding = EdgeInsets.only(top: 8);
 
@@ -77,9 +73,9 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text('Use deeper dark color for the dark mode'),
               ),
-              value: darkerTheme,
+              value: ref.watch(darkerThemeProvider),
               onChanged: (value) {
-                ref.read(darkerThemeProvider.notifier).update(value);
+                ref.watch(darkerThemeProvider.notifier).update(value);
               },
             ),
             SwitchListTile(
@@ -90,7 +86,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               value: ref.watch(uiBlurProvider),
               onChanged: (value) {
-                ref.read(uiBlurProvider.notifier).enable(value);
+                ref.watch(uiBlurProvider.notifier).enable(value);
               },
             ),
           ],
@@ -104,9 +100,9 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text('Content rated as explicit will be blurred'),
               ),
-              value: blurExplicitPost,
+              value: ref.watch(blurExplicitPostProvider),
               onChanged: (value) {
-                ref.read(blurExplicitPostProvider.notifier).update(value);
+                ref.watch(blurExplicitPostProvider.notifier).update(value);
               },
             ),
             SwitchListTile(
@@ -116,9 +112,9 @@ class _SettingsContent extends HookConsumerWidget {
                 child: Text(
                     'Only fetch content that rated as safe. Note that rated as safe doesn\'t guarantee "safe for work"'),
               ),
-              value: safeMode,
+              value: ref.watch(safeModeProvider),
               onChanged: (value) {
-                ref.read(safeModeProvider.notifier).update(value);
+                ref.watch(safeModeProvider.notifier).update(value);
               },
             ),
           ],
@@ -135,7 +131,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               trailing: DropdownButton(
                 menuMaxHeight: 178,
-                value: postLimit,
+                value: ref.watch(serverPostLimitProvider),
                 elevation: 1,
                 underline: const SizedBox.shrink(),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -151,7 +147,7 @@ class _SettingsContent extends HookConsumerWidget {
                 ),
                 onChanged: (value) {
                   ref
-                      .read(serverPostLimitProvider.notifier)
+                      .watch(serverPostLimitProvider.notifier)
                       .update(value as int);
                 },
               ),
