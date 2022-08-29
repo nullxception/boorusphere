@@ -76,6 +76,11 @@ class _Footer extends StatelessWidget {
           onTap: () => context.router.push(const DownloadsRoute()),
         ),
         ListTile(
+          title: const Text('Favorites'),
+          leading: const Icon(Icons.favorite_border),
+          onTap: () => context.router.push(const FavoritesRoute()),
+        ),
+        ListTile(
           title: const Text('Server'),
           leading: const Icon(Icons.public),
           onTap: () => context.router.push(const ServerRoute()),

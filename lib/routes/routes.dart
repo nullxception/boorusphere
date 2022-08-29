@@ -7,6 +7,7 @@ import '../screens/about/about.dart';
 import '../screens/about/changelog.dart';
 import '../screens/about/licenses.dart';
 import '../screens/downloads/downloads.dart';
+import '../screens/favorites/favorites.dart';
 import '../screens/home/home.dart';
 import '../screens/post/post.dart';
 import '../screens/post/post_detail.dart';
@@ -67,6 +68,10 @@ part 'routes.gr.dart';
     ),
     CustomRoute(
       page: LicensesPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: FavoritesPage,
       customRouteBuilder: SlidePageRoute.build,
     ),
   ],

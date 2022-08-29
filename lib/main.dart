@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'entity/download_entry.dart';
+import 'entity/favorite_post.dart';
 import 'entity/post.dart';
 import 'entity/search_history.dart';
 import 'entity/server_data.dart';
@@ -56,6 +57,7 @@ void main() async {
     'server',
     'blockedTags',
     'downloads',
+    'favorites',
   ];
 
   await Hive.initFlutter();
@@ -63,6 +65,7 @@ void main() async {
   Hive.registerAdapter(SearchHistoryAdapter());
   Hive.registerAdapter(PostAdapter());
   Hive.registerAdapter(DownloadEntryAdapter());
+  Hive.registerAdapter(FavoritePostAdapter());
   await Future.wait(boxes.map(Hive.openBox));
   await Settings.performMigration();
 

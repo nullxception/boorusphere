@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../entity/post.dart';
 import '../../routes/routes.dart';
 import '../../services/download.dart';
+import '../../source/favorites.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import '../../widgets/download_dialog.dart';
@@ -26,6 +27,37 @@ class PostToolbox extends HookConsumerWidget {
       safePaddingBottom.value = viewPadding.bottom;
     }
 
+    ref.watch(favoritesProvider);
+    final isFavorite = ref.watch(favoritesProvider.notifier).checkExists(post);
+
+    addToFavorites(Post post) {
+      ref.watch(favoritesProvider.notifier).save(post);
+      context.scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: const [
+              Text('Added to Favorites'),
+            ],
+          ),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
+
+    removeFromFavorites(Post post) {
+      ref.watch(favoritesProvider.notifier).delete(post);
+      context.scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Row(
+            children: const [
+              Text('Removed from Favorites'),
+            ],
+          ),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -40,6 +72,18 @@ class PostToolbox extends HookConsumerWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          IconButton(
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            icon: AnimatedSwitcher(
+              duration: kThemeChangeDuration,
+              child: isFavorite
+                  ? const Icon(Icons.favorite)
+                  : const Icon(Icons.favorite_border),
+            ),
+            onPressed: () =>
+                isFavorite ? removeFromFavorites(post) : addToFavorites(post),
+          ),
           Stack(
             alignment: Alignment.center,
             children: [

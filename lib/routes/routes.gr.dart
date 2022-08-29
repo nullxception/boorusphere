@@ -121,6 +121,14 @@ class _$SphereRouter extends RootStackRouter {
           customRouteBuilder: SlidePageRoute.build,
           opaque: true,
           barrierDismissible: false);
+    },
+    FavoritesRoute.name: (routeData) {
+      return CustomPage<dynamic>(
+          routeData: routeData,
+          child: const FavoritesPage(),
+          customRouteBuilder: SlidePageRoute.build,
+          opaque: true,
+          barrierDismissible: false);
     }
   };
 
@@ -137,7 +145,8 @@ class _$SphereRouter extends RootStackRouter {
         RouteConfig(SettingsRoute.name, path: '/settings-page'),
         RouteConfig(AboutRoute.name, path: '/about-page'),
         RouteConfig(ChangelogRoute.name, path: '/changelog-page'),
-        RouteConfig(LicensesRoute.name, path: '/licenses-page')
+        RouteConfig(LicensesRoute.name, path: '/licenses-page'),
+        RouteConfig(FavoritesRoute.name, path: '/favorites-page')
       ];
 }
 
@@ -337,4 +346,12 @@ class LicensesRoute extends PageRouteInfo<void> {
   const LicensesRoute() : super(LicensesRoute.name, path: '/licenses-page');
 
   static const String name = 'LicensesRoute';
+}
+
+/// generated route for
+/// [FavoritesPage]
+class FavoritesRoute extends PageRouteInfo<void> {
+  const FavoritesRoute() : super(FavoritesRoute.name, path: '/favorites-page');
+
+  static const String name = 'FavoritesRoute';
 }
