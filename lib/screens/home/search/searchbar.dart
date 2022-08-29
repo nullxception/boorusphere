@@ -13,6 +13,9 @@ class _SearchBar extends HookConsumerWidget {
     final isBlurAllowed = ref.watch(uiBlurProvider);
 
     final onScrolling = useCallback(() {
+      if (!scrollController.hasClients) {
+        return;
+      }
       final position = scrollController.position;
       final threshold = _SearchBar.innerHeight;
       if (delta.value.first > 0 &&
@@ -40,7 +43,7 @@ class _SearchBar extends HookConsumerWidget {
       return () {
         scrollController.removeListener(onScrolling);
       };
-    }, [scrollController]);
+    }, []);
 
     return RepaintBoundary(
       child: BlurBackdrop(

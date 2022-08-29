@@ -23,6 +23,7 @@ class Timeline extends HookConsumerWidget {
     final posts = ref.watch(pageDataProvider.select((it) => it.posts));
 
     final loadMoreCall = useCallback(() {
+      if (!scrollController.hasClients) return;
       if (scrollController.position.extentAfter < 200) {
         PageDataSource.loadMore(ref);
       }
@@ -34,6 +35,7 @@ class Timeline extends HookConsumerWidget {
     }, [scrollController]);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!scrollController.hasClients) return;
       if (pageState.isError && scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
@@ -48,10 +50,10 @@ class Timeline extends HookConsumerWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        CustomScrollView(
-          controller: scrollController,
-          slivers: [
-            if (!isNewSearch)
+        if (!isNewSearch)
+          CustomScrollView(
+            controller: scrollController,
+            slivers: [
               SliverSafeArea(
                 sliver: SliverPadding(
                   padding: const EdgeInsets.all(10),
@@ -64,16 +66,16 @@ class Timeline extends HookConsumerWidget {
                   ),
                 ),
               ),
-            if (!isNewSearch)
               SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
                 ),
                 sliver: const SliverToBoxAdapter(child: TimelineStatus()),
               ),
-          ],
-        ),
-        if (isNewSearch) const TimelineStatus(),
+            ],
+          )
+        else
+          const TimelineStatus(),
         const _EdgeShadow(),
         SearchableView(scrollController: scrollController),
       ],

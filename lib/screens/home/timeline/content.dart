@@ -35,7 +35,10 @@ class TimelineContent extends HookConsumerWidget {
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
     performAutoScroll(int dest) {
-      if (scrollController.isAutoScrolling) return;
+      if (!scrollController.hasClients || scrollController.isAutoScrolling) {
+        return;
+      }
+
       if (scrollController.isIndexStateInLayoutRange(dest)) {
         scrollController.scrollToIndex(
           dest,
