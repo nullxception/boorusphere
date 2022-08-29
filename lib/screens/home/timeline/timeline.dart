@@ -20,6 +20,7 @@ class Timeline extends HookConsumerWidget {
     });
     final pageState = ref.watch(pageStateProvider);
     final pageOption = ref.watch(pageOptionProvider);
+    final posts = ref.watch(pageDataProvider.select((it) => it.posts));
 
     final loadMoreCall = useCallback(() {
       if (scrollController.position.extentAfter < 200) {
@@ -49,27 +50,28 @@ class Timeline extends HookConsumerWidget {
       children: [
         CustomScrollView(
           controller: scrollController,
-          slivers: !isNewSearch
-              ? [
-                  SliverSafeArea(
-                    sliver: SliverPadding(
-                      padding: const EdgeInsets.all(10),
-                      sliver: TimelineContent(
-                        scrollController: scrollController,
-                        onTap: (index) {
-                          context.scaffoldMessenger.removeCurrentSnackBar();
-                        },
-                      ),
-                    ),
+          slivers: [
+            if (!isNewSearch)
+              SliverSafeArea(
+                sliver: SliverPadding(
+                  padding: const EdgeInsets.all(10),
+                  sliver: TimelineContent(
+                    scrollController: scrollController,
+                    posts: posts,
+                    onLoadMore: () {
+                      PageDataSource.loadMore(ref);
+                    },
                   ),
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
-                    ),
-                    sliver: const SliverToBoxAdapter(child: TimelineStatus()),
-                  ),
-                ]
-              : [],
+                ),
+              ),
+            if (!isNewSearch)
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
+                ),
+                sliver: const SliverToBoxAdapter(child: TimelineStatus()),
+              ),
+          ],
         ),
         if (isNewSearch) const TimelineStatus(),
         const _EdgeShadow(),

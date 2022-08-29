@@ -20,16 +20,17 @@ class TimelineContent extends HookConsumerWidget {
   const TimelineContent({
     super.key,
     required this.scrollController,
-    this.onTap,
+    this.posts = const [],
+    this.onLoadMore,
   });
 
   final AutoScrollController scrollController;
-  final Function(int index)? onTap;
+  final List<Post> posts;
+  final void Function()? onLoadMore;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
-    final pageData = ref.watch(pageDataProvider);
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
 
@@ -58,9 +59,9 @@ class TimelineContent extends HookConsumerWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      childCount: pageData.posts.length,
+      childCount: posts.length,
       itemBuilder: (context, index) {
-        final post = pageData.posts[index];
+        final post = posts[index];
         return AutoScrollTag(
           key: ValueKey(index),
           controller: scrollController,
@@ -96,11 +97,13 @@ class TimelineContent extends HookConsumerWidget {
                 },
               ),
               onTap: () {
-                onTap?.call(index);
+                context.scaffoldMessenger.removeCurrentSnackBar();
                 context.router.push(
                   PostRoute(
                     beginPage: index,
+                    posts: posts,
                     onReturned: performAutoScroll,
+                    onLoadMore: onLoadMore,
                   ),
                 );
               },

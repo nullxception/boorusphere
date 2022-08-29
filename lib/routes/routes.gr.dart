@@ -29,7 +29,9 @@ class _$SphereRouter extends RootStackRouter {
           child: PostPage(
               key: args.key,
               beginPage: args.beginPage,
-              onReturned: args.onReturned),
+              posts: args.posts,
+              onReturned: args.onReturned,
+              onLoadMore: args.onLoadMore),
           customRouteBuilder: ChillPageRoute.build,
           opaque: true,
           barrierDismissible: false);
@@ -150,27 +152,45 @@ class HomeRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [PostPage]
 class PostRoute extends PageRouteInfo<PostRouteArgs> {
-  PostRoute({Key? key, required int beginPage, void Function(int)? onReturned})
+  PostRoute(
+      {Key? key,
+      required int beginPage,
+      List<Post> posts = const [],
+      void Function(int)? onReturned,
+      void Function()? onLoadMore})
       : super(PostRoute.name,
             path: '/post-page',
             args: PostRouteArgs(
-                key: key, beginPage: beginPage, onReturned: onReturned));
+                key: key,
+                beginPage: beginPage,
+                posts: posts,
+                onReturned: onReturned,
+                onLoadMore: onLoadMore));
 
   static const String name = 'PostRoute';
 }
 
 class PostRouteArgs {
-  const PostRouteArgs({this.key, required this.beginPage, this.onReturned});
+  const PostRouteArgs(
+      {this.key,
+      required this.beginPage,
+      this.posts = const [],
+      this.onReturned,
+      this.onLoadMore});
 
   final Key? key;
 
   final int beginPage;
 
+  final List<Post> posts;
+
   final void Function(int)? onReturned;
+
+  final void Function()? onLoadMore;
 
   @override
   String toString() {
-    return 'PostRouteArgs{key: $key, beginPage: $beginPage, onReturned: $onReturned}';
+    return 'PostRouteArgs{key: $key, beginPage: $beginPage, posts: $posts, onReturned: $onReturned, onLoadMore: $onLoadMore}';
   }
 }
 

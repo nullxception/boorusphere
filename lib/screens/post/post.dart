@@ -16,23 +16,29 @@ import 'post_toolbox.dart';
 import 'post_video.dart';
 
 class PostPage extends HookConsumerWidget {
-  const PostPage({super.key, required this.beginPage, this.onReturned});
+  const PostPage({
+    super.key,
+    required this.beginPage,
+    this.posts = const [],
+    this.onReturned,
+    this.onLoadMore,
+  });
 
   final int beginPage;
   final void Function(int)? onReturned;
+  final List<Post> posts;
+  final void Function()? onLoadMore;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
     final page = useState(beginPage);
     final pageController = useExtendedPageController(initialPage: page.value);
-    final pageData = ref.watch(pageDataProvider);
     final pageState = ref.watch(pageStateProvider);
     final fullscreen = ref.watch(fullscreenProvider);
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
 
-    final posts = pageData.posts;
     final post = posts.isEmpty ? Post.empty : posts[page.value];
     final isVideo = post.contentType == PostType.video;
     final totalPost = posts.length;
@@ -60,7 +66,7 @@ class PostPage extends HookConsumerWidget {
                     final threshold =
                         totalPost / 100 * (100 - loadMoreThreshold);
                     if (offset + threshold > totalPost) {
-                      PageDataSource.loadMore(ref);
+                      onLoadMore?.call();
                     }
                   },
                   itemCount: totalPost,
