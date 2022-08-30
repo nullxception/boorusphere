@@ -19,14 +19,85 @@ class PostToolbox extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(post.originalFile);
     final viewPadding = context.mediaQuery.viewPadding;
     final safePaddingBottom = useState(viewPadding.bottom);
     if (viewPadding.bottom > safePaddingBottom.value) {
       safePaddingBottom.value = viewPadding.bottom;
     }
 
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [Colors.black54, Colors.transparent],
+        ),
+      ),
+      height: safePaddingBottom.value + 86,
+      alignment: Alignment.bottomRight,
+      padding: EdgeInsets.only(bottom: safePaddingBottom.value + 8, right: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PostFavoriteButton(post: post),
+          PostDownloadButton(post: post),
+          PostOpenLinkButton(post: post),
+          PostDetailsButton(post: post),
+        ],
+      ),
+    );
+  }
+}
+
+class PostDetailsButton extends StatelessWidget {
+  const PostDetailsButton({
+    super.key,
+    required this.post,
+  });
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: const EdgeInsets.all(16),
+      color: Colors.white,
+      icon: const Icon(Icons.info),
+      onPressed: () => context.router.push(PostDetailsRoute(post: post)),
+    );
+  }
+}
+
+class PostOpenLinkButton extends StatelessWidget {
+  const PostOpenLinkButton({
+    super.key,
+    required this.post,
+  });
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: const EdgeInsets.all(16),
+      color: Colors.white,
+      icon: const Icon(Icons.link_outlined),
+      onPressed: () => launchUrlString(post.originalFile,
+          mode: LaunchMode.externalApplication),
+    );
+  }
+}
+
+class PostFavoriteButton extends ConsumerWidget {
+  const PostFavoriteButton({
+    super.key,
+    required this.post,
+  });
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(favoritesProvider);
     final isFavorite = ref.watch(favoritesProvider.notifier).checkExists(post);
 
@@ -58,68 +129,54 @@ class PostToolbox extends HookConsumerWidget {
       );
     }
 
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [Colors.black54, Colors.transparent],
+    return IconButton(
+      padding: const EdgeInsets.all(16),
+      color: Colors.white,
+      icon: AnimatedSwitcher(
+        duration: kThemeChangeDuration,
+        child: isFavorite
+            ? const Icon(Icons.favorite)
+            : const Icon(Icons.favorite_border),
+      ),
+      onPressed: () =>
+          isFavorite ? removeFromFavorites(post) : addToFavorites(post),
+    );
+  }
+}
+
+class PostDownloadButton extends HookConsumerWidget {
+  const PostDownloadButton({
+    super.key,
+    required this.post,
+  });
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final downloader = ref.watch(downloadProvider);
+    final downloadProgress = downloader.getProgressByURL(post.originalFile);
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CircularProgressIndicator(
+          value: downloadProgress.status.isDownloading
+              ? downloadProgress.progress.ratio
+              : 0,
         ),
-      ),
-      height: safePaddingBottom.value + 86,
-      alignment: Alignment.bottomRight,
-      padding: EdgeInsets.only(bottom: safePaddingBottom.value + 8, right: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            icon: AnimatedSwitcher(
-              duration: kThemeChangeDuration,
-              child: isFavorite
-                  ? const Icon(Icons.favorite)
-                  : const Icon(Icons.favorite_border),
-            ),
-            onPressed: () =>
-                isFavorite ? removeFromFavorites(post) : addToFavorites(post),
-          ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              CircularProgressIndicator(
-                value: downloadProgress.status.isDownloading
-                    ? downloadProgress.progress.ratio
-                    : 0,
-              ),
-              IconButton(
-                padding: const EdgeInsets.all(16),
-                color: Colors.white,
-                icon: Icon(downloadProgress.status.isDownloaded
-                    ? Icons.download_done
-                    : Icons.download),
-                onPressed: () {
-                  DownloaderDialog.show(context: context, post: post);
-                },
-                disabledColor: context.colorScheme.primary,
-              ),
-            ],
-          ),
-          IconButton(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            icon: const Icon(Icons.link_outlined),
-            onPressed: () => launchUrlString(post.originalFile,
-                mode: LaunchMode.externalApplication),
-          ),
-          IconButton(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            icon: const Icon(Icons.info),
-            onPressed: () => context.router.push(PostDetailsRoute(post: post)),
-          ),
-        ],
-      ),
+        IconButton(
+          padding: const EdgeInsets.all(16),
+          color: Colors.white,
+          icon: Icon(downloadProgress.status.isDownloaded
+              ? Icons.download_done
+              : Icons.download),
+          onPressed: () {
+            DownloaderDialog.show(context: context, post: post);
+          },
+          disabledColor: context.colorScheme.primary,
+        ),
+      ],
     );
   }
 }
