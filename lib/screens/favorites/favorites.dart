@@ -6,8 +6,10 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import '../../entity/server_data.dart';
 import '../../source/favorites.dart';
 import '../../source/server.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
 import '../../widgets/notice_card.dart';
+import '../../widgets/preferred_size_builder.dart';
 import '../home/timeline/content.dart';
 
 class FavoritesPage extends ConsumerWidget {
@@ -37,11 +39,24 @@ class _FavoritesView extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Favorites'),
-          bottom: TabBar(
-            isScrollable: true,
-            tabs: [
-              for (final server in servers) _FavoriteTab(serverData: server),
-            ],
+          bottom: PreferredSizeBuilder(
+            builder: (context, child) => Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: child,
+              ),
+            ),
+            child: TabBar(
+              isScrollable: true,
+              tabs: [
+                for (final server in servers) _FavoriteTab(serverData: server),
+              ],
+              indicator: BoxDecoration(
+                color: context.colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
           ),
         ),
         body: TabBarView(
