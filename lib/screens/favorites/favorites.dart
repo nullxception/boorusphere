@@ -102,6 +102,7 @@ class _FavoriteTimeline extends HookConsumerWidget {
             sliver: TimelineContent(
               scrollController: scrollController,
               posts: posts.toList(),
+              heroPrefix: 'fav-${serverData.key}',
             ),
           ),
         ),
