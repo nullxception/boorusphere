@@ -89,11 +89,11 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     state = _box.values.map((it) => it as ServerData).toList();
   }
 
-  ServerData select(String name) {
+  ServerData getByName(String name, {ServerData? or}) {
     return state.isEmpty
         ? ServerData.empty
-        : state.firstWhere((element) => element.name == name,
-            orElse: () => state.first);
+        : state.firstWhere((it) => it.name == name,
+            orElse: () => or ?? state.first);
   }
 
   Future<void> add({required ServerData data}) async {

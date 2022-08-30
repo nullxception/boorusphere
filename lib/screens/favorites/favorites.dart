@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+import '../../entity/server_data.dart';
 import '../../source/favorites.dart';
 import '../../source/server.dart';
 import '../../widgets/favicon.dart';
@@ -22,27 +23,30 @@ class FavoritesPage extends ConsumerWidget {
 class _FavoritesView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverNames = ref.watch(favoritesProvider.select(
-      (it) => it.values.map((e) => e.post.serverName).toSet(),
+    final servers = ref.watch(favoritesProvider.select(
+      (it) => it.values
+          .map((e) => ref
+              .watch(serverDataProvider.notifier)
+              .getByName(e.post.serverName, or: ServerData.empty))
+          .where((e) => e != ServerData.empty)
+          .toSet(),
     ));
 
     return DefaultTabController(
-      length: serverNames.length,
+      length: servers.length,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Favorites'),
           bottom: TabBar(
             isScrollable: true,
             tabs: [
-              for (final serverName in serverNames)
-                _FavoriteTab(serverName: serverName),
+              for (final server in servers) _FavoriteTab(serverData: server),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            for (final serverName in serverNames)
-              _FavoriteTimeline(serverName: serverName),
+            for (final server in servers) _FavoriteTimeline(serverData: server),
           ],
         ),
       ),
@@ -51,23 +55,21 @@ class _FavoritesView extends HookConsumerWidget {
 }
 
 class _FavoriteTab extends ConsumerWidget {
-  const _FavoriteTab({required this.serverName});
+  const _FavoriteTab({required this.serverData});
 
-  final String serverName;
+  final ServerData serverData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server = ref.watch(serverDataProvider.notifier).select(serverName);
-
     return Row(
       children: [
         Favicon(
-          url: '${server.homepage}/favicon.ico',
+          url: '${serverData.homepage}/favicon.ico',
           size: 12,
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(server.name),
+          child: Text(serverData.name),
         ),
       ],
     );
@@ -75,9 +77,9 @@ class _FavoriteTab extends ConsumerWidget {
 }
 
 class _FavoriteTimeline extends HookConsumerWidget {
-  const _FavoriteTimeline({required this.serverName});
+  const _FavoriteTimeline({required this.serverData});
 
-  final String serverName;
+  final ServerData serverData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -87,7 +89,7 @@ class _FavoriteTimeline extends HookConsumerWidget {
 
     final posts = ref.watch(favoritesProvider.select(
       (value) => value.values
-          .where((it) => it.post.serverName == serverName)
+          .where((it) => it.post.serverName == serverData.name)
           .map((it) => it.post),
     ));
 
