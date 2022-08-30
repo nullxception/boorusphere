@@ -31,7 +31,8 @@ class _$SphereRouter extends RootStackRouter {
               beginPage: args.beginPage,
               posts: args.posts,
               onReturned: args.onReturned,
-              onLoadMore: args.onLoadMore),
+              onLoadMore: args.onLoadMore,
+              heroPrefix: args.heroPrefix),
           customRouteBuilder: ChillPageRoute.build,
           opaque: true,
           barrierDismissible: false);
@@ -166,7 +167,8 @@ class PostRoute extends PageRouteInfo<PostRouteArgs> {
       required int beginPage,
       List<Post> posts = const [],
       void Function(int)? onReturned,
-      void Function()? onLoadMore})
+      void Function()? onLoadMore,
+      String heroPrefix = ''})
       : super(PostRoute.name,
             path: '/post-page',
             args: PostRouteArgs(
@@ -174,7 +176,8 @@ class PostRoute extends PageRouteInfo<PostRouteArgs> {
                 beginPage: beginPage,
                 posts: posts,
                 onReturned: onReturned,
-                onLoadMore: onLoadMore));
+                onLoadMore: onLoadMore,
+                heroPrefix: heroPrefix));
 
   static const String name = 'PostRoute';
 }
@@ -185,7 +188,8 @@ class PostRouteArgs {
       required this.beginPage,
       this.posts = const [],
       this.onReturned,
-      this.onLoadMore});
+      this.onLoadMore,
+      this.heroPrefix = ''});
 
   final Key? key;
 
@@ -197,9 +201,11 @@ class PostRouteArgs {
 
   final void Function()? onLoadMore;
 
+  final String heroPrefix;
+
   @override
   String toString() {
-    return 'PostRouteArgs{key: $key, beginPage: $beginPage, posts: $posts, onReturned: $onReturned, onLoadMore: $onLoadMore}';
+    return 'PostRouteArgs{key: $key, beginPage: $beginPage, posts: $posts, onReturned: $onReturned, onLoadMore: $onLoadMore, heroPrefix: $heroPrefix}';
   }
 }
 

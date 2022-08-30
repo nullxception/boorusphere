@@ -22,12 +22,14 @@ class PostPage extends HookConsumerWidget {
     this.posts = const [],
     this.onReturned,
     this.onLoadMore,
+    this.heroPrefix = '',
   });
 
   final int beginPage;
   final void Function(int)? onReturned;
   final List<Post> posts;
   final void Function()? onLoadMore;
+  final String heroPrefix;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,18 +75,26 @@ class PostPage extends HookConsumerWidget {
                   itemBuilder: (_, index) {
                     final post = posts[index];
                     final Widget widget;
+                    final heroKey = '$heroPrefix-${post.id}';
                     switch (post.contentType) {
                       case PostType.photo:
                         widget = PostImageDisplay(
                           post: post,
                           isFromHome: index == beginPage,
+                          heroKey: heroKey,
                         );
                         break;
                       case PostType.video:
-                        widget = PostVideoDisplay(post: post);
+                        widget = PostVideoDisplay(
+                          post: post,
+                          heroKey: heroKey,
+                        );
                         break;
                       default:
-                        widget = PostErrorDisplay(post: post);
+                        widget = PostErrorDisplay(
+                          post: post,
+                          heroKey: heroKey,
+                        );
                         break;
                     }
                     return HeroMode(

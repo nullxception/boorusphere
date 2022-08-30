@@ -10,9 +10,14 @@ import 'post_placeholder_image.dart';
 import 'quickbar.dart';
 
 class PostErrorDisplay extends HookConsumerWidget {
-  const PostErrorDisplay({super.key, required this.post});
+  const PostErrorDisplay({
+    super.key,
+    required this.post,
+    this.heroKey,
+  });
 
   final Post post;
+  final Object? heroKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +27,7 @@ class PostErrorDisplay extends HookConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         Hero(
-          tag: post.id,
+          tag: heroKey ?? post.id,
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: shouldBlur && post.rating == PostRating.explicit,

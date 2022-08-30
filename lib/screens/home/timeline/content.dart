@@ -22,11 +22,13 @@ class TimelineContent extends HookConsumerWidget {
     required this.scrollController,
     this.posts = const [],
     this.onLoadMore,
+    this.heroPrefix = '',
   });
 
   final AutoScrollController scrollController;
   final List<Post> posts;
   final void Function()? onLoadMore;
+  final String heroPrefix;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,7 +81,7 @@ class TimelineContent extends HookConsumerWidget {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: GestureDetector(
               child: Hero(
-                tag: post.id,
+                tag: '$heroPrefix-${post.id}',
                 child: _Thumbnail(post: post),
                 flightShuttleBuilder: (flightContext, animation,
                     flightDirection, fromHeroContext, toHeroContext) {
@@ -107,6 +109,7 @@ class TimelineContent extends HookConsumerWidget {
                     posts: posts,
                     onReturned: performAutoScroll,
                     onLoadMore: onLoadMore,
+                    heroPrefix: heroPrefix,
                   ),
                 );
               },

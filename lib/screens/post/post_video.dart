@@ -77,10 +77,12 @@ class PostVideoDisplay extends HookConsumerWidget {
     super.key,
     required this.post,
     this.isFromHome = false,
+    this.heroKey,
   });
 
   final Post post;
   final bool isFromHome;
+  final Object? heroKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,9 +91,13 @@ class PostVideoDisplay extends HookConsumerWidget {
     final isMounted = useIsMounted();
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
 
-    final heroKey = useMemoized(GlobalKey.new);
+    final heroWidgetKey = useMemoized(GlobalKey.new);
     Widget asHero(Widget child) {
-      return Hero(key: heroKey, tag: post.id, child: child);
+      return Hero(
+        key: heroWidgetKey,
+        tag: heroKey ?? post.id,
+        child: child,
+      );
     }
 
     final blurNoticeAnimator =

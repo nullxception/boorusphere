@@ -18,10 +18,12 @@ class PostImageDisplay extends HookConsumerWidget {
     super.key,
     required this.post,
     this.isFromHome = false,
+    this.heroKey,
   });
 
   final Post post;
   final bool isFromHome;
+  final Object? heroKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -90,7 +92,7 @@ class PostImageDisplay extends HookConsumerWidget {
                   state: state,
                   child: Hero(
                     key: imageHeroKey,
-                    tag: post.id,
+                    tag: heroKey ?? post.id,
                     child: LoadState.completed == state.extendedImageLoadState
                         ? state.completedWidget
                         : PostPlaceholderImage(post: post, shouldBlur: false),
