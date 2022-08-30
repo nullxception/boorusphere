@@ -9,6 +9,7 @@ import '../screens/about/licenses.dart';
 import '../screens/downloads/downloads.dart';
 import '../screens/favorites/favorites.dart';
 import '../screens/home/home.dart';
+import '../screens/home/timeline/controller.dart';
 import '../screens/post/post.dart';
 import '../screens/post/post_detail.dart';
 import '../screens/server/server.dart';

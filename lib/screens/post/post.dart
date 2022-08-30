@@ -9,6 +9,7 @@ import '../../services/fullscreen.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../widgets/styled_overlay_region.dart';
+import '../home/timeline/controller.dart';
 import 'appbar_visibility.dart';
 import 'post_error.dart';
 import 'post_image.dart';
@@ -19,17 +20,11 @@ class PostPage extends HookConsumerWidget {
   const PostPage({
     super.key,
     required this.beginPage,
-    this.posts = const [],
-    this.onReturned,
-    this.onLoadMore,
-    this.heroPrefix = '',
+    required this.controller,
   });
 
   final int beginPage;
-  final void Function(int)? onReturned;
-  final List<Post> posts;
-  final void Function()? onLoadMore;
-  final String heroPrefix;
+  final TimelineController controller;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,13 +36,14 @@ class PostPage extends HookConsumerWidget {
     final appbarAnimController =
         useAnimationController(duration: const Duration(milliseconds: 300));
 
+    final posts = controller.posts;
     final post = posts.isEmpty ? Post.empty : posts[page.value];
     final isVideo = post.contentType == PostType.video;
     final totalPost = posts.length;
 
     return WillPopScope(
       onWillPop: () async {
-        onReturned?.call(page.value);
+        controller.revealAt(page.value);
         return true;
       },
       child: Scaffold(
@@ -68,14 +64,15 @@ class PostPage extends HookConsumerWidget {
                     final threshold =
                         totalPost / 100 * (100 - loadMoreThreshold);
                     if (offset + threshold > totalPost) {
-                      onLoadMore?.call();
+                      controller.loadMoreData();
                     }
                   },
                   itemCount: totalPost,
                   itemBuilder: (_, index) {
                     final post = posts[index];
                     final Widget widget;
-                    final heroKey = '$heroPrefix-${post.id}';
+                    final heroKey =
+                        controller.heroKeyBuilder?.call(post) ?? post.id;
                     switch (post.contentType) {
                       case PostType.photo:
                         widget = PostImageDisplay(

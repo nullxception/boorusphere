@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../entity/server_data.dart';
 import '../../source/favorites.dart';
@@ -10,7 +8,8 @@ import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/favicon.dart';
 import '../../widgets/notice_card.dart';
 import '../../widgets/preferred_size_builder.dart';
-import '../home/timeline/content.dart';
+import '../home/timeline/controller.dart';
+import '../home/timeline/timeline.dart';
 
 class FavoritesPage extends ConsumerWidget {
   const FavoritesPage({super.key});
@@ -98,27 +97,23 @@ class _FavoriteTimeline extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scrollController = useMemoized(() {
-      return AutoScrollController(axis: Axis.vertical);
-    });
-
     final posts = ref.watch(favoritesProvider.select(
       (value) => value.values
           .where((it) => it.post.serverName == serverData.name)
           .map((it) => it.post),
     ));
+    final controller = useTimelineController(
+      posts: posts.toList(),
+      heroKeyBuilder: (post) => 'fav@${serverData.name}-${post.id}',
+    );
 
     return CustomScrollView(
-      controller: scrollController,
+      controller: controller.scrollController,
       slivers: [
         SliverSafeArea(
           sliver: SliverPadding(
             padding: const EdgeInsets.all(10),
-            sliver: TimelineContent(
-              scrollController: scrollController,
-              posts: posts.toList(),
-              heroPrefix: 'fav-${serverData.key}',
-            ),
+            sliver: Timeline(controller: controller),
           ),
         ),
       ],

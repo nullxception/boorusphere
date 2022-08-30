@@ -29,10 +29,7 @@ class _$SphereRouter extends RootStackRouter {
           child: PostPage(
               key: args.key,
               beginPage: args.beginPage,
-              posts: args.posts,
-              onReturned: args.onReturned,
-              onLoadMore: args.onLoadMore,
-              heroPrefix: args.heroPrefix),
+              controller: args.controller),
           customRouteBuilder: ChillPageRoute.build,
           opaque: true,
           barrierDismissible: false);
@@ -165,47 +162,28 @@ class PostRoute extends PageRouteInfo<PostRouteArgs> {
   PostRoute(
       {Key? key,
       required int beginPage,
-      List<Post> posts = const [],
-      void Function(int)? onReturned,
-      void Function()? onLoadMore,
-      String heroPrefix = ''})
+      required TimelineController controller})
       : super(PostRoute.name,
             path: '/post-page',
             args: PostRouteArgs(
-                key: key,
-                beginPage: beginPage,
-                posts: posts,
-                onReturned: onReturned,
-                onLoadMore: onLoadMore,
-                heroPrefix: heroPrefix));
+                key: key, beginPage: beginPage, controller: controller));
 
   static const String name = 'PostRoute';
 }
 
 class PostRouteArgs {
   const PostRouteArgs(
-      {this.key,
-      required this.beginPage,
-      this.posts = const [],
-      this.onReturned,
-      this.onLoadMore,
-      this.heroPrefix = ''});
+      {this.key, required this.beginPage, required this.controller});
 
   final Key? key;
 
   final int beginPage;
 
-  final List<Post> posts;
-
-  final void Function(int)? onReturned;
-
-  final void Function()? onLoadMore;
-
-  final String heroPrefix;
+  final TimelineController controller;
 
   @override
   String toString() {
-    return 'PostRouteArgs{key: $key, beginPage: $beginPage, posts: $posts, onReturned: $onReturned, onLoadMore: $onLoadMore, heroPrefix: $heroPrefix}';
+    return 'PostRouteArgs{key: $key, beginPage: $beginPage, controller: $controller}';
   }
 }
 
