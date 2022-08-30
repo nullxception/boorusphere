@@ -8,6 +8,7 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/asyncvalue.dart';
+import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/styled_overlay_region.dart';
 import '../home/timeline/controller.dart';
 import 'appbar_visibility.dart';
@@ -59,6 +60,7 @@ class PostPage extends HookConsumerWidget {
                 child: ExtendedImageGesturePageView.builder(
                   controller: pageController,
                   onPageChanged: (index) {
+                    context.scaffoldMessenger.hideCurrentSnackBar();
                     page.value = index;
                     final offset = index + 1;
                     final threshold =

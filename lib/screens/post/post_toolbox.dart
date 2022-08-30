@@ -88,6 +88,59 @@ class PostOpenLinkButton extends StatelessWidget {
   }
 }
 
+class FavoriteSnackbar extends StatelessWidget {
+  const FavoriteSnackbar({super.key, required this.isAdded});
+
+  final bool isAdded;
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomSafe =
+        context.mediaQuery.viewPadding.bottom + kBottomNavigationBarHeight;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: context.theme.snackBarTheme.backgroundColor,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            margin: EdgeInsets.fromLTRB(16, 0, 16, bottomSafe),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.favorite_outline, size: 16),
+                const SizedBox(width: 8),
+                Text(isAdded ? 'Added to Favorites' : 'Removed from Favorites'),
+              ],
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        context.scaffoldMessenger.hideCurrentSnackBar();
+      },
+    );
+  }
+
+  static void show({required BuildContext context, required bool isAdded}) {
+    context.scaffoldMessenger.showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        content: FavoriteSnackbar(isAdded: isAdded),
+        padding: EdgeInsets.zero,
+        behavior: SnackBarBehavior.floating,
+        dismissDirection: DismissDirection.horizontal,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+}
+
 class PostFavoriteButton extends ConsumerWidget {
   const PostFavoriteButton({
     super.key,
@@ -101,34 +154,6 @@ class PostFavoriteButton extends ConsumerWidget {
     ref.watch(favoritesProvider);
     final isFavorite = ref.watch(favoritesProvider.notifier).checkExists(post);
 
-    addToFavorites(Post post) {
-      ref.watch(favoritesProvider.notifier).save(post);
-      context.scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Row(
-            children: const [
-              Text('Added to Favorites'),
-            ],
-          ),
-          duration: const Duration(seconds: 1),
-        ),
-      );
-    }
-
-    removeFromFavorites(Post post) {
-      ref.watch(favoritesProvider.notifier).delete(post);
-      context.scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Row(
-            children: const [
-              Text('Removed from Favorites'),
-            ],
-          ),
-          duration: const Duration(seconds: 1),
-        ),
-      );
-    }
-
     return IconButton(
       padding: const EdgeInsets.all(16),
       color: Colors.white,
@@ -138,8 +163,15 @@ class PostFavoriteButton extends ConsumerWidget {
             ? const Icon(Icons.favorite)
             : const Icon(Icons.favorite_border),
       ),
-      onPressed: () =>
-          isFavorite ? removeFromFavorites(post) : addToFavorites(post),
+      onPressed: () {
+        if (isFavorite) {
+          ref.watch(favoritesProvider.notifier).delete(post);
+          FavoriteSnackbar.show(context: context, isAdded: false);
+        } else {
+          ref.watch(favoritesProvider.notifier).save(post);
+          FavoriteSnackbar.show(context: context, isAdded: true);
+        }
+      },
     );
   }
 }
