@@ -44,6 +44,7 @@ class PostPage extends HookConsumerWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        context.scaffoldMessenger.removeCurrentSnackBar();
         controller.revealAt(page.value);
         return true;
       },
