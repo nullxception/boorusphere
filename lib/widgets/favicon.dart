@@ -35,6 +35,7 @@ class Favicon extends StatelessWidget {
                 height: iconSize ?? context.iconTheme.size,
                 shape: shape,
                 fit: BoxFit.contain,
+                printError: false,
                 loadStateChanged: (state) =>
                     state.extendedImageLoadState == LoadState.completed
                         ? state.completedWidget
