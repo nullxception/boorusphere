@@ -155,7 +155,7 @@ class PostDownloadButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByURL(post.originalFile);
+    final downloadProgress = downloader.getProgressByPost(post);
 
     return Stack(
       alignment: Alignment.center,

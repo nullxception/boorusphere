@@ -179,14 +179,14 @@ class DownloadService extends ChangeNotifier {
     FlutterDownloader.open(taskId: id);
   }
 
-  DownloadProgress getProgressByURL(String url) {
-    final entry = entries.firstWhere((it) => it.post.originalFile == url,
+  DownloadProgress getProgressByPost(Post post) {
+    final entry = entries.lastWhere((it) => it.post == post,
         orElse: () => DownloadEntry.empty);
     return getProgress(entry.id);
   }
 
   DownloadProgress getProgress(String id) {
-    return progresses.firstWhere((it) => it.id == id,
+    return progresses.lastWhere((it) => it.id == id,
         orElse: () => DownloadProgress.none);
   }
 
