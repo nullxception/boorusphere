@@ -98,12 +98,13 @@ class FavoriteSnackbar extends StatelessWidget {
     final bottomSafe =
         context.mediaQuery.viewPadding.bottom + kBottomNavigationBarHeight;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Container(
             decoration: BoxDecoration(
               color: context.theme.snackBarTheme.backgroundColor,
               borderRadius: BorderRadius.circular(24),
@@ -119,11 +120,11 @@ class FavoriteSnackbar extends StatelessWidget {
               ],
             ),
           ),
-        ],
-      ),
-      onTap: () {
-        context.scaffoldMessenger.hideCurrentSnackBar();
-      },
+          onTap: () {
+            context.scaffoldMessenger.hideCurrentSnackBar();
+          },
+        ),
+      ],
     );
   }
 
