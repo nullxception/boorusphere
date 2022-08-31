@@ -1,9 +1,7 @@
-import 'dart:io';
-import 'package:freezed_annotation/freezed_annotation.dart';
+class SphereException {
+  const SphereException({required this.message});
+  final String message;
 
-part 'sphere_exception.freezed.dart';
-
-@freezed
-class SphereException with _$SphereException implements IOException {
-  const factory SphereException({required String message}) = _SphereException;
+  @override
+  String toString() => 'SphereException: $message';
 }

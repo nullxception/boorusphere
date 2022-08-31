@@ -1,19 +1,17 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'server_payload.freezed.dart';
-
 enum ServerPayloadType {
   search,
   suggestion,
   post,
 }
 
-@freezed
-class ServerPayload with _$ServerPayload {
-  const factory ServerPayload({
-    @Default('') String host,
-    @Default('') String query,
-    @Default(ServerPayloadType.search) ServerPayloadType type,
-  }) = _ServerPayload;
+class ServerPayload {
+  const ServerPayload({
+    required this.host,
+    required this.query,
+    required this.type,
+  });
+
+  final String host;
+  final String query;
+  final ServerPayloadType type;
 }

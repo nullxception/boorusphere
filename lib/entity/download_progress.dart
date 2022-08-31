@@ -1,17 +1,17 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'download_status.dart';
 
-part 'download_progress.freezed.dart';
+class DownloadProgress {
+  const DownloadProgress({
+    required this.id,
+    required this.status,
+    required this.progress,
+    required this.timestamp,
+  });
 
-@freezed
-class DownloadProgress with _$DownloadProgress {
-  const factory DownloadProgress({
-    required String id,
-    required DownloadStatus status,
-    required int progress,
-    required int timestamp,
-  }) = _DownloadProgress;
+  final String id;
+  final DownloadStatus status;
+  final int progress;
+  final int timestamp;
 
   static const DownloadProgress none = DownloadProgress(
     id: '',

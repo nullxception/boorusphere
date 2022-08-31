@@ -1,14 +1,11 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+class PixelSize {
+  const PixelSize({
+    this.width = -1,
+    this.height = -1,
+  });
 
-part 'pixel_size.freezed.dart';
-
-@freezed
-class PixelSize with _$PixelSize {
-  const factory PixelSize({
-    @Default(-1) int width,
-    @Default(-1) int height,
-  }) = _PixelSize;
-  const PixelSize._();
+  final int width;
+  final int height;
 
   bool get hasPixels => width + height > 0;
 
