@@ -9,9 +9,9 @@ import '../../services/fullscreen.dart';
 import '../../source/page.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
+import '../../widgets/slidefade_visibility.dart';
 import '../../widgets/styled_overlay_region.dart';
 import '../home/timeline/controller.dart';
-import 'appbar_visibility.dart';
 import 'post_error.dart';
 import 'post_image.dart';
 import 'post_toolbox.dart';
@@ -34,8 +34,6 @@ class PostPage extends HookConsumerWidget {
     final pageController = useExtendedPageController(initialPage: page.value);
     final pageState = ref.watch(pageStateProvider);
     final fullscreen = ref.watch(fullscreenProvider);
-    final appbarAnimController =
-        useAnimationController(duration: const Duration(milliseconds: 300));
 
     final posts = controller.posts;
     final post = posts.isEmpty ? Post.empty : posts[page.value];
@@ -108,8 +106,8 @@ class PostPage extends HookConsumerWidget {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: AppbarVisibility(
-                  controller: appbarAnimController,
+                child: SlideFadeVisibility(
+                  direction: HidingDirection.toTop,
                   visible: !fullscreen,
                   child: _PostAppBar(
                     subtitle: post.tags.join(' '),
@@ -124,8 +122,8 @@ class PostPage extends HookConsumerWidget {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: BottomBarVisibility(
-                    controller: appbarAnimController,
+                  child: SlideFadeVisibility(
+                    direction: HidingDirection.toBottom,
                     visible: !fullscreen,
                     child: PostToolbox(post),
                   ),
