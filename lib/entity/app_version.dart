@@ -26,8 +26,14 @@ class AppVersion with _$AppVersion {
   @override
   String toString() => '$major.$minor.$patch';
 
-  bool isNewerThan(AppVersion version) =>
-      major > version.major || minor > version.minor || patch > version.patch;
+  bool isNewerThan(AppVersion version) {
+    if (major > version.major) return true;
+    if (major >= version.major && minor > version.minor) return true;
+
+    return major >= version.major &&
+        minor >= version.minor &&
+        patch > version.patch;
+  }
 
   String get apkUrl {
     return '${VersionDataSource.gitUrl}/releases/download/$this/boorusphere-$this-${VersionDataSource.arch}.apk';
