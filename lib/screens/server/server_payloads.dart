@@ -23,7 +23,7 @@ class ServerPayloadsPage extends HookConsumerWidget {
               return ListTile(
                 title: Text(it.name),
                 subtitle: Text(it.homepage),
-                leading: Favicon(url: '${it.homepage}/favicon.ico'),
+                leading: Favicon(url: it.homepage),
                 dense: true,
                 onTap: () {
                   onReturned?.call(it);

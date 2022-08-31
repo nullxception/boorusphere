@@ -200,7 +200,7 @@ class _LeadingButton extends HookConsumerWidget {
             ? const Icon(Icons.arrow_back_rounded)
             : Favicon(
                 key: ValueKey(serverActive.homepage),
-                url: '${serverActive.homepage}/favicon.ico',
+                url: serverActive.homepage,
                 iconSize: 18,
               ),
       ),

@@ -72,7 +72,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                 return ListTile(
                   title: Text(it.name),
                   subtitle: Text(it.homepage),
-                  leading: Favicon(url: '${it.homepage}/favicon.ico'),
+                  leading: Favicon(url: it.homepage),
                   trailing: PopupMenuButton(
                     onSelected: (value) {
                       switch (value) {

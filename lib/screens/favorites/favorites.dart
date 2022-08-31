@@ -114,7 +114,7 @@ class _Tab extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 8),
           child: Favicon(
-            url: '${serverData.homepage}/favicon.ico',
+            url: serverData.homepage,
             size: 16,
             shape: BoxShape.circle,
           ),

@@ -18,6 +18,12 @@ class Favicon extends StatelessWidget {
   final double? iconSize;
   final BoxShape? shape;
 
+  String get faviconUrl {
+    final uri = url.asUri;
+    if (!uri.hasAuthority) return '';
+    return 'https://icons.duckduckgo.com/ip3/${uri.host}.ico';
+  }
+
   @override
   Widget build(BuildContext context) {
     final fallbackWidget = Icon(
@@ -28,9 +34,9 @@ class Favicon extends StatelessWidget {
       width: size ?? context.iconTheme.size,
       height: size ?? context.iconTheme.size,
       child: Center(
-        child: url.asUri.hasAuthority
+        child: faviconUrl.isNotEmpty
             ? ExtendedImage.network(
-                url,
+                faviconUrl,
                 width: iconSize ?? context.iconTheme.size,
                 height: iconSize ?? context.iconTheme.size,
                 shape: shape,

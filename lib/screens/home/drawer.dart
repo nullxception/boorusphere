@@ -243,7 +243,7 @@ class _ServerSelection extends HookConsumerWidget {
           child: ListTile(
             title: Text(it.name),
             leading: Favicon(
-              url: '${it.homepage}/favicon.ico',
+              url: it.homepage,
               shape: BoxShape.circle,
               iconSize: 21,
             ),
