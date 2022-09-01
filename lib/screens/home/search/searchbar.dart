@@ -13,9 +13,6 @@ class _SearchBar extends HookConsumerWidget {
     final isBlurAllowed = ref.watch(uiBlurProvider);
 
     final onScrolling = useCallback(() {
-      if (!scrollController.hasClients) {
-        return;
-      }
       final position = scrollController.position;
       final threshold = _SearchBar.innerHeight;
       if (delta.value.first > 0 &&
@@ -44,6 +41,15 @@ class _SearchBar extends HookConsumerWidget {
         scrollController.removeListener(onScrolling);
       };
     }, []);
+
+    // Reset delta when there's no scrollable widget attached.
+    // for example: on new search or while switching server.
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (scrollController.hasClients) return;
+      if (delta.value.reduce((a, b) => a + b) != 0) {
+        delta.value = [0, 0];
+      }
+    });
 
     return RepaintBoundary(
       child: BlurBackdrop(
