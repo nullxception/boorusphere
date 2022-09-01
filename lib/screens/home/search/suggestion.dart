@@ -133,7 +133,7 @@ class _SearchSuggestion extends HookConsumerWidget {
                             child: _SuggestionEntryTile(
                               data: SuggestionEntry(
                                 isHistory: false,
-                                text: value[index],
+                                text: value.elementAt(index),
                               ),
                               onTap: searchBar.submit,
                               onAdded: searchBar.append,

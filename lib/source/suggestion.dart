@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/extensions/string.dart';
@@ -10,11 +11,11 @@ import 'blocked_tags.dart';
 import 'settings/server/active.dart';
 
 final _dataSource = Provider(SuggestionSource.new);
-final suggestionFuture =
-    FutureProvider.autoDispose.family<List<String>, String>((ref, query) async {
+final suggestionFuture = FutureProvider.autoDispose
+    .family<Iterable<String>, String>((ref, query) async {
   final serverActive = ref.watch(serverActiveProvider);
   if (serverActive == ServerData.empty) {
-    return [];
+    return {};
   }
 
   final source = ref.watch(_dataSource);
@@ -26,7 +27,7 @@ class SuggestionSource {
 
   final Ref ref;
 
-  Future<List<String>> fetch({
+  Future<Iterable<String>> fetch({
     required String query,
     required ServerData server,
   }) async {
@@ -34,13 +35,22 @@ class SuggestionSource {
     final client = ref.read(httpProvider);
 
     final queries = query.toWordList();
-    final url = server.suggestionUrlOf(queries.isEmpty ? '' : queries.last);
+    final word = queries.isEmpty ? '' : queries.last;
+    final urls = server.suggestionUrlsOf(word);
     try {
-      final res = await client.get(url);
-
-      return ServerResponseParser.parseTagSuggestion(res, query)
+      final res = await Future.wait(urls.map(client.get));
+      return res
+          .map((e) => ServerResponseParser.parseTagSuggestion(e, query))
+          .reduce((value, element) => {...value, ...element})
           .where((it) => !blockedTags.values.contains(it))
-          .toList();
+          .sortedByCompare<String>(
+        (element) => element,
+        (a, b) {
+          if (a.startsWith(word)) return -1;
+          if (a.endsWith(word)) return 0;
+          return 1;
+        },
+      );
     } catch (e) {
       if (query.isEmpty) {
         // the server did not support empty tag matches (hot/trending tags)

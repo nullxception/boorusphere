@@ -37,13 +37,17 @@ class ServerData with _$ServerData {
         .replaceAll('{post-limit}', '$postLimit');
   }
 
-  String suggestionUrlOf(String query) {
+  List<String> suggestionUrlsOf(String query) {
     final url = '$homepage/$tagSuggestionUrl';
     if (canSuggestTags) {
       if (query.isEmpty) {
-        return url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), '');
+        return [url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), '')];
       }
-      return url.replaceAll('{tag-part}', query);
+      return [
+        url.replaceAll(RegExp(r'[*%]{tag-part}'), query),
+        url.replaceAll(RegExp(r'{tag-part}[*%]'), query),
+        url.replaceAll('{tag-part}', query),
+      ];
     } else {
       throw Exception('no suggestion config for server $name');
     }

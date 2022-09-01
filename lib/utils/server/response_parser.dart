@@ -135,7 +135,7 @@ class ServerResponseParser {
     return result;
   }
 
-  static List<String> parseTagSuggestion(Response res, String query) {
+  static Set<String> parseTagSuggestion(Response res, String query) {
     final data = res.data;
     if (res.statusCode != 200) {
       throw SphereException(
@@ -151,7 +151,7 @@ class ServerResponseParser {
     } else if (data is Map && data.keys.contains('tag')) {
       entries.addAll(data['tag']);
     } else if (data.toString().isEmpty) {
-      return [];
+      return {};
     } else if (data is String && data.contains('<?xml')) {
       final xjson = Xml2Json();
       xjson.parse(data.replaceAll('\\', ''));
@@ -173,7 +173,7 @@ class ServerResponseParser {
       throw noTagsError;
     }
 
-    final result = <String>[];
+    final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
       final tag = entry.take(['name', 'tag'], orElse: '');
       final postCount = entry.take(['post_count', 'count'], orElse: 0);
