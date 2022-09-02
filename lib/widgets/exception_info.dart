@@ -73,12 +73,18 @@ class ExceptionInfo extends HookWidget {
             if (showTrace.value && stackTrace != null)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.only(top: 16),
+                    padding: EdgeInsets.only(top: 16, bottom: 8),
                     child: Text('Stacktrace:'),
                   ),
-                  Text(stackTrace.toString()),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 128),
+                    child: SingleChildScrollView(
+                      child: Text(stackTrace.toString()),
+                    ),
+                  )
                 ],
               )
           ],
