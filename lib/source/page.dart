@@ -67,7 +67,7 @@ class PageDataSource {
       final safeMode = ref.read(safeModeProvider);
       throw SphereException(
           message: [
-        posts.isNotEmpty ? 'No result found' : 'No more result found',
+        posts.isEmpty ? 'No result found' : 'No more result found',
         if (pageOption.query.isNotEmpty) 'for ${pageOption.query}',
         if (safeMode) 'in safe mode',
       ].join(' '));
