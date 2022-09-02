@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../source/page.dart';
+import '../../../source/settings/safe_mode.dart';
 import '../../../utils/extensions/buildcontext.dart';
 import '../../../widgets/exception_info.dart';
 import '../../../widgets/notice_card.dart';
@@ -13,6 +14,7 @@ class TimelineStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageState = ref.watch(pageStateProvider);
+    final safeMode = ref.watch(safeModeProvider);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -29,14 +31,27 @@ class TimelineStatus extends ConsumerWidget {
                     err: error,
                     stackTrace: stackTrace,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: ElevatedButton(
-                      onPressed: () => ref.refresh(pageStateProvider),
-                      style: ElevatedButton.styleFrom(elevation: 0),
-                      child: const Text('Try again'),
-                    ),
-                  )
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (safeMode)
+                        ElevatedButton(
+                          onPressed: () {
+                            ref
+                                .watch(safeModeProvider.notifier)
+                                .update(false)
+                                .then((_) => ref.refresh(pageStateProvider));
+                          },
+                          style: ElevatedButton.styleFrom(elevation: 0),
+                          child: const Text('Disable safe mode'),
+                        ),
+                      ElevatedButton(
+                        onPressed: () => ref.refresh(pageStateProvider),
+                        style: ElevatedButton.styleFrom(elevation: 0),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
