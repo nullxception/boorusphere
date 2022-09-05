@@ -110,11 +110,14 @@ class ServerEditorPage extends HookConsumerWidget {
                                 ? scanApiAddrText.text
                                 : homeAddr;
                             try {
-                              data.value = await ServerScanner.scan(
+                              final res = await ServerScanner.scan(
                                 ref.read(httpProvider),
                                 homeAddr,
                                 apiAddr,
                               );
+                              data.value = res.apiAddr == res.homepage
+                                  ? res.copyWith(apiAddr: '')
+                                  : res;
                             } catch (e) {
                               error.value = e;
                               data.value = ServerData.empty.copyWith(
@@ -161,7 +164,7 @@ class ServerEditorPage extends HookConsumerWidget {
                           ref.read(serverDataProvider.notifier);
 
                       if (isEditing) {
-                        serverDataNotifier.edit(data: server, newData: data);
+                        serverDataNotifier.edit(prev: server, next: data);
                       } else {
                         serverDataNotifier.add(data: data);
                       }

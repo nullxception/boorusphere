@@ -97,7 +97,8 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   }
 
   Future<void> add({required ServerData data}) async {
-    await _box.put(data.key, data);
+    await _box.put(data.key,
+        data.apiAddr == data.homepage ? data.copyWith(apiAddr: '') : data);
     reloadFromBox();
   }
 
@@ -113,13 +114,15 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   }
 
   Future<void> edit({
-    required ServerData data,
-    required ServerData newData,
+    required ServerData prev,
+    required ServerData next,
   }) async {
-    await _box.delete(data.key);
+    final newData =
+        next.apiAddr == next.homepage ? next.copyWith(apiAddr: '') : next;
+    await _box.delete(prev.key);
     await _box.put(newData.key, newData);
     reloadFromBox();
-    if (serverActive == data && newData.key != serverActive.key) {
+    if (serverActive == prev && newData.key != serverActive.key) {
       await serverActiveNotifier.update(newData);
     }
   }
