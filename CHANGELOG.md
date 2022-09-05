@@ -1,4 +1,7 @@
 
+## 1.1.7
+* Remove problematic Android 13 notification workaround (for some unknown reason it leads to app crashing on production build)
+
 ## 1.1.6
 * Add option to disable UI Blur (might helps on low-end devices)
 * Add support for Favorite posts
