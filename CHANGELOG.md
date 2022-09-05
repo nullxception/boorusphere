@@ -1,4 +1,13 @@
 
+## 1.1.6
+* Add option to disable UI Blur (might helps on low-end devices)
+* Add support for Favorite posts
+* Add workaround for downloader notification issues on Android 13
+* Fix app update version checker
+* Fix several UI issues
+* Handle API origin redirection when scanning server
+* Improve tag suggestion result
+
 ## 1.1.5
 * Fixup load more button keep trying to load page endlessly
 
