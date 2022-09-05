@@ -50,6 +50,9 @@ class ServerDetails extends HookConsumerWidget {
                 ),
                 TextFormField(
                   controller: cName,
+                  // serverName is used by download entries and favorite posts
+                  // we can't edit it because it'll breaks those data source
+                  enabled: !isEditing,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Name',
