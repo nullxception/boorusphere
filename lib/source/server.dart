@@ -117,12 +117,13 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     required ServerData prev,
     required ServerData next,
   }) async {
-    final newData =
-        next.apiAddr == next.homepage ? next.copyWith(apiAddr: '') : next;
-    await _box.delete(prev.key);
-    await _box.put(newData.key, newData);
+    final newData = next.apiAddr == next.homepage
+        ? next.copyWith(id: prev.id, apiAddr: '')
+        : next.copyWith(id: prev.id);
+
+    await _box.put(prev.key, newData);
     reloadFromBox();
-    if (serverActive == prev && newData.key != serverActive.key) {
+    if (serverActive == prev) {
       await serverActiveNotifier.update(newData);
     }
   }
