@@ -13,7 +13,7 @@ class ServerScanner {
     List<String> queries,
     ServerPayloadType type,
   ) async {
-    final result = await Future.wait(
+    final result = await Future.wait<ServerScanResult>(
       queries.map((query) async {
         final test = query
             .replaceAll('{tags}', '*')
@@ -26,19 +26,30 @@ class ServerScanner {
             '$host/$test',
             options: Options(validateStatus: (it) => it == 200),
           );
+          final origin = res.redirects.isNotEmpty
+              ? res.redirects.last.location.origin
+              : host;
 
-          if (type == ServerPayloadType.post) return query;
+          if (type == ServerPayloadType.post) {
+            return ServerScanResult(origin: origin, query: query);
+          }
+
           final contentType = res.headers['content-type'] ?? [];
-          return contentType.any((it) => it.contains('html')) ? '' : query;
+          return ServerScanResult(
+            origin: origin,
+            query: contentType.any((it) => it.contains('html')) ? '' : query,
+          );
         } on DioError {
-          return '';
+          return ServerScanResult.empty;
         }
       }),
     );
 
     return ServerPayload(
-      host: host,
-      query: result.firstWhere((it) => it.isNotEmpty, orElse: () => ''),
+      result: result.firstWhere(
+        (it) => it.query.isNotEmpty,
+        orElse: () => ServerScanResult(origin: host),
+      ),
       type: type,
     );
   }
@@ -48,7 +59,6 @@ class ServerScanner {
     String homeUrl,
     String apiUrl,
   ) async {
-    String post = '', search = '', suggestion = '';
     final tests = await Future.wait(
       [
         _testPayload(
@@ -72,29 +82,27 @@ class ServerScanner {
       ],
     );
 
-    for (final payload in tests) {
-      switch (payload.type) {
-        case ServerPayloadType.search:
-          search = payload.query;
-          break;
-        case ServerPayloadType.suggestion:
-          suggestion = payload.query;
-          break;
-        case ServerPayloadType.post:
-          post = payload.query;
-          break;
-        default:
-          break;
-      }
-    }
-
-    return ServerData(
-      id: homeUrl.asUri.host,
-      homepage: homeUrl,
-      postUrl: post,
-      searchUrl: search,
-      tagSuggestionUrl: suggestion,
-      apiAddr: apiUrl,
+    return tests.fold<ServerData>(
+      ServerData(id: homeUrl.asUri.host),
+      (prev, it) {
+        switch (it.type) {
+          case ServerPayloadType.search:
+            return prev.copyWith(
+              searchUrl: it.result.query,
+              apiAddr: it.result.origin,
+            );
+          case ServerPayloadType.suggestion:
+            return prev.copyWith(
+              tagSuggestionUrl: it.result.query,
+              apiAddr: it.result.origin,
+            );
+          case ServerPayloadType.post:
+            return prev.copyWith(
+              postUrl: it.result.query,
+              homepage: it.result.origin,
+            );
+        }
+      },
     );
   }
 

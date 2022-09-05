@@ -6,12 +6,22 @@ enum ServerPayloadType {
 
 class ServerPayload {
   const ServerPayload({
-    required this.host,
-    required this.query,
+    required this.result,
     required this.type,
   });
 
-  final String host;
-  final String query;
+  final ServerScanResult result;
   final ServerPayloadType type;
+}
+
+class ServerScanResult {
+  const ServerScanResult({
+    this.origin = '',
+    this.query = '',
+  });
+
+  final String origin;
+  final String query;
+
+  static const empty = ServerScanResult();
 }
