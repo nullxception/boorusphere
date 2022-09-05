@@ -1,34 +1,34 @@
 [
   {
-    "name": "Safebooru",
+    "id": "Safebooru",
     "homepage": "https://safebooru.org",
     "searchUrl": "index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}",
     "tagSuggestionUrl": "index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit=20",
     "postUrl": "index.php?page=post&s=view&id={post-id}"
   },
   {
-    "name": "Danbooru",
+    "id": "Danbooru",
     "homepage": "https://danbooru.donmai.us",
     "searchUrl": "posts.json?tags={tags}&page={page-id}&limit={post-limit}",
     "tagSuggestionUrl": "tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit=20",
     "postUrl": "posts/{post-id}"
   },
   {
-    "name": "Gelbooru",
+    "id": "Gelbooru",
     "homepage": "https://gelbooru.com",
     "searchUrl": "index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}",
     "tagSuggestionUrl": "index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit=20",
     "postUrl": "index.php?page=post&s=view&id={post-id}"
   },
   {
-    "name": "Konachan",
+    "id": "Konachan",
     "homepage": "https://konachan.net",
     "searchUrl": "post.json?tags={tags}&page={page-id}&limit={post-limit}",
     "tagSuggestionUrl": "tag.json?name=*{tag-part}*&order=count&limit=20",
     "postUrl": "post/show/{post-id}"
   },
   {
-    "name": "Yandere",
+    "id": "Yandere",
     "homepage": "https://yande.re",
     "searchUrl": "post.json?tags={tags}&page={page-id}&limit={post-limit}",
     "tagSuggestionUrl": "tag.json?name=*{tag-part}*&order=count&limit=20",

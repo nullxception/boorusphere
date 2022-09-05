@@ -118,7 +118,7 @@ class ServerEditorPage extends HookConsumerWidget {
                             } catch (e) {
                               error.value = e;
                               data.value = ServerData.empty.copyWith(
-                                name: homeAddr.asUri.host,
+                                id: homeAddr.asUri.host,
                                 homepage: homeAddr,
                               );
                             }
@@ -152,7 +152,7 @@ class ServerEditorPage extends HookConsumerWidget {
                       padding: EdgeInsets.zero,
                     ),
                   ),
-                if (data.value.name.isNotEmpty)
+                if (data.value.id.isNotEmpty)
                   ServerDetails(
                     data: data.value,
                     isEditing: isEditing,

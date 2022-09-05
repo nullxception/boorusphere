@@ -9,6 +9,7 @@ import '../../entity/download_status.dart';
 import '../../routes/routes.dart';
 import '../../services/download.dart';
 import '../../source/page.dart';
+import '../../source/server.dart';
 import '../../source/settings/download/group_by_server.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
@@ -103,7 +104,10 @@ class DownloadEntryView extends ConsumerWidget {
               Text(progress.status.name.capitalized),
             if (!groupByServer) ...[
               const Text('•'),
-              Text(entry.post.serverName),
+              Text(ref
+                  .watch(serverDataProvider.notifier)
+                  .getById(entry.post.serverId)
+                  .name),
             ],
           ],
         ),

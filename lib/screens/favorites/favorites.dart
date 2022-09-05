@@ -53,12 +53,12 @@ class _FavoritesView extends HookConsumerWidget {
     final grouped = ref.watch(favoritesProvider.select(
       (it) => it.values.groupListsBy((e) => ref
           .watch(serverDataProvider.notifier)
-          .getByName(e.post.serverName, or: ServerData.empty)),
+          .getById(e.post.serverId, or: ServerData.empty)),
     ));
 
     final entries = grouped.entries
         .where((it) => it.key != ServerData.empty)
-        .sortedBy((it) => it.key.name);
+        .sortedBy((it) => it.key.id);
     final servers = entries.map((e) => e.key);
     final pages = entries.map(
       (e) => MapEntry(

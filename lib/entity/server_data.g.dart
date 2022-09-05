@@ -17,21 +17,22 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$_ServerData(
-      name: fields[0] == null ? '' : fields[0] as String,
+      id: fields[0] == null ? '' : fields[0] as String,
       homepage: fields[1] == null ? '' : fields[1] as String,
       postUrl: fields[2] == null ? '' : fields[2] as String,
       searchUrl: fields[3] == null ? '' : fields[3] as String,
       apiAddr: fields[4] == null ? '' : fields[4] as String,
       tagSuggestionUrl: fields[7] == null ? '' : fields[7] as String,
+      alias: fields[8] == null ? '' : fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_ServerData obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
       ..write(obj.homepage)
       ..writeByte(2)
@@ -41,7 +42,9 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
       ..writeByte(4)
       ..write(obj.apiAddr)
       ..writeByte(7)
-      ..write(obj.tagSuggestionUrl);
+      ..write(obj.tagSuggestionUrl)
+      ..writeByte(8)
+      ..write(obj.alias);
   }
 
   @override
@@ -61,20 +64,22 @@ class ServersAdapter extends TypeAdapter<_$_ServerData> {
 
 _$_ServerData _$$_ServerDataFromJson(Map<String, dynamic> json) =>
     _$_ServerData(
-      name: json['name'] as String? ?? '',
+      id: json['id'] as String? ?? '',
       homepage: json['homepage'] as String? ?? '',
       postUrl: json['postUrl'] as String? ?? '',
       searchUrl: json['searchUrl'] as String? ?? '',
       apiAddr: json['apiAddr'] as String? ?? '',
       tagSuggestionUrl: json['tagSuggestionUrl'] as String? ?? '',
+      alias: json['alias'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$_ServerDataToJson(_$_ServerData instance) =>
     <String, dynamic>{
-      'name': instance.name,
+      'id': instance.id,
       'homepage': instance.homepage,
       'postUrl': instance.postUrl,
       'searchUrl': instance.searchUrl,
       'apiAddr': instance.apiAddr,
       'tagSuggestionUrl': instance.tagSuggestionUrl,
+      'alias': instance.alias,
     };

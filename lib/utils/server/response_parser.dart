@@ -118,7 +118,7 @@ class ServerResponseParser {
             sampleHeight: sampleHeight,
             previewWidth: previewWidth,
             previewHeight: previewHeight,
-            serverName: server.name,
+            serverId: server.id,
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,

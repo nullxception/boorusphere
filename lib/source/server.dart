@@ -81,7 +81,7 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
   Future<void> _initLazily(Ref ref, List<ServerData> servers) async {
     if (serverActive == ServerData.empty) {
       await serverActiveNotifier
-          .update(servers.firstWhere((it) => it.name.startsWith('Safe')));
+          .update(servers.firstWhere((it) => it.id.startsWith('Safe')));
     }
   }
 
@@ -89,10 +89,10 @@ class ServerDataSource extends StateNotifier<List<ServerData>> {
     state = _box.values.map((it) => it as ServerData).toList();
   }
 
-  ServerData getByName(String name, {ServerData? or}) {
+  ServerData getById(String id, {ServerData? or}) {
     return state.isEmpty
         ? ServerData.empty
-        : state.firstWhere((it) => it.name == name,
+        : state.firstWhere((it) => it.id == id,
             orElse: () => or ?? state.first);
   }
 

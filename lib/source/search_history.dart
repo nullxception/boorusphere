@@ -57,7 +57,7 @@ class SearchHistorySource extends StateNotifier<Map<int, SearchHistory>> {
     if (query.isEmpty || checkExists(query)) return;
 
     final serverActive = ref.read(serverActiveProvider);
-    await _storage.add(SearchHistory(query: query, server: serverActive.name));
+    await _storage.add(SearchHistory(query: query, server: serverActive.id));
     _refresh();
   }
 

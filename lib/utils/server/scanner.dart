@@ -89,7 +89,7 @@ class ServerScanner {
     }
 
     return ServerData(
-      name: homeUrl.asUri.host,
+      id: homeUrl.asUri.host,
       homepage: homeUrl,
       postUrl: post,
       searchUrl: search,

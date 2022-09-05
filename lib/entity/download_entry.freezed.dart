@@ -133,7 +133,7 @@ class __$$_DownloadEntryCopyWithImpl<$Res>
 /// @nodoc
 
 @HiveType(typeId: 4, adapterName: 'DownloadEntryAdapter')
-class _$_DownloadEntry extends _DownloadEntry with DiagnosticableTreeMixin {
+class _$_DownloadEntry extends _DownloadEntry {
   const _$_DownloadEntry(
       {@HiveField(0, defaultValue: '') this.id = '',
       @HiveField(1, defaultValue: Post.empty) this.post = Post.empty,
@@ -154,18 +154,8 @@ class _$_DownloadEntry extends _DownloadEntry with DiagnosticableTreeMixin {
   final String destination;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'DownloadEntry(id: $id, post: $post, destination: $destination)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'DownloadEntry'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('post', post))
-      ..add(DiagnosticsProperty('destination', destination));
   }
 
   @override

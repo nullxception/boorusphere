@@ -30,7 +30,7 @@ class Post with _$Post {
     @HiveField(4, defaultValue: []) @Default([]) List<String> tags,
     @HiveField(5, defaultValue: -1) @Default(-1) int width,
     @HiveField(6, defaultValue: -1) @Default(-1) int height,
-    @HiveField(7, defaultValue: '') @Default('') String serverName,
+    @HiveField(7, defaultValue: '') @Default('') String serverId,
     @HiveField(8, defaultValue: '') @Default('') String postUrl,
     @HiveField(9, defaultValue: 'q') @Default('q') String rateValue,
     @HiveField(10, defaultValue: -1) @Default(-1) int sampleWidth,

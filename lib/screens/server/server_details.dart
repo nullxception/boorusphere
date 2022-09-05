@@ -24,7 +24,9 @@ class ServerDetails extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataProvider);
     final formKey = useMemoized(GlobalKey<FormState>.new);
-    final cName = useTextEditingController(text: data.name);
+    final cName = useTextEditingController(text: data.id);
+    final cAlias = useTextEditingController(
+        text: data.alias.isEmpty ? data.id : data.alias);
     final cHomepage = useTextEditingController(text: data.homepage);
     final cApiAddr = useTextEditingController(text: data.apiAddr);
     final cSearchUrl = useTextEditingController(text: data.searchUrl);
@@ -48,24 +50,30 @@ class ServerDetails extends HookConsumerWidget {
                     style: context.theme.textTheme.titleMedium,
                   ),
                 ),
-                TextFormField(
-                  controller: cName,
-                  // serverName is used by download entries and favorite posts
-                  // we can't edit it because it'll breaks those data source
-                  enabled: !isEditing,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Name',
-                  ),
-                  validator: (value) {
-                    final serverName = serverData.map((it) => it.name);
-                    if (!isEditing && serverName.contains(value)) {
-                      return 'Server data for $value already exists';
-                    }
+                if (!isEditing)
+                  TextFormField(
+                    controller: cName,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Name',
+                    ),
+                    validator: (value) {
+                      final serverName = serverData.map((it) => it.id);
+                      if (!isEditing && serverName.contains(value)) {
+                        return 'Server data for $value already exists';
+                      }
 
-                    return null;
-                  },
-                ),
+                      return null;
+                    },
+                  )
+                else
+                  TextFormField(
+                    controller: cAlias,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Alias',
+                    ),
+                  ),
                 TextFormField(
                   controller: cHomepage,
                   decoration: const InputDecoration(
@@ -145,14 +153,24 @@ class ServerDetails extends HookConsumerWidget {
                 return;
               }
 
-              onSubmitted.call(data.copyWith(
-                name: cName.text,
-                homepage: cHomepage.text,
-                apiAddr: cApiAddr.text,
-                searchUrl: cSearchUrl.text,
-                tagSuggestionUrl: cSuggestUrl.text,
-                postUrl: cPostUrl.text,
-              ));
+              final newData = isEditing
+                  ? data.copyWith(
+                      alias: cAlias.text,
+                      homepage: cHomepage.text,
+                      apiAddr: cApiAddr.text,
+                      searchUrl: cSearchUrl.text,
+                      tagSuggestionUrl: cSuggestUrl.text,
+                      postUrl: cPostUrl.text,
+                    )
+                  : data.copyWith(
+                      id: cName.text,
+                      homepage: cHomepage.text,
+                      apiAddr: cApiAddr.text,
+                      searchUrl: cSearchUrl.text,
+                      tagSuggestionUrl: cSuggestUrl.text,
+                      postUrl: cPostUrl.text,
+                    );
+              onSubmitted.call(newData);
             },
             child: const Text('Save'),
           ),

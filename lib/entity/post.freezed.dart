@@ -31,7 +31,7 @@ mixin _$Post {
   @HiveField(6, defaultValue: -1)
   int get height => throw _privateConstructorUsedError;
   @HiveField(7, defaultValue: '')
-  String get serverName => throw _privateConstructorUsedError;
+  String get serverId => throw _privateConstructorUsedError;
   @HiveField(8, defaultValue: '')
   String get postUrl => throw _privateConstructorUsedError;
   @HiveField(9, defaultValue: 'q')
@@ -73,7 +73,7 @@ abstract class $PostCopyWith<$Res> {
       @HiveField(4, defaultValue: []) List<String> tags,
       @HiveField(5, defaultValue: -1) int width,
       @HiveField(6, defaultValue: -1) int height,
-      @HiveField(7, defaultValue: '') String serverName,
+      @HiveField(7, defaultValue: '') String serverId,
       @HiveField(8, defaultValue: '') String postUrl,
       @HiveField(9, defaultValue: 'q') String rateValue,
       @HiveField(10, defaultValue: -1) int sampleWidth,
@@ -105,7 +105,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? tags = freezed,
     Object? width = freezed,
     Object? height = freezed,
-    Object? serverName = freezed,
+    Object? serverId = freezed,
     Object? postUrl = freezed,
     Object? rateValue = freezed,
     Object? sampleWidth = freezed,
@@ -148,9 +148,9 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
-      serverName: serverName == freezed
-          ? _value.serverName
-          : serverName // ignore: cast_nullable_to_non_nullable
+      serverId: serverId == freezed
+          ? _value.serverId
+          : serverId // ignore: cast_nullable_to_non_nullable
               as String,
       postUrl: postUrl == freezed
           ? _value.postUrl
@@ -217,7 +217,7 @@ abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       @HiveField(4, defaultValue: []) List<String> tags,
       @HiveField(5, defaultValue: -1) int width,
       @HiveField(6, defaultValue: -1) int height,
-      @HiveField(7, defaultValue: '') String serverName,
+      @HiveField(7, defaultValue: '') String serverId,
       @HiveField(8, defaultValue: '') String postUrl,
       @HiveField(9, defaultValue: 'q') String rateValue,
       @HiveField(10, defaultValue: -1) int sampleWidth,
@@ -250,7 +250,7 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? tags = freezed,
     Object? width = freezed,
     Object? height = freezed,
-    Object? serverName = freezed,
+    Object? serverId = freezed,
     Object? postUrl = freezed,
     Object? rateValue = freezed,
     Object? sampleWidth = freezed,
@@ -293,9 +293,9 @@ class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
-      serverName: serverName == freezed
-          ? _value.serverName
-          : serverName // ignore: cast_nullable_to_non_nullable
+      serverId: serverId == freezed
+          ? _value.serverId
+          : serverId // ignore: cast_nullable_to_non_nullable
               as String,
       postUrl: postUrl == freezed
           ? _value.postUrl
@@ -369,7 +369,7 @@ class _$_Post extends _Post {
       @HiveField(6, defaultValue: -1)
           this.height = -1,
       @HiveField(7, defaultValue: '')
-          this.serverName = '',
+          this.serverId = '',
       @HiveField(8, defaultValue: '')
           this.postUrl = '',
       @HiveField(9, defaultValue: 'q')
@@ -438,7 +438,7 @@ class _$_Post extends _Post {
   @override
   @JsonKey()
   @HiveField(7, defaultValue: '')
-  final String serverName;
+  final String serverId;
   @override
   @JsonKey()
   @HiveField(8, defaultValue: '')
@@ -514,7 +514,7 @@ class _$_Post extends _Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverName: $serverName, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight, source: $source, tagsArtist: $tagsArtist, tagsCharacter: $tagsCharacter, tagsCopyright: $tagsCopyright, tagsGeneral: $tagsGeneral, tagsMeta: $tagsMeta)';
+    return 'Post(id: $id, originalFile: $originalFile, sampleFile: $sampleFile, previewFile: $previewFile, tags: $tags, width: $width, height: $height, serverId: $serverId, postUrl: $postUrl, rateValue: $rateValue, sampleWidth: $sampleWidth, sampleHeight: $sampleHeight, previewWidth: $previewWidth, previewHeight: $previewHeight, source: $source, tagsArtist: $tagsArtist, tagsCharacter: $tagsCharacter, tagsCopyright: $tagsCopyright, tagsGeneral: $tagsGeneral, tagsMeta: $tagsMeta)';
   }
 
   @override
@@ -532,8 +532,7 @@ class _$_Post extends _Post {
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality().equals(other.width, width) &&
             const DeepCollectionEquality().equals(other.height, height) &&
-            const DeepCollectionEquality()
-                .equals(other.serverName, serverName) &&
+            const DeepCollectionEquality().equals(other.serverId, serverId) &&
             const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
             const DeepCollectionEquality().equals(other.rateValue, rateValue) &&
             const DeepCollectionEquality()
@@ -566,7 +565,7 @@ class _$_Post extends _Post {
         const DeepCollectionEquality().hash(_tags),
         const DeepCollectionEquality().hash(width),
         const DeepCollectionEquality().hash(height),
-        const DeepCollectionEquality().hash(serverName),
+        const DeepCollectionEquality().hash(serverId),
         const DeepCollectionEquality().hash(postUrl),
         const DeepCollectionEquality().hash(rateValue),
         const DeepCollectionEquality().hash(sampleWidth),
@@ -596,7 +595,7 @@ abstract class _Post extends Post {
       @HiveField(4, defaultValue: []) final List<String> tags,
       @HiveField(5, defaultValue: -1) final int width,
       @HiveField(6, defaultValue: -1) final int height,
-      @HiveField(7, defaultValue: '') final String serverName,
+      @HiveField(7, defaultValue: '') final String serverId,
       @HiveField(8, defaultValue: '') final String postUrl,
       @HiveField(9, defaultValue: 'q') final String rateValue,
       @HiveField(10, defaultValue: -1) final int sampleWidth,
@@ -634,7 +633,7 @@ abstract class _Post extends Post {
   int get height;
   @override
   @HiveField(7, defaultValue: '')
-  String get serverName;
+  String get serverId;
   @override
   @HiveField(8, defaultValue: '')
   String get postUrl;

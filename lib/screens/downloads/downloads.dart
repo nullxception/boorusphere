@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../entity/download_entry.dart';
 import '../../services/download.dart';
+import '../../source/server.dart';
 import '../../source/settings/download/group_by_server.dart';
 import '../../widgets/expandable_group_list_view.dart';
 import '../../widgets/notice_card.dart';
@@ -66,8 +67,9 @@ class DownloadsPage extends ConsumerWidget {
               )
             : ExpandableGroupListView<DownloadEntry, String>(
                 items: downloader.entries.reversed.toList(),
-                groupedBy: (entry) => entry.post.serverName,
-                groupTitle: Text.new,
+                groupedBy: (entry) => entry.post.serverId,
+                groupTitle: (id) => Text(
+                    ref.watch(serverDataProvider.notifier).getById(id).name),
                 itemBuilder: (entry) => DownloadEntryView(entry: entry),
                 ungroup: !groupByServer,
               ),

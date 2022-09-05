@@ -24,7 +24,7 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       tags: fields[4] == null ? [] : (fields[4] as List).cast<String>(),
       width: fields[5] == null ? -1 : fields[5] as int,
       height: fields[6] == null ? -1 : fields[6] as int,
-      serverName: fields[7] == null ? '' : fields[7] as String,
+      serverId: fields[7] == null ? '' : fields[7] as String,
       postUrl: fields[8] == null ? '' : fields[8] as String,
       rateValue: fields[9] == null ? 'q' : fields[9] as String,
       sampleWidth: fields[10] == null ? -1 : fields[10] as int,
@@ -60,7 +60,7 @@ class PostAdapter extends TypeAdapter<_$_Post> {
       ..writeByte(6)
       ..write(obj.height)
       ..writeByte(7)
-      ..write(obj.serverName)
+      ..write(obj.serverId)
       ..writeByte(8)
       ..write(obj.postUrl)
       ..writeByte(9)

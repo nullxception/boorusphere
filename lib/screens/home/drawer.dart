@@ -253,7 +253,7 @@ class _ServerSelection extends HookConsumerWidget {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            selected: it.name == serverActive.name,
+            selected: it.id == serverActive.id,
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {

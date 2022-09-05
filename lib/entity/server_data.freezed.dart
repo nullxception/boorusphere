@@ -21,7 +21,7 @@ ServerData _$ServerDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ServerData {
   @HiveField(0, defaultValue: '')
-  String get name => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   @HiveField(1, defaultValue: '')
   String get homepage => throw _privateConstructorUsedError;
   @HiveField(2, defaultValue: '')
@@ -32,6 +32,8 @@ mixin _$ServerData {
   String get apiAddr => throw _privateConstructorUsedError;
   @HiveField(7, defaultValue: '')
   String get tagSuggestionUrl => throw _privateConstructorUsedError;
+  @HiveField(8, defaultValue: '')
+  String get alias => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,12 +47,13 @@ abstract class $ServerDataCopyWith<$Res> {
           ServerData value, $Res Function(ServerData) then) =
       _$ServerDataCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0, defaultValue: '') String name,
+      {@HiveField(0, defaultValue: '') String id,
       @HiveField(1, defaultValue: '') String homepage,
       @HiveField(2, defaultValue: '') String postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
       @HiveField(4, defaultValue: '') String apiAddr,
-      @HiveField(7, defaultValue: '') String tagSuggestionUrl});
+      @HiveField(7, defaultValue: '') String tagSuggestionUrl,
+      @HiveField(8, defaultValue: '') String alias});
 }
 
 /// @nodoc
@@ -63,17 +66,18 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? name = freezed,
+    Object? id = freezed,
     Object? homepage = freezed,
     Object? postUrl = freezed,
     Object? searchUrl = freezed,
     Object? apiAddr = freezed,
     Object? tagSuggestionUrl = freezed,
+    Object? alias = freezed,
   }) {
     return _then(_value.copyWith(
-      name: name == freezed
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       homepage: homepage == freezed
           ? _value.homepage
@@ -95,6 +99,10 @@ class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
           ? _value.tagSuggestionUrl
           : tagSuggestionUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      alias: alias == freezed
+          ? _value.alias
+          : alias // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -107,12 +115,13 @@ abstract class _$$_ServerDataCopyWith<$Res>
       __$$_ServerDataCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0, defaultValue: '') String name,
+      {@HiveField(0, defaultValue: '') String id,
       @HiveField(1, defaultValue: '') String homepage,
       @HiveField(2, defaultValue: '') String postUrl,
       @HiveField(3, defaultValue: '') String searchUrl,
       @HiveField(4, defaultValue: '') String apiAddr,
-      @HiveField(7, defaultValue: '') String tagSuggestionUrl});
+      @HiveField(7, defaultValue: '') String tagSuggestionUrl,
+      @HiveField(8, defaultValue: '') String alias});
 }
 
 /// @nodoc
@@ -127,17 +136,18 @@ class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? name = freezed,
+    Object? id = freezed,
     Object? homepage = freezed,
     Object? postUrl = freezed,
     Object? searchUrl = freezed,
     Object? apiAddr = freezed,
     Object? tagSuggestionUrl = freezed,
+    Object? alias = freezed,
   }) {
     return _then(_$_ServerData(
-      name: name == freezed
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       homepage: homepage == freezed
           ? _value.homepage
@@ -159,6 +169,10 @@ class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
           ? _value.tagSuggestionUrl
           : tagSuggestionUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      alias: alias == freezed
+          ? _value.alias
+          : alias // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -166,14 +180,15 @@ class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 @HiveType(typeId: 2, adapterName: 'ServersAdapter')
-class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
+class _$_ServerData extends _ServerData {
   const _$_ServerData(
-      {@HiveField(0, defaultValue: '') this.name = '',
+      {@HiveField(0, defaultValue: '') this.id = '',
       @HiveField(1, defaultValue: '') this.homepage = '',
       @HiveField(2, defaultValue: '') this.postUrl = '',
       @HiveField(3, defaultValue: '') this.searchUrl = '',
       @HiveField(4, defaultValue: '') this.apiAddr = '',
-      @HiveField(7, defaultValue: '') this.tagSuggestionUrl = ''})
+      @HiveField(7, defaultValue: '') this.tagSuggestionUrl = '',
+      @HiveField(8, defaultValue: '') this.alias = ''})
       : super._();
 
   factory _$_ServerData.fromJson(Map<String, dynamic> json) =>
@@ -182,7 +197,7 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   @HiveField(0, defaultValue: '')
-  final String name;
+  final String id;
   @override
   @JsonKey()
   @HiveField(1, defaultValue: '')
@@ -203,23 +218,14 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
   @JsonKey()
   @HiveField(7, defaultValue: '')
   final String tagSuggestionUrl;
+  @override
+  @JsonKey()
+  @HiveField(8, defaultValue: '')
+  final String alias;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ServerData(name: $name, homepage: $homepage, postUrl: $postUrl, searchUrl: $searchUrl, apiAddr: $apiAddr, tagSuggestionUrl: $tagSuggestionUrl)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ServerData'))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('homepage', homepage))
-      ..add(DiagnosticsProperty('postUrl', postUrl))
-      ..add(DiagnosticsProperty('searchUrl', searchUrl))
-      ..add(DiagnosticsProperty('apiAddr', apiAddr))
-      ..add(DiagnosticsProperty('tagSuggestionUrl', tagSuggestionUrl));
+  String toString() {
+    return 'ServerData(id: $id, homepage: $homepage, postUrl: $postUrl, searchUrl: $searchUrl, apiAddr: $apiAddr, tagSuggestionUrl: $tagSuggestionUrl, alias: $alias)';
   }
 
   @override
@@ -227,25 +233,27 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ServerData &&
-            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.homepage, homepage) &&
             const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
             const DeepCollectionEquality().equals(other.searchUrl, searchUrl) &&
             const DeepCollectionEquality().equals(other.apiAddr, apiAddr) &&
             const DeepCollectionEquality()
-                .equals(other.tagSuggestionUrl, tagSuggestionUrl));
+                .equals(other.tagSuggestionUrl, tagSuggestionUrl) &&
+            const DeepCollectionEquality().equals(other.alias, alias));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(homepage),
       const DeepCollectionEquality().hash(postUrl),
       const DeepCollectionEquality().hash(searchUrl),
       const DeepCollectionEquality().hash(apiAddr),
-      const DeepCollectionEquality().hash(tagSuggestionUrl));
+      const DeepCollectionEquality().hash(tagSuggestionUrl),
+      const DeepCollectionEquality().hash(alias));
 
   @JsonKey(ignore: true)
   @override
@@ -262,13 +270,13 @@ class _$_ServerData extends _ServerData with DiagnosticableTreeMixin {
 
 abstract class _ServerData extends ServerData {
   const factory _ServerData(
-          {@HiveField(0, defaultValue: '') final String name,
-          @HiveField(1, defaultValue: '') final String homepage,
-          @HiveField(2, defaultValue: '') final String postUrl,
-          @HiveField(3, defaultValue: '') final String searchUrl,
-          @HiveField(4, defaultValue: '') final String apiAddr,
-          @HiveField(7, defaultValue: '') final String tagSuggestionUrl}) =
-      _$_ServerData;
+      {@HiveField(0, defaultValue: '') final String id,
+      @HiveField(1, defaultValue: '') final String homepage,
+      @HiveField(2, defaultValue: '') final String postUrl,
+      @HiveField(3, defaultValue: '') final String searchUrl,
+      @HiveField(4, defaultValue: '') final String apiAddr,
+      @HiveField(7, defaultValue: '') final String tagSuggestionUrl,
+      @HiveField(8, defaultValue: '') final String alias}) = _$_ServerData;
   const _ServerData._() : super._();
 
   factory _ServerData.fromJson(Map<String, dynamic> json) =
@@ -276,7 +284,7 @@ abstract class _ServerData extends ServerData {
 
   @override
   @HiveField(0, defaultValue: '')
-  String get name;
+  String get id;
   @override
   @HiveField(1, defaultValue: '')
   String get homepage;
@@ -292,6 +300,9 @@ abstract class _ServerData extends ServerData {
   @override
   @HiveField(7, defaultValue: '')
   String get tagSuggestionUrl;
+  @override
+  @HiveField(8, defaultValue: '')
+  String get alias;
   @override
   @JsonKey(ignore: true)
   _$$_ServerDataCopyWith<_$_ServerData> get copyWith =>

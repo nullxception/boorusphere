@@ -16,5 +16,5 @@ class FavoritePost {
   @HiveField(1, defaultValue: 0)
   final int timestamp;
 
-  String get key => '${post.id}@${post.serverName}';
+  String get key => '${post.id}@${post.serverId}';
 }
