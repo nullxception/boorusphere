@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../entity/post.dart';
 import '../entity/pixel_size.dart';
@@ -12,7 +9,6 @@ import '../source/page.dart';
 import '../utils/extensions/buildcontext.dart';
 import '../utils/extensions/imageprovider.dart';
 import '../utils/extensions/string.dart';
-import '../utils/permissions.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({
@@ -48,49 +44,40 @@ class DownloaderDialog extends HookConsumerWidget {
             const ListTile(title: Text('Download')),
             if (post.sampleFile.isNotEmpty)
               ListTile(
-                  title: const Text('Sample'),
-                  subtitle: FutureBuilder<PixelSize>(
-                    future: post.contentType == PostType.photo &&
-                            !post.sampleSize.hasPixels
-                        ? ExtendedNetworkImageProvider(
-                            post.sampleFile,
-                            cache: true,
-                            headers: {
-                              'Referer': post.postUrl,
-                              'Cookie': pageCookies,
-                            },
-                          ).resolvePixelSize()
-                        : Future.value(post.sampleSize),
-                    builder: (context, snapshot) {
-                      final size = snapshot.data ?? post.sampleSize;
-                      return Text('$size, ${post.sampleFile.fileExtension}');
-                    },
-                  ),
-                  leading: Icon(_getFileIcon(post.sampleFile)),
-                  onTap: () async {
-                    if (!await checkPermission(context: context)) {
-                      context.navigator.pop();
-                      return;
-                    }
-
-                    onItemClick?.call('sample');
-                    unawaited(downloader.download(post, url: post.sampleFile));
-                    context.navigator.pop();
-                  }),
+                title: const Text('Sample'),
+                subtitle: FutureBuilder<PixelSize>(
+                  future: post.contentType == PostType.photo &&
+                          !post.sampleSize.hasPixels
+                      ? ExtendedNetworkImageProvider(
+                          post.sampleFile,
+                          cache: true,
+                          headers: {
+                            'Referer': post.postUrl,
+                            'Cookie': pageCookies,
+                          },
+                        ).resolvePixelSize()
+                      : Future.value(post.sampleSize),
+                  builder: (context, snapshot) {
+                    final size = snapshot.data ?? post.sampleSize;
+                    return Text('$size, ${post.sampleFile.fileExtension}');
+                  },
+                ),
+                leading: Icon(_getFileIcon(post.sampleFile)),
+                onTap: () {
+                  onItemClick?.call('sample');
+                  context.navigator.pop();
+                  downloader.download(post, url: post.sampleFile);
+                },
+              ),
             ListTile(
               title: const Text('Original'),
               subtitle: Text(
                   '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
               leading: Icon(_getFileIcon(post.originalFile)),
-              onTap: () async {
-                if (!await checkPermission(context: context)) {
-                  context.navigator.pop();
-                  return;
-                }
-
+              onTap: () {
                 onItemClick?.call('original');
-                unawaited(downloader.download(post));
                 context.navigator.pop();
+                downloader.download(post);
               },
             ),
           ],
@@ -99,7 +86,7 @@ class DownloaderDialog extends HookConsumerWidget {
     );
   }
 
-  static show({
+  static void show({
     required BuildContext context,
     required Post post,
     Function(String type)? onItemClick,
@@ -107,22 +94,5 @@ class DownloaderDialog extends HookConsumerWidget {
     showModalBottomSheet(
         context: context,
         builder: (_) => DownloaderDialog(post: post, onItemClick: onItemClick));
-  }
-
-  Future<bool> checkPermission({required BuildContext context}) async {
-    final isGranted = await Permission.notification.isGranted;
-    if (isGranted) {
-      return true;
-    }
-
-    final status = await Permission.notification.request();
-    if (!status.isGranted) {
-      await showSystemAppSettingsDialog(
-        context: context,
-        title: 'Download',
-        reason: 'Cannot download a file; missing notification permission',
-      );
-    }
-    return status.isGranted;
   }
 }
