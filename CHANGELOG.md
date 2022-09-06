@@ -1,4 +1,7 @@
 
+## 1.1.8
+* Fix flutter engine crashing when downloading files on Android 13
+
 ## 1.1.7
 * Remove problematic Android 13 notification workaround (for some unknown reason it leads to app crashing on production build)
 
