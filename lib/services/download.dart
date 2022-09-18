@@ -20,6 +20,14 @@ import '../utils/extensions/string.dart';
 
 final downloadProvider = ChangeNotifierProvider(DownloadService.new);
 
+final _dlPort = ReceivePort();
+const _dlPortName = 'downloaderPort';
+
+@pragma('vm:entry-point')
+void _dlUpdateCallback(String id, DownloadTaskStatus status, int progress) {
+  IsolateNameServer.lookupPortByName(_dlPortName)?.send([id, status, progress]);
+}
+
 enum UpdaterAction {
   stop,
   start,
@@ -29,24 +37,20 @@ enum UpdaterAction {
 
 class DownloadService extends ChangeNotifier {
   DownloadService(this.ref) {
-    _initLazily();
+    _registerIsolateCallback();
+    _populateDownloadEntries();
   }
 
   final Ref ref;
   final entries = <DownloadEntry>[];
   final progresses = <DownloadProgress>{};
-  late final _port = ReceivePort();
+  var _initialized = false;
 
   Box get _box => Hive.box('downloads');
 
-  Future<void> _initLazily() async {
-    if (!FlutterDownloader.initialized) {
-      await FlutterDownloader.initialize();
-      FlutterDownloader.registerCallback(flutterDownloaderCallback);
-    }
-    await _populateDownloadEntries();
-    IsolateNameServer.registerPortWithName(_port.sendPort, _portName);
-    _port.listen((message) {
+  void _registerIsolateCallback() {
+    IsolateNameServer.registerPortWithName(_dlPort.sendPort, _dlPortName);
+    _dlPort.listen((message) {
       final DownloadTaskStatus status = message[1];
       final newProg = DownloadProgress(
         id: message[0],
@@ -56,15 +60,8 @@ class DownloadService extends ChangeNotifier {
       );
       _updateDownloadProgress(newProg);
     });
-  }
-
-  @pragma('vm:entry-point')
-  static void flutterDownloaderCallback(
-    String id,
-    DownloadTaskStatus status,
-    int progress,
-  ) {
-    IsolateNameServer.lookupPortByName(_portName)?.send([id, status, progress]);
+    FlutterDownloader.registerCallback(_dlUpdateCallback);
+    _initialized = true;
   }
 
   void _updateDownloadProgress(DownloadProgress prog) {
@@ -78,7 +75,9 @@ class DownloadService extends ChangeNotifier {
 
   @override
   void dispose() {
-    IsolateNameServer.removePortNameMapping(_portName);
+    if (_initialized) {
+      IsolateNameServer.removePortNameMapping(_dlPortName);
+    }
     super.dispose();
   }
 
@@ -286,6 +285,4 @@ class DownloadService extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  static const _portName = 'downloaderPort';
 }

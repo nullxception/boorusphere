@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -68,6 +69,7 @@ void main() async {
   Hive.registerAdapter(FavoritePostAdapter());
   await Future.wait(boxes.map(Hive.openBox));
   await Settings.performMigration();
+  await FlutterDownloader.initialize();
 
   runApp(const ProviderScope(child: Boorusphere()));
 }
