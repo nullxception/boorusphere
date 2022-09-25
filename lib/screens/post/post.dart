@@ -27,12 +27,55 @@ class PostPage extends HookConsumerWidget {
   final int beginPage;
   final TimelineController controller;
 
+  void _precachePostImages(
+    BuildContext context,
+    List<Post> posts,
+    int index,
+    String pageCookie,
+  ) {
+    final next = index + 1;
+    final prev = index - 1;
+
+    if (prev >= 0) {
+      _precachePostImage(context, posts[prev], pageCookie);
+    }
+
+    if (next < posts.length) {
+      _precachePostImage(context, posts[next], pageCookie);
+    }
+  }
+
+  void _precachePostImage(
+    BuildContext context,
+    Post post,
+    String pageCookies,
+  ) {
+    if (post.contentType != PostType.photo) return;
+
+    precacheImage(
+      ExtendedNetworkImageProvider(
+        post.contentFile,
+        headers: {
+          'Referer': post.postUrl,
+          'Cookie': pageCookies,
+        },
+        // params below follows the default value on
+        // the ExtendedImage.network() factory
+        cache: true,
+        retries: 3,
+      ),
+      context,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
     final page = useState(beginPage);
     final pageController = useExtendedPageController(initialPage: page.value);
     final pageState = ref.watch(pageStateProvider);
+    final pageCookies =
+        ref.watch(pageDataProvider.select((value) => value.cookies));
     final fullscreen = ref.watch(fullscreenProvider);
 
     final posts = controller.posts;
@@ -70,6 +113,8 @@ class PostPage extends HookConsumerWidget {
                   },
                   itemCount: totalPost,
                   itemBuilder: (_, index) {
+                    _precachePostImages(context, posts, index, pageCookies);
+
                     final post = posts[index];
                     final Widget widget;
                     final heroKey =
