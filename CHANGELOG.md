@@ -1,4 +1,9 @@
 
+## 1.1.9
+* Fix favorite button color on day mode UI
+* Fix video post did not recognized as video on rule34
+* Preload previous and next post (only applied to photo post, not video)
+
 ## 1.1.8
 * Fix flutter engine crashing when downloading files on Android 13
 
