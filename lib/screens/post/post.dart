@@ -50,11 +50,11 @@ class PostPage extends HookConsumerWidget {
     Post post,
     String pageCookies,
   ) {
-    if (post.contentType != PostType.photo) return;
+    if (!post.content.isPhoto) return;
 
     precacheImage(
       ExtendedNetworkImageProvider(
-        post.contentFile,
+        post.content.url,
         headers: {
           'Referer': post.postUrl,
           'Cookie': pageCookies,
@@ -80,7 +80,7 @@ class PostPage extends HookConsumerWidget {
 
     final posts = controller.posts;
     final post = posts.isEmpty ? Post.empty : posts[page.value];
-    final isVideo = post.contentType == PostType.video;
+    final isVideo = post.content.isVideo;
     final totalPost = posts.length;
 
     return WillPopScope(
@@ -119,7 +119,7 @@ class PostPage extends HookConsumerWidget {
                     final Widget widget;
                     final heroKey =
                         controller.heroKeyBuilder?.call(post) ?? post.id;
-                    switch (post.contentType) {
+                    switch (post.content.type) {
                       case PostType.photo:
                         widget = PostImageDisplay(
                           post: post,

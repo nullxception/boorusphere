@@ -25,7 +25,7 @@ final _fetcherProvider =
   final pageCookies =
       ref.watch(pageDataProvider.select((value) => value.cookies));
   final cancelable = CancelableOperation.fromFuture(cache.downloadFile(
-    arg.contentFile,
+    arg.content.url,
     authHeaders: {
       'Referer': arg.postUrl,
       'Cookie': pageCookies,
@@ -46,7 +46,7 @@ final _playerControllerProvider = FutureProvider.autoDispose
   VideoPlayerController controller;
 
   final cache = ref.watch(_videoCacheProvider);
-  final fromCache = await cache.getFileFromCache(arg.contentFile);
+  final fromCache = await cache.getFileFromCache(arg.content.url);
   final option = VideoPlayerOptions(mixWithOthers: true);
   if (fromCache != null) {
     controller = VideoPlayerController.file(

@@ -76,7 +76,7 @@ class PostImageDisplay extends HookConsumerWidget {
             )
           else
             ExtendedImage.network(
-              post.contentFile,
+              post.content.url,
               headers: {
                 'Referer': post.postUrl,
                 'Cookie': pageCookies,

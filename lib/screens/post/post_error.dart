@@ -38,7 +38,7 @@ class PostErrorDisplay extends HookConsumerWidget {
               kBottomNavigationBarHeight +
               32,
           child: QuickBar.action(
-            title: Text('${post.contentFile.fileExtension} is not supported'),
+            title: Text('${post.content.url.fileExtension} is not supported'),
             actionTitle: const Text('Open externally'),
             onPressed: () {
               launchUrlString(post.originalFile,

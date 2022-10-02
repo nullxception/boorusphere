@@ -50,8 +50,7 @@ class DownloaderDialog extends HookConsumerWidget {
               ListTile(
                   title: const Text('Sample'),
                   subtitle: FutureBuilder<PixelSize>(
-                    future: post.contentType == PostType.photo &&
-                            !post.sampleSize.hasPixels
+                    future: post.content.isPhoto && !post.sampleSize.hasPixels
                         ? ExtendedNetworkImageProvider(
                             post.sampleFile,
                             cache: true,

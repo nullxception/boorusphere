@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-import '../utils/extensions/string.dart';
+import 'content.dart';
 import 'pixel_size.dart';
 
 part 'post.freezed.dart';
@@ -46,16 +46,10 @@ class Post with _$Post {
   }) = _Post;
   const Post._();
 
-  String get contentFile => sampleFile.isEmpty ? originalFile : sampleFile;
-
-  PostType get contentType {
-    if (contentFile.mimeType.startsWith('video')) {
-      return PostType.video;
-    } else if (contentFile.mimeType.startsWith('image')) {
-      return PostType.photo;
-    } else {
-      return PostType.unsupported;
-    }
+  Content get content {
+    final sample = sampleFile.asContent();
+    final original = originalFile.asContent();
+    return sample.isUnsupported ? original : sample;
   }
 
   PostRating get rating {

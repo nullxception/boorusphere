@@ -76,10 +76,9 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                 ),
               if (post.sampleFile.isNotEmpty)
                 ListTile(
-                  title: const Text('Sample file (displayed)'),
+                  title: const Text('Sample file'),
                   subtitle: FutureBuilder<PixelSize>(
-                    future: post.contentType == PostType.photo &&
-                            !post.sampleSize.hasPixels
+                    future: post.content.isPhoto && !post.sampleSize.hasPixels
                         ? ExtendedNetworkImageProvider(
                             post.sampleFile,
                             cache: true,
