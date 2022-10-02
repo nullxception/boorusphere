@@ -49,7 +49,11 @@ class Post with _$Post {
   Content get content {
     final sample = sampleFile.asContent();
     final original = originalFile.asContent();
-    return sample.isUnsupported ? original : sample;
+    if (sample.isPhoto && original.isVideo || sample.isUnsupported) {
+      return original;
+    }
+
+    return sample;
   }
 
   PostRating get rating {
