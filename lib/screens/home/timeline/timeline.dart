@@ -12,8 +12,8 @@ import 'package:tinycolor2/tinycolor2.dart';
 import '../../../../entity/post.dart';
 import '../../../routes/routes.dart';
 import '../../../source/page.dart';
-import '../../../source/settings/blur_explicit_post.dart';
 import '../../../source/settings/grid.dart';
+import '../../../source/settings/post/blur_explicit.dart';
 import '../../../utils/extensions/buildcontext.dart';
 import 'controller.dart';
 

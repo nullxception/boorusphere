@@ -5,6 +5,7 @@ import 'migrator/keysmigrator.dart';
 enum Settings {
   downloadsGroupByServer,
   postBlurExplicit,
+  postLoadOriginal,
   serverActive,
   serverPostLimit,
   serverSafeMode,

@@ -7,6 +7,7 @@ import '../../../entity/post.dart';
 import '../../../hooks/extended_page_controller.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
+import '../../source/settings/post/load_original.dart';
 import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/slidefade_visibility.dart';
@@ -32,16 +33,17 @@ class PostPage extends HookConsumerWidget {
     List<Post> posts,
     int index,
     String pageCookie,
+    bool displayOriginal,
   ) {
     final next = index + 1;
     final prev = index - 1;
 
     if (prev >= 0) {
-      _precachePostImage(context, posts[prev], pageCookie);
+      _precachePostImage(context, posts[prev], pageCookie, displayOriginal);
     }
 
     if (next < posts.length) {
-      _precachePostImage(context, posts[next], pageCookie);
+      _precachePostImage(context, posts[next], pageCookie, displayOriginal);
     }
   }
 
@@ -49,12 +51,13 @@ class PostPage extends HookConsumerWidget {
     BuildContext context,
     Post post,
     String pageCookies,
+    bool displayOriginal,
   ) {
     if (!post.content.isPhoto) return;
 
     precacheImage(
       ExtendedNetworkImageProvider(
-        post.content.url,
+        displayOriginal ? post.originalFile : post.content.url,
         headers: {
           'Referer': post.postUrl,
           'Cookie': pageCookies,
@@ -73,6 +76,7 @@ class PostPage extends HookConsumerWidget {
     const loadMoreThreshold = 90;
     final page = useState(beginPage);
     final pageController = useExtendedPageController(initialPage: page.value);
+    final displayOriginal = ref.watch(loadOriginalPostProvider);
     final pageState = ref.watch(pageStateProvider);
     final pageCookies =
         ref.watch(pageDataProvider.select((value) => value.cookies));
@@ -113,7 +117,8 @@ class PostPage extends HookConsumerWidget {
                   },
                   itemCount: totalPost,
                   itemBuilder: (_, index) {
-                    _precachePostImages(context, posts, index, pageCookies);
+                    _precachePostImages(
+                        context, posts, index, pageCookies, displayOriginal);
 
                     final post = posts[index];
                     final Widget widget;

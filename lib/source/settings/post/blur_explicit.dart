@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'settings.dart';
+import '../settings.dart';
 
 final blurExplicitPostProvider =
     StateNotifierProvider<BlurExplicitPostState, bool>((ref) {

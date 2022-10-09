@@ -4,7 +4,8 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../hooks/markmayneedrebuild.dart';
-import '../../source/settings/blur_explicit_post.dart';
+import '../../source/settings/post/blur_explicit.dart';
+import '../../source/settings/post/load_original.dart';
 import '../../source/settings/safe_mode.dart';
 import '../../source/settings/server/post_limit.dart';
 import '../../source/settings/theme.dart';
@@ -122,6 +123,18 @@ class _SettingsContent extends HookConsumerWidget {
         _Section(
           title: const Text('Server'),
           children: [
+            SwitchListTile(
+              title: const Text('Display original content'),
+              subtitle: const Padding(
+                padding: subtitlePadding,
+                child: Text(
+                    'Load original file instead of the sample when opening the post'),
+              ),
+              value: ref.watch(loadOriginalPostProvider),
+              onChanged: (value) {
+                ref.watch(loadOriginalPostProvider.notifier).update(value);
+              },
+            ),
             ListTile(
               title: const Text('Max content per-load'),
               subtitle: const Padding(

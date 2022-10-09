@@ -11,7 +11,7 @@ import '../../../entity/post.dart';
 import '../../hooks/markmayneedrebuild.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
-import '../../source/settings/blur_explicit_post.dart';
+import '../../source/settings/post/blur_explicit.dart';
 import '../../source/settings/video_player.dart';
 import 'post_explicit_warning.dart';
 import 'post_placeholder_image.dart';

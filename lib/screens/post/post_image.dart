@@ -6,7 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../entity/post.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
-import '../../source/settings/blur_explicit_post.dart';
+import '../../source/settings/post/blur_explicit.dart';
+import '../../source/settings/post/load_original.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../utils/extensions/number.dart';
 import 'post_explicit_warning.dart';
@@ -28,6 +29,7 @@ class PostImageDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final blurExplicit = ref.watch(blurExplicitPostProvider);
+    final displayOriginal = ref.watch(loadOriginalPostProvider);
     final pageCookies =
         ref.watch(pageDataProvider.select((value) => value.cookies));
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
@@ -76,7 +78,7 @@ class PostImageDisplay extends HookConsumerWidget {
             )
           else
             ExtendedImage.network(
-              post.content.url,
+              displayOriginal ? post.originalFile : post.content.url,
               headers: {
                 'Referer': post.postUrl,
                 'Cookie': pageCookies,
