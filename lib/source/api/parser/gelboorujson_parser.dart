@@ -25,26 +25,17 @@ class GelbooruJsonParser extends BooruParser {
       }
 
       final originalFile = post.take(['file_url'], orElse: '');
-      final sampleFile =
-          post.take(['large_file_url', 'sample_url'], orElse: '');
-      final previewFile =
-          post.take(['preview_url', 'preview_file_url'], orElse: '');
-      final tags = post.take(['tags', 'tag_string'], orElse: <String>[]);
-      final width = post.take(['image_width', 'width'], orElse: -1);
-      final height = post.take(['image_height', 'height'], orElse: -1);
+      final sampleFile = post.take(['sample_url'], orElse: '');
+      final previewFile = post.take(['preview_url'], orElse: '');
+      final tags = post.take(['tags'], orElse: <String>[]);
+      final width = post.take(['width'], orElse: -1);
+      final height = post.take(['height'], orElse: -1);
       final sampleWidth = post.take(['sample_width'], orElse: -1);
       final sampleHeight = post.take(['sample_height'], orElse: -1);
       final previewWidth = post.take(['preview_width'], orElse: -1);
       final previewHeight = post.take(['preview_height'], orElse: -1);
       final rating = post.take(['rating'], orElse: 'q');
       final source = post.take(['source'], orElse: '');
-      final tagsArtist = post.take(['tag_string_artist'], orElse: <String>[]);
-      final tagsCharacter =
-          post.take(['tag_string_character'], orElse: <String>[]);
-      final tagsCopyright =
-          post.take(['tag_string_copyright'], orElse: <String>[]);
-      final tagsGeneral = post.take(['tag_string_general'], orElse: <String>[]);
-      final tagsMeta = post.take(['tag_string_meta'], orElse: <String>[]);
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -68,11 +59,6 @@ class GelbooruJsonParser extends BooruParser {
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
-            tagsArtist: tagsArtist,
-            tagsCharacter: tagsCharacter,
-            tagsCopyright: tagsCopyright,
-            tagsGeneral: tagsGeneral,
-            tagsMeta: tagsMeta,
           ),
         );
       }
@@ -84,10 +70,7 @@ class GelbooruJsonParser extends BooruParser {
   @override
   bool canParseSuggestion(Response res) {
     final data = res.data;
-    return data is Map &&
-        data.toString().contains('tag') &&
-        data.toString().contains('name') &&
-        data.toString().contains('count');
+    return data is Map && data.keys.contains('tag');
   }
 
   @override
