@@ -1,12 +1,17 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/extensions/string.dart';
-import '../../utils/server/response_parser.dart';
 import '../entity/server_data.dart';
+import '../entity/sphere_exception.dart';
 import '../services/http.dart';
+import 'api/parser/danboorujson_parser.dart';
+import 'api/parser/gelboorujson_parser.dart';
+import 'api/parser/gelbooruxml_parser.dart';
+import 'api/parser/konachanjson_parser.dart';
 import 'blocked_tags.dart';
 import 'settings/server/active.dart';
 
@@ -27,6 +32,28 @@ class SuggestionSource {
 
   final Ref ref;
 
+  Set<String> _parse(ServerData server, Response res, String query) {
+    if (res.statusCode != 200) {
+      throw SphereException(
+          message: 'Cannot fetch data (HTTP ${res.statusCode})');
+    }
+
+    final parser = [
+      DanbooruJsonParser(server),
+      KonachanJsonParser(server),
+      GelbooruXmlParser(server),
+      GelbooruJsonParser(server),
+    ];
+
+    try {
+      return parser
+          .firstWhere((it) => it.canParseSuggestion(res))
+          .parseSuggestion(res);
+    } on StateError {
+      throw SphereException(message: 'No tags that matches \'$query\'');
+    }
+  }
+
   Future<Iterable<String>> fetch({
     required String query,
     required ServerData server,
@@ -40,7 +67,7 @@ class SuggestionSource {
     try {
       final res = await Future.wait(urls.map(client.get));
       return res
-          .map((e) => ServerResponseParser.parseTagSuggestion(e, query))
+          .map((e) => _parse(server, e, query))
           .reduce((value, element) => {...value, ...element})
           .where((it) => !blockedTags.values.contains(it))
           .sortedByCompare<String>(
