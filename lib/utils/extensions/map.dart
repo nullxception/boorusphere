@@ -14,10 +14,9 @@ extension LinkedHashMapExt on LinkedHashMap {
 }
 
 extension MapStringExt on Map<String, dynamic> {
-  T take<T>(List<String> listOfKey, {required T orElse}) {
+  T tryGet<T>(String keyName, {required T orElse}) {
     try {
-      final tKey = listOfKey.where(containsKey).first;
-      final data = this[tKey];
+      final data = this[keyName];
       if (data is LinkedHashMap) {
         final g = data.toGDataString().trim();
         if (orElse is int) {
