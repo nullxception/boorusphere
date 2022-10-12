@@ -12,6 +12,7 @@ import '../entity/sphere_exception.dart';
 import '../services/http.dart';
 import '../utils/extensions/string.dart';
 import 'api/parser/danboorujson_parser.dart';
+import 'api/parser/e621json_parser.dart';
 import 'api/parser/gelboorujson_parser.dart';
 import 'api/parser/gelbooruxml_parser.dart';
 import 'api/parser/konachanjson_parser.dart';
@@ -57,6 +58,7 @@ class PageDataSource {
       KonachanJsonParser(server),
       GelbooruXmlParser(server),
       GelbooruJsonParser(server),
+      E621JsonParser(server),
     ];
 
     try {

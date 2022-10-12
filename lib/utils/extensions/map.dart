@@ -37,4 +37,20 @@ extension MapStringExt on Map<String, dynamic> {
       return orElse;
     }
   }
+
+  Map<String, dynamic> tryMap(String keyName) {
+    try {
+      return this[keyName] as Map<String, dynamic>;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  List<T> tryList<T>(String keyName) {
+    try {
+      return List<T>.from(this[keyName]);
+    } catch (e) {
+      return [];
+    }
+  }
 }
