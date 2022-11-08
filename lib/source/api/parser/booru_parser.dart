@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../entity/post.dart';
 import '../../../entity/server_data.dart';
@@ -8,11 +9,18 @@ abstract class BooruParser {
 
   final ServerData server;
 
-  List<Post> parsePage(Response res);
   bool canParsePage(Response res);
+  List<Post> parsePage(Response res) {
+    debugPrint('parsePage: ${canParsePage(res)}, on: ${res.realUri}');
+    return [];
+  }
 
-  Set<String> parseSuggestion(Response res);
   bool canParseSuggestion(Response res);
+  Set<String> parseSuggestion(Response res) {
+    debugPrint(
+        'parseSuggestion: ${canParseSuggestion(res)}, on: ${res.realUri}');
+    return {};
+  }
 
   String normalizeUrl(String urlString) {
     try {

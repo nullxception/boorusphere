@@ -16,6 +16,7 @@ class KonachanJsonParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
+    super.parsePage(res);
     final entries = List.from(res.data);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -78,6 +79,7 @@ class KonachanJsonParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
+    super.parseSuggestion(res);
     final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {

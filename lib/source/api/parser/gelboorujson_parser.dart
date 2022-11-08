@@ -16,6 +16,7 @@ class GelbooruJsonParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
+    super.parsePage(res);
     final entries = List.from(res.data['post']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -76,6 +77,8 @@ class GelbooruJsonParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
+    super.parseSuggestion(res);
+
     final entries = List.from(res.data['tag']);
 
     final result = <String>{};

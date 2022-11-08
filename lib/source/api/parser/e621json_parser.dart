@@ -91,9 +91,4 @@ class E621JsonParser extends BooruParser {
   bool canParseSuggestion(Response res) {
     return false;
   }
-
-  @override
-  Set<String> parseSuggestion(Response res) {
-    return {};
-  }
 }

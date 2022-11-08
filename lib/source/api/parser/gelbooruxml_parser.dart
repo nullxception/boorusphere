@@ -20,6 +20,7 @@ class GelbooruXmlParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
+    super.parsePage(res);
     const cantParse = SphereException(message: 'Cannot parse result');
 
     final entries = [];
@@ -101,6 +102,8 @@ class GelbooruXmlParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
+    super.parseSuggestion(res);
+
     final data = res.data;
     final entries = [];
 
