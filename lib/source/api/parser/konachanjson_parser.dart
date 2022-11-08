@@ -11,7 +11,8 @@ class KonachanJsonParser extends BooruParser {
   @override
   bool canParsePage(Response res) {
     final data = res.data;
-    return data is List && data.toString().contains('preview_url');
+    final rawString = data.toString();
+    return data is List && rawString.contains('preview_url');
   }
 
   @override
@@ -36,8 +37,8 @@ class KonachanJsonParser extends BooruParser {
       final sampleHeight = pick(post, 'sample_height').asIntOrNull() ?? -1;
       final previewWidth = pick(post, 'preview_width').asIntOrNull() ?? -1;
       final previewHeight = pick(post, 'preview_height').asIntOrNull() ?? -1;
-      final rating = pick(post, 'source').asStringOrNull() ?? 'q';
-      final source = pick(post, 'rating').asStringOrNull() ?? '';
+      final source = pick(post, 'source').asStringOrNull() ?? '';
+      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -72,9 +73,10 @@ class KonachanJsonParser extends BooruParser {
   @override
   bool canParseSuggestion(Response res) {
     final data = res.data;
+    final rawString = data.toString();
     return data is List &&
-        data.toString().contains('name') &&
-        data.toString().contains('count');
+        rawString.contains('name') &&
+        rawString.contains('count');
   }
 
   @override
