@@ -1,7 +1,8 @@
+import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 import '../../../entity/post.dart';
-import '../../../utils/extensions/map.dart';
+import '../../../utils/extensions/pick.dart';
 import 'booru_parser.dart';
 
 class DanbooruJsonParser extends BooruParser {
@@ -18,27 +19,25 @@ class DanbooruJsonParser extends BooruParser {
     final entries = List.from(res.data);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
-      final id = post.tryGet('id', orElse: -1);
+      final id = pick(post, 'id').asIntOrNull() ?? -1;
       if (result.any((it) => it.id == id)) {
         // duplicated result, skipping
         continue;
       }
 
-      final originalFile = post.tryGet('file_url', orElse: '');
-      final sampleFile = post.tryGet('large_file_url', orElse: '');
-      final previewFile = post.tryGet('preview_file_url', orElse: '');
-      final tags = post.tryGet('tag_string', orElse: <String>[]);
-      final width = post.tryGet('image_width', orElse: -1);
-      final height = post.tryGet('image_height', orElse: -1);
-      final rating = post.tryGet('rating', orElse: 'q');
-      final source = post.tryGet('source', orElse: '');
-      final tagsArtist = post.tryGet('tag_string_artist', orElse: <String>[]);
-      final tagsCharacter =
-          post.tryGet('tag_string_character', orElse: <String>[]);
-      final tagsCopyright =
-          post.tryGet('tag_string_copyright', orElse: <String>[]);
-      final tagsGeneral = post.tryGet('tag_string_general', orElse: <String>[]);
-      final tagsMeta = post.tryGet('tag_string_meta', orElse: <String>[]);
+      String originalFile = pick(post, 'file_url').asStringOrNull() ?? '';
+      final sampleFile = pick(post, 'large_file_url').asStringOrNull() ?? '';
+      final previewFile = pick(post, 'preview_file_url').asStringOrNull() ?? '';
+      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
+      final source = pick(post, 'source').asStringOrNull() ?? '';
+      final width = pick(post, 'image_width').asIntOrNull() ?? -1;
+      final height = pick(post, 'image_height').asIntOrNull() ?? -1;
+      final tags = pick(post, 'tag_string').toWordList();
+      final tagsArtist = pick(post, 'tag_string_artist').toWordList();
+      final tagsCharacter = pick(post, 'tag_string_character').toWordList();
+      final tagsCopyright = pick(post, 'tag_string_copyright').toWordList();
+      final tagsGeneral = pick(post, 'tag_string_general').toWordList();
+      final tagsMeta = pick(post, 'tag_string_meta').toWordList();
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -88,8 +87,8 @@ class DanbooruJsonParser extends BooruParser {
     final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
-      final tag = entry.tryGet('name', orElse: '');
-      final postCount = entry.tryGet('post_count', orElse: 0);
+      final tag = pick(entry, 'name').asStringOrNull() ?? '';
+      final postCount = pick(entry, 'post_count').asIntOrNull() ?? 0;
       if (postCount > 0) result.add(tag);
     }
 

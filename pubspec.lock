@@ -197,6 +197,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+  deep_pick:
+    dependency: "direct main"
+    description:
+      name: deep_pick
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0"
   device_info_plus:
     dependency: "direct main"
     description:

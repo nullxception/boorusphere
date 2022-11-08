@@ -1,12 +1,13 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 import 'package:xml2json/xml2json.dart';
 
 import '../../../entity/post.dart';
 import '../../../entity/sphere_exception.dart';
-import '../../../utils/extensions/map.dart';
+import '../../../utils/extensions/pick.dart';
 import 'booru_parser.dart';
 
 class GelbooruXmlParser extends BooruParser {
@@ -42,24 +43,24 @@ class GelbooruXmlParser extends BooruParser {
     final result = <Post>[];
 
     for (final post in entries.whereType<Map<String, dynamic>>()) {
-      final id = post.tryGet('id', orElse: -1);
+      final id = pick(post, 'id').asIntOrNull() ?? -1;
       if (result.any((it) => it.id == id)) {
         // duplicated result, skipping
         continue;
       }
 
-      final originalFile = post.tryGet('file_url', orElse: '');
-      final sampleFile = post.tryGet('sample_url', orElse: '');
-      final previewFile = post.tryGet('preview_url', orElse: '');
-      final tags = post.tryGet('tags', orElse: <String>[]);
-      final width = post.tryGet('width', orElse: -1);
-      final height = post.tryGet('height', orElse: -1);
-      final sampleWidth = post.tryGet('sample_width', orElse: -1);
-      final sampleHeight = post.tryGet('sample_height', orElse: -1);
-      final previewWidth = post.tryGet('preview_width', orElse: -1);
-      final previewHeight = post.tryGet('preview_height', orElse: -1);
-      final rating = post.tryGet('rating', orElse: 'q');
-      final source = post.tryGet('source', orElse: '');
+      final originalFile = pick(post, 'file_url').asStringOrNull() ?? '';
+      final sampleFile = pick(post, 'sample_url').asStringOrNull() ?? '';
+      final previewFile = pick(post, 'preview_url').asStringOrNull() ?? '';
+      final tags = pick(post, 'tags').toWordList();
+      final width = pick(post, 'width').asIntOrNull() ?? -1;
+      final height = pick(post, 'height').asIntOrNull() ?? -1;
+      final sampleWidth = pick(post, 'sample_width').asIntOrNull() ?? -1;
+      final sampleHeight = pick(post, 'sample_height').asIntOrNull() ?? -1;
+      final previewWidth = pick(post, 'preview_width').asIntOrNull() ?? -1;
+      final previewHeight = pick(post, 'preview_height').asIntOrNull() ?? -1;
+      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
+      final source = pick(post, 'source').asStringOrNull() ?? '';
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -122,8 +123,8 @@ class GelbooruXmlParser extends BooruParser {
 
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
-      final tag = entry.tryGet('name', orElse: '');
-      final postCount = entry.tryGet('count', orElse: 0);
+      final tag = pick(entry, 'name').asStringOrNull() ?? '';
+      final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
       if (postCount > 0) result.add(tag);
     }
 
