@@ -13,6 +13,6 @@ class LoadOriginalPostState extends StateNotifier<bool> {
 
   Future<void> update(bool value) async {
     state = value;
-    await Settings.postBlurExplicit.save(value);
+    await Settings.postLoadOriginal.save(value);
   }
 }
