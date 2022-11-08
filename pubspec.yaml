@@ -36,16 +36,16 @@ dependencies:
   auto_route: ^5.0.0
   cookie_jar: ^3.0.1
   collection: ^1.16.0
-  device_info_plus: ^4.0.1
+  device_info_plus: ^8.0.0
   dio_cookie_manager: ^2.0.0
   dio_smart_retry: ^1.3.2
   dio: ^4.0.6
   dynamic_color: ^1.4.0
   extended_image: ^6.2.1
   flutter_cache_manager: ^3.0.0-nullsafety.1
-  flutter_downloader: ^1.8.1
+  flutter_downloader: ^1.9.0
   flutter_hooks: ^0.18.5+1
-  flutter_riverpod: ^1.0.4
+  flutter_riverpod: ^2.1.1
   flutter_speed_dial: ^6.0.0
   flutter_spinkit: ^5.1.0
   flutter_staggered_grid_view: ^0.6.1
@@ -53,7 +53,7 @@ dependencies:
   freezed_annotation: ^2.1.0
   hive_flutter: ^1.0.0
   hive: ^2.0.4
-  hooks_riverpod: ^1.0.0-dev.11
+  hooks_riverpod: ^2.1.1
   json_annotation: ^4.6.0
   media_scanner: ^2.1.0
   mime: ^1.0.0
@@ -79,7 +79,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.10.0
   flutter_lints: ^2.0.1
   freezed: ^2.1.0+1
-  hive_generator: ^1.1.3
+  hive_generator: ^2.0.0
   json_serializable: ^6.0.1
 
 flutter_icons:

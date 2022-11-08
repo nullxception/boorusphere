@@ -19,5 +19,5 @@ class DeviceInfoSource {
 
   final AndroidDeviceInfo androidInfo;
 
-  int get sdkInt => androidInfo.version.sdkInt ?? 0;
+  int get sdkInt => androidInfo.version.sdkInt;
 }
