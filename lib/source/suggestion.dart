@@ -12,6 +12,7 @@ import 'api/parser/danboorujson_parser.dart';
 import 'api/parser/gelboorujson_parser.dart';
 import 'api/parser/gelbooruxml_parser.dart';
 import 'api/parser/konachanjson_parser.dart';
+import 'api/parser/safebooruxml_parser.dart';
 import 'blocked_tags.dart';
 import 'settings/server/active.dart';
 
@@ -43,6 +44,7 @@ class SuggestionSource {
       KonachanJsonParser(server),
       GelbooruXmlParser(server),
       GelbooruJsonParser(server),
+      SafebooruXmlParser(server),
     ];
 
     try {

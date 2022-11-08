@@ -16,6 +16,7 @@ import 'api/parser/e621json_parser.dart';
 import 'api/parser/gelboorujson_parser.dart';
 import 'api/parser/gelbooruxml_parser.dart';
 import 'api/parser/konachanjson_parser.dart';
+import 'api/parser/safebooruxml_parser.dart';
 import 'blocked_tags.dart';
 import 'search_history.dart';
 import 'settings/safe_mode.dart';
@@ -59,6 +60,7 @@ class PageDataSource {
       GelbooruXmlParser(server),
       GelbooruJsonParser(server),
       E621JsonParser(server),
+      SafebooruXmlParser(server),
     ];
 
     try {

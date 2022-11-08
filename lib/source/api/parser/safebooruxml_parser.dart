@@ -10,15 +10,15 @@ import '../../../entity/sphere_exception.dart';
 import '../../../utils/extensions/pick.dart';
 import 'booru_parser.dart';
 
-class GelbooruXmlParser extends BooruParser {
-  GelbooruXmlParser(super.server);
+class SafebooruXmlParser extends BooruParser {
+  SafebooruXmlParser(super.server);
   @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();
     return data is String &&
         rawString.contains('<?xml') &&
-        rawString.contains('<file_url>');
+        rawString.contains(' file_url="');
   }
 
   @override
@@ -30,12 +30,12 @@ class GelbooruXmlParser extends BooruParser {
     final xjson = Xml2Json();
     xjson.parse(res.data.replaceAll('\\', ''));
 
-    final fromParkerConv = jsonDecode(xjson.toParker());
-    if (!fromParkerConv.values.first.keys.contains('post')) {
+    final fromGDataConv = jsonDecode(xjson.toGData());
+    if (!fromGDataConv.values.first.keys.contains('post')) {
       throw cantParse;
     }
 
-    final posts = fromParkerConv.values.first['post'];
+    final posts = fromGDataConv.values.first['post'];
 
     if (posts is LinkedHashMap) {
       entries.add(posts);
@@ -103,7 +103,7 @@ class GelbooruXmlParser extends BooruParser {
     return data is String &&
         rawString.contains('<?xml') &&
         rawString.contains('<tag') &&
-        rawString.contains('<name>');
+        rawString.contains(' name="');
   }
 
   @override
@@ -116,12 +116,12 @@ class GelbooruXmlParser extends BooruParser {
     final xjson = Xml2Json();
     xjson.parse(data.replaceAll('\\', ''));
 
-    final fromParkerConv = jsonDecode(xjson.toParker());
-    if (!fromParkerConv.values.first.keys.contains('tag')) {
+    final fromGDataConv = jsonDecode(xjson.toGData());
+    if (!fromGDataConv.values.first.keys.contains('tag')) {
       throw StateError('no tags');
     }
 
-    final tags = fromParkerConv.values.first['tag'];
+    final tags = fromGDataConv.values.first['tag'];
 
     if (tags is LinkedHashMap) {
       entries.add(tags);
