@@ -54,7 +54,7 @@ dependencies:
   hive_flutter: ^1.0.0
   hive: ^2.0.4
   hooks_riverpod: ^2.1.1
-  json_annotation: ^4.6.0
+  json_annotation: ^4.7.0
   media_scanner: ^2.1.0
   mime: ^1.0.0
   package_info: ^2.0.0

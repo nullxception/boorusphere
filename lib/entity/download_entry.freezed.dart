@@ -32,7 +32,8 @@ mixin _$DownloadEntry {
 abstract class $DownloadEntryCopyWith<$Res> {
   factory $DownloadEntryCopyWith(
           DownloadEntry value, $Res Function(DownloadEntry) then) =
-      _$DownloadEntryCopyWithImpl<$Res>;
+      _$DownloadEntryCopyWithImpl<$Res, DownloadEntry>;
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: '') String id,
       @HiveField(1, defaultValue: Post.empty) Post post,
@@ -42,40 +43,43 @@ abstract class $DownloadEntryCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$DownloadEntryCopyWithImpl<$Res>
+class _$DownloadEntryCopyWithImpl<$Res, $Val extends DownloadEntry>
     implements $DownloadEntryCopyWith<$Res> {
   _$DownloadEntryCopyWithImpl(this._value, this._then);
 
-  final DownloadEntry _value;
   // ignore: unused_field
-  final $Res Function(DownloadEntry) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? post = freezed,
-    Object? destination = freezed,
+    Object? id = null,
+    Object? post = null,
+    Object? destination = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      post: post == freezed
+      post: null == post
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
               as Post,
-      destination: destination == freezed
+      destination: null == destination
           ? _value.destination
           : destination // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $PostCopyWith<$Res> get post {
     return $PostCopyWith<$Res>(_value.post, (value) {
-      return _then(_value.copyWith(post: value));
+      return _then(_value.copyWith(post: value) as $Val);
     });
   }
 }
@@ -87,6 +91,7 @@ abstract class _$$_DownloadEntryCopyWith<$Res>
           _$_DownloadEntry value, $Res Function(_$_DownloadEntry) then) =
       __$$_DownloadEntryCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: '') String id,
       @HiveField(1, defaultValue: Post.empty) Post post,
@@ -98,31 +103,29 @@ abstract class _$$_DownloadEntryCopyWith<$Res>
 
 /// @nodoc
 class __$$_DownloadEntryCopyWithImpl<$Res>
-    extends _$DownloadEntryCopyWithImpl<$Res>
+    extends _$DownloadEntryCopyWithImpl<$Res, _$_DownloadEntry>
     implements _$$_DownloadEntryCopyWith<$Res> {
   __$$_DownloadEntryCopyWithImpl(
       _$_DownloadEntry _value, $Res Function(_$_DownloadEntry) _then)
-      : super(_value, (v) => _then(v as _$_DownloadEntry));
+      : super(_value, _then);
 
-  @override
-  _$_DownloadEntry get _value => super._value as _$_DownloadEntry;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? post = freezed,
-    Object? destination = freezed,
+    Object? id = null,
+    Object? post = null,
+    Object? destination = null,
   }) {
     return _then(_$_DownloadEntry(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      post: post == freezed
+      post: null == post
           ? _value.post
           : post // ignore: cast_nullable_to_non_nullable
               as Post,
-      destination: destination == freezed
+      destination: null == destination
           ? _value.destination
           : destination // ignore: cast_nullable_to_non_nullable
               as String,
@@ -163,21 +166,18 @@ class _$_DownloadEntry extends _DownloadEntry {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_DownloadEntry &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.post, post) &&
-            const DeepCollectionEquality()
-                .equals(other.destination, destination));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.post, post) || other.post == post) &&
+            (identical(other.destination, destination) ||
+                other.destination == destination));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(post),
-      const DeepCollectionEquality().hash(destination));
+  int get hashCode => Object.hash(runtimeType, id, post, destination);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_DownloadEntryCopyWith<_$_DownloadEntry> get copyWith =>
       __$$_DownloadEntryCopyWithImpl<_$_DownloadEntry>(this, _$identity);
 }

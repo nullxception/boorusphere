@@ -28,33 +28,37 @@ mixin _$PageOption {
 abstract class $PageOptionCopyWith<$Res> {
   factory $PageOptionCopyWith(
           PageOption value, $Res Function(PageOption) then) =
-      _$PageOptionCopyWithImpl<$Res>;
+      _$PageOptionCopyWithImpl<$Res, PageOption>;
+  @useResult
   $Res call({String query, bool clear});
 }
 
 /// @nodoc
-class _$PageOptionCopyWithImpl<$Res> implements $PageOptionCopyWith<$Res> {
+class _$PageOptionCopyWithImpl<$Res, $Val extends PageOption>
+    implements $PageOptionCopyWith<$Res> {
   _$PageOptionCopyWithImpl(this._value, this._then);
 
-  final PageOption _value;
   // ignore: unused_field
-  final $Res Function(PageOption) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? query = freezed,
-    Object? clear = freezed,
+    Object? query = null,
+    Object? clear = null,
   }) {
     return _then(_value.copyWith(
-      query: query == freezed
+      query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String,
-      clear: clear == freezed
+      clear: null == clear
           ? _value.clear
           : clear // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 }
 
@@ -65,30 +69,30 @@ abstract class _$$_PageOptionCopyWith<$Res>
           _$_PageOption value, $Res Function(_$_PageOption) then) =
       __$$_PageOptionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String query, bool clear});
 }
 
 /// @nodoc
-class __$$_PageOptionCopyWithImpl<$Res> extends _$PageOptionCopyWithImpl<$Res>
+class __$$_PageOptionCopyWithImpl<$Res>
+    extends _$PageOptionCopyWithImpl<$Res, _$_PageOption>
     implements _$$_PageOptionCopyWith<$Res> {
   __$$_PageOptionCopyWithImpl(
       _$_PageOption _value, $Res Function(_$_PageOption) _then)
-      : super(_value, (v) => _then(v as _$_PageOption));
+      : super(_value, _then);
 
-  @override
-  _$_PageOption get _value => super._value as _$_PageOption;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? query = freezed,
-    Object? clear = freezed,
+    Object? query = null,
+    Object? clear = null,
   }) {
     return _then(_$_PageOption(
-      query: query == freezed
+      query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String,
-      clear: clear == freezed
+      clear: null == clear
           ? _value.clear
           : clear // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -118,18 +122,16 @@ class _$_PageOption extends _PageOption {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PageOption &&
-            const DeepCollectionEquality().equals(other.query, query) &&
-            const DeepCollectionEquality().equals(other.clear, clear));
+            (identical(other.query, query) || other.query == query) &&
+            (identical(other.clear, clear) || other.clear == clear));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(query),
-      const DeepCollectionEquality().hash(clear));
+  int get hashCode => Object.hash(runtimeType, query, clear);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PageOptionCopyWith<_$_PageOption> get copyWith =>
       __$$_PageOptionCopyWithImpl<_$_PageOption>(this, _$identity);
 }

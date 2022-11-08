@@ -45,7 +45,8 @@ mixin _$ServerData {
 abstract class $ServerDataCopyWith<$Res> {
   factory $ServerDataCopyWith(
           ServerData value, $Res Function(ServerData) then) =
-      _$ServerDataCopyWithImpl<$Res>;
+      _$ServerDataCopyWithImpl<$Res, ServerData>;
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: '') String id,
       @HiveField(1, defaultValue: '') String homepage,
@@ -57,53 +58,56 @@ abstract class $ServerDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ServerDataCopyWithImpl<$Res> implements $ServerDataCopyWith<$Res> {
+class _$ServerDataCopyWithImpl<$Res, $Val extends ServerData>
+    implements $ServerDataCopyWith<$Res> {
   _$ServerDataCopyWithImpl(this._value, this._then);
 
-  final ServerData _value;
   // ignore: unused_field
-  final $Res Function(ServerData) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? homepage = freezed,
-    Object? postUrl = freezed,
-    Object? searchUrl = freezed,
-    Object? apiAddr = freezed,
-    Object? tagSuggestionUrl = freezed,
-    Object? alias = freezed,
+    Object? id = null,
+    Object? homepage = null,
+    Object? postUrl = null,
+    Object? searchUrl = null,
+    Object? apiAddr = null,
+    Object? tagSuggestionUrl = null,
+    Object? alias = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      homepage: homepage == freezed
+      homepage: null == homepage
           ? _value.homepage
           : homepage // ignore: cast_nullable_to_non_nullable
               as String,
-      postUrl: postUrl == freezed
+      postUrl: null == postUrl
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      searchUrl: searchUrl == freezed
+      searchUrl: null == searchUrl
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      apiAddr: apiAddr == freezed
+      apiAddr: null == apiAddr
           ? _value.apiAddr
           : apiAddr // ignore: cast_nullable_to_non_nullable
               as String,
-      tagSuggestionUrl: tagSuggestionUrl == freezed
+      tagSuggestionUrl: null == tagSuggestionUrl
           ? _value.tagSuggestionUrl
           : tagSuggestionUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      alias: alias == freezed
+      alias: null == alias
           ? _value.alias
           : alias // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -114,6 +118,7 @@ abstract class _$$_ServerDataCopyWith<$Res>
           _$_ServerData value, $Res Function(_$_ServerData) then) =
       __$$_ServerDataCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: '') String id,
       @HiveField(1, defaultValue: '') String homepage,
@@ -125,51 +130,50 @@ abstract class _$$_ServerDataCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ServerDataCopyWithImpl<$Res> extends _$ServerDataCopyWithImpl<$Res>
+class __$$_ServerDataCopyWithImpl<$Res>
+    extends _$ServerDataCopyWithImpl<$Res, _$_ServerData>
     implements _$$_ServerDataCopyWith<$Res> {
   __$$_ServerDataCopyWithImpl(
       _$_ServerData _value, $Res Function(_$_ServerData) _then)
-      : super(_value, (v) => _then(v as _$_ServerData));
+      : super(_value, _then);
 
-  @override
-  _$_ServerData get _value => super._value as _$_ServerData;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? homepage = freezed,
-    Object? postUrl = freezed,
-    Object? searchUrl = freezed,
-    Object? apiAddr = freezed,
-    Object? tagSuggestionUrl = freezed,
-    Object? alias = freezed,
+    Object? id = null,
+    Object? homepage = null,
+    Object? postUrl = null,
+    Object? searchUrl = null,
+    Object? apiAddr = null,
+    Object? tagSuggestionUrl = null,
+    Object? alias = null,
   }) {
     return _then(_$_ServerData(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      homepage: homepage == freezed
+      homepage: null == homepage
           ? _value.homepage
           : homepage // ignore: cast_nullable_to_non_nullable
               as String,
-      postUrl: postUrl == freezed
+      postUrl: null == postUrl
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      searchUrl: searchUrl == freezed
+      searchUrl: null == searchUrl
           ? _value.searchUrl
           : searchUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      apiAddr: apiAddr == freezed
+      apiAddr: null == apiAddr
           ? _value.apiAddr
           : apiAddr // ignore: cast_nullable_to_non_nullable
               as String,
-      tagSuggestionUrl: tagSuggestionUrl == freezed
+      tagSuggestionUrl: null == tagSuggestionUrl
           ? _value.tagSuggestionUrl
           : tagSuggestionUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      alias: alias == freezed
+      alias: null == alias
           ? _value.alias
           : alias // ignore: cast_nullable_to_non_nullable
               as String,
@@ -233,30 +237,26 @@ class _$_ServerData extends _ServerData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ServerData &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.homepage, homepage) &&
-            const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
-            const DeepCollectionEquality().equals(other.searchUrl, searchUrl) &&
-            const DeepCollectionEquality().equals(other.apiAddr, apiAddr) &&
-            const DeepCollectionEquality()
-                .equals(other.tagSuggestionUrl, tagSuggestionUrl) &&
-            const DeepCollectionEquality().equals(other.alias, alias));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.homepage, homepage) ||
+                other.homepage == homepage) &&
+            (identical(other.postUrl, postUrl) || other.postUrl == postUrl) &&
+            (identical(other.searchUrl, searchUrl) ||
+                other.searchUrl == searchUrl) &&
+            (identical(other.apiAddr, apiAddr) || other.apiAddr == apiAddr) &&
+            (identical(other.tagSuggestionUrl, tagSuggestionUrl) ||
+                other.tagSuggestionUrl == tagSuggestionUrl) &&
+            (identical(other.alias, alias) || other.alias == alias));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(homepage),
-      const DeepCollectionEquality().hash(postUrl),
-      const DeepCollectionEquality().hash(searchUrl),
-      const DeepCollectionEquality().hash(apiAddr),
-      const DeepCollectionEquality().hash(tagSuggestionUrl),
-      const DeepCollectionEquality().hash(alias));
+  int get hashCode => Object.hash(runtimeType, id, homepage, postUrl, searchUrl,
+      apiAddr, tagSuggestionUrl, alias);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ServerDataCopyWith<_$_ServerData> get copyWith =>
       __$$_ServerDataCopyWithImpl<_$_ServerData>(this, _$identity);
 

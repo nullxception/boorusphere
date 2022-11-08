@@ -29,38 +29,42 @@ mixin _$AppVersion {
 abstract class $AppVersionCopyWith<$Res> {
   factory $AppVersionCopyWith(
           AppVersion value, $Res Function(AppVersion) then) =
-      _$AppVersionCopyWithImpl<$Res>;
+      _$AppVersionCopyWithImpl<$Res, AppVersion>;
+  @useResult
   $Res call({int major, int minor, int patch});
 }
 
 /// @nodoc
-class _$AppVersionCopyWithImpl<$Res> implements $AppVersionCopyWith<$Res> {
+class _$AppVersionCopyWithImpl<$Res, $Val extends AppVersion>
+    implements $AppVersionCopyWith<$Res> {
   _$AppVersionCopyWithImpl(this._value, this._then);
 
-  final AppVersion _value;
   // ignore: unused_field
-  final $Res Function(AppVersion) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? major = freezed,
-    Object? minor = freezed,
-    Object? patch = freezed,
+    Object? major = null,
+    Object? minor = null,
+    Object? patch = null,
   }) {
     return _then(_value.copyWith(
-      major: major == freezed
+      major: null == major
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
               as int,
-      minor: minor == freezed
+      minor: null == minor
           ? _value.minor
           : minor // ignore: cast_nullable_to_non_nullable
               as int,
-      patch: patch == freezed
+      patch: null == patch
           ? _value.patch
           : patch // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -71,35 +75,35 @@ abstract class _$$_AppVersionCopyWith<$Res>
           _$_AppVersion value, $Res Function(_$_AppVersion) then) =
       __$$_AppVersionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int major, int minor, int patch});
 }
 
 /// @nodoc
-class __$$_AppVersionCopyWithImpl<$Res> extends _$AppVersionCopyWithImpl<$Res>
+class __$$_AppVersionCopyWithImpl<$Res>
+    extends _$AppVersionCopyWithImpl<$Res, _$_AppVersion>
     implements _$$_AppVersionCopyWith<$Res> {
   __$$_AppVersionCopyWithImpl(
       _$_AppVersion _value, $Res Function(_$_AppVersion) _then)
-      : super(_value, (v) => _then(v as _$_AppVersion));
+      : super(_value, _then);
 
-  @override
-  _$_AppVersion get _value => super._value as _$_AppVersion;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? major = freezed,
-    Object? minor = freezed,
-    Object? patch = freezed,
+    Object? major = null,
+    Object? minor = null,
+    Object? patch = null,
   }) {
     return _then(_$_AppVersion(
-      major: major == freezed
+      major: null == major
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
               as int,
-      minor: minor == freezed
+      minor: null == minor
           ? _value.minor
           : minor // ignore: cast_nullable_to_non_nullable
               as int,
-      patch: patch == freezed
+      patch: null == patch
           ? _value.patch
           : patch // ignore: cast_nullable_to_non_nullable
               as int,
@@ -128,20 +132,17 @@ class _$_AppVersion extends _AppVersion {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AppVersion &&
-            const DeepCollectionEquality().equals(other.major, major) &&
-            const DeepCollectionEquality().equals(other.minor, minor) &&
-            const DeepCollectionEquality().equals(other.patch, patch));
+            (identical(other.major, major) || other.major == major) &&
+            (identical(other.minor, minor) || other.minor == minor) &&
+            (identical(other.patch, patch) || other.patch == patch));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(major),
-      const DeepCollectionEquality().hash(minor),
-      const DeepCollectionEquality().hash(patch));
+  int get hashCode => Object.hash(runtimeType, major, minor, patch);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_AppVersionCopyWith<_$_AppVersion> get copyWith =>
       __$$_AppVersionCopyWithImpl<_$_AppVersion>(this, _$identity);
 }

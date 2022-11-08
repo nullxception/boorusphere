@@ -64,7 +64,8 @@ mixin _$Post {
 /// @nodoc
 abstract class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) then) =
-      _$PostCopyWithImpl<$Res>;
+      _$PostCopyWithImpl<$Res, Post>;
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: -1) int id,
       @HiveField(1, defaultValue: '') String originalFile,
@@ -89,118 +90,121 @@ abstract class $PostCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
+class _$PostCopyWithImpl<$Res, $Val extends Post>
+    implements $PostCopyWith<$Res> {
   _$PostCopyWithImpl(this._value, this._then);
 
-  final Post _value;
   // ignore: unused_field
-  final $Res Function(Post) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? originalFile = freezed,
-    Object? sampleFile = freezed,
-    Object? previewFile = freezed,
-    Object? tags = freezed,
-    Object? width = freezed,
-    Object? height = freezed,
-    Object? serverId = freezed,
-    Object? postUrl = freezed,
-    Object? rateValue = freezed,
-    Object? sampleWidth = freezed,
-    Object? sampleHeight = freezed,
-    Object? previewWidth = freezed,
-    Object? previewHeight = freezed,
-    Object? source = freezed,
-    Object? tagsArtist = freezed,
-    Object? tagsCharacter = freezed,
-    Object? tagsCopyright = freezed,
-    Object? tagsGeneral = freezed,
-    Object? tagsMeta = freezed,
+    Object? id = null,
+    Object? originalFile = null,
+    Object? sampleFile = null,
+    Object? previewFile = null,
+    Object? tags = null,
+    Object? width = null,
+    Object? height = null,
+    Object? serverId = null,
+    Object? postUrl = null,
+    Object? rateValue = null,
+    Object? sampleWidth = null,
+    Object? sampleHeight = null,
+    Object? previewWidth = null,
+    Object? previewHeight = null,
+    Object? source = null,
+    Object? tagsArtist = null,
+    Object? tagsCharacter = null,
+    Object? tagsCopyright = null,
+    Object? tagsGeneral = null,
+    Object? tagsMeta = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      originalFile: originalFile == freezed
+      originalFile: null == originalFile
           ? _value.originalFile
           : originalFile // ignore: cast_nullable_to_non_nullable
               as String,
-      sampleFile: sampleFile == freezed
+      sampleFile: null == sampleFile
           ? _value.sampleFile
           : sampleFile // ignore: cast_nullable_to_non_nullable
               as String,
-      previewFile: previewFile == freezed
+      previewFile: null == previewFile
           ? _value.previewFile
           : previewFile // ignore: cast_nullable_to_non_nullable
               as String,
-      tags: tags == freezed
+      tags: null == tags
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      width: width == freezed
+      width: null == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
               as int,
-      height: height == freezed
+      height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
-      serverId: serverId == freezed
+      serverId: null == serverId
           ? _value.serverId
           : serverId // ignore: cast_nullable_to_non_nullable
               as String,
-      postUrl: postUrl == freezed
+      postUrl: null == postUrl
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      rateValue: rateValue == freezed
+      rateValue: null == rateValue
           ? _value.rateValue
           : rateValue // ignore: cast_nullable_to_non_nullable
               as String,
-      sampleWidth: sampleWidth == freezed
+      sampleWidth: null == sampleWidth
           ? _value.sampleWidth
           : sampleWidth // ignore: cast_nullable_to_non_nullable
               as int,
-      sampleHeight: sampleHeight == freezed
+      sampleHeight: null == sampleHeight
           ? _value.sampleHeight
           : sampleHeight // ignore: cast_nullable_to_non_nullable
               as int,
-      previewWidth: previewWidth == freezed
+      previewWidth: null == previewWidth
           ? _value.previewWidth
           : previewWidth // ignore: cast_nullable_to_non_nullable
               as int,
-      previewHeight: previewHeight == freezed
+      previewHeight: null == previewHeight
           ? _value.previewHeight
           : previewHeight // ignore: cast_nullable_to_non_nullable
               as int,
-      source: source == freezed
+      source: null == source
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
               as String,
-      tagsArtist: tagsArtist == freezed
+      tagsArtist: null == tagsArtist
           ? _value.tagsArtist
           : tagsArtist // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsCharacter: tagsCharacter == freezed
+      tagsCharacter: null == tagsCharacter
           ? _value.tagsCharacter
           : tagsCharacter // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsCopyright: tagsCopyright == freezed
+      tagsCopyright: null == tagsCopyright
           ? _value.tagsCopyright
           : tagsCopyright // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsGeneral: tagsGeneral == freezed
+      tagsGeneral: null == tagsGeneral
           ? _value.tagsGeneral
           : tagsGeneral // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsMeta: tagsMeta == freezed
+      tagsMeta: null == tagsMeta
           ? _value.tagsMeta
           : tagsMeta // ignore: cast_nullable_to_non_nullable
               as List<String>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -209,6 +213,7 @@ abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
   factory _$$_PostCopyWith(_$_Post value, $Res Function(_$_Post) then) =
       __$$_PostCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: -1) int id,
       @HiveField(1, defaultValue: '') String originalFile,
@@ -233,115 +238,113 @@ abstract class _$$_PostCopyWith<$Res> implements $PostCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
+class __$$_PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res, _$_Post>
     implements _$$_PostCopyWith<$Res> {
   __$$_PostCopyWithImpl(_$_Post _value, $Res Function(_$_Post) _then)
-      : super(_value, (v) => _then(v as _$_Post));
+      : super(_value, _then);
 
-  @override
-  _$_Post get _value => super._value as _$_Post;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? originalFile = freezed,
-    Object? sampleFile = freezed,
-    Object? previewFile = freezed,
-    Object? tags = freezed,
-    Object? width = freezed,
-    Object? height = freezed,
-    Object? serverId = freezed,
-    Object? postUrl = freezed,
-    Object? rateValue = freezed,
-    Object? sampleWidth = freezed,
-    Object? sampleHeight = freezed,
-    Object? previewWidth = freezed,
-    Object? previewHeight = freezed,
-    Object? source = freezed,
-    Object? tagsArtist = freezed,
-    Object? tagsCharacter = freezed,
-    Object? tagsCopyright = freezed,
-    Object? tagsGeneral = freezed,
-    Object? tagsMeta = freezed,
+    Object? id = null,
+    Object? originalFile = null,
+    Object? sampleFile = null,
+    Object? previewFile = null,
+    Object? tags = null,
+    Object? width = null,
+    Object? height = null,
+    Object? serverId = null,
+    Object? postUrl = null,
+    Object? rateValue = null,
+    Object? sampleWidth = null,
+    Object? sampleHeight = null,
+    Object? previewWidth = null,
+    Object? previewHeight = null,
+    Object? source = null,
+    Object? tagsArtist = null,
+    Object? tagsCharacter = null,
+    Object? tagsCopyright = null,
+    Object? tagsGeneral = null,
+    Object? tagsMeta = null,
   }) {
     return _then(_$_Post(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      originalFile: originalFile == freezed
+      originalFile: null == originalFile
           ? _value.originalFile
           : originalFile // ignore: cast_nullable_to_non_nullable
               as String,
-      sampleFile: sampleFile == freezed
+      sampleFile: null == sampleFile
           ? _value.sampleFile
           : sampleFile // ignore: cast_nullable_to_non_nullable
               as String,
-      previewFile: previewFile == freezed
+      previewFile: null == previewFile
           ? _value.previewFile
           : previewFile // ignore: cast_nullable_to_non_nullable
               as String,
-      tags: tags == freezed
+      tags: null == tags
           ? _value._tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      width: width == freezed
+      width: null == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
               as int,
-      height: height == freezed
+      height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
-      serverId: serverId == freezed
+      serverId: null == serverId
           ? _value.serverId
           : serverId // ignore: cast_nullable_to_non_nullable
               as String,
-      postUrl: postUrl == freezed
+      postUrl: null == postUrl
           ? _value.postUrl
           : postUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      rateValue: rateValue == freezed
+      rateValue: null == rateValue
           ? _value.rateValue
           : rateValue // ignore: cast_nullable_to_non_nullable
               as String,
-      sampleWidth: sampleWidth == freezed
+      sampleWidth: null == sampleWidth
           ? _value.sampleWidth
           : sampleWidth // ignore: cast_nullable_to_non_nullable
               as int,
-      sampleHeight: sampleHeight == freezed
+      sampleHeight: null == sampleHeight
           ? _value.sampleHeight
           : sampleHeight // ignore: cast_nullable_to_non_nullable
               as int,
-      previewWidth: previewWidth == freezed
+      previewWidth: null == previewWidth
           ? _value.previewWidth
           : previewWidth // ignore: cast_nullable_to_non_nullable
               as int,
-      previewHeight: previewHeight == freezed
+      previewHeight: null == previewHeight
           ? _value.previewHeight
           : previewHeight // ignore: cast_nullable_to_non_nullable
               as int,
-      source: source == freezed
+      source: null == source
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
               as String,
-      tagsArtist: tagsArtist == freezed
+      tagsArtist: null == tagsArtist
           ? _value._tagsArtist
           : tagsArtist // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsCharacter: tagsCharacter == freezed
+      tagsCharacter: null == tagsCharacter
           ? _value._tagsCharacter
           : tagsCharacter // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsCopyright: tagsCopyright == freezed
+      tagsCopyright: null == tagsCopyright
           ? _value._tagsCopyright
           : tagsCopyright // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsGeneral: tagsGeneral == freezed
+      tagsGeneral: null == tagsGeneral
           ? _value._tagsGeneral
           : tagsGeneral // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      tagsMeta: tagsMeta == freezed
+      tagsMeta: null == tagsMeta
           ? _value._tagsMeta
           : tagsMeta // ignore: cast_nullable_to_non_nullable
               as List<String>,
@@ -522,28 +525,30 @@ class _$_Post extends _Post {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Post &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.originalFile, originalFile) &&
-            const DeepCollectionEquality()
-                .equals(other.sampleFile, sampleFile) &&
-            const DeepCollectionEquality()
-                .equals(other.previewFile, previewFile) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.originalFile, originalFile) ||
+                other.originalFile == originalFile) &&
+            (identical(other.sampleFile, sampleFile) ||
+                other.sampleFile == sampleFile) &&
+            (identical(other.previewFile, previewFile) ||
+                other.previewFile == previewFile) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
-            const DeepCollectionEquality().equals(other.width, width) &&
-            const DeepCollectionEquality().equals(other.height, height) &&
-            const DeepCollectionEquality().equals(other.serverId, serverId) &&
-            const DeepCollectionEquality().equals(other.postUrl, postUrl) &&
-            const DeepCollectionEquality().equals(other.rateValue, rateValue) &&
-            const DeepCollectionEquality()
-                .equals(other.sampleWidth, sampleWidth) &&
-            const DeepCollectionEquality()
-                .equals(other.sampleHeight, sampleHeight) &&
-            const DeepCollectionEquality()
-                .equals(other.previewWidth, previewWidth) &&
-            const DeepCollectionEquality()
-                .equals(other.previewHeight, previewHeight) &&
-            const DeepCollectionEquality().equals(other.source, source) &&
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.height, height) || other.height == height) &&
+            (identical(other.serverId, serverId) ||
+                other.serverId == serverId) &&
+            (identical(other.postUrl, postUrl) || other.postUrl == postUrl) &&
+            (identical(other.rateValue, rateValue) ||
+                other.rateValue == rateValue) &&
+            (identical(other.sampleWidth, sampleWidth) ||
+                other.sampleWidth == sampleWidth) &&
+            (identical(other.sampleHeight, sampleHeight) ||
+                other.sampleHeight == sampleHeight) &&
+            (identical(other.previewWidth, previewWidth) ||
+                other.previewWidth == previewWidth) &&
+            (identical(other.previewHeight, previewHeight) ||
+                other.previewHeight == previewHeight) &&
+            (identical(other.source, source) || other.source == source) &&
             const DeepCollectionEquality()
                 .equals(other._tagsArtist, _tagsArtist) &&
             const DeepCollectionEquality()
@@ -558,21 +563,21 @@ class _$_Post extends _Post {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        const DeepCollectionEquality().hash(id),
-        const DeepCollectionEquality().hash(originalFile),
-        const DeepCollectionEquality().hash(sampleFile),
-        const DeepCollectionEquality().hash(previewFile),
+        id,
+        originalFile,
+        sampleFile,
+        previewFile,
         const DeepCollectionEquality().hash(_tags),
-        const DeepCollectionEquality().hash(width),
-        const DeepCollectionEquality().hash(height),
-        const DeepCollectionEquality().hash(serverId),
-        const DeepCollectionEquality().hash(postUrl),
-        const DeepCollectionEquality().hash(rateValue),
-        const DeepCollectionEquality().hash(sampleWidth),
-        const DeepCollectionEquality().hash(sampleHeight),
-        const DeepCollectionEquality().hash(previewWidth),
-        const DeepCollectionEquality().hash(previewHeight),
-        const DeepCollectionEquality().hash(source),
+        width,
+        height,
+        serverId,
+        postUrl,
+        rateValue,
+        sampleWidth,
+        sampleHeight,
+        previewWidth,
+        previewHeight,
+        source,
         const DeepCollectionEquality().hash(_tagsArtist),
         const DeepCollectionEquality().hash(_tagsCharacter),
         const DeepCollectionEquality().hash(_tagsCopyright),
@@ -582,6 +587,7 @@ class _$_Post extends _Post {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PostCopyWith<_$_Post> get copyWith =>
       __$$_PostCopyWithImpl<_$_Post>(this, _$identity);
 }

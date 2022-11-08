@@ -28,42 +28,46 @@ mixin _$ChangelogData {
 abstract class $ChangelogDataCopyWith<$Res> {
   factory $ChangelogDataCopyWith(
           ChangelogData value, $Res Function(ChangelogData) then) =
-      _$ChangelogDataCopyWithImpl<$Res>;
+      _$ChangelogDataCopyWithImpl<$Res, ChangelogData>;
+  @useResult
   $Res call({AppVersion version, List<String> logs});
 
   $AppVersionCopyWith<$Res> get version;
 }
 
 /// @nodoc
-class _$ChangelogDataCopyWithImpl<$Res>
+class _$ChangelogDataCopyWithImpl<$Res, $Val extends ChangelogData>
     implements $ChangelogDataCopyWith<$Res> {
   _$ChangelogDataCopyWithImpl(this._value, this._then);
 
-  final ChangelogData _value;
   // ignore: unused_field
-  final $Res Function(ChangelogData) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? version = freezed,
-    Object? logs = freezed,
+    Object? version = null,
+    Object? logs = null,
   }) {
     return _then(_value.copyWith(
-      version: version == freezed
+      version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as AppVersion,
-      logs: logs == freezed
+      logs: null == logs
           ? _value.logs
           : logs // ignore: cast_nullable_to_non_nullable
               as List<String>,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $AppVersionCopyWith<$Res> get version {
     return $AppVersionCopyWith<$Res>(_value.version, (value) {
-      return _then(_value.copyWith(version: value));
+      return _then(_value.copyWith(version: value) as $Val);
     });
   }
 }
@@ -75,6 +79,7 @@ abstract class _$$_ChangelogDataCopyWith<$Res>
           _$_ChangelogData value, $Res Function(_$_ChangelogData) then) =
       __$$_ChangelogDataCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({AppVersion version, List<String> logs});
 
   @override
@@ -83,26 +88,24 @@ abstract class _$$_ChangelogDataCopyWith<$Res>
 
 /// @nodoc
 class __$$_ChangelogDataCopyWithImpl<$Res>
-    extends _$ChangelogDataCopyWithImpl<$Res>
+    extends _$ChangelogDataCopyWithImpl<$Res, _$_ChangelogData>
     implements _$$_ChangelogDataCopyWith<$Res> {
   __$$_ChangelogDataCopyWithImpl(
       _$_ChangelogData _value, $Res Function(_$_ChangelogData) _then)
-      : super(_value, (v) => _then(v as _$_ChangelogData));
+      : super(_value, _then);
 
-  @override
-  _$_ChangelogData get _value => super._value as _$_ChangelogData;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? version = freezed,
-    Object? logs = freezed,
+    Object? version = null,
+    Object? logs = null,
   }) {
     return _then(_$_ChangelogData(
-      version: version == freezed
+      version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as AppVersion,
-      logs: logs == freezed
+      logs: null == logs
           ? _value._logs
           : logs // ignore: cast_nullable_to_non_nullable
               as List<String>,
@@ -139,18 +142,17 @@ class _$_ChangelogData extends _ChangelogData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ChangelogData &&
-            const DeepCollectionEquality().equals(other.version, version) &&
+            (identical(other.version, version) || other.version == version) &&
             const DeepCollectionEquality().equals(other._logs, _logs));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(version),
-      const DeepCollectionEquality().hash(_logs));
+      runtimeType, version, const DeepCollectionEquality().hash(_logs));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ChangelogDataCopyWith<_$_ChangelogData> get copyWith =>
       __$$_ChangelogDataCopyWithImpl<_$_ChangelogData>(this, _$identity);
 }

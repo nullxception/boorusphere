@@ -30,36 +30,39 @@ mixin _$SearchHistory {
 abstract class $SearchHistoryCopyWith<$Res> {
   factory $SearchHistoryCopyWith(
           SearchHistory value, $Res Function(SearchHistory) then) =
-      _$SearchHistoryCopyWithImpl<$Res>;
+      _$SearchHistoryCopyWithImpl<$Res, SearchHistory>;
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: '') String query,
       @HiveField(1, defaultValue: '') String server});
 }
 
 /// @nodoc
-class _$SearchHistoryCopyWithImpl<$Res>
+class _$SearchHistoryCopyWithImpl<$Res, $Val extends SearchHistory>
     implements $SearchHistoryCopyWith<$Res> {
   _$SearchHistoryCopyWithImpl(this._value, this._then);
 
-  final SearchHistory _value;
   // ignore: unused_field
-  final $Res Function(SearchHistory) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? query = freezed,
-    Object? server = freezed,
+    Object? query = null,
+    Object? server = null,
   }) {
     return _then(_value.copyWith(
-      query: query == freezed
+      query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String,
-      server: server == freezed
+      server: null == server
           ? _value.server
           : server // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -70,6 +73,7 @@ abstract class _$$_SearchHistoryCopyWith<$Res>
           _$_SearchHistory value, $Res Function(_$_SearchHistory) then) =
       __$$_SearchHistoryCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0, defaultValue: '') String query,
       @HiveField(1, defaultValue: '') String server});
@@ -77,26 +81,24 @@ abstract class _$$_SearchHistoryCopyWith<$Res>
 
 /// @nodoc
 class __$$_SearchHistoryCopyWithImpl<$Res>
-    extends _$SearchHistoryCopyWithImpl<$Res>
+    extends _$SearchHistoryCopyWithImpl<$Res, _$_SearchHistory>
     implements _$$_SearchHistoryCopyWith<$Res> {
   __$$_SearchHistoryCopyWithImpl(
       _$_SearchHistory _value, $Res Function(_$_SearchHistory) _then)
-      : super(_value, (v) => _then(v as _$_SearchHistory));
+      : super(_value, _then);
 
-  @override
-  _$_SearchHistory get _value => super._value as _$_SearchHistory;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? query = freezed,
-    Object? server = freezed,
+    Object? query = null,
+    Object? server = null,
   }) {
     return _then(_$_SearchHistory(
-      query: query == freezed
+      query: null == query
           ? _value.query
           : query // ignore: cast_nullable_to_non_nullable
               as String,
-      server: server == freezed
+      server: null == server
           ? _value.server
           : server // ignore: cast_nullable_to_non_nullable
               as String,
@@ -140,18 +142,16 @@ class _$_SearchHistory with DiagnosticableTreeMixin implements _SearchHistory {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SearchHistory &&
-            const DeepCollectionEquality().equals(other.query, query) &&
-            const DeepCollectionEquality().equals(other.server, server));
+            (identical(other.query, query) || other.query == query) &&
+            (identical(other.server, server) || other.server == server));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(query),
-      const DeepCollectionEquality().hash(server));
+  int get hashCode => Object.hash(runtimeType, query, server);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SearchHistoryCopyWith<_$_SearchHistory> get copyWith =>
       __$$_SearchHistoryCopyWithImpl<_$_SearchHistory>(this, _$identity);
 }
