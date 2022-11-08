@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -71,5 +72,14 @@ void main() async {
   await Settings.performMigration();
   await FlutterDownloader.initialize();
 
-  runApp(const ProviderScope(child: Boorusphere()));
+  final deviceInfo = DeviceInfoSource(await DeviceInfoPlugin().androidInfo);
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        deviceInfoProvider.overrideWithValue(deviceInfo),
+      ],
+      child: const Boorusphere(),
+    ),
+  );
 }

@@ -1,21 +1,11 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _androidInfo =
-    FutureProvider((ref) async => await DeviceInfoPlugin().androidInfo);
-
-final deviceInfoProvider = Provider((ref) => ref.watch(_androidInfo).maybeWhen(
-      data: (info) => DeviceInfoSource(ref, info),
-      orElse: () => DeviceInfoSource.fromMap(ref, {}),
-    ));
+final deviceInfoProvider = Provider<DeviceInfoSource>(
+    (ref) => throw Exception('DeviceInfoSource must be initialized manually'));
 
 class DeviceInfoSource {
-  DeviceInfoSource(Ref ref, this.androidInfo);
-
-  factory DeviceInfoSource.fromMap(Ref ref, Map<String, dynamic> mappedInfo) {
-    final info = AndroidDeviceInfo.fromMap(mappedInfo);
-    return DeviceInfoSource(ref, info);
-  }
+  DeviceInfoSource(this.androidInfo);
 
   final AndroidDeviceInfo androidInfo;
 
