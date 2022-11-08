@@ -38,7 +38,10 @@ class ServerData with _$ServerData {
   }
 
   List<String> suggestionUrlsOf(String query) {
-    final url = '$homepage/$tagSuggestionUrl';
+    final url = '$homepage/$tagSuggestionUrl'
+        .replaceAll('{post-limit}', '20')
+        .replaceAll('{tag-limit}', '20');
+
     if (canSuggestTags) {
       if (query.isEmpty) {
         return [url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), '')];
