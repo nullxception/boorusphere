@@ -36,9 +36,15 @@ abstract class BooruParser {
         return scheme(uri.authority, uri.path,
                 uri.hasQuery ? uri.queryParametersAll : null)
             .toString();
+      } else if (!uri.hasAuthority) {
+        final origin = Uri.parse(server.apiAddress);
+        final scheme = origin.scheme == 'https' ? Uri.https : Uri.http;
+        return scheme(origin.authority, uri.path,
+                uri.hasQuery ? uri.queryParametersAll : null)
+            .toString();
       }
 
-      // nothing we can do when there's no authority and path
+      // nothing we can do when there's no authority and path at all
       return '';
     } catch (e) {
       return '';
