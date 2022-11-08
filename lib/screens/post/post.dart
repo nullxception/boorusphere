@@ -8,7 +8,6 @@ import '../../../hooks/extended_page_controller.dart';
 import '../../services/fullscreen.dart';
 import '../../source/page.dart';
 import '../../source/settings/post/load_original.dart';
-import '../../utils/extensions/asyncvalue.dart';
 import '../../utils/extensions/buildcontext.dart';
 import '../../widgets/slidefade_visibility.dart';
 import '../../widgets/styled_overlay_region.dart';

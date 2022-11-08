@@ -261,7 +261,7 @@ class _Toolbox extends HookConsumerWidget {
                       ),
                       onPressed: () {
                         ref
-                            .read(_playerPlayState.state)
+                            .read(_playerPlayState.notifier)
                             .update((state) => !isPlaying);
                       },
                     ),
