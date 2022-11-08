@@ -1,4 +1,9 @@
 
+## 1.2.0
+* Add support for parsing E621
+* Add settings to show original content on post preview
+* Update flutter engine to 3.3.7 (actual fix for downloader crashing issues on Android 13)
+
 ## 1.1.9
 * Fix favorite button color on day mode UI
 * Fix video post did not recognized as video on rule34
