@@ -27,7 +27,7 @@ class GelbooruXmlParser extends BooruParser {
     final xjson = Xml2Json();
     xjson.parse(res.data.replaceAll('\\', ''));
 
-    final jsonObj = jsonDecode(xjson.toGData());
+    final jsonObj = jsonDecode(xjson.toParker());
     if (!jsonObj.values.first.keys.contains('post')) {
       throw cantParse;
     }
@@ -110,7 +110,7 @@ class GelbooruXmlParser extends BooruParser {
     final xjson = Xml2Json();
     xjson.parse(data.replaceAll('\\', ''));
 
-    final jsonObj = jsonDecode(xjson.toGData());
+    final jsonObj = jsonDecode(xjson.toParker());
     if (!jsonObj.values.first.keys.contains('tag')) {
       throw StateError('no tags');
     }
