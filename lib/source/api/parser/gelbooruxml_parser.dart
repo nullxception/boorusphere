@@ -27,12 +27,18 @@ class GelbooruXmlParser extends BooruParser {
     final xjson = Xml2Json();
     xjson.parse(res.data.replaceAll('\\', ''));
 
-    final jsonObj = jsonDecode(xjson.toParker());
-    if (!jsonObj.values.first.keys.contains('post')) {
+    final fromParkerConv = jsonDecode(xjson.toParker());
+    if (!fromParkerConv.values.first.keys.contains('post')) {
       throw cantParse;
     }
 
-    final posts = jsonObj.values.first['post'];
+    var posts = fromParkerConv.values.first['post'];
+
+    if (posts == null) {
+      final fromGDataConv = jsonDecode(xjson.toGData());
+      posts = fromGDataConv.values.first['post'];
+    }
+
     if (posts is LinkedHashMap) {
       entries.add(posts);
     } else if (posts is List) {
@@ -110,12 +116,18 @@ class GelbooruXmlParser extends BooruParser {
     final xjson = Xml2Json();
     xjson.parse(data.replaceAll('\\', ''));
 
-    final jsonObj = jsonDecode(xjson.toParker());
-    if (!jsonObj.values.first.keys.contains('tag')) {
+    final fromParkerConv = jsonDecode(xjson.toParker());
+    if (!fromParkerConv.values.first.keys.contains('tag')) {
       throw StateError('no tags');
     }
 
-    final tags = jsonObj.values.first['tag'];
+    var tags = fromParkerConv.values.first['tag'];
+
+    if (tags == null) {
+      final fromGDataConv = jsonDecode(xjson.toGData());
+      tags = fromGDataConv.values.first['tag'];
+    }
+
     if (tags is LinkedHashMap) {
       entries.add(tags);
     } else if (tags is List) {
