@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/app_version.dart';
+import 'package:boorusphere/constant/app.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart';
+import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/data/source/version.dart';
+import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
 import 'package:boorusphere/utils/extensions/asyncvalue.dart';
@@ -50,7 +52,7 @@ class AboutPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  'Version $currentVer - ${VersionDataSource.arch}',
+                  'Version $currentVer - $kAppArch',
                   style: context.theme.textTheme.subtitle2
                       ?.copyWith(fontWeight: FontWeight.w400),
                 ),
@@ -97,7 +99,7 @@ class AboutPage extends HookConsumerWidget {
               ListTile(
                 title: const Text('GitHub'),
                 leading: const FaIcon(FontAwesomeIcons.github),
-                onTap: () => launchUrlString(VersionDataSource.gitUrl,
+                onTap: () => launchUrlString(VersionNetworkSource.gitUrl,
                     mode: LaunchMode.externalApplication),
               ),
               ListTile(

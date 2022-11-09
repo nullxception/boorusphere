@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/source/version.dart';
+import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:dio/dio.dart';
 
 class ChangelogNetworkSource {
@@ -12,5 +12,5 @@ class ChangelogNetworkSource {
     return data is String && data.contains('## 1') ? data : '';
   }
 
-  static const url = '${VersionDataSource.gitUrl}/raw/main/CHANGELOG.md';
+  static const url = '${VersionNetworkSource.gitUrl}/raw/main/CHANGELOG.md';
 }

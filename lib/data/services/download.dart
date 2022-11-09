@@ -2,12 +2,13 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:boorusphere/data/entity/app_version.dart';
+import 'package:boorusphere/constant/app.dart';
 import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/entity/download_progress.dart';
 import 'package:boorusphere/data/entity/download_status.dart';
 import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/version.dart';
+import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/foundation.dart';
@@ -194,7 +195,7 @@ class DownloadService extends ChangeNotifier {
   DownloadProgress get appUpdateProgress => getProgress(_appUpdateTaskId);
 
   String _getAppUpdateFile(AppVersion version) {
-    return 'boorusphere-$version-${VersionDataSource.arch}.apk';
+    return 'boorusphere-$version-$kAppArch.apk';
   }
 
   Future<Directory> get _appUpdateDir async {
@@ -205,7 +206,8 @@ class DownloadService extends ChangeNotifier {
   Future<void> _startAppUpdate(AppVersion version) async {
     await _stopAppUpdate();
     final file = _getAppUpdateFile(version);
-    final url = '${VersionDataSource.gitUrl}/releases/download/$version/$file';
+    final url =
+        '${VersionNetworkSource.gitUrl}/releases/download/$version/$file';
     final dir = await getApplicationSupportDirectory();
     final appDir = Directory(path.join(dir.absolute.path, 'app-update'));
     appDir.createSync();

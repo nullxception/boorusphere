@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:boorusphere/data/entity/app_version.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'changelog_data.freezed.dart';
