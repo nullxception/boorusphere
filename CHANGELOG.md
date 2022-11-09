@@ -1,4 +1,12 @@
 
+## 1.2.1
+* Fix tag suggestion for E621
+* Fix settings > server > show original content not saved properly
+* Fix metadata parsing issues on konachan and yandere
+* Fix broken Gelbooru (XML) parser
+* Fix content not properly loaded on Moebooru-based websites
+
+
 ## 1.2.0
 * Add support for parsing E621
 * Add settings to show original content on post preview
