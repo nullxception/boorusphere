@@ -1,19 +1,18 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/app_version.dart';
+import 'package:boorusphere/routes/routes.dart';
+import 'package:boorusphere/services/download.dart';
+import 'package:boorusphere/source/changelog.dart';
+import 'package:boorusphere/source/version.dart';
+import 'package:boorusphere/utils/extensions/asyncvalue.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/number.dart';
+import 'package:boorusphere/widgets/prepare_update.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../entity/app_version.dart';
-import '../../routes/routes.dart';
-import '../../services/download.dart';
-import '../../source/changelog.dart';
-import '../../source/version.dart';
-import '../../utils/extensions/asyncvalue.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../utils/extensions/number.dart';
-import '../../widgets/prepare_update.dart';
 
 class AboutPage extends HookConsumerWidget {
   const AboutPage({super.key});

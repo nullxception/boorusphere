@@ -1,6 +1,5 @@
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:deep_pick/deep_pick.dart';
-
-import 'string.dart';
 
 extension PickExt on Pick {
   List<String> asStringList({String or = ''}) {

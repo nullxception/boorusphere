@@ -1,10 +1,9 @@
+import 'package:boorusphere/routes/slide_page.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../routes/slide_page.dart';
-import '../../utils/extensions/buildcontext.dart';
 
 final _registryProvider = FutureProvider((ref) async {
   final data = await LicenseRegistry.licenses.fold<LicenseData>(

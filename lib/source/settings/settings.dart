@@ -1,6 +1,5 @@
+import 'package:boorusphere/source/settings/migrator/keysmigrator.dart';
 import 'package:hive/hive.dart';
-
-import 'migrator/keysmigrator.dart';
 
 enum Settings {
   downloadsGroupByServer,

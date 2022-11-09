@@ -1,11 +1,10 @@
 import 'dart:ui';
 
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/source/page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../entity/post.dart';
-import '../../source/page.dart';
 
 class PostPlaceholderImage extends ConsumerWidget {
   const PostPlaceholderImage({

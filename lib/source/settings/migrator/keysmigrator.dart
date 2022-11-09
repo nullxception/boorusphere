@@ -1,5 +1,5 @@
-import '../settings.dart';
-import 'migrator.dart';
+import 'package:boorusphere/source/settings/migrator/migrator.dart';
+import 'package:boorusphere/source/settings/settings.dart';
 
 class SettingKeysMigrator extends SettingsMigrator {
   final Map<String, Settings> keys = {

@@ -1,11 +1,10 @@
+import 'package:boorusphere/entity/changelog_data.dart';
+import 'package:boorusphere/source/changelog.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import '../../entity/changelog_data.dart';
-import '../../source/changelog.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../widgets/notice_card.dart';
 
 class ChangelogPage extends ConsumerWidget {
   const ChangelogPage({

@@ -1,6 +1,5 @@
+import 'package:boorusphere/entity/post.dart';
 import 'package:hive/hive.dart';
-
-import 'post.dart';
 
 part 'favorite_post.g.dart';
 

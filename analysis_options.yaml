@@ -37,6 +37,7 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    - always_use_package_imports
     - avoid_annotating_with_dynamic
     - avoid_slow_async_io
     - avoid_types_on_closure_parameters
@@ -44,7 +45,6 @@ linter:
     - directives_ordering
     - eol_at_end_of_file
     - prefer_const_constructors
-    - prefer_relative_imports
     - prefer_single_quotes
     - sort_constructors_first
     - sort_unnamed_constructors_first
@@ -53,6 +53,5 @@ linter:
     - unnecessary_lambdas
     - use_if_null_to_convert_nulls_to_bools
     - use_super_parameters
-
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

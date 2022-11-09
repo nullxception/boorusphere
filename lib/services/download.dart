@@ -2,21 +2,20 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:boorusphere/entity/app_version.dart';
+import 'package:boorusphere/entity/download_entry.dart';
+import 'package:boorusphere/entity/download_progress.dart';
+import 'package:boorusphere/entity/download_status.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/source/version.dart';
+import 'package:boorusphere/utils/download.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-
-import '../entity/app_version.dart';
-import '../entity/download_entry.dart';
-import '../entity/download_progress.dart';
-import '../entity/download_status.dart';
-import '../entity/post.dart';
-import '../source/version.dart';
-import '../utils/download.dart';
-import '../utils/extensions/string.dart';
 
 final downloadProvider = ChangeNotifierProvider(DownloadService.new);
 

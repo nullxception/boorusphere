@@ -1,8 +1,7 @@
+import 'package:boorusphere/entity/post.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-
-import '../../../entity/post.dart';
 
 TimelineController useTimelineController({
   List<Object?> keys = const [],

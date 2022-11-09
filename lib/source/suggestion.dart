@@ -1,20 +1,19 @@
 import 'dart:async';
 
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/entity/sphere_exception.dart';
+import 'package:boorusphere/services/http.dart';
+import 'package:boorusphere/source/api/parser/danboorujson_parser.dart';
+import 'package:boorusphere/source/api/parser/gelboorujson_parser.dart';
+import 'package:boorusphere/source/api/parser/gelbooruxml_parser.dart';
+import 'package:boorusphere/source/api/parser/konachanjson_parser.dart';
+import 'package:boorusphere/source/api/parser/safebooruxml_parser.dart';
+import 'package:boorusphere/source/blocked_tags.dart';
+import 'package:boorusphere/source/settings/server/active.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../utils/extensions/string.dart';
-import '../entity/server_data.dart';
-import '../entity/sphere_exception.dart';
-import '../services/http.dart';
-import 'api/parser/danboorujson_parser.dart';
-import 'api/parser/gelboorujson_parser.dart';
-import 'api/parser/gelbooruxml_parser.dart';
-import 'api/parser/konachanjson_parser.dart';
-import 'api/parser/safebooruxml_parser.dart';
-import 'blocked_tags.dart';
-import 'settings/server/active.dart';
 
 final _dataSource = Provider(SuggestionSource.new);
 final suggestionFuture = FutureProvider.autoDispose

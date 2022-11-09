@@ -1,10 +1,9 @@
+import 'package:boorusphere/source/blocked_tags.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../widgets/notice_card.dart';
-import '../../source/blocked_tags.dart';
-import '../../utils/extensions/string.dart';
 
 class TagsBlockerPage extends HookConsumerWidget {
   const TagsBlockerPage({super.key});

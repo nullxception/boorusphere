@@ -1,13 +1,12 @@
 import 'dart:async';
 
+import 'package:boorusphere/entity/app_version.dart';
+import 'package:boorusphere/entity/changelog_data.dart';
+import 'package:boorusphere/services/http.dart';
+import 'package:boorusphere/source/version.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../entity/app_version.dart';
-import '../entity/changelog_data.dart';
-import '../services/http.dart';
-import 'version.dart';
 
 final _dataSourceProvider = Provider(ChangelogDataSource.new);
 

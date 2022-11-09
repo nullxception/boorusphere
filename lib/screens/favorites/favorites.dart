@@ -1,17 +1,16 @@
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/screens/home/timeline/controller.dart';
+import 'package:boorusphere/screens/home/timeline/timeline.dart';
+import 'package:boorusphere/source/favorites.dart';
+import 'package:boorusphere/source/server.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/widgets/favicon.dart';
+import 'package:boorusphere/widgets/notice_card.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../entity/post.dart';
-import '../../entity/server_data.dart';
-import '../../source/favorites.dart';
-import '../../source/server.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../widgets/favicon.dart';
-import '../../widgets/notice_card.dart';
-import '../home/timeline/controller.dart';
-import '../home/timeline/timeline.dart';
 
 class FavoritesPage extends ConsumerWidget {
   const FavoritesPage({super.key});

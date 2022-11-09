@@ -1,25 +1,24 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/routes/chill_page.dart';
+import 'package:boorusphere/routes/slide_page.dart';
+import 'package:boorusphere/screens/about/about.dart';
+import 'package:boorusphere/screens/about/changelog.dart';
+import 'package:boorusphere/screens/about/licenses.dart';
+import 'package:boorusphere/screens/downloads/downloads.dart';
+import 'package:boorusphere/screens/favorites/favorites.dart';
+import 'package:boorusphere/screens/home/home.dart';
+import 'package:boorusphere/screens/home/timeline/controller.dart';
+import 'package:boorusphere/screens/post/post.dart';
+import 'package:boorusphere/screens/post/post_detail.dart';
+import 'package:boorusphere/screens/server/server.dart';
+import 'package:boorusphere/screens/server/server_edit.dart';
+import 'package:boorusphere/screens/server/server_payloads.dart';
+import 'package:boorusphere/screens/settings/settings.dart';
+import 'package:boorusphere/screens/tags_blocker/tags_blocker.dart';
+import 'package:boorusphere/source/changelog.dart';
 import 'package:flutter/material.dart';
-
-import '../entity/post.dart';
-import '../entity/server_data.dart';
-import '../screens/about/about.dart';
-import '../screens/about/changelog.dart';
-import '../screens/about/licenses.dart';
-import '../screens/downloads/downloads.dart';
-import '../screens/favorites/favorites.dart';
-import '../screens/home/home.dart';
-import '../screens/home/timeline/controller.dart';
-import '../screens/post/post.dart';
-import '../screens/post/post_detail.dart';
-import '../screens/server/server.dart';
-import '../screens/server/server_edit.dart';
-import '../screens/server/server_payloads.dart';
-import '../screens/settings/settings.dart';
-import '../screens/tags_blocker/tags_blocker.dart';
-import '../source/changelog.dart';
-import 'chill_page.dart';
-import 'slide_page.dart';
 
 part 'routes.gr.dart';
 

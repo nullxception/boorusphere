@@ -1,9 +1,8 @@
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/source/api/parser/booru_parser.dart';
+import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
-
-import '../../../entity/post.dart';
-import '../../../utils/extensions/pick.dart';
-import 'booru_parser.dart';
 
 class DanbooruJsonParser extends BooruParser {
   DanbooruJsonParser(super.server);

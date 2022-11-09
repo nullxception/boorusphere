@@ -1,6 +1,5 @@
+import 'package:boorusphere/source/version.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../source/version.dart';
 
 part 'app_version.freezed.dart';
 

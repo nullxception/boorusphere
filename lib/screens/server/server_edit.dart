@@ -1,17 +1,16 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/screens/server/server_details.dart';
+import 'package:boorusphere/services/http.dart';
+import 'package:boorusphere/source/server.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/utils/server/scanner.dart';
+import 'package:boorusphere/widgets/exception_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../entity/server_data.dart';
-import '../../services/http.dart';
-import '../../source/server.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../utils/extensions/string.dart';
-import '../../utils/server/scanner.dart';
-import '../../widgets/exception_info.dart';
-import 'server_details.dart';
 
 class ServerEditorPage extends HookConsumerWidget {
   const ServerEditorPage({super.key, this.server = ServerData.empty});

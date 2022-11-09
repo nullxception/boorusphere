@@ -1,8 +1,7 @@
+import 'package:boorusphere/entity/content.dart';
+import 'package:boorusphere/entity/pixel_size.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-
-import 'content.dart';
-import 'pixel_size.dart';
 
 part 'post.freezed.dart';
 part 'post.g.dart';

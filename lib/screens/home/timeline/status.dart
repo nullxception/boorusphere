@@ -1,12 +1,11 @@
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/source/settings/safe_mode.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/widgets/exception_info.dart';
+import 'package:boorusphere/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../source/page.dart';
-import '../../../source/settings/safe_mode.dart';
-import '../../../utils/extensions/buildcontext.dart';
-import '../../../widgets/exception_info.dart';
-import '../../../widgets/notice_card.dart';
 
 class TimelineStatus extends ConsumerWidget {
   const TimelineStatus({super.key});

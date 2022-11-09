@@ -1,8 +1,7 @@
 import 'dart:async';
 
+import 'package:boorusphere/entity/pixel_size.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../entity/pixel_size.dart';
 
 extension ImageProviderExt<T> on ImageProvider {
   Future<PixelSize> resolvePixelSize() {

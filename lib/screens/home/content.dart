@@ -1,13 +1,12 @@
+import 'package:boorusphere/screens/home/search/search.dart';
+import 'package:boorusphere/screens/home/timeline/controller.dart';
+import 'package:boorusphere/screens/home/timeline/status.dart';
+import 'package:boorusphere/screens/home/timeline/timeline.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/utils/extensions/asyncvalue.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../source/page.dart';
-import '../../utils/extensions/asyncvalue.dart';
-import '../../utils/extensions/buildcontext.dart';
-import 'search/search.dart';
-import 'timeline/controller.dart';
-import 'timeline/status.dart';
-import 'timeline/timeline.dart';
 
 class HomeContent extends HookConsumerWidget {
   const HomeContent({super.key});

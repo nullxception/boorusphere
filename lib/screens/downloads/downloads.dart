@@ -1,13 +1,12 @@
+import 'package:boorusphere/entity/download_entry.dart';
+import 'package:boorusphere/screens/downloads/download_entry_view.dart';
+import 'package:boorusphere/services/download.dart';
+import 'package:boorusphere/source/server.dart';
+import 'package:boorusphere/source/settings/download/group_by_server.dart';
+import 'package:boorusphere/widgets/expandable_group_list_view.dart';
+import 'package:boorusphere/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../entity/download_entry.dart';
-import '../../services/download.dart';
-import '../../source/server.dart';
-import '../../source/settings/download/group_by_server.dart';
-import '../../widgets/expandable_group_list_view.dart';
-import '../../widgets/notice_card.dart';
-import 'download_entry_view.dart';
 
 class DownloadsPage extends ConsumerWidget {
   const DownloadsPage({super.key});

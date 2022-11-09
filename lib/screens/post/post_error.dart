@@ -1,13 +1,12 @@
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/screens/post/post_placeholder_image.dart';
+import 'package:boorusphere/screens/post/quickbar.dart';
+import 'package:boorusphere/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../../entity/post.dart';
-import '../../source/settings/post/blur_explicit.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../utils/extensions/string.dart';
-import 'post_placeholder_image.dart';
-import 'quickbar.dart';
 
 class PostErrorDisplay extends HookConsumerWidget {
   const PostErrorDisplay({

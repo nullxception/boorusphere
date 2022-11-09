@@ -1,21 +1,20 @@
+import 'package:boorusphere/entity/page_option.dart';
+import 'package:boorusphere/screens/home/home.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/source/search_history.dart';
+import 'package:boorusphere/source/settings/grid.dart';
+import 'package:boorusphere/source/settings/server/active.dart';
+import 'package:boorusphere/source/settings/ui_blur.dart';
+import 'package:boorusphere/source/suggestion.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/widgets/blur_backdrop.dart';
+import 'package:boorusphere/widgets/exception_info.dart';
+import 'package:boorusphere/widgets/favicon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../entity/page_option.dart';
-import '../../../source/page.dart';
-import '../../../source/search_history.dart';
-import '../../../source/settings/grid.dart';
-import '../../../source/settings/server/active.dart';
-import '../../../source/settings/ui_blur.dart';
-import '../../../source/suggestion.dart';
-import '../../../utils/extensions/buildcontext.dart';
-import '../../../utils/extensions/string.dart';
-import '../../../widgets/blur_backdrop.dart';
-import '../../../widgets/exception_info.dart';
-import '../../../widgets/favicon.dart';
-import '../home.dart';
 
 part 'controller.dart';
 part 'searchbar.dart';

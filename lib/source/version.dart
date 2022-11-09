@@ -1,12 +1,11 @@
 import 'dart:ffi';
 
+import 'package:boorusphere/entity/app_version.dart';
+import 'package:boorusphere/services/http.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info/package_info.dart';
 import 'package:yaml/yaml.dart';
-
-import '../entity/app_version.dart';
-import '../services/http.dart';
 
 final versionCurrentProvider = FutureProvider((ref) async {
   final pkgInfo = await PackageInfo.fromPlatform();

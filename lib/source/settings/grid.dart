@@ -1,6 +1,5 @@
+import 'package:boorusphere/source/settings/settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'settings.dart';
 
 final gridProvider = StateNotifierProvider<GridState, int>((ref) {
   final saved = Settings.uiTimelineGrid.read(or: 1);

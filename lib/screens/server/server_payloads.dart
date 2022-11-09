@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/source/server.dart';
+import 'package:boorusphere/widgets/favicon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../widgets/favicon.dart';
-import '../../entity/server_data.dart';
-import '../../source/server.dart';
 
 class ServerPayloadsPage extends HookConsumerWidget {
   const ServerPayloadsPage({super.key, this.onReturned});

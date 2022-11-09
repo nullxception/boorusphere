@@ -1,8 +1,7 @@
+import 'package:boorusphere/entity/favorite_post.dart';
+import 'package:boorusphere/entity/post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../entity/favorite_post.dart';
-import '../entity/post.dart';
 
 final favoritesProvider =
     StateNotifierProvider<FavoritesDataSource, Map<String, FavoritePost>>(

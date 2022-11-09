@@ -1,18 +1,17 @@
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/screens/post/post_explicit_warning.dart';
+import 'package:boorusphere/screens/post/post_placeholder_image.dart';
+import 'package:boorusphere/screens/post/quickbar.dart';
+import 'package:boorusphere/services/fullscreen.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/source/settings/post/load_original.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../entity/post.dart';
-import '../../services/fullscreen.dart';
-import '../../source/page.dart';
-import '../../source/settings/post/blur_explicit.dart';
-import '../../source/settings/post/load_original.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../utils/extensions/number.dart';
-import 'post_explicit_warning.dart';
-import 'post_placeholder_image.dart';
-import 'quickbar.dart';
 
 class PostImageDisplay extends HookConsumerWidget {
   const PostImageDisplay({

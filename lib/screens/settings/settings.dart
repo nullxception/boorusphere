@@ -1,17 +1,16 @@
+import 'package:boorusphere/hooks/markmayneedrebuild.dart';
+import 'package:boorusphere/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/source/settings/post/load_original.dart';
+import 'package:boorusphere/source/settings/safe_mode.dart';
+import 'package:boorusphere/source/settings/server/post_limit.dart';
+import 'package:boorusphere/source/settings/theme.dart';
+import 'package:boorusphere/source/settings/ui_blur.dart';
+import 'package:boorusphere/utils/download.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../hooks/markmayneedrebuild.dart';
-import '../../source/settings/post/blur_explicit.dart';
-import '../../source/settings/post/load_original.dart';
-import '../../source/settings/safe_mode.dart';
-import '../../source/settings/server/post_limit.dart';
-import '../../source/settings/theme.dart';
-import '../../source/settings/ui_blur.dart';
-import '../../utils/download.dart';
-import '../../utils/extensions/buildcontext.dart';
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});

@@ -1,18 +1,17 @@
 import 'dart:async';
 
+import 'package:boorusphere/entity/pixel_size.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/services/download.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/imageprovider.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/utils/permissions.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../entity/post.dart';
-import '../entity/pixel_size.dart';
-import '../services/download.dart';
-import '../source/page.dart';
-import '../utils/extensions/buildcontext.dart';
-import '../utils/extensions/imageprovider.dart';
-import '../utils/extensions/string.dart';
-import '../utils/permissions.dart';
 
 class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({

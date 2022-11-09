@@ -1,6 +1,5 @@
+import 'package:boorusphere/source/settings/settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../settings.dart';
 
 final serverPostLimitProvider =
     StateNotifierProvider<ServerPostLimitState, int>((ref) {

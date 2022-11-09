@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/entity/server_payload.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
-
-import '../../entity/server_data.dart';
-import '../../entity/server_payload.dart';
-import '../extensions/string.dart';
 
 class ServerScanner {
   static Future<ServerPayload> _testPayload(

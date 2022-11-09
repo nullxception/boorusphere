@@ -1,21 +1,20 @@
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/hooks/extended_page_controller.dart';
+import 'package:boorusphere/screens/home/timeline/controller.dart';
+import 'package:boorusphere/screens/post/post_error.dart';
+import 'package:boorusphere/screens/post/post_image.dart';
+import 'package:boorusphere/screens/post/post_toolbox.dart';
+import 'package:boorusphere/screens/post/post_video.dart';
+import 'package:boorusphere/services/fullscreen.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/source/settings/post/load_original.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/widgets/slidefade_visibility.dart';
+import 'package:boorusphere/widgets/styled_overlay_region.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../entity/post.dart';
-import '../../../hooks/extended_page_controller.dart';
-import '../../services/fullscreen.dart';
-import '../../source/page.dart';
-import '../../source/settings/post/load_original.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../widgets/slidefade_visibility.dart';
-import '../../widgets/styled_overlay_region.dart';
-import '../home/timeline/controller.dart';
-import 'post_error.dart';
-import 'post_image.dart';
-import 'post_toolbox.dart';
-import 'post_video.dart';
 
 class PostPage extends HookConsumerWidget {
   const PostPage({

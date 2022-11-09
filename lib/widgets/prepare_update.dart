@@ -1,10 +1,9 @@
+import 'package:boorusphere/services/download.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../services/download.dart';
-import '../utils/extensions/buildcontext.dart';
 
 class UpdatePrepareDialog extends HookConsumerWidget {
   const UpdatePrepareDialog({super.key});

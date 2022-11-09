@@ -1,6 +1,5 @@
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/extensions/buildcontext.dart';
 
 class QuickBar extends StatelessWidget {
   factory QuickBar({

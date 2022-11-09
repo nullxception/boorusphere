@@ -1,27 +1,26 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:boorusphere/entity/page_option.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/entity/sphere_exception.dart';
+import 'package:boorusphere/services/http.dart';
+import 'package:boorusphere/source/api/parser/danboorujson_parser.dart';
+import 'package:boorusphere/source/api/parser/e621json_parser.dart';
+import 'package:boorusphere/source/api/parser/gelboorujson_parser.dart';
+import 'package:boorusphere/source/api/parser/gelbooruxml_parser.dart';
+import 'package:boorusphere/source/api/parser/konachanjson_parser.dart';
+import 'package:boorusphere/source/api/parser/safebooruxml_parser.dart';
+import 'package:boorusphere/source/blocked_tags.dart';
+import 'package:boorusphere/source/search_history.dart';
+import 'package:boorusphere/source/settings/safe_mode.dart';
+import 'package:boorusphere/source/settings/server/active.dart';
+import 'package:boorusphere/source/settings/server/post_limit.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../entity/page_option.dart';
-import '../entity/post.dart';
-import '../entity/server_data.dart';
-import '../entity/sphere_exception.dart';
-import '../services/http.dart';
-import '../utils/extensions/string.dart';
-import 'api/parser/danboorujson_parser.dart';
-import 'api/parser/e621json_parser.dart';
-import 'api/parser/gelboorujson_parser.dart';
-import 'api/parser/gelbooruxml_parser.dart';
-import 'api/parser/konachanjson_parser.dart';
-import 'api/parser/safebooruxml_parser.dart';
-import 'blocked_tags.dart';
-import 'search_history.dart';
-import 'settings/safe_mode.dart';
-import 'settings/server/active.dart';
-import 'settings/server/post_limit.dart';
 
 final pageDataProvider = Provider(PageDataSource.new);
 final pageOptionProvider = StateProvider((_) => const PageOption(clear: true));

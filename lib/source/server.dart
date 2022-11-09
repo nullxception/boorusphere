@@ -1,12 +1,11 @@
 import 'dart:convert';
 
+import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/source/settings/server/active.dart';
+import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-
-import '../entity/server_data.dart';
-import '../utils/extensions/asyncvalue.dart';
-import 'settings/server/active.dart';
 
 final _defaultData = FutureProvider((ref) => ServerDataLoader.loadDefaults());
 

@@ -1,8 +1,7 @@
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/extensions/buildcontext.dart';
-import '../utils/extensions/string.dart';
 
 class Favicon extends StatelessWidget {
   const Favicon({

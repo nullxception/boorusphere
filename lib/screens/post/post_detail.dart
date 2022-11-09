@@ -1,4 +1,14 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/page_option.dart';
+import 'package:boorusphere/entity/pixel_size.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/screens/post/tag.dart';
+import 'package:boorusphere/source/blocked_tags.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/imageprovider.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/widgets/styled_overlay_region.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,17 +16,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../../entity/post.dart';
-import '../../entity/page_option.dart';
-import '../../entity/pixel_size.dart';
-import '../../source/blocked_tags.dart';
-import '../../source/page.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../utils/extensions/imageprovider.dart';
-import '../../utils/extensions/string.dart';
-import '../../widgets/styled_overlay_region.dart';
-import 'tag.dart';
 
 class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
   const PostDetailsPage({super.key, required this.post});

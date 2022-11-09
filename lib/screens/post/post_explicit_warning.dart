@@ -1,6 +1,5 @@
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/extensions/buildcontext.dart';
 
 class PostExplicitWarningCard extends StatelessWidget {
   const PostExplicitWarningCard({super.key, required this.onConfirm});

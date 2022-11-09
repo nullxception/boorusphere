@@ -1,6 +1,13 @@
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/routes/routes.dart';
+import 'package:boorusphere/screens/home/timeline/controller.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/source/settings/grid.dart';
+import 'package:boorusphere/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -8,14 +15,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
-
-import '../../../../entity/post.dart';
-import '../../../routes/routes.dart';
-import '../../../source/page.dart';
-import '../../../source/settings/grid.dart';
-import '../../../source/settings/post/blur_explicit.dart';
-import '../../../utils/extensions/buildcontext.dart';
-import 'controller.dart';
 
 class Timeline extends HookConsumerWidget {
   const Timeline({

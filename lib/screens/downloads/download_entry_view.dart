@@ -1,20 +1,19 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/entity/download_entry.dart';
+import 'package:boorusphere/entity/download_status.dart';
+import 'package:boorusphere/routes/routes.dart';
+import 'package:boorusphere/services/download.dart';
+import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/source/server.dart';
+import 'package:boorusphere/source/settings/download/group_by_server.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/utils/extensions/number.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/widgets/download_dialog.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
-
-import '../../entity/download_entry.dart';
-import '../../entity/download_status.dart';
-import '../../routes/routes.dart';
-import '../../services/download.dart';
-import '../../source/page.dart';
-import '../../source/server.dart';
-import '../../source/settings/download/group_by_server.dart';
-import '../../utils/extensions/buildcontext.dart';
-import '../../utils/extensions/number.dart';
-import '../../utils/extensions/string.dart';
-import '../../widgets/download_dialog.dart';
 
 class DownloadEntryView extends ConsumerWidget {
   const DownloadEntryView({super.key, required this.entry});

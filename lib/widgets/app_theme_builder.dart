@@ -1,8 +1,7 @@
+import 'package:boorusphere/services/app_theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../services/app_theme.dart';
 
 class AppThemeBuilder extends ConsumerWidget {
   const AppThemeBuilder({super.key, required this.builder});

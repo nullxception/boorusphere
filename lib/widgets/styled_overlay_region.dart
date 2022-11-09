@@ -1,9 +1,8 @@
+import 'package:boorusphere/source/device_info.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../source/device_info.dart';
-import '../utils/extensions/buildcontext.dart';
 
 class StyledOverlayRegion extends ConsumerWidget {
   const StyledOverlayRegion({

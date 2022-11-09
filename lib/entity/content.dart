@@ -1,5 +1,5 @@
-import '../utils/extensions/string.dart';
-import 'post.dart';
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 
 class Content {
   const Content({

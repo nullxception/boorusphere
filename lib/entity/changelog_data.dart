@@ -1,8 +1,7 @@
 import 'dart:convert';
 
+import 'package:boorusphere/entity/app_version.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'app_version.dart';
 
 part 'changelog_data.freezed.dart';
 

@@ -1,8 +1,7 @@
+import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/entity/server_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-
-import '../../../entity/post.dart';
-import '../../../entity/server_data.dart';
 
 abstract class BooruParser {
   BooruParser(this.server);
