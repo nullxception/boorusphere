@@ -11,14 +11,13 @@ abstract class BooruParser {
 
   bool canParsePage(Response res);
   List<Post> parsePage(Response res) {
-    debugPrint('parsePage: ${canParsePage(res)}, on: ${res.realUri}');
+    debugPrint('$runtimeType.parsePage: ${res.realUri}');
     return [];
   }
 
   bool canParseSuggestion(Response res);
   Set<String> parseSuggestion(Response res) {
-    debugPrint(
-        'parseSuggestion: ${canParseSuggestion(res)}, on: ${res.realUri}');
+    debugPrint('$runtimeType.parseSuggestion: ${res.realUri}');
     return {};
   }
 
