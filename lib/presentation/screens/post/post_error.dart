@@ -1,7 +1,7 @@
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
-import 'package:boorusphere/source/settings/post/blur_explicit.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';

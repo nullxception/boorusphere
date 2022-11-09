@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/source/settings/grid.dart';
+import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
-import 'package:boorusphere/source/page.dart';
-import 'package:boorusphere/source/settings/grid.dart';
-import 'package:boorusphere/source/settings/post/blur_explicit.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';

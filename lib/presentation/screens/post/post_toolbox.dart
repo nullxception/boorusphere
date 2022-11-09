@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/data/source/favorites.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
-import 'package:boorusphere/services/download.dart';
-import 'package:boorusphere/source/favorites.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:flutter/material.dart';

@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/services/fullscreen.dart';
+import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/data/source/settings/video_player.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
-import 'package:boorusphere/services/fullscreen.dart';
-import 'package:boorusphere/source/page.dart';
-import 'package:boorusphere/source/settings/post/blur_explicit.dart';
-import 'package:boorusphere/source/settings/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

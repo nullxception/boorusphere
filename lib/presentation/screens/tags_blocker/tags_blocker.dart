@@ -1,5 +1,5 @@
+import 'package:boorusphere/data/source/blocked_tags.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
-import 'package:boorusphere/source/blocked_tags.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

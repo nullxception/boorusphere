@@ -1,6 +1,6 @@
-import 'package:boorusphere/entity/changelog_data.dart';
+import 'package:boorusphere/data/entity/changelog_data.dart';
+import 'package:boorusphere/data/source/changelog.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
-import 'package:boorusphere/source/changelog.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:boorusphere/entity/pixel_size.dart';
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/pixel_size.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/data/source/page.dart';
 import 'package:boorusphere/presentation/widgets/permissions.dart';
-import 'package:boorusphere/services/download.dart';
-import 'package:boorusphere/source/page.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/imageprovider.dart';
 import 'package:boorusphere/utils/extensions/string.dart';

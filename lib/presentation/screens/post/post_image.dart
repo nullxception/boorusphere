@@ -1,11 +1,11 @@
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/services/fullscreen.dart';
+import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/data/source/settings/post/load_original.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
-import 'package:boorusphere/services/fullscreen.dart';
-import 'package:boorusphere/source/page.dart';
-import 'package:boorusphere/source/settings/post/blur_explicit.dart';
-import 'package:boorusphere/source/settings/post/load_original.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:extended_image/extended_image.dart';

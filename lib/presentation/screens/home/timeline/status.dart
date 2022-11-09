@@ -1,7 +1,7 @@
+import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/source/settings/safe_mode.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
-import 'package:boorusphere/source/page.dart';
-import 'package:boorusphere/source/settings/safe_mode.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

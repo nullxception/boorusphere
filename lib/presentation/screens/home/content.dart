@@ -1,8 +1,8 @@
+import 'package:boorusphere/data/source/page.dart';
 import 'package:boorusphere/presentation/screens/home/search/search.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/status.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
-import 'package:boorusphere/source/page.dart';
 import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:boorusphere/entity/pixel_size.dart';
+import 'package:boorusphere/data/entity/pixel_size.dart';
 import 'package:flutter/widgets.dart';
 
 extension ImageProviderExt<T> on ImageProvider {

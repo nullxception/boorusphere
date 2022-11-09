@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:boorusphere/entity/post.dart';
-import 'package:boorusphere/source/page.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/source/page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

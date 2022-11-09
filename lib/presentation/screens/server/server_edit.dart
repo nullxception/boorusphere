@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/data/entity/server_data.dart';
+import 'package:boorusphere/data/services/http.dart';
+import 'package:boorusphere/data/source/server.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
-import 'package:boorusphere/services/http.dart';
-import 'package:boorusphere/source/server.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:boorusphere/utils/server/scanner.dart';

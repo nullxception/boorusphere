@@ -1,4 +1,4 @@
-import 'package:boorusphere/source/device_info.dart';
+import 'package:boorusphere/data/source/device_info.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

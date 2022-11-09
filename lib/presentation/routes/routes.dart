@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/entity/post.dart';
-import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/entity/server_data.dart';
+import 'package:boorusphere/data/source/changelog.dart';
 import 'package:boorusphere/presentation/routes/chill_page.dart';
 import 'package:boorusphere/presentation/routes/slide_page.dart';
 import 'package:boorusphere/presentation/screens/about/about.dart';
@@ -17,7 +18,6 @@ import 'package:boorusphere/presentation/screens/server/server_edit.dart';
 import 'package:boorusphere/presentation/screens/server/server_payloads.dart';
 import 'package:boorusphere/presentation/screens/settings/settings.dart';
 import 'package:boorusphere/presentation/screens/tags_blocker/tags_blocker.dart';
-import 'package:boorusphere/source/changelog.dart';
 import 'package:flutter/material.dart';
 
 part 'routes.gr.dart';

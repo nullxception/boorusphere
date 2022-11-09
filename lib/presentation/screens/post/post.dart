@@ -1,4 +1,7 @@
-import 'package:boorusphere/entity/post.dart';
+import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/services/fullscreen.dart';
+import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/source/settings/post/load_original.dart';
 import 'package:boorusphere/presentation/hooks/extended_page_controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/post/post_error.dart';
@@ -7,9 +10,6 @@ import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/screens/post/post_video.dart';
 import 'package:boorusphere/presentation/widgets/slidefade_visibility.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
-import 'package:boorusphere/services/fullscreen.dart';
-import 'package:boorusphere/source/page.dart';
-import 'package:boorusphere/source/settings/post/load_original.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';

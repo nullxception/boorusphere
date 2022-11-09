@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/entity/app_version.dart';
+import 'package:boorusphere/data/entity/app_version.dart';
+import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/data/source/changelog.dart';
+import 'package:boorusphere/data/source/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
-import 'package:boorusphere/services/download.dart';
-import 'package:boorusphere/source/changelog.dart';
-import 'package:boorusphere/source/version.dart';
 import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/number.dart';

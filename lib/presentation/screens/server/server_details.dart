@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/entity/server_data.dart';
+import 'package:boorusphere/data/entity/server_data.dart';
+import 'package:boorusphere/data/source/server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
-import 'package:boorusphere/source/server.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
