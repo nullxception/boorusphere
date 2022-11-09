@@ -1,0 +1,4 @@
+enum ChangelogType {
+  assets,
+  git,
+}

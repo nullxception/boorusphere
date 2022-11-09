@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/app_version.dart';
+import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
+import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/data/source/changelog.dart';
 import 'package:boorusphere/data/source/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';

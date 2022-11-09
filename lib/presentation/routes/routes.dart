@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/source/changelog.dart';
+import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
 import 'package:boorusphere/presentation/routes/chill_page.dart';
 import 'package:boorusphere/presentation/routes/slide_page.dart';
 import 'package:boorusphere/presentation/screens/about/about.dart';
