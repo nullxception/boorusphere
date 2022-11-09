@@ -29,18 +29,15 @@ abstract class BooruParser {
         return urlString;
       }
 
-      if (uri.hasAuthority && uri.hasAbsolutePath && !uri.hasScheme) {
-        final origin = Uri.parse(server.apiAddress);
-        final scheme = origin.scheme == 'https' ? Uri.https : Uri.http;
-        return scheme(uri.authority, uri.path,
-                uri.hasQuery ? uri.queryParametersAll : null)
-            .toString();
-      } else if (!uri.hasAuthority) {
-        final origin = Uri.parse(server.apiAddress);
-        final scheme = origin.scheme == 'https' ? Uri.https : Uri.http;
-        return scheme(origin.authority, uri.path,
-                uri.hasQuery ? uri.queryParametersAll : null)
-            .toString();
+      final apiAddr = Uri.parse(server.apiAddress);
+      final scheme = apiAddr.scheme == 'https' ? Uri.https : Uri.http;
+
+      if (uri.hasAbsolutePath && !uri.hasScheme) {
+        return scheme(
+          !uri.hasAuthority ? apiAddr.authority : uri.authority,
+          uri.path,
+          uri.hasQuery ? uri.queryParametersAll : null,
+        ).toString();
       }
 
       // nothing we can do when there's no authority and path at all
