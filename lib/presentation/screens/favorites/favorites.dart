@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/source/favorites.dart';
 import 'package:boorusphere/data/source/server.dart';
+import 'package:boorusphere/presentation/provider/favorite_post.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
@@ -17,7 +17,8 @@ class FavoritesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasFav = ref.watch(favoritesProvider.select((it) => it.isNotEmpty));
+    final hasFav =
+        ref.watch(favoritePostProvider.select((it) => it.isNotEmpty));
     return hasFav ? _FavoritesView() : _EmptyView();
   }
 }
@@ -49,7 +50,7 @@ class _EmptyView extends StatelessWidget {
 class _FavoritesView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grouped = ref.watch(favoritesProvider.select(
+    final grouped = ref.watch(favoritePostProvider.select(
       (it) => it.values.groupListsBy((e) => ref
           .watch(serverDataProvider.notifier)
           .getById(e.post.serverId, or: ServerData.empty)),

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/data/source/favorites.dart';
+import 'package:boorusphere/presentation/provider/favorite_post.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -97,8 +97,9 @@ class PostFavoriteButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(favoritesProvider);
-    final isFavorite = ref.watch(favoritesProvider.notifier).checkExists(post);
+    ref.watch(favoritePostProvider);
+    final isFavorite =
+        ref.watch(favoritePostProvider.notifier).checkExists(post);
     final animator =
         useAnimationController(duration: const Duration(milliseconds: 300));
     final animation = useAnimation(
@@ -114,9 +115,9 @@ class PostFavoriteButton extends HookConsumerWidget {
           : Icon(Icons.favorite_border, color: animation),
       onPressed: () {
         if (isFavorite) {
-          ref.watch(favoritesProvider.notifier).delete(post);
+          ref.watch(favoritePostProvider.notifier).delete(post);
         } else {
-          ref.watch(favoritesProvider.notifier).save(post);
+          ref.watch(favoritePostProvider.notifier).save(post);
         }
       },
     );
