@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/services/fullscreen.dart';
 import 'package:boorusphere/data/source/page.dart';
 import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
 import 'package:boorusphere/data/source/settings/video_player.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
+import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
