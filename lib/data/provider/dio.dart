@@ -4,13 +4,13 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final cookieProvider = Provider((ref) {
+final cookieJarProvider = Provider((ref) {
   return CookieJar();
 });
 
-final httpProvider = Provider((ref) {
+final dioProvider = Provider((ref) {
   final dio = Dio();
-  final cookieJar = ref.watch(cookieProvider);
+  final cookieJar = ref.watch(cookieJarProvider);
   final retryDelays = List.generate(5, (index) {
     return Duration(milliseconds: 400 + (100 * (index + 1)));
   });

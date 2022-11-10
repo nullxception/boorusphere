@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:boorusphere/data/entity/server_data.dart';
 import 'package:boorusphere/data/entity/sphere_exception.dart';
-import 'package:boorusphere/data/services/http.dart';
+import 'package:boorusphere/data/provider/dio.dart';
 import 'package:boorusphere/data/source/api/parser/danboorujson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/gelbooruxml_parser.dart';
@@ -60,7 +60,7 @@ class SuggestionSource {
     required ServerData server,
   }) async {
     final blockedTags = ref.read(blockedTagsRepoProvider).get();
-    final client = ref.read(httpProvider);
+    final client = ref.read(dioProvider);
 
     final queries = query.toWordList();
     final word = queries.isEmpty ? '' : queries.last;

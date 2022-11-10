@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/services/http.dart';
+import 'package:boorusphere/data/provider/dio.dart';
 import 'package:boorusphere/data/source/server.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
@@ -110,7 +110,7 @@ class ServerEditorPage extends HookConsumerWidget {
                                 : homeAddr;
                             try {
                               final res = await ServerScanner.scan(
-                                ref.read(httpProvider),
+                                ref.read(dioProvider),
                                 homeAddr,
                                 apiAddr,
                               );
