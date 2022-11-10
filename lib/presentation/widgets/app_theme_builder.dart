@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/services/app_theme.dart';
+import 'package:boorusphere/presentation/provider/app_theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
