@@ -8,8 +8,8 @@ import 'package:boorusphere/data/source/api/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/source/api/parser/konachanjson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/safebooruxml_parser.dart';
-import 'package:boorusphere/data/source/blocked_tags.dart';
 import 'package:boorusphere/data/source/settings/server/active.dart';
+import 'package:boorusphere/domain/provider/blocked_tags.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -59,7 +59,7 @@ class SuggestionSource {
     required String query,
     required ServerData server,
   }) async {
-    final blockedTags = ref.read(blockedTagsProvider);
+    final blockedTags = ref.read(blockedTagsRepoProvider).get();
     final client = ref.read(httpProvider);
 
     final queries = query.toWordList();

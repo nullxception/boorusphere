@@ -12,11 +12,11 @@ import 'package:boorusphere/data/source/api/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/source/api/parser/konachanjson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/safebooruxml_parser.dart';
-import 'package:boorusphere/data/source/blocked_tags.dart';
 import 'package:boorusphere/data/source/search_history.dart';
 import 'package:boorusphere/data/source/settings/safe_mode.dart';
 import 'package:boorusphere/data/source/settings/server/active.dart';
 import 'package:boorusphere/data/source/settings/server/post_limit.dart';
+import 'package:boorusphere/domain/provider/blocked_tags.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -74,7 +74,7 @@ class PageDataSource {
     final pageOption = ref.read(pageOptionProvider);
     final serverActive = ref.read(serverActiveProvider);
     final safeMode = ref.read(safeModeProvider);
-    final blockedTags = ref.read(blockedTagsProvider);
+    final blockedTags = ref.read(blockedTagsRepoProvider).get();
     final postLimit = ref.read(serverPostLimitProvider);
     if (serverActive == ServerData.empty) return;
 

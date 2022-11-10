@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/page_option.dart';
 import 'package:boorusphere/data/entity/pixel_size.dart';
 import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/blocked_tags.dart';
 import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/presentation/provider/blocked_tags.dart';
 import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -185,7 +185,9 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
             onTap: () {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
-                ref.watch(blockedTagsProvider.notifier).pushAll(selectedTags);
+                ref
+                    .watch(blockedTagsStateProvider.notifier)
+                    .pushAll(selectedTags);
                 context.scaffoldMessenger.showSnackBar(
                   const SnackBar(
                     content: Text('Added to tags blocker list'),

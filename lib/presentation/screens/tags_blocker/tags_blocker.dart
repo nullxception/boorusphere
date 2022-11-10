@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/source/blocked_tags.dart';
+import 'package:boorusphere/presentation/provider/blocked_tags.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
   const _TagsBlockerContent();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blockedTags = ref.watch(blockedTagsProvider);
+    final blockedTags = ref.watch(blockedTagsStateProvider);
     final controller = useTextEditingController();
 
     return ListView(
@@ -38,7 +38,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
                 controller: controller,
                 onSubmitted: (value) {
                   final values = value.toWordList();
-                  ref.read(blockedTagsProvider.notifier).pushAll(values);
+                  ref.read(blockedTagsStateProvider.notifier).pushAll(values);
                   controller.clear();
                 },
                 decoration: const InputDecoration(
@@ -63,7 +63,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
             leading: const Icon(Icons.block),
             trailing: IconButton(
               onPressed: () {
-                ref.read(blockedTagsProvider.notifier).delete(tag.key);
+                ref.read(blockedTagsStateProvider.notifier).delete(tag.key);
               },
               icon: const Icon(Icons.close),
             ),
