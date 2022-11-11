@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/source/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class ServerDetails extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverStateProvider);
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final cName = useTextEditingController(text: data.id);
     final cAlias = useTextEditingController(

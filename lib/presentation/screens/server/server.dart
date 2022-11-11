@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/source/server.dart';
+import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -11,7 +11,7 @@ class ServerPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +40,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
-                            ref.read(serverDataProvider.notifier).reset();
+                            ref.read(serverStateProvider.notifier).reset();
                           },
                           child: const Text('Reset'),
                         )
@@ -88,9 +88,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                             break;
                           }
 
-                          ref
-                              .read(serverDataProvider.notifier)
-                              .delete(data: it);
+                          ref.read(serverStateProvider.notifier).remove(it);
                           break;
                         default:
                           break;

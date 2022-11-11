@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/server_data.dart';
 import 'package:boorusphere/data/provider/dio.dart';
-import 'package:boorusphere/data/source/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -160,12 +160,12 @@ class ServerEditorPage extends HookConsumerWidget {
                     isEditing: isEditing,
                     onSubmitted: (data) {
                       final serverDataNotifier =
-                          ref.read(serverDataProvider.notifier);
+                          ref.read(serverStateProvider.notifier);
 
                       if (isEditing) {
-                        serverDataNotifier.edit(prev: server, next: data);
+                        serverDataNotifier.edit(server, data);
                       } else {
-                        serverDataNotifier.add(data: data);
+                        serverDataNotifier.add(data);
                       }
                       context.router.pop();
                     },

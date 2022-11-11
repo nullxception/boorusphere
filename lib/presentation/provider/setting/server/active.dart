@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/provider/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';

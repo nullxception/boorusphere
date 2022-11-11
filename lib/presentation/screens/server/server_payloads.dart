@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/source/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,8 +17,7 @@ class ServerPayloadsPage extends HookConsumerWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children:
-                ref.read(serverDataProvider.notifier).allWithDefaults.map((it) {
+            children: ref.read(serverStateProvider.notifier).all.map((it) {
               return ListTile(
                 title: Text(it.name),
                 subtitle: Text(it.homepage),

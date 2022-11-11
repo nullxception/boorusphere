@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/entity/server_data.dart';
 import 'package:boorusphere/data/entity/server_payload.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
 

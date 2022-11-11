@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/source/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/provider/favorite_post.dart';
+import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
@@ -52,7 +52,7 @@ class _FavoritesView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final grouped = ref.watch(favoritePostProvider.select(
       (it) => it.values.groupListsBy((e) => ref
-          .watch(serverDataProvider.notifier)
+          .watch(serverStateProvider.notifier)
           .getById(e.post.serverId, or: ServerData.empty)),
     ));
 
