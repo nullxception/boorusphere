@@ -9,7 +9,7 @@ class _SearchSuggestion extends HookConsumerWidget {
     final serverActive = ref.watch(serverActiveProvider);
     final searchQuery = useState('');
     final suggester = ref.watch(suggestionFuture(searchQuery.value));
-    final history = ref.watch(searchHistoryFinder(searchQuery.value));
+    final history = ref.watch(filteredHistoryProvider(searchQuery.value));
     final isBlurAllowed = ref.watch(uiBlurProvider);
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
@@ -53,7 +53,7 @@ class _SearchSuggestion extends HookConsumerWidget {
                             const Text('Recently'),
                             TextButton(
                               onPressed: ref
-                                  .read(searchHistoryProvider.notifier)
+                                  .read(searchHistoryStateProvider.notifier)
                                   .clear,
                               child: const Text('Clear all'),
                             ),
@@ -73,7 +73,7 @@ class _SearchSuggestion extends HookConsumerWidget {
                             direction: DismissDirection.endToStart,
                             onDismissed: (direction) {
                               ref
-                                  .read(searchHistoryProvider.notifier)
+                                  .read(searchHistoryStateProvider.notifier)
                                   .delete(entry.key);
                             },
                             background: Container(

@@ -12,8 +12,8 @@ import 'package:boorusphere/data/source/api/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/source/api/parser/konachanjson_parser.dart';
 import 'package:boorusphere/data/source/api/parser/safebooruxml_parser.dart';
-import 'package:boorusphere/data/source/search_history.dart';
 import 'package:boorusphere/domain/provider/blocked_tags.dart';
+import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
 import 'package:boorusphere/presentation/provider/setting/server/active.dart';
 import 'package:boorusphere/presentation/provider/setting/server/post_limit.dart';
@@ -79,7 +79,9 @@ class PageDataSource {
     if (serverActive == ServerData.empty) return;
 
     if (pageOption.query.isNotEmpty) {
-      await ref.read(searchHistoryProvider.notifier).save(pageOption.query);
+      await ref
+          .read(searchHistoryStateProvider.notifier)
+          .save(pageOption.query);
     }
 
     if (pageOption.clear) posts.clear();
