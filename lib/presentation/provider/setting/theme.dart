@@ -1,25 +1,30 @@
-import 'package:boorusphere/data/source/settings/settings.dart';
+import 'package:boorusphere/data/repository/setting/entity/setting.dart';
+import 'package:boorusphere/domain/provider/setting.dart';
+import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final themeModeProvider =
     StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
-  final saved = Settings.uiThemeMode.read(or: ThemeMode.system.index);
-  return ThemeModeState(ThemeMode.values[saved]);
+  final repo = ref.watch(settingRepoProvider);
+  final saved = repo.get(Setting.uiThemeMode, or: ThemeMode.system.index);
+  return ThemeModeState(ThemeMode.values[saved], repo);
 });
 
 final darkerThemeProvider =
     StateNotifierProvider<DarkerThemeState, bool>((ref) {
-  final saved = Settings.uiMidnightMode.read(or: false);
-  return DarkerThemeState(saved);
+  final repo = ref.watch(settingRepoProvider);
+  final saved = repo.get(Setting.uiMidnightMode, or: false);
+  return DarkerThemeState(saved, repo);
 });
 
 class ThemeModeState extends StateNotifier<ThemeMode> {
-  ThemeModeState(super.state);
+  ThemeModeState(super.state, this.repo);
+  final SettingRepo repo;
 
   Future<void> update(ThemeMode mode) async {
     state = mode;
-    await Settings.uiThemeMode.save(mode.index);
+    await repo.put(Setting.uiThemeMode, mode.index);
   }
 
   Future<ThemeMode> cycle() async {
@@ -39,10 +44,11 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
 }
 
 class DarkerThemeState extends StateNotifier<bool> {
-  DarkerThemeState(super.state);
+  DarkerThemeState(super.state, this.repo);
+  final SettingRepo repo;
 
   Future<void> update(bool value) async {
     state = value;
-    await Settings.uiMidnightMode.save(value);
+    await repo.put(Setting.uiMidnightMode, value);
   }
 }

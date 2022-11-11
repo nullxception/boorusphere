@@ -1,5 +1,5 @@
-import 'package:boorusphere/data/source/settings/theme.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
+import 'package:boorusphere/presentation/provider/setting/theme.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
 import 'package:boorusphere/presentation/widgets/bouncing_scroll.dart';

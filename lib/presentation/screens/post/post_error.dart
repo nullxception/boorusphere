@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';

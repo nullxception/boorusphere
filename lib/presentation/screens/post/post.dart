@@ -1,8 +1,8 @@
 import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/source/page.dart';
-import 'package:boorusphere/data/source/settings/post/load_original.dart';
 import 'package:boorusphere/presentation/hooks/extended_page_controller.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
+import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/post/post_error.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';

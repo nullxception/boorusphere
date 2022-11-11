@@ -3,7 +3,7 @@ import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/entity/search_history.dart';
 import 'package:boorusphere/data/entity/server_data.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
-import 'package:boorusphere/data/source/settings/settings.dart';
+import 'package:boorusphere/data/repository/setting/migrator/setting_migrator.dart';
 import 'package:boorusphere/presentation/boorusphere.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -31,7 +31,7 @@ void main() async {
   Hive.registerAdapter(DownloadEntryAdapter());
   Hive.registerAdapter(FavoritePostAdapter());
   await Future.wait(boxes.map(Hive.openBox));
-  await Settings.performMigration();
+  await migrateSetting();
   await FlutterDownloader.initialize();
 
   final deviceProp = DeviceProp(await DeviceInfoPlugin().androidInfo);

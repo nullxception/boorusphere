@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/data/source/server.dart';
-import 'package:boorusphere/data/source/settings/download/group_by_server.dart';
+import 'package:boorusphere/presentation/provider/setting/download/group_by_server.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_entry_view.dart';
 import 'package:boorusphere/presentation/widgets/expandable_group_list_view.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';

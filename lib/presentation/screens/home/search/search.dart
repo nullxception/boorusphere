@@ -1,10 +1,10 @@
 import 'package:boorusphere/data/entity/page_option.dart';
 import 'package:boorusphere/data/source/page.dart';
 import 'package:boorusphere/data/source/search_history.dart';
-import 'package:boorusphere/data/source/settings/grid.dart';
-import 'package:boorusphere/data/source/settings/server/active.dart';
-import 'package:boorusphere/data/source/settings/ui_blur.dart';
 import 'package:boorusphere/data/source/suggestion.dart';
+import 'package:boorusphere/presentation/provider/setting/grid.dart';
+import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/setting/ui_blur.dart';
 import 'package:boorusphere/presentation/screens/home/home.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';

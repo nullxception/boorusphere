@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/entity/server_data.dart';
-import 'package:boorusphere/data/source/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/setting/server/active.dart';
 import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';

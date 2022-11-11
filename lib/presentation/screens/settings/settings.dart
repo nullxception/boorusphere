@@ -1,10 +1,10 @@
-import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
-import 'package:boorusphere/data/source/settings/post/load_original.dart';
-import 'package:boorusphere/data/source/settings/safe_mode.dart';
-import 'package:boorusphere/data/source/settings/server/post_limit.dart';
-import 'package:boorusphere/data/source/settings/theme.dart';
-import 'package:boorusphere/data/source/settings/ui_blur.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
+import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
+import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/setting/server/post_limit.dart';
+import 'package:boorusphere/presentation/provider/setting/theme.dart';
+import 'package:boorusphere/presentation/provider/setting/ui_blur.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;

@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/entity/search_history.dart';
-import 'package:boorusphere/data/source/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/setting/server/active.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

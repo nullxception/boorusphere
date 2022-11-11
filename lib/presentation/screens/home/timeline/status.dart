@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/source/page.dart';
-import 'package:boorusphere/data/source/settings/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';

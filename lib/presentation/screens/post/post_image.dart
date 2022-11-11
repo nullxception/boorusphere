@@ -1,8 +1,8 @@
 import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/source/page.dart';
-import 'package:boorusphere/data/source/settings/post/blur_explicit.dart';
-import 'package:boorusphere/data/source/settings/post/load_original.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
+import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
