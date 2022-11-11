@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/source/device_info.dart';
+import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,8 +35,8 @@ class FullscreenState extends StateNotifier<bool> {
   }
 
   Future<void> unfullscreen() async {
-    final info = ref.read(deviceInfoProvider);
-    if (info.sdkInt < 29) {
+    final deviceProp = ref.read(devicePropProvider);
+    if (deviceProp.sdkVersion < 29) {
       // SDK 28 and below ignores edgeToEdge, so we have to manually reenable them
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
         SystemUiOverlay.top,

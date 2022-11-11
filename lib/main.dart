@@ -3,9 +3,9 @@ import 'package:boorusphere/data/entity/post.dart';
 import 'package:boorusphere/data/entity/search_history.dart';
 import 'package:boorusphere/data/entity/server_data.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
-import 'package:boorusphere/data/source/device_info.dart';
 import 'package:boorusphere/data/source/settings/settings.dart';
 import 'package:boorusphere/presentation/boorusphere.dart';
+import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -34,12 +34,12 @@ void main() async {
   await Settings.performMigration();
   await FlutterDownloader.initialize();
 
-  final deviceInfo = DeviceInfoSource(await DeviceInfoPlugin().androidInfo);
+  final deviceProp = DeviceProp(await DeviceInfoPlugin().androidInfo);
 
   runApp(
     ProviderScope(
       overrides: [
-        deviceInfoProvider.overrideWithValue(deviceInfo),
+        devicePropProvider.overrideWithValue(deviceProp),
       ],
       child: const Boorusphere(),
     ),

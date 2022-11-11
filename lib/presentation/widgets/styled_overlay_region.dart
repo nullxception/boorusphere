@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/source/device_info.dart';
+import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +17,7 @@ class StyledOverlayRegion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final deviceInfo = ref.watch(deviceInfoProvider);
+    final deviceProp = ref.watch(devicePropProvider);
     final isNightMode = nightMode ?? context.brightness == Brightness.dark;
     final foregroundBrightness =
         isNightMode ? Brightness.light : Brightness.dark;
@@ -36,7 +36,7 @@ class StyledOverlayRegion extends ConsumerWidget {
     return AnnotatedRegion(
       // opt-out SDK 28 and below from transparent navigationBar
       // due to lack of SystemUiMode.edgeToEdge
-      value: deviceInfo.sdkInt > 28 ? style : defStyle,
+      value: deviceProp.sdkVersion > 28 ? style : defStyle,
       child: theme != null ? Theme(data: theme!, child: child) : child,
     );
   }

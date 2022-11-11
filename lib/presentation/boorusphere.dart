@@ -1,5 +1,5 @@
-import 'package:boorusphere/data/source/device_info.dart';
 import 'package:boorusphere/data/source/settings/theme.dart';
+import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
 import 'package:boorusphere/presentation/widgets/bouncing_scroll.dart';
@@ -15,10 +15,10 @@ class Boorusphere extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final isDarkerTheme = ref.watch(darkerThemeProvider);
-    final deviceInfo = ref.watch(deviceInfoProvider);
+    final deviceProp = ref.watch(devicePropProvider);
     final router = useMemoized(SphereRouter.new);
 
-    if (deviceInfo.sdkInt > 28) {
+    if (deviceProp.sdkVersion > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
 
