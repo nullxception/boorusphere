@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/provider/favorite_post.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';

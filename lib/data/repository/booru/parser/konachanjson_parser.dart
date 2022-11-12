@@ -1,16 +1,17 @@
-import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/api/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
-class DanbooruJsonParser extends BooruParser {
-  DanbooruJsonParser(super.server);
+class KonachanJsonParser extends BooruParser {
+  KonachanJsonParser(super.server);
 
   @override
   bool canParsePage(Response res) {
     final data = res.data;
-    return data is List && data.toString().contains('preview_file_url');
+    final rawString = data.toString();
+    return data is List && rawString.contains('preview_url');
   }
 
   @override
@@ -25,19 +26,18 @@ class DanbooruJsonParser extends BooruParser {
         continue;
       }
 
-      String originalFile = pick(post, 'file_url').asStringOrNull() ?? '';
-      final sampleFile = pick(post, 'large_file_url').asStringOrNull() ?? '';
-      final previewFile = pick(post, 'preview_file_url').asStringOrNull() ?? '';
-      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
+      final originalFile = pick(post, 'file_url').asStringOrNull() ?? '';
+      final sampleFile = pick(post, 'sample_url').asStringOrNull() ?? '';
+      final previewFile = pick(post, 'preview_url').asStringOrNull() ?? '';
+      final tags = pick(post, 'tags').toWordList();
+      final width = pick(post, 'width').asIntOrNull() ?? -1;
+      final height = pick(post, 'height').asIntOrNull() ?? -1;
+      final sampleWidth = pick(post, 'sample_width').asIntOrNull() ?? -1;
+      final sampleHeight = pick(post, 'sample_height').asIntOrNull() ?? -1;
+      final previewWidth = pick(post, 'preview_width').asIntOrNull() ?? -1;
+      final previewHeight = pick(post, 'preview_height').asIntOrNull() ?? -1;
       final source = pick(post, 'source').asStringOrNull() ?? '';
-      final width = pick(post, 'image_width').asIntOrNull() ?? -1;
-      final height = pick(post, 'image_height').asIntOrNull() ?? -1;
-      final tags = pick(post, 'tag_string').toWordList();
-      final tagsArtist = pick(post, 'tag_string_artist').toWordList();
-      final tagsCharacter = pick(post, 'tag_string_character').toWordList();
-      final tagsCopyright = pick(post, 'tag_string_copyright').toWordList();
-      final tagsGeneral = pick(post, 'tag_string_general').toWordList();
-      final tagsMeta = pick(post, 'tag_string_meta').toWordList();
+      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -53,19 +53,14 @@ class DanbooruJsonParser extends BooruParser {
             tags: tags,
             width: width,
             height: height,
-            sampleWidth: 0,
-            sampleHeight: 0,
-            previewWidth: 0,
-            previewHeight: 0,
+            sampleWidth: sampleWidth,
+            sampleHeight: sampleHeight,
+            previewWidth: previewWidth,
+            previewHeight: previewHeight,
             serverId: server.id,
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
-            tagsArtist: tagsArtist,
-            tagsCharacter: tagsCharacter,
-            tagsCopyright: tagsCopyright,
-            tagsGeneral: tagsGeneral,
-            tagsMeta: tagsMeta,
           ),
         );
       }
@@ -77,21 +72,21 @@ class DanbooruJsonParser extends BooruParser {
   @override
   bool canParseSuggestion(Response res) {
     final data = res.data;
+    final rawString = data.toString();
     return data is List &&
-        data.toString().contains('name') &&
-        data.toString().contains('post_count');
+        rawString.contains('name') &&
+        rawString.contains('count');
   }
 
   @override
   Set<String> parseSuggestion(Response res) {
     super.parseSuggestion(res);
-
     final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
-      final postCount = pick(entry, 'post_count').asIntOrNull() ?? 0;
-      if (postCount > 0) result.add(tag);
+      final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
+      if (postCount > 0 && tag.isNotEmpty) result.add(tag);
     }
 
     return result;

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/entity/pixel_size.dart';
-import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/widgets/permissions.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/imageprovider.dart';
@@ -36,8 +36,7 @@ class DownloaderDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final pageCookies =
-        ref.watch(pageDataProvider.select((value) => value.cookies));
+    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),

@@ -218,7 +218,7 @@ class _BackToHomeTile extends HookConsumerWidget {
         onTap: () {
           ref
               .read(pageOptionProvider.notifier)
-              .update((state) => const PageOption(clear: true));
+              .update((state) => state.copyWith(query: '', clear: true));
           ref.read(slidingDrawerController).close();
         },
       ),
@@ -257,10 +257,10 @@ class _ServerSelection extends HookConsumerWidget {
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
-              ref.read(serverActiveProvider.notifier).update(it);
               ref
                   .read(pageOptionProvider.notifier)
                   .update((state) => state.copyWith(clear: true));
+              ref.read(serverActiveProvider.notifier).update(it);
               ref.read(slidingDrawerController).close();
             },
           ),

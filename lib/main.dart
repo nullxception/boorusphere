@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/entity/download_entry.dart';
-import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';

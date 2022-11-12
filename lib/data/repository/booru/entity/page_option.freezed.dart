@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PageOption {
   String get query => throw _privateConstructorUsedError;
   bool get clear => throw _privateConstructorUsedError;
+  int get limit => throw _privateConstructorUsedError;
+  bool get safeMode => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PageOptionCopyWith<PageOption> get copyWith =>
@@ -30,7 +32,7 @@ abstract class $PageOptionCopyWith<$Res> {
           PageOption value, $Res Function(PageOption) then) =
       _$PageOptionCopyWithImpl<$Res, PageOption>;
   @useResult
-  $Res call({String query, bool clear});
+  $Res call({String query, bool clear, int limit, bool safeMode});
 }
 
 /// @nodoc
@@ -48,6 +50,8 @@ class _$PageOptionCopyWithImpl<$Res, $Val extends PageOption>
   $Res call({
     Object? query = null,
     Object? clear = null,
+    Object? limit = null,
+    Object? safeMode = null,
   }) {
     return _then(_value.copyWith(
       query: null == query
@@ -57,6 +61,14 @@ class _$PageOptionCopyWithImpl<$Res, $Val extends PageOption>
       clear: null == clear
           ? _value.clear
           : clear // ignore: cast_nullable_to_non_nullable
+              as bool,
+      limit: null == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int,
+      safeMode: null == safeMode
+          ? _value.safeMode
+          : safeMode // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -70,7 +82,7 @@ abstract class _$$_PageOptionCopyWith<$Res>
       __$$_PageOptionCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String query, bool clear});
+  $Res call({String query, bool clear, int limit, bool safeMode});
 }
 
 /// @nodoc
@@ -86,6 +98,8 @@ class __$$_PageOptionCopyWithImpl<$Res>
   $Res call({
     Object? query = null,
     Object? clear = null,
+    Object? limit = null,
+    Object? safeMode = null,
   }) {
     return _then(_$_PageOption(
       query: null == query
@@ -96,6 +110,14 @@ class __$$_PageOptionCopyWithImpl<$Res>
           ? _value.clear
           : clear // ignore: cast_nullable_to_non_nullable
               as bool,
+      limit: null == limit
+          ? _value.limit
+          : limit // ignore: cast_nullable_to_non_nullable
+              as int,
+      safeMode: null == safeMode
+          ? _value.safeMode
+          : safeMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -103,7 +125,12 @@ class __$$_PageOptionCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_PageOption extends _PageOption {
-  const _$_PageOption({this.query = '', this.clear = false}) : super._();
+  const _$_PageOption(
+      {this.query = '',
+      this.clear = false,
+      required this.limit,
+      required this.safeMode})
+      : super._();
 
   @override
   @JsonKey()
@@ -111,10 +138,14 @@ class _$_PageOption extends _PageOption {
   @override
   @JsonKey()
   final bool clear;
+  @override
+  final int limit;
+  @override
+  final bool safeMode;
 
   @override
   String toString() {
-    return 'PageOption(query: $query, clear: $clear)';
+    return 'PageOption(query: $query, clear: $clear, limit: $limit, safeMode: $safeMode)';
   }
 
   @override
@@ -123,11 +154,14 @@ class _$_PageOption extends _PageOption {
         (other.runtimeType == runtimeType &&
             other is _$_PageOption &&
             (identical(other.query, query) || other.query == query) &&
-            (identical(other.clear, clear) || other.clear == clear));
+            (identical(other.clear, clear) || other.clear == clear) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.safeMode, safeMode) ||
+                other.safeMode == safeMode));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, query, clear);
+  int get hashCode => Object.hash(runtimeType, query, clear, limit, safeMode);
 
   @JsonKey(ignore: true)
   @override
@@ -137,14 +171,21 @@ class _$_PageOption extends _PageOption {
 }
 
 abstract class _PageOption extends PageOption {
-  const factory _PageOption({final String query, final bool clear}) =
-      _$_PageOption;
+  const factory _PageOption(
+      {final String query,
+      final bool clear,
+      required final int limit,
+      required final bool safeMode}) = _$_PageOption;
   const _PageOption._() : super._();
 
   @override
   String get query;
   @override
   bool get clear;
+  @override
+  int get limit;
+  @override
+  bool get safeMode;
   @override
   @JsonKey(ignore: true)
   _$$_PageOptionCopyWith<_$_PageOption> get copyWith =>

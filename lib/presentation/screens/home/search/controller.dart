@@ -38,7 +38,7 @@ class SearchBarController extends ChangeNotifier {
     close();
     ref
         .read(pageOptionProvider.notifier)
-        .update((state) => PageOption(query: value, clear: true));
+        .update((state) => state.copyWith(query: value, clear: true));
   }
 
   void append(String value) {

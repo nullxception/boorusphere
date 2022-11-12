@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 
 abstract class FavoritePostRepo {

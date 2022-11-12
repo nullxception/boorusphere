@@ -1,5 +1,5 @@
-import 'package:boorusphere/data/entity/content.dart';
-import 'package:boorusphere/data/entity/pixel_size.dart';
+import 'package:boorusphere/data/repository/booru/entity/content.dart';
+import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 

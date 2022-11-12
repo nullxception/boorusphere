@@ -1,5 +1,5 @@
-import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/api/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';

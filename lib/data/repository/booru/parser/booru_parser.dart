@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';

@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -12,14 +12,14 @@ class TimelineStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageState = ref.watch(pageStateProvider);
+    final fetchPage = ref.watch(fetchPageProvider);
     final safeMode = ref.watch(safeModeProvider);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        pageState.maybeWhen(
+        fetchPage.maybeWhen(
           error: (error, stackTrace) => Center(
             child: NoticeCard(
               icon: const Icon(Icons.search),
@@ -39,13 +39,13 @@ class TimelineStatus extends ConsumerWidget {
                             ref
                                 .watch(safeModeProvider.notifier)
                                 .update(false)
-                                .then((_) => ref.refresh(pageStateProvider));
+                                .then((_) => ref.refresh(fetchPageProvider));
                           },
                           style: ElevatedButton.styleFrom(elevation: 0),
                           child: const Text('Disable safe mode'),
                         ),
                       ElevatedButton(
-                        onPressed: () => ref.refresh(pageStateProvider),
+                        onPressed: () => ref.refresh(fetchPageProvider),
                         style: ElevatedButton.styleFrom(elevation: 0),
                         child: const Text('Retry'),
                       ),
@@ -68,7 +68,7 @@ class TimelineStatus extends ConsumerWidget {
             height: 50,
             alignment: Alignment.topCenter,
             child: ElevatedButton(
-              onPressed: () => PageDataSource.loadMore(ref),
+              onPressed: () => PageUtil.loadMore(ref),
               child: const Text('Load more'),
             ),
           ),

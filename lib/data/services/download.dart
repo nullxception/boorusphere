@@ -6,7 +6,7 @@ import 'package:boorusphere/constant/app.dart';
 import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/entity/download_progress.dart';
 import 'package:boorusphere/data/entity/download_status.dart';
-import 'package:boorusphere/data/entity/post.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/utils/download.dart';

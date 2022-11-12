@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/setting/grid.dart';
 import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
@@ -109,8 +109,7 @@ class _Thumbnail extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(gridProvider);
     final blurExplicitPost = ref.watch(blurExplicitPostProvider);
-    final pageCookies =
-        ref.watch(pageDataProvider.select((value) => value.cookies));
+    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,

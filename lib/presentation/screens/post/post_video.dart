@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
 import 'package:boorusphere/presentation/provider/setting/video_player.dart';
@@ -21,8 +21,7 @@ final _videoCacheProvider = Provider((_) => DefaultCacheManager());
 final _fetcherProvider =
     Provider.family.autoDispose<CancelableOperation, Post>((ref, arg) {
   final cache = ref.watch(_videoCacheProvider);
-  final pageCookies =
-      ref.watch(pageDataProvider.select((value) => value.cookies));
+  final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
   final cancelable = CancelableOperation.fromFuture(cache.downloadFile(
     arg.content.url,
     authHeaders: {

@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/screens/home/search/search.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/status.dart';
@@ -13,18 +13,18 @@ class HomeContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final posts = ref.watch(pageDataProvider.select((it) => it.posts));
-    final pageState = ref.watch(pageStateProvider);
+    final posts = ref.watch(BooruPage.postsProvider);
+    final fetchPage = ref.watch(fetchPageProvider);
     final pageOption = ref.watch(pageOptionProvider);
     final controller = useTimelineController(
       posts: posts,
-      onLoadMore: () => PageDataSource.loadMore(ref),
+      onLoadMore: () => PageUtil.loadMore(ref),
     );
     final scrollController = controller.scrollController;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!scrollController.hasClients) return;
-      if (pageState.isError && scrollController.position.extentAfter < 300) {
+      if (fetchPage.isError && scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 250),
@@ -33,7 +33,7 @@ class HomeContent extends HookConsumerWidget {
       }
     });
 
-    final isNewSearch = !pageState.isData && pageOption.clear;
+    final isNewSearch = !fetchPage.isData && pageOption.clear;
 
     return Stack(
       alignment: Alignment.center,

@@ -1,9 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/page_option.dart';
-import 'package:boorusphere/data/entity/pixel_size.dart';
-import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -24,10 +23,8 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
-    final pageQuery =
-        ref.watch(pageOptionProvider.select((value) => value.query));
-    final pageCookies =
-        ref.watch(pageDataProvider.select((value) => value.cookies));
+    final pageQuery = ref.watch(pageOptionProvider.select((it) => it.query));
+    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -43,7 +40,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
       final newQuery = Set.from(tags).join(' ');
       if (newQuery.isEmpty) return;
       ref.read(pageOptionProvider.notifier).update((state) {
-        return PageOption(query: newQuery, clear: true);
+        return state.copyWith(query: newQuery, clear: true);
       });
       context.router.popUntilRoot();
     }

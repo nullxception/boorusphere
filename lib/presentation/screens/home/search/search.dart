@@ -1,6 +1,5 @@
-import 'package:boorusphere/data/entity/page_option.dart';
-import 'package:boorusphere/data/source/page.dart';
-import 'package:boorusphere/data/source/suggestion.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/booru/suggestion.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/setting/grid.dart';
 import 'package:boorusphere/presentation/provider/setting/server/active.dart';

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/entity/download_status.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/provider/setting/download/group_by_server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
@@ -55,8 +55,7 @@ class DownloadEntryView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
     final groupByServer = ref.watch(groupByServerProvider);
-    final pageCookies =
-        ref.watch(pageDataProvider.select((value) => value.cookies));
+    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
 
     final progress = downloader.getProgress(entry.id);
 

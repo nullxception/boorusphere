@@ -1,6 +1,6 @@
-import 'package:boorusphere/data/entity/post.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/extended_page_controller.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
@@ -75,9 +75,8 @@ class PostPage extends HookConsumerWidget {
     final page = useState(beginPage);
     final pageController = useExtendedPageController(initialPage: page.value);
     final displayOriginal = ref.watch(loadOriginalPostProvider);
-    final pageState = ref.watch(pageStateProvider);
-    final pageCookies =
-        ref.watch(pageDataProvider.select((value) => value.cookies));
+    final fetchPage = ref.watch(fetchPageProvider);
+    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
     final fullscreen = ref.watch(fullscreenProvider);
 
     final posts = controller.posts;
@@ -159,7 +158,7 @@ class PostPage extends HookConsumerWidget {
                   visible: !fullscreen,
                   child: _PostAppBar(
                     subtitle: post.tags.join(' '),
-                    title: pageState.isLoading
+                    title: fetchPage.isLoading
                         ? '#${page.value + 1} of (loading...)'
                         : '#${page.value + 1} of ${posts.length}',
                   ),

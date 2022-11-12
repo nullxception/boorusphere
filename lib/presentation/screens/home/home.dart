@@ -1,11 +1,9 @@
 import 'package:async/async.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/page_option.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/data/source/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
-
 import 'package:boorusphere/presentation/provider/setting/server/active.dart';
 import 'package:boorusphere/presentation/provider/setting/theme.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
