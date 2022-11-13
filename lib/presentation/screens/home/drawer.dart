@@ -1,8 +1,25 @@
-part of 'home.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
+import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/server.dart';
+import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/setting/theme.dart';
+import 'package:boorusphere/presentation/provider/version.dart';
+import 'package:boorusphere/presentation/routes/routes.dart';
+import 'package:boorusphere/presentation/screens/home/controller.dart';
+import 'package:boorusphere/presentation/widgets/favicon.dart';
+import 'package:boorusphere/presentation/widgets/prepare_update.dart';
+import 'package:boorusphere/utils/extensions/asyncvalue.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class _Drawer extends StatelessWidget {
-  const _Drawer({required this.maxWidth});
+class HomeDrawer extends StatelessWidget {
+  const HomeDrawer({super.key, required this.maxWidth});
+
   final double maxWidth;
+
   @override
   Widget build(BuildContext context) {
     return Material(

@@ -1,7 +1,18 @@
-part of 'search.dart';
+import 'package:boorusphere/presentation/provider/booru/suggestion.dart';
+import 'package:boorusphere/presentation/provider/search_history.dart';
+import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/setting/ui_blur.dart';
+import 'package:boorusphere/presentation/screens/home/search/controller.dart';
+import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
+import 'package:boorusphere/presentation/widgets/exception_info.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class _SearchSuggestion extends HookConsumerWidget {
-  const _SearchSuggestion();
+class SearchSuggestion extends HookConsumerWidget {
+  const SearchSuggestion({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

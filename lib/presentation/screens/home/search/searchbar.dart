@@ -1,7 +1,17 @@
-part of 'search.dart';
+import 'package:boorusphere/presentation/provider/setting/grid.dart';
+import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/setting/ui_blur.dart';
+import 'package:boorusphere/presentation/screens/home/controller.dart';
+import 'package:boorusphere/presentation/screens/home/search/controller.dart';
+import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
+import 'package:boorusphere/presentation/widgets/favicon.dart';
+import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class _SearchBar extends HookConsumerWidget {
-  const _SearchBar({required this.scrollController});
+class SearchBar extends HookConsumerWidget {
+  const SearchBar({super.key, required this.scrollController});
 
   final ScrollController scrollController;
 
@@ -14,7 +24,7 @@ class _SearchBar extends HookConsumerWidget {
 
     final onScrolling = useCallback(() {
       final position = scrollController.position;
-      final threshold = _SearchBar.innerHeight;
+      final threshold = SearchBar.innerHeight;
       if (delta.value.first > 0 &&
           position.viewportDimension > position.maxScrollExtent) {
         // reset back to default (!collapsed) because there's nothing to scroll
@@ -84,7 +94,7 @@ class _SearchBar extends HookConsumerWidget {
                   Expanded(
                     child: TextField(
                       autofocus: true,
-                      controller: searchBar._textController,
+                      controller: searchBar.textFieldController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: searchBar.hint,

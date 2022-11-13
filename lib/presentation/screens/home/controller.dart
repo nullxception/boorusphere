@@ -1,4 +1,5 @@
-part of 'home.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final slidingDrawerController = ChangeNotifierProvider((ref) {
   return SlidingDrawerController(ref);

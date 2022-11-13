@@ -1,26 +1,13 @@
 import 'package:async/async.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/repository/version/entity/app_version.dart';
-import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/presentation/provider/booru/page.dart';
-import 'package:boorusphere/presentation/provider/server.dart';
-import 'package:boorusphere/presentation/provider/setting/server/active.dart';
-import 'package:boorusphere/presentation/provider/setting/theme.dart';
-import 'package:boorusphere/presentation/provider/version.dart';
-import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/content.dart';
-import 'package:boorusphere/presentation/screens/home/search/search.dart';
-import 'package:boorusphere/presentation/widgets/favicon.dart';
-import 'package:boorusphere/presentation/widgets/prepare_update.dart';
+import 'package:boorusphere/presentation/screens/home/controller.dart';
+import 'package:boorusphere/presentation/screens/home/drawer.dart';
+import 'package:boorusphere/presentation/screens/home/search/controller.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
-import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-part 'controller.dart';
-part 'drawer.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
@@ -180,7 +167,7 @@ class _SlidableContainer extends HookConsumerWidget {
                       (1 - tween.value) * (maxDrawerWidth / 2), 0, 0)
                   ..translate(slide - maxDrawerWidth),
                 alignment: Alignment.centerLeft,
-                child: _Drawer(maxWidth: maxDrawerWidth),
+                child: HomeDrawer(maxWidth: maxDrawerWidth),
               ),
               Transform.translate(
                 offset: Offset(slide, 0),
