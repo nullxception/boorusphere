@@ -15,7 +15,8 @@ import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final pageProvider = StateNotifierProvider<BooruPage, int>((ref) {
-  final repo = ref.watch(booruRepoProvider);
+  final server = ref.watch(ServerSettingsProvider.active);
+  final repo = ref.watch(booruRepoProvider(server));
   return BooruPage(ref, repo);
 });
 

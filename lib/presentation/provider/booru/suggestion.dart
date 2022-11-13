@@ -10,7 +10,7 @@ final suggestionFuture = FutureProvider.autoDispose
   if (server == ServerData.empty) {
     return {};
   }
-  final repo = ref.watch(booruRepoProvider);
+  final repo = ref.watch(booruRepoProvider(server));
   final blockedTags = ref.watch(blockedTagsRepoProvider);
   final result = await repo.getSuggestion(query);
   return result.where((it) => !blockedTags.get().values.contains(it));
