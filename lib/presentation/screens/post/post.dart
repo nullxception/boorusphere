@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/extended_page_controller.dart';
+import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
@@ -27,28 +28,28 @@ class PostPage extends HookConsumerWidget {
   final TimelineController controller;
 
   void _precachePostImages(
+    WidgetRef ref,
     BuildContext context,
     List<Post> posts,
     int index,
-    String pageCookie,
     bool displayOriginal,
   ) {
     final next = index + 1;
     final prev = index - 1;
 
     if (prev >= 0) {
-      _precachePostImage(context, posts[prev], pageCookie, displayOriginal);
+      _precachePostImage(ref, context, posts[prev], displayOriginal);
     }
 
     if (next < posts.length) {
-      _precachePostImage(context, posts[next], pageCookie, displayOriginal);
+      _precachePostImage(ref, context, posts[next], displayOriginal);
     }
   }
 
   void _precachePostImage(
+    WidgetRef ref,
     BuildContext context,
     Post post,
-    String pageCookies,
     bool displayOriginal,
   ) {
     if (!post.content.isPhoto) return;
@@ -56,10 +57,7 @@ class PostPage extends HookConsumerWidget {
     precacheImage(
       ExtendedNetworkImageProvider(
         displayOriginal ? post.originalFile : post.content.url,
-        headers: {
-          'Referer': post.postUrl,
-          'Cookie': pageCookies,
-        },
+        headers: post.getHeaders(ref),
         // params below follows the default value on
         // the ExtendedImage.network() factory
         cache: true,
@@ -76,7 +74,6 @@ class PostPage extends HookConsumerWidget {
     final pageController = useExtendedPageController(initialPage: page.value);
     final displayOriginal = ref.watch(loadOriginalPostProvider);
     final fetchPage = ref.watch(fetchPageProvider);
-    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
     final fullscreen = ref.watch(fullscreenProvider);
 
     final posts = controller.posts;
@@ -115,7 +112,7 @@ class PostPage extends HookConsumerWidget {
                   itemCount: totalPost,
                   itemBuilder: (_, index) {
                     _precachePostImages(
-                        context, posts, index, pageCookies, displayOriginal);
+                        ref, context, posts, index, displayOriginal);
 
                     final post = posts[index];
                     final Widget widget;

@@ -13,7 +13,6 @@ import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
 import 'package:boorusphere/presentation/provider/setting/server/post_limit.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final pageProvider = StateNotifierProvider<BooruPage, int>((ref) {
@@ -115,11 +114,5 @@ class PageUtil {
     ref
         .read(pageOptionProvider.notifier)
         .update((it) => it.copyWith(clear: false));
-  }
-}
-
-extension CookiesExt on List<Cookie> {
-  String asString() {
-    return CookieManager.getCookies(this);
   }
 }

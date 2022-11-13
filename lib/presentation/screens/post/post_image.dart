@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
 import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
@@ -29,7 +29,6 @@ class PostImageDisplay extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final blurExplicit = ref.watch(blurExplicitPostProvider);
     final displayOriginal = ref.watch(loadOriginalPostProvider);
-    final pageCookies = ref.watch(BooruPage.cookieProvider).asString();
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -77,10 +76,7 @@ class PostImageDisplay extends HookConsumerWidget {
           else
             ExtendedImage.network(
               displayOriginal ? post.originalFile : post.content.url,
-              headers: {
-                'Referer': post.postUrl,
-                'Cookie': pageCookies,
-              },
+              headers: post.getHeaders(ref),
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
               initGestureConfigHandler: (state) =>
