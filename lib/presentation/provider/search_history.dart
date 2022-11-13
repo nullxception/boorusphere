@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
-import 'package:boorusphere/domain/provider/search_history.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/search_history_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';

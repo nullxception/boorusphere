@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
-import 'package:boorusphere/domain/provider/setting.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
 import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
 import 'package:boorusphere/presentation/provider/settings/content/video_player.dart';

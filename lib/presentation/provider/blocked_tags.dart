@@ -1,4 +1,4 @@
-import 'package:boorusphere/domain/provider/blocked_tags.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

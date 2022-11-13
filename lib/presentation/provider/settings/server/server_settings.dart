@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
-import 'package:boorusphere/domain/provider/setting.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
 import 'package:boorusphere/presentation/provider/settings/server/post_limit.dart';
 import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';

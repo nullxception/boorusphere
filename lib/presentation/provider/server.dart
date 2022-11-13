@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/provider/server.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/server_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';

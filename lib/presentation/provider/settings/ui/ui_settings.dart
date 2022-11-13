@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
-import 'package:boorusphere/domain/provider/setting.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/blur.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/grid.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';

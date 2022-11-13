@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart';
-import 'package:boorusphere/domain/provider/changelog.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/changelog_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

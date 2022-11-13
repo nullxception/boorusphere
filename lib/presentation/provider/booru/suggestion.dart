@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/provider/blocked_tags.dart';
-import 'package:boorusphere/domain/provider/booru.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

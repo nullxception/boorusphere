@@ -1,4 +1,4 @@
-import 'package:boorusphere/domain/provider/version.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final versionCurrentProvider = FutureProvider((ref) {
