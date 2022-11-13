@@ -47,7 +47,7 @@ class BooruRepoImpl implements BooruRepo {
     try {
       return parser.firstWhere((it) => it.canParsePage(res)).parsePage(res);
     } on StateError {
-      throw const SphereException(message: 'Cannot parse result');
+      throw SphereException(message: 'Cannot parse result');
     }
   }
 

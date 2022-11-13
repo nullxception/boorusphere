@@ -128,8 +128,8 @@ class _$_PageOption extends _PageOption {
   const _$_PageOption(
       {this.query = '',
       this.clear = false,
-      required this.limit,
-      required this.safeMode})
+      this.limit = ServerPostLimitState.defaultLimit,
+      this.safeMode = true})
       : super._();
 
   @override
@@ -139,8 +139,10 @@ class _$_PageOption extends _PageOption {
   @JsonKey()
   final bool clear;
   @override
+  @JsonKey()
   final int limit;
   @override
+  @JsonKey()
   final bool safeMode;
 
   @override
@@ -174,8 +176,8 @@ abstract class _PageOption extends PageOption {
   const factory _PageOption(
       {final String query,
       final bool clear,
-      required final int limit,
-      required final bool safeMode}) = _$_PageOption;
+      final int limit,
+      final bool safeMode}) = _$_PageOption;
   const _PageOption._() : super._();
 
   @override

@@ -1,11 +1,12 @@
-import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/page_state.dart';
+import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/screens/home/search/search.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/status.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
-import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeContent extends HookConsumerWidget {
@@ -13,18 +14,17 @@ class HomeContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final posts = ref.watch(BooruPage.posts);
-    final fetchPage = ref.watch(fetchPageProvider);
-    final pageOption = ref.watch(pageOptionProvider);
+    final pageState = ref.watch(pageStateProvider);
     final controller = useTimelineController(
-      posts: posts,
-      onLoadMore: () => PageUtil.loadMore(ref),
+      posts: pageState.data.posts,
+      onLoadMore: () => ref.read(pageStateProvider.notifier).loadMore(),
     );
     final scrollController = controller.scrollController;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!scrollController.hasClients) return;
-      if (fetchPage.isError && scrollController.position.extentAfter < 300) {
+      if (pageState is ErrorPageState &&
+          scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 250),
@@ -33,8 +33,15 @@ class HomeContent extends HookConsumerWidget {
       }
     });
 
-    final isNewSearch = !fetchPage.isData && pageOption.clear;
-
+    final isNewSearch =
+        pageState is! DataPageState && pageState.data.option.clear;
+    useEffect(() {
+      Future(
+        () {
+          ref.read(pageStateProvider.notifier).load();
+        },
+      );
+    }, []);
     return Stack(
       alignment: Alignment.center,
       children: [

@@ -1,4 +1,6 @@
-import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'dart:async';
+
+import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -12,40 +14,42 @@ class TimelineStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fetchPage = ref.watch(fetchPageProvider);
+    final pageState = ref.watch(pageStateProvider);
     final safeMode = ref.watch(ServerSettingsProvider.safeMode);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        fetchPage.maybeWhen(
-          error: (error, stackTrace) => Center(
+        pageState.when(
+          error: (data, err, trace) => Center(
             child: NoticeCard(
               icon: const Icon(Icons.search),
               margin: const EdgeInsets.all(16),
               children: Column(
                 children: [
                   ExceptionInfo(
-                    err: error,
-                    stackTrace: stackTrace,
+                    err: err,
+                    stackTrace: trace,
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (safeMode)
                         ElevatedButton(
-                          onPressed: () {
-                            ref
+                          onPressed: () async {
+                            await ref
                                 .watch(ServerSettingsProvider.safeMode.notifier)
-                                .update(false)
-                                .then((_) => ref.refresh(fetchPageProvider));
+                                .update(false);
+                            unawaited(
+                                ref.read(pageStateProvider.notifier).load());
                           },
                           style: ElevatedButton.styleFrom(elevation: 0),
                           child: const Text('Disable safe mode'),
                         ),
                       ElevatedButton(
-                        onPressed: () => ref.refresh(fetchPageProvider),
+                        onPressed: () =>
+                            ref.read(pageStateProvider.notifier).load(),
                         style: ElevatedButton.styleFrom(elevation: 0),
                         child: const Text('Retry'),
                       ),
@@ -55,7 +59,7 @@ class TimelineStatus extends ConsumerWidget {
               ),
             ),
           ),
-          loading: () => Container(
+          loading: (data) => Container(
             height: 50,
             alignment: Alignment.topCenter,
             child: SpinKitFoldingCube(
@@ -64,11 +68,11 @@ class TimelineStatus extends ConsumerWidget {
               duration: const Duration(seconds: 1),
             ),
           ),
-          orElse: () => Container(
+          data: (data) => Container(
             height: 50,
             alignment: Alignment.topCenter,
             child: ElevatedButton(
-              onPressed: () => PageUtil.loadMore(ref),
+              onPressed: () => ref.read(pageStateProvider.notifier).loadMore(),
               child: const Text('Load more'),
             ),
           ),

@@ -15,7 +15,7 @@ TimelineController useTimelineController({
       heroKeyBuilder: heroKeyBuilder,
       onLoadMore: onLoadMore,
     ),
-    keys,
+    [posts.hashCode, ...keys],
   );
 }
 

@@ -23,7 +23,7 @@ class SafebooruXmlParser extends BooruParser {
   @override
   List<Post> parsePage(res) {
     super.parsePage(res);
-    const cantParse = SphereException(message: 'Cannot parse result');
+    final cantParse = SphereException(message: 'Cannot parse result');
 
     final entries = [];
     final xjson = Xml2Json();

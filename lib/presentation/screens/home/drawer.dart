@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
-import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
@@ -225,7 +225,7 @@ class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageQuery =
-        ref.watch(pageOptionProvider.select((value) => value.query));
+        ref.watch(pageStateProvider.select((it) => it.data.option.query));
 
     return Visibility(
       visible: pageQuery.isNotEmpty,
@@ -234,7 +234,7 @@ class _BackToHomeTile extends HookConsumerWidget {
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref
-              .read(pageOptionProvider.notifier)
+              .read(pageStateProvider.notifier)
               .update((state) => state.copyWith(query: '', clear: true));
           ref.read(slidingDrawerController).close();
         },
@@ -274,10 +274,10 @@ class _ServerSelection extends HookConsumerWidget {
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
-              ref
-                  .read(pageOptionProvider.notifier)
-                  .update((state) => state.copyWith(clear: true));
               ref.read(ServerSettingsProvider.active.notifier).update(it);
+              ref
+                  .read(pageStateProvider.notifier)
+                  .update((state) => state.copyWith(clear: true));
               ref.read(slidingDrawerController).close();
             },
           ),

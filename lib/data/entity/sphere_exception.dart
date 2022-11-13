@@ -1,5 +1,5 @@
-class SphereException {
-  const SphereException({required this.message});
+class SphereException implements Exception {
+  SphereException({required this.message});
   final String message;
 
   @override

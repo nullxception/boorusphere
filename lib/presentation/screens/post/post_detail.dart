@@ -3,7 +3,7 @@ import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -24,7 +24,8 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
-    final pageQuery = ref.watch(pageOptionProvider.select((it) => it.query));
+    final pageQuery =
+        ref.watch(pageStateProvider.select((it) => it.data.option.query));
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -39,7 +40,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     updateSearch(Iterable<String> tags) {
       final newQuery = Set.from(tags).join(' ');
       if (newQuery.isEmpty) return;
-      ref.read(pageOptionProvider.notifier).update((state) {
+      ref.read(pageStateProvider.notifier).update((state) {
         return state.copyWith(query: newQuery, clear: true);
       });
       context.router.popUntilRoot();

@@ -1,11 +1,12 @@
-import 'package:boorusphere/presentation/provider/booru/page.dart';
+import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final searchBarController = ChangeNotifierProvider((ref) {
-  final pageQuery = ref.watch(pageOptionProvider.select((it) => it.query));
+  final pageQuery =
+      ref.read(pageStateProvider.select((it) => it.data.option.query));
   return SearchBarController(ref, pageQuery);
 });
 
@@ -41,7 +42,7 @@ class SearchBarController extends ChangeNotifier {
     text = value;
     close();
     ref
-        .read(pageOptionProvider.notifier)
+        .read(pageStateProvider.notifier)
         .update((state) => state.copyWith(query: value, clear: true));
   }
 
