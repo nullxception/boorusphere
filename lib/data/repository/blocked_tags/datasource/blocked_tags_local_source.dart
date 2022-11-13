@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class BlockedTagsLocalSource {
   BlockedTagsLocalSource(this.box);
 
-  final Box box;
+  final Box<String> box;
 
   Map<int, String> get() {
     return Map.from(box.toMap());
@@ -23,4 +23,5 @@ class BlockedTagsLocalSource {
   }
 
   static String key = 'blockedTags';
+  static Future<void> prepare() => Hive.openBox<String>(key);
 }

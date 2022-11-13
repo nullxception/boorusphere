@@ -7,10 +7,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 class ServerLocalSource {
   ServerLocalSource({required this.assetBundle, required this.box});
   final AssetBundle assetBundle;
-  final Box box;
+  final Box<ServerData> box;
 
-  List<ServerData> get servers =>
-      box.values.map((it) => it as ServerData).toList();
+  List<ServerData> get servers => box.values.map((it) => it).toList();
 
   Future<void> _migrateKeys() async {
     final mapped = Map<String, ServerData>.from(box.toMap());
@@ -72,4 +71,5 @@ class ServerLocalSource {
   }
 
   static const String key = 'server';
+  static Future<void> prepare() => Hive.openBox<ServerData>(key);
 }

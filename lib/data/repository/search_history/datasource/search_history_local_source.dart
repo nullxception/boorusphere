@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class SearchHistoryLocalSource {
   SearchHistoryLocalSource(this.box);
-  final Box box;
+  final Box<SearchHistory> box;
 
   Map<int, SearchHistory> get() => Map.from(box.toMap());
 
@@ -23,4 +23,5 @@ class SearchHistoryLocalSource {
   Future<void> clear() => box.clear();
 
   static const String key = 'searchHistory';
+  static Future<void> prepare() => Hive.openBox<SearchHistory>(key);
 }

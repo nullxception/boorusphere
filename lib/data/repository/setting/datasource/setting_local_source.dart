@@ -1,3 +1,4 @@
+import 'package:boorusphere/data/repository/setting/migrator/setting_migrator.dart';
 import 'package:hive/hive.dart';
 
 class SettingLocalSource {
@@ -10,4 +11,8 @@ class SettingLocalSource {
   Future<void> put<T>(String name, T value) => box.put(name, value);
 
   static String key = 'settings';
+  static Future<void> prepare() async {
+    await Hive.openBox(key);
+    await migrateSetting();
+  }
 }

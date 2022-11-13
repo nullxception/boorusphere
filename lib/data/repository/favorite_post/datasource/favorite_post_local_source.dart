@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class FavoritePostLocalSource {
   FavoritePostLocalSource(this.box);
 
-  final Box box;
+  final Box<FavoritePost> box;
 
   Map<String, FavoritePost> get() {
     return Map.from(box.toMap());
@@ -30,4 +30,5 @@ class FavoritePostLocalSource {
   }
 
   static const String key = 'favorites';
+  static Future<void> prepare() => Hive.openBox<FavoritePost>(key);
 }

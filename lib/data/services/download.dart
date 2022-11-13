@@ -46,7 +46,7 @@ class DownloadService extends ChangeNotifier {
   final progresses = <DownloadProgress>{};
   var _initialized = false;
 
-  Box get _box => Hive.box('downloads');
+  Box<DownloadEntry> get _box => Hive.box<DownloadEntry>(key);
 
   void _registerIsolateCallback() {
     IsolateNameServer.registerPortWithName(_dlPort.sendPort, _dlPortName);
@@ -93,7 +93,7 @@ class DownloadService extends ChangeNotifier {
               ))
           .toList());
       if (_box.values.isNotEmpty) {
-        entries.addAll(_box.values.cast<DownloadEntry>());
+        entries.addAll(_box.values);
       }
       notifyListeners();
     }
@@ -285,5 +285,11 @@ class DownloadService extends ChangeNotifier {
         break;
     }
     notifyListeners();
+  }
+
+  static const String key = 'downloads';
+  static Future<void> prepare() async {
+    await Hive.openBox<DownloadEntry>(key);
+    await FlutterDownloader.initialize();
   }
 }
