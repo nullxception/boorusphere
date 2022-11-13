@@ -13,7 +13,7 @@ class HomeContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final posts = ref.watch(BooruPage.postsProvider);
+    final posts = ref.watch(BooruPage.posts);
     final fetchPage = ref.watch(fetchPageProvider);
     final pageOption = ref.watch(pageOptionProvider);
     final controller = useTimelineController(

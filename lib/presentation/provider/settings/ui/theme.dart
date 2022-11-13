@@ -1,22 +1,7 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
-import 'package:boorusphere/domain/provider/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final themeModeProvider =
-    StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
-  final repo = ref.watch(settingRepoProvider);
-  final saved = repo.get(Setting.uiThemeMode, or: ThemeMode.system.index);
-  return ThemeModeState(ThemeMode.values[saved], repo);
-});
-
-final darkerThemeProvider =
-    StateNotifierProvider<DarkerThemeState, bool>((ref) {
-  final repo = ref.watch(settingRepoProvider);
-  final saved = repo.get(Setting.uiMidnightMode, or: false);
-  return DarkerThemeState(saved, repo);
-});
 
 class ThemeModeState extends StateNotifier<ThemeMode> {
   ThemeModeState(super.state, this.repo);

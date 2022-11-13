@@ -3,8 +3,8 @@ import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/provider/booru/page.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
-import 'package:boorusphere/presentation/provider/setting/server/active.dart';
-import 'package:boorusphere/presentation/provider/setting/theme.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
@@ -156,11 +156,11 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(UiSettingsProvider.theme);
 
     return IconButton(
       icon: Icon(themeIconOf(themeMode)),
-      onPressed: ref.read(themeModeProvider.notifier).cycle,
+      onPressed: ref.read(UiSettingsProvider.theme.notifier).cycle,
     );
   }
 }
@@ -249,7 +249,7 @@ class _ServerSelection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverStateProvider);
-    final serverActive = ref.watch(serverActiveProvider);
+    final serverActive = ref.watch(ServerSettingsProvider.active);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +277,7 @@ class _ServerSelection extends HookConsumerWidget {
               ref
                   .read(pageOptionProvider.notifier)
                   .update((state) => state.copyWith(clear: true));
-              ref.read(serverActiveProvider.notifier).update(it);
+              ref.read(ServerSettingsProvider.active.notifier).update(it);
               ref.read(slidingDrawerController).close();
             },
           ),

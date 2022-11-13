@@ -1,7 +1,8 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider/server.dart';
 import 'package:boorusphere/domain/repository/server_repo.dart';
-import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final serverStateProvider =
@@ -26,10 +27,10 @@ class ServerState extends StateNotifier<List<ServerData>> {
 
   Set<ServerData> get all => {...repo.defaults.values, ...state};
 
-  ServerData get active => ref.read(serverActiveProvider);
+  ServerData get active => ref.read(ServerSettingsProvider.active);
 
   ServerActiveState get activeNotifier =>
-      ref.read(serverActiveProvider.notifier);
+      ref.read(ServerSettingsProvider.active.notifier);
 
   Future<void> _populate() async {
     await repo.populate();

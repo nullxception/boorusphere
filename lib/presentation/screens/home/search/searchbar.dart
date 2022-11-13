@@ -1,6 +1,5 @@
-import 'package:boorusphere/presentation/provider/setting/grid.dart';
-import 'package:boorusphere/presentation/provider/setting/server/active.dart';
-import 'package:boorusphere/presentation/provider/setting/ui_blur.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
 import 'package:boorusphere/presentation/screens/home/search/controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
@@ -20,7 +19,7 @@ class SearchBar extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarController);
     final delta = useState([0.0, 0.0]);
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
-    final isBlurAllowed = ref.watch(uiBlurProvider);
+    final isBlurAllowed = ref.watch(UiSettingsProvider.blur);
 
     final onScrolling = useCallback(() {
       final position = scrollController.position;
@@ -182,7 +181,7 @@ class _LeadingButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverActive = ref.watch(serverActiveProvider);
+    final serverActive = ref.watch(ServerSettingsProvider.active);
     final searchBar = ref.watch(searchBarController);
 
     return _CollapsibleButton(
@@ -233,7 +232,7 @@ class _TrailingButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = context.iconTheme.size ?? 24;
-    final grid = ref.watch(gridProvider);
+    final grid = ref.watch(UiSettingsProvider.grid);
 
     backToTop() {
       scrollController?.animateTo(0,
@@ -242,7 +241,9 @@ class _TrailingButton extends ConsumerWidget {
     }
 
     return _CollapsibleButton(
-      onTap: collapsed ? backToTop : ref.read(gridProvider.notifier).cycle,
+      onTap: collapsed
+          ? backToTop
+          : ref.read(UiSettingsProvider.grid.notifier).cycle,
       collapsed: collapsed,
       child: SizedBox(
         width: size,

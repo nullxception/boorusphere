@@ -1,5 +1,5 @@
 import 'package:boorusphere/presentation/provider/booru/page.dart';
-import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -13,7 +13,7 @@ class TimelineStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final fetchPage = ref.watch(fetchPageProvider);
-    final safeMode = ref.watch(safeModeProvider);
+    final safeMode = ref.watch(ServerSettingsProvider.safeMode);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +37,7 @@ class TimelineStatus extends ConsumerWidget {
                         ElevatedButton(
                           onPressed: () {
                             ref
-                                .watch(safeModeProvider.notifier)
+                                .watch(ServerSettingsProvider.safeMode.notifier)
                                 .update(false)
                                 .then((_) => ref.refresh(fetchPageProvider));
                           },

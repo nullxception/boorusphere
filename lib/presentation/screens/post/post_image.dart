@@ -1,8 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
+import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
@@ -27,8 +26,8 @@ class PostImageDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blurExplicit = ref.watch(blurExplicitPostProvider);
-    final displayOriginal = ref.watch(loadOriginalPostProvider);
+    final blurExplicit = ref.watch(ContentSettingsProvider.blurExplicit);
+    final displayOriginal = ref.watch(ContentSettingsProvider.loadOriginal);
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));

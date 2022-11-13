@@ -1,10 +1,7 @@
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
-import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/setting/post/load_original.dart';
-import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
-import 'package:boorusphere/presentation/provider/setting/server/post_limit.dart';
-import 'package:boorusphere/presentation/provider/setting/theme.dart';
-import 'package:boorusphere/presentation/provider/setting/ui_blur.dart';
+import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
@@ -73,9 +70,11 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text('Use deeper dark color for the dark mode'),
               ),
-              value: ref.watch(darkerThemeProvider),
+              value: ref.watch(UiSettingsProvider.darkerTheme),
               onChanged: (value) {
-                ref.watch(darkerThemeProvider.notifier).update(value);
+                ref
+                    .watch(UiSettingsProvider.darkerTheme.notifier)
+                    .update(value);
               },
             ),
             SwitchListTile(
@@ -84,9 +83,9 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text('Enable blur background on various UI elements'),
               ),
-              value: ref.watch(uiBlurProvider),
+              value: ref.watch(UiSettingsProvider.blur),
               onChanged: (value) {
-                ref.watch(uiBlurProvider.notifier).enable(value);
+                ref.watch(UiSettingsProvider.blur.notifier).enable(value);
               },
             ),
           ],
@@ -100,9 +99,11 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text('Content rated as explicit will be blurred'),
               ),
-              value: ref.watch(blurExplicitPostProvider),
+              value: ref.watch(ContentSettingsProvider.blurExplicit),
               onChanged: (value) {
-                ref.watch(blurExplicitPostProvider.notifier).update(value);
+                ref
+                    .watch(ContentSettingsProvider.blurExplicit.notifier)
+                    .update(value);
               },
             ),
             SwitchListTile(
@@ -112,9 +113,11 @@ class _SettingsContent extends HookConsumerWidget {
                 child: Text(
                     'Only fetch content that rated as safe. Note that rated as safe doesn\'t guarantee "safe for work"'),
               ),
-              value: ref.watch(safeModeProvider),
+              value: ref.watch(ServerSettingsProvider.safeMode),
               onChanged: (value) {
-                ref.watch(safeModeProvider.notifier).update(value);
+                ref
+                    .watch(ServerSettingsProvider.safeMode.notifier)
+                    .update(value);
               },
             ),
           ],
@@ -129,9 +132,11 @@ class _SettingsContent extends HookConsumerWidget {
                 child: Text(
                     'Load original file instead of the sample when opening the post'),
               ),
-              value: ref.watch(loadOriginalPostProvider),
+              value: ref.watch(ContentSettingsProvider.loadOriginal),
               onChanged: (value) {
-                ref.watch(loadOriginalPostProvider.notifier).update(value);
+                ref
+                    .watch(ContentSettingsProvider.loadOriginal.notifier)
+                    .update(value);
               },
             ),
             ListTile(
@@ -143,7 +148,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               trailing: DropdownButton(
                 menuMaxHeight: 178,
-                value: ref.watch(serverPostLimitProvider),
+                value: ref.watch(ServerSettingsProvider.postLimit),
                 elevation: 1,
                 underline: const SizedBox.shrink(),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -159,7 +164,7 @@ class _SettingsContent extends HookConsumerWidget {
                 ),
                 onChanged: (value) {
                   ref
-                      .watch(serverPostLimitProvider.notifier)
+                      .watch(ServerSettingsProvider.postLimit.notifier)
                       .update(value as int);
                 },
               ),

@@ -10,8 +10,7 @@ import 'package:boorusphere/domain/provider/blocked_tags.dart';
 import 'package:boorusphere/domain/provider/booru.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
-import 'package:boorusphere/presentation/provider/setting/safe_mode.dart';
-import 'package:boorusphere/presentation/provider/setting/server/post_limit.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,15 +22,15 @@ final pageProvider = StateNotifierProvider<BooruPage, int>((ref) {
 final pageOptionProvider = StateProvider(
   (ref) => PageOption(
     clear: true,
-    limit: ref.read(serverPostLimitProvider),
-    safeMode: ref.read(safeModeProvider),
+    limit: ref.read(ServerSettingsProvider.postLimit),
+    safeMode: ref.read(ServerSettingsProvider.safeMode),
   ),
 );
 
 final fetchPageProvider = FutureProvider((ref) {
   final pageOption = ref.watch(pageOptionProvider);
-  final limit = ref.watch(serverPostLimitProvider);
-  final safeMode = ref.watch(safeModeProvider);
+  final limit = ref.watch(ServerSettingsProvider.postLimit);
+  final safeMode = ref.watch(ServerSettingsProvider.safeMode);
   final option = pageOption.copyWith(limit: limit, safeMode: safeMode);
   final pageNotifier = ref.watch(pageProvider.notifier);
   final blockedTags = ref.read(
@@ -57,7 +56,7 @@ class BooruPage extends StateNotifier<int> {
     PageOption option,
     Iterable<String> blockedTags,
   ) async {
-    final data = ref.read(postsProvider);
+    final data = ref.read(posts);
     if (repo.server == ServerData.empty) return;
 
     if (option.clear) data.clear();
@@ -94,7 +93,7 @@ class BooruPage extends StateNotifier<int> {
         await ref.read(cookieJarProvider).loadForRequest(page.src.asUri);
 
     if (cookies.isNotEmpty) {
-      ref.read(cookieProvider)
+      ref.read(cookie)
         ..clear()
         ..addAll(cookies);
     }
@@ -103,8 +102,8 @@ class BooruPage extends StateNotifier<int> {
     _skipCount = 0;
   }
 
-  static final postsProvider = Provider((ref) => <Post>[]);
-  static final cookieProvider = Provider((ref) => <Cookie>[]);
+  static final posts = Provider((ref) => <Post>[]);
+  static final cookie = Provider((ref) => <Cookie>[]);
 }
 
 class PageUtil {

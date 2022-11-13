@@ -1,5 +1,5 @@
 import 'package:boorusphere/presentation/provider/booru/page.dart';
-import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +21,7 @@ class SearchBarController extends ChangeNotifier {
   bool get isTextChanged => _textController.value.text != initialText;
   TextEditingController get textFieldController => _textController;
   String get hint {
-    final serverActive = ref.watch(serverActiveProvider);
+    final serverActive = ref.watch(ServerSettingsProvider.active);
     return _textController.text.isEmpty
         ? 'Search on ${serverActive.name}...'
         : _textController.text;

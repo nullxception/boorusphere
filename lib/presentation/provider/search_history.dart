@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/domain/provider/search_history.dart';
 import 'package:boorusphere/domain/repository/search_history_repo.dart';
-import 'package:boorusphere/presentation/provider/setting/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -38,7 +38,7 @@ class SearchHistoryState extends StateNotifier<Map<int, SearchHistory>> {
   final SearchHistoryRepo repo;
 
   Future<void> save(String value) async {
-    final serverActive = ref.read(serverActiveProvider);
+    final serverActive = ref.read(ServerSettingsProvider.active);
     await repo.save(value.trim(), serverActive.id);
     state = repo.all;
   }

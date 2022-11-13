@@ -5,8 +5,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/setting/video_player.dart';
+import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -81,7 +80,7 @@ class PostVideoDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController = ref.watch(_playerControllerProvider(post));
-    final blurExplicit = ref.watch(blurExplicitPostProvider);
+    final blurExplicit = ref.watch(ContentSettingsProvider.blurExplicit);
     final isMounted = useIsMounted();
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
 
@@ -190,10 +189,10 @@ class _Toolbox extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = controllerAsync?.asData?.value;
-    final isMuted = ref.watch(videoPlayerMuteProvider);
+    final isMuted = ref.watch(ContentSettingsProvider.mute);
     final fullscreen = ref.watch(fullscreenProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
-    final playerMute = ref.watch(videoPlayerMuteProvider);
+    final playerMute = ref.watch(ContentSettingsProvider.mute);
     final isPlaying = ref.watch(_playerPlayState);
     final isMounted = useIsMounted();
     final showToolbox = useState(true);
@@ -275,7 +274,7 @@ class _Toolbox extends HookConsumerWidget {
                               color: Colors.white,
                               onPressed: () async {
                                 final mute = await ref
-                                    .read(videoPlayerMuteProvider.notifier)
+                                    .read(ContentSettingsProvider.mute.notifier)
                                     .toggle();
                                 await controller?.setVolume(mute ? 0 : 1);
                               },

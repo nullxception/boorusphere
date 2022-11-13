@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/setting/grid.dart';
-import 'package:boorusphere/presentation/provider/setting/post/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -26,7 +26,7 @@ class Timeline extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridExtra = ref.watch(gridProvider);
+    final gridExtra = ref.watch(UiSettingsProvider.grid);
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
     final scrollController = controller.scrollController;
@@ -107,8 +107,8 @@ class _Thumbnail extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridExtra = ref.watch(gridProvider);
-    final blurExplicitPost = ref.watch(blurExplicitPostProvider);
+    final gridExtra = ref.watch(UiSettingsProvider.grid);
+    final blurExplicitPost = ref.watch(ContentSettingsProvider.blurExplicit);
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,
