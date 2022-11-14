@@ -5,6 +5,7 @@ import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
@@ -64,7 +65,7 @@ class AboutPage extends HookConsumerWidget {
                         onPressed: () => ref.refresh(versionLatestProvider),
                         style: ElevatedButton.styleFrom(elevation: 0),
                         icon: const Icon(Icons.done),
-                        label: const Text('You\'re on latest version'),
+                        label: Text(t.updater.onLatest),
                       ),
                 loading: () => ElevatedButton.icon(
                   onPressed: null,
@@ -75,18 +76,18 @@ class AboutPage extends HookConsumerWidget {
                     padding: const EdgeInsets.all(2.0),
                     child: const CircularProgressIndicator(),
                   ),
-                  label: const Text('Checking for update...'),
+                  label: Text(t.updater.checking),
                 ),
                 error: (e, s) => ElevatedButton.icon(
                   onPressed: () => ref.refresh(versionLatestProvider),
                   style: ElevatedButton.styleFrom(elevation: 0),
                   icon: const Icon(Icons.update),
-                  label: const Text('Check for update'),
+                  label: Text(t.updater.check),
                 ),
               ),
               const Divider(height: 32),
               ListTile(
-                title: const Text('Changelog'),
+                title: Text(t.changelog.title),
                 leading: const Icon(Icons.list_alt_rounded),
                 onTap: () {
                   context.router.push(
@@ -97,13 +98,13 @@ class AboutPage extends HookConsumerWidget {
                 },
               ),
               ListTile(
-                title: const Text('GitHub'),
+                title: Text(t.github),
                 leading: const FaIcon(FontAwesomeIcons.github),
                 onTap: () => launchUrlString(VersionNetworkSource.gitUrl,
                     mode: LaunchMode.externalApplication),
               ),
               ListTile(
-                title: const Text('Open source licenses'),
+                title: Text(t.ossLicense),
                 leading: const Icon(Icons.collections_bookmark),
                 onTap: () => context.router.push(const LicensesRoute()),
               ),
@@ -124,9 +125,9 @@ class _Updater extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(8),
-          child: Text('New update is available'),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(t.updater.onNewVersion),
         ),
         _Downloader(version: data),
         ElevatedButton(
@@ -141,7 +142,7 @@ class _Updater extends HookConsumerWidget {
             );
           },
           style: ElevatedButton.styleFrom(elevation: 0),
-          child: const Text('View changes'),
+          child: Text(t.changelog.view),
         ),
       ],
     );
@@ -172,7 +173,7 @@ class _Downloader extends HookConsumerWidget {
                   .updater(action: UpdaterAction.start, version: version);
             },
             style: ElevatedButton.styleFrom(elevation: 0),
-            child: Text('Download v$version'),
+            child: Text(t.updater.download(version: version)),
           ),
         if (updater.status.isDownloading) ...[
           const SizedBox(width: 16),
@@ -226,7 +227,7 @@ class _Downloader extends HookConsumerWidget {
             onPressed: () {
               UpdatePrepareDialog.show(context);
             },
-            child: const Text('Install update'),
+            child: Text(t.updater.install),
           ),
       ],
     );

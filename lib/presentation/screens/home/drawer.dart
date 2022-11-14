@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
@@ -88,27 +89,27 @@ class _Footer extends StatelessWidget {
       children: [
         _BackToHomeTile(),
         ListTile(
-          title: const Text('Downloads'),
+          title: Text(t.downloader.title),
           leading: const Icon(Icons.cloud_download),
           onTap: () => context.router.push(const DownloadsRoute()),
         ),
         ListTile(
-          title: const Text('Favorites'),
+          title: Text(t.favorites.title),
           leading: const Icon(Icons.favorite_border),
           onTap: () => context.router.push(const FavoritesRoute()),
         ),
         ListTile(
-          title: const Text('Server'),
+          title: Text(t.servers.title),
           leading: const Icon(Icons.public),
           onTap: () => context.router.push(const ServerRoute()),
         ),
         ListTile(
-          title: const Text('Tags Blocker'),
+          title: Text(t.tagsBlocker.title),
           leading: const Icon(Icons.block),
           onTap: () => context.router.push(const TagsBlockerRoute()),
         ),
         ListTile(
-          title: const Text('Settings'),
+          title: Text(t.settings.title),
           leading: const Icon(Icons.settings),
           onTap: () => context.router.push(const SettingsRoute()),
         ),
@@ -188,7 +189,7 @@ class AppVersionTile extends HookConsumerWidget {
         if (!data.isNewerThan(currentVer)) return current;
         if (updateStatus.isDownloading) {
           return ListTile(
-            title: Text('Update available: $data'),
+            title: Text(t.updater.available(version: '$data')),
             leading: const SizedBox(
               height: 24,
               width: 24,
@@ -197,15 +198,15 @@ class AppVersionTile extends HookConsumerWidget {
                 child: CircularProgressIndicator(strokeWidth: 3),
               ),
             ),
-            subtitle: Text('Downloading ${updater.progress}%'),
+            subtitle: Text(t.updater.progress(progress: updater.progress)),
             onTap: () => context.router.push(const AboutRoute()),
           );
         }
         return ListTile(
-          title: Text('Update available: $data'),
+          title: Text(t.updater.available(version: '$data')),
           leading: Icon(Icons.info_outline, color: Colors.pink.shade300),
           subtitle: Text(
-            updater.status.isDownloaded ? 'Tap to install' : 'Tap to view',
+            updater.status.isDownloaded ? t.updater.install : t.changelog.view,
           ),
           onTap: () {
             if (updater.status.isDownloaded) {
@@ -229,7 +230,7 @@ class _BackToHomeTile extends HookConsumerWidget {
     return Visibility(
       visible: query.isNotEmpty,
       child: ListTile(
-        title: const Text('Back to home'),
+        title: Text(t.goHome),
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref

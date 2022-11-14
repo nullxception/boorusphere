@@ -1,4 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
@@ -37,8 +38,10 @@ class PostErrorDisplay extends HookConsumerWidget {
               kBottomNavigationBarHeight +
               32,
           child: QuickBar.action(
-            title: Text('${post.content.url.fileExtension} is not supported'),
-            actionTitle: const Text('Open externally'),
+            title: Text(
+              t.unsupportedMedia(fileExt: post.content.url.fileExtension),
+            ),
+            actionTitle: Text(t.openExternally),
             onPressed: () {
               launchUrlString(post.originalFile,
                   mode: LaunchMode.externalApplication);

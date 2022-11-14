@@ -1,4 +1,5 @@
 import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -42,7 +43,7 @@ class UpdatePrepareDialog extends HookConsumerWidget {
               ),
             ),
             const SizedBox(width: 32),
-            const Text('Preparing for update')
+            Text(t.updater.preparing)
           ],
         ),
       ),

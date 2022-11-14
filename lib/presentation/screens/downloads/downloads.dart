@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/provider/settings/download/download_settings.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_entry_view.dart';
@@ -18,7 +19,7 @@ class DownloadsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Downloads'),
+        title: Text(t.downloader.title),
         actions: [
           if (downloader.entries.isNotEmpty)
             PopupMenuButton(
@@ -40,11 +41,15 @@ class DownloadsPage extends ConsumerWidget {
                 return [
                   PopupMenuItem(
                     value: 'group-by-server',
-                    child: Text(groupByServer ? 'Ungroup' : 'Group by server'),
+                    child: Text(
+                      groupByServer
+                          ? t.downloader.ungroup
+                          : t.downloader.groupByServer,
+                    ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'clear-all',
-                    child: Text('Clear all'),
+                    child: Text(t.clear),
                   ),
                 ];
               },
@@ -54,12 +59,12 @@ class DownloadsPage extends ConsumerWidget {
       body: SafeArea(
         child: downloader.entries.isEmpty
             ? Column(
-                children: const [
+                children: [
                   Center(
                     child: NoticeCard(
-                      icon: Icon(Icons.cloud_download),
-                      margin: EdgeInsets.only(top: 64),
-                      children: Text('Your downloaded files will appear here'),
+                      icon: const Icon(Icons.cloud_download),
+                      margin: const EdgeInsets.only(top: 64),
+                      children: Text(t.downloader.placeholder),
                     ),
                   ),
                 ],

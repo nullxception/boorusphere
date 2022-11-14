@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
@@ -47,13 +48,13 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Details')),
+      appBar: AppBar(title: Text(t.details)),
       body: StyledOverlayRegion(
         child: SafeArea(
           child: ListView(
             children: [
               ListTile(
-                title: const Text('Rating'),
+                title: Text(t.rating),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(post.rating.name.capitalized),
@@ -61,19 +62,19 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
               ),
               if (post.postUrl.isNotEmpty)
                 ListTile(
-                  title: const Text('Location'),
+                  title: Text(t.location),
                   subtitle: _LinkSubtitle(post.postUrl),
                   trailing: _CopyButton(post.postUrl),
                 ),
               if (post.source.isNotEmpty)
                 ListTile(
-                  title: const Text('Source'),
+                  title: Text(t.source),
                   subtitle: _LinkSubtitle(post.source),
                   trailing: _CopyButton(post.source),
                 ),
               if (post.sampleFile.isNotEmpty)
                 ListTile(
-                  title: const Text('Sample file'),
+                  title: Text(t.fileSample),
                   subtitle: FutureBuilder<PixelSize>(
                     future: post.content.isPhoto && !post.sampleSize.hasPixels
                         ? ExtendedNetworkImageProvider(
@@ -93,7 +94,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                   trailing: _CopyButton(post.sampleFile),
                 ),
               ListTile(
-                title: const Text('Original file'),
+                title: Text(t.fileOG),
                 subtitle: _LinkSubtitle(
                   post.originalFile,
                   label:
@@ -102,7 +103,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                 trailing: _CopyButton(post.originalFile),
               ),
               ListTile(
-                title: const Text('Tags'),
+                title: Text(t.tags),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 72),
                   child: Column(
@@ -117,35 +118,35 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                       else ...[
                         if (post.tagsMeta.isNotEmpty)
                           _TagsView(
-                            label: 'Meta',
+                            label: t.meta,
                             tags: post.tagsMeta,
                             isSelected: selectedtag.value.contains,
                             onSelected: onTagPressed,
                           ),
                         if (post.tagsArtist.isNotEmpty)
                           _TagsView(
-                            label: 'Artist',
+                            label: t.artist,
                             tags: post.tagsArtist,
                             isSelected: selectedtag.value.contains,
                             onSelected: onTagPressed,
                           ),
                         if (post.tagsCharacter.isNotEmpty)
                           _TagsView(
-                            label: 'Character',
+                            label: t.character,
                             tags: post.tagsCharacter,
                             isSelected: selectedtag.value.contains,
                             onSelected: onTagPressed,
                           ),
                         if (post.tagsCopyright.isNotEmpty)
                           _TagsView(
-                            label: 'Copyright',
+                            label: t.copyright,
                             tags: post.tagsCopyright,
                             isSelected: selectedtag.value.contains,
                             onSelected: onTagPressed,
                           ),
                         if (post.tagsGeneral.isNotEmpty)
                           _TagsView(
-                            label: 'General',
+                            label: t.general,
                             tags: post.tagsGeneral,
                             isSelected: selectedtag.value.contains,
                             onSelected: onTagPressed,
@@ -167,7 +168,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
         children: [
           SpeedDialChild(
               child: const Icon(Icons.copy),
-              label: 'Copy tag',
+              label: t.actionTag.copy,
               onTap: () {
                 final tags = selectedtag.value.join(' ');
                 if (tags.isNotEmpty) {
@@ -176,7 +177,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
               }),
           SpeedDialChild(
             child: const Icon(Icons.block),
-            label: 'Block selected tag',
+            label: t.actionTag.block,
             onTap: () {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
@@ -184,9 +185,9 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                     .watch(blockedTagsStateProvider.notifier)
                     .pushAll(selectedTags);
                 context.scaffoldMessenger.showSnackBar(
-                  const SnackBar(
-                    content: Text('Added to tags blocker list'),
-                    duration: Duration(seconds: 1),
+                  SnackBar(
+                    content: Text(t.actionTag.blocked),
+                    duration: const Duration(seconds: 1),
                   ),
                 );
               }
@@ -194,7 +195,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
           ),
           SpeedDialChild(
             child: const Icon(Icons.search),
-            label: 'Add tag to current search',
+            label: t.actionTag.append,
             onTap: () {
               if (selectedtag.value.isEmpty) return;
               updateSearch([...pageQuery.toWordList(), ...selectedtag.value]);
@@ -202,7 +203,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
           ),
           SpeedDialChild(
             child: const Icon(Icons.search),
-            label: 'Search tag',
+            label: t.actionTag.search,
             onTap: () {
               updateSearch(selectedtag.value);
             },
@@ -310,9 +311,9 @@ mixin ClipboardMixins {
   void clip(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
     context.scaffoldMessenger.showSnackBar(
-      const SnackBar(
-        content: Text('Copied to clipboard'),
-        duration: Duration(seconds: 1),
+      SnackBar(
+        content: Text(t.copySuccess),
+        duration: const Duration(seconds: 1),
       ),
     );
   }

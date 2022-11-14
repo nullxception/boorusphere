@@ -1,4 +1,5 @@
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
@@ -15,7 +16,7 @@ class SettingsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(t.settings.title)),
       body: const SafeArea(
         child: _SettingsContent(),
       ),
@@ -34,7 +35,7 @@ class _SettingsContent extends HookConsumerWidget {
     return ListView(
       children: [
         _Section(
-          title: const Text('Downloads'),
+          title: Text(t.downloader.title),
           children: [
             FutureBuilder(
               future: DownloadUtils.hasDotnomedia,
@@ -43,11 +44,10 @@ class _SettingsContent extends HookConsumerWidget {
                 final data = snapshot.data;
                 final value = data is bool ? data : false;
                 return SwitchListTile(
-                  title: const Text('Hide downloaded media'),
-                  subtitle: const Padding(
+                  title: Text(t.settings.hideMedia.title),
+                  subtitle: Padding(
                     padding: subtitlePadding,
-                    child: Text(
-                        'Prevent external gallery app from showing downloaded files'),
+                    child: Text(t.settings.hideMedia.desc),
                   ),
                   value: value,
                   onChanged: (isEnabled) async {
@@ -62,13 +62,13 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: const Text('Interface'),
+          title: Text(t.settings.interface),
           children: [
             SwitchListTile(
-              title: const Text('Darker Theme'),
-              subtitle: const Padding(
+              title: Text(t.settings.midnightTheme.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text('Use deeper dark color for the dark mode'),
+                child: Text(t.settings.midnightTheme.desc),
               ),
               value: ref.watch(UiSettingsProvider.darkerTheme),
               onChanged: (value) {
@@ -78,10 +78,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             SwitchListTile(
-              title: const Text('Enable blur'),
-              subtitle: const Padding(
+              title: Text(t.settings.uiBlur.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text('Enable blur background on various UI elements'),
+                child: Text(t.settings.uiBlur.desc),
               ),
               value: ref.watch(UiSettingsProvider.blur),
               onChanged: (value) {
@@ -91,13 +91,13 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: const Text('Safe mode'),
+          title: Text(t.settings.safeMode),
           children: [
             SwitchListTile(
-              title: const Text('Blur explicit content'),
-              subtitle: const Padding(
+              title: Text(t.settings.blurContent.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text('Content rated as explicit will be blurred'),
+                child: Text(t.settings.blurContent.desc),
               ),
               value: ref.watch(ContentSettingsProvider.blurExplicit),
               onChanged: (value) {
@@ -107,11 +107,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             SwitchListTile(
-              title: const Text('Rated safe only'),
-              subtitle: const Padding(
+              title: Text(t.settings.strictSafeMode.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(
-                    'Only fetch content that rated as safe. Note that rated as safe doesn\'t guarantee "safe for work"'),
+                child: Text(t.settings.strictSafeMode.desc),
               ),
               value: ref.watch(ServerSettingsProvider.safeMode),
               onChanged: (value) {
@@ -123,14 +122,13 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: const Text('Server'),
+          title: Text(t.servers.title),
           children: [
             SwitchListTile(
-              title: const Text('Display original content'),
-              subtitle: const Padding(
+              title: Text(t.settings.loadOG.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(
-                    'Load original file instead of the sample when opening the post'),
+                child: Text(t.settings.loadOG.desc),
               ),
               value: ref.watch(ContentSettingsProvider.loadOriginal),
               onChanged: (value) {
@@ -140,11 +138,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             ListTile(
-              title: const Text('Max content per-load'),
-              subtitle: const Padding(
+              title: Text(t.settings.postLimit.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(
-                    'Result might less than expected (caused by blocked tags or invalid data)'),
+                child: Text(t.settings.postLimit.desc),
               ),
               trailing: DropdownButton(
                 menuMaxHeight: 178,
@@ -172,28 +169,30 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: const Text('Miscellaneous'),
+          title: Text(t.settings.misc),
           children: [
             ListTile(
-              title: const Text('Clear cache'),
-              subtitle: const Padding(
+              title: Text(t.settings.clearCache.title),
+              subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text('Clear loaded content from cache'),
+                child: Text(t.settings.clearCache.desc),
               ),
               onTap: () async {
-                context.scaffoldMessenger.showSnackBar(const SnackBar(
-                  content: Text('Clearing...'),
-                  duration: Duration(milliseconds: 500),
+                context.scaffoldMessenger.showSnackBar(SnackBar(
+                  content: Text(t.clearing),
+                  duration: const Duration(milliseconds: 500),
                 ));
 
                 await DefaultCacheManager().emptyCache();
                 await extended_image.clearDiskCachedImages();
                 extended_image.clearMemoryImageCache();
 
-                context.scaffoldMessenger.showSnackBar(const SnackBar(
-                  content: Text('Cache cleared'),
-                  duration: Duration(milliseconds: 500),
-                ));
+                context.scaffoldMessenger.showSnackBar(
+                  SnackBar(
+                    content: Text(t.settings.clearCache.done),
+                    duration: const Duration(milliseconds: 500),
+                  ),
+                );
               },
             ),
           ],

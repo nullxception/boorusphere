@@ -1,3 +1,4 @@
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
@@ -61,12 +62,12 @@ class SearchSuggestion extends HookConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Recently'),
+                            Text(t.recently),
                             TextButton(
                               onPressed: ref
                                   .read(searchHistoryStateProvider.notifier)
                                   .clear,
-                              child: const Text('Clear all'),
+                              child: Text(t.clear),
                             ),
                           ],
                         ),
@@ -91,9 +92,9 @@ class SearchSuggestion extends HookConsumerWidget {
                               color: Colors.red,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                children: const [
-                                  Text('Remove'),
-                                  Padding(
+                                children: [
+                                  Text(t.remove),
+                                  const Padding(
                                     padding: EdgeInsets.all(16.0),
                                     child:
                                         Icon(Icons.delete, color: Colors.white),
@@ -125,7 +126,10 @@ class SearchSuggestion extends HookConsumerWidget {
                             child: Icon(Icons.search_off),
                           ),
                           Text(
-                              '${serverActive.name} did not support search suggestion'),
+                            t.suggestion.notSupported(
+                              serverName: serverActive.name,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -133,7 +137,12 @@ class SearchSuggestion extends HookConsumerWidget {
                     SliverPadding(
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
-                          child: Text('Suggested on ${serverActive.name}')),
+                        child: Text(
+                          t.suggestion.suggested(
+                            serverName: serverActive.name,
+                          ),
+                        ),
+                      ),
                     ),
                   if (serverActive.canSuggestTags)
                     suggester.when(
@@ -214,7 +223,9 @@ class _SuggestionEntryTile extends StatelessWidget {
       horizontalTitleGap: 1,
       leading: Icon(data.isHistory ? Icons.history : Icons.tag, size: 22),
       title: Text(data.text),
-      subtitle: data.server.isNotEmpty ? Text('at ${data.server}') : null,
+      subtitle: data.server.isNotEmpty
+          ? Text(t.suggestion.desc(serverName: data.server))
+          : null,
       onTap: () => onTap.call(data.text),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

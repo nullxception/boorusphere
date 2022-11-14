@@ -1,4 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
@@ -174,8 +175,8 @@ class _PostImageStatus extends StatelessWidget {
             scale: state.extendedImageLoadState == LoadState.completed ? 0 : 1,
             child: isFailed
                 ? QuickBar.action(
-                    title: const Text('Failed to load image'),
-                    actionTitle: const Text('Retry'),
+                    title: Text(t.loadImageFailed),
+                    actionTitle: Text(t.retry),
                     onPressed: state.reLoadImage,
                   )
                 : QuickBar.progress(

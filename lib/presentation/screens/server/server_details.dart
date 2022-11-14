@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -45,7 +46,7 @@ class ServerDetails extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Text(
-                    'Details',
+                    t.details,
                     style: context.theme.textTheme.titleMedium,
                   ),
                 ),
@@ -59,7 +60,7 @@ class ServerDetails extends HookConsumerWidget {
                     validator: (value) {
                       final serverName = serverData.map((it) => it.id);
                       if (!isEditing && serverName.contains(value)) {
-                        return 'Server data for $value already exists';
+                        return t.servers.alreadyExists(name: value ?? '');
                       }
 
                       return null;
@@ -68,23 +69,23 @@ class ServerDetails extends HookConsumerWidget {
                 else
                   TextFormField(
                     controller: cAlias,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'Alias',
+                    decoration: InputDecoration(
+                      border: const UnderlineInputBorder(),
+                      labelText: t.servers.alias,
                     ),
                   ),
                 TextFormField(
                   controller: cHomepage,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Homepage',
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: t.servers.homepage,
                   ),
                 ),
                 TextFormField(
                   controller: cApiAddr,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'API Address',
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: t.servers.apiAddr,
                   ),
                 ),
                 Padding(
@@ -93,7 +94,7 @@ class ServerDetails extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Payload',
+                        t.servers.payloads.title,
                         style: context.theme.textTheme.titleMedium,
                       ),
                       ElevatedButton(
@@ -108,7 +109,7 @@ class ServerDetails extends HookConsumerWidget {
                             ),
                           );
                         },
-                        child: const Text('From Preset'),
+                        child: Text(t.servers.preset),
                       ),
                     ],
                   ),
@@ -117,27 +118,26 @@ class ServerDetails extends HookConsumerWidget {
                   minLines: 1,
                   maxLines: 3,
                   controller: cSearchUrl,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Search Payload',
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: t.servers.payloads.search,
                   ),
                 ),
                 TextFormField(
                   minLines: 1,
                   maxLines: 3,
                   controller: cSuggestUrl,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Tag Suggestion Payload',
-                  ),
+                  decoration: InputDecoration(
+                      border: const UnderlineInputBorder(),
+                      labelText: t.servers.payloads.suggestion),
                 ),
                 TextFormField(
                   minLines: 1,
                   maxLines: 3,
                   controller: cPostUrl,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Web Post Payload',
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
+                    labelText: t.servers.payloads.post,
                   ),
                 ),
               ],
@@ -171,7 +171,7 @@ class ServerDetails extends HookConsumerWidget {
                     );
               onSubmitted.call(newData);
             },
-            child: const Text('Save'),
+            child: Text(t.save),
           ),
         ),
       ],

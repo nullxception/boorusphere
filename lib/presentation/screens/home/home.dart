@@ -1,4 +1,5 @@
 import 'package:async/async.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/screens/home/content.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
 import 'package:boorusphere/presentation/screens/home/drawer.dart';
@@ -48,8 +49,8 @@ class HomePage extends HookConsumerWidget {
 
             if (!allowPop.value) {
               allowPop.value = true;
-              context.scaffoldMessenger.showSnackBar(const SnackBar(
-                content: Text('Press back again to exit'),
+              context.scaffoldMessenger.showSnackBar(SnackBar(
+                content: Text(t.retryPopBack),
                 duration: maybePopTimeout,
               ));
               maybePopTimer.cancel();

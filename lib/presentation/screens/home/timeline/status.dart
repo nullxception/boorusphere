@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
@@ -45,13 +46,13 @@ class TimelineStatus extends ConsumerWidget {
                                 ref.read(pageStateProvider.notifier).load());
                           },
                           style: ElevatedButton.styleFrom(elevation: 0),
-                          child: const Text('Disable safe mode'),
+                          child: Text(t.disableSafeMode),
                         ),
                       ElevatedButton(
                         onPressed: () =>
                             ref.read(pageStateProvider.notifier).load(),
                         style: ElevatedButton.styleFrom(elevation: 0),
-                        child: const Text('Retry'),
+                        child: Text(t.retry),
                       ),
                     ],
                   ),
@@ -73,7 +74,7 @@ class TimelineStatus extends ConsumerWidget {
             alignment: Alignment.topCenter,
             child: ElevatedButton(
               onPressed: () => ref.read(pageStateProvider.notifier).loadMore(),
-              child: const Text('Load more'),
+              child: Text(t.loadMore),
             ),
           ),
         ),

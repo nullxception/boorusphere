@@ -10,6 +10,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/boorusphere.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LocaleSettings.useDeviceLocale();
 
   await Hive.initFlutter();
 
@@ -43,7 +45,7 @@ void main() async {
       overrides: [
         devicePropProvider.overrideWithValue(deviceProp),
       ],
-      child: const Boorusphere(),
+      child: TranslationProvider(child: const Boorusphere()),
     ),
   );
 }

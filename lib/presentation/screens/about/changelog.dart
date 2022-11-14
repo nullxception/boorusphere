@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/changelog.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -50,11 +51,11 @@ class ChangelogPage extends ConsumerWidget {
           error: (e, s) => Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Center(
                 child: NoticeCard(
-                  icon: Icon(Icons.cancel_rounded),
-                  children: Text('No changelog available'),
+                  icon: const Icon(Icons.cancel_rounded),
+                  children: Text(t.changelog.none),
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 
@@ -18,17 +19,14 @@ class PostExplicitWarningCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(8, 12, 8, 12),
-            child: Text(
-              'This media may contain material that is not safe for public viewing.',
-              textAlign: TextAlign.center,
-            ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+            child: Text(t.onMediaBlurred, textAlign: TextAlign.center),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(elevation: 0),
             onPressed: onConfirm,
-            child: const Text('Show me'),
+            child: Text(t.unblur),
           )
         ],
       ),

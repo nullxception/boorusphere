@@ -1,3 +1,4 @@
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -11,7 +12,7 @@ class TagsBlockerPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tags blocker')),
+      appBar: AppBar(title: Text(t.tagsBlocker.title)),
       body: const SafeArea(
         child: _TagsBlockerContent(),
       ),
@@ -32,8 +33,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 16),
           child: Column(
             children: [
-              const Text(
-                  'You can block multiple tags by separating it with space'),
+              Text(t.tagsBlocker.desc),
               TextField(
                 controller: controller,
                 onSubmitted: (value) {
@@ -41,20 +41,20 @@ class _TagsBlockerContent extends HookConsumerWidget {
                   ref.read(blockedTagsStateProvider.notifier).pushAll(values);
                   controller.clear();
                 },
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Example: red_shirt blue_shoes',
+                decoration: InputDecoration(
+                  border: const UnderlineInputBorder(),
+                  labelText: t.tagsBlocker.hint,
                 ),
               ),
             ],
           ),
         ),
         if (blockedTags.isEmpty)
-          const Center(
+          Center(
             child: NoticeCard(
-              icon: Icon(Icons.tag),
-              margin: EdgeInsets.all(32),
-              children: Text('No blocked tags yet'),
+              icon: const Icon(Icons.tag),
+              margin: const EdgeInsets.all(32),
+              children: Text(t.tagsBlocker.empty),
             ),
           ),
         for (final tag in blockedTags.entries)

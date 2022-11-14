@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/widgets/permissions.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -42,10 +43,10 @@ class DownloaderDialog extends HookConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const ListTile(title: Text('Download')),
+            ListTile(title: Text(t.downloader.title)),
             if (post.sampleFile.isNotEmpty)
               ListTile(
-                  title: const Text('Sample'),
+                  title: Text(t.fileSample),
                   subtitle: FutureBuilder<PixelSize>(
                     future: post.content.isPhoto && !post.sampleSize.hasPixels
                         ? ExtendedNetworkImageProvider(
@@ -71,7 +72,7 @@ class DownloaderDialog extends HookConsumerWidget {
                     context.navigator.pop();
                   }),
             ListTile(
-              title: const Text('Original'),
+              title: Text(t.fileOG),
               subtitle: Text(
                   '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
               leading: Icon(_getFileIcon(post.originalFile)),
@@ -112,8 +113,8 @@ class DownloaderDialog extends HookConsumerWidget {
     if (!status.isGranted) {
       await showSystemAppSettingsDialog(
         context: context,
-        title: 'Download',
-        reason: 'Cannot download a file; missing notification permission',
+        title: t.downloader.title,
+        reason: t.downloader.noPermission,
       );
     }
     return status.isGranted;

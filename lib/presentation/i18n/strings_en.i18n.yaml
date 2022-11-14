@@ -1,0 +1,148 @@
+save: "Save"
+cancel: "Cancel"
+clear: "Clear"
+retry: "Retry"
+remove: "Remove"
+edit: "Edit"
+add: "Add"
+reset: "Reset"
+reset2: "Reset to default"
+scan: "Scan"
+loadMore: "Load more"
+clearing: "Clearing..."
+disableSafeMode: "Disable safe mode"
+details: "Details"
+rating: "Rating"
+location: "Location"
+source: "Source"
+fileSample: "Sample file"
+fileOG: "Original file"
+tags: "Tags"
+meta: "Meta"
+artist: "Artist"
+character: "Character"
+copyright: "Copyright"
+general: "General"
+ossLicense: "Open source license"
+github: "GitHub"
+openSettings: "Open Settings"
+copySuccess: "Copied to clipboard"
+loadImageFailed: "Failed to load image"
+onMediaBlurred: "This media may contain material that is not safe for public viewing"
+unblur: "Show me"
+unsupportedMedia: "${fileExt} is not supported"
+openExternally: "Open externally"
+retryPopBack: "Press back again to exit"
+goHome: "Back to home"
+recently: "Recently"
+
+suggestion:
+  notSupported: "${serverName} did not support search suggestion"
+  suggested: "Suggested at ${serverName}"
+  desc: "at ${serverName}"
+
+actionTag:
+  copy: "Copy tag"
+  block: "Block selected tag"
+  blocked: "Added to tags blocker"
+  append: "Add tag to current search"
+  search: "Search tag"
+
+updater:
+  check: "Check for update"
+  checking: "Checking for update..."
+  download: "Download ${version}"
+  available: "Update available: ${version}"
+  preparing: "Preparing for update..."
+  onLatest: "You're on latest version"
+  onNewVersion: "New version is available"
+  install: "Install update"
+  progress: "Downloading: ${progress}%"
+
+changelog:
+  title: "Changelog"
+  view: "View changes"
+  none: "No changelog available"
+
+license:
+  package: "package: ${name}"
+  title:
+    one: "License"
+    other: "Licenses"
+  counted:
+    one: "${n} license"
+    other: "${n} licenses"
+
+downloader:
+  title: "Downloads"
+  noFile: "File moved or missing"
+  redownload: "Redownload"
+  detail: "Show detail"
+  placeholder: "Your downloaded files will appear here"
+  ungroup: "Ungroup"
+  groupByServer: "Group by server"
+  noPermission: "Cannot download a file; missing notification permission"
+
+favorites:
+  placeholder: "Your saved content will appear here"
+  title: "Favorites"
+
+tagsBlocker:
+  title: "Tags Blocker"
+  desc: "You can block multiple tags by separating it with space"
+  empty: "No blocked tags yet"
+  hint: "Example: red_shirt blue_shoes"
+
+servers:
+  title: "Server"
+  resetWarning: "Are you sure you want to reset server list to default ?\n\nThis will erase all of your added server"
+  removeLastError: "The last server cannot be removed"
+  preset: "From Preset"
+  select: "Select Server"
+  add: "Add new server"
+  edit: "Edit ${name}"
+  alias: "Alias"
+  homepage: "Homepage"
+  homepageHint: "Homepage, example: https://verycoolbooru.com"
+  useCustomApi: "Use custom API address"
+  useCustomApiDesc: "Useful if server has different API address than the homepage"
+  addrError: "not a valid address"
+  apiAddr: "API Address"
+  apiAddrHint: "API address, example: https://api-v69.verycoolbooru.com"
+  alreadyExists: "Server data for ${name} already exists"
+  payloads:
+    title: "Payload"
+    search: "Search Payload"
+    suggestion: "Tag Suggestion Payload"
+    post: "Web Post Payload"
+
+settings:
+  title: "Settings"
+  interface: "Interface"
+  safeMode: "Safe mode"
+  misc: "Miscellaneous"
+  midnightTheme:
+    title: "Midnight Theme"
+    desc: "Use darker color for the dark-mode"
+  uiBlur:
+    title: "Enable blur"
+    desc: "Enable blur background on various UI elements"
+  hideMedia:
+    title: "Hide downloaded media"
+    desc: "Prevent external gallery app from showing downloaded files"
+  blurContent:
+    title: "Blur explicit content"
+    desc: "Content rated as explicit will be blurred"
+  strictSafeMode:
+    title: "Rated safe only"
+    desc: "Only fetch content that rated as safe. Note that rated as safe doesn't guarantee safe for work"
+  loadOG:
+    title: "Display original content"
+    desc: "Load original file instead of the sample when opening the post"
+  postLimit:
+    title: "Max content per-load"
+    desc: "Result might less than expected (caused by blocked tags or invalid data)"
+  clearCache:
+    title: "Clear cache"
+    desc: "Clear loaded content from cache"
+    done: "Cache cleared"

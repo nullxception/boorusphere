@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -21,14 +22,14 @@ Future<void>? showSystemAppSettingsDialog({
           onPressed: () {
             context.navigator.pop();
           },
-          child: const Text('Close'),
+          child: Text(t.cancel),
         ),
         ElevatedButton(
           onPressed: () {
             context.navigator.pop();
             unawaited(openAppSettings());
           },
-          child: const Text('Open Settings'),
+          child: Text(t.openSettings),
         )
       ],
     ),

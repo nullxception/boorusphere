@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/provider/dio.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/widgets/exception_info.dart';
@@ -33,7 +34,7 @@ class ServerEditorPage extends HookConsumerWidget {
 
     validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
-        return 'not a valid address';
+        return t.servers.addrError;
       }
 
       return null;
@@ -41,7 +42,9 @@ class ServerEditorPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit ${server.name}' : 'Add new server'),
+        title: Text(
+          isEditing ? t.servers.edit(name: server.name) : t.servers.add,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -55,22 +58,22 @@ class ServerEditorPage extends HookConsumerWidget {
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: TextFormField(
                     controller: scanHomepageText,
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'Homepage, example: https://verycoolbooru.com',
+                    decoration: InputDecoration(
+                      border: const UnderlineInputBorder(),
+                      labelText: t.servers.homepageHint,
                     ),
                     validator: validateAddress,
                   ),
                 ),
                 CheckboxListTile(
                   value: useApiAddr.value,
-                  title: const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Text('Use custom API address')),
-                  subtitle: const Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Text(
-                        'Useful if server has different API address than the homepage'),
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(t.servers.useCustomApi),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(t.servers.useCustomApiDesc),
                   ),
                   onChanged: (isChecked) {
                     if (isChecked != null) {
@@ -83,10 +86,9 @@ class ServerEditorPage extends HookConsumerWidget {
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: TextFormField(
                       controller: scanApiAddrText,
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText:
-                            'API address, example: https://api-v69.verycoolbooru.com',
+                      decoration: InputDecoration(
+                        border: const UnderlineInputBorder(),
+                        labelText: t.servers.apiAddrHint,
                       ),
                       validator: validateAddress,
                     ),
@@ -128,7 +130,7 @@ class ServerEditorPage extends HookConsumerWidget {
                             isLoading.value = false;
                           }
                         : null,
-                    child: const Text('Scan'),
+                    child: Text(t.scan),
                   ),
                 ),
                 Visibility(

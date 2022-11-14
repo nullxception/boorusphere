@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/favorite_post.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
@@ -28,16 +29,16 @@ class _EmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorites'),
+        title: Text(t.favorites.title),
       ),
       body: SafeArea(
         child: Column(
-          children: const [
+          children: [
             Center(
               child: NoticeCard(
-                icon: Icon(Icons.favorite),
-                margin: EdgeInsets.only(top: 64),
-                children: Text('Your saved content will appear here'),
+                icon: const Icon(Icons.favorite),
+                margin: const EdgeInsets.only(top: 64),
+                children: Text(t.favorites.placeholder),
               ),
             ),
           ],
@@ -72,7 +73,7 @@ class _FavoritesView extends HookConsumerWidget {
       child: Scaffold(
         extendBody: true,
         appBar: AppBar(
-          title: const Text('Favorites'),
+          title: Text(t.favorites.title),
         ),
         body: TabBarView(
           children: [

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
@@ -15,7 +16,7 @@ class ServerPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Server'),
+        title: Text(t.servers.title),
         actions: [
           PopupMenuButton(
             onSelected: (value) {
@@ -25,25 +26,22 @@ class ServerPage extends HookConsumerWidget {
                     context: context,
                     builder: (context) => AlertDialog(
                       backgroundColor: context.colorScheme.background,
-                      title: const Text('Reset to default'),
+                      title: Text(t.reset2),
                       icon: const Icon(Icons.restore),
-                      content: const Text(
-                        '''
-Are you sure you want to reset server list to default ? \n\nThis will erase all of your added server.''',
-                      ),
+                      content: Text(t.servers.resetWarning),
                       actions: [
                         TextButton(
                           onPressed: () {
                             context.navigator.pop();
                           },
-                          child: const Text('Cancel'),
+                          child: Text(t.cancel),
                         ),
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
                             ref.read(serverStateProvider.notifier).reset();
                           },
-                          child: const Text('Reset'),
+                          child: Text(t.reset),
                         )
                       ],
                     ),
@@ -55,10 +53,10 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
             },
             itemBuilder: (context) {
               return [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'reset',
-                  child: Text('Reset to default'),
-                )
+                  child: Text(t.reset2),
+                ),
               ];
             },
           )
@@ -82,10 +80,11 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                         case 'remove':
                           if (serverData.length == 1) {
                             context.scaffoldMessenger.showSnackBar(
-                                const SnackBar(
-                                    duration: Duration(seconds: 1),
-                                    content: Text(
-                                        'The last server cannot be removed')));
+                              SnackBar(
+                                duration: const Duration(seconds: 1),
+                                content: Text(t.servers.removeLastError),
+                              ),
+                            );
                             break;
                           }
 
@@ -97,13 +96,13 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                     },
                     itemBuilder: (context) {
                       return [
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'edit',
-                          child: Text('Edit'),
+                          child: Text(t.edit),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'remove',
-                          child: Text('Remove'),
+                          child: Text(t.remove),
                         ),
                       ];
                     },
@@ -112,7 +111,7 @@ Are you sure you want to reset server list to default ? \n\nThis will erase all 
                 );
               }).toList(),
               ListTile(
-                title: const Text('Add'),
+                title: Text(t.add),
                 leading: const Icon(Icons.add),
                 onTap: () => context.router.push(ServerEditorRoute()),
               )

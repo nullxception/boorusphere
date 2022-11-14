@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/entity/download_status.dart';
 import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/provider/settings/download/download_settings.dart';
@@ -95,7 +96,7 @@ class DownloadEntryView extends ConsumerWidget {
                 size: 18,
               ),
             if (progress.status.isDownloaded && !entry.isFileExists)
-              const Text('File moved or missing')
+              Text(t.downloader.noFile)
             else
               Text(progress.status.name.capitalized),
             if (!groupByServer) ...[
@@ -166,27 +167,27 @@ class _EntryPopupMenu extends ConsumerWidget {
       itemBuilder: (context) {
         return [
           if (progress.status.isDownloaded && !entry.isFileExists)
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'redownload',
-              child: Text('Redownload'),
+              child: Text(t.downloader.redownload),
             ),
           if (progress.status.isCanceled || progress.status.isFailed)
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'retry',
-              child: Text('Retry'),
+              child: Text(t.retry),
             ),
           if (progress.status.isDownloading)
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'cancel',
-              child: Text('Cancel'),
+              child: Text(t.cancel),
             ),
-          const PopupMenuItem(
+          PopupMenuItem(
             value: 'show-detail',
-            child: Text('Show detail'),
+            child: Text(t.downloader.detail),
           ),
-          const PopupMenuItem(
+          PopupMenuItem(
             value: 'clear',
-            child: Text('Clear'),
+            child: Text(t.clear),
           ),
         ];
       },
