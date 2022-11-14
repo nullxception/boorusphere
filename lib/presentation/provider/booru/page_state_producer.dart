@@ -59,6 +59,7 @@ class PageStateProducer extends StateNotifier<PageState> {
     try {
       await _fetch();
     } catch (err, stackTrace) {
+      if (!mounted) return;
       state = PageState.error(currentData, err, stackTrace);
     }
   }
@@ -74,6 +75,7 @@ class PageStateProducer extends StateNotifier<PageState> {
       blockedTagsRepoProvider.select((repo) => repo.get().values),
     );
 
+    if (!mounted) return;
     if (option.clear) data.clear();
     if (data.isEmpty) _page = 0;
     state = PageState.loading(currentData);
@@ -105,6 +107,8 @@ class PageStateProducer extends StateNotifier<PageState> {
 
     final fromJar =
         await ref.read(cookieJarProvider).loadForRequest(page.src.asUri);
+
+    if (!mounted) return;
 
     if (fromJar.isNotEmpty) {
       cookie

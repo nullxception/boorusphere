@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final blockedTagsStateProvider =
     StateNotifierProvider<BlockedTagsState, Map<int, String>>((ref) {
-  final repo = ref.watch(blockedTagsRepoProvider);
+  final repo = ref.read(blockedTagsRepoProvider);
   return BlockedTagsState(repo.get(), repo);
 });
 

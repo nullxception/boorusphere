@@ -7,21 +7,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ContentSettingsProvider {
   static final mute = StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
-    final repo = ref.watch(settingRepoProvider);
+    final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.videoPlayerMuted, or: false);
     return VideoPlayerMuteState(saved, repo);
   });
 
   static final blurExplicit =
       StateNotifierProvider<BlurExplicitPostState, bool>((ref) {
-    final repo = ref.watch(settingRepoProvider);
+    final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.postBlurExplicit, or: true);
     return BlurExplicitPostState(saved, repo);
   });
 
   static final loadOriginal =
       StateNotifierProvider<LoadOriginalPostState, bool>((ref) {
-    final repo = ref.watch(settingRepoProvider);
+    final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.postLoadOriginal, or: false);
     return LoadOriginalPostState(saved, repo);
   });

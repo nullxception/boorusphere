@@ -32,14 +32,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-final blockedTagsRepoProvider = Provider<BlockedTagsRepo>((ref) {
+final blockedTagsRepoProvider = Provider.autoDispose<BlockedTagsRepo>((ref) {
   final box = Hive.box<String>(BlockedTagsLocalSource.key);
   return BlockedTagsRepoImpl(
     localSource: BlockedTagsLocalSource(box),
   );
 });
 
-final booruRepoProvider = Provider.family<BooruRepo, ServerData>((ref, server) {
+final booruRepoProvider =
+    Provider.autoDispose.family<BooruRepo, ServerData>((ref, server) {
   final dio = ref.watch(dioProvider);
   return BooruRepoImpl(
     networkSource: BooruNetworkSource(dio),
@@ -47,7 +48,7 @@ final booruRepoProvider = Provider.family<BooruRepo, ServerData>((ref, server) {
   );
 });
 
-final changelogRepoProvider = Provider<ChangelogRepo>((ref) {
+final changelogRepoProvider = Provider.autoDispose<ChangelogRepo>((ref) {
   final dio = ref.watch(dioProvider);
   return ChangelogRepoImpl(
     localSource: ChangelogLocalSource(rootBundle),
@@ -55,35 +56,36 @@ final changelogRepoProvider = Provider<ChangelogRepo>((ref) {
   );
 });
 
-final favoritePostRepoProvider = Provider<FavoritePostRepo>((ref) {
+final favoritePostRepoProvider = Provider.autoDispose<FavoritePostRepo>((ref) {
   final box = Hive.box<FavoritePost>(FavoritePostLocalSource.key);
   return FavoritePostRepoImpl(
     localSource: FavoritePostLocalSource(box),
   );
 });
 
-final searchHistoryRepoProvider = Provider<SearchHistoryRepo>((ref) {
+final searchHistoryRepoProvider =
+    Provider.autoDispose<SearchHistoryRepo>((ref) {
   final box = Hive.box<SearchHistory>(SearchHistoryLocalSource.key);
   return SearchHistoryRepoImpl(
     localSource: SearchHistoryLocalSource(box),
   );
 });
 
-final serverRepoProvider = Provider<ServerRepo>((ref) {
+final serverRepoProvider = Provider.autoDispose<ServerRepo>((ref) {
   final box = Hive.box<ServerData>(ServerLocalSource.key);
   return ServerRepoImpl(
     localSource: ServerLocalSource(assetBundle: rootBundle, box: box),
   );
 });
 
-final settingRepoProvider = Provider<SettingRepo>((ref) {
+final settingRepoProvider = Provider.autoDispose<SettingRepo>((ref) {
   final box = Hive.box(SettingLocalSource.key);
   return SettingRepoImpl(
     localSource: SettingLocalSource(box),
   );
 });
 
-final versionRepoProvider = Provider<VersionRepo>((ref) {
+final versionRepoProvider = Provider.autoDispose<VersionRepo>((ref) {
   final dio = ref.watch(dioProvider);
   return VersionRepoImpl(
     localSource: VersionLocalSource(),

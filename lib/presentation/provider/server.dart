@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final serverStateProvider =
     StateNotifierProvider<ServerState, List<ServerData>>((ref) {
-  final repo = ref.watch(serverRepoProvider);
+  final repo = ref.read(serverRepoProvider);
   return ServerState(ref, repo);
 });
 

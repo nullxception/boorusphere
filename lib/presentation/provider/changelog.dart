@@ -6,13 +6,13 @@ import 'package:boorusphere/domain/repository/changelog_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _producer = Provider((ref) {
+final _producer = Provider.autoDispose((ref) {
   return ChangelogProducer(ref.watch(changelogRepoProvider));
 });
 
 final changelogProvider =
     FutureProvider.family<List<ChangelogData>, ChangelogOption>((ref, arg) {
-  return ref.watch(_producer).invoke(arg);
+  return ref.read(_producer).invoke(arg);
 });
 
 class ChangelogProducer {

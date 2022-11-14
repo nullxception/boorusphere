@@ -8,21 +8,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ServerSettingsProvider {
   static final safeMode = StateNotifierProvider<SafeModeState, bool>((ref) {
-    final repo = ref.watch(settingRepoProvider);
+    final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.serverSafeMode, or: true);
     return SafeModeState(saved, repo);
   });
 
   static final active =
       StateNotifierProvider<ServerActiveState, ServerData>((ref) {
-    final repo = ref.watch(settingRepoProvider);
+    final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.serverActive, or: ServerData.empty);
     return ServerActiveState(saved, repo);
   });
 
   static final postLimit =
       StateNotifierProvider<ServerPostLimitState, int>((ref) {
-    final repo = ref.watch(settingRepoProvider);
+    final repo = ref.read(settingRepoProvider);
     final saved = repo.get(
       Setting.serverPostLimit,
       or: ServerPostLimitState.defaultLimit,

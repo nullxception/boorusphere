@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final favoritePostProvider =
     StateNotifierProvider<FavoritePostState, Map<String, FavoritePost>>((ref) {
-  final repo = ref.watch(favoritePostRepoProvider);
+  final repo = ref.read(favoritePostRepoProvider);
   return FavoritePostState(repo.get(), repo);
 });
 

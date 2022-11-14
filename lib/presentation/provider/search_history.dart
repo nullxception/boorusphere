@@ -7,12 +7,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final searchHistoryStateProvider =
     StateNotifierProvider<SearchHistoryState, Map<int, SearchHistory>>((ref) {
-  final repo = ref.watch(searchHistoryRepoProvider);
+  final repo = ref.read(searchHistoryRepoProvider);
   return SearchHistoryState(ref, repo);
 });
 
 final filteredHistoryProvider =
-    Provider.family<Map<int, SearchHistory>, String>((ref, query) {
+    Provider.family.autoDispose<Map<int, SearchHistory>, String>((ref, query) {
   final history = ref.watch(searchHistoryStateProvider);
   if (query.endsWith(' ') || query.isEmpty) {
     return history;
