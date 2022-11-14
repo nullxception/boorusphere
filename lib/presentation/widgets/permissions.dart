@@ -14,6 +14,7 @@ Future<void>? showSystemAppSettingsDialog({
     builder: (context) => AlertDialog(
       backgroundColor: context.colorScheme.background,
       title: Text(title),
+      icon: const Icon(Icons.security),
       content: Text(reason),
       actions: [
         TextButton(

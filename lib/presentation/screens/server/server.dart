@@ -25,7 +25,8 @@ class ServerPage extends HookConsumerWidget {
                     context: context,
                     builder: (context) => AlertDialog(
                       backgroundColor: context.colorScheme.background,
-                      title: const Text('Server'),
+                      title: const Text('Reset to default'),
+                      icon: const Icon(Icons.restore),
                       content: const Text(
                         '''
 Are you sure you want to reset server list to default ? \n\nThis will erase all of your added server.''',
