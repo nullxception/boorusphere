@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
+import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
@@ -27,6 +28,7 @@ class Timeline extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(UiSettingsProvider.grid);
+    final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
     final scrollController = controller.scrollController;
@@ -36,9 +38,9 @@ class Timeline extends HookConsumerWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      childCount: controller.posts.length,
+      childCount: posts.length,
       itemBuilder: (context, index) {
-        final post = controller.posts[index];
+        final post = posts[index];
         return AutoScrollTag(
           key: ValueKey(index),
           controller: scrollController,

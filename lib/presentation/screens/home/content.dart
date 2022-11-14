@@ -16,7 +16,6 @@ class HomeContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pageState = ref.watch(pageStateProvider);
     final controller = useTimelineController(
-      posts: pageState.data.posts,
       onLoadMore: () => ref.read(pageStateProvider.notifier).loadMore(),
     );
     final scrollController = controller.scrollController;

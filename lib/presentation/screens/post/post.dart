@@ -76,8 +76,8 @@ class PostPage extends HookConsumerWidget {
     final displayOriginal = ref.watch(ContentSettingsProvider.loadOriginal);
     final pageState = ref.watch(pageStateProvider);
     final fullscreen = ref.watch(fullscreenProvider);
+    final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));
 
-    final posts = controller.posts;
     final post = posts.isEmpty ? Post.empty : posts[page.value];
     final isVideo = post.content.isVideo;
     final totalPost = posts.length;

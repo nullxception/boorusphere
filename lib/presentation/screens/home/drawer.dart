@@ -224,11 +224,10 @@ class AppVersionTile extends HookConsumerWidget {
 class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageQuery =
+    final query =
         ref.watch(pageStateProvider.select((it) => it.data.option.query));
-
     return Visibility(
-      visible: pageQuery.isNotEmpty,
+      visible: query.isNotEmpty,
       child: ListTile(
         title: const Text('Back to home'),
         leading: const Icon(Icons.home_outlined),

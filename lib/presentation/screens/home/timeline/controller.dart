@@ -5,30 +5,26 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 TimelineController useTimelineController({
   List<Object?> keys = const [],
-  required List<Post> posts,
   Object Function(Post post)? heroKeyBuilder,
   void Function()? onLoadMore,
 }) {
   return useMemoized(
     () => TimelineController(
-      posts: posts,
       heroKeyBuilder: heroKeyBuilder,
       onLoadMore: onLoadMore,
     ),
-    [posts.hashCode, ...keys],
+    keys,
   );
 }
 
 class TimelineController extends ChangeNotifier {
   TimelineController({
-    required this.posts,
     this.heroKeyBuilder,
     this.onLoadMore,
   }) {
     _scrollController.addListener(_autoLoadMore);
   }
 
-  final List<Post> posts;
   final Object Function(Post post)? heroKeyBuilder;
   final void Function()? onLoadMore;
   final _scrollController = AutoScrollController(axis: Axis.vertical);

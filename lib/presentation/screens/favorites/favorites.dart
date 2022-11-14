@@ -137,9 +137,8 @@ class _Content extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useTimelineController(
-      posts: data,
       heroKeyBuilder: (post) => 'fav@$serverData-${post.id}',
-      keys: [data],
+      keys: [data.hashCode],
     );
 
     return CustomScrollView(
