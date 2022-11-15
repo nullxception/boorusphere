@@ -11,11 +11,10 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - lib/**/*.gr.dart
     - lib/**/*.config.dart
-    - lib/**/*.g.dart
     - lib/**/*.freezed.dart
-    - lib/generated_*.dart
+    - lib/**/*.g.dart
+    - lib/**/*.gr.dart
 
   errors:
     public_member_api_docs: ignore
