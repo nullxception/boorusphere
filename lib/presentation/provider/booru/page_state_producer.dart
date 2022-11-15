@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:boorusphere/data/provider/dio.dart';
-import 'package:boorusphere/data/repository/booru/entity/page_error.dart';
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
@@ -87,7 +87,7 @@ class PageStateProducer extends StateNotifier<PageState> {
     await pageResult.when(
       data: (src, page) async {
         if (page.isEmpty) {
-          state = PageState.error(currentData, error: PageError.empty);
+          state = PageState.error(currentData, error: BooruError.empty);
           return;
         }
 

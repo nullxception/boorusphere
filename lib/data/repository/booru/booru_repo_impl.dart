@@ -1,7 +1,6 @@
-import 'package:boorusphere/data/entity/sphere_exception.dart';
 import 'package:boorusphere/data/repository/booru/datasource/booru_network_source.dart';
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/booru_result.dart';
-import 'package:boorusphere/data/repository/booru/entity/page_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
@@ -15,7 +14,6 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
 
 class BooruRepoImpl implements BooruRepo {
   BooruRepoImpl({required this.networkSource, required this.server});
@@ -34,46 +32,52 @@ class BooruRepoImpl implements BooruRepo {
         SafebooruXmlParser(server),
       ];
 
-  Set<String> _parseSuggestion(Response res, String query) {
-    if (res.statusCode != 200) {
-      throw SphereException(
-          message: 'Cannot fetch data (HTTP ${res.statusCode})');
-    }
-
-    try {
-      return parser
-          .firstWhere((it) => it.canParseSuggestion(res))
-          .parseSuggestion(res);
-    } on StateError {
-      throw SphereException(message: 'No tags that matches \'$query\'');
-    }
-  }
-
   @override
-  Future<Iterable<String>> getSuggestion(
-    String query,
-  ) async {
+  Future<BooruResult<List<String>>> getSuggestion(String query) async {
     final queries = query.toWordList();
     final word = queries.isEmpty ? '' : queries.last;
+    final res = await networkSource.fetchSuggestion(server, query);
     try {
-      final res = await networkSource.fetchSuggestion(server, query);
-      return res
-          .map((e) => _parseSuggestion(e, query))
+      final data = res
+          .map((resp) {
+            if (resp.statusCode != 200) {
+              throw BooruError.httpError;
+            }
+
+            try {
+              return parser
+                  .firstWhere((it) => it.canParseSuggestion(resp))
+                  .parseSuggestion(resp);
+            } on StateError {
+              throw BooruError.empty;
+            }
+          })
           .reduce((value, element) => {...value, ...element})
           .sortedByCompare<String>(
-        (element) => element,
-        (a, b) {
-          if (a.startsWith(word)) return -1;
-          if (a.endsWith(word)) return 0;
-          return 1;
-        },
-      );
-    } catch (e) {
+            (element) => element,
+            (a, b) {
+              if (a.startsWith(word)) return -1;
+              if (a.endsWith(word)) return 0;
+              return 1;
+            },
+          );
+
+      return BooruResult.data(query, data);
+    } catch (e, s) {
       if (query.isEmpty) {
         // the server did not support empty tag matches (hot/trending tags)
-        return [];
+        return BooruResult.data(query, []);
+      } else if (e == BooruError.httpError) {
+        return BooruResult.error(
+            res.firstWhere(
+              (element) => element.statusCode != 200,
+              orElse: () => res.first,
+            ),
+            error: e,
+            stackTrace: s);
+      } else {
+        return BooruResult.error(res.last, error: e, stackTrace: s);
       }
-      rethrow;
     }
   }
 
@@ -90,7 +94,7 @@ class BooruRepoImpl implements BooruRepo {
     );
     final res = await networkSource.fetchPage(url);
     if (res.statusCode != 200) {
-      return BooruResult.error(res, PageError.httpError);
+      return BooruResult.error(res, error: BooruError.httpError);
     } else if (!res.data.toString().contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
       return BooruResult.data(url, []);
@@ -102,7 +106,7 @@ class BooruRepoImpl implements BooruRepo {
         parser.firstWhere((it) => it.canParsePage(res)).parsePage(res),
       );
     } on StateError {
-      return BooruResult.error(res, PageError.noParser);
+      return BooruResult.error(res, error: BooruError.noParser);
     }
   }
 }

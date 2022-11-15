@@ -5,6 +5,6 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 
 abstract class BooruRepo {
   ServerData get server;
-  Future<Iterable<String>> getSuggestion(String query);
+  Future<BooruResult<List<String>>> getSuggestion(String query);
   Future<BooruResult<List<Post>>> getPage(PageOption option, int index);
 }

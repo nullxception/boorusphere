@@ -52,6 +52,10 @@ suggestion:
   notSupported: "${serverName} did not support search suggestion"
   suggested: "Suggested at ${serverName}"
   desc: "at ${serverName}"
+  empty: "No tags that matches '${query}'"
+  httpError:
+    zero: "Cannot get result for '${query}' on ${serverName}"
+    other: "Cannot get result for '${query}' on ${serverName} (HTTP ${n})"
 
 actionTag:
   copy: "Copy tag"

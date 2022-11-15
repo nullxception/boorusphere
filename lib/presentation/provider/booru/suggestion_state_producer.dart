@@ -29,11 +29,24 @@ class SuggestionStateProducer extends StateNotifier<SuggestionState> {
     }
 
     state = SuggestionState.loading(_data);
-    final result = await repo.getSuggestion(query);
-
-    _data.clear();
-    final blockedTags = ref.read(blockedTagsRepoProvider);
-    _data.addAll(result.where((it) => !blockedTags.get().values.contains(it)));
-    state = SuggestionState.data(_data);
+    final res = await repo.getSuggestion(query);
+    res.when(
+      data: (src, data) {
+        final blockedTags = ref.read(blockedTagsRepoProvider);
+        _data.clear();
+        _data.addAll(
+          data.where((it) => !blockedTags.get().values.contains(it)),
+        );
+        state = SuggestionState.data(_data);
+      },
+      error: (res, error, stackTrace) {
+        state = SuggestionState.error(
+          _data,
+          error: error,
+          stackTrace: stackTrace,
+          code: res.statusCode ?? 0,
+        );
+      },
+    );
   }
 }

@@ -7,8 +7,8 @@ part 'booru_result.freezed.dart';
 class BooruResult<T> with _$BooruResult<T> {
   const factory BooruResult.data(String src, T data) = DataBooruResult;
   const factory BooruResult.error(
-    Response res, [
+    Response res, {
     Object? error,
     StackTrace? stackTrace,
-  ]) = ErrorBooruResult;
+  }) = ErrorBooruResult;
 }

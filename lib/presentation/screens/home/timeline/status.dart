@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/booru/entity/page_error.dart';
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state_producer.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
@@ -54,21 +54,21 @@ class TimelineStatus extends ConsumerWidget {
                 margin: const EdgeInsets.all(16),
                 children: Column(
                   children: [
-                    if (error == PageError.httpError)
+                    if (error == BooruError.httpError)
                       ErrorInfo(
                         error: t.pageStatus.httpError(
                           n: code,
                           serverName: serverActive.name,
                         ),
                       )
-                    else if (error == PageError.empty)
+                    else if (error == BooruError.empty)
                       ErrorInfo(
                         error: query.isEmpty
                             ? t.pageStatus.noResult(n: size)
                             : t.pageStatus
                                 .noResultForQuery(n: size, query: query),
                       )
-                    else if (error == PageError.noParser)
+                    else if (error == BooruError.noParser)
                       ErrorInfo(
                         error: t.pageStatus
                             .noParser(serverName: serverActive.name),
@@ -78,7 +78,7 @@ class TimelineStatus extends ConsumerWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (error == PageError.empty && data.option.safeMode)
+                        if (error == BooruError.empty && data.option.safeMode)
                           ElevatedButton(
                             onPressed: () {
                               ref

@@ -1,3 +1,4 @@
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state_producer.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
@@ -182,11 +183,24 @@ class SearchSuggestion extends HookConsumerWidget {
                           ),
                         );
                       },
-                      error: (data, error, stackTrace) {
+                      error: (data, error, stackTrace, code) {
+                        final Object? msg;
+                        if (error == BooruError.empty) {
+                          msg = t.suggestion.empty(query: searchQuery.value);
+                        } else if (error == BooruError.httpError) {
+                          msg = t.suggestion.httpError(
+                            n: code,
+                            query: searchQuery.value,
+                            serverName: serverActive.name,
+                          );
+                        } else {
+                          msg = error;
+                        }
+
                         return SliverPadding(
                           padding: const EdgeInsets.all(16),
                           sliver: SliverToBoxAdapter(
-                            child: ErrorInfo(error: error),
+                            child: ErrorInfo(error: msg),
                           ),
                         );
                       },

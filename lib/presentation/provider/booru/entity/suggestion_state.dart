@@ -11,5 +11,6 @@ class SuggestionState with _$SuggestionState {
     Set<String> data, {
     Object? error,
     StackTrace? stackTrace,
+    @Default(0) int code,
   }) = ErrorSuggestionState;
 }

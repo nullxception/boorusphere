@@ -1,4 +1,4 @@
-enum PageError {
+enum BooruError {
   empty,
   noParser,
   httpError,
