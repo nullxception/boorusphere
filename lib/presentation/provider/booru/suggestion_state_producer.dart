@@ -28,24 +28,28 @@ class SuggestionStateProducer extends StateNotifier<FetchState<Set<String>>> {
     }
 
     state = FetchState.loading(_data);
-    final res = await repo.getSuggestion(query);
-    res.when(
-      data: (data, src) {
-        final blockedTags = ref.read(blockedTagsRepoProvider);
-        _data.clear();
-        _data.addAll(
-          data.where((it) => !blockedTags.get().values.contains(it)),
-        );
-        state = FetchState.data(_data);
-      },
-      error: (res, error, stackTrace) {
-        state = FetchState.error(
-          _data,
-          error: error,
-          stackTrace: stackTrace,
-          code: res.statusCode ?? 0,
-        );
-      },
-    );
+    try {
+      final res = await repo.getSuggestion(query);
+      res.when(
+        data: (data, src) {
+          final blockedTags = ref.read(blockedTagsRepoProvider);
+          _data.clear();
+          _data.addAll(
+            data.where((it) => !blockedTags.get().values.contains(it)),
+          );
+          state = FetchState.data(_data);
+        },
+        error: (res, error, stackTrace) {
+          state = FetchState.error(
+            _data,
+            error: error,
+            stackTrace: stackTrace,
+            code: res.statusCode ?? 0,
+          );
+        },
+      );
+    } catch (e, s) {
+      state = FetchState.error(_data, error: e, stackTrace: s);
+    }
   }
 }
