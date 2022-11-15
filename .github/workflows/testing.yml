@@ -16,11 +16,13 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
-      - name: Get dependencies
-        run: flutter pub get
-      - name: Verify formatting
-        run: flutter format --output=none --set-exit-if-changed .
-      - name: Analyze source
-        run: flutter analyze
+      - name: Install derry
+        run: flutter pub global activate derry
+      - name: Sync
+        run: derry sync
+      - name: Generate
+        run: derry gen all
+      - name: Test
+        run: derry test all
