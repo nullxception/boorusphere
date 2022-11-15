@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:boorusphere/data/entity/sphere_exception.dart';
 import 'package:boorusphere/data/provider/dio.dart';
+import 'package:boorusphere/data/repository/booru/entity/page_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
@@ -58,9 +58,12 @@ class PageStateProducer extends StateNotifier<PageState> {
 
     try {
       await _fetch();
-    } catch (err, stackTrace) {
-      if (!mounted) return;
-      state = PageState.error(currentData, err, stackTrace);
+    } catch (error, stackTrace) {
+      state = PageState.error(
+        currentData,
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -80,43 +83,50 @@ class PageStateProducer extends StateNotifier<PageState> {
     if (data.isEmpty) _page = 0;
     state = PageState.loading(currentData);
 
-    final page = await repo.getPage(option, _page);
+    final pageResult = await repo.getPage(option, _page);
+    await pageResult.when(
+      data: (src, page) async {
+        if (page.isEmpty) {
+          state = PageState.error(currentData, error: PageError.empty);
+          return;
+        }
 
-    if (page.data.isEmpty) {
-      throw SphereException(
-          message: [
-        data.isEmpty ? 'No result found' : 'No more result found',
-        if (option.query.isNotEmpty) 'for ${option.query}',
-        if (option.safeMode) 'in safe mode',
-      ].join(' '));
-    }
+        _page++;
+        final newPosts = page
+            .where((it) =>
+                !it.tags.any(blockedTags.contains) &&
+                !data.any((post) => post.id == it.id))
+            .toList();
 
-    _page++;
-    final newPosts = page.data
-        .where((it) =>
-            !it.tags.any(blockedTags.contains) &&
-            !data.any((post) => post.id == it.id))
-        .toList();
+        if (newPosts.isEmpty) {
+          if (_skipCount > 3) return;
+          _skipCount++;
+          return Future.delayed(const Duration(milliseconds: 150), _fetch);
+        }
+        _skipCount = 0;
 
-    if (newPosts.isEmpty) {
-      if (_skipCount > 3) return;
-      _skipCount++;
-      return Future.delayed(const Duration(milliseconds: 150), _fetch);
-    }
-    _skipCount = 0;
+        final fromJar =
+            await ref.read(cookieJarProvider).loadForRequest(src.asUri);
 
-    final fromJar =
-        await ref.read(cookieJarProvider).loadForRequest(page.src.asUri);
+        if (!mounted) return;
 
-    if (!mounted) return;
+        if (fromJar.isNotEmpty) {
+          cookie
+            ..clear()
+            ..addAll(fromJar);
+        }
 
-    if (fromJar.isNotEmpty) {
-      cookie
-        ..clear()
-        ..addAll(fromJar);
-    }
-
-    data.addAll(newPosts);
-    state = PageState.data(currentData);
+        data.addAll(newPosts);
+        state = PageState.data(currentData);
+      },
+      error: (res, error, stackTrace) {
+        state = PageState.error(
+          currentData,
+          error: error,
+          stackTrace: stackTrace,
+          code: res.statusCode ?? 0,
+        );
+      },
+    );
   }
 }

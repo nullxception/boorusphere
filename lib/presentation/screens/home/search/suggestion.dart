@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/provider/settings/server/server_setting
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/search/controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
-import 'package:boorusphere/presentation/widgets/exception_info.dart';
+import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -173,10 +173,11 @@ class SearchSuggestion extends HookConsumerWidget {
                           ),
                         ),
                       ),
-                      error: (ex, trace) => SliverPadding(
+                      error: (error, stackTrace) => SliverPadding(
                         padding: const EdgeInsets.all(16),
-                        sliver:
-                            SliverToBoxAdapter(child: ExceptionInfo(err: ex)),
+                        sliver: SliverToBoxAdapter(
+                          child: ErrorInfo(error: error),
+                        ),
                       ),
                     ),
                   const SliverToBoxAdapter(

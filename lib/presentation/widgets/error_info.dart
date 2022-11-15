@@ -6,10 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ExceptionInfo extends HookWidget {
-  const ExceptionInfo({
+class ErrorInfo extends HookWidget {
+  const ErrorInfo({
     super.key,
-    this.err,
+    this.error,
     this.stackTrace,
     this.textAlign = TextAlign.center,
     this.style,
@@ -17,7 +17,7 @@ class ExceptionInfo extends HookWidget {
     this.padding = const EdgeInsets.symmetric(vertical: 16),
   });
 
-  final Object? err;
+  final Object? error;
   final StackTrace? stackTrace;
   final TextAlign textAlign;
   final CrossAxisAlignment crossAxisAlignment;
@@ -25,7 +25,7 @@ class ExceptionInfo extends HookWidget {
   final EdgeInsets padding;
 
   String get description {
-    final e = err is DioError ? (err as DioError).error : err;
+    final e = error is DioError ? (error as DioError).error : error;
     if (e is HandshakeException) {
       return 'Cannot establish a secure connection';
     } else if (e is SocketException) {
@@ -49,7 +49,9 @@ class ExceptionInfo extends HookWidget {
   }
 
   bool get traceable =>
-      stackTrace != null && err is! TimeoutException && err is! SphereException;
+      stackTrace != null &&
+      error is! TimeoutException &&
+      error is! SphereException;
 
   @override
   Widget build(BuildContext context) {

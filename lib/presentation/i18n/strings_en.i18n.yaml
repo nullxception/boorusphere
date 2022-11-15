@@ -36,6 +36,18 @@ retryPopBack: "Press back again to exit"
 goHome: "Back to home"
 recently: "Recently"
 
+pageStatus:
+  noParser: "Cannot parse result from ${serverName}"
+  httpError:
+    zero: "Cannot get result from ${serverName}"
+    other: "Cannot get result from ${serverName} (HTTP ${n})"
+  noResult:
+    one: No result found
+    other: No more result
+  noResultForQuery:
+    one: No result found for ${query}
+    other: No more result for ${query}
+
 suggestion:
   notSupported: "${serverName} did not support search suggestion"
   suggested: "Suggested at ${serverName}"

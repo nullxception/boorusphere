@@ -8,8 +8,9 @@ class PageState with _$PageState {
   const factory PageState.data(PageData data) = DataPageState;
   const factory PageState.loading(PageData data) = LoadingPageState;
   const factory PageState.error(
-    PageData data,
-    Object error,
+    PageData data, {
+    Object? error,
     StackTrace? stackTrace,
-  ) = ErrorPageState;
+    @Default(0) int code,
+  }) = ErrorPageState;
 }

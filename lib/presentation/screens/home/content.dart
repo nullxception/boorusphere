@@ -21,9 +21,11 @@ class HomeContent extends HookConsumerWidget {
     final scrollController = controller.scrollController;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!scrollController.hasClients) return;
-      if (pageState is ErrorPageState &&
-          scrollController.position.extentAfter < 300) {
+      if (!scrollController.hasClients ||
+          pageState is DataPageState ||
+          pageState is LoadingPageState) return;
+
+      if (scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 250),

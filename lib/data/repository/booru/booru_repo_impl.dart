@@ -1,7 +1,8 @@
 import 'package:boorusphere/data/entity/sphere_exception.dart';
 import 'package:boorusphere/data/repository/booru/datasource/booru_network_source.dart';
+import 'package:boorusphere/data/repository/booru/entity/booru_result.dart';
+import 'package:boorusphere/data/repository/booru/entity/page_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
-import 'package:boorusphere/data/repository/booru/entity/page_response.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/danboorujson_parser.dart';
@@ -32,24 +33,6 @@ class BooruRepoImpl implements BooruRepo {
         E621JsonParser(server),
         SafebooruXmlParser(server),
       ];
-
-  List<Post> _parsePage(Response res) {
-    final data = res.data;
-
-    if (res.statusCode != 200) {
-      throw SphereException(
-          message: 'Cannot fetch page (HTTP ${res.statusCode})');
-    } else if (!data.toString().contains(RegExp('https?'))) {
-      // no url founds in the document means no image(s) available to display
-      return [];
-    }
-
-    try {
-      return parser.firstWhere((it) => it.canParsePage(res)).parsePage(res);
-    } on StateError {
-      throw SphereException(message: 'Cannot parse result');
-    }
-  }
 
   Set<String> _parseSuggestion(Response res, String query) {
     if (res.statusCode != 200) {
@@ -95,7 +78,7 @@ class BooruRepoImpl implements BooruRepo {
   }
 
   @override
-  Future<PageResponse> getPage(
+  Future<BooruResult<List<Post>>> getPage(
     PageOption option,
     int index,
   ) async {
@@ -106,7 +89,20 @@ class BooruRepoImpl implements BooruRepo {
       option.limit,
     );
     final res = await networkSource.fetchPage(url);
-    final data = _parsePage(res);
-    return PageResponse(src: url, data: data);
+    if (res.statusCode != 200) {
+      return BooruResult.error(res, PageError.httpError);
+    } else if (!res.data.toString().contains(RegExp('https?'))) {
+      // no url founds in the document means no image(s) available to display
+      return BooruResult.data(url, []);
+    }
+
+    try {
+      return BooruResult.data(
+        url,
+        parser.firstWhere((it) => it.canParsePage(res)).parsePage(res),
+      );
+    } on StateError {
+      return BooruResult.error(res, PageError.noParser);
+    }
   }
 }

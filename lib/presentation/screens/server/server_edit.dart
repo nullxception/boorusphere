@@ -4,7 +4,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
-import 'package:boorusphere/presentation/widgets/exception_info.dart';
+import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:boorusphere/utils/server/scanner.dart';
@@ -150,8 +150,8 @@ class ServerEditorPage extends HookConsumerWidget {
                     margin: const EdgeInsets.only(top: 8),
                     color: context.colorScheme.error,
                     padding: const EdgeInsets.all(16),
-                    child: ExceptionInfo(
-                      err: error.value,
+                    child: ErrorInfo(
+                      error: error.value,
                       style: TextStyle(color: context.colorScheme.onError),
                       padding: EdgeInsets.zero,
                     ),
