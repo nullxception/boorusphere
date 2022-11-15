@@ -85,7 +85,7 @@ class PageStateProducer extends StateNotifier<PageState> {
 
     final pageResult = await repo.getPage(option, _page);
     await pageResult.when(
-      data: (src, page) async {
+      data: (page, src) async {
         if (page.isEmpty) {
           state = PageState.error(currentData, error: BooruError.empty);
           return;

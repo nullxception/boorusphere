@@ -62,11 +62,11 @@ class BooruRepoImpl implements BooruRepo {
             },
           );
 
-      return BooruResult.data(query, data);
+      return BooruResult.data(data);
     } catch (e, s) {
       if (query.isEmpty) {
         // the server did not support empty tag matches (hot/trending tags)
-        return BooruResult.data(query, []);
+        return const BooruResult.data([]);
       } else if (e == BooruError.httpError) {
         return BooruResult.error(
             res.firstWhere(
@@ -97,13 +97,13 @@ class BooruRepoImpl implements BooruRepo {
       return BooruResult.error(res, error: BooruError.httpError);
     } else if (!res.data.toString().contains(RegExp('https?'))) {
       // no url founds in the document means no image(s) available to display
-      return BooruResult.data(url, []);
+      return BooruResult.data([], src: url);
     }
 
     try {
       return BooruResult.data(
-        url,
         parser.firstWhere((it) => it.canParsePage(res)).parsePage(res),
+        src: url,
       );
     } on StateError {
       return BooruResult.error(res, error: BooruError.noParser);

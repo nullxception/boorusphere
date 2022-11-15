@@ -31,7 +31,7 @@ class SuggestionStateProducer extends StateNotifier<SuggestionState> {
     state = SuggestionState.loading(_data);
     final res = await repo.getSuggestion(query);
     res.when(
-      data: (src, data) {
+      data: (data, src) {
         final blockedTags = ref.read(blockedTagsRepoProvider);
         _data.clear();
         _data.addAll(
