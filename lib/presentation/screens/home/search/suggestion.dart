@@ -1,5 +1,5 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/booru/suggestion.dart';
+import 'package:boorusphere/presentation/provider/booru/suggestion_state_producer.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
@@ -20,11 +20,12 @@ class SearchSuggestion extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarController);
     final serverActive = ref.watch(ServerSettingsProvider.active);
     final searchQuery = useState('');
-    final suggester = ref.watch(suggestionFuture(searchQuery.value));
+    final suggestionState = ref.watch(suggestionStateProvider);
     final history = ref.watch(filteredHistoryProvider(searchQuery.value));
     final isBlurAllowed = ref.watch(UiSettingsProvider.blur);
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
+      ref.read(suggestionStateProvider.notifier).get(searchQuery.value);
     }, [searchBar]);
 
     useEffect(() {
@@ -145,40 +146,50 @@ class SearchSuggestion extends HookConsumerWidget {
                       ),
                     ),
                   if (serverActive.canSuggestTags)
-                    suggester.when(
-                      data: (value) => SliverList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: _SuggestionEntryTile(
-                              data: SuggestionEntry(
-                                isHistory: false,
-                                text: value.elementAt(index),
+                    suggestionState.when(
+                      data: (data) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: _SuggestionEntryTile(
+                                  data: SuggestionEntry(
+                                    isHistory: false,
+                                    text: data.elementAt(index),
+                                  ),
+                                  onTap: searchBar.submit,
+                                  onAdded: searchBar.append,
+                                ),
+                              );
+                            },
+                            childCount: data.length,
+                          ),
+                        );
+                      },
+                      loading: (data) {
+                        return SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 128,
+                            child: Center(
+                              child: SpinKitFoldingCube(
+                                size: 24,
+                                color: context.colorScheme.primary,
+                                duration: const Duration(seconds: 1),
                               ),
-                              onTap: searchBar.submit,
-                              onAdded: searchBar.append,
-                            ),
-                          );
-                        }, childCount: value.length),
-                      ),
-                      loading: () => SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 128,
-                          child: Center(
-                            child: SpinKitFoldingCube(
-                              size: 24,
-                              color: context.colorScheme.primary,
-                              duration: const Duration(seconds: 1),
                             ),
                           ),
-                        ),
-                      ),
-                      error: (error, stackTrace) => SliverPadding(
-                        padding: const EdgeInsets.all(16),
-                        sliver: SliverToBoxAdapter(
-                          child: ErrorInfo(error: error),
-                        ),
-                      ),
+                        );
+                      },
+                      error: (data, error, stackTrace) {
+                        return SliverPadding(
+                          padding: const EdgeInsets.all(16),
+                          sliver: SliverToBoxAdapter(
+                            child: ErrorInfo(error: error),
+                          ),
+                        );
+                      },
                     ),
                   const SliverToBoxAdapter(
                     child: SizedBox(
