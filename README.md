@@ -12,6 +12,7 @@ Simple, content-focused booru viewer for Android
 </a>
 
 # Preview
+
 <p align="center">
     <img width="23%" src="assets/previews/screen0.jpg" alt="screenshot of application menu"/>
     <img width="23%" src="assets/previews/screen1.jpg" alt="screenshot of search result"/>
@@ -23,15 +24,28 @@ Simple, content-focused booru viewer for Android
 
 This projects uses several code generators such as [freezed](https://github.com/rrousselGit/freezed), [json_serializable](https://github.com/google/json_serializable.dart), [hive_generator](https://github.com/hivedb/hive), and [auto_route_generator](https://github.com/Milad-Akarie/auto_route_library).
 
-So if you're editing some areas that needs a code generator such as entities, routing, or add and removing packages, make sure run the particular codegens before building.
+So if you're editing some areas that needs a code generator such as entities, routing, i18n, or add/removing packages, make sure to run the code generator before building.
 
 ```bash
-# Run code generator
-$ derry regenerate
+# Sync dependencies
+$ flutter pub get
 
-# Build production-ready apks
-$ derry release
+# Generate everything that needed
+$ derry gen all
+# ..or just regenerate i18n
+$ derry gen lang
 ```
+
+Run `derry ls` for complete list of script available.
+
+After that, you can use regular `flutter` commands to deploy app to your device, for example:
+
+```bash
+# run app in debug mode
+$ flutter run
+```
+
+For more details, see [Flutter's build modes](https://docs.flutter.dev/testing/build-modes).
 
 # License
 

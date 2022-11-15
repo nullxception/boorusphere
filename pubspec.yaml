@@ -139,15 +139,25 @@ flutter:
 
 # Task definition for derry
 scripts:
-  check:
-    - flutter format --output=none --set-exit-if-changed .
-    - flutter analyze
-  regenerate:
-    - flutter pub run build_runner build --delete-conflicting-outputs
-    - flutter pub run slang
-    - flutter format --fix .
-  release:
+  sync:
     - flutter clean
     - flutter pub get
+  gen:
+    core: flutter pub run build_runner build --delete-conflicting-outputs
+    lang:
+      - flutter pub run slang
+      - flutter format --fix lib/presentation/i18n
+    all:
+      - $gen:core
+      - $gen:lang
+  test:
+    fmt: flutter format --output=none --set-exit-if-changed lib/
+    ref: flutter analyze
+    all:
+      - $test:fmt
+      - $test:ref
+  release:
+    - $sync
+    - $gen:all
     - flutter build apk --split-per-abi
     - flutter pub run boorusphere:renameapk
