@@ -1,21 +1,20 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
-import 'package:boorusphere/presentation/provider/booru/entity/suggestion_state.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final suggestionStateProvider =
-    StateNotifierProvider.autoDispose<SuggestionStateProducer, SuggestionState>(
-        (ref) {
+final suggestionStateProvider = StateNotifierProvider.autoDispose<
+    SuggestionStateProducer, FetchState<Set<String>>>((ref) {
   final server = ref.watch(ServerSettingsProvider.active);
   final repo = ref.watch(booruRepoProvider(server));
   return SuggestionStateProducer(ref, repo);
 });
 
-class SuggestionStateProducer extends StateNotifier<SuggestionState> {
+class SuggestionStateProducer extends StateNotifier<FetchState<Set<String>>> {
   SuggestionStateProducer(this.ref, this.repo)
-      : super(const SuggestionState.data({}));
+      : super(const FetchState.data({}));
   final BooruRepo repo;
   final Ref ref;
   final Set<String> _data = {};
@@ -24,11 +23,11 @@ class SuggestionStateProducer extends StateNotifier<SuggestionState> {
     final server = ref.read(ServerSettingsProvider.active);
     if (server == ServerData.empty) {
       _data.clear();
-      state = const SuggestionState.data({});
+      state = const FetchState.data({});
       return;
     }
 
-    state = SuggestionState.loading(_data);
+    state = FetchState.loading(_data);
     final res = await repo.getSuggestion(query);
     res.when(
       data: (data, src) {
@@ -37,10 +36,10 @@ class SuggestionStateProducer extends StateNotifier<SuggestionState> {
         _data.addAll(
           data.where((it) => !blockedTags.get().values.contains(it)),
         );
-        state = SuggestionState.data(_data);
+        state = FetchState.data(_data);
       },
       error: (res, error, stackTrace) {
-        state = SuggestionState.error(
+        state = FetchState.error(
           _data,
           error: error,
           stackTrace: stackTrace,

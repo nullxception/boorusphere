@@ -8,23 +8,24 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
-import 'package:boorusphere/presentation/provider/booru/entity/page_state.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final pageStateProvider =
-    StateNotifierProvider.autoDispose<PageStateProducer, PageState>((ref) {
+    StateNotifierProvider.autoDispose<PageStateProducer, FetchState<PageData>>(
+        (ref) {
   final server = ref.watch(ServerSettingsProvider.active);
   final repo = ref.watch(booruRepoProvider(server));
   return PageStateProducer(ref, repo);
 });
 
-class PageStateProducer extends StateNotifier<PageState> {
+class PageStateProducer extends StateNotifier<FetchState<PageData>> {
   PageStateProducer(this.ref, this.repo)
-      : super(const PageState.data(PageData()));
+      : super(const FetchState.data(PageData()));
 
   final Ref ref;
   final BooruRepo repo;
@@ -59,7 +60,7 @@ class PageStateProducer extends StateNotifier<PageState> {
     try {
       await _fetch();
     } catch (error, stackTrace) {
-      state = PageState.error(
+      state = FetchState.error(
         currentData,
         error: error,
         stackTrace: stackTrace,
@@ -68,7 +69,7 @@ class PageStateProducer extends StateNotifier<PageState> {
   }
 
   void loadMore() {
-    if (state is! DataPageState) return;
+    if (state is! DataFetchState) return;
 
     update((it) => it.copyWith(clear: false));
   }
@@ -81,13 +82,13 @@ class PageStateProducer extends StateNotifier<PageState> {
     if (!mounted) return;
     if (option.clear) data.clear();
     if (data.isEmpty) _page = 0;
-    state = PageState.loading(currentData);
+    state = FetchState.loading(currentData);
 
     final pageResult = await repo.getPage(option, _page);
     await pageResult.when(
       data: (page, src) async {
         if (page.isEmpty) {
-          state = PageState.error(currentData, error: BooruError.empty);
+          state = FetchState.error(currentData, error: BooruError.empty);
           return;
         }
 
@@ -117,10 +118,10 @@ class PageStateProducer extends StateNotifier<PageState> {
         }
 
         data.addAll(newPosts);
-        state = PageState.data(currentData);
+        state = FetchState.data(currentData);
       },
       error: (res, error, stackTrace) {
-        state = PageState.error(
+        state = FetchState.error(
           currentData,
           error: error,
           stackTrace: stackTrace,
