@@ -6,23 +6,24 @@ import 'package:boorusphere/presentation/provider/settings/content/video_player.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ContentSettingsProvider {
-  static final mute = StateNotifierProvider<VideoPlayerMuteState, bool>((ref) {
+  static final mute =
+      StateNotifierProvider<VideoPlayerMuteSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.videoPlayerMuted, or: false);
-    return VideoPlayerMuteState(saved, repo);
+    return VideoPlayerMuteSettingNotifier(saved, repo);
   });
 
   static final blurExplicit =
-      StateNotifierProvider<BlurExplicitPostState, bool>((ref) {
+      StateNotifierProvider<BlurExplicitPostSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.postBlurExplicit, or: true);
-    return BlurExplicitPostState(saved, repo);
+    return BlurExplicitPostSettingNotifier(saved, repo);
   });
 
   static final loadOriginal =
-      StateNotifierProvider<LoadOriginalPostState, bool>((ref) {
+      StateNotifierProvider<LoadOriginalPostSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.postLoadOriginal, or: false);
-    return LoadOriginalPostState(saved, repo);
+    return LoadOriginalPostSettingNotifier(saved, repo);
   });
 }

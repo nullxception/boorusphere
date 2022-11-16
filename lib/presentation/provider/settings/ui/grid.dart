@@ -2,8 +2,8 @@ import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GridState extends StateNotifier<int> {
-  GridState(super.state, this.repo);
+class GridSettingNotifier extends StateNotifier<int> {
+  GridSettingNotifier(super.state, this.repo);
 
   final SettingRepo repo;
 

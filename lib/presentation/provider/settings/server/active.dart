@@ -3,8 +3,8 @@ import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ServerActiveState extends StateNotifier<ServerData> {
-  ServerActiveState(super.state, this.repo);
+class ServerActiveSettingNotifier extends StateNotifier<ServerData> {
+  ServerActiveSettingNotifier(super.state, this.repo);
 
   final SettingRepo repo;
 

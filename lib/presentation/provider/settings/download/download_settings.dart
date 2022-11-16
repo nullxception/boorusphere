@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DownloadSettingsProvider {
   static final groupByServer =
-      StateNotifierProvider<GroupByServerState, bool>((ref) {
+      StateNotifierProvider<GroupByServerSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.downloadsGroupByServer, or: false);
-    return GroupByServerState(saved, repo);
+    return GroupByServerSettingNotifier(saved, repo);
   });
 }

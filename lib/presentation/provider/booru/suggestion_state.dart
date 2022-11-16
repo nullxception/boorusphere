@@ -6,14 +6,14 @@ import 'package:boorusphere/presentation/provider/settings/server/server_setting
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final suggestionStateProvider = StateNotifierProvider.autoDispose<
-    SuggestionStateProducer, FetchState<Set<String>>>((ref) {
+    SuggestionStateNotifier, FetchState<Set<String>>>((ref) {
   final server = ref.watch(ServerSettingsProvider.active);
   final repo = ref.watch(booruRepoProvider(server));
-  return SuggestionStateProducer(ref, repo);
+  return SuggestionStateNotifier(ref, repo);
 });
 
-class SuggestionStateProducer extends StateNotifier<FetchState<Set<String>>> {
-  SuggestionStateProducer(this.ref, this.repo)
+class SuggestionStateNotifier extends StateNotifier<FetchState<Set<String>>> {
+  SuggestionStateNotifier(this.ref, this.repo)
       : super(const FetchState.data({}));
   final BooruRepo repo;
   final Ref ref;

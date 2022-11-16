@@ -5,13 +5,14 @@ import 'package:boorusphere/domain/repository/favorite_post_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final favoritePostProvider =
-    StateNotifierProvider<FavoritePostState, Map<String, FavoritePost>>((ref) {
+    StateNotifierProvider<FavoritePostNotifier, Map<String, FavoritePost>>(
+        (ref) {
   final repo = ref.read(favoritePostRepoProvider);
-  return FavoritePostState(repo.get(), repo);
+  return FavoritePostNotifier(repo.get(), repo);
 });
 
-class FavoritePostState extends StateNotifier<Map<String, FavoritePost>> {
-  FavoritePostState(super.state, this.repo);
+class FavoritePostNotifier extends StateNotifier<Map<String, FavoritePost>> {
+  FavoritePostNotifier(super.state, this.repo);
 
   final FavoritePostRepo repo;
 

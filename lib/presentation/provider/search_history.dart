@@ -6,9 +6,10 @@ import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final searchHistoryStateProvider =
-    StateNotifierProvider<SearchHistoryState, Map<int, SearchHistory>>((ref) {
+    StateNotifierProvider<SearchHistoryNotifier, Map<int, SearchHistory>>(
+        (ref) {
   final repo = ref.read(searchHistoryRepoProvider);
-  return SearchHistoryState(ref, repo);
+  return SearchHistoryNotifier(ref, repo);
 });
 
 final filteredHistoryProvider =
@@ -29,8 +30,8 @@ final filteredHistoryProvider =
   return filtered;
 });
 
-class SearchHistoryState extends StateNotifier<Map<int, SearchHistory>> {
-  SearchHistoryState(this.ref, this.repo) : super({}) {
+class SearchHistoryNotifier extends StateNotifier<Map<int, SearchHistory>> {
+  SearchHistoryNotifier(this.ref, this.repo) : super({}) {
     state = repo.all;
   }
 

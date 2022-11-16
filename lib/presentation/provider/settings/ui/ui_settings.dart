@@ -7,28 +7,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UiSettingsProvider {
-  static final grid = StateNotifierProvider<GridState, int>((ref) {
+  static final grid = StateNotifierProvider<GridSettingNotifier, int>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.uiTimelineGrid, or: 1);
-    return GridState(saved, repo);
+    return GridSettingNotifier(saved, repo);
   });
 
-  static final theme = StateNotifierProvider<ThemeModeState, ThemeMode>((ref) {
+  static final theme =
+      StateNotifierProvider<ThemeModeSettingNotifier, ThemeMode>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.uiThemeMode, or: ThemeMode.system.index);
-    return ThemeModeState(ThemeMode.values[saved], repo);
+    return ThemeModeSettingNotifier(ThemeMode.values[saved], repo);
   });
 
   static final darkerTheme =
-      StateNotifierProvider<DarkerThemeState, bool>((ref) {
+      StateNotifierProvider<DarkerThemeSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.uiMidnightMode, or: false);
-    return DarkerThemeState(saved, repo);
+    return DarkerThemeSettingNotifier(saved, repo);
   });
 
-  static final blur = StateNotifierProvider<UiBlurState, bool>((ref) {
+  static final blur = StateNotifierProvider<UiBlurSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.uiBlur, or: false);
-    return UiBlurState(saved, repo);
+    return UiBlurSettingNotifier(saved, repo);
   });
 }

@@ -18,7 +18,7 @@ class ChangelogPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final changelog = ref.watch(changelogProvider(option));
+    final changelog = ref.watch(changelogDataProvider(option));
 
     return Scaffold(
       appBar: AppBar(

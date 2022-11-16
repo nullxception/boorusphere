@@ -3,8 +3,8 @@ import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ThemeModeState extends StateNotifier<ThemeMode> {
-  ThemeModeState(super.state, this.repo);
+class ThemeModeSettingNotifier extends StateNotifier<ThemeMode> {
+  ThemeModeSettingNotifier(super.state, this.repo);
   final SettingRepo repo;
 
   Future<void> update(ThemeMode mode) async {
@@ -28,8 +28,8 @@ class ThemeModeState extends StateNotifier<ThemeMode> {
   }
 }
 
-class DarkerThemeState extends StateNotifier<bool> {
-  DarkerThemeState(super.state, this.repo);
+class DarkerThemeSettingNotifier extends StateNotifier<bool> {
+  DarkerThemeSettingNotifier(super.state, this.repo);
   final SettingRepo repo;
 
   Future<void> update(bool value) async {

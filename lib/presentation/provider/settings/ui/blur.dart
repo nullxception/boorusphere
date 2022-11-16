@@ -2,8 +2,8 @@ import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UiBlurState extends StateNotifier<bool> {
-  UiBlurState(super.state, this.repo);
+class UiBlurSettingNotifier extends StateNotifier<bool> {
+  UiBlurSettingNotifier(super.state, this.repo);
 
   final SettingRepo repo;
 

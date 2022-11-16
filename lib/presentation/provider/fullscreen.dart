@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final fullscreenProvider =
-    StateNotifierProvider.autoDispose<FullscreenState, bool>((ref) {
-  return FullscreenState(ref);
+    StateNotifierProvider.autoDispose<FullscreenNotifier, bool>((ref) {
+  return FullscreenNotifier(ref);
 });
 
-class FullscreenState extends StateNotifier<bool> {
-  FullscreenState(this.ref) : super(false);
+class FullscreenNotifier extends StateNotifier<bool> {
+  FullscreenNotifier(this.ref) : super(false);
 
   final Ref ref;
   final lastOrientations = <DeviceOrientation>[];

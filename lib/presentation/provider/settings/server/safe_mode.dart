@@ -2,8 +2,8 @@ import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SafeModeState extends StateNotifier<bool> {
-  SafeModeState(super.state, this.repo);
+class SafeModeSettingNotifier extends StateNotifier<bool> {
+  SafeModeSettingNotifier(super.state, this.repo);
   final SettingRepo repo;
 
   Future<void> update(bool value) async {

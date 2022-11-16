@@ -6,13 +6,13 @@ import 'package:boorusphere/presentation/provider/settings/server/server_setting
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final serverStateProvider =
-    StateNotifierProvider<ServerState, List<ServerData>>((ref) {
+    StateNotifierProvider<ServerNotifier, List<ServerData>>((ref) {
   final repo = ref.read(serverRepoProvider);
-  return ServerState(ref, repo);
+  return ServerNotifier(ref, repo);
 });
 
-class ServerState extends StateNotifier<List<ServerData>> {
-  ServerState(
+class ServerNotifier extends StateNotifier<List<ServerData>> {
+  ServerNotifier(
     this.ref,
     this.repo, {
     state = const <ServerData>[],
@@ -29,7 +29,7 @@ class ServerState extends StateNotifier<List<ServerData>> {
 
   ServerData get active => ref.read(ServerSettingsProvider.active);
 
-  ServerActiveState get activeNotifier =>
+  ServerActiveSettingNotifier get activeNotifier =>
       ref.read(ServerSettingsProvider.active.notifier);
 
   Future<void> _populate() async {

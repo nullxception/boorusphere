@@ -7,26 +7,27 @@ import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ServerSettingsProvider {
-  static final safeMode = StateNotifierProvider<SafeModeState, bool>((ref) {
+  static final safeMode =
+      StateNotifierProvider<SafeModeSettingNotifier, bool>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.serverSafeMode, or: true);
-    return SafeModeState(saved, repo);
+    return SafeModeSettingNotifier(saved, repo);
   });
 
   static final active =
-      StateNotifierProvider<ServerActiveState, ServerData>((ref) {
+      StateNotifierProvider<ServerActiveSettingNotifier, ServerData>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.serverActive, or: ServerData.empty);
-    return ServerActiveState(saved, repo);
+    return ServerActiveSettingNotifier(saved, repo);
   });
 
   static final postLimit =
-      StateNotifierProvider<ServerPostLimitState, int>((ref) {
+      StateNotifierProvider<ServerPostLimitSettingNotifier, int>((ref) {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(
       Setting.serverPostLimit,
-      or: ServerPostLimitState.defaultLimit,
+      or: ServerPostLimitSettingNotifier.defaultLimit,
     );
-    return ServerPostLimitState(saved, repo);
+    return ServerPostLimitSettingNotifier(saved, repo);
   });
 }

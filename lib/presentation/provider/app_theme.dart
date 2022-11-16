@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-final appThemeProvider = Provider((_) => AppThemeDataProducer());
+final appThemeProvider = Provider((_) => AppThemeDataNotifier());
 
 class AppThemeData {
   const AppThemeData({
@@ -17,7 +17,7 @@ class AppThemeData {
   final ThemeData midnight;
 }
 
-class AppThemeDataProducer {
+class AppThemeDataNotifier {
   late AppThemeData _data = _createAppThemeData();
 
   AppThemeData get data => _data;
