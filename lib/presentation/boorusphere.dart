@@ -15,10 +15,21 @@ class Boorusphere extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(UiSettingsProvider.lang);
     final themeMode = ref.watch(UiSettingsProvider.theme);
     final isDarkerTheme = ref.watch(UiSettingsProvider.darkerTheme);
     final deviceProp = ref.watch(devicePropProvider);
     final router = useMemoized(SphereRouter.new);
+
+    useEffect(() {
+      Future(() {
+        if (language != null) {
+          LocaleSettings.setLocale(language);
+        } else {
+          LocaleSettings.useDeviceLocale();
+        }
+      });
+    }, [language]);
 
     if (deviceProp.sdkVersion > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

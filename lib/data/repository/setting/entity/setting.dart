@@ -9,5 +9,6 @@ enum Setting {
   uiBlur,
   uiThemeMode,
   uiTimelineGrid,
+  uiLanguage,
   videoPlayerMuted;
 }

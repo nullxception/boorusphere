@@ -1,7 +1,9 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/provider.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/blur.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/grid.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +13,14 @@ class UiSettingsProvider {
     final repo = ref.read(settingRepoProvider);
     final saved = repo.get(Setting.uiTimelineGrid, or: 1);
     return GridSettingNotifier(saved, repo);
+  });
+
+  static final lang =
+      StateNotifierProvider<LanguageSettingNotifier, AppLocale?>((ref) {
+    final repo = ref.read(settingRepoProvider);
+    final savedCode = repo.get(Setting.uiLanguage, or: '');
+    final saved = LanguageSettingNotifier.fromString(savedCode);
+    return LanguageSettingNotifier(saved, repo);
   });
 
   static final theme =

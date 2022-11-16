@@ -1,14 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
+import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final localeProvider =
+    StreamProvider((ref) => LocaleSettings.getLocaleStream());
 
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});
@@ -64,6 +69,16 @@ class _SettingsContent extends HookConsumerWidget {
         _Section(
           title: Text(t.settings.interface),
           children: [
+            ListTile(
+              title: Text(t.settings.lang.title),
+              subtitle: Padding(
+                padding: subtitlePadding,
+                child: _CurrentLanguage(),
+              ),
+              onTap: () {
+                context.router.push(const LanguageSettingsRoute());
+              },
+            ),
             SwitchListTile(
               title: Text(t.settings.midnightTheme.title),
               subtitle: Padding(
@@ -198,6 +213,16 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _CurrentLanguage extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(UiSettingsProvider.lang);
+    return Text(
+      language == null ? t.settings.lang.automatic.title : t.languageName,
     );
   }
 }

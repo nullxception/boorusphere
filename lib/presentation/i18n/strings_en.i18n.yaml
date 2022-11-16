@@ -1,3 +1,6 @@
+languageName: "English"
+languageAlias: "English"
+
 save: "Save"
 cancel: "Cancel"
 clear: "Clear"
@@ -137,6 +140,11 @@ servers:
 settings:
   title: "Settings"
   interface: "Interface"
+  lang:
+    title: "Language"
+    automatic:
+      title: "Automatic"
+      desc: "Follow system language (if possible)"
   safeMode: "Safe mode"
   misc: "Miscellaneous"
   midnightTheme:
