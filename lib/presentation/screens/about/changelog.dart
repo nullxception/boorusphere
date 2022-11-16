@@ -24,10 +24,10 @@ class ChangelogPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           option.version == null
-              ? 'Changelog'
+              ? t.changelog.title
               : changelog.maybeWhen(
-                  data: (value) => 'Version ${option.version}',
-                  orElse: () => 'Changelog',
+                  data: (value) => t.version(version: '${option.version}'),
+                  orElse: () => t.changelog.title,
                 ),
         ),
       ),

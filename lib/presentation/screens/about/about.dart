@@ -53,7 +53,7 @@ class AboutPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  'Version $currentVer - $kAppArch',
+                  t.version(version: '$currentVer - $kAppArch'),
                   style: context.theme.textTheme.subtitle2
                       ?.copyWith(fontWeight: FontWeight.w400),
                 ),

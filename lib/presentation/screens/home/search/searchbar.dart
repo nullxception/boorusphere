@@ -1,3 +1,4 @@
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
@@ -20,7 +21,7 @@ class SearchBar extends HookConsumerWidget {
     final delta = useState([0.0, 0.0]);
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
     final isBlurAllowed = ref.watch(UiSettingsProvider.blur);
-
+    final serverActive = ref.watch(ServerSettingsProvider.active);
     final onScrolling = useCallback(() {
       final position = scrollController.position;
       final threshold = SearchBar.innerHeight;
@@ -96,7 +97,9 @@ class SearchBar extends HookConsumerWidget {
                       controller: searchBar.textFieldController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: searchBar.hint,
+                        hintText: searchBar.textFieldController.text.isEmpty
+                            ? t.searchHint(serverName: serverActive.name)
+                            : searchBar.textFieldController.text,
                         isDense: true,
                       ),
                       textAlign:

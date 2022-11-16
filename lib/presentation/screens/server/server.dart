@@ -26,7 +26,7 @@ class ServerPage extends HookConsumerWidget {
                     context: context,
                     builder: (context) => AlertDialog(
                       backgroundColor: context.colorScheme.background,
-                      title: Text(t.reset2),
+                      title: Text(t.resetToDefault),
                       icon: const Icon(Icons.restore),
                       content: Text(t.servers.resetWarning),
                       actions: [
@@ -55,7 +55,7 @@ class ServerPage extends HookConsumerWidget {
               return [
                 PopupMenuItem(
                   value: 'reset',
-                  child: Text(t.reset2),
+                  child: Text(t.resetToDefault),
                 ),
               ];
             },

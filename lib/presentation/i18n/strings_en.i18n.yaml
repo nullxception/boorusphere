@@ -6,7 +6,7 @@ remove: "Remove"
 edit: "Edit"
 add: "Add"
 reset: "Reset"
-reset2: "Reset to default"
+resetToDefault: "Reset to default"
 scan: "Scan"
 loadMore: "Load more"
 clearing: "Clearing..."
@@ -28,13 +28,15 @@ github: "GitHub"
 openSettings: "Open Settings"
 copySuccess: "Copied to clipboard"
 loadImageFailed: "Failed to load image"
-onMediaBlurred: "This media may contain material that is not safe for public viewing"
+onMediaBlurred: "This media may contain material that is not safe for public-viewing"
 unblur: "Show me"
 unsupportedMedia: "${fileExt} is not supported"
 openExternally: "Open externally"
 retryPopBack: "Press back again to exit"
 goHome: "Back to home"
 recently: "Recently"
+searchHint: "Search on ${serverName}..."
+version: "Version ${version}"
 
 pageStatus:
   noParser: "Cannot parse result from ${serverName}"
@@ -42,11 +44,11 @@ pageStatus:
     zero: "Cannot get result from ${serverName}"
     other: "Cannot get result from ${serverName} (HTTP ${n})"
   noResult:
-    one: No result found
-    other: No more result
+    one: "No result found"
+    other: "No more result"
   noResultForQuery:
-    one: No result found for ${query}
-    other: No more result for ${query}
+    one: "No result found for ${query}"
+    other: "No more result for ${query}"
 
 suggestion:
   notSupported: "${serverName} did not support search suggestion"
@@ -150,8 +152,8 @@ settings:
     title: "Blur explicit content"
     desc: "Content rated as explicit will be blurred"
   strictSafeMode:
-    title: "Rated safe only"
-    desc: "Only fetch content that rated as safe. Note that rated as safe doesn't guarantee safe for work"
+    title: "Strict Safe Mode"
+    desc: "Only fetch content that rated as 'safe'. Note that rated as 'safe' doesn't guarantee safe-for-work"
   loadOG:
     title: "Display original content"
     desc: "Load original file instead of the sample when opening the post"
