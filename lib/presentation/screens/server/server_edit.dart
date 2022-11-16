@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/provider/dio.dart';
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server.dart';

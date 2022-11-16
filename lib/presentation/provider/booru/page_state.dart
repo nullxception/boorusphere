@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:boorusphere/data/provider/dio.dart';
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
