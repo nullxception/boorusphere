@@ -4,7 +4,7 @@ import 'package:boorusphere/data/entity/download_status.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/server.dart';
+import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/download/download_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -102,7 +102,7 @@ class DownloadEntryView extends ConsumerWidget {
             if (!groupByServer) ...[
               const Text('•'),
               Text(ref
-                  .watch(serverStateProvider.notifier)
+                  .watch(serverDataProvider.notifier)
                   .getById(entry.post.serverId)
                   .name),
             ],

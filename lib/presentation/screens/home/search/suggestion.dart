@@ -21,12 +21,12 @@ class SearchSuggestion extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarController);
     final serverActive = ref.watch(ServerSettingsProvider.active);
     final searchQuery = useState('');
-    final suggestionState = ref.watch(suggestionStateProvider);
+    final suggestionState = ref.watch(suggestionProvider);
     final history = ref.watch(filteredHistoryProvider(searchQuery.value));
     final isBlurAllowed = ref.watch(UiSettingsProvider.blur);
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
-      ref.read(suggestionStateProvider.notifier).get(searchQuery.value);
+      ref.read(suggestionProvider.notifier).get(searchQuery.value);
     }, [searchBar]);
 
     useEffect(() {
@@ -67,7 +67,7 @@ class SearchSuggestion extends HookConsumerWidget {
                             Text(t.recently),
                             TextButton(
                               onPressed: ref
-                                  .read(searchHistoryStateProvider.notifier)
+                                  .read(searchHistoryProvider.notifier)
                                   .clear,
                               child: Text(t.clear),
                             ),
@@ -87,7 +87,7 @@ class SearchSuggestion extends HookConsumerWidget {
                             direction: DismissDirection.endToStart,
                             onDismissed: (direction) {
                               ref
-                                  .read(searchHistoryStateProvider.notifier)
+                                  .read(searchHistoryProvider.notifier)
                                   .delete(entry.key);
                             },
                             background: Container(

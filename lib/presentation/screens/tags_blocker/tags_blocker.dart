@@ -24,7 +24,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
   const _TagsBlockerContent();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blockedTags = ref.watch(blockedTagsStateProvider);
+    final blockedTags = ref.watch(blockedTagsProvider);
     final controller = useTextEditingController();
 
     return ListView(
@@ -38,7 +38,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
                 controller: controller,
                 onSubmitted: (value) {
                   final values = value.toWordList();
-                  ref.read(blockedTagsStateProvider.notifier).pushAll(values);
+                  ref.read(blockedTagsProvider.notifier).pushAll(values);
                   controller.clear();
                 },
                 decoration: InputDecoration(
@@ -63,7 +63,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
             leading: const Icon(Icons.block),
             trailing: IconButton(
               onPressed: () {
-                ref.read(blockedTagsStateProvider.notifier).delete(tag.key);
+                ref.read(blockedTagsProvider.notifier).delete(tag.key);
               },
               icon: const Icon(Icons.close),
             ),

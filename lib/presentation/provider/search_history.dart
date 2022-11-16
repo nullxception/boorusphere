@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/provider/settings/server/server_setting
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final searchHistoryStateProvider =
+final searchHistoryProvider =
     StateNotifierProvider<SearchHistoryNotifier, Map<int, SearchHistory>>(
         (ref) {
   final repo = ref.read(searchHistoryRepoProvider);
@@ -14,7 +14,7 @@ final searchHistoryStateProvider =
 
 final filteredHistoryProvider =
     Provider.family.autoDispose<Map<int, SearchHistory>, String>((ref, query) {
-  final history = ref.watch(searchHistoryStateProvider);
+  final history = ref.watch(searchHistoryProvider);
   if (query.endsWith(' ') || query.isEmpty) {
     return history;
   }

@@ -4,11 +4,10 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 extension PostExt on Post {
   Map<String, String> getHeaders(ref) {
-    final cookie =
-        ref.read(pageStateProvider.select((value) => value.data.cookies));
+    final cookies = ref.read(pageProvider.select((it) => it.data.cookies));
     return {
       'Referer': postUrl,
-      'Cookie': CookieManager.getCookies(cookie),
+      'Cookie': CookieManager.getCookies(cookies),
     };
   }
 }

@@ -15,7 +15,7 @@ import 'package:boorusphere/presentation/provider/settings/server/server_setting
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final pageStateProvider =
+final pageProvider =
     StateNotifierProvider.autoDispose<PageStateNotifier, FetchState<PageData>>(
         (ref) {
   final server = ref.watch(ServerSettingsProvider.active);
@@ -35,12 +35,12 @@ class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
   PageOption _option = const PageOption(clear: true);
 
   List<Post> data = [];
-  List<Cookie> cookie = [];
+  List<Cookie> cookies = [];
 
   PageOption get option => _option;
 
   PageData get currentData =>
-      PageData(option: option, posts: data, cookies: cookie);
+      PageData(option: option, posts: data, cookies: cookies);
 
   Future<void> update(PageOption Function(PageOption) updater) async {
     _option = updater(option);
@@ -54,7 +54,7 @@ class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
     _option = option.copyWith(limit: limit, safeMode: safeMode);
 
     if (option.query.isNotEmpty) {
-      await ref.read(searchHistoryStateProvider.notifier).save(option.query);
+      await ref.read(searchHistoryProvider.notifier).save(option.query);
     }
 
     try {
@@ -112,7 +112,7 @@ class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
         if (!mounted) return;
 
         if (fromJar.isNotEmpty) {
-          cookie
+          cookies
             ..clear()
             ..addAll(fromJar);
         }

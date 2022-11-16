@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final searchBarController = ChangeNotifierProvider((ref) {
-  final pageQuery =
-      ref.read(pageStateProvider.select((it) => it.data.option.query));
+  final pageQuery = ref.read(pageProvider.select((it) => it.data.option.query));
   return SearchBarController(ref, pageQuery);
 });
 
@@ -35,7 +34,7 @@ class SearchBarController extends ChangeNotifier {
     text = value;
     close();
     ref
-        .read(pageStateProvider.notifier)
+        .read(pageProvider.notifier)
         .update((state) => state.copyWith(query: value, clear: true));
   }
 

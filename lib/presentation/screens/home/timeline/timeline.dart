@@ -28,7 +28,7 @@ class Timeline extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gridExtra = ref.watch(UiSettingsProvider.grid);
-    final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));
+    final posts = ref.watch(pageProvider.select((it) => it.data.posts));
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + gridExtra;
     final scrollController = controller.scrollController;

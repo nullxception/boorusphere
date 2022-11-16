@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/server.dart';
+import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -12,7 +12,7 @@ class ServerPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverStateProvider);
+    final serverData = ref.watch(serverDataProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,7 @@ class ServerPage extends HookConsumerWidget {
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
-                            ref.read(serverStateProvider.notifier).reset();
+                            ref.read(serverDataProvider.notifier).reset();
                           },
                           child: Text(t.reset),
                         )
@@ -88,7 +88,7 @@ class ServerPage extends HookConsumerWidget {
                             break;
                           }
 
-                          ref.read(serverStateProvider.notifier).remove(it);
+                          ref.read(serverDataProvider.notifier).remove(it);
                           break;
                         default:
                           break;

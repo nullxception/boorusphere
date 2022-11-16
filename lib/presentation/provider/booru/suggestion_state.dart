@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart'
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final suggestionStateProvider = StateNotifierProvider.autoDispose<
+final suggestionProvider = StateNotifierProvider.autoDispose<
     SuggestionStateNotifier, FetchState<Set<String>>>((ref) {
   final server = ref.watch(ServerSettingsProvider.active);
   final repo = ref.watch(booruRepoProvider(server));

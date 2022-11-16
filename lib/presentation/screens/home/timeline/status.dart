@@ -16,7 +16,7 @@ class TimelineStatus extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final serverActive = ref.watch(ServerSettingsProvider.active);
 
-    final pageState = ref.watch(pageStateProvider);
+    final pageState = ref.watch(pageProvider);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -28,8 +28,7 @@ class TimelineStatus extends ConsumerWidget {
               height: 50,
               alignment: Alignment.topCenter,
               child: ElevatedButton(
-                onPressed: () =>
-                    ref.read(pageStateProvider.notifier).loadMore(),
+                onPressed: () => ref.read(pageProvider.notifier).loadMore(),
                 child: Text(t.loadMore),
               ),
             );
@@ -85,16 +84,15 @@ class TimelineStatus extends ConsumerWidget {
                                   .watch(
                                       ServerSettingsProvider.safeMode.notifier)
                                   .update(false)
-                                  .then((value) => ref
-                                      .read(pageStateProvider.notifier)
-                                      .load());
+                                  .then((value) =>
+                                      ref.read(pageProvider.notifier).load());
                             },
                             style: ElevatedButton.styleFrom(elevation: 0),
                             child: Text(t.disableSafeMode),
                           ),
                         ElevatedButton(
                           onPressed: () =>
-                              ref.read(pageStateProvider.notifier).load(),
+                              ref.read(pageProvider.notifier).load(),
                           style: ElevatedButton.styleFrom(elevation: 0),
                           child: Text(t.retry),
                         ),

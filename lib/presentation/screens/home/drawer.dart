@@ -3,7 +3,7 @@ import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
-import 'package:boorusphere/presentation/provider/server.dart';
+import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
@@ -225,8 +225,7 @@ class AppVersionTile extends HookConsumerWidget {
 class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final query =
-        ref.watch(pageStateProvider.select((it) => it.data.option.query));
+    final query = ref.watch(pageProvider.select((it) => it.data.option.query));
     return Visibility(
       visible: query.isNotEmpty,
       child: ListTile(
@@ -234,7 +233,7 @@ class _BackToHomeTile extends HookConsumerWidget {
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref
-              .read(pageStateProvider.notifier)
+              .read(pageProvider.notifier)
               .update((state) => state.copyWith(query: '', clear: true));
           ref.read(slidingDrawerController).close();
         },
@@ -248,7 +247,7 @@ class _ServerSelection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverStateProvider);
+    final serverData = ref.watch(serverDataProvider);
     final serverActive = ref.watch(ServerSettingsProvider.active);
 
     return Column(
