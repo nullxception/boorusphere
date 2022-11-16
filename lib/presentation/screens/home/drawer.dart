@@ -275,9 +275,6 @@ class _ServerSelection extends HookConsumerWidget {
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(ServerSettingsProvider.active.notifier).update(it);
-              ref
-                  .read(pageStateProvider.notifier)
-                  .update((state) => state.copyWith(clear: true));
               ref.read(slidingDrawerController).close();
             },
           ),

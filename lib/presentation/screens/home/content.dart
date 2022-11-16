@@ -6,7 +6,6 @@ import 'package:boorusphere/presentation/screens/home/timeline/status.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeContent extends HookConsumerWidget {
@@ -36,13 +35,7 @@ class HomeContent extends HookConsumerWidget {
 
     final isNewSearch =
         pageState is! DataFetchState && pageState.data.option.clear;
-    useEffect(() {
-      Future(
-        () {
-          ref.read(pageStateProvider.notifier).load();
-        },
-      );
-    }, []);
+
     return Stack(
       alignment: Alignment.center,
       children: [

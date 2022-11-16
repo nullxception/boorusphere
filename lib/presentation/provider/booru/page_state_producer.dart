@@ -20,7 +20,7 @@ final pageStateProvider =
         (ref) {
   final server = ref.watch(ServerSettingsProvider.active);
   final repo = ref.watch(booruRepoProvider(server));
-  return PageStateProducer(ref, repo);
+  return PageStateProducer(ref, repo)..load();
 });
 
 class PageStateProducer extends StateNotifier<FetchState<PageData>> {
