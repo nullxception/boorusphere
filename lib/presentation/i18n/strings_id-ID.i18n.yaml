@@ -15,7 +15,6 @@ loadMore: "Muat lebih banyak"
 clearing: "Membersihkan..."
 disableSafeMode: "Nonaktifkan mode aman"
 details: "Rincian"
-rating: "Penilaian"
 location: "Lokasi"
 source: "Sumber"
 fileSample: "File contoh"
@@ -40,6 +39,12 @@ goHome: "Kembali ke beranda"
 recently: "Baru-baru ini"
 searchHint: "Cari di ${serverName}..."
 version: "Versi ${version}"
+
+rating:
+  title: "Penilaian"
+  questionable: "Dipertanyakan"
+  explicit: "Eksplisit"
+  safe: "Aman"
 
 pageStatus:
   noParser: "Tidak dapat mengurai hasil dari ${serverName}"
@@ -161,7 +166,7 @@ settings:
     desc: "Konten yang dinilai eksplisit akan disensor"
   strictSafeMode:
     title: "Mode Ketat"
-    desc: "Hanya ambil konten yang dinilai 'safe'. Perhatikan bahwa dinilai sebagai 'safe' tidak menjamin aman untuk dilihat publik"
+    desc: "Hanya ambil konten yang telah dinilai 'Aman'. Perhatikan bahwa ini tidak menjamin aman untuk dilihat publik"
   loadOG:
     title: "Tampilkan konten asli"
     desc: "Muat konten original saat membuka post"

@@ -54,10 +54,10 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
           child: ListView(
             children: [
               ListTile(
-                title: Text(t.rating),
+                title: Text(t.rating.title),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Text(post.rating.name.capitalized),
+                  child: Text(post.rating.translate()),
                 ),
               ),
               if (post.postUrl.isNotEmpty)
@@ -314,5 +314,18 @@ mixin ClipboardMixins {
         duration: const Duration(seconds: 1),
       ),
     );
+  }
+}
+
+extension PostRatingText on PostRating {
+  String translate() {
+    switch (this) {
+      case PostRating.safe:
+        return t.rating.safe;
+      case PostRating.explicit:
+        return t.rating.explicit;
+      default:
+        return t.rating.questionable;
+    }
   }
 }

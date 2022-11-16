@@ -15,7 +15,6 @@ loadMore: "Load more"
 clearing: "Clearing..."
 disableSafeMode: "Disable safe mode"
 details: "Details"
-rating: "Rating"
 location: "Location"
 source: "Source"
 fileSample: "Sample file"
@@ -40,6 +39,12 @@ goHome: "Back to home"
 recently: "Recently"
 searchHint: "Search on ${serverName}..."
 version: "Version ${version}"
+
+rating:
+  title: "Rating"
+  questionable: "Questionable"
+  explicit: "Explicit"
+  safe: "Safe"
 
 pageStatus:
   noParser: "Cannot parse result from ${serverName}"
