@@ -1,0 +1,174 @@
+languageName: "Bahasa Indonesia"
+languageAlias: "Indonesian (id-ID)"
+
+save: "Simpan"
+cancel: "Batalkan"
+clear: "Bersihkan"
+retry: "Coba lagi"
+remove: "Hapus"
+edit: "Edit"
+add: "Tambah"
+reset: "Setel ulang"
+resetToDefault: "Setel ulang ke bawaan"
+scan: "Pindai"
+loadMore: "Muat lebih banyak"
+clearing: "Membersihkan..."
+disableSafeMode: "Nonaktifkan mode aman"
+details: "Rincian"
+rating: "Penilaian"
+location: "Lokasi"
+source: "Sumber"
+fileSample: "File contoh"
+fileOG: "File asli"
+tags: "Tag"
+meta: "Meta"
+artist: "Artis"
+character: "Karakter"
+copyright: "Hak Cipta"
+general: "General"
+ossLicense: "Lisensi sumber terbuka"
+github: "GitHub"
+openSettings: "Buka Pengaturan"
+copySuccess: "Disalin ke clipboard"
+loadImageFailed: "Gagal memuat konten"
+onMediaBlurred: "Media ini mungkin berisi konten yang tidak aman untuk dilihat publik"
+unblur: "Perlihatkan"
+unsupportedMedia: "${fileExt} tidak didukung"
+openExternally: "Buka secara eksternal"
+retryPopBack: "Tekan kembali lagi untuk keluar"
+goHome: "Kembali ke beranda"
+recently: "Baru-baru ini"
+searchHint: "Cari di ${serverName}..."
+version: "Versi ${version}"
+
+pageStatus:
+  noParser: "Tidak dapat mengurai hasil dari ${serverName}"
+  httpError:
+    zero: "Tidak bisa mendapatkan hasil dari ${serverName}"
+    other: "Tidak dapat memperoleh hasil dari ${serverName} (HTTP ${n})"
+  noResult:
+    one: "Tidak ada hasil yang ditemukan"
+    other: "Tidak ada lagi hasil"
+  noResultForQuery:
+    one: "Tidak ada hasil yang ditemukan untuk ${query}"
+    other: "Tidak ada lagi hasil untuk ${query}"
+
+suggestion:
+  notSupported: "${serverName} tidak mendukung saran pencarian"
+  suggested: "Disarankan di ${serverName}"
+  desc: "di ${serverName}"
+  empty: "Tidak ada tag yang cocok dengan '${query}'"
+  httpError:
+    zero: "Tidak bisa mendapatkan hasil untuk '${query}' di ${serverName}"
+    other: "Tidak bisa mendapatkan hasil untuk '${query}' di ${serverName} (HTTP ${n})"
+
+actionTag:
+  copy: "Salin tag"
+  block: "Blokir tag yang dipilih"
+  blocked: "Ditambahkan ke pemblokir tag"
+  append: "Tambahkan tag ke pencarian saat ini"
+  search: "Cari tag"
+
+updater:
+  check: "Periksa pembaruan"
+  checking: "Memeriksa pembaruan..."
+  download: "Unduh ${version}"
+  available: "Pembaruan tersedia: ${version}"
+  preparing: "Mempersiapkan pembaruan..."
+  onLatest: "Kamu telah menggunakan versi terbaru"
+  onNewVersion: "Versi baru tersedia"
+  install: "Pasang pembaruan"
+  progress: "Mengunduh: ${progress}%"
+
+changelog:
+  title: "Perubahan"
+  view: "Lihat perubahan"
+  none: "Tidak ada changelog yang tersedia"
+
+license:
+  package: "paket: ${name}"
+  title:
+    one: "Lisensi"
+    other: "Lisensi"
+  counted:
+    one: "${n} lisensi"
+    other: "${n} lisensi"
+
+downloader:
+  title: "Unduhan"
+  noFile: "File telah dipindahkan atau hilang"
+  redownload: "Unduh ulang"
+  detail: "Tampilkan detail"
+  placeholder: "File yang kamu unduh akan muncul di sini"
+  ungroup: "Batalkan grup"
+  groupByServer: "Kelompokkan berdasarkan server"
+  noPermission: "Tidak dapat mengunduh file; gagal mendapatkan izin"
+
+favorites:
+  placeholder: "Konten yang kamu suka akan berada di sini"
+  title: "Favorit"
+
+tagsBlocker:
+  title: "Pemblokir Tag"
+  desc: "Kamu dapat memblokir beberapa tag sekaligus dengan cara memisahkannya dengan spasi"
+  empty: "Belum ada tag yang diblokir"
+  hint: "Contoh: red_shirt blue_shoes"
+
+servers:
+  title: "Server"
+  resetWarning: "Apakah kamu yakin ingin mengatur ulang daftar server ke bawaan ?\n\nIni akan menghapus semua server yang kamu tambahkan"
+  removeLastError: "Server terakhir tidak dapat dihapus"
+  preset: "Dari Preset"
+  select: "Pilih Server"
+  add: "Tambahkan server baru"
+  edit: "Edit ${name}"
+  alias: "Alias"
+  homepage: "Beranda"
+  homepageHint: "Beranda, contoh: https://verycoolbooru.com"
+  useCustomApi: "Gunakan alamat API khusus"
+  useCustomApiDesc: "Berguna jika server memiliki alamat API yang berbeda dari beranda"
+  addrError: "bukan alamat yang valid"
+  apiAddr: "Alamat API"
+  apiAddrHint: "Alamat API, contoh: https://api-v69.verycoolbooru.com"
+  alreadyExists: "Data server untuk ${name} sudah ada"
+  payloads:
+    title: "Payload"
+    search: "Payload pencarian"
+    suggestion: "Payload saran pencarian"
+    post: "Payload Web posting"
+
+settings:
+  title: "Pengaturan"
+  interface: "Antarmuka"
+  lang:
+    title: "Bahasa"
+    automatic:
+      title: "Otomatis"
+      desc: "Ikuti bahasa sistem jika memungkinkan"
+  safeMode: "Mode aman"
+  misc: "Lain-lain"
+  midnightTheme:
+    title: "Tema Tengah Malam"
+    desc: "Gunakan warna yang lebih gelap untuk mode malam"
+  uiBlur:
+    title: "Aktifkan blur"
+    desc: "Aktifkan latar belakang blur pada berbagai elemen UI"
+  hideMedia:
+    title: "Sembunyikan media yang diunduh"
+    desc: "Cegah aplikasi galeri eksternal menampilkan file yang diunduh"
+  blurContent:
+    title: "Sensor konten eksplisit"
+    desc: "Konten yang dinilai eksplisit akan disensor"
+  strictSafeMode:
+    title: "Mode Ketat"
+    desc: "Hanya ambil konten yang dinilai 'safe'. Perhatikan bahwa dinilai sebagai 'safe' tidak menjamin aman untuk dilihat publik"
+  loadOG:
+    title: "Tampilkan konten asli"
+    desc: "Muat konten original saat membuka post"
+  postLimit:
+    title: "Maksimum konten setiap muatan"
+    desc: "Hasil mungkin kurang dari yang diharapkan (disebabkan oleh tag yang diblokir atau data yang tidak valid)"
+  clearCache:
+    title: "Hapus cache"
+    desc: "Hapus konten yang tersimpan di cache"
+    done: "Cache dibersihkan"
