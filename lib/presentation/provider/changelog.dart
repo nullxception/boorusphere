@@ -4,16 +4,20 @@ import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/changelog_repo.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final changelogProvider = Provider.autoDispose((ref) {
+part 'changelog.g.dart';
+
+@riverpod
+ChangelogNotifier changelog(ChangelogRef ref) {
   return ChangelogNotifier(ref.watch(changelogRepoProvider));
-});
+}
 
-final changelogDataProvider =
-    FutureProvider.family<List<ChangelogData>, ChangelogOption>((ref, arg) {
-  return ref.read(changelogProvider).invoke(arg);
-});
+@riverpod
+Future<List<ChangelogData>> changelogData(
+    ChangelogDataRef ref, ChangelogOption option) {
+  return ref.read(changelogProvider).invoke(option);
+}
 
 class ChangelogNotifier {
   ChangelogNotifier(this.repo);

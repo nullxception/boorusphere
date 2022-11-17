@@ -5,14 +5,19 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final _registryProvider = FutureProvider((ref) async {
+part 'licenses.g.dart';
+
+@Riverpod(keepAlive: true)
+FutureOr<Map<String, Iterable<LicenseEntry>>> licenseRegistry(
+    LicenseRegistryRef ref) async {
   final data = await LicenseRegistry.licenses.fold<LicenseData>(
     LicenseData(),
     (prev, license) => prev..add(license),
   );
   return data.toMap();
-});
+}
 
 class LicenseData {
   final _packages = <String>{};
@@ -36,7 +41,7 @@ class LicensesPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final registry = ref.watch(_registryProvider);
+    final registry = ref.watch(licenseRegistryProvider);
     return Scaffold(
       appBar: AppBar(title: Text(t.ossLicense)),
       body: SafeArea(

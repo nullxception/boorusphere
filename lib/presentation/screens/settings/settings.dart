@@ -12,9 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final localeProvider =
-    StreamProvider((ref) => LocaleSettings.getLocaleStream());
-
 class SettingsPage extends HookConsumerWidget {
   const SettingsPage({super.key});
 

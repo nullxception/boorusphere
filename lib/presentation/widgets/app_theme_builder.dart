@@ -10,7 +10,7 @@ class AppThemeBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appTheme = ref.watch(appThemeProvider);
+    final appTheme = ref.watch(appThemeDataProvider);
     return DynamicColorBuilder(
       builder: (light, dark) => builder(
         context,

@@ -4,9 +4,6 @@ import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final localeProvider =
-    StreamProvider((ref) => LocaleSettings.getLocaleStream());
-
 class LanguageSettingsPage extends StatelessWidget {
   const LanguageSettingsPage({super.key});
 

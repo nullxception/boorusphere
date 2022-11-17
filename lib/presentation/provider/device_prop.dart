@@ -1,8 +1,12 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final devicePropProvider = Provider<DeviceProp>(
-    (ref) => throw Exception('DeviceProp must be initialized manually'));
+part 'device_prop.g.dart';
+
+@Riverpod(keepAlive: true)
+DeviceProp deviceProp(DevicePropRef ref) {
+  throw UnimplementedError('DeviceProp must be overridden manually');
+}
 
 class DeviceProp {
   DeviceProp(this.android);
