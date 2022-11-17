@@ -80,7 +80,7 @@ dev_dependencies:
     sdk: flutter
   auto_route_generator: ^5.0.0
   build_runner: ^2.0.5
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.1
   freezed: ^2.1.0+1
   hive_generator: ^2.0.0
