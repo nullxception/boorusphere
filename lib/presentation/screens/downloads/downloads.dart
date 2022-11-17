@@ -2,7 +2,7 @@ import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
-import 'package:boorusphere/presentation/provider/settings/download/group_by_server.dart';
+import 'package:boorusphere/presentation/provider/settings/download_settings.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_entry_view.dart';
 import 'package:boorusphere/presentation/widgets/expandable_group_list_view.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -15,7 +15,8 @@ class DownloadsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final groupByServer = ref.watch(downloadGroupByServerSettingStateProvider);
+    final groupByServer = ref
+        .watch(downloadSettingsStateProvider.select((it) => it.groupByServer));
 
     return Scaffold(
       appBar: AppBar(
@@ -30,9 +31,8 @@ class DownloadsPage extends ConsumerWidget {
                     break;
                   case 'group-by-server':
                     ref
-                        .read(
-                            downloadGroupByServerSettingStateProvider.notifier)
-                        .update(!groupByServer);
+                        .read(downloadSettingsStateProvider.notifier)
+                        .setGroupByServer(!groupByServer);
                     break;
                   default:
                     break;
