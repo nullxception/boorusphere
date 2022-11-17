@@ -83,9 +83,11 @@ class PageState extends _$PageState {
     if (data.isEmpty) _page = 0;
     state = FetchState.loading(currentData);
 
+    final lastHashCode = repo.hashCode;
     final pageResult = await repo.getPage(option, _page);
     return pageResult.when<void>(
       data: (page, src) async {
+        if (lastHashCode != repo.hashCode) return;
         if (page.isEmpty) {
           state = FetchState.error(currentData, error: BooruError.empty);
           return;
@@ -107,6 +109,7 @@ class PageState extends _$PageState {
 
         final fromJar =
             await ref.read(cookieJarProvider).loadForRequest(src.asUri);
+        if (lastHashCode != repo.hashCode) return;
 
         if (fromJar.isNotEmpty) {
           cookies
