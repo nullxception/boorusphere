@@ -162,7 +162,7 @@ class ServerEditorPage extends HookConsumerWidget {
                     isEditing: isEditing,
                     onSubmitted: (data) {
                       final serverDataNotifier =
-                          ref.read(serverDataProvider.notifier);
+                          ref.read(serverDataStateProvider.notifier);
 
                       if (isEditing) {
                         serverDataNotifier.edit(server, data);

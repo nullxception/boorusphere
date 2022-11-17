@@ -248,7 +248,7 @@ class _ServerSelection extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverDataStateProvider);
     final serverActive = ref.watch(ServerSettingsProvider.active);
 
     return Column(

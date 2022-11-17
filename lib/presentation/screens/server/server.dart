@@ -12,7 +12,7 @@ class ServerPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverDataStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,7 @@ class ServerPage extends HookConsumerWidget {
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
-                            ref.read(serverDataProvider.notifier).reset();
+                            ref.read(serverDataStateProvider.notifier).reset();
                           },
                           child: Text(t.reset),
                         )
@@ -88,7 +88,7 @@ class ServerPage extends HookConsumerWidget {
                             break;
                           }
 
-                          ref.read(serverDataProvider.notifier).remove(it);
+                          ref.read(serverDataStateProvider.notifier).remove(it);
                           break;
                         default:
                           break;

@@ -54,7 +54,7 @@ class PageState extends _$PageState {
     _option = option.copyWith(limit: limit, safeMode: safeMode);
 
     if (option.query.isNotEmpty) {
-      await ref.read(searchHistoryProvider.notifier).save(option.query);
+      await ref.read(searchHistoryStateProvider.notifier).save(option.query);
     }
 
     try {

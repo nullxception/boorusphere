@@ -22,7 +22,7 @@ class ServerDetails extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataProvider);
+    final serverData = ref.watch(serverDataStateProvider);
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final cName = useTextEditingController(text: data.id);
     final cAlias = useTextEditingController(

@@ -72,8 +72,10 @@ class DownloadsPage extends ConsumerWidget {
             : ExpandableGroupListView<DownloadEntry, String>(
                 items: downloader.entries.reversed.toList(),
                 groupedBy: (entry) => entry.post.serverId,
-                groupTitle: (id) => Text(
-                    ref.watch(serverDataProvider.notifier).getById(id).name),
+                groupTitle: (id) => Text(ref
+                    .watch(serverDataStateProvider.notifier)
+                    .getById(id)
+                    .name),
                 itemBuilder: (entry) => DownloadEntryView(entry: entry),
                 ungroup: !groupByServer,
               ),

@@ -1,17 +1,21 @@
 import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:flutter/services.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final fullscreenProvider =
-    StateNotifierProvider.autoDispose<FullscreenNotifier, bool>((ref) {
-  return FullscreenNotifier(ref);
-});
+part 'fullscreen.g.dart';
 
-class FullscreenNotifier extends StateNotifier<bool> {
-  FullscreenNotifier(this.ref) : super(false);
-
-  final Ref ref;
+@riverpod
+class FullscreenState extends _$FullscreenState {
   final lastOrientations = <DeviceOrientation>[];
+
+  @override
+  bool build() {
+    ref.onDispose(() {
+      SystemChrome.setPreferredOrientations([]);
+      unfullscreen();
+    });
+    return false;
+  }
 
   Future<void> toggle({bool shouldLandscape = false}) async {
     state = !state;
@@ -45,12 +49,5 @@ class FullscreenNotifier extends StateNotifier<bool> {
     } else {
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setPreferredOrientations([]);
-    unfullscreen();
-    super.dispose();
   }
 }

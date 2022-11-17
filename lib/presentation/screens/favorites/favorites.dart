@@ -19,7 +19,7 @@ class FavoritesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasFav =
-        ref.watch(favoritePostProvider.select((it) => it.isNotEmpty));
+        ref.watch(favoritePostStateProvider.select((it) => it.isNotEmpty));
     return hasFav ? _FavoritesView() : _EmptyView();
   }
 }
@@ -51,9 +51,9 @@ class _EmptyView extends StatelessWidget {
 class _FavoritesView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grouped = ref.watch(favoritePostProvider.select(
+    final grouped = ref.watch(favoritePostStateProvider.select(
       (it) => it.values.groupListsBy((e) => ref
-          .watch(serverDataProvider.notifier)
+          .watch(serverDataStateProvider.notifier)
           .getById(e.post.serverId, or: ServerData.empty)),
     ));
 

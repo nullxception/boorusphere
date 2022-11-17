@@ -3,18 +3,13 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/search_history_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final searchHistoryProvider =
-    StateNotifierProvider<SearchHistoryNotifier, Map<int, SearchHistory>>(
-        (ref) {
-  final repo = ref.read(searchHistoryRepoProvider);
-  return SearchHistoryNotifier(ref, repo);
-});
+part 'search_history.g.dart';
 
-final filteredHistoryProvider =
-    Provider.family.autoDispose<Map<int, SearchHistory>, String>((ref, query) {
-  final history = ref.watch(searchHistoryProvider);
+@riverpod
+Map<int, SearchHistory> filterHistory(FilterHistoryRef ref, String query) {
+  final history = ref.watch(searchHistoryStateProvider);
   if (query.endsWith(' ') || query.isEmpty) {
     return history;
   }
@@ -28,15 +23,17 @@ final filteredHistoryProvider =
       queries.take(queries.length).contains(value.query));
 
   return filtered;
-});
+}
 
-class SearchHistoryNotifier extends StateNotifier<Map<int, SearchHistory>> {
-  SearchHistoryNotifier(this.ref, this.repo) : super({}) {
-    state = repo.all;
+@riverpod
+class SearchHistoryState extends _$SearchHistoryState {
+  late SearchHistoryRepo repo;
+
+  @override
+  Map<int, SearchHistory> build() {
+    repo = ref.read(searchHistoryRepoProvider);
+    return repo.all;
   }
-
-  final Ref ref;
-  final SearchHistoryRepo repo;
 
   Future<void> save(String value) async {
     final serverActive = ref.read(ServerSettingsProvider.active);

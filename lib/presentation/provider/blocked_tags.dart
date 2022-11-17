@@ -1,17 +1,18 @@
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final blockedTagsProvider =
-    StateNotifierProvider<BlockedTagsNotifier, Map<int, String>>((ref) {
-  final repo = ref.read(blockedTagsRepoProvider);
-  return BlockedTagsNotifier(repo.get(), repo);
-});
+part 'blocked_tags.g.dart';
 
-class BlockedTagsNotifier extends StateNotifier<Map<int, String>> {
-  BlockedTagsNotifier(super.state, this.repo);
+@Riverpod(keepAlive: true)
+class BlockedTagsState extends _$BlockedTagsState {
+  late BlockedTagsRepo repo;
 
-  final BlockedTagsRepo repo;
+  @override
+  Map<int, String> build() {
+    repo = ref.read(blockedTagsRepoProvider);
+    return repo.get();
+  }
 
   Future<void> delete(key) async {
     await repo.delete(key);

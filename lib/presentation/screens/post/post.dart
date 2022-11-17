@@ -75,7 +75,7 @@ class PostPage extends HookConsumerWidget {
     final pageController = useExtendedPageController(initialPage: page.value);
     final displayOriginal = ref.watch(ContentSettingsProvider.loadOriginal);
     final pageState = ref.watch(pageStateProvider);
-    final fullscreen = ref.watch(fullscreenProvider);
+    final fullscreen = ref.watch(fullscreenStateProvider);
     final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));
 
     final post = posts.isEmpty ? Post.empty : posts[page.value];

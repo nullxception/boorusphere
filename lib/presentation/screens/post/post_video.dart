@@ -198,7 +198,7 @@ class _Toolbox extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = controllerAsync?.asData?.value;
     final isMuted = ref.watch(ContentSettingsProvider.mute);
-    final fullscreen = ref.watch(fullscreenProvider);
+    final fullscreen = ref.watch(fullscreenStateProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     final playerMute = ref.watch(ContentSettingsProvider.mute);
     final isPlaying = ref.watch(_playerPlayState);
@@ -300,8 +300,11 @@ class _Toolbox extends HookConsumerWidget {
                               ),
                               padding: const EdgeInsets.all(16),
                               onPressed: () {
-                                ref.read(fullscreenProvider.notifier).toggle(
-                                    shouldLandscape: post.width > post.height);
+                                ref
+                                    .read(fullscreenStateProvider.notifier)
+                                    .toggle(
+                                        shouldLandscape:
+                                            post.width > post.height);
                                 autoHideToolbox();
                               },
                             ),

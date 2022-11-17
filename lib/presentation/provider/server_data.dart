@@ -3,27 +3,22 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/server_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final serverDataProvider =
-    StateNotifierProvider<ServerDataNotifier, List<ServerData>>((ref) {
-  final repo = ref.read(serverRepoProvider);
-  return ServerDataNotifier(ref, repo);
-});
+part 'server_data.g.dart';
 
-class ServerDataNotifier extends StateNotifier<List<ServerData>> {
-  ServerDataNotifier(
-    this.ref,
-    this.repo, {
-    state = const <ServerData>[],
-  }) : super(state) {
+@Riverpod(keepAlive: true)
+class ServerDataState extends _$ServerDataState {
+  late ServerRepo repo;
+
+  @override
+  List<ServerData> build() {
+    repo = ref.read(serverRepoProvider);
     // execute it anonymously since we can't update other state
     // while constructing a state
-    Future.delayed(Duration.zero, _populate);
+    Future(_populate);
+    return [];
   }
-
-  final Ref ref;
-  final ServerRepo repo;
 
   Set<ServerData> get all => {...repo.defaults.values, ...state};
 

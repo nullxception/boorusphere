@@ -58,7 +58,7 @@ class PostImageDisplay extends HookConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        ref.read(fullscreenProvider.notifier).toggle();
+        ref.read(fullscreenStateProvider.notifier).toggle();
       },
       child: Stack(
         alignment: Alignment.center,

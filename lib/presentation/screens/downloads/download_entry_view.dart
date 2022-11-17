@@ -102,7 +102,7 @@ class DownloadEntryView extends ConsumerWidget {
             if (!groupByServer) ...[
               const Text('•'),
               Text(ref
-                  .watch(serverDataProvider.notifier)
+                  .watch(serverDataStateProvider.notifier)
                   .getById(entry.post.serverId)
                   .name),
             ],

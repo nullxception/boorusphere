@@ -2,19 +2,19 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/favorite_post_repo.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final favoritePostProvider =
-    StateNotifierProvider<FavoritePostNotifier, Map<String, FavoritePost>>(
-        (ref) {
-  final repo = ref.read(favoritePostRepoProvider);
-  return FavoritePostNotifier(repo.get(), repo);
-});
+part 'favorite_post.g.dart';
 
-class FavoritePostNotifier extends StateNotifier<Map<String, FavoritePost>> {
-  FavoritePostNotifier(super.state, this.repo);
+@riverpod
+class FavoritePostState extends _$FavoritePostState {
+  late FavoritePostRepo repo;
 
-  final FavoritePostRepo repo;
+  @override
+  Map<String, FavoritePost> build() {
+    final repo = ref.read(favoritePostRepoProvider);
+    return repo.get();
+  }
 
   Future<void> clear() async {
     await repo.clear();

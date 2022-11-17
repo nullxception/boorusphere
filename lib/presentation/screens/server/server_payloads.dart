@@ -18,7 +18,7 @@ class ServerPayloadsPage extends HookConsumerWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: ref.read(serverDataProvider.notifier).all.map((it) {
+            children: ref.read(serverDataStateProvider.notifier).all.map((it) {
               return ListTile(
                 title: Text(it.name),
                 subtitle: Text(it.homepage),
