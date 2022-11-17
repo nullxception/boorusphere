@@ -22,14 +22,14 @@ Future<void>? showSystemAppSettingsDialog({
           onPressed: () {
             context.navigator.pop();
           },
-          child: Text(t.cancel),
+          child: Text(context.t.cancel),
         ),
         ElevatedButton(
           onPressed: () {
             context.navigator.pop();
             unawaited(openAppSettings());
           },
-          child: Text(t.openSettings),
+          child: Text(context.t.openSettings),
         )
       ],
     ),

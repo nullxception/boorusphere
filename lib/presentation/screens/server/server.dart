@@ -16,7 +16,7 @@ class ServerPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.servers.title),
+        title: Text(context.t.servers.title),
         actions: [
           PopupMenuButton(
             onSelected: (value) {
@@ -26,22 +26,22 @@ class ServerPage extends HookConsumerWidget {
                     context: context,
                     builder: (context) => AlertDialog(
                       backgroundColor: context.colorScheme.background,
-                      title: Text(t.resetToDefault),
+                      title: Text(context.t.resetToDefault),
                       icon: const Icon(Icons.restore),
-                      content: Text(t.servers.resetWarning),
+                      content: Text(context.t.servers.resetWarning),
                       actions: [
                         TextButton(
                           onPressed: () {
                             context.navigator.pop();
                           },
-                          child: Text(t.cancel),
+                          child: Text(context.t.cancel),
                         ),
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
                             ref.read(serverDataStateProvider.notifier).reset();
                           },
-                          child: Text(t.reset),
+                          child: Text(context.t.reset),
                         )
                       ],
                     ),
@@ -55,7 +55,7 @@ class ServerPage extends HookConsumerWidget {
               return [
                 PopupMenuItem(
                   value: 'reset',
-                  child: Text(t.resetToDefault),
+                  child: Text(context.t.resetToDefault),
                 ),
               ];
             },
@@ -82,7 +82,8 @@ class ServerPage extends HookConsumerWidget {
                             context.scaffoldMessenger.showSnackBar(
                               SnackBar(
                                 duration: const Duration(seconds: 1),
-                                content: Text(t.servers.removeLastError),
+                                content:
+                                    Text(context.t.servers.removeLastError),
                               ),
                             );
                             break;
@@ -98,11 +99,11 @@ class ServerPage extends HookConsumerWidget {
                       return [
                         PopupMenuItem(
                           value: 'edit',
-                          child: Text(t.edit),
+                          child: Text(context.t.edit),
                         ),
                         PopupMenuItem(
                           value: 'remove',
-                          child: Text(t.remove),
+                          child: Text(context.t.remove),
                         ),
                       ];
                     },
@@ -111,7 +112,7 @@ class ServerPage extends HookConsumerWidget {
                 );
               }).toList(),
               ListTile(
-                title: Text(t.add),
+                title: Text(context.t.add),
                 leading: const Icon(Icons.add),
                 onTap: () => context.router.push(ServerEditorRoute()),
               )

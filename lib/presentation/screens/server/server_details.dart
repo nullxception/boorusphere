@@ -46,7 +46,7 @@ class ServerDetails extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Text(
-                    t.details,
+                    context.t.details,
                     style: context.theme.textTheme.titleMedium,
                   ),
                 ),
@@ -60,7 +60,8 @@ class ServerDetails extends HookConsumerWidget {
                     validator: (value) {
                       final serverName = serverData.map((it) => it.id);
                       if (!isEditing && serverName.contains(value)) {
-                        return t.servers.alreadyExists(name: value ?? '');
+                        return context.t.servers
+                            .alreadyExists(name: value ?? '');
                       }
 
                       return null;
@@ -71,21 +72,21 @@ class ServerDetails extends HookConsumerWidget {
                     controller: cAlias,
                     decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
-                      labelText: t.servers.alias,
+                      labelText: context.t.servers.alias,
                     ),
                   ),
                 TextFormField(
                   controller: cHomepage,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: t.servers.homepage,
+                    labelText: context.t.servers.homepage,
                   ),
                 ),
                 TextFormField(
                   controller: cApiAddr,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: t.servers.apiAddr,
+                    labelText: context.t.servers.apiAddr,
                   ),
                 ),
                 Padding(
@@ -94,7 +95,7 @@ class ServerDetails extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        t.servers.payloads.title,
+                        context.t.servers.payloads.title,
                         style: context.theme.textTheme.titleMedium,
                       ),
                       ElevatedButton(
@@ -109,7 +110,7 @@ class ServerDetails extends HookConsumerWidget {
                             ),
                           );
                         },
-                        child: Text(t.servers.preset),
+                        child: Text(context.t.servers.preset),
                       ),
                     ],
                   ),
@@ -120,7 +121,7 @@ class ServerDetails extends HookConsumerWidget {
                   controller: cSearchUrl,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: t.servers.payloads.search,
+                    labelText: context.t.servers.payloads.search,
                   ),
                 ),
                 TextFormField(
@@ -129,7 +130,7 @@ class ServerDetails extends HookConsumerWidget {
                   controller: cSuggestUrl,
                   decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
-                      labelText: t.servers.payloads.suggestion),
+                      labelText: context.t.servers.payloads.suggestion),
                 ),
                 TextFormField(
                   minLines: 1,
@@ -137,7 +138,7 @@ class ServerDetails extends HookConsumerWidget {
                   controller: cPostUrl,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: t.servers.payloads.post,
+                    labelText: context.t.servers.payloads.post,
                   ),
                 ),
               ],
@@ -171,7 +172,7 @@ class ServerDetails extends HookConsumerWidget {
                     );
               onSubmitted.call(newData);
             },
-            child: Text(t.save),
+            child: Text(context.t.save),
           ),
         ),
       ],

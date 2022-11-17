@@ -98,7 +98,8 @@ class SearchBar extends HookConsumerWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: searchBar.textFieldController.text.isEmpty
-                            ? t.searchHint(serverName: serverActive.name)
+                            ? context.t
+                                .searchHint(serverName: serverActive.name)
                             : searchBar.textFieldController.text,
                         isDense: true,
                       ),

@@ -30,7 +30,7 @@ class TimelineStatus extends ConsumerWidget {
               child: ElevatedButton(
                 onPressed: () =>
                     ref.read(pageStateProvider.notifier).loadMore(),
-                child: Text(t.loadMore),
+                child: Text(context.t.loadMore),
               ),
             );
           },
@@ -56,7 +56,7 @@ class TimelineStatus extends ConsumerWidget {
                   children: [
                     if (error == BooruError.httpError)
                       ErrorInfo(
-                        error: t.pageStatus.httpError(
+                        error: context.t.pageStatus.httpError(
                           n: code,
                           serverName: serverActive.name,
                         ),
@@ -64,13 +64,13 @@ class TimelineStatus extends ConsumerWidget {
                     else if (error == BooruError.empty)
                       ErrorInfo(
                         error: query.isEmpty
-                            ? t.pageStatus.noResult(n: size)
-                            : t.pageStatus
+                            ? context.t.pageStatus.noResult(n: size)
+                            : context.t.pageStatus
                                 .noResultForQuery(n: size, query: query),
                       )
                     else if (error == BooruError.noParser)
                       ErrorInfo(
-                        error: t.pageStatus
+                        error: context.t.pageStatus
                             .noParser(serverName: serverActive.name),
                       )
                     else
@@ -90,13 +90,13 @@ class TimelineStatus extends ConsumerWidget {
                                       .load());
                             },
                             style: ElevatedButton.styleFrom(elevation: 0),
-                            child: Text(t.disableSafeMode),
+                            child: Text(context.t.disableSafeMode),
                           ),
                         ElevatedButton(
                           onPressed: () =>
                               ref.read(pageStateProvider.notifier).load(),
                           style: ElevatedButton.styleFrom(elevation: 0),
-                          child: Text(t.retry),
+                          child: Text(context.t.retry),
                         ),
                       ],
                     ),

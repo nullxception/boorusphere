@@ -175,8 +175,8 @@ class _PostImageStatus extends StatelessWidget {
             scale: state.extendedImageLoadState == LoadState.completed ? 0 : 1,
             child: isFailed
                 ? QuickBar.action(
-                    title: Text(t.loadImageFailed),
-                    actionTitle: Text(t.retry),
+                    title: Text(context.t.loadImageFailed),
+                    actionTitle: Text(context.t.retry),
                     onPressed: state.reLoadImage,
                   )
                 : QuickBar.progress(

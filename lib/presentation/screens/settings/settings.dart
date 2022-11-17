@@ -18,7 +18,7 @@ class SettingsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(t.settings.title)),
+      appBar: AppBar(title: Text(context.t.settings.title)),
       body: const SafeArea(
         child: _SettingsContent(),
       ),
@@ -37,7 +37,7 @@ class _SettingsContent extends HookConsumerWidget {
     return ListView(
       children: [
         _Section(
-          title: Text(t.downloader.title),
+          title: Text(context.t.downloader.title),
           children: [
             FutureBuilder(
               future: DownloadUtils.hasDotnomedia,
@@ -46,10 +46,10 @@ class _SettingsContent extends HookConsumerWidget {
                 final data = snapshot.data;
                 final value = data is bool ? data : false;
                 return SwitchListTile(
-                  title: Text(t.settings.hideMedia.title),
+                  title: Text(context.t.settings.hideMedia.title),
                   subtitle: Padding(
                     padding: subtitlePadding,
-                    child: Text(t.settings.hideMedia.desc),
+                    child: Text(context.t.settings.hideMedia.desc),
                   ),
                   value: value,
                   onChanged: (isEnabled) async {
@@ -64,10 +64,10 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: Text(t.settings.interface),
+          title: Text(context.t.settings.interface),
           children: [
             ListTile(
-              title: Text(t.settings.lang.title),
+              title: Text(context.t.settings.lang.title),
               subtitle: Padding(
                 padding: subtitlePadding,
                 child: _CurrentLanguage(),
@@ -77,10 +77,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             SwitchListTile(
-              title: Text(t.settings.midnightTheme.title),
+              title: Text(context.t.settings.midnightTheme.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.midnightTheme.desc),
+                child: Text(context.t.settings.midnightTheme.desc),
               ),
               value: ref.watch(UiSettingsProvider.darkerTheme),
               onChanged: (value) {
@@ -90,10 +90,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             SwitchListTile(
-              title: Text(t.settings.uiBlur.title),
+              title: Text(context.t.settings.uiBlur.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.uiBlur.desc),
+                child: Text(context.t.settings.uiBlur.desc),
               ),
               value: ref.watch(UiSettingsProvider.blur),
               onChanged: (value) {
@@ -103,13 +103,13 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: Text(t.settings.safeMode),
+          title: Text(context.t.settings.safeMode),
           children: [
             SwitchListTile(
-              title: Text(t.settings.blurContent.title),
+              title: Text(context.t.settings.blurContent.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.blurContent.desc),
+                child: Text(context.t.settings.blurContent.desc),
               ),
               value: ref.watch(ContentSettingsProvider.blurExplicit),
               onChanged: (value) {
@@ -119,10 +119,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             SwitchListTile(
-              title: Text(t.settings.strictSafeMode.title),
+              title: Text(context.t.settings.strictSafeMode.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.strictSafeMode.desc),
+                child: Text(context.t.settings.strictSafeMode.desc),
               ),
               value: ref.watch(ServerSettingsProvider.safeMode),
               onChanged: (value) {
@@ -134,13 +134,13 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: Text(t.servers.title),
+          title: Text(context.t.servers.title),
           children: [
             SwitchListTile(
-              title: Text(t.settings.loadOG.title),
+              title: Text(context.t.settings.loadOG.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.loadOG.desc),
+                child: Text(context.t.settings.loadOG.desc),
               ),
               value: ref.watch(ContentSettingsProvider.loadOriginal),
               onChanged: (value) {
@@ -150,10 +150,10 @@ class _SettingsContent extends HookConsumerWidget {
               },
             ),
             ListTile(
-              title: Text(t.settings.postLimit.title),
+              title: Text(context.t.settings.postLimit.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.postLimit.desc),
+                child: Text(context.t.settings.postLimit.desc),
               ),
               trailing: DropdownButton(
                 menuMaxHeight: 178,
@@ -181,17 +181,17 @@ class _SettingsContent extends HookConsumerWidget {
           ],
         ),
         _Section(
-          title: Text(t.settings.misc),
+          title: Text(context.t.settings.misc),
           children: [
             ListTile(
-              title: Text(t.settings.clearCache.title),
+              title: Text(context.t.settings.clearCache.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(t.settings.clearCache.desc),
+                child: Text(context.t.settings.clearCache.desc),
               ),
               onTap: () async {
                 context.scaffoldMessenger.showSnackBar(SnackBar(
-                  content: Text(t.clearing),
+                  content: Text(context.t.clearing),
                   duration: const Duration(milliseconds: 500),
                 ));
 
@@ -201,7 +201,7 @@ class _SettingsContent extends HookConsumerWidget {
 
                 context.scaffoldMessenger.showSnackBar(
                   SnackBar(
-                    content: Text(t.settings.clearCache.done),
+                    content: Text(context.t.settings.clearCache.done),
                     duration: const Duration(milliseconds: 500),
                   ),
                 );
@@ -219,7 +219,9 @@ class _CurrentLanguage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(UiSettingsProvider.lang);
     return Text(
-      language == null ? t.settings.lang.automatic.title : t.languageName,
+      language == null
+          ? context.t.settings.lang.automatic.title
+          : context.t.languageName,
     );
   }
 }

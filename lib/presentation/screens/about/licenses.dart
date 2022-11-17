@@ -43,7 +43,7 @@ class LicensesPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final registry = ref.watch(licenseRegistryProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(t.ossLicense)),
+      appBar: AppBar(title: Text(context.t.ossLicense)),
       body: SafeArea(
         child: registry.maybeWhen(
           data: (data) {
@@ -56,7 +56,7 @@ class LicensesPage extends HookConsumerWidget {
                 final count = packageLicenses.length;
                 return ListTile(
                   title: Text(packageName),
-                  subtitle: Text(t.license.counted(n: count)),
+                  subtitle: Text(context.t.license.counted(n: count)),
                   onTap: () {
                     PackageLicenses.display(
                       context: context,
@@ -95,13 +95,13 @@ class PackageLicenses extends StatelessWidget {
     final count = packageLicenses.length;
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.license.title(n: count)),
+        title: Text(context.t.license.title(n: count)),
         centerTitle: true,
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(32),
             child: Padding(
                 padding: const EdgeInsets.only(bottom: 18),
-                child: Text(t.license.package(name: packageName)))),
+                child: Text(context.t.license.package(name: packageName)))),
       ),
       body: ListView.separated(
         itemCount: packageLicenses.length,

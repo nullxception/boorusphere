@@ -29,7 +29,7 @@ class _EmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.favorites.title),
+        title: Text(context.t.favorites.title),
       ),
       body: SafeArea(
         child: Column(
@@ -38,7 +38,7 @@ class _EmptyView extends StatelessWidget {
               child: NoticeCard(
                 icon: const Icon(Icons.favorite),
                 margin: const EdgeInsets.only(top: 64),
-                children: Text(t.favorites.placeholder),
+                children: Text(context.t.favorites.placeholder),
               ),
             ),
           ],
@@ -73,7 +73,7 @@ class _FavoritesView extends HookConsumerWidget {
       child: Scaffold(
         extendBody: true,
         appBar: AppBar(
-          title: Text(t.favorites.title),
+          title: Text(context.t.favorites.title),
         ),
         body: TabBarView(
           children: [

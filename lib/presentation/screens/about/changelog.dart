@@ -24,10 +24,11 @@ class ChangelogPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           option.version == null
-              ? t.changelog.title
+              ? context.t.changelog.title
               : changelog.maybeWhen(
-                  data: (value) => t.version(version: '${option.version}'),
-                  orElse: () => t.changelog.title,
+                  data: (value) =>
+                      context.t.version(version: '${option.version}'),
+                  orElse: () => context.t.changelog.title,
                 ),
         ),
       ),
@@ -55,7 +56,7 @@ class ChangelogPage extends ConsumerWidget {
               Center(
                 child: NoticeCard(
                   icon: const Icon(Icons.cancel_rounded),
-                  children: Text(t.changelog.none),
+                  children: Text(context.t.changelog.none),
                 ),
               ),
             ],

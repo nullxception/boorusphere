@@ -12,7 +12,7 @@ class TagsBlockerPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(t.tagsBlocker.title)),
+      appBar: AppBar(title: Text(context.t.tagsBlocker.title)),
       body: const SafeArea(
         child: _TagsBlockerContent(),
       ),
@@ -33,7 +33,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 16),
           child: Column(
             children: [
-              Text(t.tagsBlocker.desc),
+              Text(context.t.tagsBlocker.desc),
               TextField(
                 controller: controller,
                 onSubmitted: (value) {
@@ -43,7 +43,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
                 },
                 decoration: InputDecoration(
                   border: const UnderlineInputBorder(),
-                  labelText: t.tagsBlocker.hint,
+                  labelText: context.t.tagsBlocker.hint,
                 ),
               ),
             ],
@@ -54,7 +54,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
             child: NoticeCard(
               icon: const Icon(Icons.tag),
               margin: const EdgeInsets.all(32),
-              children: Text(t.tagsBlocker.empty),
+              children: Text(context.t.tagsBlocker.empty),
             ),
           ),
         for (final tag in blockedTags.entries)

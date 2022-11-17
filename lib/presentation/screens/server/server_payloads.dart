@@ -14,7 +14,7 @@ class ServerPayloadsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(t.servers.select)),
+      appBar: AppBar(title: Text(context.t.servers.select)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

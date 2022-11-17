@@ -43,10 +43,10 @@ class DownloaderDialog extends HookConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(title: Text(t.downloader.title)),
+            ListTile(title: Text(context.t.downloader.title)),
             if (post.sampleFile.isNotEmpty)
               ListTile(
-                  title: Text(t.fileSample),
+                  title: Text(context.t.fileSample),
                   subtitle: FutureBuilder<PixelSize>(
                     future: post.content.isPhoto && !post.sampleSize.hasPixels
                         ? ExtendedNetworkImageProvider(
@@ -72,7 +72,7 @@ class DownloaderDialog extends HookConsumerWidget {
                     context.navigator.pop();
                   }),
             ListTile(
-              title: Text(t.fileOG),
+              title: Text(context.t.fileOG),
               subtitle: Text(
                   '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
               leading: Icon(_getFileIcon(post.originalFile)),
@@ -113,8 +113,8 @@ class DownloaderDialog extends HookConsumerWidget {
     if (!status.isGranted) {
       await showSystemAppSettingsDialog(
         context: context,
-        title: t.downloader.title,
-        reason: t.downloader.noPermission,
+        title: context.t.downloader.title,
+        reason: context.t.downloader.noPermission,
       );
     }
     return status.isGranted;

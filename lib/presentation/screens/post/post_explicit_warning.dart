@@ -21,12 +21,12 @@ class PostExplicitWarningCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
-            child: Text(t.onMediaBlurred, textAlign: TextAlign.center),
+            child: Text(context.t.onMediaBlurred, textAlign: TextAlign.center),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(elevation: 0),
             onPressed: onConfirm,
-            child: Text(t.unblur),
+            child: Text(context.t.unblur),
           )
         ],
       ),

@@ -89,27 +89,27 @@ class _Footer extends StatelessWidget {
       children: [
         _BackToHomeTile(),
         ListTile(
-          title: Text(t.downloader.title),
+          title: Text(context.t.downloader.title),
           leading: const Icon(Icons.cloud_download),
           onTap: () => context.router.push(const DownloadsRoute()),
         ),
         ListTile(
-          title: Text(t.favorites.title),
+          title: Text(context.t.favorites.title),
           leading: const Icon(Icons.favorite_border),
           onTap: () => context.router.push(const FavoritesRoute()),
         ),
         ListTile(
-          title: Text(t.servers.title),
+          title: Text(context.t.servers.title),
           leading: const Icon(Icons.public),
           onTap: () => context.router.push(const ServerRoute()),
         ),
         ListTile(
-          title: Text(t.tagsBlocker.title),
+          title: Text(context.t.tagsBlocker.title),
           leading: const Icon(Icons.block),
           onTap: () => context.router.push(const TagsBlockerRoute()),
         ),
         ListTile(
-          title: Text(t.settings.title),
+          title: Text(context.t.settings.title),
           leading: const Icon(Icons.settings),
           onTap: () => context.router.push(const SettingsRoute()),
         ),
@@ -189,7 +189,7 @@ class AppVersionTile extends HookConsumerWidget {
         if (!data.isNewerThan(currentVer)) return current;
         if (updateStatus.isDownloading) {
           return ListTile(
-            title: Text(t.updater.available(version: '$data')),
+            title: Text(context.t.updater.available(version: '$data')),
             leading: const SizedBox(
               height: 24,
               width: 24,
@@ -198,15 +198,18 @@ class AppVersionTile extends HookConsumerWidget {
                 child: CircularProgressIndicator(strokeWidth: 3),
               ),
             ),
-            subtitle: Text(t.updater.progress(progress: updater.progress)),
+            subtitle:
+                Text(context.t.updater.progress(progress: updater.progress)),
             onTap: () => context.router.push(const AboutRoute()),
           );
         }
         return ListTile(
-          title: Text(t.updater.available(version: '$data')),
+          title: Text(context.t.updater.available(version: '$data')),
           leading: Icon(Icons.info_outline, color: Colors.pink.shade300),
           subtitle: Text(
-            updater.status.isDownloaded ? t.updater.install : t.changelog.view,
+            updater.status.isDownloaded
+                ? context.t.updater.install
+                : context.t.changelog.view,
           ),
           onTap: () {
             if (updater.status.isDownloaded) {
@@ -230,7 +233,7 @@ class _BackToHomeTile extends HookConsumerWidget {
     return Visibility(
       visible: query.isNotEmpty,
       child: ListTile(
-        title: Text(t.goHome),
+        title: Text(context.t.goHome),
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref

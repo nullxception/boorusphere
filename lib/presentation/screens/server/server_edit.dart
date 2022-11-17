@@ -34,7 +34,7 @@ class ServerEditorPage extends HookConsumerWidget {
 
     validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
-        return t.servers.addrError;
+        return context.t.servers.addrError;
       }
 
       return null;
@@ -43,7 +43,9 @@ class ServerEditorPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          isEditing ? t.servers.edit(name: server.name) : t.servers.add,
+          isEditing
+              ? context.t.servers.edit(name: server.name)
+              : context.t.servers.add,
         ),
       ),
       body: SafeArea(
@@ -60,7 +62,7 @@ class ServerEditorPage extends HookConsumerWidget {
                     controller: scanHomepageText,
                     decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
-                      labelText: t.servers.homepageHint,
+                      labelText: context.t.servers.homepageHint,
                     ),
                     validator: validateAddress,
                   ),
@@ -69,11 +71,11 @@ class ServerEditorPage extends HookConsumerWidget {
                   value: useApiAddr.value,
                   title: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(t.servers.useCustomApi),
+                    child: Text(context.t.servers.useCustomApi),
                   ),
                   subtitle: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(t.servers.useCustomApiDesc),
+                    child: Text(context.t.servers.useCustomApiDesc),
                   ),
                   onChanged: (isChecked) {
                     if (isChecked != null) {
@@ -88,7 +90,7 @@ class ServerEditorPage extends HookConsumerWidget {
                       controller: scanApiAddrText,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(),
-                        labelText: t.servers.apiAddrHint,
+                        labelText: context.t.servers.apiAddrHint,
                       ),
                       validator: validateAddress,
                     ),
@@ -130,7 +132,7 @@ class ServerEditorPage extends HookConsumerWidget {
                             isLoading.value = false;
                           }
                         : null,
-                    child: Text(t.scan),
+                    child: Text(context.t.scan),
                   ),
                 ),
                 Visibility(

@@ -96,7 +96,7 @@ class DownloadEntryView extends ConsumerWidget {
                 size: 18,
               ),
             if (progress.status.isDownloaded && !entry.isFileExists)
-              Text(t.downloader.noFile)
+              Text(context.t.downloader.noFile)
             else
               Text(progress.status.name.capitalized),
             if (!groupByServer) ...[
@@ -169,25 +169,25 @@ class _EntryPopupMenu extends ConsumerWidget {
           if (progress.status.isDownloaded && !entry.isFileExists)
             PopupMenuItem(
               value: 'redownload',
-              child: Text(t.downloader.redownload),
+              child: Text(context.t.downloader.redownload),
             ),
           if (progress.status.isCanceled || progress.status.isFailed)
             PopupMenuItem(
               value: 'retry',
-              child: Text(t.retry),
+              child: Text(context.t.retry),
             ),
           if (progress.status.isDownloading)
             PopupMenuItem(
               value: 'cancel',
-              child: Text(t.cancel),
+              child: Text(context.t.cancel),
             ),
           PopupMenuItem(
             value: 'show-detail',
-            child: Text(t.downloader.detail),
+            child: Text(context.t.downloader.detail),
           ),
           PopupMenuItem(
             value: 'clear',
-            child: Text(t.clear),
+            child: Text(context.t.clear),
           ),
         ];
       },

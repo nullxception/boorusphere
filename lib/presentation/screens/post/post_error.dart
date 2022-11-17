@@ -39,9 +39,10 @@ class PostErrorDisplay extends HookConsumerWidget {
               32,
           child: QuickBar.action(
             title: Text(
-              t.unsupportedMedia(fileExt: post.content.url.fileExtension),
+              context.t
+                  .unsupportedMedia(fileExt: post.content.url.fileExtension),
             ),
-            actionTitle: Text(t.openExternally),
+            actionTitle: Text(context.t.openExternally),
             onPressed: () {
               launchUrlString(post.originalFile,
                   mode: LaunchMode.externalApplication);

@@ -64,12 +64,12 @@ class SearchSuggestion extends HookConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(t.recently),
+                            Text(context.t.recently),
                             TextButton(
                               onPressed: ref
                                   .read(searchHistoryStateProvider.notifier)
                                   .clear,
-                              child: Text(t.clear),
+                              child: Text(context.t.clear),
                             ),
                           ],
                         ),
@@ -95,7 +95,7 @@ class SearchSuggestion extends HookConsumerWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(t.remove),
+                                  Text(context.t.remove),
                                   const Padding(
                                     padding: EdgeInsets.all(16.0),
                                     child:
@@ -128,7 +128,7 @@ class SearchSuggestion extends HookConsumerWidget {
                             child: Icon(Icons.search_off),
                           ),
                           Text(
-                            t.suggestion.notSupported(
+                            context.t.suggestion.notSupported(
                               serverName: serverActive.name,
                             ),
                           ),
@@ -140,7 +140,7 @@ class SearchSuggestion extends HookConsumerWidget {
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: Text(
-                          t.suggestion.suggested(
+                          context.t.suggestion.suggested(
                             serverName: serverActive.name,
                           ),
                         ),
@@ -186,9 +186,10 @@ class SearchSuggestion extends HookConsumerWidget {
                       error: (data, error, stackTrace, code) {
                         final Object? msg;
                         if (error == BooruError.empty) {
-                          msg = t.suggestion.empty(query: searchQuery.value);
+                          msg = context.t.suggestion
+                              .empty(query: searchQuery.value);
                         } else if (error == BooruError.httpError) {
-                          msg = t.suggestion.httpError(
+                          msg = context.t.suggestion.httpError(
                             n: code,
                             query: searchQuery.value,
                             serverName: serverActive.name,
@@ -250,7 +251,7 @@ class _SuggestionEntryTile extends StatelessWidget {
       leading: Icon(data.isHistory ? Icons.history : Icons.tag, size: 22),
       title: Text(data.text),
       subtitle: data.server.isNotEmpty
-          ? Text(t.suggestion.desc(serverName: data.server))
+          ? Text(context.t.suggestion.desc(serverName: data.server))
           : null,
       onTap: () => onTap.call(data.text),
       trailing: Row(

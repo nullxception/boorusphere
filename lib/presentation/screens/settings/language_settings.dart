@@ -10,7 +10,7 @@ class LanguageSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(t.settings.lang.title)),
+      appBar: AppBar(title: Text(context.t.settings.lang.title)),
       body: const SafeArea(child: _Content()),
     );
   }
@@ -34,10 +34,10 @@ class _Content extends HookConsumerWidget {
     return ListView(
       children: [
         ListTile(
-          title: Text(t.settings.lang.automatic.title),
+          title: Text(context.t.settings.lang.automatic.title),
           subtitle: Padding(
             padding: subtitlePadding,
-            child: Text(t.settings.lang.automatic.desc),
+            child: Text(context.t.settings.lang.automatic.desc),
           ),
           onTap: () {
             useLanguage(null);

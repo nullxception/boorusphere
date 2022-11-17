@@ -50,7 +50,7 @@ class HomePage extends HookConsumerWidget {
             if (!allowPop.value) {
               allowPop.value = true;
               context.scaffoldMessenger.showSnackBar(SnackBar(
-                content: Text(t.retryPopBack),
+                content: Text(context.t.retryPopBack),
                 duration: maybePopTimeout,
               ));
               maybePopTimer.cancel();

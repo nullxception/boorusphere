@@ -19,7 +19,7 @@ class DownloadsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.downloader.title),
+        title: Text(context.t.downloader.title),
         actions: [
           if (downloader.entries.isNotEmpty)
             PopupMenuButton(
@@ -43,13 +43,13 @@ class DownloadsPage extends ConsumerWidget {
                     value: 'group-by-server',
                     child: Text(
                       groupByServer
-                          ? t.downloader.ungroup
-                          : t.downloader.groupByServer,
+                          ? context.t.downloader.ungroup
+                          : context.t.downloader.groupByServer,
                     ),
                   ),
                   PopupMenuItem(
                     value: 'clear-all',
-                    child: Text(t.clear),
+                    child: Text(context.t.clear),
                   ),
                 ];
               },
@@ -64,7 +64,7 @@ class DownloadsPage extends ConsumerWidget {
                     child: NoticeCard(
                       icon: const Icon(Icons.cloud_download),
                       margin: const EdgeInsets.only(top: 64),
-                      children: Text(t.downloader.placeholder),
+                      children: Text(context.t.downloader.placeholder),
                     ),
                   ),
                 ],

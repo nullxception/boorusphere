@@ -43,7 +43,7 @@ class UpdatePrepareDialog extends HookConsumerWidget {
               ),
             ),
             const SizedBox(width: 32),
-            Text(t.updater.preparing)
+            Text(context.t.updater.preparing)
           ],
         ),
       ),
