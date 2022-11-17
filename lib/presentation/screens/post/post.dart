@@ -4,7 +4,7 @@ import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart'
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/post/post_error.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
@@ -73,7 +73,7 @@ class PostPage extends HookConsumerWidget {
     const loadMoreThreshold = 90;
     final page = useState(beginPage);
     final pageController = useExtendedPageController(initialPage: page.value);
-    final displayOriginal = ref.watch(ContentSettingsProvider.loadOriginal);
+    final displayOriginal = ref.watch(loadOriginalPostSettingStateProvider);
     final pageState = ref.watch(pageStateProvider);
     final fullscreen = ref.watch(fullscreenStateProvider);
     final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));

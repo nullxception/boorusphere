@@ -1,6 +1,7 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
 import 'package:boorusphere/presentation/widgets/bouncing_scroll.dart';
@@ -15,9 +16,9 @@ class Boorusphere extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(UiSettingsProvider.lang);
-    final themeMode = ref.watch(UiSettingsProvider.theme);
-    final isDarkerTheme = ref.watch(UiSettingsProvider.darkerTheme);
+    final language = ref.watch(languageSettingStateProvider);
+    final themeMode = ref.watch(themeModeSettingStateProvider);
+    final isDarkerTheme = ref.watch(midnightModeSettingStateProvider);
     final deviceProp = ref.watch(devicePropProvider);
     final router = useMemoized(SphereRouter.new);
 

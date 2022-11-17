@@ -2,7 +2,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
-import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/server/active.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'suggestion_state.g.dart';
@@ -14,13 +14,13 @@ class SuggestionState extends _$SuggestionState {
 
   @override
   FetchState<Set<String>> build() {
-    final server = ref.watch(ServerSettingsProvider.active);
+    final server = ref.watch(serverActiveSettingStateProvider);
     repo = ref.read(booruRepoProvider(server));
     return const FetchState.data({});
   }
 
   Future<void> get(String query) async {
-    final server = ref.read(ServerSettingsProvider.active);
+    final server = ref.read(serverActiveSettingStateProvider);
     if (server == ServerData.empty) {
       _data.clear();
       state = const FetchState.data({});

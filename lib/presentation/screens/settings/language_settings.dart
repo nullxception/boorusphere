@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,7 +24,7 @@ class _Content extends HookConsumerWidget {
     const subtitlePadding = EdgeInsets.only(top: 8);
 
     useLanguage(AppLocale? lang) async {
-      await ref.read(UiSettingsProvider.lang.notifier).update(lang);
+      await ref.read(languageSettingStateProvider.notifier).update(lang);
       Future.delayed(
         const Duration(milliseconds: 120),
         () => context.router.pop(),

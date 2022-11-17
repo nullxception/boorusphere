@@ -1,16 +1,23 @@
+import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class ServerPostLimitSettingNotifier extends StateNotifier<int> {
-  ServerPostLimitSettingNotifier(super.state, this.repo);
+part 'post_limit.g.dart';
 
-  final SettingRepo repo;
+@riverpod
+class PostLimitSettingState extends _$PostLimitSettingState {
+  late SettingRepo repo;
+
+  @override
+  int build() {
+    repo = ref.read(settingRepoProvider);
+    return repo.get(Setting.serverPostLimit, or: PageOption.defaultLimit);
+  }
 
   Future<void> update(int value) async {
     state = value;
     await repo.put(Setting.serverPostLimit, value);
   }
-
-  static const defaultLimit = 40;
 }

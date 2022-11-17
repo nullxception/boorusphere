@@ -1,11 +1,19 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class LoadOriginalPostSettingNotifier extends StateNotifier<bool> {
-  LoadOriginalPostSettingNotifier(super.state, this.repo);
+part 'load_original.g.dart';
 
-  final SettingRepo repo;
+@riverpod
+class LoadOriginalPostSettingState extends _$LoadOriginalPostSettingState {
+  late SettingRepo repo;
+
+  @override
+  bool build() {
+    repo = ref.read(settingRepoProvider);
+    return repo.get(Setting.postLoadOriginal, or: false);
+  }
 
   Future<void> update(bool value) async {
     state = value;

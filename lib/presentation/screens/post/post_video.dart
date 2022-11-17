@@ -6,7 +6,8 @@ import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/settings/content/video_player.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -88,7 +89,7 @@ class PostVideoDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController = ref.watch(videoPlayerControllerProvider(post));
-    final blurExplicit = ref.watch(ContentSettingsProvider.blurExplicit);
+    final blurExplicit = ref.watch(blurExplicitPostSettingStateProvider);
     final isMounted = useIsMounted();
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
 
@@ -197,10 +198,9 @@ class _Toolbox extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = controllerAsync?.asData?.value;
-    final isMuted = ref.watch(ContentSettingsProvider.mute);
+    final isMuted = ref.watch(videoPlayerMuteSettingStateProvider);
     final fullscreen = ref.watch(fullscreenStateProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
-    final playerMute = ref.watch(ContentSettingsProvider.mute);
     final isPlaying = ref.watch(_playerPlayState);
     final isMounted = useIsMounted();
     final showToolbox = useState(true);
@@ -227,7 +227,7 @@ class _Toolbox extends HookConsumerWidget {
           }
 
           it.addListener(onFirstFrame);
-          it.setVolume(playerMute ? 0 : 1);
+          it.setVolume(isMuted ? 0 : 1);
           if (isPlaying) {
             it.play();
             autoHideToolbox();
@@ -282,7 +282,8 @@ class _Toolbox extends HookConsumerWidget {
                               color: Colors.white,
                               onPressed: () async {
                                 final mute = await ref
-                                    .read(ContentSettingsProvider.mute.notifier)
+                                    .read(videoPlayerMuteSettingStateProvider
+                                        .notifier)
                                     .toggle();
                                 await controller?.setVolume(mute ? 0 : 1);
                               },

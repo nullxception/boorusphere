@@ -1,9 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
-import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
+import 'package:boorusphere/presentation/provider/settings/server/post_limit.dart';
+import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/blur.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -82,10 +86,10 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.midnightTheme.desc),
               ),
-              value: ref.watch(UiSettingsProvider.darkerTheme),
+              value: ref.watch(midnightModeSettingStateProvider),
               onChanged: (value) {
                 ref
-                    .watch(UiSettingsProvider.darkerTheme.notifier)
+                    .watch(midnightModeSettingStateProvider.notifier)
                     .update(value);
               },
             ),
@@ -95,9 +99,9 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.uiBlur.desc),
               ),
-              value: ref.watch(UiSettingsProvider.blur),
+              value: ref.watch(uiBlurSettingStateProvider),
               onChanged: (value) {
-                ref.watch(UiSettingsProvider.blur.notifier).enable(value);
+                ref.watch(uiBlurSettingStateProvider.notifier).enable(value);
               },
             ),
           ],
@@ -111,10 +115,10 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.blurContent.desc),
               ),
-              value: ref.watch(ContentSettingsProvider.blurExplicit),
+              value: ref.watch(blurExplicitPostSettingStateProvider),
               onChanged: (value) {
                 ref
-                    .watch(ContentSettingsProvider.blurExplicit.notifier)
+                    .watch(blurExplicitPostSettingStateProvider.notifier)
                     .update(value);
               },
             ),
@@ -124,11 +128,9 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.strictSafeMode.desc),
               ),
-              value: ref.watch(ServerSettingsProvider.safeMode),
+              value: ref.watch(safeModeSettingStateProvider),
               onChanged: (value) {
-                ref
-                    .watch(ServerSettingsProvider.safeMode.notifier)
-                    .update(value);
+                ref.watch(safeModeSettingStateProvider.notifier).update(value);
               },
             ),
           ],
@@ -142,10 +144,10 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.loadOG.desc),
               ),
-              value: ref.watch(ContentSettingsProvider.loadOriginal),
+              value: ref.watch(loadOriginalPostSettingStateProvider),
               onChanged: (value) {
                 ref
-                    .watch(ContentSettingsProvider.loadOriginal.notifier)
+                    .watch(loadOriginalPostSettingStateProvider.notifier)
                     .update(value);
               },
             ),
@@ -157,7 +159,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               trailing: DropdownButton(
                 menuMaxHeight: 178,
-                value: ref.watch(ServerSettingsProvider.postLimit),
+                value: ref.watch(postLimitSettingStateProvider),
                 elevation: 1,
                 underline: const SizedBox.shrink(),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -173,7 +175,7 @@ class _SettingsContent extends HookConsumerWidget {
                 ),
                 onChanged: (value) {
                   ref
-                      .watch(ServerSettingsProvider.postLimit.notifier)
+                      .watch(postLimitSettingStateProvider.notifier)
                       .update(value as int);
                 },
               ),
@@ -217,7 +219,7 @@ class _SettingsContent extends HookConsumerWidget {
 class _CurrentLanguage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(UiSettingsProvider.lang);
+    final language = ref.watch(languageSettingStateProvider);
     return Text(
       language == null
           ? context.t.settings.lang.automatic.title

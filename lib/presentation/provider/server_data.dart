@@ -2,7 +2,6 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/server_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
-import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_data.g.dart';
@@ -22,10 +21,10 @@ class ServerDataState extends _$ServerDataState {
 
   Set<ServerData> get all => {...repo.defaults.values, ...state};
 
-  ServerData get active => ref.read(ServerSettingsProvider.active);
+  ServerData get active => ref.read(serverActiveSettingStateProvider);
 
-  ServerActiveSettingNotifier get activeNotifier =>
-      ref.read(ServerSettingsProvider.active.notifier);
+  ServerActiveSettingState get activeNotifier =>
+      ref.read(serverActiveSettingStateProvider.notifier);
 
   Future<void> _populate() async {
     await repo.populate();

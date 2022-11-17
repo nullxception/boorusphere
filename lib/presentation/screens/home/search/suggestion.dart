@@ -2,8 +2,8 @@ import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
-import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/blur.dart';
 import 'package:boorusphere/presentation/screens/home/search/controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
@@ -19,11 +19,11 @@ class SearchSuggestion extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarController);
-    final serverActive = ref.watch(ServerSettingsProvider.active);
+    final serverActive = ref.watch(serverActiveSettingStateProvider);
     final searchQuery = useState('');
     final suggestionState = ref.watch(suggestionStateProvider);
     final history = ref.watch(filterHistoryProvider(searchQuery.value));
-    final isBlurAllowed = ref.watch(UiSettingsProvider.blur);
+    final isBlurAllowed = ref.watch(uiBlurSettingStateProvider);
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
       ref.read(suggestionStateProvider.notifier).get(searchQuery.value);

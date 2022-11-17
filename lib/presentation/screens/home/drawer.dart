@@ -4,8 +4,8 @@ import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
-import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/ui_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
@@ -157,11 +157,11 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(UiSettingsProvider.theme);
+    final themeMode = ref.watch(themeModeSettingStateProvider);
 
     return IconButton(
       icon: Icon(themeIconOf(themeMode)),
-      onPressed: ref.read(UiSettingsProvider.theme.notifier).cycle,
+      onPressed: ref.read(themeModeSettingStateProvider.notifier).cycle,
     );
   }
 }
@@ -252,7 +252,7 @@ class _ServerSelection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final serverActive = ref.watch(ServerSettingsProvider.active);
+    final serverActive = ref.watch(serverActiveSettingStateProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +277,7 @@ class _ServerSelection extends HookConsumerWidget {
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
-              ref.read(ServerSettingsProvider.active.notifier).update(it);
+              ref.read(serverActiveSettingStateProvider.notifier).update(it);
               ref.read(slidingDrawerController).close();
             },
           ),

@@ -1,12 +1,20 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class LanguageSettingNotifier extends StateNotifier<AppLocale?> {
-  LanguageSettingNotifier(super.state, this.repo);
+part 'language.g.dart';
 
-  final SettingRepo repo;
+@riverpod
+class LanguageSettingState extends _$LanguageSettingState {
+  late SettingRepo repo;
+  @override
+  AppLocale? build() {
+    repo = ref.read(settingRepoProvider);
+    final savedCode = repo.get(Setting.uiLanguage, or: '');
+    return fromString(savedCode);
+  }
 
   Future<void> update(AppLocale? locale) async {
     state = locale;

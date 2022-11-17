@@ -5,7 +5,7 @@ import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
-import 'package:boorusphere/presentation/provider/settings/download/download_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/download/group_by_server.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -55,7 +55,7 @@ class DownloadEntryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloader = ref.watch(downloadProvider);
-    final groupByServer = ref.watch(DownloadSettingsProvider.groupByServer);
+    final groupByServer = ref.watch(downloadGroupByServerSettingStateProvider);
     final progress = downloader.getProgress(entry.id);
 
     return ListTile(

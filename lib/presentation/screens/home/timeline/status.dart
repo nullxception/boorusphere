@@ -1,7 +1,8 @@
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
-import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -14,7 +15,7 @@ class TimelineStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverActive = ref.watch(ServerSettingsProvider.active);
+    final serverActive = ref.watch(serverActiveSettingStateProvider);
 
     final pageState = ref.watch(pageStateProvider);
 
@@ -82,8 +83,7 @@ class TimelineStatus extends ConsumerWidget {
                           ElevatedButton(
                             onPressed: () {
                               ref
-                                  .watch(
-                                      ServerSettingsProvider.safeMode.notifier)
+                                  .watch(safeModeSettingStateProvider.notifier)
                                   .update(false)
                                   .then((value) => ref
                                       .read(pageStateProvider.notifier)
