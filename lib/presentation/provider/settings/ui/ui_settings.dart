@@ -6,7 +6,7 @@ import 'package:boorusphere/presentation/provider/settings/ui/grid.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
 import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UiSettingsProvider {
   static final grid = StateNotifierProvider<GridSettingNotifier, int>((ref) {

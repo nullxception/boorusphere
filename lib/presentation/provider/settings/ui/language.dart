@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LanguageSettingNotifier extends StateNotifier<AppLocale?> {
   LanguageSettingNotifier(super.state, this.repo);

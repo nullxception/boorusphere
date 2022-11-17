@@ -3,7 +3,7 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
 import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
 import 'package:boorusphere/presentation/provider/settings/content/video_player.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ContentSettingsProvider {
   static final mute =

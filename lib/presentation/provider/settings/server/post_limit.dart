@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ServerPostLimitSettingNotifier extends StateNotifier<int> {
   ServerPostLimitSettingNotifier(super.state, this.repo);

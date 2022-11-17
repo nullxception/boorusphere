@@ -1,6 +1,6 @@
 import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final fullscreenProvider =
     StateNotifierProvider.autoDispose<FullscreenNotifier, bool>((ref) {

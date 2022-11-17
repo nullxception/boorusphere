@@ -3,7 +3,7 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final suggestionProvider = StateNotifierProvider.autoDispose<
     SuggestionStateNotifier, FetchState<Set<String>>>((ref) {

@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 extension AsyncValueExt<T> on AsyncValue<T> {
   T? get maybeValue {

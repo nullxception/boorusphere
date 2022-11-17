@@ -13,7 +13,7 @@ import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
 class DownloadEntryView extends ConsumerWidget {

@@ -1,6 +1,6 @@
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final blockedTagsProvider =
     StateNotifierProvider<BlockedTagsNotifier, Map<int, String>>((ref) {

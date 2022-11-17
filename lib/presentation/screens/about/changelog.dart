@@ -5,8 +5,8 @@ import 'package:boorusphere/presentation/provider/changelog.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ChangelogPage extends ConsumerWidget {
   const ChangelogPage({

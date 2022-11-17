@@ -4,7 +4,7 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
 import 'package:boorusphere/presentation/provider/settings/server/post_limit.dart';
 import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ServerSettingsProvider {
   static final safeMode =
