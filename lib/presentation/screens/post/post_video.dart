@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
+import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/settings/content/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
@@ -13,16 +14,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_player/video_player.dart';
 
-final _videoCacheProvider = Provider((_) => DefaultCacheManager());
+part 'post_video.g.dart';
 
-final _fetcherProvider =
-    Provider.family.autoDispose<CancelableOperation, Post>((ref, arg) {
-  final cache = ref.watch(_videoCacheProvider);
+@riverpod
+CancelableOperation<FileInfo> videoPlayerSource(
+  VideoPlayerSourceRef ref,
+  Post post,
+) {
+  final cache = ref.watch(cacheManagerProvider);
   final cancelable = CancelableOperation.fromFuture(cache.downloadFile(
-    arg.content.url,
-    authHeaders: arg.getHeaders(ref),
+    post.content.url,
+    authHeaders: post.getHeaders(ref),
   ));
 
   ref.onDispose(() {
@@ -32,14 +37,17 @@ final _fetcherProvider =
   });
 
   return cancelable;
-});
+}
 
-final _playerControllerProvider = FutureProvider.autoDispose
-    .family<VideoPlayerController, Post>((ref, arg) async {
+@riverpod
+Future<VideoPlayerController> videoPlayerController(
+  VideoPlayerControllerRef ref,
+  Post post,
+) async {
   VideoPlayerController controller;
 
-  final cache = ref.watch(_videoCacheProvider);
-  final fromCache = await cache.getFileFromCache(arg.content.url);
+  final cache = ref.watch(cacheManagerProvider);
+  final fromCache = await cache.getFileFromCache(post.content.url);
   final option = VideoPlayerOptions(mixWithOthers: true);
   if (fromCache != null) {
     controller = VideoPlayerController.file(
@@ -47,7 +55,7 @@ final _playerControllerProvider = FutureProvider.autoDispose
       videoPlayerOptions: option,
     );
   } else {
-    final fetcher = ref.watch(_fetcherProvider(arg));
+    final fetcher = ref.watch(videoPlayerSourceProvider(post));
     final fromNet = await fetcher.value;
     controller = VideoPlayerController.file(
       fromNet.file,
@@ -61,7 +69,7 @@ final _playerControllerProvider = FutureProvider.autoDispose
   });
 
   return controller;
-});
+}
 
 final _playerPlayState = StateProvider((ref) => false);
 
@@ -79,7 +87,7 @@ class PostVideoDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerController = ref.watch(_playerControllerProvider(post));
+    final playerController = ref.watch(videoPlayerControllerProvider(post));
     final blurExplicit = ref.watch(ContentSettingsProvider.blurExplicit);
     final isMounted = useIsMounted();
     final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
