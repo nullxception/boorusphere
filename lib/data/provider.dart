@@ -17,14 +17,18 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final cookieJarProvider = Provider((ref) {
+part 'provider.g.dart';
+
+@riverpod
+CookieJar cookieJar(CookieJarRef ref) {
   return CookieJar();
-});
+}
 
-final dioProvider = Provider((ref) {
+@riverpod
+Dio dio(DioRef ref) {
   final dio = Dio();
   final cookieJar = ref.watch(cookieJarProvider);
   final retryDelays = List.generate(5, (index) {
@@ -41,52 +45,64 @@ final dioProvider = Provider((ref) {
     ));
 
   return dio;
-});
+}
 
-final versionNetworkSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+VersionNetworkSource versionNetworkSource(VersionNetworkSourceRef ref) {
   final dio = ref.watch(dioProvider);
   return VersionNetworkSource(dio);
-});
+}
 
-final versionLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+VersionLocalSource versionLocalSource(VersionLocalSourceRef ref) {
   return VersionLocalSource();
-});
+}
 
-final settingsLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+SettingLocalSource settingLocalSource(SettingLocalSourceRef ref) {
   final box = Hive.box(SettingLocalSource.key);
   return SettingLocalSource(box);
-});
+}
 
-final serverLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+ServerLocalSource serverLocalSource(ServerLocalSourceRef ref) {
   final box = Hive.box<ServerData>(ServerLocalSource.key);
   return ServerLocalSource(assetBundle: rootBundle, box: box);
-});
+}
 
-final searchHistoryLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+SearchHistoryLocalSource searchHistoryLocalSource(
+    SearchHistoryLocalSourceRef ref) {
   final box = Hive.box<SearchHistory>(SearchHistoryLocalSource.key);
   return SearchHistoryLocalSource(box);
-});
+}
 
-final favoritePostLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+FavoritePostLocalSource favoritePostLocalSource(
+    FavoritePostLocalSourceRef ref) {
   final box = Hive.box<FavoritePost>(FavoritePostLocalSource.key);
   return FavoritePostLocalSource(box);
-});
+}
 
-final changelogNetworkSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+ChangelogNetworkSource changelogNetworkSource(ChangelogNetworkSourceRef ref) {
   final dio = ref.watch(dioProvider);
   return ChangelogNetworkSource(dio);
-});
+}
 
-final changelogLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+ChangelogLocalSource changelogLocalSource(ChangelogLocalSourceRef ref) {
   return ChangelogLocalSource(rootBundle);
-});
+}
 
-final booruNetworkSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+BooruNetworkSource booruNetworkSource(BooruNetworkSourceRef ref) {
   final dio = ref.watch(dioProvider);
   return BooruNetworkSource(dio);
-});
+}
 
-final blockedTagsLocalSourceProvider = Provider.autoDispose((ref) {
+@riverpod
+BlockedTagsLocalSource blockedTagsLocalSource(BlockedTagsLocalSourceRef ref) {
   final box = Hive.box<String>(BlockedTagsLocalSource.key);
   return BlockedTagsLocalSource(box);
-});
+}
