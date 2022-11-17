@@ -3,7 +3,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/blur.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/search/controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
@@ -23,7 +23,8 @@ class SearchSuggestion extends HookConsumerWidget {
     final searchQuery = useState('');
     final suggestionState = ref.watch(suggestionStateProvider);
     final history = ref.watch(filterHistoryProvider(searchQuery.value));
-    final isBlurAllowed = ref.watch(uiBlurSettingStateProvider);
+    final isBlurAllowed =
+        ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
       ref.read(suggestionStateProvider.notifier).get(searchQuery.value);

@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/server/active.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
@@ -157,11 +157,13 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeSettingStateProvider);
+    final theme =
+        ref.watch(uiSettingStateProvider.select((ui) => ui.themeMode));
 
     return IconButton(
-      icon: Icon(themeIconOf(themeMode)),
-      onPressed: ref.read(themeModeSettingStateProvider.notifier).cycle,
+      icon: Icon(themeIconOf(theme)),
+      onPressed: () =>
+          ref.read(uiSettingStateProvider.notifier).cycleThemeMode(),
     );
   }
 }

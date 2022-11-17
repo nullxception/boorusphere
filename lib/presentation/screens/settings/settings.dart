@@ -5,9 +5,7 @@ import 'package:boorusphere/presentation/provider/settings/content/blur_explicit
 import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
 import 'package:boorusphere/presentation/provider/settings/server/post_limit.dart';
 import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/blur.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -86,11 +84,12 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.midnightTheme.desc),
               ),
-              value: ref.watch(midnightModeSettingStateProvider),
+              value: ref.watch(
+                  uiSettingStateProvider.select((ui) => ui.midnightMode)),
               onChanged: (value) {
                 ref
-                    .watch(midnightModeSettingStateProvider.notifier)
-                    .update(value);
+                    .watch(uiSettingStateProvider.notifier)
+                    .setMidnightMode(value);
               },
             ),
             SwitchListTile(
@@ -99,9 +98,9 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.uiBlur.desc),
               ),
-              value: ref.watch(uiBlurSettingStateProvider),
+              value: ref.watch(uiSettingStateProvider.select((ui) => ui.blur)),
               onChanged: (value) {
-                ref.watch(uiBlurSettingStateProvider.notifier).enable(value);
+                ref.watch(uiSettingStateProvider.notifier).showBlur(value);
               },
             ),
           ],
@@ -219,9 +218,10 @@ class _SettingsContent extends HookConsumerWidget {
 class _CurrentLanguage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(languageSettingStateProvider);
+    final locale = ref.watch(uiSettingStateProvider.select((ui) => ui.locale));
+
     return Text(
-      language == null
+      locale == null
           ? context.t.settings.lang.automatic.title
           : context.t.languageName,
     );

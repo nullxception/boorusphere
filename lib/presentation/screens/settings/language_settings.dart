@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,8 +23,8 @@ class _Content extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const subtitlePadding = EdgeInsets.only(top: 8);
 
-    useLanguage(AppLocale? lang) async {
-      await ref.read(languageSettingStateProvider.notifier).update(lang);
+    updateLocale(AppLocale? locale) async {
+      await ref.read(uiSettingStateProvider.notifier).setLocale(locale);
       Future.delayed(
         const Duration(milliseconds: 120),
         () => context.router.pop(),
@@ -40,7 +40,7 @@ class _Content extends HookConsumerWidget {
             child: Text(context.t.settings.lang.automatic.desc),
           ),
           onTap: () {
-            useLanguage(null);
+            updateLocale(null);
           },
         ),
         ...AppLocale.values.map((locale) {
@@ -51,7 +51,7 @@ class _Content extends HookConsumerWidget {
               child: Text(locale.translations.languageAlias),
             ),
             onTap: () {
-              useLanguage(locale);
+              updateLocale(locale);
             },
           );
         }).toList()

@@ -1,7 +1,6 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/language.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/theme.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
 import 'package:boorusphere/presentation/widgets/bouncing_scroll.dart';
@@ -16,21 +15,23 @@ class Boorusphere extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(languageSettingStateProvider);
-    final themeMode = ref.watch(themeModeSettingStateProvider);
-    final isDarkerTheme = ref.watch(midnightModeSettingStateProvider);
+    final locale = ref.watch(uiSettingStateProvider.select((ui) => ui.locale));
+    final theme =
+        ref.watch(uiSettingStateProvider.select((ui) => ui.themeMode));
+    final isMidnight =
+        ref.watch(uiSettingStateProvider.select((ui) => ui.midnightMode));
     final deviceProp = ref.watch(devicePropProvider);
     final router = useMemoized(SphereRouter.new);
 
     useEffect(() {
       Future(() {
-        if (language != null) {
-          LocaleSettings.setLocale(language);
+        if (locale != null) {
+          LocaleSettings.setLocale(locale);
         } else {
           LocaleSettings.useDeviceLocale();
         }
       });
-    }, [language]);
+    }, [locale]);
 
     if (deviceProp.sdkVersion > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -41,8 +42,8 @@ class Boorusphere extends HookConsumerWidget {
         debugShowCheckedModeBanner: false,
         title: 'Boorusphere',
         theme: appTheme.day,
-        darkTheme: isDarkerTheme ? appTheme.midnight : appTheme.night,
-        themeMode: themeMode,
+        darkTheme: isMidnight ? appTheme.midnight : appTheme.night,
+        themeMode: theme,
         routerDelegate: router.delegate(),
         routeInformationParser: router.defaultRouteParser(),
         locale: TranslationProvider.of(context).flutterLocale,

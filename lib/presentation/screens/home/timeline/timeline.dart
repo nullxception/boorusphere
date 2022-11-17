@@ -5,7 +5,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/settings/ui/grid.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -27,10 +27,10 @@ class Timeline extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridExtra = ref.watch(gridSettingStateProvider);
+    final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
     final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));
     final screenWidth = context.mediaQuery.size.width;
-    final flexibleGrid = (screenWidth / 200).round() + gridExtra;
+    final flexibleGrid = (screenWidth / 200).round() + grid;
     final scrollController = controller.scrollController;
 
     return SliverMasonryGrid.count(
@@ -109,7 +109,7 @@ class _Thumbnail extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gridExtra = ref.watch(gridSettingStateProvider);
+    final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
     final blurExplicitPost = ref.watch(blurExplicitPostSettingStateProvider);
 
     return AspectRatio(
@@ -117,7 +117,7 @@ class _Thumbnail extends HookConsumerWidget {
       child: ExtendedImage.network(
         post.previewFile,
         headers: post.getHeaders(ref),
-        filterQuality: _thumbnailQuality(gridExtra),
+        filterQuality: _thumbnailQuality(grid),
         fit: BoxFit.cover,
         beforePaintImage: (canvas, rect, image, paint) {
           if (blurExplicitPost && post.rating == PostRating.explicit) {
