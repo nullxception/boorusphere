@@ -26,7 +26,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedtag = useState(<String>[]);
     final pageQuery =
-        ref.watch(pageProvider.select((it) => it.data.option.query));
+        ref.watch(pageStateProvider.select((it) => it.data.option.query));
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -41,7 +41,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     updateSearch(Iterable<String> tags) {
       final newQuery = Set.from(tags).join(' ');
       if (newQuery.isEmpty) return;
-      ref.read(pageProvider.notifier).update((state) {
+      ref.read(pageStateProvider.notifier).update((state) {
         return state.copyWith(query: newQuery, clear: true);
       });
       context.router.popUntilRoot();

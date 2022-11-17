@@ -13,22 +13,13 @@ import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final pageProvider =
-    StateNotifierProvider.autoDispose<PageStateNotifier, FetchState<PageData>>(
-        (ref) {
-  final server = ref.watch(ServerSettingsProvider.active);
-  final repo = ref.watch(booruRepoProvider(server));
-  return PageStateNotifier(ref, repo)..load();
-});
+part 'page_state.g.dart';
 
-class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
-  PageStateNotifier(this.ref, this.repo)
-      : super(const FetchState.data(PageData()));
-
-  final Ref ref;
-  final BooruRepo repo;
+@riverpod
+class PageState extends _$PageState {
+  late BooruRepo repo;
 
   int _skipCount = 0;
   int _page = 0;
@@ -41,6 +32,15 @@ class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
 
   PageData get currentData =>
       PageData(option: option, posts: data, cookies: cookies);
+
+  @override
+  FetchState<PageData> build() {
+    final server = ref.watch(ServerSettingsProvider.active);
+    repo = ref.read(booruRepoProvider(server));
+    // throw initial load side-effect somewhere else lol
+    Future(load);
+    return const FetchState.data(PageData());
+  }
 
   Future<void> update(PageOption Function(PageOption) updater) async {
     _option = updater(option);
@@ -79,7 +79,6 @@ class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
       blockedTagsRepoProvider.select((repo) => repo.get().values),
     );
 
-    if (!mounted) return;
     if (option.clear) data.clear();
     if (data.isEmpty) _page = 0;
     state = FetchState.loading(currentData);
@@ -108,8 +107,6 @@ class PageStateNotifier extends StateNotifier<FetchState<PageData>> {
 
         final fromJar =
             await ref.read(cookieJarProvider).loadForRequest(src.asUri);
-
-        if (!mounted) return;
 
         if (fromJar.isNotEmpty) {
           cookies

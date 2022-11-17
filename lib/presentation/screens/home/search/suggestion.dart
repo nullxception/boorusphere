@@ -21,12 +21,12 @@ class SearchSuggestion extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarController);
     final serverActive = ref.watch(ServerSettingsProvider.active);
     final searchQuery = useState('');
-    final suggestionState = ref.watch(suggestionProvider);
+    final suggestionState = ref.watch(suggestionStateProvider);
     final history = ref.watch(filteredHistoryProvider(searchQuery.value));
     final isBlurAllowed = ref.watch(UiSettingsProvider.blur);
     final updateQuery = useCallback(() {
       searchQuery.value = searchBar.text;
-      ref.read(suggestionProvider.notifier).get(searchQuery.value);
+      ref.read(suggestionStateProvider.notifier).get(searchQuery.value);
     }, [searchBar]);
 
     useEffect(() {

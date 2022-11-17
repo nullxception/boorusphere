@@ -3,21 +3,21 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server/server_settings.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final suggestionProvider = StateNotifierProvider.autoDispose<
-    SuggestionStateNotifier, FetchState<Set<String>>>((ref) {
-  final server = ref.watch(ServerSettingsProvider.active);
-  final repo = ref.watch(booruRepoProvider(server));
-  return SuggestionStateNotifier(ref, repo);
-});
+part 'suggestion_state.g.dart';
 
-class SuggestionStateNotifier extends StateNotifier<FetchState<Set<String>>> {
-  SuggestionStateNotifier(this.ref, this.repo)
-      : super(const FetchState.data({}));
-  final BooruRepo repo;
-  final Ref ref;
+@riverpod
+class SuggestionState extends _$SuggestionState {
   final Set<String> _data = {};
+  late BooruRepo repo;
+
+  @override
+  FetchState<Set<String>> build() {
+    final server = ref.watch(ServerSettingsProvider.active);
+    repo = ref.read(booruRepoProvider(server));
+    return const FetchState.data({});
+  }
 
   Future<void> get(String query) async {
     final server = ref.read(ServerSettingsProvider.active);

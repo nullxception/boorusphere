@@ -225,7 +225,8 @@ class AppVersionTile extends HookConsumerWidget {
 class _BackToHomeTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final query = ref.watch(pageProvider.select((it) => it.data.option.query));
+    final query =
+        ref.watch(pageStateProvider.select((it) => it.data.option.query));
     return Visibility(
       visible: query.isNotEmpty,
       child: ListTile(
@@ -233,7 +234,7 @@ class _BackToHomeTile extends HookConsumerWidget {
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref
-              .read(pageProvider.notifier)
+              .read(pageStateProvider.notifier)
               .update((state) => state.copyWith(query: '', clear: true));
           ref.read(slidingDrawerController).close();
         },
