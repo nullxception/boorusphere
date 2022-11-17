@@ -2,7 +2,7 @@ import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
-import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/search/controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
@@ -19,7 +19,8 @@ class SearchSuggestion extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarController);
-    final serverActive = ref.watch(serverActiveSettingStateProvider);
+    final server =
+        ref.watch(serverSettingsStateProvider.select((it) => it.active));
     final searchQuery = useState('');
     final suggestionState = ref.watch(suggestionStateProvider);
     final history = ref.watch(filterHistoryProvider(searchQuery.value));
@@ -120,7 +121,7 @@ class SearchSuggestion extends HookConsumerWidget {
                       childCount: history.entries.length,
                     ),
                   ),
-                  if (!serverActive.canSuggestTags)
+                  if (!server.canSuggestTags)
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -130,24 +131,24 @@ class SearchSuggestion extends HookConsumerWidget {
                           ),
                           Text(
                             context.t.suggestion.notSupported(
-                              serverName: serverActive.name,
+                              serverName: server.name,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  if (serverActive.canSuggestTags)
+                  if (server.canSuggestTags)
                     SliverPadding(
                       padding: const EdgeInsets.all(16),
                       sliver: SliverToBoxAdapter(
                         child: Text(
                           context.t.suggestion.suggested(
-                            serverName: serverActive.name,
+                            serverName: server.name,
                           ),
                         ),
                       ),
                     ),
-                  if (serverActive.canSuggestTags)
+                  if (server.canSuggestTags)
                     suggestionState.when(
                       data: (data) {
                         return SliverList(
@@ -193,7 +194,7 @@ class SearchSuggestion extends HookConsumerWidget {
                           msg = context.t.suggestion.httpError(
                             n: code,
                             query: searchQuery.value,
-                            serverName: serverActive.name,
+                            serverName: server.name,
                           );
                         } else {
                           msg = error;

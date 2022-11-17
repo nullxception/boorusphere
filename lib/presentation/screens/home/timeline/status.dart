@@ -1,8 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
-import 'package:boorusphere/presentation/provider/settings/server/active.dart';
-import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -15,7 +14,8 @@ class TimelineStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverActive = ref.watch(serverActiveSettingStateProvider);
+    final server =
+        ref.watch(serverSettingsStateProvider.select((it) => it.active));
 
     final pageState = ref.watch(pageStateProvider);
 
@@ -59,7 +59,7 @@ class TimelineStatus extends ConsumerWidget {
                       ErrorInfo(
                         error: context.t.pageStatus.httpError(
                           n: code,
-                          serverName: serverActive.name,
+                          serverName: server.name,
                         ),
                       )
                     else if (error == BooruError.empty)
@@ -72,7 +72,7 @@ class TimelineStatus extends ConsumerWidget {
                     else if (error == BooruError.noParser)
                       ErrorInfo(
                         error: context.t.pageStatus
-                            .noParser(serverName: serverActive.name),
+                            .noParser(serverName: server.name),
                       )
                     else
                       ErrorInfo(error: error, stackTrace: stackTrace),
@@ -83,8 +83,8 @@ class TimelineStatus extends ConsumerWidget {
                           ElevatedButton(
                             onPressed: () {
                               ref
-                                  .watch(safeModeSettingStateProvider.notifier)
-                                  .update(false)
+                                  .read(serverSettingsStateProvider.notifier)
+                                  .setSafeMode(false)
                                   .then((value) => ref
                                       .read(pageStateProvider.notifier)
                                       .load());

@@ -3,8 +3,7 @@ import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
 import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
-import 'package:boorusphere/presentation/provider/settings/server/post_limit.dart';
-import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/utils/download.dart';
@@ -127,9 +126,12 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.strictSafeMode.desc),
               ),
-              value: ref.watch(safeModeSettingStateProvider),
+              value: ref.watch(
+                  serverSettingsStateProvider.select((it) => it.safeMode)),
               onChanged: (value) {
-                ref.watch(safeModeSettingStateProvider.notifier).update(value);
+                ref
+                    .read(serverSettingsStateProvider.notifier)
+                    .setSafeMode(value);
               },
             ),
           ],
@@ -158,7 +160,8 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               trailing: DropdownButton(
                 menuMaxHeight: 178,
-                value: ref.watch(postLimitSettingStateProvider),
+                value: ref.watch(
+                    serverSettingsStateProvider.select((it) => it.postLimit)),
                 elevation: 1,
                 underline: const SizedBox.shrink(),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -174,8 +177,8 @@ class _SettingsContent extends HookConsumerWidget {
                 ),
                 onChanged: (value) {
                   ref
-                      .watch(postLimitSettingStateProvider.notifier)
-                      .update(value as int);
+                      .read(serverSettingsStateProvider.notifier)
+                      .setPostLimit(value as int);
                 },
               ),
             ),

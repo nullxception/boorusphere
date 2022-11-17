@@ -1,5 +1,5 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
 import 'package:boorusphere/presentation/screens/home/search/controller.dart';
@@ -22,7 +22,8 @@ class SearchBar extends HookConsumerWidget {
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
     final isBlurAllowed =
         ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
-    final serverActive = ref.watch(serverActiveSettingStateProvider);
+    final server =
+        ref.watch(serverSettingsStateProvider.select((it) => it.active));
     final onScrolling = useCallback(() {
       final position = scrollController.position;
       final threshold = SearchBar.innerHeight;
@@ -99,8 +100,7 @@ class SearchBar extends HookConsumerWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: searchBar.textFieldController.text.isEmpty
-                            ? context.t
-                                .searchHint(serverName: serverActive.name)
+                            ? context.t.searchHint(serverName: server.name)
                             : searchBar.textFieldController.text,
                         isDense: true,
                       ),
@@ -186,7 +186,8 @@ class _LeadingButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverActive = ref.watch(serverActiveSettingStateProvider);
+    final server =
+        ref.watch(serverSettingsStateProvider.select((it) => it.active));
     final searchBar = ref.watch(searchBarController);
 
     return _CollapsibleButton(
@@ -219,8 +220,8 @@ class _LeadingButton extends HookConsumerWidget {
         child: searchBar.isOpen
             ? const Icon(Icons.arrow_back_rounded)
             : Favicon(
-                key: ValueKey(serverActive.homepage),
-                url: serverActive.homepage,
+                key: ValueKey(server.homepage),
+                url: server.homepage,
                 iconSize: 18,
               ),
       ),

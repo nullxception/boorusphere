@@ -11,9 +11,7 @@ import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
-import 'package:boorusphere/presentation/provider/settings/server/active.dart';
-import 'package:boorusphere/presentation/provider/settings/server/post_limit.dart';
-import 'package:boorusphere/presentation/provider/settings/server/safe_mode.dart';
+import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -37,7 +35,8 @@ class PageState extends _$PageState {
 
   @override
   FetchState<PageData> build() {
-    final server = ref.watch(serverActiveSettingStateProvider);
+    final server =
+        ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
     // throw initial load side-effect somewhere else lol
     Future(load);
@@ -51,9 +50,11 @@ class PageState extends _$PageState {
 
   Future<void> load() async {
     if (repo.server == ServerData.empty) return;
-    final limit = ref.read(postLimitSettingStateProvider);
-    final safeMode = ref.read(safeModeSettingStateProvider);
-    _option = option.copyWith(limit: limit, safeMode: safeMode);
+    final settings = ref.read(serverSettingsStateProvider);
+    _option = option.copyWith(
+      limit: settings.postLimit,
+      safeMode: settings.safeMode,
+    );
 
     if (option.query.isNotEmpty) {
       await ref.read(searchHistoryStateProvider.notifier).save(option.query);

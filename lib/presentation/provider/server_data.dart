@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/server_repo.dart';
-import 'package:boorusphere/presentation/provider/settings/server/active.dart';
+import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_data.g.dart';
@@ -21,18 +21,19 @@ class ServerDataState extends _$ServerDataState {
 
   Set<ServerData> get all => {...repo.defaults.values, ...state};
 
-  ServerData get active => ref.read(serverActiveSettingStateProvider);
+  ServerData get active =>
+      ref.read(serverSettingsStateProvider.select((it) => it.active));
 
-  ServerActiveSettingState get activeNotifier =>
-      ref.read(serverActiveSettingStateProvider.notifier);
+  ServerSettingsState get settings =>
+      ref.read(serverSettingsStateProvider.notifier);
 
   Future<void> _populate() async {
     await repo.populate();
     state = repo.servers;
 
     if (state.isNotEmpty && active == ServerData.empty) {
-      await activeNotifier
-          .update(state.firstWhere((it) => it.id.startsWith('Safe')));
+      await settings
+          .setActiveServer(state.firstWhere((it) => it.id.startsWith('Safe')));
     }
   }
 
@@ -58,7 +59,7 @@ class ServerDataState extends _$ServerDataState {
     await repo.remove(data);
     state = repo.servers;
     if (active == data) {
-      await activeNotifier.update(state.first);
+      await settings.setActiveServer(state.first);
     }
   }
 
@@ -66,13 +67,13 @@ class ServerDataState extends _$ServerDataState {
     final data = await repo.edit(from, to);
     state = repo.servers;
     if (active == from) {
-      await activeNotifier.update(data);
+      await settings.setActiveServer(data);
     }
   }
 
   Future<void> reset() async {
     await repo.reset();
     state = repo.servers;
-    await activeNotifier.update(state.first);
+    await settings.setActiveServer(state.first);
   }
 }
