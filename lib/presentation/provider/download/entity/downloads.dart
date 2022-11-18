@@ -13,13 +13,6 @@ class Downloads with _$Downloads {
   }) = _Downloads;
   const Downloads._();
 
-  DownloadEntry getEntryByPost(Post post) {
-    return entries.lastWhere(
-      (it) => it.post == post,
-      orElse: () => DownloadEntry.empty,
-    );
-  }
-
   DownloadProgress getProgressById(String id) {
     return progresses.firstWhere(
       (it) => it.id == id,
@@ -28,10 +21,10 @@ class Downloads with _$Downloads {
   }
 
   DownloadProgress getProgressByPost(Post post) {
-    final id = getEntryByPost(post).id;
-    return progresses.firstWhere(
-      (it) => it.id == id,
-      orElse: () => DownloadProgress.none,
+    final entry = entries.lastWhere(
+      (it) => it.post == post,
+      orElse: () => DownloadEntry.empty,
     );
+    return getProgressById(entry.id);
   }
 }
