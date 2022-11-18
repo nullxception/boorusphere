@@ -71,8 +71,6 @@ Future<VideoPlayerController> videoPlayerController(
   return controller;
 }
 
-final _playerPlayState = StateProvider((ref) => false);
-
 class PostVideoDisplay extends HookConsumerWidget {
   const PostVideoDisplay({
     super.key,
@@ -204,15 +202,22 @@ class _Toolbox extends HookConsumerWidget {
         ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
     final fullscreen = ref.watch(fullscreenStateProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
-    final isPlaying = ref.watch(_playerPlayState);
+    final playState = useState(true);
     final isMounted = useIsMounted();
     final showToolbox = useState(true);
 
-    ref.listen<bool>(_playerPlayState, (previous, next) {
+    onPlayStateChanged() {
       if (controller != null) {
-        next ? controller.play() : controller.pause();
+        playState.value ? controller.play() : controller.pause();
       }
-    });
+    }
+
+    useEffect(() {
+      playState.addListener(onPlayStateChanged);
+      return () {
+        playState.removeListener(onPlayStateChanged);
+      };
+    }, [controller]);
 
     autoHideToolbox() {
       Future.delayed(const Duration(seconds: 2), () {
@@ -231,7 +236,7 @@ class _Toolbox extends HookConsumerWidget {
 
           it.addListener(onFirstFrame);
           it.setVolume(isMuted ? 0 : 1);
-          if (isPlaying) {
+          if (playState.value) {
             it.play();
             autoHideToolbox();
           }
@@ -261,12 +266,12 @@ class _Toolbox extends HookConsumerWidget {
                       color: Colors.white,
                       iconSize: 72,
                       icon: Icon(
-                        isPlaying ? Icons.pause_outlined : Icons.play_arrow,
+                        playState.value
+                            ? Icons.pause_outlined
+                            : Icons.play_arrow,
                       ),
                       onPressed: () {
-                        ref
-                            .read(_playerPlayState.notifier)
-                            .update((state) => !isPlaying);
+                        playState.value = !playState.value;
                       },
                     ),
                   ),
