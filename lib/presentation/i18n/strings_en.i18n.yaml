@@ -101,7 +101,7 @@ license:
 
 downloader:
   title: "Downloads"
-  noFile: "File moved or missing"
+  noFile: "File has been moved"
   redownload: "Redownload"
   detail: "Show detail"
   placeholder: "Your downloaded files will appear here"

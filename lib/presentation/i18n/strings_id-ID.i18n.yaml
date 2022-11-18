@@ -101,7 +101,7 @@ license:
 
 downloader:
   title: "Unduhan"
-  noFile: "File telah dipindahkan atau hilang"
+  noFile: "File telah dipindahkan"
   redownload: "Unduh ulang"
   detail: "Tampilkan detail"
   placeholder: "File yang kamu unduh akan muncul di sini"
