@@ -26,6 +26,13 @@ DownloadService downloadService(DownloadServiceRef ref) {
   return DownloadService(ref);
 }
 
+@riverpod
+DownloadProgress appUpdateProgress(AppUpdateProgressRef ref) {
+  final updateId =
+      ref.watch(downloadServiceProvider.select((it) => it.appUpdateTaskId));
+  return ref.watch(downloadStateProvider).getProgressById(updateId);
+}
+
 @pragma('vm:entry-point')
 void downloadTaskStatusSender(
   String id,

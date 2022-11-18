@@ -6,7 +6,6 @@ import 'package:boorusphere/data/repository/version/datasource/version_network_s
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/download_service.dart';
-import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -160,10 +159,7 @@ class _Downloader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updateId =
-        ref.watch(downloadServiceProvider.select((it) => it.appUpdateTaskId));
-    final downloadState = ref.watch(downloadStateProvider);
-    final progress = downloadState.getProgressById(updateId);
+    final progress = ref.watch(appUpdateProgressProvider);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

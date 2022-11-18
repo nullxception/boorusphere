@@ -3,7 +3,6 @@ import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/download/download_service.dart';
-import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
@@ -177,12 +176,9 @@ class AppVersionTile extends HookConsumerWidget {
     final currentVer = ref.watch(versionCurrentProvider
         .select((it) => it.maybeValue ?? AppVersion.zero));
     final latestVer = ref.watch(versionLatestProvider);
-    final updateId =
-        ref.watch(downloadServiceProvider.select((it) => it.appUpdateTaskId));
-    final downloadState = ref.watch(downloadStateProvider);
-    final updater = downloadState.getProgressById(updateId);
+    final updateProgress = ref.watch(appUpdateProgressProvider);
 
-    final updateStatus = updater.status;
+    final updateStatus = updateProgress.status;
     final current = ListTile(
       title: Text('Boorusphere $currentVer'),
       leading: const Icon(Icons.info_outline),
@@ -203,8 +199,8 @@ class AppVersionTile extends HookConsumerWidget {
                 child: CircularProgressIndicator(strokeWidth: 3),
               ),
             ),
-            subtitle:
-                Text(context.t.updater.progress(progress: updater.progress)),
+            subtitle: Text(
+                context.t.updater.progress(progress: updateProgress.progress)),
             onTap: () => context.router.push(const AboutRoute()),
           );
         }
@@ -212,12 +208,12 @@ class AppVersionTile extends HookConsumerWidget {
           title: Text(context.t.updater.available(version: '$data')),
           leading: Icon(Icons.info_outline, color: Colors.pink.shade300),
           subtitle: Text(
-            updater.status.isDownloaded
+            updateProgress.status.isDownloaded
                 ? context.t.updater.install
                 : context.t.changelog.view,
           ),
           onTap: () {
-            if (updater.status.isDownloaded) {
+            if (updateProgress.status.isDownloaded) {
               UpdatePrepareDialog.show(context);
             } else {
               context.router.push(const AboutRoute());
