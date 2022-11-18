@@ -9,6 +9,7 @@ import 'package:boorusphere/presentation/provider/download/download_service.dart
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
+import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
 import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -171,8 +172,12 @@ class _Downloader extends HookConsumerWidget {
             progress.status.isFailed ||
             progress.status.isEmpty)
           ElevatedButton(
-            onPressed: () {
-              ref
+            onPressed: () async {
+              if (!await checkNotificationPermission(context)) {
+                return;
+              }
+
+              await ref
                   .read(downloadServiceProvider)
                   .updater(action: UpdaterAction.start, version: version);
             },

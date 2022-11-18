@@ -61,7 +61,7 @@ class DownloaderDialog extends HookConsumerWidget {
                   ),
                   leading: Icon(_getFileIcon(post.sampleFile)),
                   onTap: () async {
-                    if (!await checkPermission(context: context)) {
+                    if (!await checkNotificationPermission(context)) {
                       context.navigator.pop();
                       return;
                     }
@@ -78,7 +78,7 @@ class DownloaderDialog extends HookConsumerWidget {
                   '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
               leading: Icon(_getFileIcon(post.originalFile)),
               onTap: () async {
-                if (!await checkPermission(context: context)) {
+                if (!await checkNotificationPermission(context)) {
                   context.navigator.pop();
                   return;
                 }
@@ -103,21 +103,21 @@ class DownloaderDialog extends HookConsumerWidget {
         context: context,
         builder: (_) => DownloaderDialog(post: post, onItemClick: onItemClick));
   }
+}
 
-  Future<bool> checkPermission({required BuildContext context}) async {
-    final isGranted = await Permission.notification.isGranted;
-    if (isGranted) {
-      return true;
-    }
-
-    final status = await Permission.notification.request();
-    if (!status.isGranted) {
-      await showSystemAppSettingsDialog(
-        context: context,
-        title: context.t.downloader.title,
-        reason: context.t.downloader.noPermission,
-      );
-    }
-    return status.isGranted;
+Future<bool> checkNotificationPermission(BuildContext context) async {
+  final isGranted = await Permission.notification.isGranted;
+  if (isGranted) {
+    return true;
   }
+
+  final status = await Permission.notification.request();
+  if (!status.isGranted) {
+    await showSystemAppSettingsDialog(
+      context: context,
+      title: context.t.downloader.title,
+      reason: context.t.downloader.noPermission,
+    );
+  }
+  return status.isGranted;
 }
