@@ -59,6 +59,31 @@ class DownloadEntryView extends ConsumerWidget {
         .watch(downloadSettingsStateProvider.select((it) => it.groupByServer));
     final progress = downloader.getProgress(entry.id);
 
+    String downloadStatus;
+    switch (progress.status) {
+      case DownloadStatus.pending:
+        downloadStatus = context.t.downloader.status.pending;
+        break;
+      case DownloadStatus.downloading:
+        downloadStatus = context.t.downloader.status.downloading;
+        break;
+      case DownloadStatus.downloaded:
+        downloadStatus = context.t.downloader.status.downloaded;
+        break;
+      case DownloadStatus.failed:
+        downloadStatus = context.t.downloader.status.failed;
+        break;
+      case DownloadStatus.canceled:
+        downloadStatus = context.t.downloader.status.canceled;
+        break;
+      case DownloadStatus.paused:
+        downloadStatus = context.t.downloader.status.paused;
+        break;
+      default:
+        downloadStatus = context.t.downloader.status.empty;
+        break;
+    }
+
     return ListTile(
       title: Text(
         entry.destination.fileName.asDecoded,
@@ -99,7 +124,7 @@ class DownloadEntryView extends ConsumerWidget {
             if (progress.status.isDownloaded && !entry.isFileExists)
               Text(context.t.downloader.noFile)
             else
-              Text(progress.status.name.capitalized),
+              Text(downloadStatus),
             if (!groupByServer) ...[
               const Text('•'),
               Text(ref

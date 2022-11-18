@@ -108,6 +108,14 @@ downloader:
   ungroup: "Batalkan grup"
   groupByServer: "Kelompokkan berdasarkan server"
   noPermission: "Tidak dapat mengunduh file; gagal mendapatkan izin"
+  status:
+    empty: "Kosong"
+    pending: "Menunggu"
+    downloading: "Mengunduh"
+    downloaded: "Terunduh"
+    failed: "Gagal"
+    canceled: "Dibatalkan"
+    paused: "Tertunda"
 
 favorites:
   placeholder: "Konten yang kamu suka akan berada di sini"

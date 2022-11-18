@@ -108,6 +108,14 @@ downloader:
   ungroup: "Ungroup"
   groupByServer: "Group by server"
   noPermission: "Cannot download a file; missing notification permission"
+  status:
+    empty: "Empty"
+    pending: "Pending"
+    downloading: "Downloading"
+    downloaded: "Downloaded"
+    failed: "Failed"
+    canceled: "Canceled"
+    paused: "Paused"
 
 favorites:
   placeholder: "Your saved content will appear here"
