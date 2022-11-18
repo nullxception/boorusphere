@@ -6,8 +6,7 @@ import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/settings/content/video_player.dart';
+import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -89,9 +88,12 @@ class PostVideoDisplay extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController = ref.watch(videoPlayerControllerProvider(post));
-    final blurExplicit = ref.watch(blurExplicitPostSettingStateProvider);
+    final blurExplicitPost =
+        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
+
     final isMounted = useIsMounted();
-    final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
+    final isBlur =
+        useState(post.rating == PostRating.explicit && blurExplicitPost);
 
     final heroWidgetKey = useMemoized(GlobalKey.new);
     Widget asHero(Widget child) {
@@ -105,7 +107,7 @@ class PostVideoDisplay extends HookConsumerWidget {
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
     useEffect(() {
-      if (post.rating != PostRating.explicit || !blurExplicit) {
+      if (post.rating != PostRating.explicit || !blurExplicitPost) {
         return;
       }
 
@@ -162,7 +164,7 @@ class PostVideoDisplay extends HookConsumerWidget {
           controllerAsync: playerController,
           disableProgressBar: isBlur.value,
         ),
-        if (post.rating == PostRating.explicit && blurExplicit)
+        if (post.rating == PostRating.explicit && blurExplicitPost)
           FadeTransition(
             opacity: Tween<double>(begin: 0, end: 1).animate(
               CurvedAnimation(
@@ -198,7 +200,8 @@ class _Toolbox extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = controllerAsync?.asData?.value;
-    final isMuted = ref.watch(videoPlayerMuteSettingStateProvider);
+    final isMuted =
+        ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
     final fullscreen = ref.watch(fullscreenStateProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     final isPlaying = ref.watch(_playerPlayState);
@@ -282,9 +285,8 @@ class _Toolbox extends HookConsumerWidget {
                               color: Colors.white,
                               onPressed: () async {
                                 final mute = await ref
-                                    .read(videoPlayerMuteSettingStateProvider
-                                        .notifier)
-                                    .toggle();
+                                    .read(contentSettingStateProvider.notifier)
+                                    .toggleVideoPlayerMute();
                                 await controller?.setVolume(mute ? 0 : 1);
                               },
                               icon: Icon(

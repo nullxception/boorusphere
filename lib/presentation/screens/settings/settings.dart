@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
+import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
@@ -113,11 +112,12 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.blurContent.desc),
               ),
-              value: ref.watch(blurExplicitPostSettingStateProvider),
+              value: ref.watch(
+                  contentSettingStateProvider.select((it) => it.blurExplicit)),
               onChanged: (value) {
                 ref
-                    .watch(blurExplicitPostSettingStateProvider.notifier)
-                    .update(value);
+                    .watch(contentSettingStateProvider.notifier)
+                    .setBlurExplicitPost(value);
               },
             ),
             SwitchListTile(
@@ -145,11 +145,12 @@ class _SettingsContent extends HookConsumerWidget {
                 padding: subtitlePadding,
                 child: Text(context.t.settings.loadOG.desc),
               ),
-              value: ref.watch(loadOriginalPostSettingStateProvider),
+              value: ref.watch(
+                  contentSettingStateProvider.select((it) => it.loadOriginal)),
               onChanged: (value) {
                 ref
-                    .watch(loadOriginalPostSettingStateProvider.notifier)
-                    .update(value);
+                    .watch(contentSettingStateProvider.notifier)
+                    .setLoadOriginalPost(value);
               },
             ),
             ListTile(

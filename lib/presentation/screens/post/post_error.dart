@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
+import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -21,7 +21,8 @@ class PostErrorDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shouldBlur = ref.watch(blurExplicitPostSettingStateProvider);
+    final blurExplicitPost =
+        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
     return Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,
@@ -30,7 +31,7 @@ class PostErrorDisplay extends HookConsumerWidget {
           tag: heroKey ?? post.id,
           child: PostPlaceholderImage(
             post: post,
-            shouldBlur: shouldBlur && post.rating == PostRating.explicit,
+            shouldBlur: blurExplicitPost && post.rating == PostRating.explicit,
           ),
         ),
         Positioned(

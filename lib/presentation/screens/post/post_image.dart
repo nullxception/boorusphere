@@ -2,8 +2,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/settings/content/blur_explicit.dart';
-import 'package:boorusphere/presentation/provider/settings/content/load_original.dart';
+import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
@@ -28,9 +27,9 @@ class PostImageDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blurExplicit = ref.watch(blurExplicitPostSettingStateProvider);
-    final displayOriginal = ref.watch(loadOriginalPostSettingStateProvider);
-    final isBlur = useState(post.rating == PostRating.explicit && blurExplicit);
+    final contentSettings = ref.watch(contentSettingStateProvider);
+    final isBlur = useState(
+        post.rating == PostRating.explicit && contentSettings.blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
     // GlobalKey to keep the hero state across blur and ExtendedImage's loadState changes
@@ -40,7 +39,7 @@ class PostImageDisplay extends HookConsumerWidget {
     final isMounted = useIsMounted();
 
     useEffect(() {
-      if (post.rating != PostRating.explicit || !blurExplicit) {
+      if (post.rating != PostRating.explicit || !contentSettings.blurExplicit) {
         return;
       }
 
@@ -76,7 +75,9 @@ class PostImageDisplay extends HookConsumerWidget {
             )
           else
             ExtendedImage.network(
-              displayOriginal ? post.originalFile : post.content.url,
+              contentSettings.loadOriginal
+                  ? post.originalFile
+                  : post.content.url,
               headers: post.getHeaders(ref),
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
@@ -122,7 +123,8 @@ class PostImageDisplay extends HookConsumerWidget {
                 animation.removeListener(onAnimating);
               },
             ),
-          if (post.rating == PostRating.explicit && blurExplicit)
+          if (post.rating == PostRating.explicit &&
+              contentSettings.blurExplicit)
             FadeTransition(
               opacity: Tween<double>(begin: 0, end: 1).animate(
                 CurvedAnimation(
