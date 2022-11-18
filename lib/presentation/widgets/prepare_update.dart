@@ -1,5 +1,5 @@
-import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/download/download_service.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,7 +11,7 @@ class UpdatePrepareDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.read(downloadProvider);
+    final downloader = ref.read(downloadServiceProvider);
     final allowPop = useState(false);
     useEffect(() {
       downloader.updater(action: UpdaterAction.exposeAppFile).then((value) {

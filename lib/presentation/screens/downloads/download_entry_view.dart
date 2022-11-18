@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/entity/download_entry.dart';
-import 'package:boorusphere/data/entity/download_status.dart';
-import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
+import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
+import 'package:boorusphere/presentation/provider/download/download_service.dart';
+import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/download_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
@@ -54,10 +56,13 @@ class DownloadEntryView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.watch(downloadProvider);
     final groupByServer = ref
         .watch(downloadSettingsStateProvider.select((it) => it.groupByServer));
-    final progress = downloader.getProgress(entry.id);
+    final downloadState = ref.watch(downloadStateProvider);
+    final progress = downloadState.progresses.firstWhere(
+      (it) => it.id == entry.id,
+      orElse: () => DownloadProgress.none,
+    );
 
     String downloadStatus;
     switch (progress.status) {
@@ -147,7 +152,7 @@ class DownloadEntryView extends ConsumerWidget {
       dense: true,
       onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
-          : () => downloader.openEntryFile(id: entry.id),
+          : () => ref.read(downloadServiceProvider).openFile(id: entry.id),
     );
   }
 }
@@ -159,29 +164,30 @@ class _EntryPopupMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.watch(downloadProvider);
-    final progress = downloader.getProgress(entry.id);
+    final downloadState = ref.watch(downloadStateProvider);
+    final progress = downloadState.getProgressById(entry.id);
 
     return PopupMenuButton(
       onSelected: (value) {
+        final downloader = ref.read(downloadServiceProvider);
         switch (value) {
           case 'redownload':
             DownloaderDialog.show(
               context: context,
               post: entry.post,
               onItemClick: (type) async {
-                await downloader.clearEntry(id: entry.id);
+                await downloader.clear(id: entry.id);
               },
             );
             break;
           case 'retry':
-            downloader.retryEntry(id: entry.id);
+            downloader.retry(id: entry.id);
             break;
           case 'cancel':
-            downloader.cancelEntry(id: entry.id);
+            downloader.cancel(id: entry.id);
             break;
           case 'clear':
-            downloader.clearEntry(id: entry.id);
+            downloader.clear(id: entry.id);
             break;
           case 'show-detail':
             context.router.push(PostDetailsRoute(post: entry.post));

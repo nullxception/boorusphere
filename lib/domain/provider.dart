@@ -2,6 +2,7 @@ import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
 import 'package:boorusphere/data/repository/booru/booru_repo_impl.dart';
 import 'package:boorusphere/data/repository/changelog/changelog_repo_impl.dart';
+import 'package:boorusphere/data/repository/download/download_repo_impl.dart';
 import 'package:boorusphere/data/repository/favorite_post/favorite_post_repo_impl.dart';
 import 'package:boorusphere/data/repository/search_history/search_history_repo_impl.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
@@ -11,6 +12,7 @@ import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
 import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/domain/repository/changelog_repo.dart';
+import 'package:boorusphere/domain/repository/download_repo.dart';
 import 'package:boorusphere/domain/repository/favorite_post_repo.dart';
 import 'package:boorusphere/domain/repository/search_history_repo.dart';
 import 'package:boorusphere/domain/repository/server_repo.dart';
@@ -76,5 +78,12 @@ VersionRepo versionRepo(VersionRepoRef ref) {
   return VersionRepoImpl(
     localSource: ref.watch(versionLocalSourceProvider),
     networkSource: ref.watch(versionNetworkSourceProvider),
+  );
+}
+
+@riverpod
+DownloadRepo downloadRepo(DownloadRepoRef ref) {
+  return DownloadRepoImpl(
+    ref.watch(downloaderSourceProvider),
   );
 }

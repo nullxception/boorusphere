@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
+import 'package:boorusphere/presentation/provider/download/download_service.dart';
 import 'package:boorusphere/presentation/widgets/permissions.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/imageprovider.dart';
@@ -36,7 +36,6 @@ class DownloaderDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.watch(downloadProvider);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
@@ -68,7 +67,9 @@ class DownloaderDialog extends HookConsumerWidget {
                     }
 
                     onItemClick?.call('sample');
-                    unawaited(downloader.download(post, url: post.sampleFile));
+                    unawaited(ref
+                        .read(downloadServiceProvider)
+                        .download(post, url: post.sampleFile));
                     context.navigator.pop();
                   }),
             ListTile(
@@ -83,7 +84,7 @@ class DownloaderDialog extends HookConsumerWidget {
                 }
 
                 onItemClick?.call('original');
-                unawaited(downloader.download(post));
+                unawaited(ref.read(downloadServiceProvider).download(post));
                 context.navigator.pop();
               },
             ),

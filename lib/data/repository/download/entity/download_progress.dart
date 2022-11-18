@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/entity/download_status.dart';
+import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 
 class DownloadProgress {
   const DownloadProgress({

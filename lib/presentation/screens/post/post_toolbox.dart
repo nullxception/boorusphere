@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/favorite_post.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -134,21 +134,18 @@ class PostDownloadButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.watch(downloadProvider);
-    final downloadProgress = downloader.getProgressByPost(post);
+    final progress = ref.watch(downloadStateProvider).getProgressByPost(post);
 
     return Stack(
       alignment: Alignment.center,
       children: [
         CircularProgressIndicator(
-          value: downloadProgress.status.isDownloading
-              ? downloadProgress.progress.ratio
-              : 0,
+          value: progress.status.isDownloading ? progress.progress.ratio : 0,
         ),
         IconButton(
           padding: const EdgeInsets.all(16),
           color: Colors.white,
-          icon: Icon(downloadProgress.status.isDownloaded
+          icon: Icon(progress.status.isDownloaded
               ? Icons.download_done
               : Icons.download),
           onPressed: () {

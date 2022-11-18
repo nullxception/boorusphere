@@ -2,6 +2,8 @@ import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags
 import 'package:boorusphere/data/repository/booru/datasource/booru_network_source.dart';
 import 'package:boorusphere/data/repository/changelog/datasource/changelog_local_source.dart';
 import 'package:boorusphere/data/repository/changelog/datasource/changelog_network_source.dart';
+import 'package:boorusphere/data/repository/download/datasource/downloader_source.dart';
+import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/favorite_post/datasource/favorite_post_local_source.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/data/repository/search_history/datasource/search_history_local_source.dart';
@@ -105,4 +107,10 @@ BooruNetworkSource booruNetworkSource(BooruNetworkSourceRef ref) {
 BlockedTagsLocalSource blockedTagsLocalSource(BlockedTagsLocalSourceRef ref) {
   final box = Hive.box<String>(BlockedTagsLocalSource.key);
   return BlockedTagsLocalSource(box);
+}
+
+@riverpod
+DownloaderSource downloaderSource(DownloaderSourceRef ref) {
+  final box = Hive.box<DownloadEntry>(DownloaderSource.key);
+  return DownloaderSource(box);
 }

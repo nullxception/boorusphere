@@ -4,8 +4,9 @@ import 'package:boorusphere/data/repository/changelog/entity/changelog_option.da
 import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
-import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/download/download_service.dart';
+import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
@@ -158,35 +159,38 @@ class _Downloader extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updater =
-        ref.watch(downloadProvider.select((it) => it.appUpdateProgress));
+    final updateId =
+        ref.watch(downloadServiceProvider.select((it) => it.appUpdateTaskId));
+    final downloadState = ref.watch(downloadStateProvider);
+    final progress = downloadState.getProgressById(updateId);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (updater.status.isCanceled ||
-            updater.status.isFailed ||
-            updater.status.isEmpty)
+        if (progress.status.isCanceled ||
+            progress.status.isFailed ||
+            progress.status.isEmpty)
           ElevatedButton(
             onPressed: () {
               ref
-                  .read(downloadProvider)
+                  .read(downloadServiceProvider)
                   .updater(action: UpdaterAction.start, version: version);
             },
             style: ElevatedButton.styleFrom(elevation: 0),
             child: Text(context.t.updater.download(version: version)),
           ),
-        if (updater.status.isDownloading) ...[
+        if (progress.status.isDownloading) ...[
           const SizedBox(width: 16),
           Padding(
               padding: const EdgeInsets.all(8),
-              child: Text('${updater.progress}%')),
+              child: Text('${progress.progress}%')),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Stack(
                 children: [
                   LinearProgressIndicator(
-                    value: updater.progress.ratio,
+                    value: progress.progress.ratio,
                     minHeight: 16,
                   ),
                   Shimmer(
@@ -216,13 +220,15 @@ class _Downloader extends HookConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              ref.read(downloadProvider).updater(action: UpdaterAction.stop);
+              ref
+                  .read(downloadServiceProvider)
+                  .updater(action: UpdaterAction.stop);
             },
             icon: const Icon(Icons.close),
           ),
           const SizedBox(width: 16),
         ],
-        if (updater.status.isDownloaded)
+        if (progress.status.isDownloaded)
           ElevatedButton(
             onPressed: () {
               UpdatePrepareDialog.show(context);

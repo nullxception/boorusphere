@@ -1,6 +1,6 @@
-import 'package:boorusphere/data/entity/download_entry.dart';
-import 'package:boorusphere/data/services/download.dart';
+import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/download_settings.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_entry_view.dart';
@@ -14,7 +14,7 @@ class DownloadsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloader = ref.watch(downloadProvider);
+    final downloadState = ref.watch(downloadStateProvider);
     final groupByServer = ref
         .watch(downloadSettingsStateProvider.select((it) => it.groupByServer));
 
@@ -22,12 +22,12 @@ class DownloadsPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(context.t.downloader.title),
         actions: [
-          if (downloader.entries.isNotEmpty)
+          if (downloadState.entries.isNotEmpty)
             PopupMenuButton(
               onSelected: (value) {
                 switch (value) {
                   case 'clear-all':
-                    downloader.clearEntries();
+                    ref.read(downloadStateProvider.notifier).clear();
                     break;
                   case 'group-by-server':
                     ref
@@ -58,7 +58,7 @@ class DownloadsPage extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        child: downloader.entries.isEmpty
+        child: downloadState.entries.isEmpty
             ? Column(
                 children: [
                   Center(
@@ -71,7 +71,7 @@ class DownloadsPage extends ConsumerWidget {
                 ],
               )
             : ExpandableGroupListView<DownloadEntry, String>(
-                items: downloader.entries.reversed.toList(),
+                items: downloadState.entries.reversed.toList(),
                 groupedBy: (entry) => entry.post.serverId,
                 groupTitle: (id) => Text(ref
                     .watch(serverDataStateProvider.notifier)

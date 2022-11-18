@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
-import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/provider/download/download_service.dart';
+import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
@@ -176,8 +177,10 @@ class AppVersionTile extends HookConsumerWidget {
     final currentVer = ref.watch(versionCurrentProvider
         .select((it) => it.maybeValue ?? AppVersion.zero));
     final latestVer = ref.watch(versionLatestProvider);
-    final updater =
-        ref.watch(downloadProvider.select((it) => it.appUpdateProgress));
+    final updateId =
+        ref.watch(downloadServiceProvider.select((it) => it.appUpdateTaskId));
+    final downloadState = ref.watch(downloadStateProvider);
+    final updater = downloadState.getProgressById(updateId);
 
     final updateStatus = updater.status;
     final current = ListTile(

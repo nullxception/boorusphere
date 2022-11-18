@@ -1,6 +1,7 @@
-import 'package:boorusphere/data/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/data/repository/download/datasource/downloader_source.dart';
+import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/favorite_post/datasource/favorite_post_local_source.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/data/repository/search_history/datasource/search_history_local_source.dart';
@@ -8,7 +9,6 @@ import 'package:boorusphere/data/repository/search_history/entity/search_history
 import 'package:boorusphere/data/repository/server/datasource/server_local_source.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
-import 'package:boorusphere/data/services/download.dart';
 import 'package:boorusphere/presentation/boorusphere.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
@@ -34,7 +34,7 @@ void main() async {
     FavoritePostLocalSource.prepare(),
     SearchHistoryLocalSource.prepare(),
     SettingLocalSource.prepare(),
-    DownloadService.prepare(),
+    DownloaderSource.prepare(),
   ]);
 
   final deviceProp = DeviceProp(await DeviceInfoPlugin().androidInfo);
