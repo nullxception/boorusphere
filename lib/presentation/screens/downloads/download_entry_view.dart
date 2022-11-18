@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/download/download_service.dart';
@@ -59,33 +58,36 @@ class DownloadEntryView extends ConsumerWidget {
     }
   }
 
-  String _buildStatusDesc(BuildContext context, ServerData server) {
-    final desc = !groupByServer ? ' • ${server.name}' : '';
+  String _buildStatusDesc(BuildContext context) {
     if (progress.status.isDownloaded && !entry.isFileExists) {
-      return context.t.downloader.noFile + desc;
+      return context.t.downloader.noFile;
     }
 
     final status = context.t.downloader.status;
     switch (progress.status) {
       case DownloadStatus.pending:
-        return status.pending + desc;
+        return status.pending;
       case DownloadStatus.downloading:
-        return status.downloading + desc;
+        return status.downloading;
       case DownloadStatus.downloaded:
-        return status.downloaded + desc;
+        return status.downloaded;
       case DownloadStatus.failed:
-        return status.failed + desc;
+        return status.failed;
       case DownloadStatus.canceled:
-        return status.canceled + desc;
+        return status.canceled;
       case DownloadStatus.paused:
-        return status.paused + desc;
+        return status.paused;
       default:
-        return status.empty + desc;
+        return status.empty;
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final server = ref
+        .watch(serverDataStateProvider.notifier)
+        .getById(entry.post.serverId);
+
     return ListTile(
       title: Text(
         entry.destination.fileName.asDecoded,
@@ -94,41 +96,47 @@ class DownloadEntryView extends ConsumerWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 8),
-        child: SeparatedRow(
-          separatorBuilder: (_, __) => const SizedBox(width: 6),
+        child: Wrap(
           children: [
-            if (progress.status.isDownloading || progress.status.isPending) ...[
-              SizedBox(
-                height: 18,
-                width: 18,
-                child: Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: CircularProgressIndicator(
-                    value: progress.status.isPending
-                        ? null
-                        : progress.progress.ratio,
-                    strokeWidth: 2.5,
-                    backgroundColor: context.colorScheme.surfaceVariant,
+            SeparatedRow(
+              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (progress.status.isDownloading ||
+                    progress.status.isPending) ...[
+                  SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: CircularProgressIndicator(
+                        value: progress.status.isPending
+                            ? null
+                            : progress.progress.ratio,
+                        strokeWidth: 2.5,
+                        backgroundColor: context.colorScheme.surfaceVariant,
+                      ),
+                    ),
                   ),
+                  Text('${progress.progress}%'),
+                ] else
+                  Icon(
+                    _buildStatusIcon(),
+                    color: _buildStatusColor(context.colorScheme),
+                    size: 18,
+                  ),
+                Text(_buildStatusDesc(context)),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  width: 18,
+                  child: Center(child: Text('•')),
                 ),
-              ),
-              Text('${progress.progress}%'),
-            ] else
-              Icon(
-                _buildStatusIcon(),
-                color: _buildStatusColor(context.colorScheme),
-                size: 18,
-              ),
-            Expanded(
-              child: Text(
-                _buildStatusDesc(
-                  context,
-                  ref
-                      .watch(serverDataStateProvider.notifier)
-                      .getById(entry.post.serverId),
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+                Text(server.name),
+              ],
             ),
           ],
         ),
