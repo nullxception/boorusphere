@@ -77,7 +77,11 @@ class DownloadsPage extends ConsumerWidget {
                     .watch(serverDataStateProvider.notifier)
                     .getById(id)
                     .name),
-                itemBuilder: (entry) => DownloadEntryView(entry: entry),
+                itemBuilder: (entry) => DownloadEntryView(
+                  entry: entry,
+                  progress: downloadState.getProgressById(entry.id),
+                  groupByServer: groupByServer,
+                ),
                 ungroup: !groupByServer,
               ),
       ),

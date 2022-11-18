@@ -2,12 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/download/download_service.dart';
-import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
-import 'package:boorusphere/presentation/provider/settings/download_settings.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -19,12 +18,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
 class DownloadEntryView extends ConsumerWidget {
-  const DownloadEntryView({super.key, required this.entry});
+  const DownloadEntryView({
+    super.key,
+    required this.entry,
+    required this.progress,
+    required this.groupByServer,
+  });
 
   final DownloadEntry entry;
+  final DownloadProgress progress;
+  final bool groupByServer;
 
-  IconData downloadStatusIconOf(DownloadEntry entry, DownloadStatus status) {
-    switch (status) {
+  IconData _buildStatusIcon() {
+    switch (progress.status) {
       case DownloadStatus.downloaded:
         return entry.isFileExists
             ? Icons.download_done_rounded
@@ -39,9 +45,8 @@ class DownloadEntryView extends ConsumerWidget {
     }
   }
 
-  Color downloadStatusColorOf(
-      DownloadEntry entry, DownloadStatus status, ColorScheme scheme) {
-    switch (status) {
+  Color _buildStatusColor(ColorScheme scheme) {
+    switch (progress.status) {
       case DownloadStatus.downloaded:
         return entry.isFileExists
             ? Colors.lightBlueAccent
@@ -54,41 +59,33 @@ class DownloadEntryView extends ConsumerWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final groupByServer = ref
-        .watch(downloadSettingsStateProvider.select((it) => it.groupByServer));
-    final downloadState = ref.watch(downloadStateProvider);
-    final progress = downloadState.progresses.firstWhere(
-      (it) => it.id == entry.id,
-      orElse: () => DownloadProgress.none,
-    );
-
-    String downloadStatus;
-    switch (progress.status) {
-      case DownloadStatus.pending:
-        downloadStatus = context.t.downloader.status.pending;
-        break;
-      case DownloadStatus.downloading:
-        downloadStatus = context.t.downloader.status.downloading;
-        break;
-      case DownloadStatus.downloaded:
-        downloadStatus = context.t.downloader.status.downloaded;
-        break;
-      case DownloadStatus.failed:
-        downloadStatus = context.t.downloader.status.failed;
-        break;
-      case DownloadStatus.canceled:
-        downloadStatus = context.t.downloader.status.canceled;
-        break;
-      case DownloadStatus.paused:
-        downloadStatus = context.t.downloader.status.paused;
-        break;
-      default:
-        downloadStatus = context.t.downloader.status.empty;
-        break;
+  String _buildStatusDesc(BuildContext context, ServerData server) {
+    final desc = !groupByServer ? ' • ${server.name}' : '';
+    if (progress.status.isDownloaded && !entry.isFileExists) {
+      return context.t.downloader.noFile + desc;
     }
 
+    final status = context.t.downloader.status;
+    switch (progress.status) {
+      case DownloadStatus.pending:
+        return status.pending + desc;
+      case DownloadStatus.downloading:
+        return status.downloading + desc;
+      case DownloadStatus.downloaded:
+        return status.downloaded + desc;
+      case DownloadStatus.failed:
+        return status.failed + desc;
+      case DownloadStatus.canceled:
+        return status.canceled + desc;
+      case DownloadStatus.paused:
+        return status.paused + desc;
+      default:
+        return status.empty + desc;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: Text(
         entry.destination.fileName.asDecoded,
@@ -118,25 +115,21 @@ class DownloadEntryView extends ConsumerWidget {
               Text('${progress.progress}%'),
             ] else
               Icon(
-                downloadStatusIconOf(entry, progress.status),
-                color: downloadStatusColorOf(
-                  entry,
-                  progress.status,
-                  context.colorScheme,
-                ),
+                _buildStatusIcon(),
+                color: _buildStatusColor(context.colorScheme),
                 size: 18,
               ),
-            if (progress.status.isDownloaded && !entry.isFileExists)
-              Text(context.t.downloader.noFile)
-            else
-              Text(downloadStatus),
-            if (!groupByServer) ...[
-              const Text('•'),
-              Text(ref
-                  .watch(serverDataStateProvider.notifier)
-                  .getById(entry.post.serverId)
-                  .name),
-            ],
+            Expanded(
+              child: Text(
+                _buildStatusDesc(
+                  context,
+                  ref
+                      .watch(serverDataStateProvider.notifier)
+                      .getById(entry.post.serverId),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
       ),
@@ -148,7 +141,7 @@ class DownloadEntryView extends ConsumerWidget {
         borderRadius: const BorderRadius.all(Radius.circular(5)),
         fit: BoxFit.cover,
       ),
-      trailing: _EntryPopupMenu(entry: entry),
+      trailing: _EntryPopupMenu(entry: entry, progress: progress),
       dense: true,
       onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
@@ -158,15 +151,16 @@ class DownloadEntryView extends ConsumerWidget {
 }
 
 class _EntryPopupMenu extends ConsumerWidget {
-  const _EntryPopupMenu({required this.entry});
+  const _EntryPopupMenu({
+    required this.entry,
+    required this.progress,
+  });
 
   final DownloadEntry entry;
+  final DownloadProgress progress;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final downloadState = ref.watch(downloadStateProvider);
-    final progress = downloadState.getProgressById(entry.id);
-
     return PopupMenuButton(
       onSelected: (value) {
         final downloader = ref.read(downloadServiceProvider);
