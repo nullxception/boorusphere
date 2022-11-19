@@ -1,7 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
-import 'package:boorusphere/presentation/provider/download/entity/downloads.dart';
 import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -20,9 +19,6 @@ class Downloader {
 
   final Ref ref;
 
-  Downloads get state => ref.read(downloadStateProvider);
-  DownloadState get stateNotifier => ref.read(downloadStateProvider.notifier);
-
   Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
     final dir = await DownloadUtils.downloadDir;
@@ -39,18 +35,20 @@ class Downloader {
       final destination = '${dir.absolute.path}/${fileUrl.fileName}';
       final entry =
           DownloadEntry(id: taskId, post: post, destination: destination);
-      await stateNotifier.add(entry);
+      await ref.read(downloadStateProvider.notifier).add(entry);
     }
   }
 
   Future<void> retry({required String id}) async {
     final newId = await FlutterDownloader.retry(taskId: id);
     if (newId != null) {
-      final newEntry = state.entries
+      final newEntry = ref
+          .read(downloadStateProvider)
+          .entries
           .firstWhere((it) => it.id == id, orElse: () => DownloadEntry.empty)
           .copyWith(id: newId);
 
-      await stateNotifier.update(id, newEntry);
+      await ref.read(downloadStateProvider.notifier).update(id, newEntry);
     }
   }
 
@@ -60,7 +58,7 @@ class Downloader {
 
   Future<void> clear({required String id}) async {
     await FlutterDownloader.remove(taskId: id, shouldDeleteContent: false);
-    await stateNotifier.remove(id);
+    await ref.read(downloadStateProvider.notifier).remove(id);
   }
 
   void openFile({required String id}) {
