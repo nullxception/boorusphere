@@ -4,7 +4,7 @@ import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/download/download_service.dart';
+import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/widgets/permissions.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/imageprovider.dart';
@@ -68,7 +68,7 @@ class DownloaderDialog extends HookConsumerWidget {
 
                     onItemClick?.call('sample');
                     unawaited(ref
-                        .read(downloadServiceProvider)
+                        .read(downloaderProvider)
                         .download(post, url: post.sampleFile));
                     context.navigator.pop();
                   }),
@@ -84,7 +84,7 @@ class DownloaderDialog extends HookConsumerWidget {
                 }
 
                 onItemClick?.call('original');
-                unawaited(ref.read(downloadServiceProvider).download(post));
+                unawaited(ref.read(downloaderProvider).download(post));
                 context.navigator.pop();
               },
             ),

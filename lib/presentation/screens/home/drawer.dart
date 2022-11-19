@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/app_updater.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
-import 'package:boorusphere/presentation/provider/download/download_service.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';

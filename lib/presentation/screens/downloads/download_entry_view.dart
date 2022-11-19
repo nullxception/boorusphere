@@ -4,7 +4,7 @@ import 'package:boorusphere/data/repository/download/entity/download_progress.da
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/download/download_service.dart';
+import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -153,7 +153,7 @@ class DownloadEntryView extends ConsumerWidget {
       dense: true,
       onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
-          : () => ref.read(downloadServiceProvider).openFile(id: entry.id),
+          : () => ref.read(downloaderProvider).openFile(id: entry.id),
     );
   }
 }
@@ -171,7 +171,7 @@ class _EntryPopupMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PopupMenuButton(
       onSelected: (value) {
-        final downloader = ref.read(downloadServiceProvider);
+        final downloader = ref.read(downloaderProvider);
         switch (value) {
           case 'redownload':
             DownloaderDialog.show(

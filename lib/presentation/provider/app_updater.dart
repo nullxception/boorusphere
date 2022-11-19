@@ -1,33 +1,28 @@
 import 'dart:io';
 
 import 'package:boorusphere/constant/app.dart';
-import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
-import 'package:boorusphere/presentation/provider/download/entity/downloads.dart';
 import 'package:boorusphere/utils/download.dart';
-import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'download_service.g.dart';
+part 'app_updater.g.dart';
 
 @riverpod
-DownloadService downloadService(DownloadServiceRef ref) {
-  return DownloadService(ref);
+AppUpdater appUpdater(AppUpdaterRef ref) {
+  return AppUpdater(ref);
 }
 
 @riverpod
 DownloadProgress appUpdateProgress(AppUpdateProgressRef ref) {
-  final updateId =
-      ref.watch(downloadServiceProvider.select((it) => it.appUpdateTaskId));
-  return ref.watch(downloadStateProvider).getProgressById(updateId);
+  final id = ref.watch(appUpdaterProvider.select((it) => it.id));
+  return ref.watch(downloadStateProvider).getProgressById(id);
 }
 
 enum UpdaterAction {
@@ -37,60 +32,12 @@ enum UpdaterAction {
   install;
 }
 
-class DownloadService {
-  DownloadService(this.ref);
+class AppUpdater {
+  AppUpdater(this.ref);
 
   final Ref ref;
-  var initialized = false;
 
-  Downloads get state => ref.read(downloadStateProvider);
-  DownloadState get stateNotifier => ref.read(downloadStateProvider.notifier);
-
-  Future<void> download(Post post, {String? url}) async {
-    final fileUrl = url ?? post.originalFile;
-    final dir = await DownloadUtils.downloadDir;
-
-    await DownloadUtils.createDownloadDir();
-
-    final taskId = await FlutterDownloader.enqueue(
-        url: fileUrl,
-        savedDir: dir.absolute.path,
-        showNotification: true,
-        openFileFromNotification: true);
-
-    if (taskId != null) {
-      final destination = '${dir.absolute.path}/${fileUrl.fileName}';
-      final entry =
-          DownloadEntry(id: taskId, post: post, destination: destination);
-      await stateNotifier.add(entry);
-    }
-  }
-
-  Future<void> retry({required String id}) async {
-    final newId = await FlutterDownloader.retry(taskId: id);
-    if (newId != null) {
-      final newEntry = state.entries
-          .firstWhere((it) => it.id == id, orElse: () => DownloadEntry.empty)
-          .copyWith(id: newId);
-
-      await stateNotifier.update(id, newEntry);
-    }
-  }
-
-  Future<void> cancel({required String id}) async {
-    await FlutterDownloader.cancel(taskId: id);
-  }
-
-  Future<void> clear({required String id}) async {
-    await FlutterDownloader.remove(taskId: id, shouldDeleteContent: false);
-    await stateNotifier.remove(id);
-  }
-
-  void openFile({required String id}) {
-    FlutterDownloader.open(taskId: id);
-  }
-
-  String appUpdateTaskId = '';
+  String id = '';
   AppVersion appUpdateVersion = AppVersion.zero;
 
   String _getAppUpdateFile(AppVersion version) {
@@ -115,26 +62,26 @@ class DownloadService {
       appFile.deleteSync();
     }
 
-    final id = await FlutterDownloader.enqueue(
+    final newId = await FlutterDownloader.enqueue(
       url: url,
       savedDir: appDir.absolute.path,
       showNotification: true,
       openFileFromNotification: false,
     );
 
-    if (id != null) {
+    if (newId != null) {
       appUpdateVersion = version;
-      appUpdateTaskId = id;
+      id = newId;
     }
   }
 
   Future<void> _stopAppUpdate() async {
-    if (appUpdateTaskId.isEmpty) return;
+    if (id.isEmpty) return;
     await FlutterDownloader.remove(
-      taskId: appUpdateTaskId,
+      taskId: id,
       shouldDeleteContent: true,
     );
-    appUpdateTaskId = '';
+    id = '';
   }
 
   _clearAppUpdate() async {
@@ -144,7 +91,7 @@ class DownloadService {
     for (var task in tasks) {
       await FlutterDownloader.remove(taskId: task.taskId);
     }
-    appUpdateTaskId = '';
+    id = '';
   }
 
   Future<void> _exposeAppUpdateFile() async {
@@ -176,7 +123,7 @@ class DownloadService {
         await _stopAppUpdate();
         break;
       case UpdaterAction.install:
-        await FlutterDownloader.open(taskId: appUpdateTaskId);
+        await FlutterDownloader.open(taskId: id);
         await _clearAppUpdate();
         break;
       case UpdaterAction.exposeAppFile:

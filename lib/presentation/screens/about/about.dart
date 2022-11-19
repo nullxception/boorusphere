@@ -5,7 +5,7 @@ import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/download/download_service.dart';
+import 'package:boorusphere/presentation/provider/app_updater.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -174,7 +174,7 @@ class _Downloader extends HookConsumerWidget {
               }
 
               await ref
-                  .read(downloadServiceProvider)
+                  .read(appUpdaterProvider)
                   .updater(action: UpdaterAction.start, version: version);
             },
             style: ElevatedButton.styleFrom(elevation: 0),
@@ -221,9 +221,7 @@ class _Downloader extends HookConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              ref
-                  .read(downloadServiceProvider)
-                  .updater(action: UpdaterAction.stop);
+              ref.read(appUpdaterProvider).updater(action: UpdaterAction.stop);
             },
             icon: const Icon(Icons.close),
           ),
