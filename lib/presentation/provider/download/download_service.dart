@@ -1,12 +1,9 @@
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 
 import 'package:boorusphere/constant/app.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
-import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
@@ -33,16 +30,6 @@ DownloadProgress appUpdateProgress(AppUpdateProgressRef ref) {
   return ref.watch(downloadStateProvider).getProgressById(updateId);
 }
 
-@pragma('vm:entry-point')
-void downloadTaskStatusSender(
-  String id,
-  DownloadTaskStatus status,
-  int progress,
-) {
-  IsolateNameServer.lookupPortByName(DownloadService.portName)
-      ?.send([id, status, progress]);
-}
-
 enum UpdaterAction {
   stop,
   start,
@@ -50,47 +37,14 @@ enum UpdaterAction {
   install;
 }
 
-final downloadServicePort = ReceivePort();
-
 class DownloadService {
-  DownloadService(this.ref) {
-    ref.onDispose(() {
-      if (initialized) {
-        IsolateNameServer.removePortNameMapping(portName);
-      }
-    });
-    _registerIsolateCallback();
-  }
+  DownloadService(this.ref);
 
   final Ref ref;
   var initialized = false;
 
   Downloads get state => ref.read(downloadStateProvider);
   DownloadState get stateNotifier => ref.read(downloadStateProvider.notifier);
-
-  void _registerIsolateCallback() {
-    IsolateNameServer.removePortNameMapping(portName);
-    IsolateNameServer.registerPortWithName(
-        downloadServicePort.sendPort, portName);
-    FlutterDownloader.registerCallback(downloadTaskStatusSender);
-    downloadServicePort.listen(_updateProgress);
-    initialized = true;
-  }
-
-  void _updateProgress(data) {
-    final DownloadTaskStatus status = data[1];
-    final progress = DownloadProgress(
-      id: data[0],
-      status: DownloadStatus.fromIndex(status.value),
-      progress: data[2],
-      timestamp: DateTime.now().millisecondsSinceEpoch,
-    );
-
-    stateNotifier.updateProgress(progress);
-    if (progress.status.isDownloaded) {
-      DownloadUtils.rescanMedia();
-    }
-  }
 
   Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
@@ -230,6 +184,4 @@ class DownloadService {
         break;
     }
   }
-
-  static const portName = 'downloaderPort';
 }
