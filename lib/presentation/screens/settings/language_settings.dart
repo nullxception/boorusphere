@@ -34,10 +34,10 @@ class _Content extends HookConsumerWidget {
     return ListView(
       children: [
         ListTile(
-          title: Text(context.t.settings.lang.automatic.title),
+          title: Text(context.t.settings.lang.auto.title),
           subtitle: Padding(
             padding: subtitlePadding,
-            child: Text(context.t.settings.lang.automatic.desc),
+            child: Text(context.t.settings.lang.auto.desc),
           ),
           onTap: () {
             updateLocale(null);

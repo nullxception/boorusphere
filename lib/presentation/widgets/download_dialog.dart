@@ -42,7 +42,7 @@ class DownloaderDialog extends HookConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(title: Text(context.t.downloader.title)),
+            ListTile(title: Text(context.t.downloads.title)),
             if (post.sampleFile.isNotEmpty)
               ListTile(
                   title: Text(context.t.fileSample),
@@ -73,7 +73,7 @@ class DownloaderDialog extends HookConsumerWidget {
                     context.navigator.pop();
                   }),
             ListTile(
-              title: Text(context.t.fileOG),
+              title: Text(context.t.fileOg),
               subtitle: Text(
                   '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
               leading: Icon(_getFileIcon(post.originalFile)),
@@ -115,8 +115,8 @@ Future<bool> checkNotificationPermission(BuildContext context) async {
   if (!status.isGranted) {
     await showSystemAppSettingsDialog(
       context: context,
-      title: context.t.downloader.title,
-      reason: context.t.downloader.noPermission,
+      title: context.t.downloads.title,
+      reason: context.t.downloads.noPermission,
     );
   }
   return status.isGranted;

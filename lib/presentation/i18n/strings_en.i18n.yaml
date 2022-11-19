@@ -1,5 +1,5 @@
-languageName: "English"
-languageAlias: "English"
+language_name: "English"
+language_alias: "English"
 
 save: "Save"
 cancel: "Cancel"
@@ -9,35 +9,35 @@ remove: "Remove"
 edit: "Edit"
 add: "Add"
 reset: "Reset"
-resetToDefault: "Reset to default"
+reset_to_default: "Reset to default"
 scan: "Scan"
-loadMore: "Load more"
+load_more: "Load more"
 clearing: "Clearing..."
-disableSafeMode: "Disable safe mode"
+disable_safe_mode: "Disable safe mode"
 details: "Details"
 location: "Location"
 source: "Source"
-fileSample: "Sample file"
-fileOG: "Original file"
+file_sample: "Sample file"
+file_og: "Original file"
 tags: "Tags"
 meta: "Meta"
 artist: "Artist"
 character: "Character"
 copyright: "Copyright"
 general: "General"
-ossLicense: "Open source license"
+oss_license: "Open source license"
 github: "GitHub"
-openSettings: "Open Settings"
-copySuccess: "Copied to clipboard"
-loadImageFailed: "Failed to load image"
-onMediaBlurred: "This media may contain material that is not safe for public-viewing"
+open_settings: "Open Settings"
+copy_success: "Copied to clipboard"
+load_image_failed: "Failed to load image"
+on_media_blurred: "This media may contain material that is not safe for public-viewing"
 unblur: "Show me"
-unsupportedMedia: "${fileExt} is not supported"
-openExternally: "Open externally"
-retryPopBack: "Press back again to exit"
-goHome: "Back to home"
+unsupported_media: "${file_ext} is not supported"
+open_externally: "Open externally"
+retry_pop_back: "Press back again to exit"
+go_home: "Back to home"
 recently: "Recently"
-searchHint: "Search on ${serverName}..."
+search_hint: "Search on ${server_name}..."
 version: "Version ${version}"
 
 rating:
@@ -46,28 +46,28 @@ rating:
   explicit: "Explicit"
   safe: "Safe"
 
-pageStatus:
-  noParser: "Cannot parse result from ${serverName}"
-  httpError:
-    zero: "Cannot get result from ${serverName}"
-    other: "Cannot get result from ${serverName} (HTTP ${n})"
-  noResult:
+page_status:
+  no_parser: "Cannot parse result from ${server_name}"
+  http_error:
+    zero: "Cannot get result from ${server_name}"
+    other: "Cannot get result from ${server_name} (HTTP ${n})"
+  no_result:
     one: "No result found"
     other: "No more result"
-  noResultForQuery:
+  no_result_for_query:
     one: "No result found for ${query}"
     other: "No more result for ${query}"
 
 suggestion:
-  notSupported: "${serverName} did not support search suggestion"
-  suggested: "Suggested at ${serverName}"
-  desc: "at ${serverName}"
+  not_supported: "${server_name} did not support search suggestion"
+  suggested: "Suggested at ${server_name}"
+  desc: "at ${server_name}"
   empty: "No tags that matches '${query}'"
-  httpError:
-    zero: "Cannot get result for '${query}' on ${serverName}"
-    other: "Cannot get result for '${query}' on ${serverName} (HTTP ${n})"
+  http_error:
+    zero: "Cannot get result for '${query}' on ${server_name}"
+    other: "Cannot get result for '${query}' on ${server_name} (HTTP ${n})"
 
-actionTag:
+action_tag:
   copy: "Copy tag"
   block: "Block selected tag"
   blocked: "Added to tags blocker"
@@ -80,8 +80,8 @@ updater:
   download: "Download ${version}"
   available: "Update available: ${version}"
   preparing: "Preparing for update..."
-  onLatest: "You're on latest version"
-  onNewVersion: "New version is available"
+  on_latest: "You're on latest version"
+  on_new_version: "New version is available"
   install: "Install update"
   progress: "Downloading: ${progress}%"
 
@@ -99,15 +99,15 @@ license:
     one: "${n} license"
     other: "${n} licenses"
 
-downloader:
+downloads:
   title: "Downloads"
-  noFile: "File has been moved"
+  no_file: "File has been moved"
   redownload: "Redownload"
   detail: "Show detail"
   placeholder: "Your downloaded files will appear here"
   ungroup: "Ungroup"
-  groupByServer: "Group by server"
-  noPermission: "Cannot download a file; missing notification permission"
+  group_by_server: "Group by server"
+  no_permission: "Cannot download a file; missing notification permission"
   status:
     empty: "Empty"
     pending: "Pending"
@@ -118,10 +118,10 @@ downloader:
     paused: "Paused"
 
 favorites:
-  placeholder: "Your saved content will appear here"
   title: "Favorites"
+  placeholder: "Your saved content will appear here"
 
-tagsBlocker:
+tags_blocker:
   title: "Tags Blocker"
   desc: "You can block multiple tags by separating it with space"
   empty: "No blocked tags yet"
@@ -129,59 +129,60 @@ tagsBlocker:
 
 servers:
   title: "Server"
-  resetWarning: "Are you sure you want to reset server list to default ?\n\nThis will erase all of your added server"
-  removeLastError: "The last server cannot be removed"
+  reset_warning: "Are you sure you want to reset server list to default ?\n\nThis will erase all of your added server"
+  remove_last_error: "The last server cannot be removed"
   preset: "From Preset"
   select: "Select Server"
   add: "Add new server"
   edit: "Edit ${name}"
   alias: "Alias"
   homepage: "Homepage"
-  homepageHint: "Homepage, example: https://verycoolbooru.com"
-  useCustomApi: "Use custom API address"
-  useCustomApiDesc: "Useful if server has different API address than the homepage"
-  addrError: "not a valid address"
-  apiAddr: "API Address"
-  apiAddrHint: "API address, example: https://api-v69.verycoolbooru.com"
-  alreadyExists: "Server data for ${name} already exists"
-  payloads:
-    title: "Payload"
-    search: "Search Payload"
-    suggestion: "Tag Suggestion Payload"
-    post: "Web Post Payload"
+  homepage_hint: "Homepage, example: https://verycoolbooru.com"
+  use_custom_api: "Use custom API address"
+  use_custom_api_desc: "Useful if server has different API address than the homepage"
+  addr_error: "not a valid address"
+  api_addr: "API Address"
+  api_addr_hint: "API address, example: https://api-v69.verycoolbooru.com"
+  already_exists: "Server data for ${name} already exists"
+
+server_query:
+  title: "Query"
+  search: "Search Query"
+  suggestion: "Tag Suggestion Query"
+  post: "Web Post Query"
 
 settings:
   title: "Settings"
   interface: "Interface"
+  safe_mode: "Safe mode"
+  misc: "Miscellaneous"
   lang:
     title: "Language"
-    automatic:
+    auto:
       title: "Automatic"
       desc: "Follow system language (if possible)"
-  safeMode: "Safe mode"
-  misc: "Miscellaneous"
-  midnightTheme:
+  midnight_theme:
     title: "Midnight Theme"
     desc: "Use darker color for the dark-mode"
-  uiBlur:
+  ui_blur:
     title: "Enable blur"
     desc: "Enable blur background on various UI elements"
-  hideMedia:
+  hide_media:
     title: "Hide downloaded media"
     desc: "Prevent external gallery app from showing downloaded files"
-  blurContent:
+  blur_content:
     title: "Blur explicit content"
     desc: "Content rated as explicit will be blurred"
-  strictSafeMode:
+  strict_safe_mode:
     title: "Strict Safe Mode"
     desc: "Only fetch content that rated as 'safe'. Note that rated as 'safe' doesn't guarantee safe-for-work"
-  loadOG:
+  load_og:
     title: "Display original content"
     desc: "Load original file instead of the sample when opening the post"
-  postLimit:
+  post_limit:
     title: "Max content per-load"
     desc: "Result might less than expected (caused by blocked tags or invalid data)"
-  clearCache:
+  clear_cache:
     title: "Clear cache"
     desc: "Clear loaded content from cache"
     done: "Cache cleared"

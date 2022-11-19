@@ -95,7 +95,7 @@ class ServerDetails extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        context.t.servers.payloads.title,
+                        context.t.serverQuery.title,
                         style: context.theme.textTheme.titleMedium,
                       ),
                       ElevatedButton(
@@ -121,7 +121,7 @@ class ServerDetails extends HookConsumerWidget {
                   controller: cSearchUrl,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: context.t.servers.payloads.search,
+                    labelText: context.t.serverQuery.search,
                   ),
                 ),
                 TextFormField(
@@ -130,7 +130,7 @@ class ServerDetails extends HookConsumerWidget {
                   controller: cSuggestUrl,
                   decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
-                      labelText: context.t.servers.payloads.suggestion),
+                      labelText: context.t.serverQuery.suggestion),
                 ),
                 TextFormField(
                   minLines: 1,
@@ -138,7 +138,7 @@ class ServerDetails extends HookConsumerWidget {
                   controller: cPostUrl,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
-                    labelText: context.t.servers.payloads.post,
+                    labelText: context.t.serverQuery.post,
                   ),
                 ),
               ],

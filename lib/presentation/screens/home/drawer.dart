@@ -89,7 +89,7 @@ class _Footer extends StatelessWidget {
       children: [
         _BackToHomeTile(),
         ListTile(
-          title: Text(context.t.downloader.title),
+          title: Text(context.t.downloads.title),
           leading: const Icon(Icons.cloud_download),
           onTap: () => context.router.push(const DownloadsRoute()),
         ),

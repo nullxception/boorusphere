@@ -107,7 +107,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                   trailing: _CopyButton(post.sampleFile),
                 ),
               ListTile(
-                title: Text(context.t.fileOG),
+                title: Text(context.t.fileOg),
                 subtitle: _LinkSubtitle(
                   post.originalFile,
                   label:

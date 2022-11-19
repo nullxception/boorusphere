@@ -60,10 +60,10 @@ class DownloadEntryView extends ConsumerWidget {
 
   String _buildStatusDesc(BuildContext context) {
     if (progress.status.isDownloaded && !entry.isFileExists) {
-      return context.t.downloader.noFile;
+      return context.t.downloads.noFile;
     }
 
-    final status = context.t.downloader.status;
+    final status = context.t.downloads.status;
     switch (progress.status) {
       case DownloadStatus.pending:
         return status.pending;
@@ -203,7 +203,7 @@ class _EntryPopupMenu extends ConsumerWidget {
           if (progress.status.isDownloaded && !entry.isFileExists)
             PopupMenuItem(
               value: 'redownload',
-              child: Text(context.t.downloader.redownload),
+              child: Text(context.t.downloads.redownload),
             ),
           if (progress.status.isCanceled || progress.status.isFailed)
             PopupMenuItem(
@@ -217,7 +217,7 @@ class _EntryPopupMenu extends ConsumerWidget {
             ),
           PopupMenuItem(
             value: 'show-detail',
-            child: Text(context.t.downloader.detail),
+            child: Text(context.t.downloads.detail),
           ),
           PopupMenuItem(
             value: 'clear',

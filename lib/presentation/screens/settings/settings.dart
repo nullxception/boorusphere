@@ -37,7 +37,7 @@ class _SettingsContent extends HookConsumerWidget {
     return ListView(
       children: [
         _Section(
-          title: Text(context.t.downloader.title),
+          title: Text(context.t.downloads.title),
           children: [
             FutureBuilder(
               future: DownloadUtils.hasDotnomedia,
@@ -140,10 +140,10 @@ class _SettingsContent extends HookConsumerWidget {
           title: Text(context.t.servers.title),
           children: [
             SwitchListTile(
-              title: Text(context.t.settings.loadOG.title),
+              title: Text(context.t.settings.loadOg.title),
               subtitle: Padding(
                 padding: subtitlePadding,
-                child: Text(context.t.settings.loadOG.desc),
+                child: Text(context.t.settings.loadOg.desc),
               ),
               value: ref.watch(
                   contentSettingStateProvider.select((it) => it.loadOriginal)),
@@ -226,7 +226,7 @@ class _CurrentLanguage extends ConsumerWidget {
 
     return Text(
       locale == null
-          ? context.t.settings.lang.automatic.title
+          ? context.t.settings.lang.auto.title
           : context.t.languageName,
     );
   }

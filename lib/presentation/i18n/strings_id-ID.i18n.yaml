@@ -1,5 +1,5 @@
-languageName: "Bahasa Indonesia"
-languageAlias: "Indonesian (id-ID)"
+language_name: "Bahasa Indonesia"
+language_alias: "Indonesian (id-ID)"
 
 save: "Simpan"
 cancel: "Batalkan"
@@ -9,35 +9,35 @@ remove: "Hapus"
 edit: "Edit"
 add: "Tambah"
 reset: "Setel ulang"
-resetToDefault: "Setel ulang ke bawaan"
+reset_to_default: "Setel ulang ke bawaan"
 scan: "Pindai"
-loadMore: "Muat lebih banyak"
+load_more: "Muat lebih banyak"
 clearing: "Membersihkan..."
-disableSafeMode: "Nonaktifkan mode aman"
+disable_safe_mode: "Nonaktifkan mode aman"
 details: "Rincian"
 location: "Lokasi"
 source: "Sumber"
-fileSample: "File contoh"
-fileOG: "File asli"
+file_sample: "File contoh"
+file_og: "File asli"
 tags: "Tag"
 meta: "Meta"
 artist: "Artis"
 character: "Karakter"
 copyright: "Hak Cipta"
 general: "General"
-ossLicense: "Lisensi sumber terbuka"
+oss_license: "Lisensi sumber terbuka"
 github: "GitHub"
-openSettings: "Buka Pengaturan"
-copySuccess: "Disalin ke clipboard"
-loadImageFailed: "Gagal memuat konten"
-onMediaBlurred: "Media ini mungkin berisi konten yang tidak aman untuk dilihat publik"
+open_settings: "Buka Pengaturan"
+copy_success: "Disalin ke clipboard"
+load_image_failed: "Gagal memuat konten"
+on_media_blurred: "Media ini mungkin berisi konten yang tidak aman untuk dilihat publik"
 unblur: "Perlihatkan"
-unsupportedMedia: "${fileExt} tidak didukung"
-openExternally: "Buka secara eksternal"
-retryPopBack: "Tekan kembali lagi untuk keluar"
-goHome: "Kembali ke beranda"
+unsupported_media: "${file_ext} tidak didukung"
+open_externally: "Buka secara eksternal"
+retry_pop_back: "Tekan kembali lagi untuk keluar"
+go_home: "Kembali ke beranda"
 recently: "Baru-baru ini"
-searchHint: "Cari di ${serverName}..."
+search_hint: "Cari di ${server_name}..."
 version: "Versi ${version}"
 
 rating:
@@ -46,28 +46,28 @@ rating:
   explicit: "Eksplisit"
   safe: "Aman"
 
-pageStatus:
-  noParser: "Tidak dapat mengurai hasil dari ${serverName}"
-  httpError:
-    zero: "Tidak bisa mendapatkan hasil dari ${serverName}"
-    other: "Tidak dapat memperoleh hasil dari ${serverName} (HTTP ${n})"
-  noResult:
+page_status:
+  no_parser: "Tidak dapat mengurai hasil dari ${server_name}"
+  http_error:
+    zero: "Tidak bisa mendapatkan hasil dari ${server_name}"
+    other: "Tidak dapat memperoleh hasil dari ${server_name} (HTTP ${n})"
+  no_result:
     one: "Tidak ada hasil yang ditemukan"
     other: "Tidak ada lagi hasil"
-  noResultForQuery:
+  no_result_for_query:
     one: "Tidak ada hasil yang ditemukan untuk ${query}"
     other: "Tidak ada lagi hasil untuk ${query}"
 
 suggestion:
-  notSupported: "${serverName} tidak mendukung saran pencarian"
-  suggested: "Disarankan di ${serverName}"
-  desc: "di ${serverName}"
+  not_supported: "${server_name} tidak mendukung saran pencarian"
+  suggested: "Disarankan di ${server_name}"
+  desc: "di ${server_name}"
   empty: "Tidak ada tag yang cocok dengan '${query}'"
-  httpError:
-    zero: "Tidak bisa mendapatkan hasil untuk '${query}' di ${serverName}"
-    other: "Tidak bisa mendapatkan hasil untuk '${query}' di ${serverName} (HTTP ${n})"
+  http_error:
+    zero: "Tidak bisa mendapatkan hasil untuk '${query}' di ${server_name}"
+    other: "Tidak bisa mendapatkan hasil untuk '${query}' di ${server_name} (HTTP ${n})"
 
-actionTag:
+action_tag:
   copy: "Salin tag"
   block: "Blokir tag yang dipilih"
   blocked: "Ditambahkan ke pemblokir tag"
@@ -80,8 +80,8 @@ updater:
   download: "Unduh ${version}"
   available: "Pembaruan tersedia: ${version}"
   preparing: "Mempersiapkan pembaruan..."
-  onLatest: "Kamu telah menggunakan versi terbaru"
-  onNewVersion: "Versi baru tersedia"
+  on_latest: "Kamu telah menggunakan versi terbaru"
+  on_new_version: "Versi baru tersedia"
   install: "Pasang pembaruan"
   progress: "Mengunduh: ${progress}%"
 
@@ -99,15 +99,15 @@ license:
     one: "${n} lisensi"
     other: "${n} lisensi"
 
-downloader:
+downloads:
   title: "Unduhan"
-  noFile: "File telah dipindahkan"
+  no_file: "File telah dipindahkan"
   redownload: "Unduh ulang"
   detail: "Tampilkan detail"
   placeholder: "File yang kamu unduh akan muncul di sini"
   ungroup: "Batalkan grup"
-  groupByServer: "Kelompokkan berdasarkan server"
-  noPermission: "Tidak dapat mengunduh file; gagal mendapatkan izin"
+  group_by_server: "Kelompokkan berdasarkan server"
+  no_permission: "Tidak dapat mengunduh file; gagal mendapatkan izin"
   status:
     empty: "Kosong"
     pending: "Menunggu"
@@ -118,10 +118,10 @@ downloader:
     paused: "Tertunda"
 
 favorites:
-  placeholder: "Konten yang kamu suka akan berada di sini"
   title: "Favorit"
+  placeholder: "Konten yang kamu suka akan berada di sini"
 
-tagsBlocker:
+tags_blocker:
   title: "Pemblokir Tag"
   desc: "Kamu dapat memblokir beberapa tag sekaligus dengan cara memisahkannya dengan spasi"
   empty: "Belum ada tag yang diblokir"
@@ -129,59 +129,60 @@ tagsBlocker:
 
 servers:
   title: "Server"
-  resetWarning: "Apakah kamu yakin ingin mengatur ulang daftar server ke bawaan ?\n\nIni akan menghapus semua server yang kamu tambahkan"
-  removeLastError: "Server terakhir tidak dapat dihapus"
+  reset_warning: "Apakah kamu yakin ingin mengatur ulang daftar server ke bawaan ?\n\nIni akan menghapus semua server yang kamu tambahkan"
+  remove_last_error: "Server terakhir tidak dapat dihapus"
   preset: "Dari Preset"
   select: "Pilih Server"
   add: "Tambahkan server baru"
   edit: "Edit ${name}"
   alias: "Alias"
   homepage: "Beranda"
-  homepageHint: "Beranda, contoh: https://verycoolbooru.com"
-  useCustomApi: "Gunakan alamat API khusus"
-  useCustomApiDesc: "Berguna jika server memiliki alamat API yang berbeda dari beranda"
-  addrError: "bukan alamat yang valid"
-  apiAddr: "Alamat API"
-  apiAddrHint: "Alamat API, contoh: https://api-v69.verycoolbooru.com"
-  alreadyExists: "Data server untuk ${name} sudah ada"
-  payloads:
-    title: "Payload"
-    search: "Payload pencarian"
-    suggestion: "Payload saran pencarian"
-    post: "Payload Web posting"
+  homepage_hint: "Beranda, contoh: https://verycoolbooru.com"
+  use_custom_api: "Gunakan alamat API khusus"
+  use_custom_api_desc: "Berguna jika server memiliki alamat API yang berbeda dari beranda"
+  addr_error: "bukan alamat yang valid"
+  api_addr: "Alamat API"
+  api_addr_hint: "Alamat API, contoh: https://api-v69.verycoolbooru.com"
+  already_exists: "Data server untuk ${name} sudah ada"
+
+server_query:
+  title: "Query"
+  search: "Query pencarian"
+  suggestion: "Query saran pencarian"
+  post: "Query Web posting"
 
 settings:
   title: "Pengaturan"
   interface: "Antarmuka"
+  safe_mode: "Mode aman"
+  misc: "Lain-lain"
   lang:
     title: "Bahasa"
-    automatic:
+    auto:
       title: "Otomatis"
       desc: "Ikuti bahasa sistem jika memungkinkan"
-  safeMode: "Mode aman"
-  misc: "Lain-lain"
-  midnightTheme:
+  midnight_theme:
     title: "Tema Tengah Malam"
     desc: "Gunakan warna yang lebih gelap untuk mode malam"
-  uiBlur:
+  ui_blur:
     title: "Aktifkan blur"
     desc: "Aktifkan latar belakang blur pada berbagai elemen UI"
-  hideMedia:
+  hide_media:
     title: "Sembunyikan media yang diunduh"
     desc: "Cegah aplikasi galeri eksternal menampilkan file yang diunduh"
-  blurContent:
+  blur_content:
     title: "Sensor konten eksplisit"
     desc: "Konten yang dinilai eksplisit akan disensor"
-  strictSafeMode:
+  strict_safe_mode:
     title: "Mode Ketat"
     desc: "Hanya ambil konten yang telah dinilai 'Aman'. Perhatikan bahwa ini tidak menjamin aman untuk dilihat publik"
-  loadOG:
+  load_og:
     title: "Tampilkan konten asli"
     desc: "Muat konten original saat membuka post"
-  postLimit:
+  post_limit:
     title: "Maksimum konten setiap muatan"
     desc: "Hasil mungkin kurang dari yang diharapkan (disebabkan oleh tag yang diblokir atau data yang tidak valid)"
-  clearCache:
+  clear_cache:
     title: "Hapus cache"
     desc: "Hapus konten yang tersimpan di cache"
     done: "Cache dibersihkan"
