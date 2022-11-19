@@ -14,14 +14,12 @@ class UpdatePrepareDialog extends HookConsumerWidget {
     final downloader = ref.read(appUpdaterProvider);
     final allowPop = useState(false);
     useEffect(() {
-      downloader.updater(action: UpdaterAction.exposeAppFile).then((value) {
+      downloader.expose().then((value) {
         allowPop.value = true;
         context.navigator.pop();
       });
 
-      return () {
-        downloader.updater(action: UpdaterAction.install);
-      };
+      return downloader.install;
     }, []);
 
     return WillPopScope(

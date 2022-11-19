@@ -173,9 +173,7 @@ class _Downloader extends HookConsumerWidget {
                 return;
               }
 
-              await ref
-                  .read(appUpdaterProvider)
-                  .updater(action: UpdaterAction.start, version: version);
+              await ref.read(appUpdaterProvider).start(version);
             },
             style: ElevatedButton.styleFrom(elevation: 0),
             child: Text(context.t.updater.download(version: version)),
@@ -221,7 +219,7 @@ class _Downloader extends HookConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              ref.read(appUpdaterProvider).updater(action: UpdaterAction.stop);
+              ref.read(appUpdaterProvider).stop();
             },
             icon: const Icon(Icons.close),
           ),

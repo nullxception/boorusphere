@@ -25,33 +25,39 @@ DownloadProgress appUpdateProgress(AppUpdateProgressRef ref) {
   return ref.watch(downloadStateProvider).getProgressById(id);
 }
 
-enum UpdaterAction {
-  stop,
-  start,
-  exposeAppFile,
-  install;
-}
-
 class AppUpdater {
   AppUpdater(this.ref);
 
   final Ref ref;
 
   String id = '';
-  AppVersion appUpdateVersion = AppVersion.zero;
+  AppVersion _version = AppVersion.zero;
 
-  String _getAppUpdateFile(AppVersion version) {
+  String _fileName(AppVersion version) {
     return 'boorusphere-$version-$kAppArch.apk';
   }
 
-  Future<Directory> get _appUpdateDir async {
+  Future<Directory> get _dir async {
     final dir = await getApplicationSupportDirectory();
     return Directory(path.join(dir.absolute.path, 'app-update'));
   }
 
-  Future<void> _startAppUpdate(AppVersion version) async {
-    await _stopAppUpdate();
-    final file = _getAppUpdateFile(version);
+  _clear({bool removeFile = false}) async {
+    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
+        query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
+    if (tasks == null) return;
+    for (var task in tasks) {
+      await FlutterDownloader.remove(
+        taskId: task.taskId,
+        shouldDeleteContent: removeFile,
+      );
+    }
+    id = '';
+  }
+
+  Future<void> start(AppVersion version) async {
+    await stop();
+    final file = _fileName(version);
     final url =
         '${VersionNetworkSource.gitUrl}/releases/download/$version/$file';
     final dir = await getApplicationSupportDirectory();
@@ -70,33 +76,18 @@ class AppUpdater {
     );
 
     if (newId != null) {
-      appUpdateVersion = version;
+      _version = version;
       id = newId;
     }
   }
 
-  Future<void> _stopAppUpdate() async {
-    if (id.isEmpty) return;
-    await FlutterDownloader.remove(
-      taskId: id,
-      shouldDeleteContent: true,
-    );
-    id = '';
+  Future<void> stop() async {
+    _clear(removeFile: true);
   }
 
-  _clearAppUpdate() async {
-    final tasks = await FlutterDownloader.loadTasksWithRawQuery(
-        query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
-    if (tasks == null) return;
-    for (var task in tasks) {
-      await FlutterDownloader.remove(taskId: task.taskId);
-    }
-    id = '';
-  }
-
-  Future<void> _exposeAppUpdateFile() async {
-    final file = _getAppUpdateFile(appUpdateVersion);
-    final appDir = await _appUpdateDir;
+  Future<void> expose() async {
+    final file = _fileName(_version);
+    final appDir = await _dir;
     final downloadDir = (await DownloadUtils.downloadDir).absolute.path;
     final extAppDir = Directory(path.join(downloadDir, 'app-update'));
 
@@ -112,23 +103,8 @@ class AppUpdater {
     }
   }
 
-  Future<void> updater(
-      {required UpdaterAction action, AppVersion? version}) async {
-    if (version != null) appUpdateVersion = version;
-    switch (action) {
-      case UpdaterAction.start:
-        await _startAppUpdate(appUpdateVersion);
-        break;
-      case UpdaterAction.stop:
-        await _stopAppUpdate();
-        break;
-      case UpdaterAction.install:
-        await FlutterDownloader.open(taskId: id);
-        await _clearAppUpdate();
-        break;
-      case UpdaterAction.exposeAppFile:
-        await _exposeAppUpdateFile();
-        break;
-    }
+  Future<void> install() async {
+    await FlutterDownloader.open(taskId: id);
+    await _clear();
   }
 }
