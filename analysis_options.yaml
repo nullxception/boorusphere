@@ -11,10 +11,7 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - lib/**/*.config.dart
-    - lib/**/*.freezed.dart
     - lib/**/*.g.dart
-    - lib/**/*.gr.dart
 
   errors:
     public_member_api_docs: ignore
