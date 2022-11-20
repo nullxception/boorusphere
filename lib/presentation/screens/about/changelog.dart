@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
-import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/changelog.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -11,23 +11,24 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ChangelogPage extends ConsumerWidget {
   const ChangelogPage({
     super.key,
-    required this.option,
+    required this.type,
+    this.version,
   });
 
-  final ChangelogOption option;
+  final ChangelogType type;
+  final AppVersion? version;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final changelog = ref.watch(changelogDataProvider(option));
+    final changelog = ref.watch(changelogStateProvider(type, version));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          option.version == null
+          version == null
               ? context.t.changelog.title
               : changelog.maybeWhen(
-                  data: (value) =>
-                      context.t.version(version: '${option.version}'),
+                  data: (value) => context.t.version(version: '$version'),
                   orElse: () => context.t.changelog.title,
                 ),
         ),

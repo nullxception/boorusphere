@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/constant/app.dart';
-import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
-import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/app_updater.dart';
+import 'package:boorusphere/presentation/provider/changelog.dart';
 import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -92,9 +91,7 @@ class AboutPage extends HookConsumerWidget {
                 leading: const Icon(Icons.list_alt_rounded),
                 onTap: () {
                   context.router.push(
-                    ChangelogRoute(
-                      option: const ChangelogOption(type: ChangelogType.assets),
-                    ),
+                    ChangelogRoute(type: ChangelogType.assets),
                   );
                 },
               ),
@@ -134,12 +131,7 @@ class _Updater extends HookConsumerWidget {
         ElevatedButton(
           onPressed: () {
             context.router.push(
-              ChangelogRoute(
-                option: ChangelogOption(
-                  type: ChangelogType.git,
-                  version: data,
-                ),
-              ),
+              ChangelogRoute(type: ChangelogType.git, version: data),
             );
           },
           style: ElevatedButton.styleFrom(elevation: 0),

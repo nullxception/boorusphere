@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
-import 'package:boorusphere/data/repository/changelog/entity/changelog_option.dart';
-import 'package:boorusphere/data/repository/changelog/entity/changelog_type.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/changelog_repo.dart';
 import 'package:flutter/foundation.dart';
@@ -8,44 +7,39 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'changelog.g.dart';
 
-@riverpod
-ChangelogNotifier changelog(ChangelogRef ref) {
-  return ChangelogNotifier(ref.watch(changelogRepoProvider));
+enum ChangelogType {
+  assets,
+  git;
+
+  bool get onGit => this == git;
 }
 
 @riverpod
-Future<List<ChangelogData>> changelogData(
-    ChangelogDataRef ref, ChangelogOption option) {
-  return ref.read(changelogProvider).invoke(option);
-}
+class ChangelogState extends _$ChangelogState {
+  late ChangelogRepo repo;
 
-class ChangelogNotifier {
-  ChangelogNotifier(this.repo);
+  @override
+  Future<List<ChangelogData>> build(
+    ChangelogType type,
+    AppVersion? version,
+  ) async {
+    repo = ref.watch(changelogRepoProvider);
+    final res = type.onGit ? await repo.fetch() : await repo.get();
+    return _parseResult(res);
+  }
 
-  final ChangelogRepo repo;
-
-  Future<List<ChangelogData>> invoke(ChangelogOption arg) async {
-    String data;
-    switch (arg.type) {
-      case ChangelogType.git:
-        data = await repo.get();
-        break;
-      default:
-        data = await repo.fetch();
-        break;
-    }
-
+  Future<List<ChangelogData>> _parseResult(String data) async {
     final parsed = await compute(ChangelogData.fromString, data);
 
-    if (arg.version != null) {
+    if (version != null) {
       return [
         parsed.firstWhere(
-          (it) => it.version == arg.version,
+          (it) => it.version == version,
           orElse: () => ChangelogData.empty,
         )
       ];
+    } else {
+      return parsed;
     }
-
-    return parsed;
   }
 }
