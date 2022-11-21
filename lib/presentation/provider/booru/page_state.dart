@@ -21,6 +21,8 @@ class PageState extends _$PageState {
   late int _skipCount;
   late int _page;
 
+  String lastQuery = '';
+
   @override
   FetchState<PageData> build() {
     final server =
@@ -28,40 +30,33 @@ class PageState extends _$PageState {
     repo = ref.read(booruRepoProvider(server));
     _skipCount = 0;
     _page = 0;
-
-    // throw initial load side-effect somewhere else lol
+    // throw initial load side-effect somewhere else
     Future(load);
-    return const FetchState.data(PageData(option: PageOption(clear: true)));
+    return FetchState.data(PageData(
+      option: PageOption(query: lastQuery, clear: true),
+    ));
   }
 
   Future<void> update(PageOption Function(PageOption) updater) async {
-    state = state.copyWith(
-      data: state.data.copyWith(
-        option: updater(state.data.option),
-      ),
-    );
+    final newOption = updater(state.data.option);
+    state = state.copyWith(data: state.data.copyWith(option: newOption));
     await load();
   }
 
   Future<void> load() async {
     if (repo.server == ServerData.empty) return;
     final settings = ref.read(serverSettingsStateProvider);
-    state = state.copyWith(
-      data: state.data.copyWith(
-        option: state.data.option.copyWith(
-          limit: settings.postLimit,
-          safeMode: settings.safeMode,
-        ),
-      ),
+    final newOption = state.data.option.copyWith(
+      limit: settings.postLimit,
+      safeMode: settings.safeMode,
     );
 
-    if (state.data.option.query.isNotEmpty) {
-      await ref
-          .read(searchHistoryStateProvider.notifier)
-          .save(state.data.option.query);
+    if (newOption.query.isNotEmpty) {
+      await ref.read(searchHistoryStateProvider.notifier).save(newOption.query);
     }
 
     try {
+      state = state.copyWith(data: state.data.copyWith(option: newOption));
       await _fetch();
     } catch (error, stackTrace) {
       state = FetchState.error(
@@ -90,6 +85,7 @@ class PageState extends _$PageState {
     }
 
     if (state.data.posts.isEmpty) _page = 0;
+    lastQuery = state.data.option.query;
 
     final lastHashCode = repo.hashCode;
     final pageResult = await repo.getPage(state.data.option, _page);
