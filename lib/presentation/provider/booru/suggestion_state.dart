@@ -9,14 +9,15 @@ part 'suggestion_state.g.dart';
 
 @riverpod
 class SuggestionState extends _$SuggestionState {
-  final Set<String> _data = {};
   late BooruRepo repo;
+  late Set<String> _data;
 
   @override
   FetchState<Set<String>> build() {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
+    _data = {};
     return const FetchState.data({});
   }
 
@@ -29,7 +30,7 @@ class SuggestionState extends _$SuggestionState {
       return;
     }
 
-    state = FetchState.loading(_data);
+    state = FetchState.loading({..._data});
     try {
       final res = await repo.getSuggestion(query);
       res.when(
@@ -39,11 +40,11 @@ class SuggestionState extends _$SuggestionState {
           _data.addAll(
             data.where((it) => !blockedTags.get().values.contains(it)),
           );
-          state = FetchState.data(_data);
+          state = FetchState.data({..._data});
         },
         error: (res, error, stackTrace) {
           state = FetchState.error(
-            _data,
+            {..._data},
             error: error,
             stackTrace: stackTrace,
             code: res.statusCode ?? 0,
@@ -51,7 +52,7 @@ class SuggestionState extends _$SuggestionState {
         },
       );
     } catch (e, s) {
-      state = FetchState.error(_data, error: e, stackTrace: s);
+      state = FetchState.error({..._data}, error: e, stackTrace: s);
     }
   }
 }

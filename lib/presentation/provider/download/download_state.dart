@@ -9,13 +9,19 @@ part 'download_state.g.dart';
 
 @riverpod
 class DownloadState extends _$DownloadState {
-  final entries = <DownloadEntry>[];
-  final progresses = <DownloadProgress>{};
+  late List<DownloadEntry> entries = [];
+  late Set<DownloadProgress> progresses = {};
   late DownloadRepo repo;
 
+  Downloads get current => Downloads(
+        entries: [...entries],
+        progresses: {...progresses},
+      );
   @override
   Downloads build() {
     repo = ref.watch(downloadRepoProvider);
+    entries = [];
+    progresses = {};
     Future(_populate);
     return const Downloads();
   }
@@ -23,21 +29,21 @@ class DownloadState extends _$DownloadState {
   Future<void> _populate() async {
     entries.addAll(repo.getEntries());
     progresses.addAll(await repo.getProgress());
-    state = Downloads(entries: entries, progresses: progresses);
+    state = current;
   }
 
   Future<void> add(DownloadEntry entry) async {
     entries.removeWhere((it) => it.id == entry.id);
     entries.add(entry);
     await repo.add(entry);
-    state = Downloads(entries: entries, progresses: progresses);
+    state = current;
   }
 
   Future<void> remove(String id) async {
     progresses.removeWhere((it) => it.id == id);
     entries.removeWhere((it) => it.id == id);
     await repo.remove(id);
-    state = Downloads(entries: entries, progresses: progresses);
+    state = current;
   }
 
   Future<void> update(String id, DownloadEntry entry) async {
@@ -47,19 +53,19 @@ class DownloadState extends _$DownloadState {
 
     entries.add(entry);
     await repo.add(entry);
-    state = Downloads(entries: entries, progresses: progresses);
+    state = current;
   }
 
   updateProgress(DownloadProgress progress) {
     progresses.removeWhere((it) => it.id == progress.id);
     progresses.add(progress);
-    state = Downloads(entries: entries, progresses: progresses);
+    state = current;
   }
 
   Future<void> clear() async {
     progresses.clear();
     entries.clear();
     await repo.clear();
-    state = Downloads(entries: entries, progresses: progresses);
+    state = current;
   }
 }

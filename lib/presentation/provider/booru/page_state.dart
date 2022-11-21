@@ -20,38 +20,43 @@ part 'page_state.g.dart';
 @riverpod
 class PageState extends _$PageState {
   late BooruRepo repo;
+  late int _skipCount;
+  late int _page;
+  late PageOption option;
+  late List<Post> data;
+  late List<Cookie> cookies;
 
-  int _skipCount = 0;
-  int _page = 0;
-  PageOption _option = const PageOption(clear: true);
-
-  List<Post> data = [];
-  List<Cookie> cookies = [];
-
-  PageOption get option => _option;
-
-  PageData get currentData =>
-      PageData(option: option, posts: data, cookies: cookies);
+  PageData get _current => PageData(
+        option: option,
+        posts: [...data],
+        cookies: [...cookies],
+      );
 
   @override
   FetchState<PageData> build() {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
+    data = [];
+    cookies = [];
+    _skipCount = 0;
+    _page = 0;
+    option = const PageOption(clear: true);
+
     // throw initial load side-effect somewhere else lol
     Future(load);
-    return const FetchState.data(PageData());
+    return FetchState.data(_current);
   }
 
   Future<void> update(PageOption Function(PageOption) updater) async {
-    _option = updater(option);
+    option = updater(option);
     await load();
   }
 
   Future<void> load() async {
     if (repo.server == ServerData.empty) return;
     final settings = ref.read(serverSettingsStateProvider);
-    _option = option.copyWith(
+    option = option.copyWith(
       limit: settings.postLimit,
       safeMode: settings.safeMode,
     );
@@ -64,7 +69,7 @@ class PageState extends _$PageState {
       await _fetch();
     } catch (error, stackTrace) {
       state = FetchState.error(
-        currentData,
+        _current,
         error: error,
         stackTrace: stackTrace,
       );
@@ -84,7 +89,7 @@ class PageState extends _$PageState {
 
     if (option.clear) data.clear();
     if (data.isEmpty) _page = 0;
-    state = FetchState.loading(currentData);
+    state = FetchState.loading(_current);
 
     final lastHashCode = repo.hashCode;
     final pageResult = await repo.getPage(option, _page);
@@ -92,7 +97,7 @@ class PageState extends _$PageState {
       data: (page, src) async {
         if (lastHashCode != repo.hashCode) return;
         if (page.isEmpty) {
-          state = FetchState.error(currentData, error: BooruError.empty);
+          state = FetchState.error(_current, error: BooruError.empty);
           return;
         }
 
@@ -121,11 +126,11 @@ class PageState extends _$PageState {
         }
 
         data.addAll(newPosts);
-        state = FetchState.data(currentData);
+        state = FetchState.data(_current);
       },
       error: (res, error, stackTrace) {
         state = FetchState.error(
-          currentData,
+          _current,
           error: error,
           stackTrace: stackTrace,
           code: res.statusCode ?? 0,

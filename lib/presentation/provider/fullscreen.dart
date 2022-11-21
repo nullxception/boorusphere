@@ -6,7 +6,7 @@ part 'fullscreen.g.dart';
 
 @riverpod
 class FullscreenState extends _$FullscreenState {
-  final lastOrientations = <DeviceOrientation>[];
+  late List<DeviceOrientation> lastOrientations;
 
   @override
   bool build() {
@@ -14,6 +14,7 @@ class FullscreenState extends _$FullscreenState {
       SystemChrome.setPreferredOrientations([]);
       unfullscreen();
     });
+    lastOrientations = [];
     return false;
   }
 
