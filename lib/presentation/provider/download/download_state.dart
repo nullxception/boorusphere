@@ -9,63 +9,63 @@ part 'download_state.g.dart';
 
 @riverpod
 class DownloadState extends _$DownloadState {
-  late List<DownloadEntry> entries = [];
-  late Set<DownloadProgress> progresses = {};
   late DownloadRepo repo;
 
-  Downloads get current => Downloads(
-        entries: [...entries],
-        progresses: {...progresses},
-      );
   @override
   Downloads build() {
     repo = ref.watch(downloadRepoProvider);
-    entries = [];
-    progresses = {};
     Future(_populate);
     return const Downloads();
   }
 
   Future<void> _populate() async {
-    entries.addAll(repo.getEntries());
-    progresses.addAll(await repo.getProgress());
-    state = current;
+    state = Downloads(
+      entries: repo.getEntries().toList(),
+      progresses: (await repo.getProgress()).toSet(),
+    );
   }
 
   Future<void> add(DownloadEntry entry) async {
-    entries.removeWhere((it) => it.id == entry.id);
-    entries.add(entry);
     await repo.add(entry);
-    state = current;
+    state = state.copyWith(entries: [
+      ...state.entries.where((it) => it.id != entry.id),
+      entry,
+    ]);
   }
 
   Future<void> remove(String id) async {
-    progresses.removeWhere((it) => it.id == id);
-    entries.removeWhere((it) => it.id == id);
     await repo.remove(id);
-    state = current;
+    state = state.copyWith(
+      entries: state.entries.where((it) => it.id != id).toList(),
+      progresses: state.progresses.where((it) => it.id != id).toSet(),
+    );
   }
 
   Future<void> update(String id, DownloadEntry entry) async {
-    progresses.removeWhere((it) => it.id == id);
-    entries.removeWhere((it) => it.id == id || it.id == entry.id);
     await repo.remove(id);
-
-    entries.add(entry);
     await repo.add(entry);
-    state = current;
+    state = state.copyWith(
+      entries: [
+        ...state.entries.where((it) => it.id != entry.id),
+        entry,
+      ],
+      progresses: state.progresses
+          .where((it) => it.id != id && it.id != entry.id)
+          .toSet(),
+    );
   }
 
   updateProgress(DownloadProgress progress) {
-    progresses.removeWhere((it) => it.id == progress.id);
-    progresses.add(progress);
-    state = current;
+    state = state.copyWith(
+      progresses: {
+        ...state.progresses.where((it) => it.id != progress.id),
+        progress
+      },
+    );
   }
 
   Future<void> clear() async {
-    progresses.clear();
-    entries.clear();
     await repo.clear();
-    state = current;
+    state = const Downloads();
   }
 }

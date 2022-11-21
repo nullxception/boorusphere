@@ -25,12 +25,7 @@ class FullscreenState extends _$FullscreenState {
         : <DeviceOrientation>[];
 
     if (orientations != lastOrientations) {
-      lastOrientations
-        ..clear()
-        ..addAll(orientations);
-    }
-
-    if (orientations != lastOrientations) {
+      lastOrientations = orientations;
       await SystemChrome.setPreferredOrientations(orientations);
     }
 

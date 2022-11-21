@@ -10,14 +10,13 @@ part 'suggestion_state.g.dart';
 @riverpod
 class SuggestionState extends _$SuggestionState {
   late BooruRepo repo;
-  late Set<String> _data;
 
   @override
   FetchState<Set<String>> build() {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
-    _data = {};
+
     return const FetchState.data({});
   }
 
@@ -25,26 +24,24 @@ class SuggestionState extends _$SuggestionState {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     if (server == ServerData.empty) {
-      _data.clear();
       state = const FetchState.data({});
       return;
     }
 
-    state = FetchState.loading({..._data});
+    state = FetchState.loading(state.data);
     try {
       final res = await repo.getSuggestion(query);
       res.when(
         data: (data, src) {
           final blockedTags = ref.read(blockedTagsRepoProvider);
-          _data.clear();
-          _data.addAll(
-            data.where((it) => !blockedTags.get().values.contains(it)),
-          );
-          state = FetchState.data({..._data});
+          final result =
+              data.where((it) => !blockedTags.get().values.contains(it));
+
+          state = FetchState.data({...state.data, ...result});
         },
         error: (res, error, stackTrace) {
           state = FetchState.error(
-            {..._data},
+            state.data,
             error: error,
             stackTrace: stackTrace,
             code: res.statusCode ?? 0,
@@ -52,7 +49,7 @@ class SuggestionState extends _$SuggestionState {
         },
       );
     } catch (e, s) {
-      state = FetchState.error({..._data}, error: e, stackTrace: s);
+      state = FetchState.error(state.data, error: e, stackTrace: s);
     }
   }
 }
