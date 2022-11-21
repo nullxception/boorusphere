@@ -11,6 +11,7 @@ import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'page_state.g.dart';
@@ -79,7 +80,9 @@ class PageState extends _$PageState {
     );
 
     if (state.data.option.clear) {
-      state = FetchState.loading(state.data.copyWith(posts: []));
+      state = FetchState.loading(state.data.copyWith(
+        posts: const IListConst([]),
+      ));
     } else {
       state = FetchState.loading(state.data);
     }
@@ -115,10 +118,11 @@ class PageState extends _$PageState {
             await ref.read(cookieJarProvider).loadForRequest(src.asUri);
         if (lastHashCode != repo.hashCode) return;
 
+        state.data.posts.addAll(newPosts);
         state = FetchState.data(
           state.data.copyWith(
-            posts: [...state.data.posts, ...newPosts],
-            cookies: [...fromJar],
+            posts: state.data.posts.addAll(newPosts),
+            cookies: fromJar.lock,
           ),
         );
       },

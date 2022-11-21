@@ -3,6 +3,7 @@ import 'package:boorusphere/data/repository/download/entity/download_progress.da
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/download_repo.dart';
 import 'package:boorusphere/presentation/provider/download/entity/downloads.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'download_state.g.dart';
@@ -20,24 +21,23 @@ class DownloadState extends _$DownloadState {
 
   Future<void> _populate() async {
     state = Downloads(
-      entries: repo.getEntries().toList(),
-      progresses: (await repo.getProgress()).toSet(),
+      entries: repo.getEntries().toIList(),
+      progresses: (await repo.getProgress()).toISet(),
     );
   }
 
   Future<void> add(DownloadEntry entry) async {
     await repo.add(entry);
-    state = state.copyWith(entries: [
-      ...state.entries.where((it) => it.id != entry.id),
-      entry,
-    ]);
+    state = state.copyWith(
+      entries: state.entries.removeWhere((it) => it.id == entry.id).add(entry),
+    );
   }
 
   Future<void> remove(String id) async {
     await repo.remove(id);
     state = state.copyWith(
-      entries: state.entries.where((it) => it.id != id).toList(),
-      progresses: state.progresses.where((it) => it.id != id).toSet(),
+      entries: state.entries.removeWhere((it) => it.id == id),
+      progresses: state.progresses.removeWhere((it) => it.id == id),
     );
   }
 
@@ -45,22 +45,17 @@ class DownloadState extends _$DownloadState {
     await repo.remove(id);
     await repo.add(entry);
     state = state.copyWith(
-      entries: [
-        ...state.entries.where((it) => it.id != entry.id),
-        entry,
-      ],
+      entries: state.entries.removeWhere((it) => it.id == entry.id).add(entry),
       progresses: state.progresses
-          .where((it) => it.id != id && it.id != entry.id)
-          .toSet(),
+          .removeWhere((it) => it.id == id || it.id == entry.id),
     );
   }
 
   updateProgress(DownloadProgress progress) {
     state = state.copyWith(
-      progresses: {
-        ...state.progresses.where((it) => it.id != progress.id),
-        progress
-      },
+      progresses: state.progresses
+          .removeWhere((it) => it.id == progress.id)
+          .add(progress),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'suggestion_state.g.dart';
@@ -12,19 +13,19 @@ class SuggestionState extends _$SuggestionState {
   late BooruRepo repo;
 
   @override
-  FetchState<Set<String>> build() {
+  FetchState<ISet<String>> build() {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
 
-    return const FetchState.data({});
+    return const FetchState.data(ISetConst({}));
   }
 
   Future<void> get(String query) async {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     if (server == ServerData.empty) {
-      state = const FetchState.data({});
+      state = const FetchState.data(ISetConst({}));
       return;
     }
 
@@ -37,7 +38,7 @@ class SuggestionState extends _$SuggestionState {
           final result =
               data.where((it) => !blockedTags.get().values.contains(it));
 
-          state = FetchState.data({...state.data, ...result});
+          state = FetchState.data(state.data.addAll(result));
         },
         error: (res, error, stackTrace) {
           state = FetchState.error(

@@ -45,6 +45,7 @@ dependencies:
   dio: ^4.0.6
   dynamic_color: ^1.4.0
   extended_image: ^6.2.1
+  fast_immutable_collections: ^8.0.0
   flutter_cache_manager: ^3.0.0-nullsafety.1
   flutter_downloader: ^1.9.0
   flutter_hooks: ^0.18.5+1

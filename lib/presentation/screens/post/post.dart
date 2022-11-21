@@ -14,6 +14,7 @@ import 'package:boorusphere/presentation/widgets/slidefade_visibility.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,7 +32,7 @@ class PostPage extends HookConsumerWidget {
   void _precachePostImages(
     WidgetRef ref,
     BuildContext context,
-    List<Post> posts,
+    IList<Post> posts,
     int index,
     bool displayOriginal,
   ) {
