@@ -1,17 +1,15 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/app_updater.dart';
+import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
-import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
-import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -173,24 +171,24 @@ class AppVersionTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentVer = ref.watch(versionCurrentProvider
-        .select((it) => it.maybeValue ?? AppVersion.zero));
-    final latestVer = ref.watch(versionLatestProvider);
+    final appVersions = ref.watch(appVersionsStateProvider);
     final updateProgress = ref.watch(appUpdateProgressProvider);
 
-    final updateStatus = updateProgress.status;
-    final current = ListTile(
-      title: Text('Boorusphere $currentVer'),
+    final currentTile = ListTile(
+      title: appVersions.maybeWhen(
+        data: (data) => Text('Boorusphere ${data.current}'),
+        orElse: () => const Text('Boorusphere'),
+      ),
       leading: const Icon(Icons.info_outline),
       onTap: () => context.router.push(const AboutRoute()),
     );
 
-    return latestVer.maybeWhen(
+    return appVersions.maybeWhen(
       data: (data) {
-        if (!data.isNewerThan(currentVer)) return current;
-        if (updateStatus.isDownloading) {
+        if (!data.latest.isNewerThan(data.current)) return currentTile;
+        if (updateProgress.status.isDownloading) {
           return ListTile(
-            title: Text(context.t.updater.available(version: '$data')),
+            title: Text(context.t.updater.available(version: '${data.latest}')),
             leading: const SizedBox(
               height: 24,
               width: 24,
@@ -205,7 +203,7 @@ class AppVersionTile extends HookConsumerWidget {
           );
         }
         return ListTile(
-          title: Text(context.t.updater.available(version: '$data')),
+          title: Text(context.t.updater.available(version: '${data.latest}')),
           leading: Icon(Icons.info_outline, color: Colors.pink.shade300),
           subtitle: Text(
             updateProgress.status.isDownloaded
@@ -221,7 +219,7 @@ class AppVersionTile extends HookConsumerWidget {
           },
         );
       },
-      orElse: () => current,
+      orElse: () => currentTile,
     );
   }
 }

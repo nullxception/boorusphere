@@ -4,12 +4,11 @@ import 'package:boorusphere/data/repository/version/datasource/version_network_s
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/app_updater.dart';
+import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
 import 'package:boorusphere/presentation/provider/changelog.dart';
-import 'package:boorusphere/presentation/provider/version.dart';
 import 'package:boorusphere/presentation/routes/routes.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
-import 'package:boorusphere/utils/extensions/asyncvalue.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +22,7 @@ class AboutPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentVer = ref.watch(versionCurrentProvider
-        .select((it) => it.maybeValue ?? AppVersion.zero));
-    final latestVer = ref.watch(versionLatestProvider);
+    final appVersions = ref.watch(appVersionsStateProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -52,38 +49,53 @@ class AboutPage extends HookConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  context.t.version(version: '$currentVer - $kAppArch'),
-                  style: context.theme.textTheme.subtitle2
-                      ?.copyWith(fontWeight: FontWeight.w400),
+                child: appVersions.maybeWhen(
+                  data: (data) {
+                    return Text(
+                      context.t.version(version: '${data.current} - $kAppArch'),
+                      style: context.theme.textTheme.subtitle2
+                          ?.copyWith(fontWeight: FontWeight.w400),
+                    );
+                  },
+                  orElse: SizedBox.shrink,
                 ),
               ),
-              latestVer.when(
-                data: (data) => data.isNewerThan(currentVer)
-                    ? _Updater(data)
-                    : ElevatedButton.icon(
-                        onPressed: () => ref.refresh(versionLatestProvider),
-                        style: ElevatedButton.styleFrom(elevation: 0),
-                        icon: const Icon(Icons.done),
-                        label: Text(context.t.updater.onLatest),
-                      ),
-                loading: () => ElevatedButton.icon(
-                  onPressed: null,
-                  style: ElevatedButton.styleFrom(elevation: 0),
-                  icon: Container(
-                    width: 24,
-                    height: 24,
-                    padding: const EdgeInsets.all(2.0),
-                    child: const CircularProgressIndicator(),
-                  ),
-                  label: Text(context.t.updater.checking),
-                ),
-                error: (e, s) => ElevatedButton.icon(
-                  onPressed: () => ref.refresh(versionLatestProvider),
-                  style: ElevatedButton.styleFrom(elevation: 0),
-                  icon: const Icon(Icons.update),
-                  label: Text(context.t.updater.check),
-                ),
+              appVersions.when(
+                data: (data) {
+                  return data.latest.isNewerThan(data.current)
+                      ? _Updater(data.latest)
+                      : ElevatedButton.icon(
+                          onPressed: () {
+                            ref.invalidate(appVersionsStateProvider);
+                          },
+                          style: ElevatedButton.styleFrom(elevation: 0),
+                          icon: const Icon(Icons.done),
+                          label: Text(context.t.updater.onLatest),
+                        );
+                },
+                loading: () {
+                  return ElevatedButton.icon(
+                    onPressed: null,
+                    style: ElevatedButton.styleFrom(elevation: 0),
+                    icon: Container(
+                      width: 24,
+                      height: 24,
+                      padding: const EdgeInsets.all(2.0),
+                      child: const CircularProgressIndicator(),
+                    ),
+                    label: Text(context.t.updater.checking),
+                  );
+                },
+                error: (e, s) {
+                  return ElevatedButton.icon(
+                    onPressed: () {
+                      ref.invalidate(appVersionsStateProvider);
+                    },
+                    style: ElevatedButton.styleFrom(elevation: 0),
+                    icon: const Icon(Icons.update),
+                    label: Text(context.t.updater.check),
+                  );
+                },
               ),
               const Divider(height: 32),
               ListTile(
@@ -98,13 +110,19 @@ class AboutPage extends HookConsumerWidget {
               ListTile(
                 title: Text(context.t.github),
                 leading: const FaIcon(FontAwesomeIcons.github),
-                onTap: () => launchUrlString(VersionNetworkSource.gitUrl,
-                    mode: LaunchMode.externalApplication),
+                onTap: () {
+                  launchUrlString(
+                    VersionNetworkSource.gitUrl,
+                    mode: LaunchMode.externalApplication,
+                  );
+                },
               ),
               ListTile(
                 title: Text(context.t.ossLicense),
                 leading: const Icon(Icons.collections_bookmark),
-                onTap: () => context.router.push(const LicensesRoute()),
+                onTap: () {
+                  context.router.push(const LicensesRoute());
+                },
               ),
             ],
           ),
