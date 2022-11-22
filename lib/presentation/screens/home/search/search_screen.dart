@@ -1,12 +1,13 @@
-import 'package:boorusphere/presentation/screens/home/search/controller.dart';
+import 'package:boorusphere/presentation/screens/home/search/search_suggestion.dart';
 import 'package:boorusphere/presentation/screens/home/search/searchbar.dart';
-import 'package:boorusphere/presentation/screens/home/search/suggestion.dart';
+import 'package:boorusphere/presentation/screens/home/search/searchbar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SearchableView extends HookConsumerWidget {
-  const SearchableView({super.key, required this.scrollController});
+class SearchScreen extends HookConsumerWidget {
+  const SearchScreen({super.key, required this.scrollController});
+
   final ScrollController scrollController;
 
   @override

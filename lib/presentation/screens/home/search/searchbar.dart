@@ -2,7 +2,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
-import 'package:boorusphere/presentation/screens/home/search/controller.dart';
+import 'package:boorusphere/presentation/screens/home/search/searchbar_controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -96,12 +96,12 @@ class SearchBar extends HookConsumerWidget {
                   Expanded(
                     child: TextField(
                       autofocus: true,
-                      controller: searchBar.textFieldController,
+                      controller: searchBar.textEditingController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: searchBar.textFieldController.text.isEmpty
+                        hintText: searchBar.value.isEmpty
                             ? context.t.searchHint(serverName: server.name)
-                            : searchBar.textFieldController.text,
+                            : searchBar.value,
                         isDense: true,
                       ),
                       textAlign:
@@ -118,7 +118,7 @@ class SearchBar extends HookConsumerWidget {
                     _TrailingButton(
                         collapsed: collapsed,
                         scrollController: scrollController),
-                  if (searchBar.isOpen && searchBar.isTextChanged)
+                  if (searchBar.isOpen && searchBar.value != searchBar.initial)
                     IconButton(
                       icon: const Icon(Icons.rotate_left),
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -128,14 +128,7 @@ class SearchBar extends HookConsumerWidget {
                     IconButton(
                       icon: const Icon(Icons.close_rounded),
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      onPressed: () {
-                        if (searchBar.text.isEmpty) {
-                          searchBar.reset();
-                          searchBar.close();
-                        } else {
-                          searchBar.clear();
-                        }
-                      },
+                      onPressed: searchBar.clear,
                     ),
                 ],
               ),

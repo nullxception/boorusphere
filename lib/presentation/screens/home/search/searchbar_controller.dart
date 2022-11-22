@@ -1,4 +1,5 @@
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,29 +11,38 @@ final searchBarController = ChangeNotifierProvider((ref) {
 });
 
 class SearchBarController extends ChangeNotifier {
-  SearchBarController(this.ref, this.initialText);
+  SearchBarController(this.ref, this.initial) {
+    textEditingController.addListener(_fetch);
+
+    ref.onDispose(() {
+      textEditingController.removeListener(_fetch);
+    });
+  }
 
   final Ref ref;
-  final String initialText;
-  late final _textController = TextEditingController(text: initialText);
-  bool _isOpen = false;
+  final String initial;
 
-  bool get isOpen => _isOpen;
-  bool get isTextChanged => _textController.value.text != initialText;
-  TextEditingController get textFieldController => _textController;
+  late final textEditingController = TextEditingController(text: initial);
 
-  String get text => _textController.value.text;
+  bool _open = false;
 
-  set text(String value) {
-    _textController.value = TextEditingValue(
+  bool get isOpen => _open;
+  String get value => textEditingController.value.text;
+
+  set _value(String value) {
+    textEditingController.value = TextEditingValue(
       text: value,
       selection: TextSelection.collapsed(offset: value.length),
       composing: TextRange(start: value.length, end: value.length),
     );
   }
 
+  _fetch() {
+    ref.read(suggestionStateProvider.notifier).get(value);
+  }
+
   void submit(String value) {
-    text = value;
+    _value = value;
     close();
     ref
         .read(pageStateProvider.notifier)
@@ -40,36 +50,33 @@ class SearchBarController extends ChangeNotifier {
   }
 
   void append(String value) {
-    final current = text.toWordList();
+    final current = value.toWordList();
     final result = {...current.take(current.length), ...value.toWordList()};
-    text = '${result.join(' ')} ';
+    _value = '${result.join(' ')} ';
   }
 
   void reset() {
-    text = initialText;
-    notifyListeners();
-  }
-
-  void clear() {
-    _textController.clear();
+    _value = initial;
     notifyListeners();
   }
 
   void open() {
-    _isOpen = true;
+    _open = true;
     notifyListeners();
   }
 
   void close() {
-    _isOpen = false;
+    _open = false;
     notifyListeners();
   }
 
-  void addTextListener(Function() cb) {
-    _textController.addListener(cb);
-  }
-
-  void removeTextListener(Function() cb) {
-    _textController.removeListener(cb);
+  void clear() {
+    if (value.isEmpty) {
+      reset();
+      close();
+    } else {
+      textEditingController.clear();
+      notifyListeners();
+    }
   }
 }

@@ -4,12 +4,11 @@ import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_settings.dart';
-import 'package:boorusphere/presentation/screens/home/search/controller.dart';
+import 'package:boorusphere/presentation/screens/home/search/searchbar_controller.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,24 +18,14 @@ class SearchSuggestion extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarController);
-    final server =
-        ref.watch(serverSettingsStateProvider.select((it) => it.active));
-    final searchQuery = useState('');
+    final server = ref.watch(serverSettingsStateProvider.select(
+      (it) => it.active,
+    ));
     final suggestionState = ref.watch(suggestionStateProvider);
-    final history = ref.watch(filterHistoryProvider(searchQuery.value));
-    final isBlurAllowed =
-        ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
-    final updateQuery = useCallback(() {
-      searchQuery.value = searchBar.text;
-      ref.read(suggestionStateProvider.notifier).get(searchQuery.value);
-    }, [searchBar]);
-
-    useEffect(() {
-      searchBar.addTextListener(updateQuery);
-      return () {
-        searchBar.removeTextListener(updateQuery);
-      };
-    }, [searchBar]);
+    final history = ref.watch(filterHistoryProvider(searchBar.value));
+    final isBlurAllowed = ref.watch(uiSettingStateProvider.select(
+      (ui) => ui.blur,
+    ));
 
     return Container(
       color: context.theme.scaffoldBackgroundColor.withOpacity(
@@ -189,11 +178,11 @@ class SearchSuggestion extends HookConsumerWidget {
                         final Object? msg;
                         if (error == BooruError.empty) {
                           msg = context.t.suggestion
-                              .empty(query: searchQuery.value);
+                              .empty(query: searchBar.value);
                         } else if (error == BooruError.httpError) {
                           msg = context.t.suggestion.httpError(
                             n: code,
-                            query: searchQuery.value,
+                            query: searchBar.value,
                             serverName: server.name,
                           );
                         } else {

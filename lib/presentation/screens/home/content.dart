@@ -1,6 +1,6 @@
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
-import 'package:boorusphere/presentation/screens/home/search/search.dart';
+import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/status.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
@@ -60,7 +60,7 @@ class HomeContent extends HookConsumerWidget {
         else
           const TimelineStatus(),
         const _EdgeShadow(),
-        SearchableView(scrollController: scrollController),
+        SearchScreen(scrollController: scrollController),
       ],
     );
   }

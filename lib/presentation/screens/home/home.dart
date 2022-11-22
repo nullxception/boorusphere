@@ -3,7 +3,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/screens/home/content.dart';
 import 'package:boorusphere/presentation/screens/home/controller.dart';
 import 'package:boorusphere/presentation/screens/home/drawer.dart';
-import 'package:boorusphere/presentation/screens/home/search/controller.dart';
+import 'package:boorusphere/presentation/screens/home/search/searchbar_controller.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
