@@ -1,11 +1,11 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/extended_page_controller.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
 import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/precache_posts.dart';
 import 'package:boorusphere/presentation/screens/post/post_error.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -14,7 +14,6 @@ import 'package:boorusphere/presentation/widgets/slidefade_visibility.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -29,60 +28,19 @@ class PostPage extends HookConsumerWidget {
   final int beginPage;
   final TimelineController controller;
 
-  void _precachePostImages(
-    WidgetRef ref,
-    BuildContext context,
-    IList<Post> posts,
-    int index,
-    bool displayOriginal,
-  ) {
-    final next = index + 1;
-    final prev = index - 1;
-
-    if (prev >= 0) {
-      _precachePostImage(ref, context, posts[prev], displayOriginal);
-    }
-
-    if (next < posts.length) {
-      _precachePostImage(ref, context, posts[next], displayOriginal);
-    }
-  }
-
-  void _precachePostImage(
-    WidgetRef ref,
-    BuildContext context,
-    Post post,
-    bool displayOriginal,
-  ) {
-    if (!post.content.isPhoto) return;
-
-    precacheImage(
-      ExtendedNetworkImageProvider(
-        displayOriginal ? post.originalFile : post.content.url,
-        headers: post.getHeaders(ref),
-        // params below follows the default value on
-        // the ExtendedImage.network() factory
-        cache: true,
-        retries: 3,
-      ),
-      context,
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
     final page = useState(beginPage);
     final pageController = useExtendedPageController(initialPage: page.value);
-    final displayOriginal =
+    final loadOriginal =
         ref.watch(contentSettingStateProvider.select((it) => it.loadOriginal));
     final pageState = ref.watch(pageStateProvider);
     final fullscreen = ref.watch(fullscreenStateProvider);
     final posts = ref.watch(pageStateProvider.select((it) => it.data.posts));
 
     final post = posts.isEmpty ? Post.empty : posts[page.value];
-    final isVideo = post.content.isVideo;
-    final totalPost = posts.length;
+    final precachePosts = usePrecachePosts(ref, posts);
 
     return WillPopScope(
       onWillPop: () async {
@@ -107,15 +65,14 @@ class PostPage extends HookConsumerWidget {
                     page.value = index;
                     final offset = index + 1;
                     final threshold =
-                        totalPost / 100 * (100 - loadMoreThreshold);
-                    if (offset + threshold > totalPost) {
+                        posts.length / 100 * (100 - loadMoreThreshold);
+                    if (offset + threshold > posts.length) {
                       controller.loadMoreData();
                     }
                   },
-                  itemCount: totalPost,
+                  itemCount: posts.length,
                   itemBuilder: (_, index) {
-                    _precachePostImages(
-                        ref, context, posts, index, displayOriginal);
+                    precachePosts(index, loadOriginal);
 
                     final post = posts[index];
                     final Widget widget;
@@ -164,7 +121,7 @@ class PostPage extends HookConsumerWidget {
                   ),
                 ),
               ),
-              if (!isVideo)
+              if (!post.content.isVideo)
                 Positioned(
                   bottom: 0,
                   left: 0,
