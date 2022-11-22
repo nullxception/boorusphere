@@ -6,7 +6,7 @@ import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
-import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
@@ -25,7 +25,7 @@ class PageState extends _$PageState {
   String lastQuery = '';
 
   @override
-  FetchState<PageData> build() {
+  FetchResult<PageData> build() {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
@@ -33,7 +33,7 @@ class PageState extends _$PageState {
     _page = 0;
     // throw initial load side-effect somewhere else
     Future(load);
-    return FetchState.data(PageData(
+    return FetchResult.data(PageData(
       option: PageOption(query: lastQuery, clear: true),
     ));
   }
@@ -60,7 +60,7 @@ class PageState extends _$PageState {
       state = state.copyWith(data: state.data.copyWith(option: newOption));
       await _fetch();
     } catch (error, stackTrace) {
-      state = FetchState.error(
+      state = FetchResult.error(
         state.data,
         error: error,
         stackTrace: stackTrace,
@@ -69,7 +69,7 @@ class PageState extends _$PageState {
   }
 
   void loadMore() {
-    if (state is! DataFetchState) return;
+    if (state is! DataFetchResult) return;
 
     update((it) => it.copyWith(clear: false));
   }
@@ -80,11 +80,11 @@ class PageState extends _$PageState {
     );
 
     if (state.data.option.clear) {
-      state = FetchState.loading(state.data.copyWith(
+      state = FetchResult.loading(state.data.copyWith(
         posts: const IListConst([]),
       ));
     } else {
-      state = FetchState.loading(state.data);
+      state = FetchResult.loading(state.data);
     }
 
     if (state.data.posts.isEmpty) _page = 0;
@@ -96,7 +96,7 @@ class PageState extends _$PageState {
       data: (page, src) async {
         if (lastHashCode != repo.hashCode) return;
         if (page.isEmpty) {
-          state = FetchState.error(state.data, error: BooruError.empty);
+          state = FetchResult.error(state.data, error: BooruError.empty);
           return;
         }
 
@@ -119,7 +119,7 @@ class PageState extends _$PageState {
         if (lastHashCode != repo.hashCode) return;
 
         state.data.posts.addAll(newPosts);
-        state = FetchState.data(
+        state = FetchResult.data(
           state.data.copyWith(
             posts: state.data.posts.addAll(newPosts),
             cookies: fromJar.lock,
@@ -127,7 +127,7 @@ class PageState extends _$PageState {
         );
       },
       error: (res, error, stackTrace) {
-        state = FetchState.error(
+        state = FetchResult.error(
           state.data,
           error: error,
           stackTrace: stackTrace,

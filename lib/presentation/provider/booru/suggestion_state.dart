@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
-import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -13,23 +13,23 @@ class SuggestionState extends _$SuggestionState {
   late BooruRepo repo;
 
   @override
-  FetchState<ISet<String>> build() {
+  FetchResult<ISet<String>> build() {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
 
-    return const FetchState.data(ISetConst({}));
+    return const FetchResult.data(ISetConst({}));
   }
 
   Future<void> get(String query) async {
     final server =
         ref.watch(serverSettingsStateProvider.select((it) => it.active));
     if (server == ServerData.empty) {
-      state = const FetchState.data(ISetConst({}));
+      state = const FetchResult.data(ISetConst({}));
       return;
     }
 
-    state = FetchState.loading(state.data);
+    state = FetchResult.loading(state.data);
     try {
       final res = await repo.getSuggestion(query);
       res.when(
@@ -38,10 +38,10 @@ class SuggestionState extends _$SuggestionState {
           final result =
               data.where((it) => !blockedTags.get().values.contains(it));
 
-          state = FetchState.data(state.data.addAll(result));
+          state = FetchResult.data(state.data.addAll(result));
         },
         error: (res, error, stackTrace) {
-          state = FetchState.error(
+          state = FetchResult.error(
             state.data,
             error: error,
             stackTrace: stackTrace,
@@ -50,7 +50,7 @@ class SuggestionState extends _$SuggestionState {
         },
       );
     } catch (e, s) {
-      state = FetchState.error(state.data, error: e, stackTrace: s);
+      state = FetchResult.error(state.data, error: e, stackTrace: s);
     }
   }
 }

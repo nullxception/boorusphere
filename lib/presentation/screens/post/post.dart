@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/extended_page_controller.dart';
-import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/fullscreen.dart';
@@ -158,7 +158,7 @@ class PostPage extends HookConsumerWidget {
                   visible: !fullscreen,
                   child: _PostAppBar(
                     subtitle: post.tags.join(' '),
-                    title: pageState is LoadingFetchState
+                    title: pageState is LoadingFetchResult
                         ? '#${page.value + 1} of (loading...)'
                         : '#${page.value + 1} of ${posts.length}',
                   ),

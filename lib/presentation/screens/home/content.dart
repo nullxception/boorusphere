@@ -1,4 +1,4 @@
-import 'package:boorusphere/presentation/provider/booru/entity/fetch_state.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/screens/home/search/search.dart';
 import 'package:boorusphere/presentation/screens/home/timeline/controller.dart';
@@ -21,8 +21,8 @@ class HomeContent extends HookConsumerWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!scrollController.hasClients ||
-          pageState is DataFetchState ||
-          pageState is LoadingFetchState) return;
+          pageState is DataFetchResult ||
+          pageState is LoadingFetchResult) return;
 
       if (scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
@@ -34,7 +34,7 @@ class HomeContent extends HookConsumerWidget {
     });
 
     final isNewSearch =
-        pageState is! DataFetchState && pageState.data.option.clear;
+        pageState is! DataFetchResult && pageState.data.option.clear;
 
     return Stack(
       alignment: Alignment.center,
