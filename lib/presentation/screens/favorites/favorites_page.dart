@@ -19,9 +19,10 @@ class FavoritesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasFav =
-        ref.watch(favoritePostStateProvider.select((it) => it.isNotEmpty));
-    return hasFav ? _FavoritesView() : _EmptyView();
+    final favoritePostState = ref.watch(favoritePostStateProvider);
+    return favoritePostState.isNotEmpty
+        ? _Pager(favoritePostState)
+        : _EmptyView();
   }
 }
 
@@ -49,28 +50,25 @@ class _EmptyView extends StatelessWidget {
   }
 }
 
-class _FavoritesView extends HookConsumerWidget {
+class _Pager extends HookConsumerWidget {
+  const _Pager(this.posts);
+
+  final IList<Post> posts;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grouped = ref.watch(favoritePostStateProvider.select(
-      (it) => it.values.groupListsBy((e) => ref
-          .watch(serverDataStateProvider.notifier)
-          .getById(e.post.serverId, or: ServerData.empty)),
-    ));
+    final serverDataState = ref.watch(serverDataStateProvider);
 
-    final entries = grouped.entries
+    final pages = posts
+        .groupListsBy(
+          (e) => serverDataState.getById(e.serverId, or: ServerData.empty),
+        )
+        .entries
         .where((it) => it.key != ServerData.empty)
         .sortedBy((it) => it.key.id);
-    final servers = entries.map((e) => e.key);
-    final pages = entries.map(
-      (e) => MapEntry(
-        e.key,
-        e.value.map((e) => e.post).toList(),
-      ),
-    );
 
     return DefaultTabController(
-      length: servers.length,
+      length: pages.length,
       child: Scaffold(
         extendBody: true,
         appBar: AppBar(
@@ -79,7 +77,7 @@ class _FavoritesView extends HookConsumerWidget {
         body: TabBarView(
           children: [
             for (final page in pages)
-              _Content(serverData: page.key, posts: page.value.toIList()),
+              _Content(server: page.key, posts: page.value.toIList()),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -90,7 +88,7 @@ class _FavoritesView extends HookConsumerWidget {
             padding: const EdgeInsets.all(8),
             isScrollable: true,
             tabs: [
-              for (final server in servers) _Tab(serverData: server),
+              for (final page in pages) _Tab(server: page.key),
             ],
             indicator: BoxDecoration(
               color: context.colorScheme.primaryContainer,
@@ -104,9 +102,9 @@ class _FavoritesView extends HookConsumerWidget {
 }
 
 class _Tab extends StatelessWidget {
-  const _Tab({required this.serverData});
+  const _Tab({required this.server});
 
-  final ServerData serverData;
+  final ServerData server;
 
   @override
   Widget build(BuildContext context) {
@@ -116,14 +114,14 @@ class _Tab extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 8),
           child: Favicon(
-            url: serverData.homepage,
+            url: server.homepage,
             size: 16,
             shape: BoxShape.circle,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(serverData.name),
+          child: Text(server.name),
         ),
       ],
     );
@@ -131,16 +129,16 @@ class _Tab extends StatelessWidget {
 }
 
 class _Content extends HookWidget {
-  const _Content({required this.posts, required this.serverData});
+  const _Content({required this.posts, required this.server});
 
   final IList<Post> posts;
-  final ServerData serverData;
+  final ServerData server;
 
   @override
   Widget build(BuildContext context) {
     final controller = useTimelineController(
       posts: posts,
-      heroKeyBuilder: (post) => 'fav@$serverData-${post.id}',
+      heroKeyBuilder: (post) => 'fav@$server-${post.id}',
     );
 
     return CustomScrollView(

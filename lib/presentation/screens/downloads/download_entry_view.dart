@@ -84,9 +84,7 @@ class DownloadEntryView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server = ref
-        .watch(serverDataStateProvider.notifier)
-        .getById(entry.post.serverId);
+    final serverData = ref.watch(serverDataStateProvider);
 
     return ListTile(
       title: Text(
@@ -135,7 +133,7 @@ class DownloadEntryView extends ConsumerWidget {
                   width: 18,
                   child: Center(child: Text('•')),
                 ),
-                Text(server.name),
+                Text(serverData.getById(entry.post.serverId).name),
               ],
             ),
           ],

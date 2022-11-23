@@ -97,27 +97,26 @@ class PostFavoriteButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(favoritePostStateProvider);
-    final isFavorite =
-        ref.watch(favoritePostStateProvider.notifier).checkExists(post);
+    final favorites = ref.watch(favoritePostStateProvider);
     final animator =
         useAnimationController(duration: const Duration(milliseconds: 300));
     final animation = useAnimation(
         ColorTween(begin: Colors.white, end: Colors.pink.shade300)
             .animate(animator));
-    isFavorite ? animator.forward() : animator.reverse();
+    final isFav = favorites.contains(post);
+    isFav ? animator.forward() : animator.reverse();
 
     return IconButton(
       padding: const EdgeInsets.all(16),
       color: Colors.white,
-      icon: isFavorite
+      icon: isFav
           ? Icon(Icons.favorite, color: animation)
           : Icon(Icons.favorite_border, color: animation),
       onPressed: () {
-        if (isFavorite) {
-          ref.watch(favoritePostStateProvider.notifier).delete(post);
+        if (isFav) {
+          ref.read(favoritePostStateProvider.notifier).remove(post);
         } else {
-          ref.watch(favoritePostStateProvider.notifier).save(post);
+          ref.read(favoritePostStateProvider.notifier).save(post);
         }
       },
     );

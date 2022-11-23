@@ -37,15 +37,6 @@ class ServerDataState extends _$ServerDataState {
     }
   }
 
-  ServerData getById(String id, {ServerData? or}) {
-    return state.isEmpty
-        ? ServerData.empty
-        : state.firstWhere(
-            (it) => it.id == id,
-            orElse: () => or ?? state.first,
-          );
-  }
-
   Future<void> add(ServerData data) async {
     await repo.add(data);
     state = repo.servers;
@@ -75,5 +66,16 @@ class ServerDataState extends _$ServerDataState {
     await repo.reset();
     state = repo.servers;
     await settings.setActiveServer(state.first);
+  }
+}
+
+extension ServerDataListExt on Iterable<ServerData> {
+  ServerData getById(String id, {ServerData? or}) {
+    return isEmpty
+        ? ServerData.empty
+        : firstWhere(
+            (it) => it.id == id,
+            orElse: () => or ?? first,
+          );
   }
 }

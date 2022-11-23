@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/favorite_post_repo.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'favorite_post_state.g.dart';
@@ -11,7 +11,7 @@ class FavoritePostState extends _$FavoritePostState {
   late FavoritePostRepo repo;
 
   @override
-  Map<String, FavoritePost> build() {
+  IList<Post> build() {
     repo = ref.read(favoritePostRepoProvider);
     return repo.get();
   }
@@ -21,17 +21,13 @@ class FavoritePostState extends _$FavoritePostState {
     state = repo.get();
   }
 
-  Future<void> delete(Post post) async {
-    await repo.delete(post);
+  Future<void> remove(Post post) async {
+    await repo.remove(post);
     state = repo.get();
   }
 
-  bool checkExists(Post post) {
-    return state.values.map((e) => e.post).contains(post);
-  }
-
   Future<void> save(Post post) async {
-    if (checkExists(post)) return;
+    if (state.contains(post)) return;
     await repo.save(post);
     state = repo.get();
   }

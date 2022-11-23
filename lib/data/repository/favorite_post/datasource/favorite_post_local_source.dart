@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class FavoritePostLocalSource {
@@ -7,8 +8,8 @@ class FavoritePostLocalSource {
 
   final Box<FavoritePost> box;
 
-  Map<String, FavoritePost> get() {
-    return Map.from(box.toMap());
+  IList<Post> get() {
+    return box.values.map((e) => e.post).toIList();
   }
 
   Future<void> clear() async {

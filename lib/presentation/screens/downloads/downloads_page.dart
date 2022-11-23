@@ -14,6 +14,8 @@ class DownloadsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final serverData = ref.watch(serverDataStateProvider);
+
     final downloadState = ref.watch(downloadStateProvider);
     final groupByServer = ref
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));
@@ -73,10 +75,7 @@ class DownloadsPage extends ConsumerWidget {
             : ExpandableGroupListView<DownloadEntry, String>(
                 items: downloadState.entries.reversed.toList(),
                 groupedBy: (entry) => entry.post.serverId,
-                groupTitle: (id) => Text(ref
-                    .watch(serverDataStateProvider.notifier)
-                    .getById(id)
-                    .name),
+                groupTitle: (id) => Text(serverData.getById(id).name),
                 itemBuilder: (entry) => DownloadEntryView(
                   entry: entry,
                   progress: downloadState.getProgressById(entry.id),
