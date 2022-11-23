@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
@@ -12,7 +14,6 @@ import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'page_state.g.dart';
@@ -25,6 +26,14 @@ class PageState extends _$PageState {
   late int _page;
   late Map<int, String> _blockedTags;
 
+  // Posts and Cookies holder
+  // Mutable collections is used here since we'll use it on multiple
+  // screens which require us to share the exact List object for
+  // several reason like incoming addition from loadMore()
+  // or item removal from favorites screen
+  final _posts = <Post>[];
+  final _cookies = <Cookie>[];
+
   String lastQuery = '';
 
   @override
@@ -34,9 +43,12 @@ class PageState extends _$PageState {
     _repo = ref.read(booruRepoProvider(_server));
     _skipCount = 0;
     _page = 0;
-    // throw initial load side-effect somewhere else
+    _posts.clear();
+    _cookies.clear();
     Future(load);
     return FetchResult.data(PageData(
+      posts: _posts,
+      cookies: _cookies,
       option: PageOption(query: lastQuery, clear: true),
     ));
   }
@@ -79,14 +91,11 @@ class PageState extends _$PageState {
 
   Future<void> _fetch() async {
     if (state.data.option.clear) {
-      state = FetchResult.loading(state.data.copyWith(
-        posts: const IListConst([]),
-      ));
-    } else {
-      state = FetchResult.loading(state.data);
+      _posts.clear();
     }
+    state = FetchResult.loading(state.data);
 
-    if (state.data.posts.isEmpty) _page = 0;
+    if (_posts.isEmpty) _page = 0;
     lastQuery = state.data.option.query;
 
     final lastHashCode = _repo.hashCode;
@@ -103,7 +112,7 @@ class PageState extends _$PageState {
         final newPosts = page
             .where((it) =>
                 !it.tags.any(_blockedTags.values.contains) &&
-                !state.data.posts.any((post) => post.id == it.id))
+                !_posts.any((post) => post.id == it.id))
             .toList();
 
         if (newPosts.isEmpty) {
@@ -117,13 +126,12 @@ class PageState extends _$PageState {
             await ref.read(cookieJarProvider).loadForRequest(src.asUri);
         if (lastHashCode != _repo.hashCode) return;
 
-        state.data.posts.addAll(newPosts);
-        state = FetchResult.data(
-          state.data.copyWith(
-            posts: state.data.posts.addAll(newPosts),
-            cookies: fromJar.lock,
-          ),
-        );
+        _posts.addAll(newPosts);
+        _cookies
+          ..clear()
+          ..addAll(fromJar);
+
+        state = FetchResult.data(state.data);
       },
       error: (res, error, stackTrace) {
         state = FetchResult.error(

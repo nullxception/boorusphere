@@ -9,7 +9,6 @@ import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:collection/collection.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +20,7 @@ class FavoritesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritePostState = ref.watch(favoritePostStateProvider);
     return favoritePostState.isNotEmpty
-        ? _Pager(favoritePostState)
+        ? _Pager(favoritePostState.toList())
         : _EmptyView();
   }
 }
@@ -53,7 +52,7 @@ class _EmptyView extends StatelessWidget {
 class _Pager extends HookConsumerWidget {
   const _Pager(this.posts);
 
-  final IList<Post> posts;
+  final List<Post> posts;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,7 +76,7 @@ class _Pager extends HookConsumerWidget {
         body: TabBarView(
           children: [
             for (final page in pages)
-              _Content(server: page.key, posts: page.value.toIList()),
+              _Content(server: page.key, posts: page.value),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -131,7 +130,7 @@ class _Tab extends StatelessWidget {
 class _Content extends HookWidget {
   const _Content({required this.posts, required this.server});
 
-  final IList<Post> posts;
+  final List<Post> posts;
   final ServerData server;
 
   @override

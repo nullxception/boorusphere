@@ -1,12 +1,11 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 TimelineController useTimelineController({
   List<Object?> keys = const [],
-  required IList<Post> posts,
+  required List<Post> posts,
   Object Function(Post post)? heroKeyBuilder,
   void Function()? onLoadMore,
 }) {
@@ -32,7 +31,7 @@ class TimelineController extends ChangeNotifier {
   final Object Function(Post post)? heroKeyBuilder;
   final void Function()? onLoadMore;
   final _scrollController = AutoScrollController(axis: Axis.vertical);
-  final IList<Post> posts;
+  final List<Post> posts;
 
   AutoScrollController get scrollController => _scrollController;
 
