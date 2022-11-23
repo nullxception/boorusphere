@@ -10,30 +10,30 @@ part 'ui_setting_state.g.dart';
 
 @riverpod
 class UiSettingState extends _$UiSettingState {
-  late SettingRepo repo;
+  late SettingRepo _repo;
 
   @override
   UiSetting build() {
-    repo = ref.read(settingRepoProvider);
+    _repo = ref.read(settingRepoProvider);
     return UiSetting(
-      blur: repo.get(Setting.uiBlur, or: false),
-      grid: repo.get(Setting.uiTimelineGrid, or: 1),
-      locale: localeFromStr(repo.get(Setting.uiLanguage, or: '')),
+      blur: _repo.get(Setting.uiBlur, or: false),
+      grid: _repo.get(Setting.uiTimelineGrid, or: 1),
+      locale: localeFromStr(_repo.get(Setting.uiLanguage, or: '')),
       themeMode: ThemeMode
-          .values[repo.get(Setting.uiThemeMode, or: ThemeMode.system.index)],
-      midnightMode: repo.get(Setting.uiMidnightMode, or: false),
+          .values[_repo.get(Setting.uiThemeMode, or: ThemeMode.system.index)],
+      midnightMode: _repo.get(Setting.uiMidnightMode, or: false),
     );
   }
 
   Future<int> cycleGrid() async {
     state = state.copyWith(grid: state.grid < 2 ? state.grid + 1 : 0);
-    await repo.put(Setting.uiTimelineGrid, state.grid);
+    await _repo.put(Setting.uiTimelineGrid, state.grid);
     return state.grid;
   }
 
   Future<bool> showBlur(bool value) async {
     state = state.copyWith(blur: value);
-    await repo.put(Setting.uiBlur, value);
+    await _repo.put(Setting.uiBlur, value);
     return state.blur;
   }
 
@@ -52,13 +52,13 @@ class UiSettingState extends _$UiSettingState {
     } else {
       LocaleSettings.setLocale(locale);
     }
-    await repo.put(Setting.uiLanguage, locale == null ? '' : locale.name);
+    await _repo.put(Setting.uiLanguage, locale == null ? '' : locale.name);
     return state.locale;
   }
 
   Future<ThemeMode> setThemeMode(ThemeMode mode) async {
     state = state.copyWith(themeMode: mode);
-    await repo.put(Setting.uiThemeMode, mode.index);
+    await _repo.put(Setting.uiThemeMode, mode.index);
     return state.themeMode;
   }
 
@@ -79,7 +79,7 @@ class UiSettingState extends _$UiSettingState {
 
   Future<bool> setMidnightMode(bool value) async {
     state = state.copyWith(midnightMode: value);
-    await repo.put(Setting.uiMidnightMode, value);
+    await _repo.put(Setting.uiMidnightMode, value);
     return state.midnightMode;
   }
 }

@@ -8,27 +8,27 @@ part 'favorite_post_state.g.dart';
 
 @riverpod
 class FavoritePostState extends _$FavoritePostState {
-  late FavoritePostRepo repo;
+  late FavoritePostRepo _repo;
 
   @override
   IList<Post> build() {
-    repo = ref.read(favoritePostRepoProvider);
-    return repo.get();
+    _repo = ref.read(favoritePostRepoProvider);
+    return _repo.get();
   }
 
   Future<void> clear() async {
-    await repo.clear();
-    state = repo.get();
+    await _repo.clear();
+    state = _repo.get();
   }
 
   Future<void> remove(Post post) async {
-    await repo.remove(post);
-    state = repo.get();
+    await _repo.remove(post);
+    state = _repo.get();
   }
 
   Future<void> save(Post post) async {
     if (state.contains(post)) return;
-    await repo.save(post);
-    state = repo.get();
+    await _repo.save(post);
+    state = _repo.get();
   }
 }

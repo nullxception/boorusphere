@@ -16,15 +16,15 @@ enum ChangelogType {
 
 @riverpod
 class ChangelogState extends _$ChangelogState {
-  late ChangelogRepo repo;
+  late ChangelogRepo _repo;
 
   @override
   Future<List<ChangelogData>> build(
     ChangelogType type,
     AppVersion? version,
   ) async {
-    repo = ref.watch(changelogRepoProvider);
-    final res = type.onGit ? await repo.fetch() : await repo.get();
+    _repo = ref.watch(changelogRepoProvider);
+    final res = type.onGit ? await _repo.fetch() : await _repo.get();
     return _parseResult(res);
   }
 

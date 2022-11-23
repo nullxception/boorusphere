@@ -10,30 +10,31 @@ part 'server_setting_state.g.dart';
 
 @riverpod
 class ServerSettingState extends _$ServerSettingState {
-  late SettingRepo repo;
+  late SettingRepo _repo;
 
   @override
   ServerSetting build() {
-    repo = ref.read(settingRepoProvider);
+    _repo = ref.read(settingRepoProvider);
     return ServerSetting(
-      active: repo.get(Setting.serverActive, or: ServerData.empty),
-      postLimit: repo.get(Setting.serverPostLimit, or: PageOption.defaultLimit),
-      safeMode: repo.get(Setting.serverSafeMode, or: true),
+      active: _repo.get(Setting.serverActive, or: ServerData.empty),
+      postLimit:
+          _repo.get(Setting.serverPostLimit, or: PageOption.defaultLimit),
+      safeMode: _repo.get(Setting.serverSafeMode, or: true),
     );
   }
 
   Future<void> setActiveServer(ServerData value) async {
     state = state.copyWith(active: value);
-    await repo.put(Setting.serverActive, value);
+    await _repo.put(Setting.serverActive, value);
   }
 
   Future<void> setPostLimit(int value) async {
     state = state.copyWith(postLimit: value);
-    await repo.put(Setting.serverPostLimit, value);
+    await _repo.put(Setting.serverPostLimit, value);
   }
 
   Future<void> setSafeMode(bool value) async {
     state = state.copyWith(safeMode: value);
-    await repo.put(Setting.serverSafeMode, value);
+    await _repo.put(Setting.serverSafeMode, value);
   }
 }

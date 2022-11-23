@@ -18,7 +18,8 @@ part 'page_state.g.dart';
 
 @riverpod
 class PageState extends _$PageState {
-  late BooruRepo repo;
+  late BooruRepo _repo;
+  late ServerData _server;
   late int _skipCount;
   late int _page;
 
@@ -26,9 +27,8 @@ class PageState extends _$PageState {
 
   @override
   FetchResult<PageData> build() {
-    final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
-    repo = ref.read(booruRepoProvider(server));
+    _server = ref.watch(serverSettingStateProvider.select((it) => it.active));
+    _repo = ref.read(booruRepoProvider(_server));
     _skipCount = 0;
     _page = 0;
     // throw initial load side-effect somewhere else
@@ -45,7 +45,7 @@ class PageState extends _$PageState {
   }
 
   Future<void> load() async {
-    if (repo.server == ServerData.empty) return;
+    if (_server == ServerData.empty) return;
     final settings = ref.read(serverSettingStateProvider);
     final newOption = state.data.option.copyWith(
       limit: settings.postLimit,
@@ -90,11 +90,11 @@ class PageState extends _$PageState {
     if (state.data.posts.isEmpty) _page = 0;
     lastQuery = state.data.option.query;
 
-    final lastHashCode = repo.hashCode;
-    final pageResult = await repo.getPage(state.data.option, _page);
+    final lastHashCode = _repo.hashCode;
+    final pageResult = await _repo.getPage(state.data.option, _page);
     return pageResult.when<void>(
       data: (page, src) async {
-        if (lastHashCode != repo.hashCode) return;
+        if (lastHashCode != _repo.hashCode) return;
         if (page.isEmpty) {
           state = FetchResult.error(state.data, error: BooruError.empty);
           return;
@@ -116,7 +116,7 @@ class PageState extends _$PageState {
 
         final fromJar =
             await ref.read(cookieJarProvider).loadForRequest(src.asUri);
-        if (lastHashCode != repo.hashCode) return;
+        if (lastHashCode != _repo.hashCode) return;
 
         state.data.posts.addAll(newPosts);
         state = FetchResult.data(

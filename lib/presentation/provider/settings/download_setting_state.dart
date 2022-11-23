@@ -8,18 +8,18 @@ part 'download_setting_state.g.dart';
 
 @riverpod
 class DownloadSettingState extends _$DownloadSettingState {
-  late SettingRepo repo;
+  late SettingRepo _repo;
 
   @override
   DownloadSetting build() {
-    repo = ref.read(settingRepoProvider);
+    _repo = ref.read(settingRepoProvider);
     return DownloadSetting(
-      groupByServer: repo.get(Setting.downloadsGroupByServer, or: false),
+      groupByServer: _repo.get(Setting.downloadsGroupByServer, or: false),
     );
   }
 
   Future<void> setGroupByServer(bool value) async {
     state = state.copyWith(groupByServer: value);
-    await repo.put(Setting.downloadsGroupByServer, value);
+    await _repo.put(Setting.downloadsGroupByServer, value);
   }
 }

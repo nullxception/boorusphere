@@ -10,28 +10,25 @@ part 'suggestion_state.g.dart';
 
 @riverpod
 class SuggestionState extends _$SuggestionState {
-  late BooruRepo repo;
+  late BooruRepo _repo;
+  late ServerData _server;
 
   @override
   FetchResult<ISet<String>> build() {
-    final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
-    repo = ref.read(booruRepoProvider(server));
-
+    _server = ref.watch(serverSettingStateProvider.select((it) => it.active));
+    _repo = ref.read(booruRepoProvider(_server));
     return const FetchResult.data(ISetConst({}));
   }
 
   Future<void> get(String query) async {
-    final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
-    if (server == ServerData.empty) {
+    if (_server == ServerData.empty) {
       state = const FetchResult.data(ISetConst({}));
       return;
     }
 
     state = FetchResult.loading(state.data);
     try {
-      final res = await repo.getSuggestion(query);
+      final res = await _repo.getSuggestion(query);
       res.when(
         data: (data, src) {
           final blockedTags = ref.read(blockedTagsRepoProvider);

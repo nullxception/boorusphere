@@ -6,28 +6,28 @@ part 'blocked_tags_state.g.dart';
 
 @Riverpod(keepAlive: true)
 class BlockedTagsState extends _$BlockedTagsState {
-  late BlockedTagsRepo repo;
+  late BlockedTagsRepo _repo;
 
   @override
   Map<int, String> build() {
-    repo = ref.read(blockedTagsRepoProvider);
-    return repo.get();
+    _repo = ref.read(blockedTagsRepoProvider);
+    return _repo.get();
   }
 
   Future<void> delete(key) async {
-    await repo.delete(key);
-    state = repo.get();
+    await _repo.delete(key);
+    state = _repo.get();
   }
 
   Future<void> push(String value) async {
-    await repo.push(value);
-    state = repo.get();
+    await _repo.push(value);
+    state = _repo.get();
   }
 
   Future<void> pushAll(List<String> values) async {
     for (var tag in values) {
-      await repo.push(tag);
+      await _repo.push(tag);
     }
-    state = repo.get();
+    state = _repo.get();
   }
 }

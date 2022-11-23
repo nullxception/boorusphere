@@ -27,28 +27,28 @@ Map<int, SearchHistory> filterHistory(FilterHistoryRef ref, String query) {
 
 @riverpod
 class SearchHistoryState extends _$SearchHistoryState {
-  late SearchHistoryRepo repo;
+  late SearchHistoryRepo _repo;
 
   @override
   Map<int, SearchHistory> build() {
-    repo = ref.read(searchHistoryRepoProvider);
-    return repo.all;
+    _repo = ref.read(searchHistoryRepoProvider);
+    return _repo.all;
   }
 
   Future<void> save(String value) async {
     final server =
         ref.read(serverSettingStateProvider.select((it) => it.active));
-    await repo.save(value.trim(), server.id);
-    state = repo.all;
+    await _repo.save(value.trim(), server.id);
+    state = _repo.all;
   }
 
   Future<void> delete(key) async {
-    await repo.delete(key);
-    state = repo.all;
+    await _repo.delete(key);
+    state = _repo.all;
   }
 
   Future<void> clear() async {
-    await repo.clear();
-    state = repo.all;
+    await _repo.clear();
+    state = _repo.all;
   }
 }

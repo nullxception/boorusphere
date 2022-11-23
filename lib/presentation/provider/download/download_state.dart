@@ -10,31 +10,31 @@ part 'download_state.g.dart';
 
 @riverpod
 class DownloadState extends _$DownloadState {
-  late DownloadRepo repo;
+  late DownloadRepo _repo;
 
   @override
   Downloads build() {
-    repo = ref.watch(downloadRepoProvider);
+    _repo = ref.watch(downloadRepoProvider);
     Future(_populate);
     return const Downloads();
   }
 
   Future<void> _populate() async {
     state = Downloads(
-      entries: repo.getEntries().toIList(),
-      progresses: (await repo.getProgress()).toISet(),
+      entries: _repo.getEntries().toIList(),
+      progresses: (await _repo.getProgress()).toISet(),
     );
   }
 
   Future<void> add(DownloadEntry entry) async {
-    await repo.add(entry);
+    await _repo.add(entry);
     state = state.copyWith(
       entries: state.entries.removeWhere((it) => it.id == entry.id).add(entry),
     );
   }
 
   Future<void> remove(String id) async {
-    await repo.remove(id);
+    await _repo.remove(id);
     state = state.copyWith(
       entries: state.entries.removeWhere((it) => it.id == id),
       progresses: state.progresses.removeWhere((it) => it.id == id),
@@ -42,8 +42,8 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> update(String id, DownloadEntry entry) async {
-    await repo.remove(id);
-    await repo.add(entry);
+    await _repo.remove(id);
+    await _repo.add(entry);
     state = state.copyWith(
       entries: state.entries.removeWhere((it) => it.id == entry.id).add(entry),
       progresses: state.progresses
@@ -60,7 +60,7 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> clear() async {
-    await repo.clear();
+    await _repo.clear();
     state = const Downloads();
   }
 }
