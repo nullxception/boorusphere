@@ -6,6 +6,7 @@ import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
+import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
@@ -22,12 +23,14 @@ class PageState extends _$PageState {
   late ServerData _server;
   late int _skipCount;
   late int _page;
+  late Map<int, String> _blockedTags;
 
   String lastQuery = '';
 
   @override
   FetchResult<PageData> build() {
     _server = ref.watch(serverSettingStateProvider.select((it) => it.active));
+    _blockedTags = ref.watch(blockedTagsStateProvider);
     _repo = ref.read(booruRepoProvider(_server));
     _skipCount = 0;
     _page = 0;
@@ -75,10 +78,6 @@ class PageState extends _$PageState {
   }
 
   Future<void> _fetch() async {
-    final blockedTags = ref.read(
-      blockedTagsRepoProvider.select((repo) => repo.get().values),
-    );
-
     if (state.data.option.clear) {
       state = FetchResult.loading(state.data.copyWith(
         posts: const IListConst([]),
@@ -103,7 +102,7 @@ class PageState extends _$PageState {
         _page++;
         final newPosts = page
             .where((it) =>
-                !it.tags.any(blockedTags.contains) &&
+                !it.tags.any(_blockedTags.values.contains) &&
                 !state.data.posts.any((post) => post.id == it.id))
             .toList();
 
