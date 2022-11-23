@@ -39,7 +39,7 @@ void main() async {
   ]);
 
   final deviceProp = DeviceProp(await DeviceInfoPlugin().androidInfo);
-  LocaleHelper.useFallbackPluralResolver(['id']);
+  LocaleHelper.useFallbackPluralResolver([AppLocale.idId]);
 
   runApp(
     ProviderScope(
