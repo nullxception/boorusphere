@@ -1,9 +1,9 @@
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/screens/home/home_status.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
-import 'package:boorusphere/presentation/widgets/timeline/timeline_status.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -54,12 +54,12 @@ class HomeContent extends HookConsumerWidget {
                 padding: EdgeInsets.only(
                   bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
                 ),
-                sliver: const SliverToBoxAdapter(child: TimelineStatus()),
+                sliver: const SliverToBoxAdapter(child: HomeStatus()),
               ),
             ],
           )
         else
-          const TimelineStatus(),
+          const HomeStatus(),
         const _EdgeShadow(),
         SearchScreen(scrollController: scrollController),
       ],

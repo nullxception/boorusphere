@@ -9,14 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TimelineStatus extends ConsumerWidget {
-  const TimelineStatus({super.key});
+class HomeStatus extends ConsumerWidget {
+  const HomeStatus({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final server =
         ref.watch(serverSettingStateProvider.select((it) => it.active));
-
     final pageState = ref.watch(pageStateProvider);
 
     return Column(
