@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/server_data.dart';
-import 'package:boorusphere/presentation/routes/routes.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -101,7 +101,7 @@ class ServerDetails extends HookConsumerWidget {
                       ElevatedButton(
                         onPressed: () {
                           context.router.push(
-                            ServerPayloadsRoute(
+                            ServerPresetRoute(
                               onReturned: (newData) {
                                 cSearchUrl.text = newData.searchUrl;
                                 cSuggestUrl.text = newData.tagSuggestionUrl;

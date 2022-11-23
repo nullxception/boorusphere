@@ -2,7 +2,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
-import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,7 +15,7 @@ class SuggestionState extends _$SuggestionState {
   @override
   FetchResult<ISet<String>> build() {
     final server =
-        ref.watch(serverSettingsStateProvider.select((it) => it.active));
+        ref.watch(serverSettingStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
 
     return const FetchResult.data(ISetConst({}));
@@ -23,7 +23,7 @@ class SuggestionState extends _$SuggestionState {
 
   Future<void> get(String query) async {
     final server =
-        ref.watch(serverSettingsStateProvider.select((it) => it.active));
+        ref.watch(serverSettingStateProvider.select((it) => it.active));
     if (server == ServerData.empty) {
       state = const FetchResult.data(ISetConst({}));
       return;

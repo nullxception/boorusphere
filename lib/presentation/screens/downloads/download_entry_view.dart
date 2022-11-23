@@ -5,8 +5,8 @@ import 'package:boorusphere/data/repository/download/entity/download_status.dart
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
-import 'package:boorusphere/presentation/provider/server_data.dart';
-import 'package:boorusphere/presentation/routes/routes.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/number.dart';

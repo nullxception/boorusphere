@@ -5,8 +5,8 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
-import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
+import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
+import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -71,8 +71,8 @@ Future<VideoPlayerController> videoPlayerController(
   return controller;
 }
 
-class PostVideoDisplay extends HookConsumerWidget {
-  const PostVideoDisplay({
+class PostVideo extends HookConsumerWidget {
+  const PostVideo({
     super.key,
     required this.post,
     this.isFromHome = false,

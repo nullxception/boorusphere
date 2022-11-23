@@ -8,8 +8,8 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
-import 'package:boorusphere/presentation/provider/search_history.dart';
-import 'package:boorusphere/presentation/provider/settings/server_settings.dart';
+import 'package:boorusphere/presentation/provider/search_history_state.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,7 +27,7 @@ class PageState extends _$PageState {
   @override
   FetchResult<PageData> build() {
     final server =
-        ref.watch(serverSettingsStateProvider.select((it) => it.active));
+        ref.watch(serverSettingStateProvider.select((it) => it.active));
     repo = ref.read(booruRepoProvider(server));
     _skipCount = 0;
     _page = 0;
@@ -46,7 +46,7 @@ class PageState extends _$PageState {
 
   Future<void> load() async {
     if (repo.server == ServerData.empty) return;
-    final settings = ref.read(serverSettingsStateProvider);
+    final settings = ref.read(serverSettingStateProvider);
     final newOption = state.data.option.copyWith(
       limit: settings.postLimit,
       safeMode: settings.safeMode,

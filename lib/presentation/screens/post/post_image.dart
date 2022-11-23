@@ -1,8 +1,8 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/fullscreen.dart';
-import 'package:boorusphere/presentation/provider/settings/content_settings.dart';
+import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
+import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PostImageDisplay extends HookConsumerWidget {
-  const PostImageDisplay({
+class PostImage extends HookConsumerWidget {
+  const PostImage({
     super.key,
     required this.post,
     this.isFromHome = false,
@@ -27,9 +27,9 @@ class PostImageDisplay extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final contentSettings = ref.watch(contentSettingStateProvider);
+    final contentSetting = ref.watch(contentSettingStateProvider);
     final isBlur = useState(
-        post.rating == PostRating.explicit && contentSettings.blurExplicit);
+        post.rating == PostRating.explicit && contentSetting.blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
     // GlobalKey to keep the hero state across blur and ExtendedImage's loadState changes
@@ -39,7 +39,7 @@ class PostImageDisplay extends HookConsumerWidget {
     final isMounted = useIsMounted();
 
     useEffect(() {
-      if (post.rating != PostRating.explicit || !contentSettings.blurExplicit) {
+      if (post.rating != PostRating.explicit || !contentSetting.blurExplicit) {
         return;
       }
 
@@ -75,7 +75,7 @@ class PostImageDisplay extends HookConsumerWidget {
             )
           else
             ExtendedImage.network(
-              contentSettings.loadOriginal
+              contentSetting.loadOriginal
                   ? post.originalFile
                   : post.content.url,
               headers: post.getHeaders(ref),
@@ -123,8 +123,7 @@ class PostImageDisplay extends HookConsumerWidget {
                 animation.removeListener(onAnimating);
               },
             ),
-          if (post.rating == PostRating.explicit &&
-              contentSettings.blurExplicit)
+          if (post.rating == PostRating.explicit && contentSetting.blurExplicit)
             FadeTransition(
               opacity: Tween<double>(begin: 0, end: 1).animate(
                 CurvedAnimation(
