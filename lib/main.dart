@@ -10,6 +10,7 @@ import 'package:boorusphere/data/repository/server/datasource/server_local_sourc
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
 import 'package:boorusphere/presentation/boorusphere.dart';
+import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -38,6 +39,7 @@ void main() async {
   ]);
 
   final deviceProp = DeviceProp(await DeviceInfoPlugin().androidInfo);
+  LocaleHelper.useFallbackPluralResolver(['id']);
 
   runApp(
     ProviderScope(

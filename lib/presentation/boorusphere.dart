@@ -1,3 +1,4 @@
+import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
@@ -29,13 +30,7 @@ class Boorusphere extends HookConsumerWidget {
     final router = useMemoized(AppRouter.new);
 
     useEffect(() {
-      Future(() {
-        if (locale != null) {
-          LocaleSettings.setLocale(locale);
-        } else {
-          LocaleSettings.useDeviceLocale();
-        }
-      });
+      LocaleHelper.update(locale);
     }, [locale]);
 
     useEffect(() {
