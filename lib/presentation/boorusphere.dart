@@ -25,8 +25,6 @@ class Boorusphere extends HookConsumerWidget {
     final isMidnight =
         ref.watch(uiSettingStateProvider.select((ui) => ui.midnightMode));
     final deviceProp = ref.watch(devicePropProvider);
-    final downloaderHandle =
-        ref.watch(flutterDownloaderHandleProvider.notifier);
     final router = useMemoized(AppRouter.new);
 
     useEffect(() {
@@ -34,7 +32,7 @@ class Boorusphere extends HookConsumerWidget {
     }, [locale]);
 
     useEffect(() {
-      downloaderHandle.listen((progress) {
+      ref.read(flutterDownloaderHandleProvider.notifier).listen((progress) {
         ref.read(downloadStateProvider.notifier).updateProgress(progress);
         if (progress.status.isDownloaded) {
           DownloadUtils.rescanMedia();

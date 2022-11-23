@@ -86,7 +86,7 @@ class _SettingsContent extends HookConsumerWidget {
                   uiSettingStateProvider.select((ui) => ui.midnightMode)),
               onChanged: (value) {
                 ref
-                    .watch(uiSettingStateProvider.notifier)
+                    .read(uiSettingStateProvider.notifier)
                     .setMidnightMode(value);
               },
             ),
@@ -98,7 +98,7 @@ class _SettingsContent extends HookConsumerWidget {
               ),
               value: ref.watch(uiSettingStateProvider.select((ui) => ui.blur)),
               onChanged: (value) {
-                ref.watch(uiSettingStateProvider.notifier).showBlur(value);
+                ref.read(uiSettingStateProvider.notifier).showBlur(value);
               },
             ),
           ],
@@ -116,7 +116,7 @@ class _SettingsContent extends HookConsumerWidget {
                   contentSettingStateProvider.select((it) => it.blurExplicit)),
               onChanged: (value) {
                 ref
-                    .watch(contentSettingStateProvider.notifier)
+                    .read(contentSettingStateProvider.notifier)
                     .setBlurExplicitPost(value);
               },
             ),
@@ -149,7 +149,7 @@ class _SettingsContent extends HookConsumerWidget {
                   contentSettingStateProvider.select((it) => it.loadOriginal)),
               onChanged: (value) {
                 ref
-                    .watch(contentSettingStateProvider.notifier)
+                    .read(contentSettingStateProvider.notifier)
                     .setLoadOriginalPost(value);
               },
             ),

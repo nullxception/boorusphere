@@ -195,7 +195,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
                 ref
-                    .watch(blockedTagsStateProvider.notifier)
+                    .read(blockedTagsStateProvider.notifier)
                     .pushAll(selectedTags);
                 context.scaffoldMessenger.showSnackBar(
                   SnackBar(
