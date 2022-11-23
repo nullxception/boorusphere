@@ -12,7 +12,7 @@ class FavoritePostState extends _$FavoritePostState {
 
   @override
   Map<String, FavoritePost> build() {
-    final repo = ref.read(favoritePostRepoProvider);
+    repo = ref.read(favoritePostRepoProvider);
     return repo.get();
   }
 

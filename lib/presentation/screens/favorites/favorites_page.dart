@@ -3,12 +3,13 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
-import 'package:boorusphere/presentation/screens/home/timeline/timeline.dart';
-import 'package:boorusphere/presentation/screens/home/timeline/timeline_controller.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
+import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
+import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -78,7 +79,7 @@ class _FavoritesView extends HookConsumerWidget {
         body: TabBarView(
           children: [
             for (final page in pages)
-              _Content(serverData: page.key, data: page.value),
+              _Content(serverData: page.key, posts: page.value.toIList()),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -130,16 +131,16 @@ class _Tab extends StatelessWidget {
 }
 
 class _Content extends HookWidget {
-  const _Content({required this.data, required this.serverData});
+  const _Content({required this.posts, required this.serverData});
 
-  final List<Post> data;
+  final IList<Post> posts;
   final ServerData serverData;
 
   @override
   Widget build(BuildContext context) {
     final controller = useTimelineController(
+      posts: posts,
       heroKeyBuilder: (post) => 'fav@$serverData-${post.id}',
-      keys: [data.hashCode],
     );
 
     return CustomScrollView(
