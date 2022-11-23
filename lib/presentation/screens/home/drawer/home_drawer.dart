@@ -278,6 +278,9 @@ class _ServerSelection extends HookConsumerWidget {
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(serverSettingStateProvider.notifier).setActiveServer(it);
+              if (it.id == serverActive.id) {
+                ref.invalidate(pageStateProvider);
+              }
               ref.read(homeDrawerController).close();
             },
           ),
