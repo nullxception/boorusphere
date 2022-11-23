@@ -64,7 +64,7 @@ class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
         }
 
         if (next < posts.length) {
-          _precache(posts[next], showOG, posts[prev].getHeaders(ref));
+          _precache(posts[next], showOG, posts[next].getHeaders(ref));
         }
       };
 
