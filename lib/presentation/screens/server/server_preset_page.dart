@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
@@ -13,12 +14,16 @@ class ServerPresetPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final defaults = ref.watch(serverRepoProvider.select((it) => it.defaults));
+    final servers = ref.watch(serverDataStateProvider);
+    final all = {...defaults.values, ...servers};
+
     return Scaffold(
       appBar: AppBar(title: Text(context.t.servers.select)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: ref.read(serverDataStateProvider.notifier).all.map((it) {
+            children: all.map((it) {
               return ListTile(
                 title: Text(it.name),
                 subtitle: Text(it.homepage),

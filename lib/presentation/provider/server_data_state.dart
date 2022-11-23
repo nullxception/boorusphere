@@ -19,8 +19,6 @@ class ServerDataState extends _$ServerDataState {
     return [];
   }
 
-  Set<ServerData> get all => {...repo.defaults.values, ...state};
-
   ServerData get active =>
       ref.read(serverSettingStateProvider.select((it) => it.active));
 
