@@ -50,9 +50,9 @@ class SearchBarController extends ChangeNotifier {
         .update((state) => state.copyWith(query: value, clear: true));
   }
 
-  void append(String value) {
+  void append(String newValue) {
     final current = value.toWordList();
-    final result = {...current.take(current.length), ...value.toWordList()};
+    final result = {...current.take(current.length), ...newValue.toWordList()};
     _value = '${result.join(' ')} ';
   }
 
