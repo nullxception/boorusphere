@@ -6,6 +6,7 @@ import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/post/post_ext.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart';
@@ -55,7 +56,7 @@ class Timeline extends HookConsumerWidget {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: GestureDetector(
               child: Hero(
-                tag: controller.heroKeyBuilder?.call(post) ?? post.id,
+                tag: post.heroTag,
                 child: _Thumbnail(post: post),
                 flightShuttleBuilder: (flightContext, animation,
                     flightDirection, fromHeroContext, toHeroContext) {

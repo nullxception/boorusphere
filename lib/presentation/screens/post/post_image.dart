@@ -4,6 +4,7 @@ import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
+import 'package:boorusphere/presentation/screens/post/post_ext.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -90,7 +91,7 @@ class PostImage extends HookConsumerWidget {
                   state: state,
                   child: Hero(
                     key: imageHeroKey,
-                    tag: heroKey ?? post.id,
+                    tag: heroKey ?? post.heroTag,
                     child: LoadState.completed == state.extendedImageLoadState
                         ? state.completedWidget
                         : PostPlaceholderImage(post: post, shouldBlur: false),

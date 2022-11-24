@@ -8,6 +8,7 @@ import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
+import 'package:boorusphere/presentation/screens/post/post_ext.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:flutter/material.dart';
@@ -76,12 +77,12 @@ class PostVideo extends HookConsumerWidget {
     super.key,
     required this.post,
     this.isFromHome = false,
-    this.heroKey,
+    this.heroTag,
   });
 
   final Post post;
   final bool isFromHome;
-  final Object? heroKey;
+  final Object? heroTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -97,7 +98,7 @@ class PostVideo extends HookConsumerWidget {
     Widget asHero(Widget child) {
       return Hero(
         key: heroWidgetKey,
-        tag: heroKey ?? post.id,
+        tag: heroTag ?? post.heroTag,
         child: child,
       );
     }

@@ -1,16 +1,13 @@
-import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class TimelineController extends ChangeNotifier {
   TimelineController({
-    this.heroKeyBuilder,
     this.onLoadMore,
   }) {
     _scrollController.addListener(_autoLoadMore);
   }
 
-  final Object Function(Post post)? heroKeyBuilder;
   final void Function()? onLoadMore;
   final _scrollController = AutoScrollController(axis: Axis.vertical);
 

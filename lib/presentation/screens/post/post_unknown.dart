@@ -1,6 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/screens/post/post_ext.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
@@ -13,11 +14,11 @@ class PostUnknown extends HookConsumerWidget {
   const PostUnknown({
     super.key,
     required this.post,
-    this.heroKey,
+    this.heroTag,
   });
 
   final Post post;
-  final Object? heroKey;
+  final Object? heroTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +29,7 @@ class PostUnknown extends HookConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         Hero(
-          tag: heroKey ?? post.id,
+          tag: heroTag ?? post.heroTag,
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: blurExplicitPost && post.rating == PostRating.explicit,

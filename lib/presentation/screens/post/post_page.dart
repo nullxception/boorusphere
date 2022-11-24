@@ -78,26 +78,21 @@ class PostPage extends HookConsumerWidget {
                     precachePosts(index, loadOriginal);
                     final post = posts.elementAt(index);
                     final Widget widget;
-                    final heroKey =
-                        controller.heroKeyBuilder?.call(post) ?? post.id;
                     switch (post.content.type) {
                       case PostType.photo:
                         widget = PostImage(
                           post: post,
                           isFromHome: index == beginPage,
-                          heroKey: heroKey,
                         );
                         break;
                       case PostType.video:
                         widget = PostVideo(
                           post: post,
-                          heroKey: heroKey,
                         );
                         break;
                       default:
                         widget = PostUnknown(
                           post: post,
-                          heroKey: heroKey,
                         );
                         break;
                     }
