@@ -5,7 +5,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 TimelineController useTimelineController({
   List<Object?> keys = const [],
-  required List<Post> posts,
+  required Iterable<Post> posts,
   Object Function(Post post)? heroKeyBuilder,
   void Function()? onLoadMore,
 }) {
@@ -31,7 +31,7 @@ class TimelineController extends ChangeNotifier {
   final Object Function(Post post)? heroKeyBuilder;
   final void Function()? onLoadMore;
   final _scrollController = AutoScrollController(axis: Axis.vertical);
-  final List<Post> posts;
+  final Iterable<Post> posts;
 
   AutoScrollController get scrollController => _scrollController;
 

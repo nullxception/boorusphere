@@ -20,7 +20,7 @@ class FavoritesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritePostState = ref.watch(favoritePostStateProvider);
     return favoritePostState.isNotEmpty
-        ? _Pager(favoritePostState.toList())
+        ? _Pager(favoritePostState)
         : _EmptyView();
   }
 }
@@ -52,7 +52,7 @@ class _EmptyView extends StatelessWidget {
 class _Pager extends HookConsumerWidget {
   const _Pager(this.posts);
 
-  final List<Post> posts;
+  final Iterable<Post> posts;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -130,7 +130,7 @@ class _Tab extends StatelessWidget {
 class _Content extends HookWidget {
   const _Content({required this.posts, required this.server});
 
-  final List<Post> posts;
+  final Iterable<Post> posts;
   final ServerData server;
 
   @override

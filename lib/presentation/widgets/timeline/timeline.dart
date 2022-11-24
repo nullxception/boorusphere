@@ -38,7 +38,7 @@ class Timeline extends HookConsumerWidget {
       crossAxisSpacing: 5,
       childCount: controller.posts.length,
       itemBuilder: (context, index) {
-        final post = controller.posts[index];
+        final post = controller.posts.elementAt(index);
         return AutoScrollTag(
           key: ValueKey(index),
           controller: scrollController,

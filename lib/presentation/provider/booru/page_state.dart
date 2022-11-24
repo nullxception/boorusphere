@@ -109,11 +109,9 @@ class PageState extends _$PageState {
         }
 
         _page++;
-        final newPosts = page
-            .where((it) =>
-                !it.tags.any(_blockedTags.values.contains) &&
-                !_posts.any((post) => post.id == it.id))
-            .toList();
+        final newPosts = page.where((it) =>
+            !it.tags.any(_blockedTags.values.contains) &&
+            !_posts.any((post) => post.id == it.id));
 
         if (newPosts.isEmpty) {
           if (_skipCount > 3) return;

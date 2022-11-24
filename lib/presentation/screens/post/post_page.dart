@@ -31,9 +31,9 @@ class PostPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const loadMoreThreshold = 90;
-    final initPage = useState(beginPage);
+    final currentPage = useState(beginPage);
     final pageController =
-        useExtendedPageController(initialPage: initPage.value);
+        useExtendedPageController(initialPage: currentPage.value);
     final loadOriginal =
         ref.watch(contentSettingStateProvider.select((it) => it.loadOriginal));
     final pageState = ref.watch(pageStateProvider);
@@ -41,13 +41,13 @@ class PostPage extends HookConsumerWidget {
 
     final post = controller.posts.isEmpty
         ? Post.empty
-        : controller.posts[initPage.value];
+        : controller.posts.elementAt(currentPage.value);
     final precachePosts = usePrecachePosts(ref, controller.posts);
 
     return WillPopScope(
       onWillPop: () async {
         context.scaffoldMessenger.removeCurrentSnackBar();
-        controller.revealAt(initPage.value);
+        controller.revealAt(currentPage.value);
         return true;
       },
       child: Scaffold(
@@ -64,7 +64,7 @@ class PostPage extends HookConsumerWidget {
                   controller: pageController,
                   onPageChanged: (index) {
                     context.scaffoldMessenger.hideCurrentSnackBar();
-                    initPage.value = index;
+                    currentPage.value = index;
                     final offset = index + 1;
                     final threshold = controller.posts.length /
                         100 *
@@ -76,8 +76,7 @@ class PostPage extends HookConsumerWidget {
                   itemCount: controller.posts.length,
                   itemBuilder: (_, index) {
                     precachePosts(index, loadOriginal);
-
-                    final post = controller.posts[index];
+                    final post = controller.posts.elementAt(index);
                     final Widget widget;
                     final heroKey =
                         controller.heroKeyBuilder?.call(post) ?? post.id;
@@ -103,7 +102,7 @@ class PostPage extends HookConsumerWidget {
                         break;
                     }
                     return HeroMode(
-                      enabled: index == initPage.value,
+                      enabled: index == currentPage.value,
                       child: widget,
                     );
                   },
@@ -119,8 +118,8 @@ class PostPage extends HookConsumerWidget {
                   child: _PostAppBar(
                     subtitle: post.tags.join(' '),
                     title: pageState is LoadingFetchResult
-                        ? '#${initPage.value + 1} of (loading...)'
-                        : '#${initPage.value + 1} of ${controller.posts.length}',
+                        ? '#${currentPage.value + 1} of (loading...)'
+                        : '#${currentPage.value + 1} of ${controller.posts.length}',
                   ),
                 ),
               ),

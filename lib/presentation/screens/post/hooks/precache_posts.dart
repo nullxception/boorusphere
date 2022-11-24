@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void Function(int index, bool loadOriginal) usePrecachePosts(
   WidgetRef ref,
-  List<Post> posts,
+  Iterable<Post> posts,
 ) {
   return use(_PrecachePostsHook(ref, posts));
 }
@@ -18,7 +18,7 @@ class _PrecachePostsHook extends Hook<_Precacher> {
   const _PrecachePostsHook(this.ref, this.posts);
 
   final WidgetRef ref;
-  final List<Post> posts;
+  final Iterable<Post> posts;
 
   @override
   _PrecachePostsState createState() => _PrecachePostsState();
@@ -28,7 +28,7 @@ class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
   _PrecachePostsState();
 
   WidgetRef get ref => hook.ref;
-  List<Post> get posts => hook.posts;
+  Iterable<Post> get posts => hook.posts;
 
   bool _mounted = true;
 
@@ -59,11 +59,13 @@ class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
         final prev = i - 1;
 
         if (prev >= 0) {
-          _precache(posts[prev], showOG, posts[prev].getHeaders(ref));
+          _precache(posts.elementAt(prev), showOG,
+              posts.elementAt(prev).getHeaders(ref));
         }
 
         if (next < posts.length) {
-          _precache(posts[next], showOG, posts[next].getHeaders(ref));
+          _precache(posts.elementAt(next), showOG,
+              posts.elementAt(next).getHeaders(ref));
         }
       };
 
