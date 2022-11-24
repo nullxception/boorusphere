@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
@@ -10,7 +9,8 @@ import 'package:boorusphere/presentation/provider/settings/content_setting_state
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
-import 'package:boorusphere/utils/extensions/post.dart';
+import 'package:boorusphere/presentation/utils/extensions/post.dart';
+import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

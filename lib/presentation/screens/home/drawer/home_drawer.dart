@@ -8,9 +8,9 @@ import 'package:boorusphere/presentation/provider/settings/server_setting_state.
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
+import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
-import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

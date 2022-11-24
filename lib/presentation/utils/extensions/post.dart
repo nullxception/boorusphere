@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/utils/content.dart';
-import 'package:boorusphere/utils/pixel_size.dart';
+import 'package:boorusphere/presentation/utils/entity/content.dart';
+import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 
 enum PostRating {
   questionable,

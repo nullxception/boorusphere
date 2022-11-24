@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 

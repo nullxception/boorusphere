@@ -2,9 +2,9 @@ import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/screens/home/home_status.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
+import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
-import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

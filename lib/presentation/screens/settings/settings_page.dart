@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/presentation/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/utils/download.dart';
-import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

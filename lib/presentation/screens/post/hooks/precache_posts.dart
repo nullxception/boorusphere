@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/utils/extensions/post.dart';
+import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

@@ -1,6 +1,6 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/routes/slide_page_route.dart';
-import 'package:boorusphere/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
