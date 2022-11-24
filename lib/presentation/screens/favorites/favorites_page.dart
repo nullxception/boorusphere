@@ -135,18 +135,19 @@ class _Content extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useTimelineController(
-      posts: posts,
-      heroKeyBuilder: (post) => 'fav@$server-${post.id}',
+    final controller = useMemoized(
+      () => TimelineController(
+        heroKeyBuilder: (post) => 'fav@$server-${post.id}',
+      ),
+      [posts.hashCode],
     );
-
     return CustomScrollView(
       controller: controller.scrollController,
       slivers: [
         SliverSafeArea(
           sliver: SliverPadding(
             padding: const EdgeInsets.all(10),
-            sliver: Timeline(controller: controller),
+            sliver: Timeline(controller: controller, posts: posts),
           ),
         ),
       ],

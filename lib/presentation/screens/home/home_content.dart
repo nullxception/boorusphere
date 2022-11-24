@@ -6,6 +6,7 @@ import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeContent extends HookConsumerWidget {
@@ -14,9 +15,11 @@ class HomeContent extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageState = ref.watch(pageStateProvider);
-    final controller = useTimelineController(
-      posts: pageState.data.posts,
-      onLoadMore: () => ref.read(pageStateProvider.notifier).loadMore(),
+    final controller = useMemoized(
+      () => TimelineController(
+        onLoadMore: () => ref.read(pageStateProvider.notifier).loadMore(),
+      ),
+      [pageState.data.posts.hashCode],
     );
     final scrollController = controller.scrollController;
 
@@ -47,7 +50,10 @@ class HomeContent extends HookConsumerWidget {
               SliverSafeArea(
                 sliver: SliverPadding(
                   padding: const EdgeInsets.all(10),
-                  sliver: Timeline(controller: controller),
+                  sliver: Timeline(
+                    controller: controller,
+                    posts: pageState.data.posts,
+                  ),
                 ),
               ),
               SliverPadding(

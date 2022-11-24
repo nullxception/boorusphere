@@ -20,9 +20,11 @@ class Timeline extends HookConsumerWidget {
   const Timeline({
     super.key,
     required this.controller,
+    required this.posts,
   });
 
   final TimelineController controller;
+  final Iterable<Post> posts;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,9 +38,9 @@ class Timeline extends HookConsumerWidget {
       key: ObjectKey(flexibleGrid),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      childCount: controller.posts.length,
+      childCount: posts.length,
       itemBuilder: (context, index) {
-        final post = controller.posts.elementAt(index);
+        final post = posts.elementAt(index);
         return AutoScrollTag(
           key: ValueKey(index),
           controller: scrollController,
@@ -79,6 +81,7 @@ class Timeline extends HookConsumerWidget {
                   PostRoute(
                     beginPage: index,
                     controller: controller,
+                    posts: posts,
                   ),
                 );
               },
