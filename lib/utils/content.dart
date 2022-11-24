@@ -1,5 +1,10 @@
-import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
+
+enum PostType {
+  video,
+  photo,
+  unsupported,
+}
 
 class Content {
   const Content({

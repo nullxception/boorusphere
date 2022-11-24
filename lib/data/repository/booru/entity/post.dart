@@ -1,22 +1,8 @@
-import 'package:boorusphere/data/repository/booru/entity/content.dart';
-import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 part 'post.freezed.dart';
 part 'post.g.dart';
-
-enum PostType {
-  video,
-  photo,
-  unsupported,
-}
-
-enum PostRating {
-  questionable,
-  explicit,
-  safe;
-}
 
 @freezed
 class Post with _$Post {
@@ -43,56 +29,6 @@ class Post with _$Post {
     @HiveField(18, defaultValue: []) @Default([]) List<String> tagsGeneral,
     @HiveField(19, defaultValue: []) @Default([]) List<String> tagsMeta,
   }) = _Post;
-  const Post._();
-
-  Content get content {
-    final sample = sampleFile.asContent();
-    final original = originalFile.asContent();
-    if (sample.isPhoto && original.isVideo || sample.isUnsupported) {
-      return original;
-    }
-
-    return sample;
-  }
-
-  PostRating get rating {
-    switch (rateValue) {
-      case 'explicit':
-      case 'e':
-        return PostRating.explicit;
-      case 'safe':
-      case 's':
-        return PostRating.safe;
-      default:
-        return PostRating.questionable;
-    }
-  }
-
-  PixelSize get originalSize => PixelSize(width: width, height: height);
-
-  PixelSize get sampleSize =>
-      PixelSize(width: sampleWidth, height: sampleHeight);
-
-  PixelSize get prescreensize =>
-      PixelSize(width: previewWidth, height: previewHeight);
-
-  double get aspectRatio {
-    if (prescreensize.hasPixels) {
-      return prescreensize.aspectRatio;
-    } else if (sampleSize.hasPixels) {
-      return sampleSize.aspectRatio;
-    } else {
-      return originalSize.aspectRatio;
-    }
-  }
-
-  bool get hasCategorizedTags => [
-        ...tagsArtist,
-        ...tagsCharacter,
-        ...tagsCopyright,
-        ...tagsGeneral,
-        ...tagsMeta
-      ].isNotEmpty;
 
   static const empty = Post();
 }

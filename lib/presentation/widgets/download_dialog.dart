@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/repository/booru/entity/pixel_size.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
@@ -8,7 +7,9 @@ import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/widgets/permissions.dart';
 import 'package:boorusphere/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/utils/extensions/imageprovider.dart';
+import 'package:boorusphere/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/utils/pixel_size.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
