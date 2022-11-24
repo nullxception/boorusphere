@@ -135,10 +135,8 @@ class _Content extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useMemoized(
-      TimelineController.new,
-      [posts.hashCode],
-    );
+    final controller = useTimelineController();
+
     return CustomScrollView(
       controller: controller.scrollController,
       slivers: [

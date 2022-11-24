@@ -81,8 +81,9 @@ class Timeline extends HookConsumerWidget {
                 context.router.push(
                   PostRoute(
                     beginPage: index,
-                    controller: controller,
                     posts: posts,
+                    onPop: controller.revealAt,
+                    onLoadMore: controller.onLoadMore,
                   ),
                 );
               },
