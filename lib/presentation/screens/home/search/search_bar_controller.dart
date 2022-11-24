@@ -4,10 +4,11 @@ import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final searchBarController = ChangeNotifierProvider((ref) {
-  final pageQuery =
-      ref.read(pageStateProvider.select((it) => it.data.option.query));
-  return SearchBarController(ref, pageQuery);
+final searchBarController = ChangeNotifierProvider.autoDispose((ref) {
+  final query = ref.watch(pageStateProvider.select(
+    (it) => it.data.option.query,
+  ));
+  return SearchBarController(ref, query);
 });
 
 class SearchBarController extends ChangeNotifier {
