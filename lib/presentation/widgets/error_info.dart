@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:boorusphere/data/entity/sphere_exception.dart';
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -49,9 +49,7 @@ class ErrorInfo extends HookWidget {
   }
 
   bool get traceable =>
-      stackTrace != null &&
-      error is! TimeoutException &&
-      error is! SphereException;
+      stackTrace != null && error is! TimeoutException && error is! BooruError;
 
   @override
   Widget build(BuildContext context) {

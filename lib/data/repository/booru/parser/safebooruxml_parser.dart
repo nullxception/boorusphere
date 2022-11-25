@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:boorusphere/data/entity/sphere_exception.dart';
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
@@ -23,7 +23,6 @@ class SafebooruXmlParser extends BooruParser {
   @override
   List<Post> parsePage(res) {
     super.parsePage(res);
-    final cantParse = SphereException(message: 'Cannot parse result');
 
     final entries = [];
     final xjson = Xml2Json();
@@ -31,7 +30,7 @@ class SafebooruXmlParser extends BooruParser {
 
     final fromGDataConv = jsonDecode(xjson.toGData());
     if (!fromGDataConv.values.first.keys.contains('post')) {
-      throw cantParse;
+      throw BooruError.noParser;
     }
 
     final posts = fromGDataConv.values.first['post'];
@@ -41,7 +40,7 @@ class SafebooruXmlParser extends BooruParser {
     } else if (posts is List) {
       entries.addAll(posts);
     } else {
-      throw cantParse;
+      throw BooruError.noParser;
     }
 
     final result = <Post>[];
