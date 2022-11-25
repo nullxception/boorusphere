@@ -32,7 +32,7 @@ class ContentSettingState extends _$ContentSettingState {
 
   Future<bool> toggleVideoPlayerMute() async {
     state = state.copyWith(videoMuted: !state.videoMuted);
-    await _repo.put(Setting.videoPlayerMuted, state);
+    await _repo.put(Setting.videoPlayerMuted, state.videoMuted);
     return state.videoMuted;
   }
 }
