@@ -18,12 +18,10 @@ class PostImage extends HookConsumerWidget {
   const PostImage({
     super.key,
     required this.post,
-    this.isFromHome = false,
     this.heroTag,
   });
 
   final Post post;
-  final bool isFromHome;
   final Object? heroTag;
 
   @override
@@ -44,12 +42,7 @@ class PostImage extends HookConsumerWidget {
         return;
       }
 
-      if (!isFromHome) {
-        blurNoticeAnimator.forward();
-        return;
-      }
-
-      Future.delayed(const Duration(milliseconds: 200), () {
+      Future(() {
         if (isMounted()) {
           blurNoticeAnimator.forward();
         }

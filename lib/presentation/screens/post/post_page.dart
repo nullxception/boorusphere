@@ -86,23 +86,13 @@ class PostPage extends HookConsumerWidget {
                     final Widget widget;
                     switch (post.content.type) {
                       case PostType.photo:
-                        widget = PostImage(
-                          post: post,
-                          isFromHome: index == beginPage,
-                          heroTag: heroTag,
-                        );
+                        widget = PostImage(post: post, heroTag: heroTag);
                         break;
                       case PostType.video:
-                        widget = PostVideo(
-                          post: post,
-                          heroTag: heroTag,
-                        );
+                        widget = PostVideo(post: post, heroTag: heroTag);
                         break;
                       default:
-                        widget = PostUnknown(
-                          post: post,
-                          heroTag: heroTag,
-                        );
+                        widget = PostUnknown(post: post, heroTag: heroTag);
                         break;
                     }
                     return HeroMode(
