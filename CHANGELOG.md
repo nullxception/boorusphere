@@ -1,4 +1,11 @@
 
+## 1.2.2
+* Add Indonesian language (Bahasa Indonesia)
+* A lot code architectural changes for more maintainable codebase
+* Settings: add option to switch language (currently only English and Indonesian)
+* Fix crash issues when tyring to update app due to missing permission
+* Small UI fixes and improvements
+
 ## 1.2.1
 * Fix tag suggestion for E621
 * Fix settings > server > show original content not saved properly
