@@ -29,7 +29,7 @@ class PostUnknown extends HookConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         Hero(
-          tag: heroTag ?? post.heroTag,
+          tag: heroTag ?? post.id,
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: blurExplicitPost && post.rating == PostRating.explicit,

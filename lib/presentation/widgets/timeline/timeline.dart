@@ -27,6 +27,10 @@ class Timeline extends HookConsumerWidget {
   final TimelineController controller;
   final Iterable<Post> posts;
 
+  String buildHeroTag(Post post) {
+    return '${controller.hashCode}-${post.serverId}@${post.id}';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
@@ -56,7 +60,7 @@ class Timeline extends HookConsumerWidget {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: GestureDetector(
               child: Hero(
-                tag: post.heroTag,
+                tag: buildHeroTag(post),
                 child: _Thumbnail(post: post),
                 flightShuttleBuilder: (flightContext, animation,
                     flightDirection, fromHeroContext, toHeroContext) {
@@ -82,6 +86,7 @@ class Timeline extends HookConsumerWidget {
                   PostRoute(
                     beginPage: index,
                     posts: posts,
+                    heroTagBuilder: buildHeroTag,
                     onPop: controller.revealAt,
                     onLoadMore: controller.onLoadMore,
                   ),

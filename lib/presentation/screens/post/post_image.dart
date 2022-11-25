@@ -19,12 +19,12 @@ class PostImage extends HookConsumerWidget {
     super.key,
     required this.post,
     this.isFromHome = false,
-    this.heroKey,
+    this.heroTag,
   });
 
   final Post post;
   final bool isFromHome;
-  final Object? heroKey;
+  final Object? heroTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,7 +68,7 @@ class PostImage extends HookConsumerWidget {
           if (isBlur.value)
             Hero(
               key: imageHeroKey,
-              tag: post.id,
+              tag: heroTag ?? post.id,
               child: PostPlaceholderImage(
                 post: post,
                 shouldBlur: true,
@@ -91,7 +91,7 @@ class PostImage extends HookConsumerWidget {
                   state: state,
                   child: Hero(
                     key: imageHeroKey,
-                    tag: heroKey ?? post.heroTag,
+                    tag: heroTag ?? post.id,
                     child: LoadState.completed == state.extendedImageLoadState
                         ? state.completedWidget
                         : PostPlaceholderImage(post: post, shouldBlur: false),

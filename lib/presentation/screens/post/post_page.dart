@@ -24,12 +24,14 @@ class PostPage extends HookConsumerWidget {
     super.key,
     required this.beginPage,
     required this.posts,
+    this.heroTagBuilder,
     this.onPop,
     this.onLoadMore,
   });
 
   final int beginPage;
   final Iterable<Post> posts;
+  final Object Function(Post)? heroTagBuilder;
   final void Function(int)? onPop;
   final void Function()? onLoadMore;
 
@@ -80,22 +82,26 @@ class PostPage extends HookConsumerWidget {
                   itemBuilder: (_, index) {
                     precachePosts(index, loadOriginal);
                     final post = posts.elementAt(index);
+                    final heroTag = heroTagBuilder?.call(post);
                     final Widget widget;
                     switch (post.content.type) {
                       case PostType.photo:
                         widget = PostImage(
                           post: post,
                           isFromHome: index == beginPage,
+                          heroTag: heroTag,
                         );
                         break;
                       case PostType.video:
                         widget = PostVideo(
                           post: post,
+                          heroTag: heroTag,
                         );
                         break;
                       default:
                         widget = PostUnknown(
                           post: post,
+                          heroTag: heroTag,
                         );
                         break;
                     }

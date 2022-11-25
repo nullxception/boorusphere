@@ -9,8 +9,6 @@ enum PostRating {
 }
 
 extension PostExt on Post {
-  String get heroTag => '$id@$serverId';
-
   bool get hasCategorizedTags => [
         ...tagsArtist,
         ...tagsCharacter,

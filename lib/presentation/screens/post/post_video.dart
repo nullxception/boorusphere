@@ -98,7 +98,7 @@ class PostVideo extends HookConsumerWidget {
     Widget asHero(Widget child) {
       return Hero(
         key: heroWidgetKey,
-        tag: heroTag ?? post.heroTag,
+        tag: heroTag ?? post.id,
         child: child,
       );
     }
