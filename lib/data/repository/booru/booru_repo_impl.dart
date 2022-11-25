@@ -35,8 +35,8 @@ class BooruRepoImpl implements BooruRepo {
   @override
   Future<BooruResult<List<String>>> getSuggestion(String query) async {
     final queries = query.toWordList();
-    final word = queries.isEmpty ? '' : queries.last;
-    final res = await networkSource.fetchSuggestion(server, query);
+    final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
+    final res = await networkSource.fetchSuggestion(server, word);
     try {
       final data = res
           .map((resp) {
