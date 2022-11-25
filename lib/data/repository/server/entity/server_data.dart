@@ -26,13 +26,11 @@ class ServerData with _$ServerData {
 
   String searchUrlOf(String query, int page, bool safeMode, int postLimit) {
     final tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
+    final safeTags =
+        safeMode && !homepage.contains('//safe') ? '$tags rating:safe' : tags;
 
     return '$homepage/$searchUrl'
-        .replaceAll(
-            '{tags}',
-            safeMode && !homepage.contains('//safe')
-                ? '$tags rating:safe'
-                : tags)
+        .replaceAll('{tags}', Uri.encodeComponent(safeTags))
         .replaceAll('{page-id}', '$page')
         .replaceAll('{post-limit}', '$postLimit');
   }
@@ -42,14 +40,15 @@ class ServerData with _$ServerData {
         .replaceAll('{post-limit}', '20')
         .replaceAll('{tag-limit}', '20');
 
+    final encq = Uri.encodeComponent(query);
     if (canSuggestTags) {
       if (query.isEmpty) {
         return [url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), '')];
       }
       return [
-        url.replaceAll(RegExp(r'[*%]{tag-part}'), query),
-        url.replaceAll(RegExp(r'{tag-part}[*%]'), query),
-        url.replaceAll('{tag-part}', query),
+        url.replaceAll(RegExp(r'[*%]{tag-part}'), encq),
+        url.replaceAll(RegExp(r'{tag-part}[*%]'), encq),
+        url.replaceAll('{tag-part}', encq),
       ];
     } else {
       throw Exception('no suggestion config for server $name');
