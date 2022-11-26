@@ -43,7 +43,10 @@ class _ScanResult {
 
 class ServerScanner {
   ServerScanner(this.client);
+
   final Dio client;
+
+  late CancelToken _cancelToken = CancelToken();
 
   Future<_ScanResult> _tryQuery(
     String host,
@@ -60,6 +63,7 @@ class ServerScanner {
       final res = await client.get(
         '$host/$test',
         options: Options(validateStatus: (it) => it == 200),
+        cancelToken: _cancelToken,
       );
       final origin =
           res.redirects.isNotEmpty ? res.redirects.last.location.origin : host;
@@ -94,6 +98,11 @@ class ServerScanner {
       ),
       type: type,
     );
+  }
+
+  void cancel() {
+    _cancelToken.cancel();
+    _cancelToken = CancelToken();
   }
 
   Future<ServerData> scan(String homeUrl, String apiUrl) async {

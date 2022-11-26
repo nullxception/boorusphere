@@ -98,37 +98,42 @@ class ServerEditorPage extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: ElevatedButton(
-                    onPressed: !isLoading.value
-                        ? () async {
-                            if (formKey.currentState?.validate() != true) {
-                              return;
-                            }
+                    onPressed: () async {
+                      if (formKey.currentState?.validate() != true) {
+                        return;
+                      }
 
-                            FocusScope.of(context).unfocus();
-                            data.value = ServerData.empty;
-                            isLoading.value = true;
-                            error.value = null;
-                            final homeAddr = scanHomepageText.text;
-                            final apiAddr = useApiAddr.value
-                                ? scanApiAddrText.text
-                                : homeAddr;
-                            try {
-                              final res = await scanner.scan(homeAddr, apiAddr);
-                              data.value = res.apiAddr == res.homepage
-                                  ? res.copyWith(apiAddr: '')
-                                  : res;
-                            } catch (e) {
-                              error.value = e;
-                              data.value = ServerData.empty.copyWith(
-                                id: homeAddr.toUri().host,
-                                homepage: homeAddr,
-                              );
-                            }
+                      FocusScope.of(context).unfocus();
+                      if (isLoading.value) {
+                        scanner.cancel();
+                        isLoading.value = false;
+                        return;
+                      }
 
-                            isLoading.value = false;
-                          }
-                        : null,
-                    child: Text(context.t.scan),
+                      data.value = ServerData.empty;
+                      isLoading.value = true;
+                      error.value = null;
+                      final homeAddr = scanHomepageText.text;
+                      final apiAddr =
+                          useApiAddr.value ? scanApiAddrText.text : homeAddr;
+                      try {
+                        final res = await scanner.scan(homeAddr, apiAddr);
+                        data.value = res.apiAddr == res.homepage
+                            ? res.copyWith(apiAddr: '')
+                            : res;
+                      } catch (e) {
+                        error.value = e;
+                        data.value = ServerData.empty.copyWith(
+                          id: homeAddr.toUri().host,
+                          homepage: homeAddr,
+                        );
+                      }
+
+                      isLoading.value = false;
+                    },
+                    child: Text(
+                      isLoading.value ? context.t.cancel : context.t.scan,
+                    ),
                   ),
                 ),
                 Visibility(
