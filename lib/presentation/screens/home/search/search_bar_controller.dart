@@ -39,7 +39,9 @@ class SearchBarController extends ChangeNotifier {
   }
 
   _fetch() {
-    ref.read(suggestionStateProvider.notifier).get(value);
+    if (isOpen) {
+      ref.read(suggestionStateProvider.notifier).get(value);
+    }
   }
 
   void submit(String value) {
