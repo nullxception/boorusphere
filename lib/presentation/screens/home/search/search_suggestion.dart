@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
@@ -9,6 +10,7 @@ import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -21,11 +23,21 @@ class SearchSuggestion extends HookConsumerWidget {
     final server = ref.watch(serverSettingStateProvider.select(
       (it) => it.active,
     ));
-    final suggestionState = ref.watch(suggestionStateProvider);
+    final suggestion = ref.watch(suggestionStateProvider);
     final history = ref.watch(filterHistoryProvider(searchBar.value));
     final isBlurAllowed = ref.watch(uiSettingStateProvider.select(
       (ui) => ui.blur,
     ));
+
+    useEffect(() {
+      Future(() {
+        if (searchBar.isOpen &&
+            suggestion is! LoadingFetchResult &&
+            suggestion.data.isEmpty) {
+          ref.read(suggestionStateProvider.notifier).get(searchBar.value);
+        }
+      });
+    }, [searchBar.isOpen]);
 
     return Container(
       color: context.theme.scaffoldBackgroundColor.withOpacity(
@@ -138,7 +150,7 @@ class SearchSuggestion extends HookConsumerWidget {
                       ),
                     ),
                   if (server.canSuggestTags)
-                    suggestionState.when(
+                    suggestion.when(
                       data: (data) {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
