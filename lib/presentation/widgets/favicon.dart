@@ -18,7 +18,7 @@ class Favicon extends StatelessWidget {
   final BoxShape? shape;
 
   String get faviconUrl {
-    final uri = url.asUri;
+    final uri = url.toUri();
     if (!uri.hasAuthority) return '';
     return 'https://icons.duckduckgo.com/ip3/${uri.host}.ico';
   }

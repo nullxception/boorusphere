@@ -6,24 +6,16 @@ extension StringExt on String {
     return lookupMimeType(fileName) ?? 'application/octet-stream';
   }
 
-  String get capitalized {
-    return isEmpty ? this : this[0].toUpperCase() + substring(1);
-  }
-
-  Uri get asUri {
-    return Uri.parse(this);
-  }
-
-  String get asDecoded {
-    return Uri.decodeFull(this);
-  }
-
   String get fileName {
-    return basename(asUri.path);
+    return basename(toUri().path);
   }
 
-  String get fileExtension {
-    return extension(asUri.path).replaceFirst('.', '');
+  String get fileExt {
+    return extension(toUri().path).replaceFirst('.', '');
+  }
+
+  Uri toUri() {
+    return Uri.parse(this);
   }
 
   List<String> toWordList() {

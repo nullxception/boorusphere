@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -20,5 +19,5 @@ class DownloadEntry with _$DownloadEntry {
 
   static const empty = DownloadEntry();
 
-  bool get isFileExists => File(destination.asDecoded).existsSync();
+  bool get isFileExists => File(Uri.decodeFull(destination)).existsSync();
 }

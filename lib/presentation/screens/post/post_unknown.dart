@@ -41,8 +41,7 @@ class PostUnknown extends HookConsumerWidget {
               32,
           child: QuickBar.action(
             title: Text(
-              context.t
-                  .unsupportedMedia(fileExt: post.content.url.fileExtension),
+              context.t.unsupportedMedia(fileExt: post.content.url.fileExt),
             ),
             actionTitle: Text(context.t.openExternally),
             onPressed: () {

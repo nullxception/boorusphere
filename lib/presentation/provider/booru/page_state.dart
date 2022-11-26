@@ -125,7 +125,7 @@ class PageState extends _$PageState {
         _skipCount = 0;
 
         final fromJar =
-            await ref.read(cookieJarProvider).loadForRequest(src.asUri);
+            await ref.read(cookieJarProvider).loadForRequest(src.toUri());
         if (lastHashCode != _repo.hashCode) return;
 
         _posts.addAll(newPosts);

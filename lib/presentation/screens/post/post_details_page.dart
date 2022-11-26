@@ -101,7 +101,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                       final size = snapshot.data ?? post.sampleSize;
                       return _LinkSubtitle(
                         post.sampleFile,
-                        label: '$size, ${post.sampleFile.fileExtension}',
+                        label: '$size, ${post.sampleFile.fileExt}',
                       );
                     },
                   ),
@@ -112,7 +112,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                 subtitle: _LinkSubtitle(
                   post.originalFile,
                   label:
-                      '${post.originalSize.toString()}, ${post.originalFile.fileExtension}',
+                      '${post.originalSize.toString()}, ${post.originalFile.fileExt}',
                 ),
                 trailing: _CopyButton(post.originalFile),
               ),

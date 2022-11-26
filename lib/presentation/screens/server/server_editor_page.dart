@@ -124,7 +124,7 @@ class ServerEditorPage extends HookConsumerWidget {
                             } catch (e) {
                               error.value = e;
                               data.value = ServerData.empty.copyWith(
-                                id: homeAddr.asUri.host,
+                                id: homeAddr.toUri().host,
                                 homepage: homeAddr,
                               );
                             }

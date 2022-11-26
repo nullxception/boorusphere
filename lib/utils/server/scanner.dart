@@ -82,7 +82,7 @@ class ServerScanner {
     );
 
     return tests.fold<ServerData>(
-      ServerData(id: homeUrl.asUri.host),
+      ServerData(id: homeUrl.toUri().host),
       (prev, it) {
         switch (it.type) {
           case ServerPayloadType.search:

@@ -88,7 +88,7 @@ class DownloadEntryView extends ConsumerWidget {
 
     return ListTile(
       title: Text(
-        entry.destination.fileName.asDecoded,
+        Uri.decodeFull(entry.destination.fileName),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),

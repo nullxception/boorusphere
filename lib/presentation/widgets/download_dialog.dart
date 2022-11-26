@@ -57,7 +57,7 @@ class DownloaderDialog extends HookConsumerWidget {
                         : Future.value(post.sampleSize),
                     builder: (context, snapshot) {
                       final size = snapshot.data ?? post.sampleSize;
-                      return Text('$size, ${post.sampleFile.fileExtension}');
+                      return Text('$size, ${post.sampleFile.fileExt}');
                     },
                   ),
                   leading: Icon(_getFileIcon(post.sampleFile)),
@@ -76,7 +76,7 @@ class DownloaderDialog extends HookConsumerWidget {
             ListTile(
               title: Text(context.t.fileOg),
               subtitle: Text(
-                  '${post.originalSize.toString()}, ${post.originalFile.fileExtension}'),
+                  '${post.originalSize.toString()}, ${post.originalFile.fileExt}'),
               leading: Icon(_getFileIcon(post.originalFile)),
               onTap: () async {
                 if (!await checkNotificationPermission(context)) {
