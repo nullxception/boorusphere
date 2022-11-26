@@ -73,11 +73,11 @@ class E621JsonParser extends BooruParser {
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
-            tagsArtist: List.from(tagsArtist),
-            tagsCharacter: List.from(tagsCharacter),
-            tagsCopyright: List.from(tagsCopyright),
-            tagsGeneral: tagsGeneral,
-            tagsMeta: tagsMeta,
+            tagsArtist: tagsArtist.map(Uri.decodeComponent).toList(),
+            tagsCharacter: tagsCharacter.map(Uri.decodeComponent).toList(),
+            tagsCopyright: tagsCopyright.map(Uri.decodeComponent).toList(),
+            tagsGeneral: tagsGeneral.map(Uri.decodeComponent).toList(),
+            tagsMeta: tagsMeta.map(Uri.decodeComponent).toList(),
           ),
         );
       }
