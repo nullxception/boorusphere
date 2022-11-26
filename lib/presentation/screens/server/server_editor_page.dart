@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -23,6 +22,7 @@ class ServerEditorPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(GlobalKey<FormState>.new);
+    final scanner = ref.watch(serverScannerProvider);
     final data = useState(server);
     final isLoading = useState(false);
     final useApiAddr = useState(false);
@@ -113,11 +113,7 @@ class ServerEditorPage extends HookConsumerWidget {
                                 ? scanApiAddrText.text
                                 : homeAddr;
                             try {
-                              final res = await ServerScanner.scan(
-                                ref.read(dioProvider),
-                                homeAddr,
-                                apiAddr,
-                              );
+                              final res = await scanner.scan(homeAddr, apiAddr);
                               data.value = res.apiAddr == res.homepage
                                   ? res.copyWith(apiAddr: '')
                                   : res;

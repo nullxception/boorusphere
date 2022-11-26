@@ -1,101 +1,123 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/entity/server_payload.dart';
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'scanner.g.dart';
+
+@riverpod
+ServerScanner serverScanner(ServerScannerRef ref) {
+  return ServerScanner(ref.watch(dioProvider));
+}
+
+enum _PayloadType {
+  search,
+  suggestion,
+  post,
+}
+
+class _Payload {
+  const _Payload({
+    required this.result,
+    required this.type,
+  });
+
+  final _ScanResult result;
+  final _PayloadType type;
+}
+
+class _ScanResult {
+  const _ScanResult({
+    this.origin = '',
+    this.query = '',
+  });
+
+  final String origin;
+  final String query;
+
+  static const empty = _ScanResult();
+}
 
 class ServerScanner {
-  static Future<ServerPayload> _testPayload(
-    Dio client,
+  ServerScanner(this.client);
+  final Dio client;
+
+  Future<_ScanResult> _tryQuery(
+    String host,
+    String query,
+    _PayloadType type,
+  ) async {
+    final test = query
+        .replaceAll('{tags}', '*')
+        .replaceAll('{tag-part}', 'a')
+        .replaceAll('{post-limit}', '3')
+        .replaceAll('{page-id}', '1')
+        .replaceAll('{post-id}', '100');
+    try {
+      final res = await client.get(
+        '$host/$test',
+        options: Options(validateStatus: (it) => it == 200),
+      );
+      final origin =
+          res.redirects.isNotEmpty ? res.redirects.last.location.origin : host;
+
+      if (type == _PayloadType.post) {
+        return _ScanResult(origin: origin, query: query);
+      }
+
+      final contentType = res.headers['content-type'] ?? [];
+      return _ScanResult(
+        origin: origin,
+        query: contentType.any((it) => it.contains('html')) ? '' : query,
+      );
+    } on DioError {
+      return _ScanResult.empty;
+    }
+  }
+
+  Future<_Payload> _test(
     String host,
     List<String> queries,
-    ServerPayloadType type,
+    _PayloadType type,
   ) async {
-    final result = await Future.wait<ServerScanResult>(
-      queries.map((query) async {
-        final test = query
-            .replaceAll('{tags}', '*')
-            .replaceAll('{tag-part}', 'a')
-            .replaceAll('{post-limit}', '3')
-            .replaceAll('{page-id}', '1')
-            .replaceAll('{post-id}', '100');
-        try {
-          final res = await client.get(
-            '$host/$test',
-            options: Options(validateStatus: (it) => it == 200),
-          );
-          final origin = res.redirects.isNotEmpty
-              ? res.redirects.last.location.origin
-              : host;
-
-          if (type == ServerPayloadType.post) {
-            return ServerScanResult(origin: origin, query: query);
-          }
-
-          final contentType = res.headers['content-type'] ?? [];
-          return ServerScanResult(
-            origin: origin,
-            query: contentType.any((it) => it.contains('html')) ? '' : query,
-          );
-        } on DioError {
-          return ServerScanResult.empty;
-        }
-      }),
+    final result = await Future.wait<_ScanResult>(
+      queries.map((q) => _tryQuery(host, q, type)),
     );
 
-    return ServerPayload(
+    return _Payload(
       result: result.firstWhere(
         (it) => it.query.isNotEmpty,
-        orElse: () => ServerScanResult(origin: host),
+        orElse: () => _ScanResult(origin: host),
       ),
       type: type,
     );
   }
 
-  static Future<ServerData> scan(
-    Dio client,
-    String homeUrl,
-    String apiUrl,
-  ) async {
-    final tests = await Future.wait(
-      [
-        _testPayload(
-          client,
-          apiUrl,
-          searchQueries,
-          ServerPayloadType.search,
-        ),
-        _testPayload(
-          client,
-          apiUrl,
-          suggestionQueries,
-          ServerPayloadType.suggestion,
-        ),
-        _testPayload(
-          client,
-          homeUrl,
-          webPostUrls,
-          ServerPayloadType.post,
-        ),
-      ],
-    );
+  Future<ServerData> scan(String homeUrl, String apiUrl) async {
+    final tests = await Future.wait([
+      _test(apiUrl, searchQueries, _PayloadType.search),
+      _test(apiUrl, suggestionQueries, _PayloadType.suggestion),
+      _test(homeUrl, webPostUrls, _PayloadType.post),
+    ]);
 
     return tests.fold<ServerData>(
       ServerData(id: homeUrl.toUri().host),
       (prev, it) {
         switch (it.type) {
-          case ServerPayloadType.search:
+          case _PayloadType.search:
             return prev.copyWith(
               searchUrl: it.result.query,
               apiAddr: it.result.origin,
             );
-          case ServerPayloadType.suggestion:
+          case _PayloadType.suggestion:
             return prev.copyWith(
               tagSuggestionUrl: it.result.query,
               apiAddr: it.result.origin,
             );
-          case ServerPayloadType.post:
+          case _PayloadType.post:
             return prev.copyWith(
               postUrl: it.result.query,
               homepage: it.result.origin,
