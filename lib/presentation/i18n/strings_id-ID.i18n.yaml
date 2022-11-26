@@ -57,6 +57,7 @@ page_status:
   no_result_for_query:
     one: "Tidak ada hasil yang ditemukan untuk ${query}"
     other: "Tidak ada lagi hasil untuk ${query}"
+  blocked: "'${query}' diblokir oleh Tags Blocker"
 
 suggestion:
   not_supported: "${server_name} tidak mendukung saran pencarian"

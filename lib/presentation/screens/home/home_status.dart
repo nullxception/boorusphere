@@ -73,6 +73,10 @@ class HomeStatus extends ConsumerWidget {
                         error: context.t.pageStatus
                             .noParser(serverName: server.name),
                       )
+                    else if (error == BooruError.tagsBlocked)
+                      ErrorInfo(
+                        error: context.t.pageStatus.blocked(query: query),
+                      )
                     else
                       ErrorInfo(error: error, stackTrace: stackTrace),
                     Row(

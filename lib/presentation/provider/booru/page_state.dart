@@ -97,6 +97,10 @@ class PageState extends _$PageState {
 
     if (_posts.isEmpty) _page = 0;
     lastQuery = state.data.option.query;
+    if (lastQuery.toWordList().any(_blockedTags.values.contains)) {
+      state = FetchResult.error(state.data, error: BooruError.tagsBlocked);
+      return;
+    }
 
     final lastHashCode = _repo.hashCode;
     final pageResult = await _repo.getPage(state.data.option, _page);

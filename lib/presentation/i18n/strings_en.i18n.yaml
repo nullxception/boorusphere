@@ -57,6 +57,7 @@ page_status:
   no_result_for_query:
     one: "No result found for ${query}"
     other: "No more result for ${query}"
+  blocked: "'${query}' is blocked by Tags Blocker"
 
 suggestion:
   not_supported: "${server_name} did not support search suggestion"
