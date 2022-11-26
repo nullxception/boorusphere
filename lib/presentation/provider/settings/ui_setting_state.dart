@@ -16,7 +16,7 @@ class UiSettingState extends _$UiSettingState {
   UiSetting build() {
     _repo = ref.read(settingRepoProvider);
     return UiSetting(
-      blur: _repo.get(Setting.uiBlur, or: false),
+      blur: _repo.get(Setting.uiBlur, or: true),
       grid: _repo.get(Setting.uiTimelineGrid, or: 1),
       locale: localeFromStr(_repo.get(Setting.uiLanguage, or: '')),
       themeMode: ThemeMode

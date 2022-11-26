@@ -7,7 +7,7 @@ part 'ui_setting.freezed.dart';
 @freezed
 class UiSetting with _$UiSetting {
   const factory UiSetting({
-    @Default(false) bool blur,
+    @Default(true) bool blur,
     @Default(1) int grid,
     AppLocale? locale,
     @Default(ThemeMode.system) ThemeMode themeMode,
