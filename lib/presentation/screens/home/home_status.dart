@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -14,8 +18,6 @@ class HomeStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
     final pageState = ref.watch(pageStateProvider);
 
     return Column(
@@ -46,70 +48,91 @@ class HomeStatus extends ConsumerWidget {
             );
           },
           error: (data, error, stackTrace, code) {
-            final query = data.option.query;
-            final size = data.posts.length;
-            return Center(
-              child: NoticeCard(
-                icon: const Icon(Icons.search),
-                margin: const EdgeInsets.all(16),
-                children: Column(
-                  children: [
-                    if (error == BooruError.httpError)
-                      ErrorInfo(
-                        error: context.t.pageStatus.httpError(
-                          n: code,
-                          serverName: server.name,
-                        ),
-                      )
-                    else if (error == BooruError.empty)
-                      ErrorInfo(
-                        error: query.isEmpty
-                            ? context.t.pageStatus.noResult(n: size)
-                            : context.t.pageStatus
-                                .noResultForQuery(n: size, query: query),
-                      )
-                    else if (error == BooruError.noParser)
-                      ErrorInfo(
-                        error: context.t.pageStatus
-                            .noParser(serverName: server.name),
-                      )
-                    else if (error == BooruError.tagsBlocked)
-                      ErrorInfo(
-                        error: context.t.pageStatus.blocked(query: query),
-                      )
-                    else
-                      ErrorInfo(error: error, stackTrace: stackTrace),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (error == BooruError.empty && data.option.safeMode)
-                          ElevatedButton(
-                            onPressed: () {
-                              ref
-                                  .read(serverSettingStateProvider.notifier)
-                                  .setSafeMode(false)
-                                  .then((value) => ref
-                                      .read(pageStateProvider.notifier)
-                                      .load());
-                            },
-                            style: ElevatedButton.styleFrom(elevation: 0),
-                            child: Text(context.t.disableSafeMode),
-                          ),
-                        ElevatedButton(
-                          onPressed: () =>
-                              ref.read(pageStateProvider.notifier).load(),
-                          style: ElevatedButton.styleFrom(elevation: 0),
-                          child: Text(context.t.retry),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            return _ErrorStatus(
+              data: data,
+              error: error,
+              stackTrace: stackTrace,
+              code: code,
             );
           },
         ),
       ],
+    );
+  }
+}
+
+class _ErrorStatus extends ConsumerWidget {
+  const _ErrorStatus({
+    required this.code,
+    required this.data,
+    this.error,
+    this.stackTrace,
+  });
+
+  final int code;
+  final PageData data;
+  final Object? error;
+  final StackTrace? stackTrace;
+
+  Object? buildError(BuildContext context, ServerData server) {
+    final t = context.t;
+    final q = data.option.query;
+    final size = data.posts.length;
+    switch (error) {
+      case BooruError.httpError:
+        return t.pageStatus.httpError(n: code, serverName: server.name);
+      case BooruError.empty:
+        return q.isEmpty
+            ? t.pageStatus.noResult(n: size)
+            : t.pageStatus.noResultForQuery(n: size, query: q);
+      case BooruError.noParser:
+        return t.pageStatus.noParser(serverName: server.name);
+      case BooruError.tagsBlocked:
+        return t.pageStatus.blocked(query: q);
+      default:
+        return error;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final server =
+        ref.watch(serverSettingStateProvider.select((it) => it.active));
+
+    return Center(
+      child: NoticeCard(
+        icon: const Icon(Icons.search),
+        margin: const EdgeInsets.all(16),
+        children: Column(
+          children: [
+            ErrorInfo(
+              error: buildError(context, server),
+              stackTrace: stackTrace,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (error == BooruError.empty && data.option.safeMode)
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(elevation: 0),
+                    onPressed: () async {
+                      await ref
+                          .read(serverSettingStateProvider.notifier)
+                          .setSafeMode(false);
+                      unawaited(ref.read(pageStateProvider.notifier).load());
+                    },
+                    child: Text(context.t.disableSafeMode),
+                  ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(elevation: 0),
+                  onPressed: () => ref.read(pageStateProvider.notifier).load(),
+                  child: Text(context.t.retry),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
