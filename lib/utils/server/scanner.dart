@@ -170,5 +170,6 @@ class ServerScanner {
     'posts/{post-id}',
     'index.php?page=post&s=view&id={post-id}',
     'post/show/{post-id}',
+    'post/view/{post-id}',
   ];
 }
