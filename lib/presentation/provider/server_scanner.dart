@@ -6,7 +6,7 @@ import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'scanner.g.dart';
+part 'server_scanner.g.dart';
 
 @riverpod
 ServerScanner serverScanner(ServerScannerRef ref) {
@@ -147,29 +147,33 @@ class ServerScanner {
   }
 
   static const searchQueries = [
+    // JSON
     'post.json?tags={tags}&page={page-id}&limit={post-limit}',
     'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
     'post/index.json?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
+    // XML
+    'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}',
     'post/index.xml?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
-    'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}'
   ];
 
   static const suggestionQueries = [
+    // JSON
     'tag.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
     'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}',
-    'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
+    'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}&json=1',
+    // XML
+    'api/internal/autocomplete?s={tag-part}',
     'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
-    'api/internal/autocomplete?s={tag-part}',
   ];
 
   static const webPostUrls = [
     'posts/{post-id}',
-    'index.php?page=post&s=view&id={post-id}',
     'post/show/{post-id}',
     'post/view/{post-id}',
+    'index.php?page=post&s=view&id={post-id}',
   ];
 }
