@@ -1,4 +1,10 @@
 
+## 1.2.3
+* Add support for Shimmie2-powered boorus
+* Fix tags encoding issues
+* Fix searching tag that has been blocked resulting in endless loading
+* Other small bugfix and improvement on server scanner and parser
+
 ## 1.2.2
 * Add Indonesian language (Bahasa Indonesia)
 * A lot code architectural changes for more maintainable codebase
