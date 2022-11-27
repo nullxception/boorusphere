@@ -17,6 +17,8 @@ class GelbooruXmlParser extends BooruParser {
     final rawString = data.toString();
     return data is String &&
         rawString.contains('<?xml') &&
+        rawString.contains('<posts ') &&
+        rawString.contains('<post>') &&
         rawString.contains('<file_url>');
   }
 
@@ -100,7 +102,8 @@ class GelbooruXmlParser extends BooruParser {
     final rawString = data.toString();
     return data is String &&
         rawString.contains('<?xml') &&
-        rawString.contains('<tag') &&
+        rawString.contains('<tags') &&
+        rawString.contains('<tag>') &&
         rawString.contains('<name>');
   }
 
