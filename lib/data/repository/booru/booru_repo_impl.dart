@@ -10,6 +10,7 @@ import 'package:boorusphere/data/repository/booru/parser/gelboorujson_parser.dar
 import 'package:boorusphere/data/repository/booru/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -30,6 +31,7 @@ class BooruRepoImpl implements BooruRepo {
         GelbooruJsonParser(server),
         E621JsonParser(server),
         SafebooruXmlParser(server),
+        ShimmieXmlParser(server),
       ];
 
   @override

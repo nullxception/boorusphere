@@ -143,6 +143,7 @@ class ServerScanner {
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
     'post/index.xml?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
+    'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}'
   ];
 
   static const suggestionQueries = [
