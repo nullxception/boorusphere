@@ -65,8 +65,10 @@ class ServerScanner {
         options: Options(validateStatus: (it) => it == 200),
         cancelToken: _cancelToken,
       );
-      final origin =
-          res.redirects.isNotEmpty ? res.redirects.last.location.origin : host;
+
+      final origin = res.redirects.isNotEmpty && res.realUri.hasAuthority
+          ? res.realUri.origin
+          : host;
 
       if (type == _PayloadType.post) {
         return _ScanResult(origin: origin, query: query);
