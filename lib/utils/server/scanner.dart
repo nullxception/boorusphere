@@ -75,6 +75,11 @@ class ServerScanner {
       }
 
       final contentType = res.headers['content-type'] ?? [];
+      if (contentType.any((it) => it.contains(RegExp(r'(json|xml)'))) &&
+          res.data.toString().isEmpty) {
+        return _ScanResult.empty;
+      }
+
       return _ScanResult(
         origin: origin,
         query: contentType.any((it) => it.contains('html')) ? '' : query,
