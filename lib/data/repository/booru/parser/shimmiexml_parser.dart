@@ -97,6 +97,17 @@ class ShimmieXmlParser extends BooruParser {
 
   @override
   bool canParseSuggestion(Response res) {
-    return false;
+    final data = res.data;
+    return data is Map<String, dynamic> && data.values.any((it) => it is num);
+  }
+
+  @override
+  Set<String> parseSuggestion(Response res) {
+    super.parseSuggestion(res);
+    Map<String, num> counted = Map.from(res.data);
+    return counted.entries
+        .where((element) => element.value > 0)
+        .map((e) => e.key)
+        .toSet();
   }
 }

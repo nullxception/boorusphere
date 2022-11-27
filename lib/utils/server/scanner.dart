@@ -153,6 +153,7 @@ class ServerScanner {
     'index.php?page=dapi&s=tag&q=index&json=1&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
     'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
+    'api/internal/autocomplete?s={tag-part}',
   ];
 
   static const webPostUrls = [
