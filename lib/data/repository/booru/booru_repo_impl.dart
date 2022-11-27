@@ -95,9 +95,6 @@ class BooruRepoImpl implements BooruRepo {
     final res = await networkSource.fetchPage(url);
     if (res.statusCode != 200) {
       return BooruResult.error(res, error: BooruError.httpError);
-    } else if (!res.data.toString().contains(RegExp('https?'))) {
-      // no url founds in the document means no image(s) available to display
-      return BooruResult.data([], src: url);
     }
 
     try {
