@@ -112,7 +112,7 @@ class _ErrorStatus extends ConsumerWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (error == BooruError.empty && data.option.safeMode)
+                if (data.option.safeMode)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(elevation: 0),
                     onPressed: () async {
