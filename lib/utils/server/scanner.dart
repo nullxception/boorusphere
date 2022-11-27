@@ -108,14 +108,17 @@ class ServerScanner {
   }
 
   Future<ServerData> scan(String homeUrl, String apiUrl) async {
+    final api = apiUrl.replaceFirst(RegExp(r'/$'), '');
+    final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
+
     final tests = await Future.wait([
-      _test(apiUrl, searchQueries, _PayloadType.search),
-      _test(apiUrl, suggestionQueries, _PayloadType.suggestion),
-      _test(homeUrl, webPostUrls, _PayloadType.post),
+      _test(api, searchQueries, _PayloadType.search),
+      _test(api, suggestionQueries, _PayloadType.suggestion),
+      _test(home, webPostUrls, _PayloadType.post),
     ]);
 
     return tests.fold<ServerData>(
-      ServerData(id: homeUrl.toUri().host),
+      ServerData(id: home.toUri().host),
       (prev, it) {
         switch (it.type) {
           case _PayloadType.search:
