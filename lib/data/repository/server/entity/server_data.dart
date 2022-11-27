@@ -35,7 +35,7 @@ class ServerData with _$ServerData {
         .replaceAll('{post-limit}', '$postLimit');
   }
 
-  List<String> suggestionUrlsOf(String query) {
+  Iterable<String> suggestionUrlsOf(String query) {
     final url = '$homepage/$tagSuggestionUrl'
         .replaceAll('{post-limit}', '20')
         .replaceAll('{tag-limit}', '20');
@@ -49,7 +49,7 @@ class ServerData with _$ServerData {
         url.replaceAll(RegExp(r'[*%]{tag-part}'), encq),
         url.replaceAll(RegExp(r'{tag-part}[*%]'), encq),
         url.replaceAll('{tag-part}', encq),
-      ];
+      ].where((it) => !it.contains('{tag-part}')).toSet();
     } else {
       throw Exception('no suggestion config for server $name');
     }
