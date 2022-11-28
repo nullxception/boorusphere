@@ -1,4 +1,7 @@
 
+## 1.2.4
+* Fix parser error when post(s) contains a tag ended with percent
+
 ## 1.2.3
 * Add support for Shimmie2-powered boorus
 * Fix tags encoding issues
