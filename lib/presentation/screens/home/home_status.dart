@@ -85,8 +85,6 @@ class _ErrorStatus extends ConsumerWidget {
         return q.isEmpty
             ? t.pageStatus.noResult(n: size)
             : t.pageStatus.noResultForQuery(n: size, query: q);
-      case BooruError.noParser:
-        return t.pageStatus.noParser(serverName: server.name);
       case BooruError.tagsBlocked:
         return t.pageStatus.blocked(query: q);
       default:

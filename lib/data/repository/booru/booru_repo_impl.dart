@@ -101,11 +101,16 @@ class BooruRepoImpl implements BooruRepo {
 
     try {
       return BooruResult.data(
-        parser.firstWhere((it) => it.canParsePage(res)).parsePage(res),
+        parser.firstWhere(
+          (it) => it.canParsePage(res),
+          orElse: () {
+            throw BooruError.empty;
+          },
+        ).parsePage(res),
         src: url,
       );
-    } on StateError {
-      return BooruResult.error(res, error: BooruError.noParser);
+    } on BooruError catch (e) {
+      return BooruResult.error(res, error: e);
     }
   }
 }

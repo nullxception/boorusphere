@@ -32,7 +32,7 @@ class GelbooruXmlParser extends BooruParser {
 
     final fromParkerConv = jsonDecode(xjson.toParker());
     if (!fromParkerConv.values.first.keys.contains('post')) {
-      throw BooruError.noParser;
+      throw BooruError.empty;
     }
 
     final posts = fromParkerConv.values.first['post'];
@@ -42,7 +42,7 @@ class GelbooruXmlParser extends BooruParser {
     } else if (posts is List) {
       entries.addAll(posts);
     } else {
-      throw BooruError.noParser;
+      throw BooruError.empty;
     }
 
     final result = <Post>[];

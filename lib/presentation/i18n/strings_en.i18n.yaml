@@ -47,7 +47,6 @@ rating:
   safe: "Safe"
 
 page_status:
-  no_parser: "Cannot parse result from ${server_name}"
   http_error:
     zero: "Cannot get result from ${server_name}"
     other: "Cannot get result from ${server_name} (HTTP ${n})"

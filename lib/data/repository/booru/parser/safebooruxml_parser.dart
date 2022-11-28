@@ -32,7 +32,7 @@ class SafebooruXmlParser extends BooruParser {
 
     final fromGDataConv = jsonDecode(xjson.toGData());
     if (!fromGDataConv.values.first.keys.contains('post')) {
-      throw BooruError.noParser;
+      throw BooruError.empty;
     }
 
     final posts = fromGDataConv.values.first['post'];
@@ -42,7 +42,7 @@ class SafebooruXmlParser extends BooruParser {
     } else if (posts is List) {
       entries.addAll(posts);
     } else {
-      throw BooruError.noParser;
+      throw BooruError.empty;
     }
 
     final result = <Post>[];

@@ -31,7 +31,7 @@ class ShimmieXmlParser extends BooruParser {
     final conv = jsonDecode(xjson.toGData());
 
     if (!conv.values.first.keys.contains('tag')) {
-      throw BooruError.noParser;
+      throw BooruError.empty;
     }
 
     final posts = conv.values.first['tag'];
@@ -41,7 +41,7 @@ class ShimmieXmlParser extends BooruParser {
     } else if (posts is List) {
       entries.addAll(posts);
     } else {
-      throw BooruError.noParser;
+      throw BooruError.empty;
     }
 
     final result = <Post>[];

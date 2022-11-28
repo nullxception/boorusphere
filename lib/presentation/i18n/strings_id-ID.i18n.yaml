@@ -47,7 +47,6 @@ rating:
   safe: "Aman"
 
 page_status:
-  no_parser: "Tidak dapat mengurai hasil dari ${server_name}"
   http_error:
     zero: "Tidak bisa mendapatkan hasil dari ${server_name}"
     other: "Tidak dapat memperoleh hasil dari ${server_name} (HTTP ${n})"
