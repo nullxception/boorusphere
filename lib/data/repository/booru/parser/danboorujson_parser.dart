@@ -61,11 +61,11 @@ class DanbooruJsonParser extends BooruParser {
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
-            tagsArtist: tagsArtist.map(Uri.decodeComponent).toList(),
-            tagsCharacter: tagsCharacter.map(Uri.decodeComponent).toList(),
-            tagsCopyright: tagsCopyright.map(Uri.decodeComponent).toList(),
-            tagsGeneral: tagsGeneral.map(Uri.decodeComponent).toList(),
-            tagsMeta: tagsMeta.map(Uri.decodeComponent).toList(),
+            tagsArtist: tagsArtist.map(decodeTags).toList(),
+            tagsCharacter: tagsCharacter.map(decodeTags).toList(),
+            tagsCopyright: tagsCopyright.map(decodeTags).toList(),
+            tagsGeneral: tagsGeneral.map(decodeTags).toList(),
+            tagsMeta: tagsMeta.map(decodeTags).toList(),
           ),
         );
       }
@@ -91,7 +91,7 @@ class DanbooruJsonParser extends BooruParser {
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
       final postCount = pick(entry, 'post_count').asIntOrNull() ?? 0;
-      if (postCount > 0) result.add(Uri.decodeComponent(tag));
+      if (postCount > 0) result.add(decodeTags(tag));
     }
 
     return result;

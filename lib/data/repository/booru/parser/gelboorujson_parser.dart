@@ -49,7 +49,7 @@ class GelbooruJsonParser extends BooruParser {
             originalFile: normalizeUrl(originalFile),
             sampleFile: normalizeUrl(sampleFile),
             previewFile: normalizeUrl(previewFile),
-            tags: tags.map(Uri.decodeComponent).toList(),
+            tags: tags.map(decodeTags).toList(),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
@@ -84,7 +84,7 @@ class GelbooruJsonParser extends BooruParser {
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
       final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
-      if (postCount > 0) result.add(Uri.decodeComponent(tag));
+      if (postCount > 0) result.add(decodeTags(tag));
     }
 
     return result;

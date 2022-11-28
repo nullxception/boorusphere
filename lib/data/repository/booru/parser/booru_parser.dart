@@ -45,4 +45,12 @@ abstract class BooruParser {
       return '';
     }
   }
+
+  String decodeTags(String str) {
+    try {
+      return Uri.decodeQueryComponent(str);
+    } on ArgumentError {
+      return str;
+    }
+  }
 }

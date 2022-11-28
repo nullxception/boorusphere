@@ -77,7 +77,7 @@ class ShimmieXmlParser extends BooruParser {
             originalFile: normalizeUrl(originalFile),
             sampleFile: normalizeUrl(sampleFile),
             previewFile: normalizeUrl(previewFile),
-            tags: tags.map(Uri.decodeComponent).toList(),
+            tags: tags.map(decodeTags).toList(),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
