@@ -141,7 +141,7 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _ThemeSwitcherButton extends HookConsumerWidget {
+class _ThemeSwitcherButton extends ConsumerWidget {
   IconData themeIconOf(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.dark:
@@ -166,7 +166,7 @@ class _ThemeSwitcherButton extends HookConsumerWidget {
   }
 }
 
-class AppVersionTile extends HookConsumerWidget {
+class AppVersionTile extends ConsumerWidget {
   const AppVersionTile({super.key});
 
   @override
@@ -224,7 +224,7 @@ class AppVersionTile extends HookConsumerWidget {
   }
 }
 
-class _BackToHomeTile extends HookConsumerWidget {
+class _BackToHomeTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final query =
@@ -245,7 +245,7 @@ class _BackToHomeTile extends HookConsumerWidget {
   }
 }
 
-class _ServerSelection extends HookConsumerWidget {
+class _ServerSelection extends ConsumerWidget {
   const _ServerSelection();
 
   @override

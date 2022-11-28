@@ -49,7 +49,7 @@ class _EmptyView extends StatelessWidget {
   }
 }
 
-class _Pager extends HookConsumerWidget {
+class _Pager extends ConsumerWidget {
   const _Pager(this.posts);
 
   final Iterable<Post> posts;
@@ -57,7 +57,6 @@ class _Pager extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverDataState = ref.watch(serverDataStateProvider);
-
     final pages = posts
         .groupListsBy(
           (e) => serverDataState.getById(e.serverId, or: ServerData.empty),

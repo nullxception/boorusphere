@@ -36,7 +36,7 @@ class LicenseData {
   }
 }
 
-class LicensesPage extends HookConsumerWidget {
+class LicensesPage extends ConsumerWidget {
   const LicensesPage({super.key});
 
   @override

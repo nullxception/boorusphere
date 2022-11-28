@@ -123,11 +123,8 @@ class PostFavoriteButton extends HookConsumerWidget {
   }
 }
 
-class PostDownloadButton extends HookConsumerWidget {
-  const PostDownloadButton({
-    super.key,
-    required this.post,
-  });
+class PostDownloadButton extends ConsumerWidget {
+  const PostDownloadButton({super.key, required this.post});
 
   final Post post;
 

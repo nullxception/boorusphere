@@ -16,7 +16,7 @@ class LanguageSettingsPage extends StatelessWidget {
   }
 }
 
-class _Content extends HookConsumerWidget {
+class _Content extends ConsumerWidget {
   const _Content();
 
   @override

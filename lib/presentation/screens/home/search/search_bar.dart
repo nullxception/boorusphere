@@ -172,7 +172,7 @@ class _CollapsibleButton extends StatelessWidget {
   }
 }
 
-class _LeadingButton extends HookConsumerWidget {
+class _LeadingButton extends ConsumerWidget {
   const _LeadingButton({this.collapsed = false});
 
   final bool collapsed;

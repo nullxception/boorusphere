@@ -15,7 +15,6 @@ class DownloadsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-
     final downloadState = ref.watch(downloadStateProvider);
     final groupByServer = ref
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));

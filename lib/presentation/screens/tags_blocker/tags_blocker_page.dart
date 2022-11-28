@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TagsBlockerPage extends HookConsumerWidget {
+class TagsBlockerPage extends StatelessWidget {
   const TagsBlockerPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.t.tagsBlocker.title)),
       body: const SafeArea(

@@ -7,7 +7,7 @@ import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ServerPage extends HookConsumerWidget {
+class ServerPage extends ConsumerWidget {
   const ServerPage({super.key});
 
   @override

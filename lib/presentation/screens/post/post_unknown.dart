@@ -10,12 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class PostUnknown extends HookConsumerWidget {
-  const PostUnknown({
-    super.key,
-    required this.post,
-    this.heroTag,
-  });
+class PostUnknown extends ConsumerWidget {
+  const PostUnknown({super.key, required this.post, this.heroTag});
 
   final Post post;
   final Object? heroTag;

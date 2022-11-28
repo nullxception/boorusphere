@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class DownloaderDialog extends HookConsumerWidget {
+class DownloaderDialog extends ConsumerWidget {
   const DownloaderDialog({
     super.key,
     required this.post,

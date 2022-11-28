@@ -17,7 +17,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class AboutPage extends HookConsumerWidget {
+class AboutPage extends ConsumerWidget {
   const AboutPage({super.key});
 
   @override
@@ -132,20 +132,20 @@ class AboutPage extends HookConsumerWidget {
   }
 }
 
-class _Updater extends HookConsumerWidget {
+class _Updater extends StatelessWidget {
   const _Updater(this.data);
 
   final AppVersion data;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(context.t.updater.onNewVersion),
         ),
-        _Downloader(version: data),
+        _Downloader(data),
         ElevatedButton(
           onPressed: () {
             context.router.push(
@@ -160,10 +160,8 @@ class _Updater extends HookConsumerWidget {
   }
 }
 
-class _Downloader extends HookConsumerWidget {
-  const _Downloader({
-    required this.version,
-  });
+class _Downloader extends ConsumerWidget {
+  const _Downloader(this.version);
 
   final AppVersion version;
 

@@ -17,7 +17,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-class Timeline extends HookConsumerWidget {
+class Timeline extends ConsumerWidget {
   const Timeline({
     super.key,
     required this.controller,
@@ -100,7 +100,7 @@ class Timeline extends HookConsumerWidget {
   }
 }
 
-class _Thumbnail extends HookConsumerWidget {
+class _Thumbnail extends ConsumerWidget {
   const _Thumbnail({required this.post});
   final Post post;
 
