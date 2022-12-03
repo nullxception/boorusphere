@@ -1,5 +1,6 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,8 @@ class _TagsBlockerContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final blockedTags = ref.watch(blockedTagsStateProvider);
     final controller = useTextEditingController();
+    final imeIncognito =
+        ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
 
     return ListView(
       children: [
@@ -36,6 +39,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
               Text(context.t.tagsBlocker.desc),
               TextField(
                 controller: controller,
+                enableIMEPersonalizedLearning: !imeIncognito,
                 onSubmitted: (value) {
                   final values = value.toWordList();
                   ref.read(blockedTagsStateProvider.notifier).pushAll(values);

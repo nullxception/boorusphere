@@ -22,6 +22,8 @@ class SearchBar extends HookConsumerWidget {
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
     final isBlurAllowed =
         ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
+    final imeIncognito =
+        ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final server =
         ref.watch(serverSettingStateProvider.select((it) => it.active));
     final onScrolling = useCallback(() {
@@ -96,6 +98,7 @@ class SearchBar extends HookConsumerWidget {
                   Expanded(
                     child: TextField(
                       autofocus: true,
+                      enableIMEPersonalizedLearning: !imeIncognito,
                       controller: searchBar.textEditingController,
                       decoration: InputDecoration(
                         border: InputBorder.none,

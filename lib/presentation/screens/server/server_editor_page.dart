@@ -3,6 +3,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/server_scanner.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
@@ -23,6 +24,8 @@ class ServerEditorPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final scanner = ref.watch(serverScannerProvider);
+    final imeIncognito =
+        ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final data = useState(server);
     final isLoading = useState(false);
     final useApiAddr = useState(false);
@@ -88,6 +91,7 @@ class ServerEditorPage extends HookConsumerWidget {
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: TextFormField(
                       controller: scanApiAddrText,
+                      enableIMEPersonalizedLearning: !imeIncognito,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(),
                         labelText: context.t.servers.apiAddrHint,

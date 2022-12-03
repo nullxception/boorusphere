@@ -12,5 +12,6 @@ class UiSetting with _$UiSetting {
     AppLocale? locale,
     @Default(ThemeMode.system) ThemeMode themeMode,
     @Default(false) bool midnightMode,
+    @Default(false) bool imeIncognito,
   }) = _UiSetting;
 }

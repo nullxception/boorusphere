@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class ServerDetails extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
+    final imeIncognito =
+        ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final cName = useTextEditingController(text: data.id);
     final cAlias = useTextEditingController(
@@ -53,6 +56,7 @@ class ServerDetails extends HookConsumerWidget {
                 if (!isEditing)
                   TextFormField(
                     controller: cName,
+                    enableIMEPersonalizedLearning: !imeIncognito,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Name',
@@ -70,6 +74,7 @@ class ServerDetails extends HookConsumerWidget {
                 else
                   TextFormField(
                     controller: cAlias,
+                    enableIMEPersonalizedLearning: !imeIncognito,
                     decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
                       labelText: context.t.servers.alias,
@@ -77,6 +82,7 @@ class ServerDetails extends HookConsumerWidget {
                   ),
                 TextFormField(
                   controller: cHomepage,
+                  enableIMEPersonalizedLearning: !imeIncognito,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: context.t.servers.homepage,
@@ -84,6 +90,7 @@ class ServerDetails extends HookConsumerWidget {
                 ),
                 TextFormField(
                   controller: cApiAddr,
+                  enableIMEPersonalizedLearning: !imeIncognito,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: context.t.servers.apiAddr,
@@ -119,6 +126,7 @@ class ServerDetails extends HookConsumerWidget {
                   minLines: 1,
                   maxLines: 3,
                   controller: cSearchUrl,
+                  enableIMEPersonalizedLearning: !imeIncognito,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: context.t.serverQuery.search,
@@ -128,6 +136,7 @@ class ServerDetails extends HookConsumerWidget {
                   minLines: 1,
                   maxLines: 3,
                   controller: cSuggestUrl,
+                  enableIMEPersonalizedLearning: !imeIncognito,
                   decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
                       labelText: context.t.serverQuery.suggestion),
@@ -136,6 +145,7 @@ class ServerDetails extends HookConsumerWidget {
                   minLines: 1,
                   maxLines: 3,
                   controller: cPostUrl,
+                  enableIMEPersonalizedLearning: !imeIncognito,
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: context.t.serverQuery.post,

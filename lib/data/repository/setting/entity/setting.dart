@@ -10,5 +10,6 @@ enum Setting {
   uiThemeMode,
   uiTimelineGrid,
   uiLanguage,
-  videoPlayerMuted;
+  videoPlayerMuted,
+  imeIncognito;
 }

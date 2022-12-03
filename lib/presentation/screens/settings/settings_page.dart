@@ -42,6 +42,7 @@ class SettingsPage extends StatelessWidget {
               children: const [
                 _BlurContent(),
                 _StrictSafeMode(),
+                _ImeIncognito(),
               ],
             ),
             _Section(
@@ -211,6 +212,25 @@ class _StrictSafeMode extends ConsumerWidget {
       value: ref.watch(serverSettingStateProvider.select((it) => it.safeMode)),
       onChanged: (value) {
         ref.read(serverSettingStateProvider.notifier).setSafeMode(value);
+      },
+    );
+  }
+}
+
+class _ImeIncognito extends ConsumerWidget {
+  const _ImeIncognito();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile(
+      title: Text(context.t.settings.imeIncognito.title),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(context.t.settings.imeIncognito.desc),
+      ),
+      value: ref.watch(uiSettingStateProvider.select((ui) => ui.imeIncognito)),
+      onChanged: (value) {
+        ref.read(uiSettingStateProvider.notifier).setimeIncognito(value);
       },
     );
   }

@@ -176,6 +176,9 @@ settings:
   strict_safe_mode:
     title: "Strict Safe Mode"
     desc: "Only fetch content that rated as 'safe'. Note that rated as 'safe' doesn't guarantee safe-for-work"
+  ime_incognito:
+    title: "Incognito Keyboard"
+    desc: "Enable incognito-mode for keyboard if supported."
   load_og:
     title: "Display original content"
     desc: "Load original file instead of the sample when opening the post"
