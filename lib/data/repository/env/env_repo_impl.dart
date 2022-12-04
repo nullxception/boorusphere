@@ -1,0 +1,16 @@
+import 'package:boorusphere/domain/repository/env_repo.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info/package_info.dart';
+
+class EnvRepoImpl implements EnvRepo {
+  EnvRepoImpl({required this.packageInfo, required this.androidInfo});
+
+  @override
+  final PackageInfo packageInfo;
+
+  @override
+  final AndroidDeviceInfo androidInfo;
+
+  @override
+  int get sdkVersion => androidInfo.version.sdkInt;
+}

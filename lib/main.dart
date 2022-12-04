@@ -9,11 +9,10 @@ import 'package:boorusphere/data/repository/search_history/entity/search_history
 import 'package:boorusphere/data/repository/server/datasource/server_local_source.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/boorusphere.dart';
 import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/device_prop.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -38,13 +37,12 @@ void main() async {
     DownloaderSource.prepare(),
   ]);
 
-  final deviceProp = DeviceProp(await DeviceInfoPlugin().androidInfo);
   LocaleHelper.useFallbackPluralResolver([AppLocale.idId]);
 
   runApp(
     ProviderScope(
       overrides: [
-        devicePropProvider.overrideWithValue(deviceProp),
+        await envRepoProvider.initialize(),
       ],
       child: TranslationProvider(child: const Boorusphere()),
     ),

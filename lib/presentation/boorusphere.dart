@@ -1,6 +1,6 @@
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/device_prop.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/flutter_downloader_handle.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
@@ -24,7 +24,7 @@ class Boorusphere extends HookConsumerWidget {
         ref.watch(uiSettingStateProvider.select((ui) => ui.themeMode));
     final isMidnight =
         ref.watch(uiSettingStateProvider.select((ui) => ui.midnightMode));
-    final deviceProp = ref.watch(devicePropProvider);
+    final envRepo = ref.watch(envRepoProvider);
     final router = useMemoized(AppRouter.new);
 
     useEffect(() {
@@ -40,7 +40,7 @@ class Boorusphere extends HookConsumerWidget {
       });
     }, []);
 
-    if (deviceProp.sdkVersion > 28) {
+    if (envRepo.sdkVersion > 28) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
 
