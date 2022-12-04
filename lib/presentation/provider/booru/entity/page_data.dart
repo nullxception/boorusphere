@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,6 +9,5 @@ class PageData with _$PageData {
   const factory PageData({
     @Default(PageOption(clear: true)) PageOption option,
     @Default(<Post>[]) List<Post> posts,
-    @Default(<Cookie>[]) List<Cookie> cookies,
   }) = _PageData;
 }

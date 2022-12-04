@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
@@ -28,28 +30,24 @@ class _PrecachePostsHook extends Hook<_Precacher> {
 class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
   _PrecachePostsState();
 
-  WidgetRef get ref => hook.ref;
-  Iterable<Post> get posts => hook.posts;
-
   bool _mounted = true;
 
-  void _precache(
+  Future<void> _precache(
     Post post,
     bool displayOriginal,
-    Map<String, String>? headers,
-  ) {
+  ) async {
     if (!post.content.isPhoto || !_mounted) return;
-    precacheImage(
+    unawaited(precacheImage(
       ExtendedNetworkImageProvider(
         displayOriginal ? post.originalFile : post.content.url,
-        headers: headers,
+        headers: await post.getHeaders(hook.ref),
         // params below follows the default value on
         // the ExtendedImage.network() factory
         cache: true,
         retries: 3,
       ),
       context,
-    );
+    ));
   }
 
   @override
@@ -58,15 +56,14 @@ class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
 
         final next = i + 1;
         final prev = i - 1;
+        final posts = hook.posts;
 
         if (prev >= 0) {
-          _precache(posts.elementAt(prev), showOG,
-              posts.elementAt(prev).getHeaders(ref));
+          _precache(posts.elementAt(prev), showOG);
         }
 
         if (next < posts.length) {
-          _precache(posts.elementAt(next), showOG,
-              posts.elementAt(next).getHeaders(ref));
+          _precache(posts.elementAt(next), showOG);
         }
       };
 

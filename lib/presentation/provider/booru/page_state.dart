@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
@@ -26,13 +24,12 @@ class PageState extends _$PageState {
   late int _page;
   late Map<int, String> _blockedTags;
 
-  // Posts and Cookies holder
+  // Posts holder
   // Mutable collections is used here since we'll use it on multiple
   // screens which require us to share the exact List object for
   // several reason like incoming addition from loadMore()
   // or item removal from favorites screen
   final _posts = <Post>[];
-  final _cookies = <Cookie>[];
 
   String lastQuery = '';
 
@@ -44,11 +41,9 @@ class PageState extends _$PageState {
     _skipCount = 0;
     _page = 0;
     _posts.clear();
-    _cookies.clear();
     Future(load);
     return FetchResult.data(PageData(
       posts: _posts,
-      cookies: _cookies,
       option: PageOption(query: lastQuery, clear: true),
     ));
   }
@@ -124,15 +119,9 @@ class PageState extends _$PageState {
         }
         _skipCount = 0;
 
-        final fromJar =
-            await ref.read(cookieJarProvider).loadForRequest(src.toUri());
         if (lastHashCode != _repo.hashCode) return;
 
         _posts.addAll(newPosts);
-        _cookies
-          ..clear()
-          ..addAll(fromJar);
-
         state = FetchResult.data(state.data);
       },
       error: (res, error, stackTrace) {

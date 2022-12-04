@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
 import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -25,6 +25,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final headers = usePostCookie(ref, post);
     final selectedtag = useState(<String>[]);
     final pageQuery =
         ref.watch(pageStateProvider.select((it) => it.data.option.query));
@@ -94,7 +95,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                         ? ExtendedNetworkImageProvider(
                             post.sampleFile,
                             cache: true,
-                            headers: post.getHeaders(ref),
+                            headers: headers.data,
                           ).resolvePixelSize()
                         : Future.value(post.sampleSize),
                     builder: (context, snapshot) {

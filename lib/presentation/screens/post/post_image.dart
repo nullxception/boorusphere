@@ -1,8 +1,8 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
@@ -27,6 +27,7 @@ class PostImage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contentSetting = ref.watch(contentSettingStateProvider);
+    final headers = usePostCookie(ref, post);
     final isBlur = useState(
         post.rating == PostRating.explicit && contentSetting.blurExplicit);
     final zoomAnimator =
@@ -72,7 +73,7 @@ class PostImage extends HookConsumerWidget {
               contentSetting.loadOriginal
                   ? post.originalFile
                   : post.content.url,
-              headers: post.getHeaders(ref),
+              headers: headers.data,
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
               initGestureConfigHandler: (state) =>

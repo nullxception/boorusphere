@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
@@ -100,7 +100,7 @@ class Timeline extends ConsumerWidget {
   }
 }
 
-class _Thumbnail extends ConsumerWidget {
+class _Thumbnail extends HookConsumerWidget {
   const _Thumbnail({required this.post});
   final Post post;
 
@@ -120,12 +120,13 @@ class _Thumbnail extends ConsumerWidget {
     final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
     final blurExplicitPost =
         ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
+    final headers = usePostCookie(ref, post);
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,
       child: ExtendedImage.network(
         post.previewFile,
-        headers: post.getHeaders(ref),
+        headers: headers.data,
         filterQuality: _thumbnailQuality(grid),
         fit: BoxFit.cover,
         beforePaintImage: (canvas, rect, image, paint) {

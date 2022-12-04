@@ -3,10 +3,10 @@ import 'package:boorusphere/data/repository/download/entity/download_entry.dart'
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
-class DownloadEntryView extends ConsumerWidget {
+class DownloadEntryView extends HookConsumerWidget {
   const DownloadEntryView({
     super.key,
     required this.entry,
@@ -85,6 +85,7 @@ class DownloadEntryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
+    final headers = usePostCookie(ref, entry.post);
 
     return ListTile(
       title: Text(
@@ -141,7 +142,7 @@ class DownloadEntryView extends ConsumerWidget {
       ),
       leading: ExtendedImage.network(
         entry.post.previewFile,
-        headers: entry.post.getHeaders(ref),
+        headers: headers.data,
         width: 42,
         shape: BoxShape.rectangle,
         borderRadius: const BorderRadius.all(Radius.circular(5)),

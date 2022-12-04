@@ -20,15 +20,23 @@ import 'package:video_player/video_player.dart';
 
 part 'post_video.g.dart';
 
+Future<FileInfo> _fetchVideo(
+  String url,
+  CacheManager cache,
+  Future<Map<String, String>> headers,
+) async {
+  return cache.downloadFile(url, authHeaders: await headers);
+}
+
 @riverpod
 CancelableOperation<FileInfo> videoPlayerSource(
   VideoPlayerSourceRef ref,
   Post post,
 ) {
-  final cache = ref.watch(cacheManagerProvider);
-  final cancelable = CancelableOperation.fromFuture(cache.downloadFile(
+  final cancelable = CancelableOperation.fromFuture(_fetchVideo(
     post.content.url,
-    authHeaders: post.getHeaders(ref),
+    ref.watch(cacheManagerProvider),
+    post.getHeaders(ref as WidgetRef),
   ));
 
   ref.onDispose(() {

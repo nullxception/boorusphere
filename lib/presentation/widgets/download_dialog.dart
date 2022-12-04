@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/imageprovider.dart';
@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class DownloaderDialog extends ConsumerWidget {
+class DownloaderDialog extends HookConsumerWidget {
   const DownloaderDialog({
     super.key,
     required this.post,
@@ -37,6 +37,8 @@ class DownloaderDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final headers = usePostCookie(ref, post);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 16),
@@ -52,7 +54,7 @@ class DownloaderDialog extends ConsumerWidget {
                         ? ExtendedNetworkImageProvider(
                             post.sampleFile,
                             cache: true,
-                            headers: post.getHeaders(ref),
+                            headers: headers.data,
                           ).resolvePixelSize()
                         : Future.value(post.sampleSize),
                     builder: (context, snapshot) {
