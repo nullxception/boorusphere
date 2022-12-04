@@ -24,7 +24,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 CookieJar cookieJar(CookieJarRef ref) {
   return CookieJar();
 }
