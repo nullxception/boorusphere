@@ -26,8 +26,7 @@ extension PostExt on Post {
     final referer = _findReferer(ref);
     final cookies =
         await ref.read(cookieJarProvider).loadForRequest(referer.toUri());
-    final userAgent =
-        await ref.read(versionLocalSourceProvider).buildUserAgent();
+    final userAgent = ref.read(versionLocalSourceProvider).buildUserAgent();
 
     return {
       'Referer': referer,

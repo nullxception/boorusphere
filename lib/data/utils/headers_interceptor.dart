@@ -12,14 +12,14 @@ class HeadersInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     options.headers['Referer'] = options.path;
-    options.headers['User-Agent'] = await versionLocalSource.buildUserAgent();
+    options.headers['User-Agent'] = versionLocalSource.buildUserAgent();
     super.onRequest(options, handler);
   }
 }
 
 extension VersionLocalSourceExt on VersionLocalSource {
-  Future<String> buildUserAgent() async {
-    final ver = await get();
+  String buildUserAgent() {
+    final ver = get();
     return 'Boorusphere/$ver';
   }
 }

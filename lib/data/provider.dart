@@ -14,6 +14,7 @@ import 'package:boorusphere/data/repository/setting/datasource/setting_local_sou
 import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/utils/headers_interceptor.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -58,7 +59,8 @@ VersionNetworkSource versionNetworkSource(VersionNetworkSourceRef ref) {
 
 @riverpod
 VersionLocalSource versionLocalSource(VersionLocalSourceRef ref) {
-  return VersionLocalSource();
+  final envRepo = ref.watch(envRepoProvider);
+  return VersionLocalSource(envRepo);
 }
 
 @riverpod

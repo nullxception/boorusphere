@@ -10,7 +10,7 @@ class VersionRepoImpl implements VersionRepo {
   final VersionLocalSource localSource;
 
   @override
-  Future<AppVersion> get() => localSource.get();
+  AppVersion get() => localSource.get();
 
   @override
   Future<AppVersion> fetch() => networkSource.get();

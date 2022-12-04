@@ -1,9 +1,11 @@
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
-import 'package:package_info/package_info.dart';
+import 'package:boorusphere/domain/repository/env_repo.dart';
 
 class VersionLocalSource {
-  Future<AppVersion> get() async {
-    final pkgInfo = await PackageInfo.fromPlatform();
-    return AppVersion.fromString(pkgInfo.version);
+  VersionLocalSource(this.envRepo);
+  final EnvRepo envRepo;
+
+  AppVersion get() {
+    return AppVersion.fromString(envRepo.packageInfo.version);
   }
 }
