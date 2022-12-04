@@ -24,14 +24,14 @@ extension PostExt on Post {
 
   Future<Map<String, String>> getHeaders(WidgetRef ref) async {
     final referer = _findReferer(ref);
-    final cookies =
-        await ref.read(cookieJarProvider).loadForRequest(referer.toUri());
-    final userAgent = ref.read(versionLocalSourceProvider).buildUserAgent();
+    final cookieJar = ref.read(cookieJarProvider);
+    final versionLocalSource = ref.read(versionLocalSourceProvider);
+    final cookies = await cookieJar.loadForRequest(referer.toUri());
 
     return {
       'Referer': referer,
       'Cookie': CookieManager.getCookies(cookies),
-      'User-Agent': userAgent,
+      'User-Agent': HeadersInterceptor.buildUA(versionLocalSource),
     };
   }
 }
