@@ -36,10 +36,11 @@ Dio dio(DioRef ref) {
   final retryDelays = List.generate(5, (index) {
     return Duration(milliseconds: 400 + (100 * (index + 1)));
   });
+  final versionLocalSource = ref.watch(versionLocalSourceProvider);
 
   dio.interceptors
     ..add(CookieManager(cookieJar))
-    ..add(HeadersInterceptor())
+    ..add(HeadersInterceptor(versionLocalSource))
     ..add(RetryInterceptor(
       dio: dio,
       retries: retryDelays.length,
