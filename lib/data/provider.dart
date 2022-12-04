@@ -13,7 +13,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
-import 'package:boorusphere/utils/dio/headers_interceptor.dart';
+import 'package:boorusphere/data/utils/headers_interceptor.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
