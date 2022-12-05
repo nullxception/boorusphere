@@ -1,3 +1,4 @@
+import 'package:boorusphere/data/dio/headers_factory.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
 import 'package:dio/dio.dart';
 
@@ -11,13 +12,12 @@ class HeadersInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    options.headers['Referer'] = options.path;
-    options.headers['User-Agent'] = buildUA(versionLocalSource);
+    options.headers.addAll(
+      HeadersFactory.builder()
+          .setReferer(options.path)
+          .setUserAgent(versionLocalSource.get())
+          .build(),
+    );
     super.onRequest(options, handler);
-  }
-
-  static String buildUA(VersionLocalSource versionLocalSource) {
-    final ver = versionLocalSource.get();
-    return 'Boorusphere/$ver';
   }
 }

@@ -1,3 +1,4 @@
+import 'package:boorusphere/data/dio/app_dio.dart';
 import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
 import 'package:boorusphere/data/repository/booru/datasource/booru_network_source.dart';
 import 'package:boorusphere/data/repository/changelog/datasource/changelog_local_source.dart';
@@ -13,12 +14,9 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
-import 'package:boorusphere/data/utils/headers_interceptor.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -32,23 +30,9 @@ CookieJar cookieJar(CookieJarRef ref) {
 
 @riverpod
 Dio dio(DioRef ref) {
-  final dio = Dio();
   final cookieJar = ref.watch(cookieJarProvider);
-  final retryDelays = List.generate(5, (index) {
-    return Duration(milliseconds: 400 + (100 * (index + 1)));
-  });
   final versionLocalSource = ref.watch(versionLocalSourceProvider);
-
-  dio.interceptors
-    ..add(CookieManager(cookieJar))
-    ..add(HeadersInterceptor(versionLocalSource))
-    ..add(RetryInterceptor(
-      dio: dio,
-      retries: retryDelays.length,
-      retryDelays: retryDelays,
-    ));
-
-  return dio;
+  return AppDio(cookieJar: cookieJar, versionLocalSource: versionLocalSource);
 }
 
 @riverpod
