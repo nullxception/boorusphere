@@ -27,6 +27,22 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'provider.g.dart';
 
+@Riverpod(keepAlive: true)
+EnvRepo envRepo(EnvRepoRef ref) {
+  throw UnimplementedError('must be initialized manually');
+}
+
+extension EnvRepoProviderExt on Provider<EnvRepo> {
+  Future<Override> initialize() async {
+    return overrideWithValue(
+      EnvRepoImpl(
+        packageInfo: await PackageInfo.fromPlatform(),
+        androidInfo: await DeviceInfoPlugin().androidInfo,
+      ),
+    );
+  }
+}
+
 @riverpod
 BlockedTagsRepo blockedTagsRepo(BlockedTagsRepoRef ref) {
   return BlockedTagsRepoImpl(
@@ -81,7 +97,7 @@ SettingRepo settingRepo(SettingRepoRef ref) {
 @riverpod
 VersionRepo versionRepo(VersionRepoRef ref) {
   return VersionRepoImpl(
-    localSource: ref.watch(versionLocalSourceProvider),
+    envRepo: ref.watch(envRepoProvider),
     networkSource: ref.watch(versionNetworkSourceProvider),
   );
 }
@@ -91,20 +107,4 @@ DownloadRepo downloadRepo(DownloadRepoRef ref) {
   return DownloadRepoImpl(
     ref.watch(downloaderSourceProvider),
   );
-}
-
-@Riverpod(keepAlive: true)
-EnvRepo envRepo(EnvRepoRef ref) {
-  throw UnimplementedError('must be initialized manually');
-}
-
-extension EnvRepoProviderExt on Provider<EnvRepo> {
-  Future<Override> initialize() async {
-    return overrideWithValue(
-      EnvRepoImpl(
-        packageInfo: await PackageInfo.fromPlatform(),
-        androidInfo: await DeviceInfoPlugin().androidInfo,
-      ),
-    );
-  }
 }

@@ -15,7 +15,7 @@ class AppVersionsState extends _$AppVersionsState {
     });
     _repo = ref.read(versionRepoProvider);
     return AppVersions(
-      current: _repo.get(),
+      current: _repo.current,
       latest: await _repo.fetch(),
     );
   }

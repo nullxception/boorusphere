@@ -1,16 +1,16 @@
-import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
+import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 
 class VersionRepoImpl implements VersionRepo {
-  VersionRepoImpl({required this.localSource, required this.networkSource});
+  VersionRepoImpl({required this.envRepo, required this.networkSource});
 
+  final EnvRepo envRepo;
   final VersionNetworkSource networkSource;
-  final VersionLocalSource localSource;
 
   @override
-  AppVersion get() => localSource.get();
+  AppVersion get current => envRepo.appVersion;
 
   @override
   Future<AppVersion> fetch() => networkSource.get();

@@ -1,11 +1,11 @@
 import 'package:boorusphere/data/dio/headers_factory.dart';
-import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
+import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:dio/dio.dart';
 
 class HeadersInterceptor extends Interceptor {
-  HeadersInterceptor(this.versionLocalSource);
+  HeadersInterceptor(this.envRepo);
 
-  final VersionLocalSource versionLocalSource;
+  final EnvRepo envRepo;
 
   @override
   Future<void> onRequest(
@@ -15,7 +15,7 @@ class HeadersInterceptor extends Interceptor {
     options.headers.addAll(
       HeadersFactory.builder()
           .setReferer(options.path)
-          .setUserAgent(versionLocalSource.get())
+          .setUserAgent(envRepo.appVersion)
           .build(),
     );
     super.onRequest(options, handler);

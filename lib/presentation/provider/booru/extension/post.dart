@@ -31,7 +31,7 @@ extension PostExt on Post {
     return HeadersFactory.builder()
         .setReferer(referer)
         .setCookies(cookies)
-        .setUserAgent(versionRepo.get())
+        .setUserAgent(versionRepo.current)
         .build();
   }
 }

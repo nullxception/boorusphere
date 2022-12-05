@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/dio/headers_interceptor.dart';
-import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
+import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -9,7 +9,7 @@ import 'package:dio_smart_retry/dio_smart_retry.dart';
 class AppDio with DioMixin implements Dio {
   AppDio({
     required CookieJar cookieJar,
-    required VersionLocalSource versionLocalSource,
+    required EnvRepo envRepo,
   }) {
     options = BaseOptions();
     httpClientAdapter = DefaultHttpClientAdapter();
@@ -19,7 +19,7 @@ class AppDio with DioMixin implements Dio {
 
     interceptors
       ..add(CookieManager(cookieJar))
-      ..add(HeadersInterceptor(versionLocalSource))
+      ..add(HeadersInterceptor(envRepo))
       ..add(RetryInterceptor(
         dio: this,
         retries: retryDelays.length,

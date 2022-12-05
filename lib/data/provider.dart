@@ -12,7 +12,6 @@ import 'package:boorusphere/data/repository/search_history/entity/search_history
 import 'package:boorusphere/data/repository/server/datasource/server_local_source.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
-import 'package:boorusphere/data/repository/version/datasource/version_local_source.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -29,22 +28,9 @@ CookieJar cookieJar(CookieJarRef ref) {
 }
 
 @riverpod
-Dio dio(DioRef ref) {
-  final cookieJar = ref.watch(cookieJarProvider);
-  final versionLocalSource = ref.watch(versionLocalSourceProvider);
-  return AppDio(cookieJar: cookieJar, versionLocalSource: versionLocalSource);
-}
-
-@riverpod
 VersionNetworkSource versionNetworkSource(VersionNetworkSourceRef ref) {
   final dio = ref.watch(dioProvider);
   return VersionNetworkSource(dio);
-}
-
-@riverpod
-VersionLocalSource versionLocalSource(VersionLocalSourceRef ref) {
-  final envRepo = ref.watch(envRepoProvider);
-  return VersionLocalSource(envRepo);
 }
 
 @riverpod
@@ -100,4 +86,11 @@ BlockedTagsLocalSource blockedTagsLocalSource(BlockedTagsLocalSourceRef ref) {
 DownloaderSource downloaderSource(DownloaderSourceRef ref) {
   final box = Hive.box<DownloadEntry>(DownloaderSource.key);
   return DownloaderSource(box);
+}
+
+@riverpod
+Dio dio(DioRef ref) {
+  final cookieJar = ref.watch(cookieJarProvider);
+  final envRepo = ref.watch(envRepoProvider);
+  return AppDio(cookieJar: cookieJar, envRepo: envRepo);
 }
