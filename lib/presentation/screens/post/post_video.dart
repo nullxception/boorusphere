@@ -36,7 +36,7 @@ CancelableOperation<FileInfo> videoPlayerSource(
   final cancelable = CancelableOperation.fromFuture(_fetchVideo(
     post.content.url,
     ref.watch(cacheManagerProvider),
-    post.getHeaders(ref as WidgetRef),
+    post.getHeaders(ref),
   ));
 
   ref.onDispose(() {
