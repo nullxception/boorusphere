@@ -110,7 +110,7 @@ class PostPage extends HookConsumerWidget {
                   direction: HidingDirection.toTop,
                   visible: !fullscreen,
                   child: _PostAppBar(
-                    subtitle: post.tags.join(' '),
+                    subtitle: post.describeTags,
                     title: pageState is LoadingFetchResult
                         ? '#${currentPage.value + 1} of (loading...)'
                         : '#${currentPage.value + 1} of ${posts.length}',
