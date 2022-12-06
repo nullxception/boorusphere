@@ -37,7 +37,10 @@ void main() async {
     DownloaderSource.prepare(),
   ]);
 
-  LocaleHelper.useFallbackPluralResolver([AppLocale.idId]);
+  LocaleHelper.useFallbackPluralResolver([
+    AppLocale.idId,
+    AppLocale.thTh,
+  ]);
 
   runApp(
     ProviderScope(
