@@ -7,6 +7,7 @@ import 'package:boorusphere/presentation/provider/settings/server_setting_state.
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:flutter/material.dart';
@@ -192,11 +193,12 @@ class SearchSuggestion extends HookConsumerWidget {
                           msg = context.t.suggestion
                               .empty(query: searchBar.value);
                         } else if (error == BooruError.httpError) {
-                          msg = context.t.suggestion.httpError(
-                            n: code,
-                            query: searchBar.value,
-                            serverName: server.name,
-                          );
+                          msg = context.t.suggestion
+                              .httpError(
+                                query: searchBar.value,
+                                serverName: server.name,
+                              )
+                              .withHttpErrCode(code);
                         } else {
                           msg = error;
                         }

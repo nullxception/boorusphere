@@ -47,9 +47,7 @@ rating:
   safe: "ปลอดภัย"
 
 page_status:
-  http_error:
-    zero: "ไม่สามารถรับผลลัพธ์จาก ${server_name} ได้"
-    other: "ไม่สามารถรับผลลัพธ์จาก ${server_name} ได้ (HTTP ${n})"
+  http_error: "ไม่สามารถรับผลลัพธ์จาก ${server_name} ได้"
   no_result:
     one: "ไม่พบผลลัพธ์"
     other: "ไม่มีผลลัพธ์เพิ่มเติม"
@@ -63,9 +61,7 @@ suggestion:
   suggested: "ถูกแนะนำใน ${server_name}"
   desc: "ใน ${server_name}"
   empty: "ไม่พบแท็กที่ตรงกับ '${query}'"
-  http_error:
-    zero: "ไม่สามารถรับผลลัพธ์สำหรับ '${query}' จาก ${server_name} ได้"
-    other: "ไม่สามารถรับผลลัพธ์สำหรับ '${query}' จาก ${server_name} ได้ (HTTP ${n})"
+  http_error: "ไม่สามารถรับผลลัพธ์สำหรับ '${query}' จาก ${server_name} ได้"
 
 action_tag:
   copy: "คัดลอกแท็ก"

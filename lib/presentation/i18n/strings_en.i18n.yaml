@@ -47,9 +47,7 @@ rating:
   safe: "Safe"
 
 page_status:
-  http_error:
-    zero: "Cannot get result from ${server_name}"
-    other: "Cannot get result from ${server_name} (HTTP ${n})"
+  http_error: "Cannot get result from ${server_name}"
   no_result:
     one: "No result found"
     other: "No more result"
@@ -63,9 +61,7 @@ suggestion:
   suggested: "Suggested at ${server_name}"
   desc: "at ${server_name}"
   empty: "No tags that matches '${query}'"
-  http_error:
-    zero: "Cannot get result for '${query}' on ${server_name}"
-    other: "Cannot get result for '${query}' on ${server_name} (HTTP ${n})"
+  http_error: "Cannot get result for '${query}' on ${server_name}"
 
 action_tag:
   copy: "Copy tag"

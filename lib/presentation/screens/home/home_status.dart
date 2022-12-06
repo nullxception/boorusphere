@@ -7,6 +7,7 @@ import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,9 @@ class _ErrorStatus extends ConsumerWidget {
     final size = data.posts.length;
     switch (error) {
       case BooruError.httpError:
-        return t.pageStatus.httpError(n: code, serverName: server.name);
+        return t.pageStatus
+            .httpError(serverName: server.name)
+            .withHttpErrCode(code);
       case BooruError.empty:
         return q.isEmpty
             ? t.pageStatus.noResult(n: size)

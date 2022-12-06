@@ -47,9 +47,7 @@ rating:
   safe: "Aman"
 
 page_status:
-  http_error:
-    zero: "Tidak bisa mendapatkan hasil dari ${server_name}"
-    other: "Tidak dapat memperoleh hasil dari ${server_name} (HTTP ${n})"
+  http_error: "Tidak bisa mendapatkan hasil dari ${server_name}"
   no_result:
     one: "Tidak ada hasil yang ditemukan"
     other: "Tidak ada lagi hasil"
@@ -63,9 +61,7 @@ suggestion:
   suggested: "Disarankan di ${server_name}"
   desc: "di ${server_name}"
   empty: "Tidak ada tag yang cocok dengan '${query}'"
-  http_error:
-    zero: "Tidak bisa mendapatkan hasil untuk '${query}' di ${server_name}"
-    other: "Tidak bisa mendapatkan hasil untuk '${query}' di ${server_name} (HTTP ${n})"
+  http_error: "Tidak bisa mendapatkan hasil untuk '${query}' di ${server_name}"
 
 action_tag:
   copy: "Salin tag"
