@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/imageprovider.dart';
@@ -37,7 +37,7 @@ class DownloaderDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final headers = usePostCookie(ref, post);
+    final headers = usePostHeaders(ref, post);
 
     return SafeArea(
       child: Padding(

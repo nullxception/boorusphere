@@ -5,7 +5,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_cookie.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
@@ -120,7 +120,7 @@ class _Thumbnail extends HookConsumerWidget {
     final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
     final blurExplicitPost =
         ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
-    final headers = usePostCookie(ref, post);
+    final headers = usePostHeaders(ref, post);
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,
