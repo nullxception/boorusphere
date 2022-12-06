@@ -176,6 +176,9 @@ settings:
   strict_safe_mode:
     title: "Mode Ketat"
     desc: "Hanya ambil konten yang telah dinilai 'Aman'. Perhatikan bahwa ini tidak menjamin aman untuk dilihat publik"
+  ime_incognito:
+    title: "Keyboard Mode Incognito"
+    desc: "Aktifkan mode incognito untuk keyboard jika memungkinkan."
   load_og:
     title: "Tampilkan konten asli"
     desc: "Muat konten original saat membuka post"
