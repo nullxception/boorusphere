@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
@@ -21,11 +25,19 @@ import 'package:video_player/video_player.dart';
 part 'post_video.g.dart';
 
 Future<FileInfo> _fetchVideo(
-  String url,
-  CacheManager cache,
-  Future<Map<String, String>> headers,
+  Ref ref,
+  Post post,
 ) async {
-  return cache.downloadFile(url, authHeaders: await headers);
+  final headers = await post.buildHeaders(
+    cookieJar: ref.read(cookieJarProvider),
+    server: ref
+        .read(serverDataStateProvider)
+        .getById(post.serverId, or: ServerData.empty),
+    version: ref.read(versionRepoProvider).current,
+  );
+  return ref
+      .read(cacheManagerProvider)
+      .downloadFile(post.content.url, authHeaders: headers);
 }
 
 @riverpod
@@ -33,11 +45,7 @@ CancelableOperation<FileInfo> videoPlayerSource(
   VideoPlayerSourceRef ref,
   Post post,
 ) {
-  final cancelable = CancelableOperation.fromFuture(_fetchVideo(
-    post.content.url,
-    ref.watch(cacheManagerProvider),
-    post.getHeaders(ref),
-  ));
+  final cancelable = CancelableOperation.fromFuture(_fetchVideo(ref, post));
 
   ref.onDispose(() {
     if (!cancelable.isCompleted) {

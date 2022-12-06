@@ -1,19 +1,15 @@
 import 'package:boorusphere/data/dio/headers_factory.dart';
-import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 
 extension PostExt on Post {
-  String _findReferer(ref) {
+  String _findReferer(ServerData server) {
     if (postUrl.isNotEmpty) {
       return postUrl;
     }
-    final server = ref
-        .read(serverDataStateProvider)
-        .getById(serverId, or: ServerData.empty);
     if (server.homepage.isNotEmpty) {
       return server.homepage;
     } else {
@@ -21,16 +17,18 @@ extension PostExt on Post {
     }
   }
 
-  Future<Map<String, String>> getHeaders(ref) async {
-    final referer = _findReferer(ref);
-    final cookieJar = ref.read(cookieJarProvider);
-    final versionRepo = ref.read(versionRepoProvider);
+  Future<Map<String, String>> buildHeaders({
+    required CookieJar cookieJar,
+    required AppVersion version,
+    required ServerData server,
+  }) async {
+    final referer = _findReferer(server);
     final cookies = await cookieJar.loadForRequest(referer.toUri());
 
     return HeadersFactory.builder()
         .setReferer(referer)
         .setCookies(cookies)
-        .setUserAgent(versionRepo.current)
+        .setUserAgent(version)
         .build();
   }
 }
