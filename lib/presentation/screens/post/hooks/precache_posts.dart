@@ -1,11 +1,7 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
-import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/widgets.dart';
@@ -45,13 +41,7 @@ class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
     unawaited(precacheImage(
       ExtendedNetworkImageProvider(
         displayOriginal ? post.originalFile : post.content.url,
-        headers: await post.buildHeaders(
-          cookieJar: ref.read(cookieJarProvider),
-          server: ref
-              .read(serverDataStateProvider)
-              .getById(post.serverId, or: ServerData.empty),
-          version: ref.read(versionRepoProvider).current,
-        ),
+        headers: await ref.read(postHeadersFactoryProvider).build(post),
         // params below follows the default value on
         // the ExtendedImage.network() factory
         cache: true,

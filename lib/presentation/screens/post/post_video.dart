@@ -1,14 +1,10 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/booru/extension/post.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
-import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
@@ -28,13 +24,7 @@ Future<FileInfo> _fetchVideo(
   Ref ref,
   Post post,
 ) async {
-  final headers = await post.buildHeaders(
-    cookieJar: ref.read(cookieJarProvider),
-    server: ref
-        .read(serverDataStateProvider)
-        .getById(post.serverId, or: ServerData.empty),
-    version: ref.read(versionRepoProvider).current,
-  );
+  final headers = await ref.read(postHeadersFactoryProvider).build(post);
   return ref
       .read(cacheManagerProvider)
       .downloadFile(post.content.url, authHeaders: headers);
