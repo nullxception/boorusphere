@@ -166,7 +166,7 @@ class PostVideo extends HookConsumerWidget {
           ),
         _Toolbox(
           post: post,
-          controllerAsync: playerController,
+          controllerAsync: isBlur.value ? null : playerController,
           disableProgressBar: isBlur.value,
         ),
         if (post.rating == PostRating.explicit && blurExplicitPost)
