@@ -12,7 +12,7 @@ import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_cache_manager/file.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,62 +20,33 @@ import 'package:video_player/video_player.dart';
 
 part 'post_video.g.dart';
 
-Future<FileInfo> _fetchVideo(
-  Ref ref,
-  Post post,
-) async {
-  final headers = await ref.read(postHeadersFactoryProvider).build(post);
-  return ref
-      .read(cacheManagerProvider)
-      .downloadFile(post.content.url, authHeaders: headers);
-}
-
-@riverpod
-CancelableOperation<FileInfo> videoPlayerSource(
-  VideoPlayerSourceRef ref,
-  Post post,
-) {
-  final cancelable = CancelableOperation.fromFuture(_fetchVideo(ref, post));
-
-  ref.onDispose(() {
-    if (!cancelable.isCompleted) {
-      cancelable.cancel();
-    }
-  });
-
-  return cancelable;
-}
-
 @riverpod
 Future<VideoPlayerController> videoPlayerController(
   VideoPlayerControllerRef ref,
   Post post,
 ) async {
-  VideoPlayerController controller;
-
-  final cache = ref.watch(cacheManagerProvider);
-  final fromCache = await cache.getFileFromCache(post.content.url);
-  final option = VideoPlayerOptions(mixWithOthers: true);
-  if (fromCache != null) {
-    controller = VideoPlayerController.file(
-      fromCache.file,
-      videoPlayerOptions: option,
-    );
-  } else {
-    final fetcher = ref.watch(videoPlayerSourceProvider(post));
-    final fromNet = await fetcher.value;
-    controller = VideoPlayerController.file(
-      fromNet.file,
-      videoPlayerOptions: option,
-    );
-  }
-  await controller.setLooping(true);
+  VideoPlayerController? controller;
+  CancelableOperation<File>? source;
 
   ref.onDispose(() {
-    controller.pause();
-    controller.dispose();
+    if (source?.isCompleted ?? false) {
+      source?.cancel();
+    }
+    controller?.pause();
+    controller?.dispose();
   });
 
+  final cache = ref.watch(cacheManagerProvider);
+  final headers = await ref.read(postHeadersFactoryProvider).build(post);
+  source = CancelableOperation.fromFuture(
+    cache.getSingleFile(post.content.url, headers: headers),
+  );
+
+  controller = VideoPlayerController.file(
+    await source.value,
+    videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+  );
+  await controller.setLooping(true);
   return controller;
 }
 
