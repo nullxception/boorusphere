@@ -166,7 +166,9 @@ class PostVideo extends HookConsumerWidget {
           ),
         _Toolbox(
           post: post,
-          controllerAsync: isBlur.value ? null : playerController,
+          controller: isBlur.value
+              ? null
+              : playerController.whenOrNull(data: (it) => it),
           disableProgressBar: isBlur.value,
         ),
         if (post.rating == PostRating.explicit && blurExplicitPost)
@@ -194,17 +196,17 @@ class PostVideo extends HookConsumerWidget {
 class _Toolbox extends HookConsumerWidget {
   const _Toolbox({
     required this.post,
-    this.controllerAsync,
+    required this.controller,
     this.disableProgressBar = false,
   });
 
   final Post post;
-  final AsyncValue<VideoPlayerController>? controllerAsync;
+  final VideoPlayerController? controller;
   final bool disableProgressBar;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = controllerAsync?.asData?.value;
+    final controller = this.controller;
     final isMuted =
         ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
     final fullscreen = ref.watch(fullscreenStateProvider);
@@ -233,23 +235,21 @@ class _Toolbox extends HookConsumerWidget {
     }
 
     useEffect(() {
-      controllerAsync?.whenData((it) {
-        it.setLooping(true);
-        it.initialize().whenComplete(() {
-          onFirstFrame() {
-            markMayNeedRebuild();
-            it.removeListener(onFirstFrame);
-          }
+      controller?.setLooping(true);
+      controller?.initialize().whenComplete(() {
+        onFirstFrame() {
+          markMayNeedRebuild();
+          controller.removeListener(onFirstFrame);
+        }
 
-          it.addListener(onFirstFrame);
-          it.setVolume(isMuted ? 0 : 1);
-          if (playState.value) {
-            it.play();
-            autoHideToolbox();
-          }
-        });
+        controller.addListener(onFirstFrame);
+        controller.setVolume(isMuted ? 0 : 1);
+        if (playState.value) {
+          controller.play();
+          autoHideToolbox();
+        }
       });
-    }, [controllerAsync]);
+    }, [controller]);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
