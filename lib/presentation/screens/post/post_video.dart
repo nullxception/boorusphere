@@ -69,6 +69,7 @@ Future<VideoPlayerController> videoPlayerController(
       videoPlayerOptions: option,
     );
   }
+  await controller.setLooping(true);
 
   ref.onDispose(() {
     controller.pause();
@@ -203,6 +204,7 @@ class _Toolbox extends HookConsumerWidget {
     final hideTimer = useState<Timer?>(null);
 
     autoHideToolbox() {
+      if (!isMounted()) return;
       hideTimer.value?.cancel();
       hideTimer.value = Timer(const Duration(seconds: 2), () {
         if (isMounted()) {
@@ -212,17 +214,16 @@ class _Toolbox extends HookConsumerWidget {
     }
 
     useEffect(() {
-      controller?.setLooping(true);
-      controller?.initialize().whenComplete(() {
+      controller?.initialize().whenComplete(() async {
         onFirstFrame() {
           markMayNeedRebuild();
           controller.removeListener(onFirstFrame);
         }
 
         controller.addListener(onFirstFrame);
-        controller.setVolume(isMuted ? 0 : 1);
-        if (isPlaying.value) {
-          controller.play();
+        await controller.setVolume(isMuted ? 0 : 1);
+        if (isPlaying.value && isMounted()) {
+          await controller.play();
           autoHideToolbox();
         }
       });
