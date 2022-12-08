@@ -200,9 +200,11 @@ class _Toolbox extends HookConsumerWidget {
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     final isPlaying = useState(true);
     final isMounted = useIsMounted();
+    final hideTimer = useState<Timer?>(null);
 
     autoHideToolbox() {
-      Future.delayed(const Duration(seconds: 2), () {
+      hideTimer.value?.cancel();
+      hideTimer.value = Timer(const Duration(seconds: 2), () {
         if (isMounted()) {
           onVisibilityChange.call(false);
         }
@@ -258,6 +260,7 @@ class _Toolbox extends HookConsumerWidget {
                           controller.value.isPlaying
                               ? controller.pause()
                               : controller.play();
+                          autoHideToolbox();
                         } else {
                           isPlaying.value = !isPlaying.value;
                         }
