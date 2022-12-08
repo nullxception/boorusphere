@@ -211,22 +211,9 @@ class _Toolbox extends HookConsumerWidget {
         ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
     final fullscreen = ref.watch(fullscreenStateProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
-    final playState = useState(true);
+    final isPlaying = useState(true);
     final isMounted = useIsMounted();
     final showToolbox = useState(true);
-
-    onPlayStateChanged() {
-      if (controller != null) {
-        playState.value ? controller.play() : controller.pause();
-      }
-    }
-
-    useEffect(() {
-      playState.addListener(onPlayStateChanged);
-      return () {
-        playState.removeListener(onPlayStateChanged);
-      };
-    }, [controller]);
 
     autoHideToolbox() {
       Future.delayed(const Duration(seconds: 2), () {
@@ -244,7 +231,7 @@ class _Toolbox extends HookConsumerWidget {
 
         controller.addListener(onFirstFrame);
         controller.setVolume(isMuted ? 0 : 1);
-        if (playState.value) {
+        if (isPlaying.value) {
           controller.play();
           autoHideToolbox();
         }
@@ -273,12 +260,19 @@ class _Toolbox extends HookConsumerWidget {
                       color: Colors.white,
                       iconSize: 72,
                       icon: Icon(
-                        playState.value
+                        isPlaying.value
                             ? Icons.pause_outlined
                             : Icons.play_arrow,
                       ),
                       onPressed: () {
-                        playState.value = !playState.value;
+                        if (controller != null) {
+                          isPlaying.value = !controller.value.isPlaying;
+                          controller.value.isPlaying
+                              ? controller.pause()
+                              : controller.play();
+                        } else {
+                          isPlaying.value = !isPlaying.value;
+                        }
                       },
                     ),
                   ),
