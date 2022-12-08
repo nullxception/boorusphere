@@ -73,6 +73,7 @@ dependencies:
   tinycolor2: ^3.0.0
   url_launcher: ^6.0.3
   video_player: ^2.2.5
+  wakelock: ^0.6.2
   xml2json: ^5.0.0
   yaml: ^3.1.0
 
