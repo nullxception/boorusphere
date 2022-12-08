@@ -93,12 +93,14 @@ class PostVideo extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerController = ref.watch(videoPlayerControllerProvider(post));
-    final blurExplicitPost =
+    final blurExplicit =
         ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
 
     final isMounted = useIsMounted();
-    final isBlur =
-        useState(post.rating == PostRating.explicit && blurExplicitPost);
+    final shouldBlur = post.rating == PostRating.explicit && blurExplicit;
+    final isBlur = useState(shouldBlur);
+    final blurNoticeAnimator =
+        useAnimationController(duration: const Duration(milliseconds: 200));
 
     final heroWidgetKey = useMemoized(GlobalKey.new);
     Widget asHero(Widget child) {
@@ -109,10 +111,8 @@ class PostVideo extends HookConsumerWidget {
       );
     }
 
-    final blurNoticeAnimator =
-        useAnimationController(duration: const Duration(milliseconds: 200));
     useEffect(() {
-      if (post.rating != PostRating.explicit || !blurExplicitPost) {
+      if (!shouldBlur) {
         return;
       }
 
@@ -171,7 +171,7 @@ class PostVideo extends HookConsumerWidget {
               : playerController.whenOrNull(data: (it) => it),
           disableProgressBar: isBlur.value,
         ),
-        if (post.rating == PostRating.explicit && blurExplicitPost)
+        if (shouldBlur && blurNoticeAnimator.status != AnimationStatus.reverse)
           FadeTransition(
             opacity: Tween<double>(begin: 0, end: 1).animate(
               CurvedAnimation(
