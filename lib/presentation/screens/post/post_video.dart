@@ -102,7 +102,7 @@ class PostVideo extends HookConsumerWidget {
     final isBlur = useState(shouldBlur);
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
-    final showToolbox = useState(true);
+    final showOverlay = useState(true);
 
     useEffect(() {
       Future(() {
@@ -143,15 +143,13 @@ class PostVideo extends HookConsumerWidget {
             ),
           ),
         ),
-        _Toolbox(
+        _PlayerOverlay(
           post: post,
-          controller: isBlur.value
-              ? null
-              : controllerFuture.whenOrNull(data: (it) => it),
-          disableProgressBar: isBlur.value,
-          visible: showToolbox.value,
+          controller: controllerFuture.valueOrNull,
+          blur: isBlur.value,
+          visible: showOverlay.value,
           onVisibilityChange: (value) {
-            showToolbox.value = value;
+            showOverlay.value = value;
             onToolboxVisibilityChange.call(value);
           },
         ),
@@ -177,25 +175,25 @@ class PostVideo extends HookConsumerWidget {
   }
 }
 
-class _Toolbox extends HookConsumerWidget {
-  const _Toolbox({
+class _PlayerOverlay extends HookConsumerWidget {
+  const _PlayerOverlay({
     required this.post,
     required this.controller,
-    this.disableProgressBar = false,
+    required this.blur,
     required this.visible,
     required this.onVisibilityChange,
   });
 
   final Post post;
   final VideoPlayerController? controller;
-  final bool disableProgressBar;
+  final bool blur;
   final bool visible;
   final void Function(bool visible) onVisibilityChange;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = this.controller;
-    final isMuted =
+    final controller = blur ? null : this.controller;
+    final videoMuted =
         ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
     final fullscreen = ref.watch(fullscreenStateProvider);
     final markMayNeedRebuild = useMarkMayNeedRebuild();
@@ -203,7 +201,7 @@ class _Toolbox extends HookConsumerWidget {
     final isMounted = useIsMounted();
     final hideTimer = useState<Timer?>(null);
 
-    autoHideToolbox() {
+    scheduleHide() {
       if (!isMounted()) return;
       hideTimer.value?.cancel();
       hideTimer.value = Timer(const Duration(seconds: 2), () {
@@ -216,15 +214,15 @@ class _Toolbox extends HookConsumerWidget {
     useEffect(() {
       controller?.initialize().whenComplete(() async {
         onFirstFrame() {
-          markMayNeedRebuild();
           controller.removeListener(onFirstFrame);
+          markMayNeedRebuild();
         }
 
         controller.addListener(onFirstFrame);
-        await controller.setVolume(isMuted ? 0 : 1);
+        await controller.setVolume(videoMuted ? 0 : 1);
         if (isPlaying.value && isMounted()) {
           await controller.play();
-          autoHideToolbox();
+          scheduleHide();
         }
       });
     }, [controller]);
@@ -236,91 +234,127 @@ class _Toolbox extends HookConsumerWidget {
       },
       child: Container(
         color: visible ? Colors.black38 : Colors.transparent,
-        child: !visible
-            ? const SizedBox.expand()
-            : Stack(
-                alignment: Alignment.center,
-                children: [
-                  DecoratedBox(
-                    decoration: const BoxDecoration(
-                      color: Colors.black38,
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      padding: const EdgeInsets.all(8.0),
-                      color: Colors.white,
-                      iconSize: 72,
-                      icon: Icon(
-                        isPlaying.value
-                            ? Icons.pause_outlined
-                            : Icons.play_arrow,
-                      ),
-                      onPressed: () {
-                        if (controller != null) {
-                          isPlaying.value = !controller.value.isPlaying;
-                          controller.value.isPlaying
-                              ? controller.pause()
-                              : controller.play();
-                          autoHideToolbox();
-                        } else {
-                          isPlaying.value = !isPlaying.value;
-                        }
-                      },
-                    ),
-                  ),
-                  SafeArea(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            PostFavoriteButton(post: post),
-                            PostDownloadButton(post: post),
-                            IconButton(
-                              padding: const EdgeInsets.all(16),
-                              color: Colors.white,
-                              onPressed: () async {
-                                final mute = await ref
-                                    .read(contentSettingStateProvider.notifier)
-                                    .toggleVideoPlayerMute();
-                                await controller?.setVolume(mute ? 0 : 1);
-                              },
-                              icon: Icon(
-                                isMuted ? Icons.volume_mute : Icons.volume_up,
-                              ),
-                            ),
-                            PostDetailsButton(post: post),
-                            IconButton(
-                              color: Colors.white,
-                              icon: Icon(
-                                fullscreen
-                                    ? Icons.fullscreen_exit
-                                    : Icons.fullscreen_outlined,
-                              ),
-                              padding: const EdgeInsets.all(16),
-                              onPressed: () {
-                                ref
-                                    .read(fullscreenStateProvider.notifier)
-                                    .toggle(
-                                        shouldLandscape:
-                                            post.width > post.height);
-                                autoHideToolbox();
-                              },
-                            ),
-                          ],
-                        ),
-                        _Progress(
-                          controller: controller,
-                          enabled: !disableProgressBar,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+        child: visible
+            ? SafeArea(
+                child: _PlayerToolbox(
+                  isPlaying: isPlaying.value,
+                  controller: controller,
+                  post: post,
+                  isMuted: videoMuted,
+                  isFullscreen: fullscreen,
+                  disableProgressBar: blur,
+                  onAutoHideRequest: scheduleHide,
+                  onPlayChange: (value) {
+                    isPlaying.value = value;
+                  },
+                ),
+              )
+            : const SizedBox.expand(),
       ),
+    );
+  }
+}
+
+class _PlayerToolbox extends ConsumerWidget {
+  const _PlayerToolbox({
+    required this.controller,
+    required this.post,
+    required this.isPlaying,
+    required this.isMuted,
+    required this.isFullscreen,
+    required this.disableProgressBar,
+    this.onAutoHideRequest,
+    this.onPlayChange,
+  });
+
+  final bool isPlaying;
+  final VideoPlayerController? controller;
+  final Post post;
+  final bool isMuted;
+  final bool isFullscreen;
+  final bool disableProgressBar;
+  final void Function()? onAutoHideRequest;
+  final void Function(bool value)? onPlayChange;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = this.controller;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        DecoratedBox(
+          decoration: const BoxDecoration(
+            color: Colors.black38,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            padding: const EdgeInsets.all(8.0),
+            color: Colors.white,
+            iconSize: 72,
+            icon: Icon(
+              isPlaying ? Icons.pause_outlined : Icons.play_arrow,
+            ),
+            onPressed: () {
+              if (controller != null) {
+                onPlayChange?.call(!controller.value.isPlaying);
+                controller.value.isPlaying
+                    ? controller.pause()
+                    : controller.play();
+                onAutoHideRequest?.call();
+              } else {
+                onPlayChange?.call(!isPlaying);
+              }
+            },
+          ),
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                PostFavoriteButton(post: post),
+                PostDownloadButton(post: post),
+                IconButton(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.white,
+                  onPressed: () async {
+                    final mute = await ref
+                        .read(contentSettingStateProvider.notifier)
+                        .toggleVideoPlayerMute();
+                    await controller?.setVolume(mute ? 0 : 1);
+                  },
+                  icon: Icon(
+                    isMuted ? Icons.volume_mute : Icons.volume_up,
+                  ),
+                ),
+                PostDetailsButton(post: post),
+                IconButton(
+                  color: Colors.white,
+                  icon: Icon(
+                    isFullscreen
+                        ? Icons.fullscreen_exit
+                        : Icons.fullscreen_outlined,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  onPressed: () {
+                    ref
+                        .read(fullscreenStateProvider.notifier)
+                        .toggle(shouldLandscape: post.width > post.height);
+                    onAutoHideRequest?.call();
+                  },
+                ),
+              ],
+            ),
+            _Progress(
+              controller: controller,
+              enabled: !disableProgressBar,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
