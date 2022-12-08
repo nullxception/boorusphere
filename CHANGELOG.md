@@ -1,8 +1,8 @@
 
-### 1.2.5
-- Add support for Incognito Keyboard mode (Settings -> Safe Mode -> Incognito Keyboard)
-- Fix scanner is being blocked on some site (such as e621)
-- Fix video player crash while loading source
+## 1.2.5
+* Add support for Incognito Keyboard mode (Settings -> Safe Mode -> Incognito Keyboard)
+* Fix scanner is being blocked on some site (such as e621)
+* Fix video player crash while loading source
 
 ## 1.2.4
 * Fix parser error when post(s) contains a tag ended with percent
