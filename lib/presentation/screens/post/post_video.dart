@@ -82,12 +82,10 @@ class PostVideo extends HookConsumerWidget {
   const PostVideo({
     super.key,
     required this.post,
-    this.isFromHome = false,
     this.heroTag,
   });
 
   final Post post;
-  final bool isFromHome;
   final Object? heroTag;
 
   @override
@@ -112,17 +110,8 @@ class PostVideo extends HookConsumerWidget {
     }
 
     useEffect(() {
-      if (!shouldBlur) {
-        return;
-      }
-
-      if (!isFromHome) {
-        blurNoticeAnimator.forward();
-        return;
-      }
-
-      Future.delayed(const Duration(milliseconds: 200), () {
-        if (isMounted()) {
+      Future(() {
+        if (isMounted() && shouldBlur) {
           blurNoticeAnimator.forward();
         }
       });
