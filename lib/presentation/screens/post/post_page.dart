@@ -49,6 +49,11 @@ class PostPage extends HookConsumerWidget {
     final post =
         posts.isEmpty ? Post.empty : posts.elementAt(currentPage.value);
     final precachePosts = usePrecachePosts(ref, posts);
+    final showAppbar = useState(true);
+
+    useEffect(() {
+      showAppbar.value = !fullscreen;
+    }, [fullscreen]);
 
     return WillPopScope(
       onWillPop: () async {
@@ -89,7 +94,13 @@ class PostPage extends HookConsumerWidget {
                         widget = PostImage(post: post, heroTag: heroTag);
                         break;
                       case PostType.video:
-                        widget = PostVideo(post: post, heroTag: heroTag);
+                        widget = PostVideo(
+                          post: post,
+                          heroTag: heroTag,
+                          onToolboxVisibilityChange: (visible) {
+                            showAppbar.value = visible;
+                          },
+                        );
                         break;
                       default:
                         widget = PostUnknown(post: post, heroTag: heroTag);
@@ -108,7 +119,7 @@ class PostPage extends HookConsumerWidget {
                 right: 0,
                 child: SlideFadeVisibility(
                   direction: HidingDirection.toTop,
-                  visible: !fullscreen,
+                  visible: showAppbar.value,
                   child: _PostAppBar(
                     subtitle: post.describeTags,
                     title: pageState is LoadingFetchResult

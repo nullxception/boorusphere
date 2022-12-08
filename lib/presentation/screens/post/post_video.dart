@@ -83,10 +83,12 @@ class PostVideo extends HookConsumerWidget {
     super.key,
     required this.post,
     this.heroTag,
+    required this.onToolboxVisibilityChange,
   });
 
   final Post post;
   final Object? heroTag;
+  final void Function(bool visible) onToolboxVisibilityChange;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -99,6 +101,7 @@ class PostVideo extends HookConsumerWidget {
     final isBlur = useState(shouldBlur);
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
+    final showToolbox = useState(true);
 
     useEffect(() {
       Future(() {
@@ -145,8 +148,13 @@ class PostVideo extends HookConsumerWidget {
               ? null
               : controllerFuture.whenOrNull(data: (it) => it),
           disableProgressBar: isBlur.value,
+          visible: showToolbox.value,
+          onVisibilityChange: (value) {
+            showToolbox.value = value;
+            onToolboxVisibilityChange.call(value);
+          },
         ),
-        if (shouldBlur && blurNoticeAnimator.status != AnimationStatus.reverse)
+        if (isBlur.value)
           FadeTransition(
             opacity: Tween<double>(begin: 0, end: 1).animate(
               CurvedAnimation(
@@ -156,8 +164,8 @@ class PostVideo extends HookConsumerWidget {
             ),
             child: Center(
               child: PostExplicitWarningCard(
-                onConfirm: () {
-                  blurNoticeAnimator.reverse();
+                onConfirm: () async {
+                  await blurNoticeAnimator.reverse();
                   isBlur.value = false;
                 },
               ),
@@ -173,11 +181,15 @@ class _Toolbox extends HookConsumerWidget {
     required this.post,
     required this.controller,
     this.disableProgressBar = false,
+    required this.visible,
+    required this.onVisibilityChange,
   });
 
   final Post post;
   final VideoPlayerController? controller;
   final bool disableProgressBar;
+  final bool visible;
+  final void Function(bool visible) onVisibilityChange;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -188,11 +200,12 @@ class _Toolbox extends HookConsumerWidget {
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     final isPlaying = useState(true);
     final isMounted = useIsMounted();
-    final showToolbox = useState(true);
 
     autoHideToolbox() {
       Future.delayed(const Duration(seconds: 2), () {
-        if (isMounted()) showToolbox.value = false;
+        if (isMounted()) {
+          onVisibilityChange.call(false);
+        }
       });
     }
 
@@ -216,11 +229,11 @@ class _Toolbox extends HookConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        showToolbox.value = !showToolbox.value;
+        onVisibilityChange.call(!visible);
       },
       child: Container(
-        color: showToolbox.value ? Colors.black38 : Colors.transparent,
-        child: !showToolbox.value
+        color: visible ? Colors.black38 : Colors.transparent,
+        child: !visible
             ? const SizedBox.expand()
             : Stack(
                 alignment: Alignment.center,
