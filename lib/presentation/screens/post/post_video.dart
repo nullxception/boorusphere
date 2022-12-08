@@ -90,7 +90,7 @@ class PostVideo extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerController = ref.watch(videoPlayerControllerProvider(post));
+    final controllerFuture = ref.watch(videoPlayerControllerProvider(post));
     final blurExplicit =
         ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
 
@@ -99,15 +99,6 @@ class PostVideo extends HookConsumerWidget {
     final isBlur = useState(shouldBlur);
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
-
-    final heroWidgetKey = useMemoized(GlobalKey.new);
-    Widget asHero(Widget child) {
-      return Hero(
-        key: heroWidgetKey,
-        tag: heroTag ?? post.id,
-        child: child,
-      );
-    }
 
     useEffect(() {
       Future(() {
@@ -121,43 +112,38 @@ class PostVideo extends HookConsumerWidget {
       alignment: Alignment.center,
       fit: StackFit.passthrough,
       children: [
-        if (isBlur.value)
-          asHero(AspectRatio(
-            aspectRatio: post.aspectRatio,
-            child: PostPlaceholderImage(
-              post: post,
-              shouldBlur: true,
-            ),
-          ))
-        else
-          asHero(
-            Center(
-              child: AspectRatio(
-                aspectRatio: post.aspectRatio,
-                child: playerController.maybeWhen(
-                  data: (controller) => Stack(
-                    fit: StackFit.passthrough,
-                    children: [
-                      PostPlaceholderImage(
+        Hero(
+          key: ValueKey(post),
+          tag: heroTag ?? post.id,
+          child: Center(
+            child: AspectRatio(
+              aspectRatio: post.aspectRatio,
+              child: isBlur.value
+                  ? PostPlaceholderImage(post: post, shouldBlur: true)
+                  : controllerFuture.maybeWhen(
+                      data: (controller) => Stack(
+                        fit: StackFit.passthrough,
+                        children: [
+                          PostPlaceholderImage(
+                            post: post,
+                            shouldBlur: false,
+                          ),
+                          VideoPlayer(controller),
+                        ],
+                      ),
+                      orElse: () => PostPlaceholderImage(
                         post: post,
                         shouldBlur: false,
                       ),
-                      VideoPlayer(controller),
-                    ],
-                  ),
-                  orElse: () => PostPlaceholderImage(
-                    post: post,
-                    shouldBlur: false,
-                  ),
-                ),
-              ),
+                    ),
             ),
           ),
+        ),
         _Toolbox(
           post: post,
           controller: isBlur.value
               ? null
-              : playerController.whenOrNull(data: (it) => it),
+              : controllerFuture.whenOrNull(data: (it) => it),
           disableProgressBar: isBlur.value,
         ),
         if (shouldBlur && blurNoticeAnimator.status != AnimationStatus.reverse)
