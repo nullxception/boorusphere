@@ -205,9 +205,24 @@ class _PlayerOverlay extends HookConsumerWidget {
       },
       child: Container(
         color: visible ? Colors.black38 : Colors.transparent,
-        child: visible
-            ? SafeArea(
-                child: _PlayerToolbox(
+        child: Visibility(
+          visible: visible,
+          replacement: const SizedBox.expand(),
+          child: SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _PlayPauseOverlay(
+                  isPlaying: isPlaying.value,
+                  controller: controller,
+                  onPlayChange: (value) {
+                    isPlaying.value = value;
+                    if (controller != null) {
+                      scheduleHide();
+                    }
+                  },
+                ),
+                _ToolboxOverlay(
                   isPlaying: isPlaying.value,
                   controller: controller,
                   post: post,
@@ -219,15 +234,17 @@ class _PlayerOverlay extends HookConsumerWidget {
                     isPlaying.value = value;
                   },
                 ),
-              )
-            : const SizedBox.expand(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
-class _PlayerToolbox extends ConsumerWidget {
-  const _PlayerToolbox({
+class _ToolboxOverlay extends ConsumerWidget {
+  const _ToolboxOverlay({
     required this.controller,
     required this.post,
     required this.isPlaying,
@@ -251,81 +268,89 @@ class _PlayerToolbox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = this.controller;
 
-    return Stack(
-      alignment: Alignment.center,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Colors.black38,
-            shape: BoxShape.circle,
-          ),
-          child: IconButton(
-            padding: const EdgeInsets.all(8.0),
-            color: Colors.white,
-            iconSize: 72,
-            icon: Icon(
-              isPlaying ? Icons.pause_outlined : Icons.play_arrow,
-            ),
-            onPressed: () {
-              if (controller != null) {
-                onPlayChange?.call(!controller.value.isPlaying);
-                controller.value.isPlaying
-                    ? controller.pause()
-                    : controller.play();
-                onAutoHideRequest?.call();
-              } else {
-                onPlayChange?.call(!isPlaying);
-              }
-            },
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.max,
+        Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                PostFavoriteButton(post: post),
-                PostDownloadButton(post: post),
-                IconButton(
-                  padding: const EdgeInsets.all(16),
-                  color: Colors.white,
-                  onPressed: () async {
-                    final mute = await ref
-                        .read(contentSettingStateProvider.notifier)
-                        .toggleVideoPlayerMute();
-                    await controller?.setVolume(mute ? 0 : 1);
-                  },
-                  icon: Icon(
-                    isMuted ? Icons.volume_mute : Icons.volume_up,
-                  ),
-                ),
-                PostDetailsButton(post: post),
-                IconButton(
-                  color: Colors.white,
-                  icon: Icon(
-                    isFullscreen
-                        ? Icons.fullscreen_exit
-                        : Icons.fullscreen_outlined,
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  onPressed: () {
-                    ref
-                        .read(fullscreenStateProvider.notifier)
-                        .toggle(shouldLandscape: post.width > post.height);
-                    onAutoHideRequest?.call();
-                  },
-                ),
-              ],
+            PostFavoriteButton(post: post),
+            PostDownloadButton(post: post),
+            IconButton(
+              padding: const EdgeInsets.all(16),
+              color: Colors.white,
+              onPressed: () async {
+                final mute = await ref
+                    .read(contentSettingStateProvider.notifier)
+                    .toggleVideoPlayerMute();
+                await controller?.setVolume(mute ? 0 : 1);
+              },
+              icon: Icon(
+                isMuted ? Icons.volume_mute : Icons.volume_up,
+              ),
             ),
-            _Progress(
-              controller: controller,
-              enabled: !disableProgressBar,
+            PostDetailsButton(post: post),
+            IconButton(
+              color: Colors.white,
+              icon: Icon(
+                isFullscreen
+                    ? Icons.fullscreen_exit
+                    : Icons.fullscreen_outlined,
+              ),
+              padding: const EdgeInsets.all(16),
+              onPressed: () {
+                ref
+                    .read(fullscreenStateProvider.notifier)
+                    .toggle(shouldLandscape: post.width > post.height);
+                onAutoHideRequest?.call();
+              },
             ),
           ],
         ),
+        _Progress(
+          controller: controller,
+          enabled: !disableProgressBar,
+        ),
       ],
+    );
+  }
+}
+
+class _PlayPauseOverlay extends StatelessWidget {
+  const _PlayPauseOverlay({
+    required this.isPlaying,
+    required this.controller,
+    required this.onPlayChange,
+  });
+
+  final bool isPlaying;
+  final VideoPlayerController? controller;
+  final void Function(bool value)? onPlayChange;
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = this.controller;
+
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Colors.black38,
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        padding: const EdgeInsets.all(8.0),
+        color: Colors.white,
+        iconSize: 72,
+        icon: Icon(isPlaying ? Icons.pause_outlined : Icons.play_arrow),
+        onPressed: () {
+          if (controller != null) {
+            onPlayChange?.call(!controller.value.isPlaying);
+            controller.value.isPlaying ? controller.pause() : controller.play();
+          } else {
+            onPlayChange?.call(!isPlaying);
+          }
+        },
+      ),
     );
   }
 }
