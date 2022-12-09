@@ -32,7 +32,7 @@ class Boorusphere extends HookConsumerWidget {
     }, [locale]);
 
     useEffect(() {
-      ref.read(flutterDownloaderHandleProvider.notifier).listen((progress) {
+      ref.read(downloaderHandleProvider).listen((progress) {
         ref.read(downloadStateProvider.notifier).updateProgress(progress);
         if (progress.status.isDownloaded) {
           DownloadUtils.rescanMedia();

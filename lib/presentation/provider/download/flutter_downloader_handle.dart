@@ -8,28 +8,21 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'flutter_downloader_handle.g.dart';
 
-@riverpod
-class FlutterDownloaderHandle extends _$FlutterDownloaderHandle {
-  final receiver = ReceivePort();
+@Riverpod(keepAlive: true)
+FlutterDownloaderHandle downloaderHandle(DownloaderHandleRef ref) {
+  final handle = FlutterDownloaderHandle();
+  ref.onDispose(handle.dispose);
+  return handle;
+}
 
-  @override
-  void build() {
-    ref.onDispose(() {
-      if (IsolateNameServer.lookupPortByName(_name) != null) {
-        IsolateNameServer.removePortNameMapping(_name);
-      }
-    });
-    if (IsolateNameServer.lookupPortByName(_name) != null) {
-      IsolateNameServer.removePortNameMapping(_name);
-    }
-    IsolateNameServer.registerPortWithName(
-      receiver.sendPort,
-      _name,
-    );
+class FlutterDownloaderHandle {
+  FlutterDownloaderHandle() {
+    dispose();
+    IsolateNameServer.registerPortWithName(receiver.sendPort, _name);
     FlutterDownloader.registerCallback(_onProgressUpdated);
   }
 
-  static const _name = 'flutterDownloaderHandle';
+  final receiver = ReceivePort();
 
   void listen(void Function(DownloadProgress progress) onUpdate) {
     receiver.listen((data) {
@@ -43,6 +36,14 @@ class FlutterDownloaderHandle extends _$FlutterDownloaderHandle {
       onUpdate(progress);
     });
   }
+
+  void dispose() {
+    if (IsolateNameServer.lookupPortByName(_name) != null) {
+      IsolateNameServer.removePortNameMapping(_name);
+    }
+  }
+
+  static const _name = 'DownloaderHandle';
 
   @pragma('vm:entry-point')
   static void _onProgressUpdated(
