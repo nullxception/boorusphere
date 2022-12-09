@@ -1,4 +1,10 @@
 
+## 1.2.6
+* Add Thai language (ภาษาไทย, translated by @altinat)
+* Improve and fix several issues on video player
+* Fix download status and progress not showing properly
+* Keep screen awake when opening post viewer
+
 ## 1.2.5
 * Add support for Incognito Keyboard mode (Settings -> Safe Mode -> Incognito Keyboard)
 * Fix scanner is being blocked on some site (such as e621)
