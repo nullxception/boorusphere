@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/presentation/provider/data_backup.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -9,7 +10,7 @@ class ServerLocalSource {
   final AssetBundle assetBundle;
   final Box<ServerData> box;
 
-  List<ServerData> get servers => box.values.map((it) => it).toList();
+  List<ServerData> get servers => box.values.toList();
 
   Future<void> _migrateKeys() async {
     final mapped = Map<String, ServerData>.from(box.toMap());
@@ -68,6 +69,22 @@ class ServerLocalSource {
 
   Future<void> remove(ServerData data) async {
     await box.delete(data.key);
+  }
+
+  Future<void> import(String src) async {
+    final List maps = jsonDecode(src);
+    if (maps.isEmpty) return;
+    await box.deleteAll(box.keys);
+    for (final map in maps) {
+      if (map is Map<String, dynamic>) {
+        final server = ServerData.fromJson(map);
+        await add(server);
+      }
+    }
+  }
+
+  Future<BackupItem> export() async {
+    return BackupItem(key, box.values.map((e) => e.toJson()).toList());
   }
 
   static const String key = 'server';

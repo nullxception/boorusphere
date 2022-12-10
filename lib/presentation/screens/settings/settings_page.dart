@@ -55,6 +55,7 @@ class SettingsPage extends StatelessWidget {
             _Section(
               title: Text(context.t.settings.misc),
               children: const [
+                _BackupRestore(),
                 _ClearCache(),
               ],
             ),
@@ -310,6 +311,24 @@ class _PostLimit extends ConsumerWidget {
               .setPostLimit(value as int);
         },
       ),
+    );
+  }
+}
+
+class _BackupRestore extends StatelessWidget {
+  const _BackupRestore();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(context.t.dataBackup.title),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(context.t.dataBackup.desc),
+      ),
+      onTap: () {
+        context.router.push(const DataBackupRoute());
+      },
     );
   }
 }

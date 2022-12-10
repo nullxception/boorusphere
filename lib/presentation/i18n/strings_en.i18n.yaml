@@ -39,6 +39,7 @@ go_home: "Back to home"
 recently: "Recently"
 search_hint: "Search on ${server_name}..."
 version: "Version ${version}"
+restore: "Restore"
 
 rating:
   title: "Rating"
@@ -185,3 +186,17 @@ settings:
     title: "Clear cache"
     desc: "Clear loaded content from cache"
     done: "Cache cleared"
+
+data_backup:
+  title: "Backup and Restore"
+  desc: "Backup and Restore app data"
+  backup:
+    title: "Backup data"
+    desc: "Backup app data into a file"
+    success: "Backup created at :\n${dest}"
+  restore:
+    title: "Restore data"
+    desc: "Restore app data from backup file"
+    success: "App data has been restored"
+    invalid: "Invalid backup file"
+    warning: "Warning! this action will overwrite any existing data.\nAre you sure you want to continue ?"

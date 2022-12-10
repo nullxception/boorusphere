@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
+import 'package:boorusphere/presentation/provider/data_backup.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -28,6 +31,22 @@ class FavoritePostLocalSource {
     );
 
     await box.put(fav.key, fav);
+  }
+
+  Future<void> import(String src) async {
+    final List maps = jsonDecode(src);
+    if (maps.isEmpty) return;
+    await box.deleteAll(box.keys);
+    for (final map in maps) {
+      if (map is Map) {
+        final fav = FavoritePost.fromJson(Map.from(map));
+        await box.put(fav.key, fav);
+      }
+    }
+  }
+
+  Future<BackupItem> export() async {
+    return BackupItem(key, box.values.map((e) => e.toJson()).toList());
   }
 
   static const String key = 'favorites';

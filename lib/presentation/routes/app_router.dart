@@ -16,6 +16,7 @@ import 'package:boorusphere/presentation/screens/post/post_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_editor_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_preset_page.dart';
+import 'package:boorusphere/presentation/screens/settings/data_backup_page.dart';
 import 'package:boorusphere/presentation/screens/settings/language_settings_page.dart';
 import 'package:boorusphere/presentation/screens/settings/settings_page.dart';
 import 'package:boorusphere/presentation/screens/tags_blocker/tags_blocker_page.dart';
@@ -61,6 +62,10 @@ part 'app_router.gr.dart';
     ),
     CustomRoute(
       page: LanguageSettingsPage,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
+    CustomRoute(
+      page: DataBackupPage,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(

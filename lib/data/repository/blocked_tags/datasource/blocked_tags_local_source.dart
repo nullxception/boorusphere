@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:boorusphere/presentation/provider/data_backup.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class BlockedTagsLocalSource {
@@ -22,6 +25,21 @@ class BlockedTagsLocalSource {
     }
   }
 
-  static String key = 'blockedTags';
+  Future<void> import(String src) async {
+    final List tags = jsonDecode(src);
+    if (tags.isEmpty) return;
+    await box.deleteAll(box.keys);
+    for (var element in tags) {
+      if (element is String) {
+        await push(element);
+      }
+    }
+  }
+
+  Future<BackupItem> export() async {
+    return BackupItem(key, box.values.toList());
+  }
+
+  static const String key = 'blockedTags';
   static Future<void> prepare() => Hive.openBox<String>(key);
 }
