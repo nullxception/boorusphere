@@ -30,5 +30,7 @@ class Post with _$Post {
     @HiveField(19, defaultValue: []) @Default([]) List<String> tagsMeta,
   }) = _Post;
 
+  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
+
   static const empty = Post();
 }

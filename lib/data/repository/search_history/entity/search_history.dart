@@ -12,4 +12,6 @@ class SearchHistory with _$SearchHistory {
     @HiveField(0, defaultValue: '') @Default('*') String query,
     @HiveField(1, defaultValue: '') @Default('') String server,
   }) = _SearchHistory;
+  factory SearchHistory.fromJson(Map<String, dynamic> json) =>
+      _$SearchHistoryFromJson(json);
 }
