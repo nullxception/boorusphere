@@ -22,6 +22,7 @@ class UiSettingState extends _$UiSettingState {
       themeMode: ThemeMode
           .values[_repo.get(Setting.uiThemeMode, or: ThemeMode.system.index)],
       midnightMode: _repo.get(Setting.uiMidnightMode, or: false),
+      imeIncognito: _repo.get(Setting.imeIncognito, or: false),
     );
   }
 
@@ -83,7 +84,7 @@ class UiSettingState extends _$UiSettingState {
     return state.midnightMode;
   }
 
-  Future<bool> setimeIncognito(bool value) async {
+  Future<bool> setImeIncognito(bool value) async {
     state = state.copyWith(imeIncognito: value);
     await _repo.put(Setting.imeIncognito, value);
     return state.imeIncognito;

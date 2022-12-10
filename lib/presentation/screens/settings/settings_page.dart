@@ -230,7 +230,7 @@ class _ImeIncognito extends ConsumerWidget {
       ),
       value: ref.watch(uiSettingStateProvider.select((ui) => ui.imeIncognito)),
       onChanged: (value) {
-        ref.read(uiSettingStateProvider.notifier).setimeIncognito(value);
+        ref.read(uiSettingStateProvider.notifier).setImeIncognito(value);
       },
     );
   }
