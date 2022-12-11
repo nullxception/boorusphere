@@ -39,6 +39,7 @@ go_home: "Kembali ke beranda"
 recently: "Baru-baru ini"
 search_hint: "Cari di ${server_name}..."
 version: "Versi ${version}"
+restore: "Pulihkan"
 
 rating:
   title: "Penilaian"
@@ -185,3 +186,17 @@ settings:
     title: "Hapus cache"
     desc: "Hapus konten yang tersimpan di cache"
     done: "Cache dibersihkan"
+
+data_backup:
+  title: "Cadangan dan Pulihkan"
+  desc: "Mencadangkan atau memulihkan data aplikasi"
+  backup:
+    title: "Mencadangkan data"
+    desc: "Buat file cadangan data aplikasi"
+    success: "File cadangan telah dibuat :\n${dest}"
+  restore:
+    title: "Memulihkan data"
+    desc: "Pulihkan data aplikasi dari file cadangan"
+    success: "Data aplikasi telah dipulihkan"
+    invalid: "File cadangan tidak valid"
+    warning: "Perhatian! tindakan ini akan menimpa data yang ada.\nApakah kamu yakin ingin melanjutkan?"
