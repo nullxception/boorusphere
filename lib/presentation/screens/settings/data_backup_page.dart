@@ -1,5 +1,6 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/data_backup.dart';
+import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
+import 'package:boorusphere/presentation/provider/data_backup/entity/backup_result.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -50,6 +51,29 @@ class _Content extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const subtitlePadding = EdgeInsets.only(top: 8);
+    ref.listen<BackupResult?>(dataBackupStateProvider, (prev, next) {
+      next?.maybeWhen(
+        imported: () {
+          context.scaffoldMessenger.showSnackBar(SnackBar(
+            content: Text(context.t.dataBackup.restore.success),
+            duration: const Duration(seconds: 1),
+          ));
+        },
+        exported: (data) {
+          context.scaffoldMessenger.showSnackBar(SnackBar(
+            content: Text(context.t.dataBackup.backup.success(dest: data)),
+            duration: const Duration(seconds: 2),
+          ));
+        },
+        error: (error, stackTrace) {
+          context.scaffoldMessenger.showSnackBar(SnackBar(
+            content: Text(context.t.dataBackup.restore.invalid),
+            duration: const Duration(seconds: 1),
+          ));
+        },
+        orElse: () {},
+      );
+    });
 
     return ListView(
       children: [
@@ -59,12 +83,8 @@ class _Content extends ConsumerWidget {
             padding: subtitlePadding,
             child: Text(context.t.dataBackup.backup.desc),
           ),
-          onTap: () async {
-            final dest = await ref.read(dataBackupProvider).export();
-            context.scaffoldMessenger.showSnackBar(SnackBar(
-              content: Text(context.t.dataBackup.backup.success(dest: dest)),
-              duration: const Duration(seconds: 2),
-            ));
+          onTap: () {
+            ref.read(dataBackupStateProvider.notifier).export();
           },
         ),
         ListTile(
@@ -73,22 +93,10 @@ class _Content extends ConsumerWidget {
             padding: subtitlePadding,
             child: Text(context.t.dataBackup.restore.desc),
           ),
-          onTap: () async {
-            final res = await ref
-                .read(dataBackupProvider)
+          onTap: () {
+            ref
+                .read(dataBackupStateProvider.notifier)
                 .import(onConfirm: () => _warningDialog(context));
-
-            if (res == DataBackupResult.success) {
-              context.scaffoldMessenger.showSnackBar(SnackBar(
-                content: Text(context.t.dataBackup.restore.success),
-                duration: const Duration(seconds: 1),
-              ));
-            } else if (res == DataBackupResult.invalid) {
-              context.scaffoldMessenger.showSnackBar(SnackBar(
-                content: Text(context.t.dataBackup.restore.invalid),
-                duration: const Duration(seconds: 1),
-              ));
-            }
           },
         ),
       ],

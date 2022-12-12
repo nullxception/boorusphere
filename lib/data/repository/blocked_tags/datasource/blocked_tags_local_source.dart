@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:boorusphere/presentation/provider/data_backup.dart';
+import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class BlockedTagsLocalSource {

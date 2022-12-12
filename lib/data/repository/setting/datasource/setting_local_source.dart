@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/data/repository/setting/migrator/setting_migrator.dart';
-import 'package:boorusphere/presentation/provider/data_backup.dart';
+import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
 class SettingLocalSource {

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
-import 'package:boorusphere/presentation/provider/data_backup.dart';
+import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

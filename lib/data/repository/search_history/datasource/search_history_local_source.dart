@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
-import 'package:boorusphere/presentation/provider/data_backup.dart';
+import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
 class SearchHistoryLocalSource {

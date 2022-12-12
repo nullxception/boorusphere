@@ -11,6 +11,7 @@ import 'package:boorusphere/data/repository/setting/datasource/setting_local_sou
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
+import 'package:boorusphere/presentation/provider/data_backup/entity/backup_result.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -27,45 +28,27 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'data_backup.g.dart';
 
-@riverpod
-DataBackup dataBackup(DataBackupRef ref) {
-  return DataBackup(
-    serverLocalSource: ref.watch(serverLocalSourceProvider),
-    blockedTagsLocalSource: ref.watch(blockedTagsLocalSourceProvider),
-    favoritePostLocalSource: ref.watch(favoritePostLocalSourceProvider),
-    settingLocalSource: ref.watch(settingLocalSourceProvider),
-    searchHistoryLocalSource: ref.watch(searchHistoryLocalSourceProvider),
-    versionRepo: ref.watch(versionRepoProvider),
-    invalidate: ref.invalidate,
-  );
-}
-
-enum DataBackupResult {
-  cancelled,
-  invalid,
-  success;
-}
-
 typedef BackupItem = MapEntry<String, Object>;
 
-class DataBackup {
-  const DataBackup({
-    required this.serverLocalSource,
-    required this.blockedTagsLocalSource,
-    required this.favoritePostLocalSource,
-    required this.settingLocalSource,
-    required this.searchHistoryLocalSource,
-    required this.versionRepo,
-    this.invalidate,
-  });
+@riverpod
+class DataBackupState extends _$DataBackupState {
+  late ServerLocalSource _serverLocalSource;
+  late BlockedTagsLocalSource _blockedTagsLocalSource;
+  late FavoritePostLocalSource _favoritePostLocalSource;
+  late SettingLocalSource _settingLocalSource;
+  late SearchHistoryLocalSource _searchHistoryLocalSource;
+  late VersionRepo _versionRepo;
 
-  final ServerLocalSource serverLocalSource;
-  final BlockedTagsLocalSource blockedTagsLocalSource;
-  final FavoritePostLocalSource favoritePostLocalSource;
-  final SettingLocalSource settingLocalSource;
-  final SearchHistoryLocalSource searchHistoryLocalSource;
-  final VersionRepo versionRepo;
-  final void Function(ProviderOrFamily)? invalidate;
+  @override
+  BackupResult build() {
+    _serverLocalSource = ref.watch(serverLocalSourceProvider);
+    _blockedTagsLocalSource = ref.watch(blockedTagsLocalSourceProvider);
+    _favoritePostLocalSource = ref.watch(favoritePostLocalSourceProvider);
+    _settingLocalSource = ref.watch(settingLocalSourceProvider);
+    _searchHistoryLocalSource = ref.watch(searchHistoryLocalSourceProvider);
+    _versionRepo = ref.watch(versionRepoProvider);
+    return const BackupResult.idle();
+  }
 
   Future<Directory> _tempDir() async {
     final basedir = await getTemporaryDirectory();
@@ -86,21 +69,21 @@ class DataBackup {
   }
 
   Future<BackupItem> _metadata() async {
-    return BackupItem(appId, {'version': '${versionRepo.current}'});
+    return BackupItem(appId, {'version': '${_versionRepo.current}'});
   }
 
   void _invalidateProviders() {
-    invalidate?.call(serverDataStateProvider);
-    invalidate?.call(blockedTagsStateProvider);
-    invalidate?.call(searchHistoryStateProvider);
-    invalidate?.call(favoritePostStateProvider);
-    invalidate?.call(uiSettingStateProvider);
-    invalidate?.call(contentSettingStateProvider);
-    invalidate?.call(downloadSettingStateProvider);
-    invalidate?.call(serverSettingStateProvider);
+    ref.invalidate(serverDataStateProvider);
+    ref.invalidate(blockedTagsStateProvider);
+    ref.invalidate(searchHistoryStateProvider);
+    ref.invalidate(favoritePostStateProvider);
+    ref.invalidate(uiSettingStateProvider);
+    ref.invalidate(contentSettingStateProvider);
+    ref.invalidate(downloadSettingStateProvider);
+    ref.invalidate(serverSettingStateProvider);
   }
 
-  Future<DataBackupResult> import({Future<bool?> Function()? onConfirm}) async {
+  Future<void> import({Future<bool?> Function()? onConfirm}) async {
     final backupsDir = await _backupDir();
     await FilePicker.platform.clearTemporaryFiles();
 
@@ -112,34 +95,41 @@ class DataBackup {
     );
 
     final bytes = await result?.files.single.readStream?.first;
-    if (bytes == null) return DataBackupResult.cancelled;
+    if (bytes == null) {
+      state = const BackupResult.idle();
+      return;
+    }
 
     final decoder = ZipDecoder().decodeBytes(bytes);
     if (!decoder.files.any((it) => it.name == '$appId.json')) {
-      return DataBackupResult.invalid;
+      state = const BackupResult.error();
+      return;
     }
 
     final confirm = onConfirm ?? () async => true;
     final continueRestore = await confirm.call() ?? false;
-    if (!continueRestore) return DataBackupResult.cancelled;
+    if (!continueRestore) {
+      state = const BackupResult.idle();
+      return;
+    }
 
     for (final json in decoder.files) {
       final content = utf8.decode(json.content);
       switch (json.name.replaceAll('.json', '')) {
         case ServerLocalSource.key:
-          await serverLocalSource.import(content);
+          await _serverLocalSource.import(content);
           break;
         case BlockedTagsLocalSource.key:
-          await blockedTagsLocalSource.import(content);
+          await _blockedTagsLocalSource.import(content);
           break;
         case FavoritePostLocalSource.key:
-          await favoritePostLocalSource.import(content);
+          await _favoritePostLocalSource.import(content);
           break;
         case SettingLocalSource.key:
-          await settingLocalSource.import(content);
+          await _settingLocalSource.import(content);
           break;
         case SearchHistoryLocalSource.key:
-          await searchHistoryLocalSource.import(content);
+          await _searchHistoryLocalSource.import(content);
           break;
         default:
           break;
@@ -147,15 +137,15 @@ class DataBackup {
     }
 
     _invalidateProviders();
-    return DataBackupResult.success;
+    state = const BackupResult.imported();
   }
 
-  Future<String> export() async {
-    final server = serverLocalSource.export();
-    final blockedTags = blockedTagsLocalSource.export();
-    final favoritePost = favoritePostLocalSource.export();
-    final setting = settingLocalSource.export();
-    final searchHistory = searchHistoryLocalSource.export();
+  Future<void> export() async {
+    final server = _serverLocalSource.export();
+    final blockedTags = _blockedTagsLocalSource.export();
+    final favoritePost = _favoritePostLocalSource.export();
+    final setting = _settingLocalSource.export();
+    final searchHistory = _searchHistoryLocalSource.export();
     final temp = await _tempDir();
     final encoder = ZipFileEncoder();
     encoder.create('${temp.path}/data.zip');
@@ -191,7 +181,7 @@ class DataBackup {
 
     await File(encoder.zipPath).copy(zip.path);
     temp.deleteSync(recursive: true);
-    return zip.path;
+    state = BackupResult.exported(zip.path);
   }
 
   static const appId = 'boorusphere';
