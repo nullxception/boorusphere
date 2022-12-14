@@ -10,10 +10,7 @@ class FullscreenState extends _$FullscreenState {
 
   @override
   bool build() {
-    ref.onDispose(() {
-      SystemChrome.setPreferredOrientations([]);
-      unfullscreen();
-    });
+    ref.onDispose(reset);
     lastOrientations = [];
     return false;
   }
@@ -45,5 +42,10 @@ class FullscreenState extends _$FullscreenState {
     } else {
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
+  }
+
+  void reset() {
+    SystemChrome.setPreferredOrientations([]);
+    unfullscreen();
   }
 }
