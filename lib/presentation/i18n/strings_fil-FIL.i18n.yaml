@@ -139,7 +139,7 @@ servers:
   addr_error: "hindi valid ang address"
   api_addr: "API Address"
   api_addr_hint: "API address, halimbawa: https://api-v69.verycoolbooru.com"
-  already_exists: "Mayroon nang data ng server para sa ${name}"
+  already_exists: "Mayroon nang data ang server na ${name}"
 
 server_query:
   title: "Query"
