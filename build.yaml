@@ -14,7 +14,7 @@ targets:
           base_locale: en
           fallback_strategy: base_locale
           input_file_pattern: .i18n.yaml
+          flat_map: false
           timestamp: false
           key_case: camel
           param_case: camel
-          translation_overrides: true
