@@ -181,6 +181,7 @@ class DataBackupState extends _$DataBackupState {
 
     await File(encoder.zipPath).copy(zip.path);
     temp.deleteSync(recursive: true);
+    await DownloadUtils.rescanMedia();
     state = BackupResult.exported(zip.path);
   }
 
