@@ -58,6 +58,19 @@ class SearchBarController extends ChangeNotifier {
     _value = '${result.join(' ')} ';
   }
 
+  void replaceLast(String newValue) {
+    final current = value.toWordList();
+    final result = {
+      if (current.isNotEmpty) ...current.take(current.length - 1),
+      ...newValue.toWordList()
+    };
+    _value = '${result.join(' ')} ';
+  }
+
+  void appendTyped(String newValue) {
+    value.endsWith(' ') ? append(newValue) : replaceLast(newValue);
+  }
+
   void reset() {
     _value = initial;
     notifyListeners();

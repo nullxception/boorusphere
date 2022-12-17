@@ -115,7 +115,7 @@ class SearchSuggestion extends HookConsumerWidget {
                                 server: entry.value.server,
                               ),
                               onTap: searchBar.submit,
-                              onAdded: searchBar.append,
+                              onAdded: searchBar.appendTyped,
                             ),
                           ),
                         );
@@ -165,7 +165,7 @@ class SearchSuggestion extends HookConsumerWidget {
                                     text: data.elementAt(index),
                                   ),
                                   onTap: searchBar.submit,
-                                  onAdded: searchBar.append,
+                                  onAdded: searchBar.appendTyped,
                                 ),
                               );
                             },
