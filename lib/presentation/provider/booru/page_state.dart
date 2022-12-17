@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
@@ -22,7 +23,7 @@ class PageState extends _$PageState {
   late ServerData _server;
   late int _skipCount;
   late int _page;
-  late Map<int, String> _blockedTags;
+  late List<BooruTag> _allBlockedTags;
 
   // Posts holder
   // Mutable collections is used here since we'll use it on multiple
@@ -36,7 +37,7 @@ class PageState extends _$PageState {
   @override
   FetchResult<PageData> build() {
     _server = ref.watch(serverSettingStateProvider.select((it) => it.active));
-    _blockedTags = ref.watch(blockedTagsStateProvider);
+    _allBlockedTags = ref.watch(blockedTagsStateProvider).values.toList();
     _repo = ref.read(booruRepoProvider(_server));
     _skipCount = 0;
     _page = 0;
@@ -46,6 +47,12 @@ class PageState extends _$PageState {
       posts: _posts,
       option: PageOption(query: lastQuery, clear: true),
     ));
+  }
+
+  Iterable<String> get blockedTags {
+    return _allBlockedTags
+        .where((it) => it.serverId.isEmpty || it.serverId == _server.id)
+        .map((it) => it.name);
   }
 
   Future<void> update(PageOption Function(PageOption) updater) async {
@@ -92,7 +99,7 @@ class PageState extends _$PageState {
 
     if (_posts.isEmpty) _page = 0;
     lastQuery = state.data.option.query;
-    if (lastQuery.toWordList().any(_blockedTags.values.contains)) {
+    if (lastQuery.toWordList().any(blockedTags.contains)) {
       state = FetchResult.error(state.data, error: BooruError.tagsBlocked);
       return;
     }
@@ -109,7 +116,7 @@ class PageState extends _$PageState {
 
         _page++;
         final newPosts = page.where((it) =>
-            !it.tags.any(_blockedTags.values.contains) &&
+            !it.tags.any(blockedTags.contains) &&
             !_posts.any((post) => post.id == it.id));
 
         if (newPosts.isEmpty) {

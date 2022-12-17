@@ -42,7 +42,9 @@ class _TagsBlockerContent extends HookConsumerWidget {
                 enableIMEPersonalizedLearning: !imeIncognito,
                 onSubmitted: (value) {
                   final values = value.toWordList();
-                  ref.read(blockedTagsStateProvider.notifier).pushAll(values);
+                  ref
+                      .read(blockedTagsStateProvider.notifier)
+                      .pushAll(tags: values);
                   controller.clear();
                 },
                 decoration: InputDecoration(
@@ -63,7 +65,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
           ),
         for (final tag in blockedTags.entries)
           ListTile(
-            title: Text(tag.value),
+            title: Text(tag.value.name),
             leading: const Icon(Icons.block),
             trailing: IconButton(
               onPressed: () {

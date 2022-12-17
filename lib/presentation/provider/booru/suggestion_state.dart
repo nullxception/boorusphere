@@ -33,7 +33,8 @@ class SuggestionState extends _$SuggestionState {
         data: (data, src) {
           final blockedTags = ref.read(blockedTagsRepoProvider);
           final result = data
-              .where((it) => !blockedTags.get().values.contains(it))
+              .where((it) =>
+                  !blockedTags.get().values.map((e) => e.name).contains(it))
               .toISet();
 
           state = FetchResult.data(result);

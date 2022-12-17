@@ -1,4 +1,5 @@
 import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
+import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/datasource/downloader_source.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
@@ -23,6 +24,7 @@ void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(ServersAdapter());
+  Hive.registerAdapter(BooruTagAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
   Hive.registerAdapter(PostAdapter());
   Hive.registerAdapter(DownloadEntryAdapter());

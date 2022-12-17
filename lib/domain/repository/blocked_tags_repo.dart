@@ -1,5 +1,7 @@
+import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
+
 abstract class BlockedTagsRepo {
-  Map<int, String> get();
+  Map<int, BooruTag> get();
   Future<void> delete(key);
-  Future<void> push(String value);
+  Future<void> push(BooruTag value);
 }

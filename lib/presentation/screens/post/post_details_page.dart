@@ -198,7 +198,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
               if (selectedTags.isNotEmpty) {
                 ref
                     .read(blockedTagsStateProvider.notifier)
-                    .pushAll(selectedTags);
+                    .pushAll(tags: selectedTags);
                 context.scaffoldMessenger.showSnackBar(
                   SnackBar(
                     content: Text(context.t.actionTag.blocked),

@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/dio/app_dio.dart';
 import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
+import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/datasource/booru_network_source.dart';
 import 'package:boorusphere/data/repository/changelog/datasource/changelog_local_source.dart';
 import 'package:boorusphere/data/repository/changelog/datasource/changelog_network_source.dart';
@@ -78,7 +79,7 @@ BooruNetworkSource booruNetworkSource(BooruNetworkSourceRef ref) {
 
 @riverpod
 BlockedTagsLocalSource blockedTagsLocalSource(BlockedTagsLocalSourceRef ref) {
-  final box = Hive.box<String>(BlockedTagsLocalSource.key);
+  final box = Hive.box<BooruTag>(BlockedTagsLocalSource.key);
   return BlockedTagsLocalSource(box);
 }
 
