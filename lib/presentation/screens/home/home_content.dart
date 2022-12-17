@@ -1,8 +1,11 @@
+import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/home_status.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +16,16 @@ class HomeContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final server =
+        ref.watch(serverSettingStateProvider.select((it) => it.active));
+    final blockedTags = ref.watch(blockedTagsStateProvider.select(
+      (state) => state.values
+          .where((it) => it.serverId.isEmpty || it.serverId == server.id)
+          .map((it) => it.name),
+    ));
     final pageState = ref.watch(pageStateProvider);
+    final filteredPost = pageState.data.posts
+        .where((it) => !it.allTags.any(blockedTags.contains));
     final controller = useTimelineController(onLoadMore: () {
       ref.read(pageStateProvider.notifier).loadMore();
     });
@@ -48,7 +60,7 @@ class HomeContent extends HookConsumerWidget {
                   padding: const EdgeInsets.all(10),
                   sliver: Timeline(
                     controller: controller,
-                    posts: pageState.data.posts,
+                    posts: filteredPost,
                   ),
                 ),
               ),

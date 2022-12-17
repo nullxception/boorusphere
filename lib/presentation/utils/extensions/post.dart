@@ -17,14 +17,16 @@ extension PostExt on Post {
         ...tagsMeta
       ].isNotEmpty;
 
-  String get describeTags => {
+  Set<String> get allTags => {
         ...tagsArtist,
         ...tagsCharacter,
         ...tagsCopyright,
         ...tagsGeneral,
         ...tagsMeta,
         ...tags,
-      }.join(' ');
+      };
+
+  String get describeTags => allTags.join(' ');
 
   double get aspectRatio {
     if (prescreensize.hasPixels) {

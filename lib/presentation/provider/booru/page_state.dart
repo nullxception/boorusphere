@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
@@ -12,6 +11,7 @@ import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,7 +23,6 @@ class PageState extends _$PageState {
   late ServerData _server;
   late int _skipCount;
   late int _page;
-  late List<BooruTag> _allBlockedTags;
 
   // Posts holder
   // Mutable collections is used here since we'll use it on multiple
@@ -37,7 +36,6 @@ class PageState extends _$PageState {
   @override
   FetchResult<PageData> build() {
     _server = ref.watch(serverSettingStateProvider.select((it) => it.active));
-    _allBlockedTags = ref.watch(blockedTagsStateProvider).values.toList();
     _repo = ref.read(booruRepoProvider(_server));
     _skipCount = 0;
     _page = 0;
@@ -50,7 +48,9 @@ class PageState extends _$PageState {
   }
 
   Iterable<String> get blockedTags {
-    return _allBlockedTags
+    return ref
+        .read(blockedTagsStateProvider)
+        .values
         .where((it) => it.serverId.isEmpty || it.serverId == _server.id)
         .map((it) => it.name);
   }
@@ -115,11 +115,12 @@ class PageState extends _$PageState {
         }
 
         _page++;
-        final newPosts = page.where((it) =>
-            !it.tags.any(blockedTags.contains) &&
-            !_posts.any((post) => post.id == it.id));
+        final newPosts =
+            page.where((it) => !_posts.any((post) => post.id == it.id));
 
-        if (newPosts.isEmpty) {
+        final displayedPosts =
+            newPosts.where((it) => !it.allTags.any(blockedTags.contains));
+        if (displayedPosts.isEmpty) {
           if (_skipCount > 3) return;
           _skipCount++;
           return Future.delayed(const Duration(milliseconds: 150), _fetch);
