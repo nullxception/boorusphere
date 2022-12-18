@@ -6,7 +6,7 @@ import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
-import 'package:boorusphere/utils/download.dart';
+import 'package:boorusphere/utils/file_utils.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -102,7 +102,7 @@ class _HideMedia extends HookWidget {
     final markMayNeedRebuild = useMarkMayNeedRebuild();
 
     return FutureBuilder(
-      future: DownloadUtils.hasDotnomedia,
+      future: FileUtils.hasNoMediaFile,
       initialData: false,
       builder: (context, snapshot) {
         final data = snapshot.data;
@@ -116,8 +116,8 @@ class _HideMedia extends HookWidget {
           value: value,
           onChanged: (isEnabled) async {
             isEnabled
-                ? await DownloadUtils.createDotnomedia()
-                : await DownloadUtils.removeDotnomedia();
+                ? await FileUtils.createNoMediaFile()
+                : await FileUtils.removeNoMediaFile();
             markMayNeedRebuild();
           },
         );

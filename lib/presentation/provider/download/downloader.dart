@@ -1,8 +1,8 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
-import 'package:boorusphere/utils/download.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/utils/file_utils.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,9 +21,9 @@ class Downloader {
 
   Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
-    final dir = await DownloadUtils.downloadDir;
+    final dir = await FileUtils.downloadDir;
 
-    await DownloadUtils.createDownloadDir();
+    await FileUtils.createDownloadDir();
 
     final taskId = await FlutterDownloader.enqueue(
         url: fileUrl,

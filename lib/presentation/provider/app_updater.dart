@@ -5,7 +5,7 @@ import 'package:boorusphere/data/repository/download/entity/download_progress.da
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
-import 'package:boorusphere/utils/download.dart';
+import 'package:boorusphere/utils/file_utils.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -88,10 +88,10 @@ class AppUpdater {
   Future<void> expose() async {
     final file = _fileName(_version);
     final appDir = await _dir;
-    final downloadDir = (await DownloadUtils.downloadDir).absolute.path;
+    final downloadDir = (await FileUtils.downloadDir).absolute.path;
     final extAppDir = Directory(path.join(downloadDir, 'app-update'));
 
-    await DownloadUtils.createDownloadDir();
+    await FileUtils.createDownloadDir();
     appDir.createSync();
     extAppDir.createSync();
 

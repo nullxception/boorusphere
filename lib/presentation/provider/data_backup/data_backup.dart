@@ -19,7 +19,7 @@ import 'package:boorusphere/presentation/provider/settings/content_setting_state
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/utils/download.dart';
+import 'package:boorusphere/utils/file_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -61,9 +61,9 @@ class DataBackupState extends _$DataBackupState {
   }
 
   Future<Directory> _backupDir() async {
-    final downloadDir = (await DownloadUtils.downloadDir).absolute.path;
+    final downloadDir = (await FileUtils.downloadDir).absolute.path;
     final dir = Directory(join(downloadDir, 'backups'));
-    await DownloadUtils.createDownloadDir();
+    await FileUtils.createDownloadDir();
     dir.createSync();
     return dir;
   }
@@ -181,7 +181,7 @@ class DataBackupState extends _$DataBackupState {
 
     await File(encoder.zipPath).copy(zip.path);
     temp.deleteSync(recursive: true);
-    await DownloadUtils.rescanMedia();
+    await FileUtils.rescanDir(zip.parent);
     state = BackupResult.exported(zip.path);
   }
 

@@ -4,78 +4,86 @@ import 'package:flutter/services.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class DownloadUtils {
-  static const dirName = 'Boorusphere';
+class FileUtils {
+  static const downloadDirName = 'Boorusphere';
   static const pathChannel = MethodChannel('io.chaldeaprjkt.boorusphere/path');
 
-  static Future<String> get platformDownloadPath async {
+  static Future<String> get downloadPath async {
     return await pathChannel.invokeMethod('getDownload');
   }
 
   static Future<Directory> get downloadDir async {
-    final fromPlatform = await platformDownloadPath;
-    return Directory('$fromPlatform/$dirName');
+    final path = await downloadPath;
+    return Directory('$path/$downloadDirName');
   }
 
-  static Future<File> get dotnomediaFile async {
+  static Future<File> get noMediaFile async {
     final dir = await downloadDir;
     return File('${dir.absolute.path}/.nomedia');
   }
 
-  static Future<bool> canWriteTo(String dirPath) async {
+  static bool isWritable(String dirPath) {
     final f = File('$dirPath/.boorusphere.tmp');
     try {
-      await f.writeAsString('', mode: FileMode.append, flush: true);
+      f.writeAsStringSync('', mode: FileMode.append, flush: true);
       if (!f.existsSync()) {
         return false;
       }
 
-      await f.delete();
+      f.deleteSync();
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  static Future<bool> get hasDotnomedia async {
-    final file = await dotnomediaFile;
+  static Future<bool> get hasNoMediaFile async {
+    final file = await noMediaFile;
     return file.existsSync();
   }
 
   static Future<void> createDownloadDir() async {
-    final downloadPath = await platformDownloadPath;
+    final path = await downloadPath;
 
-    if (!await canWriteTo(downloadPath)) {
+    if (!isWritable(path)) {
       await Permission.storage.request();
     }
 
     final dir = await downloadDir;
     final dirExists = dir.existsSync();
-    if (await canWriteTo(downloadPath) && !dirExists) {
+    if (isWritable(path) && !dirExists) {
       await dir.create();
     }
   }
 
-  static Future<void> rescanMedia() async {
-    final dir = await downloadDir;
+  static Future<void> rescanDir(Directory dir) async {
     if (Platform.isAndroid) {
-      await MediaScanner.loadMedia(path: dir.absolute.path);
+      await MediaScanner.loadMedia(path: dir.path);
     }
   }
 
-  static Future<void> createDotnomedia() async {
-    final file = await dotnomediaFile;
+  static Future<void> rescanDownloadDir() async {
+    final dir = await downloadDir;
+    if (Platform.isAndroid) {
+      await MediaScanner.loadMedia(path: dir.path);
+    }
+  }
+
+  static Future<void> createNoMediaFile() async {
+    final file = await noMediaFile;
+    final dir = file.parent;
     if (!file.existsSync()) {
       await file.create();
     }
-    await MediaScanner.loadMedia(path: file.parent.absolute.path);
+    await rescanDir(dir);
   }
 
-  static Future<void> removeDotnomedia() async {
-    final file = await dotnomediaFile;
+  static Future<void> removeNoMediaFile() async {
+    final file = await noMediaFile;
+    final dir = file.parent;
     if (file.existsSync()) {
       await file.delete();
     }
-    await MediaScanner.loadMedia(path: file.parent.absolute.path);
+    await rescanDir(dir);
   }
 }
