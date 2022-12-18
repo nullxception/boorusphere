@@ -70,6 +70,7 @@ class FileUtils {
   }
 
   static Future<void> createNoMediaFile() async {
+    await FileUtils.createDownloadDir();
     final file = await noMediaFile;
     final dir = file.parent;
     if (!file.existsSync()) {
