@@ -11,6 +11,7 @@ import 'package:boorusphere/data/repository/setting/datasource/setting_local_sou
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
+import 'package:boorusphere/presentation/provider/data_backup/entity/backup_option.dart';
 import 'package:boorusphere/presentation/provider/data_backup/entity/backup_result.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
@@ -140,7 +141,9 @@ class DataBackupState extends _$DataBackupState {
     state = const BackupResult.imported();
   }
 
-  Future<void> export() async {
+  Future<void> export({BackupOption option = const BackupOption()}) async {
+    if (!option.isValid()) return;
+
     final server = _serverLocalSource.export();
     final blockedTags = _blockedTagsLocalSource.export();
     final favoritePost = _favoritePostLocalSource.export();
@@ -152,11 +155,11 @@ class DataBackupState extends _$DataBackupState {
 
     final entries = [
       _metadata(),
-      server,
-      blockedTags,
-      favoritePost,
-      setting,
-      searchHistory,
+      if (option.server) server,
+      if (option.blockedTags) blockedTags,
+      if (option.favoritePost) favoritePost,
+      if (option.setting) setting,
+      if (option.searchHistory) searchHistory,
     ];
 
     await Future.wait(entries.map((entry) async {

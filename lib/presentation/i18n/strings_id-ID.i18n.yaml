@@ -39,7 +39,9 @@ go_home: "Kembali ke beranda"
 recently: "Baru-baru ini"
 search_hint: "Cari di ${server_name}..."
 version: "Versi ${version}"
+backup: "Cadangkan"
 restore: "Pulihkan"
+searchHistory: "Histori Pencarian"
 
 rating:
   title: "Penilaian"

@@ -39,7 +39,9 @@ go_home: "Back to home"
 recently: "Recently"
 search_hint: "Search on ${server_name}..."
 version: "Version ${version}"
+backup: "Backup"
 restore: "Restore"
+searchHistory: "Search History"
 
 rating:
   title: "Rating"
