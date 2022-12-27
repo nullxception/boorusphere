@@ -39,9 +39,9 @@ go_home: "กลับไปหน้าแรก"
 recently: "ล่าสุด"
 search_hint: "ค้นหาใน ${server_name}..."
 version: "เวอร์ชัน ${version}"
-backup: "Backup"
-restore: "Restore"
-searchHistory: "Search History"
+backup: "สำรอง"
+restore: "กู้คืน"
+searchHistory: "ประวัติการค้นหา"
 
 rating:
   title: "เรท"
