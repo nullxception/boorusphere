@@ -1,5 +1,6 @@
 language_name: "日本語"
 language_alias: "Japanese (ja-JP)"
+
 save: "保存"
 cancel: "キャンセル"
 clear: "クリア"
@@ -41,79 +42,90 @@ version: "バージョン ${version}"
 backup: "バックアップ"
 restore: "復元"
 searchHistory: "履歴を検索"
+
 rating:
   title: "評価"
   questionable: "疑問点"
   explicit: "明示的な"
   safe: "安全"
+
 page_status:
   http_error: "${server_name} から結果を取得できません"
   no_result:
     one: "結果が見つかりません"
     other: "これ以上の結果はありません"
   no_result_for_query:
-    one: "No result found for ${query}"
-    other: "No more result for ${query}"
-  blocked: "'${query}' is blocked by Tags Blocker"
+    one: "${query} の結果が見つかりませんでした"
+    other: "${query} の結果はこれ以上ありません"
+  blocked: "'${query}' はタグブロッカーによってブロックされています"
+
 suggestion:
-  not_supported: "${server_name} did not support search suggestion"
-  suggested: "Suggested at ${server_name}"
-  desc: "at ${server_name}"
-  empty: "No tags that matches '${query}'"
-  http_error: "Cannot get result for '${query}' on ${server_name}"
+  not_supported: "${server_name} は検索候補をサポートしていません"
+  suggested: "${server_name} での提案"
+  desc: "${server_name} に"
+  empty: "'${query} ' に一致するタグはありません"
+  http_error: "${server_name}で ${query}の結果を得ることができません。"
+
 action_tag:
-  copy: "Copy tag"
-  block: "Block selected tag"
-  blocked: "Added to tags blocker"
-  append: "Add tag to current search"
-  search: "Search tag"
+  copy: "タグをコピー"
+  block: "選択したタグをブロック"
+  blocked: "タグブロッカーに追加しました"
+  append: "現在の検索にタグを追加"
+  search: "タグを検索"
+
 updater:
-  check: "Check for update"
-  checking: "Checking for update..."
-  download: "Download ${version}"
-  available: "Update available: ${version}"
-  preparing: "Preparing for update..."
-  on_latest: "You're on latest version"
-  on_new_version: "New version is available"
-  install: "Install update"
-  progress: "Downloading: ${progress}%"
+  check: "アップデートを確認"
+  checking: "アップデートを確認しています..."
+  download: "${version} をダウンロード"
+  available: "アップデート可能: ${version}"
+  preparing: "アップデートを確認しています..."
+  on_latest: "最新バージョンです"
+  on_new_version: "新しいバージョンが利用可能です"
+  install: "アップデートをインストール"
+  progress: "ダウンロード中です。${progress}%"
+
 changelog:
-  title: "Changelog"
-  view: "View changes"
-  none: "No changelog available"
+  title: "更新履歴"
+  view: "変更を表示"
+  none: "更新履歴はありません"
+
 license:
-  package: "package: ${name}"
+  package: "パッケージ: ${name}"
   title:
-    one: "License"
-    other: "Licenses"
+    one: "ライセンス"
+    other: "ライセンス"
   counted:
-    one: "${n} license"
-    other: "${n} licenses"
+    one: "${n} ライセンス"
+    other: "${n} ライセンス"
+
 downloads:
-  title: "Downloads"
-  no_file: "File has been moved"
-  redownload: "Redownload"
-  detail: "Show detail"
-  placeholder: "Your downloaded files will appear here"
-  ungroup: "Ungroup"
-  group_by_server: "Group by server"
-  no_permission: "Cannot download a file; missing notification permission"
+  title: "ダウンロード(s)"
+  no_file: "ファイルが移動されました"
+  redownload: "再ダウンロード"
+  detail: "詳細を表示"
+  placeholder: "ダウンロードしたファイルがここに表示されます"
+  ungroup: "グループ解除"
+  group_by_server: "サーバーでグループ化"
+  no_permission: "ファイルをダウンロードできません。通知権限がありません"
   status:
-    empty: "Empty"
-    pending: "Pending"
-    downloading: "Downloading"
-    downloaded: "Downloaded"
-    failed: "Failed"
-    canceled: "Canceled"
-    paused: "Paused"
+    empty: "なし"
+    pending: "保留中"
+    downloading: "ダウンロード中"
+    downloaded: "ダウンロード済み"
+    failed: "失敗しました"
+    canceled: "キャンセルされました"
+    paused: "一時停止"
+
 favorites:
-  title: "Favorites"
-  placeholder: "Your saved content will appear here"
+  title: "お気に入り"
+  placeholder: "保存したコンテンツがここに表示されます"
+
 tags_blocker:
-  title: "Tags Blocker"
-  desc: "You can block multiple tags by separating it with space"
-  empty: "No blocked tags yet"
+  title: "タグ ブロッカー"
+  desc: "スペースで区切ることで複数のタグをブロックできます"
+  empty: "ブロックされたタグはまだありません"
   hint: "例: red_shirt blue_shoes"
+
 servers:
   title: "サーバー"
   reset_warning: "サーバーリストをデフォルトにリセットしてもよろしいですか？\n\n追加したサーバーはすべて消去されます"
@@ -131,11 +143,13 @@ servers:
   api_addr: "APIアドレス"
   api_addr_hint: "API アドレス、例: https://api-v69.verycoolbooru.com"
   already_exists: "${name} のサーバーデータは既に存在します"
+
 server_query:
   title: "クエリ"
   search: "検索クエリ"
   suggestion: "タグ提案クエリ"
   post: "Webポストクエリ"
+
 settings:
   title: "設定"
   interface: "インターフェイス"
@@ -174,6 +188,7 @@ settings:
     title: "キャッシュをクリア"
     desc: "読み込まれたコンテンツをキャッシュからクリア"
     done: "キャッシュをクリアしました"
+
 data_backup:
   title: "バックアップと復元"
   desc: "アプリデータのバックアップと復元"
