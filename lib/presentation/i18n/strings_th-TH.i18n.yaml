@@ -45,7 +45,7 @@ searchHistory: "ประวัติการค้นหา"
 
 rating:
   title: "เรท"
-  questionable: "ไม่ทราบ"
+  questionable: "อาจโป๊เปลือย"
   explicit: "โป๊เปลือย"
   safe: "ปลอดภัย"
 
