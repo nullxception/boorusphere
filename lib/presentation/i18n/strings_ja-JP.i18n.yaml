@@ -1,0 +1,204 @@
+language_name: "日本語"
+language_alias: "Japanese (ja-JP)"
+
+save: "保存"
+cancel: "キャンセル"
+clear: "クリア"
+retry: "リトライ"
+remove: "削除"
+edit: "編集"
+add: "追加"
+reset: "リセット"
+reset_to_default: "デフォルトに戻す"
+scan: "スキャン"
+load_more: "もっと読む"
+clearing: "クリアランス..."
+disable_safe_mode: "セーフモードを無効にする"
+details: "詳細"
+location: "所在地"
+source: "出典"
+file_sample: "サンプルファイル"
+file_og: "オリジナルファイル"
+tags: "タグ"
+meta: "メタ"
+artist: "画家"
+character: "キャラクター"
+copyright: "著作権"
+general: "全般"
+oss_license: "オープンソースライセンス"
+github: "GitHub"
+open_settings: "設定を開く"
+copy_success: "クリップボードにコピーしました"
+load_image_failed: "画像の読み込みに失敗しました"
+on_media_blurred: "このメディアには、一般に公開するには安全でない素材が含まれている可能性があります"
+unblur: "表示"
+unsupported_media: "${file_ext} はサポートされていません"
+open_externally: "外部で開く"
+retry_pop_back: "もう一度バックボタンを押して終了"
+go_home: "ホームへ戻る"
+recently: "最近"
+search_hint: "${server_name} で検索"
+version: "バージョン ${version}"
+backup: "バックアップ"
+restore: "復元"
+searchHistory: "履歴を検索"
+
+rating:
+  title: "評価"
+  questionable: "疑問点"
+  explicit: "明示的な"
+  safe: "安全"
+
+page_status:
+  http_error: "${server_name} から結果を取得できません"
+  no_result:
+    one: "結果が見つかりません"
+    other: "これ以上の結果はありません"
+  no_result_for_query:
+    one: "${query} の結果が見つかりませんでした"
+    other: "${query} の結果はこれ以上ありません"
+  blocked: "'${query}' はタグブロッカーによってブロックされています"
+
+suggestion:
+  not_supported: "${server_name} は検索候補をサポートしていません"
+  suggested: "${server_name} での提案"
+  desc: "${server_name} に"
+  empty: "'${query} ' に一致するタグはありません"
+  http_error: "${server_name}で ${query}の結果を得ることができません。"
+
+action_tag:
+  copy: "タグをコピー"
+  block: "選択したタグをブロック"
+  blocked: "タグブロッカーに追加しました"
+  append: "現在の検索にタグを追加"
+  search: "タグを検索"
+
+updater:
+  check: "アップデートを確認"
+  checking: "アップデートを確認しています..."
+  download: "${version} をダウンロード"
+  available: "アップデート可能: ${version}"
+  preparing: "アップデートを確認しています..."
+  on_latest: "最新バージョンです"
+  on_new_version: "新しいバージョンが利用可能です"
+  install: "アップデートをインストール"
+  progress: "ダウンロード中です。${progress}%"
+
+changelog:
+  title: "更新履歴"
+  view: "変更を表示"
+  none: "更新履歴はありません"
+
+license:
+  package: "パッケージ: ${name}"
+  title:
+    one: "ライセンス"
+    other: "ライセンス"
+  counted:
+    one: "${n} ライセンス"
+    other: "${n} ライセンス"
+
+downloads:
+  title: "ダウンロード(s)"
+  no_file: "ファイルが移動されました"
+  redownload: "再ダウンロード"
+  detail: "詳細を表示"
+  placeholder: "ダウンロードしたファイルがここに表示されます"
+  ungroup: "グループ解除"
+  group_by_server: "サーバーでグループ化"
+  no_permission: "ファイルをダウンロードできません。通知権限がありません"
+  status:
+    empty: "なし"
+    pending: "保留中"
+    downloading: "ダウンロード中"
+    downloaded: "ダウンロード済み"
+    failed: "失敗しました"
+    canceled: "キャンセルされました"
+    paused: "一時停止"
+
+favorites:
+  title: "お気に入り"
+  placeholder: "保存したコンテンツがここに表示されます"
+
+tags_blocker:
+  title: "タグ ブロッカー"
+  desc: "スペースで区切ることで複数のタグをブロックできます"
+  empty: "ブロックされたタグはまだありません"
+  hint: "例: red_shirt blue_shoes"
+
+servers:
+  title: "サーバー"
+  reset_warning: "サーバーリストをデフォルトにリセットしてもよろしいですか？\n\n追加したサーバーはすべて消去されます"
+  remove_last_error: "最後のサーバーを削除することはできません"
+  preset: "プリセットから"
+  select: "サーバーを選択"
+  add: "新しいサーバーを追加"
+  edit: "${name} を編集"
+  alias: "通称"
+  homepage: "ホームページ"
+  homepage_hint: "ホームページ、例: https://verycoolbooru.com"
+  use_custom_api: "カスタム API アドレスを使用する"
+  use_custom_api_desc: "サーバーのAPIアドレスがホームページと異なる場合に便利です"
+  addr_error: "有効な「アドレス」ではない"
+  api_addr: "APIアドレス"
+  api_addr_hint: "API アドレス、例: https://api-v69.verycoolbooru.com"
+  already_exists: "${name} のサーバーデータは既に存在します"
+
+server_query:
+  title: "クエリ"
+  search: "検索クエリ"
+  suggestion: "タグ提案クエリ"
+  post: "Webポストクエリ"
+
+settings:
+  title: "設定"
+  interface: "インターフェイス"
+  safe_mode: "セーフモード"
+  misc: "その他"
+  lang:
+    title: "言語"
+    auto:
+      title: "自動"
+      desc: "システムの言語に従ってください (可能な場合)"
+  midnight_theme:
+    title: "ミッドナイト・テーマ"
+    desc: "ダークモードには濃い色を使用"
+  ui_blur:
+    title: "ブラーを有効にする"
+    desc: "様々なUI要素で背景をぼかすことができるようになりました"
+  hide_media:
+    title: "ダウンロードしたメディアを隠す"
+    desc: "外部ギャラリーアプリでダウンロードしたファイルを表示しないようにする"
+  blur_content:
+    title: "明示的な内容をぼかす"
+    desc: "明示的に評価された内容がぼやけます"
+  strict_safe_mode:
+    title: "厳密なセーフモード"
+    desc: "「安全」と評価されたコンテンツのみを取得します。「安全」と評価されたコンテンツは安全な作業を保証しないことに注意してください。"
+  ime_incognito:
+    title: "シークレットキーボード"
+    desc: "サポートされている場合、キーボードのシークレットモードを有効にします。"
+  load_og:
+    title: "元のコンテンツを表示"
+    desc: "ポストを開いたときにサンプルの代わりに元のファイルを読み込む"
+  post_limit:
+    title: "読み込みあたりの最大コンテンツ数"
+    desc: "結果が期待値より小さい可能性があります（ブロックされたタグまたは無効なデータによって引き起こされます）"
+  clear_cache:
+    title: "キャッシュをクリア"
+    desc: "読み込まれたコンテンツをキャッシュからクリア"
+    done: "キャッシュをクリアしました"
+
+data_backup:
+  title: "バックアップと復元"
+  desc: "アプリデータのバックアップと復元"
+  backup:
+    title: "データのバックアップ"
+    desc: "アプリのデータをファイルにバックアップ"
+    success: "バックアップ作成日時 :\n${dest}"
+  restore:
+    title: "データを復元"
+    desc: "アプリのデータをバックアップ ファイルから復元"
+    success: "アプリデータが復元されました"
+    invalid: "バックアップファイルが無効です"
+    warning: "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？"
