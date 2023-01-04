@@ -1,6 +1,18 @@
+## 1.2.7
+* Add Filipino language (by @maisans-maid)
+* Add Japanese language (by @rinme)
+* Add Turkish language (by @kyoyacchi)
+* Fix add-button did not replace typed word on search screen
+* Fix Keyboard Incognito settings always keep getting reset
+* Fix nomedia creation issues
+* Fix video player late fullscreen exit
+* Improve tag blocker mechanism
+* Initial support for backup and restore app data
+* Update Indonesia translations
+* Update Thai translations (by @rinme and @altinat)
 
 ## 1.2.6
-* Add Thai language (ภาษาไทย, translated by @altinat)
+* Add Thai language (by @altinat)
 * Improve and fix several issues on video player
 * Fix download status and progress not showing properly
 * Keep screen awake when opening post viewer
