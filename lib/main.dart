@@ -40,9 +40,11 @@ void main() async {
   ]);
 
   LocaleHelper.useFallbackPluralResolver([
-    AppLocale.idId,
-    AppLocale.thTh,
     AppLocale.fil,
+    AppLocale.idId,
+    AppLocale.jaJp,
+    AppLocale.thTh,
+    AppLocale.trTr
   ]);
 
   runApp(
