@@ -44,7 +44,8 @@ void main() async {
     AppLocale.idId,
     AppLocale.jaJp,
     AppLocale.thTh,
-    AppLocale.trTr
+    AppLocale.trTr,
+    AppLocale.ru
   ]);
 
   runApp(
