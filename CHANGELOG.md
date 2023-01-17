@@ -1,3 +1,8 @@
+## 1.2.8
+* Add Russian translation (by @wheremyfiji)
+* Add Ukrainian translation (by @CakesTwix)
+* Update Flutter engine to 3.3.10
+
 ## 1.2.7
 * Add Filipino language (by @maisans-maid)
 * Add Japanese language (by @rinme)
