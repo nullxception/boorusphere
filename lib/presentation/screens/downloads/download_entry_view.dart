@@ -13,6 +13,7 @@ import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
@@ -140,19 +141,46 @@ class DownloadEntryView extends HookConsumerWidget {
           ],
         ),
       ),
-      leading: ExtendedImage.network(
-        entry.post.previewFile,
-        headers: headers.data,
-        width: 42,
-        shape: BoxShape.rectangle,
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        fit: BoxFit.cover,
-      ),
+      leading: DownloadImagePreview(entry: entry, headers: headers.data),
       trailing: _EntryPopupMenu(entry: entry, progress: progress),
       dense: true,
       onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
           : () => ref.read(downloaderProvider).openFile(id: entry.id),
+    );
+  }
+}
+
+class DownloadImagePreview extends HookWidget {
+  const DownloadImagePreview({
+    super.key,
+    required this.entry,
+    required this.headers,
+  });
+
+  final DownloadEntry entry;
+  final Map<String, String>? headers;
+
+  @override
+  Widget build(BuildContext context) {
+    final retries = useState(0);
+
+    return ExtendedImage.network(
+      entry.post.previewFile,
+      headers: headers,
+      width: 42,
+      shape: BoxShape.rectangle,
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      fit: BoxFit.cover,
+      loadStateChanged: (state) {
+        if (state.extendedImageLoadState == LoadState.failed &&
+            retries.value < 5) {
+          Future.delayed(const Duration(milliseconds: 150), (() {
+            state.reLoadImage();
+            retries.value += 1;
+          }));
+        }
+      },
     );
   }
 }

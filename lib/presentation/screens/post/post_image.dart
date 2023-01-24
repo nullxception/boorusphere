@@ -37,6 +37,7 @@ class PostImage extends HookConsumerWidget {
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
     final isMounted = useIsMounted();
+    final retries = useState(0);
 
     useEffect(() {
       if (post.rating != PostRating.explicit || !contentSetting.blurExplicit) {
@@ -80,9 +81,20 @@ class PostImage extends HookConsumerWidget {
                   GestureConfig(inPageView: true),
               handleLoadingProgress: true,
               loadStateChanged: (state) {
+                var isReloading = false;
+                if (state.extendedImageLoadState == LoadState.failed &&
+                    retries.value < 5) {
+                  isReloading = true;
+                  Future.delayed(const Duration(milliseconds: 150), (() {
+                    state.reLoadImage();
+                    retries.value += 1;
+                  }));
+                }
+
                 return _PostImageStatus(
                   key: ValueKey(post.id),
                   state: state,
+                  isReloading: isReloading,
                   child: Hero(
                     key: imageHeroKey,
                     tag: heroTag ?? post.id,
@@ -146,14 +158,17 @@ class _PostImageStatus extends StatelessWidget {
     super.key,
     required this.child,
     required this.state,
+    this.isReloading = false,
   });
 
   final Widget child;
   final ExtendedImageState state;
+  final bool isReloading;
 
   @override
   Widget build(BuildContext context) {
-    final isFailed = state.extendedImageLoadState == LoadState.failed;
+    final isFailed =
+        state.extendedImageLoadState == LoadState.failed && !isReloading;
     final isDone = state.extendedImageLoadState == LoadState.completed;
     final loadPercent =
         isDone ? 100 : state.loadingProgress?.progressPercentage ?? 0;
