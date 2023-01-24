@@ -8,6 +8,7 @@ import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/images.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -173,12 +174,10 @@ class DownloadImagePreview extends HookWidget {
       borderRadius: const BorderRadius.all(Radius.circular(5)),
       fit: BoxFit.cover,
       loadStateChanged: (state) {
-        if (state.extendedImageLoadState == LoadState.failed &&
-            retries.value < 5) {
-          Future.delayed(const Duration(milliseconds: 150), (() {
-            state.reLoadImage();
+        if (state.isFailed && retries.value < 5) {
+          state.reload(() {
             retries.value += 1;
-          }));
+          });
         }
       },
     );

@@ -7,6 +7,7 @@ import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/images.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:extended_image/extended_image.dart';
@@ -82,13 +83,11 @@ class PostImage extends HookConsumerWidget {
               handleLoadingProgress: true,
               loadStateChanged: (state) {
                 var isReloading = false;
-                if (state.extendedImageLoadState == LoadState.failed &&
-                    retries.value < 5) {
+                if (state.isFailed && retries.value < 5) {
                   isReloading = true;
-                  Future.delayed(const Duration(milliseconds: 150), (() {
-                    state.reLoadImage();
+                  state.reload(() {
                     retries.value += 1;
-                  }));
+                  });
                 }
 
                 return _PostImageStatus(
@@ -98,7 +97,7 @@ class PostImage extends HookConsumerWidget {
                   child: Hero(
                     key: imageHeroKey,
                     tag: heroTag ?? post.id,
-                    child: LoadState.completed == state.extendedImageLoadState
+                    child: state.isCompleted
                         ? state.completedWidget
                         : PostPlaceholderImage(post: post, shouldBlur: false),
                   ),
@@ -167,11 +166,9 @@ class _PostImageStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFailed =
-        state.extendedImageLoadState == LoadState.failed && !isReloading;
-    final isDone = state.extendedImageLoadState == LoadState.completed;
-    final loadPercent =
-        isDone ? 100 : state.loadingProgress?.progressPercentage ?? 0;
+    final loadPercent = state.isCompleted
+        ? 100
+        : state.loadingProgress?.progressPercentage ?? 0;
     return Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,
@@ -184,8 +181,8 @@ class _PostImageStatus extends StatelessWidget {
           child: AnimatedScale(
             duration: kThemeChangeDuration,
             curve: Curves.easeInOutCubic,
-            scale: state.extendedImageLoadState == LoadState.completed ? 0 : 1,
-            child: isFailed
+            scale: state.isCompleted ? 0 : 1,
+            child: state.isFailed && !isReloading
                 ? QuickBar.action(
                     title: Text(context.t.loadImageFailed),
                     actionTitle: Text(context.t.retry),
@@ -193,7 +190,9 @@ class _PostImageStatus extends StatelessWidget {
                   )
                 : QuickBar.progress(
                     title: loadPercent > 1 ? Text('$loadPercent%') : null,
-                    progress: isDone ? 1 : state.loadingProgress?.progressRatio,
+                    progress: state.isCompleted
+                        ? 1
+                        : state.loadingProgress?.progressRatio,
                   ),
           ),
         ),

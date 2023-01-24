@@ -1,4 +1,5 @@
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/images.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +43,7 @@ class Favicon extends StatelessWidget {
                 fit: BoxFit.contain,
                 printError: false,
                 loadStateChanged: (state) =>
-                    state.extendedImageLoadState == LoadState.completed
-                        ? state.completedWidget
-                        : fallbackWidget,
+                    state.isCompleted ? state.completedWidget : fallbackWidget,
               )
             : fallbackWidget,
       ),

@@ -7,6 +7,7 @@ import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
+import 'package:boorusphere/presentation/utils/extensions/images.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:extended_image/extended_image.dart';
@@ -144,23 +145,19 @@ class _Thumbnail extends HookConsumerWidget {
         enableLoadState: false,
         loadStateChanged: (state) {
           var isReloading = false;
-          if (state.extendedImageLoadState == LoadState.failed &&
-              retries.value < 5) {
+          if (state.isFailed && retries.value < 5) {
             isReloading = true;
-            Future.delayed(const Duration(milliseconds: 150), (() {
-              state.reLoadImage();
+            state.reload(() {
               retries.value += 1;
-            }));
+            });
           }
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
-            child: state.extendedImageLoadState == LoadState.completed
+            child: state.isCompleted
                 ? state.completedWidget
                 : _Placeholder(
                     key: ValueKey(post.id),
-                    isFailed:
-                        state.extendedImageLoadState == LoadState.failed &&
-                            !isReloading,
+                    isFailed: state.isFailed && !isReloading,
                   ),
             layoutBuilder: (currentChild, previousChildren) {
               return Stack(
