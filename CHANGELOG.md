@@ -1,3 +1,7 @@
+## 1.2.9
+* Fix loading danbooru image on unstable connection
+* Update Flutter to 3.7.0
+
 ## 1.2.8
 * Add Russian translation (by @wheremyfiji)
 * Add Ukrainian translation (by @CakesTwix)
