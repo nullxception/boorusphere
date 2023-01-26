@@ -26,10 +26,9 @@ class FlutterDownloaderHandle {
 
   void listen(void Function(DownloadProgress progress) onUpdate) {
     receiver.listen((data) {
-      final DownloadTaskStatus status = data[1];
       final progress = DownloadProgress(
         id: data[0],
-        status: DownloadStatus.fromIndex(status.value),
+        status: DownloadStatus.fromIndex(data[1]),
         progress: data[2],
         timestamp: DateTime.now().millisecondsSinceEpoch,
       );
@@ -51,6 +50,7 @@ class FlutterDownloaderHandle {
     DownloadTaskStatus status,
     int progress,
   ) {
-    IsolateNameServer.lookupPortByName(_name)?.send([id, status, progress]);
+    IsolateNameServer.lookupPortByName(_name)
+        ?.send([id, status.value, progress]);
   }
 }
