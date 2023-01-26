@@ -44,7 +44,7 @@ class AboutPage extends ConsumerWidget {
               ),
               Text(
                 'Boorusphere',
-                style: context.theme.textTheme.headline6
+                style: context.theme.textTheme.titleLarge
                     ?.copyWith(fontWeight: FontWeight.w300),
               ),
               Padding(
@@ -53,7 +53,7 @@ class AboutPage extends ConsumerWidget {
                   data: (data) {
                     return Text(
                       context.t.version(version: '${data.current} - $kAppArch'),
-                      style: context.theme.textTheme.subtitle2
+                      style: context.theme.textTheme.titleSmall
                           ?.copyWith(fontWeight: FontWeight.w400),
                     );
                   },
@@ -176,12 +176,12 @@ class _Downloader extends ConsumerWidget {
             progress.status.isFailed ||
             progress.status.isEmpty)
           ElevatedButton(
-            onPressed: () async {
-              if (!await checkNotificationPermission(context)) {
-                return;
-              }
-
-              await ref.read(appUpdaterProvider).start(version);
+            onPressed: () {
+              checkNotificationPermission(context).then((hasPerm) {
+                if (hasPerm) {
+                  ref.read(appUpdaterProvider).start(version);
+                }
+              });
             },
             style: ElevatedButton.styleFrom(elevation: 0),
             child: Text(context.t.updater.download(version: version)),

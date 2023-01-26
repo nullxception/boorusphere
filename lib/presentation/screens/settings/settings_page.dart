@@ -75,7 +75,7 @@ class _Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const sectionPadding = EdgeInsets.fromLTRB(22, 12, 22, 12);
-    final sectionStyle = context.theme.textTheme.subtitle2!
+    final sectionStyle = context.theme.textTheme.titleSmall!
         .copyWith(color: context.colorScheme.primary);
 
     return Column(
@@ -354,12 +354,14 @@ class _ClearCache extends ConsumerWidget {
         await extended_image.clearDiskCachedImages();
         extended_image.clearMemoryImageCache();
 
-        context.scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(context.t.settings.clearCache.done),
-            duration: const Duration(milliseconds: 500),
-          ),
-        );
+        if (context.mounted) {
+          context.scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text(context.t.settings.clearCache.done),
+              duration: const Duration(milliseconds: 500),
+            ),
+          );
+        }
       },
     );
   }

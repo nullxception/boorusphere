@@ -63,32 +63,30 @@ class DownloaderDialog extends HookConsumerWidget {
                     },
                   ),
                   leading: Icon(_getFileIcon(post.sampleFile)),
-                  onTap: () async {
-                    if (!await checkNotificationPermission(context)) {
+                  onTap: () {
+                    checkNotificationPermission(context).then((value) {
+                      if (value) {
+                        onItemClick?.call('sample');
+                        ref
+                            .read(downloaderProvider)
+                            .download(post, url: post.sampleFile);
+                      }
                       context.navigator.pop();
-                      return;
-                    }
-
-                    onItemClick?.call('sample');
-                    unawaited(ref
-                        .read(downloaderProvider)
-                        .download(post, url: post.sampleFile));
-                    context.navigator.pop();
+                    });
                   }),
             ListTile(
               title: Text(context.t.fileOg),
               subtitle: Text(
                   '${post.originalSize.toString()}, ${post.originalFile.fileExt}'),
               leading: Icon(_getFileIcon(post.originalFile)),
-              onTap: () async {
-                if (!await checkNotificationPermission(context)) {
+              onTap: () {
+                checkNotificationPermission(context).then((value) {
+                  if (value) {
+                    onItemClick?.call('original');
+                    ref.read(downloaderProvider).download(post);
+                  }
                   context.navigator.pop();
-                  return;
-                }
-
-                onItemClick?.call('original');
-                unawaited(ref.read(downloaderProvider).download(post));
-                context.navigator.pop();
+                });
               },
             ),
           ],
@@ -115,7 +113,7 @@ Future<bool> checkNotificationPermission(BuildContext context) async {
   }
 
   final status = await Permission.notification.request();
-  if (!status.isGranted) {
+  if (!status.isGranted && context.mounted) {
     await showSystemAppSettingsDialog(
       context: context,
       title: context.t.downloads.title,

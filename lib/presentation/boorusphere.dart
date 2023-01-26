@@ -54,7 +54,7 @@ class Boorusphere extends HookConsumerWidget {
         routerDelegate: router.delegate(),
         routeInformationParser: router.defaultRouteParser(),
         locale: TranslationProvider.of(context).flutterLocale,
-        supportedLocales: LocaleSettings.supportedLocales,
+        supportedLocales: AppLocaleUtils.supportedLocales,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         builder: (context, child) => ScrollConfiguration(
           behavior: const BouncingScrollBehavior(),
