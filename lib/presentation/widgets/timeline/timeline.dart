@@ -12,7 +12,6 @@ import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -123,7 +122,6 @@ class _Thumbnail extends HookConsumerWidget {
     final blurExplicitPost =
         ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
     final headers = usePostHeaders(ref, post);
-    final retries = useState(0);
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,
@@ -144,20 +142,13 @@ class _Thumbnail extends HookConsumerWidget {
         },
         enableLoadState: false,
         loadStateChanged: (state) {
-          var isReloading = false;
-          if (state.isFailed && retries.value < 5) {
-            isReloading = true;
-            state.reload(() {
-              retries.value += 1;
-            });
-          }
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 150),
             child: state.isCompleted
                 ? state.completedWidget
                 : _Placeholder(
                     key: ValueKey(post.id),
-                    isFailed: state.isFailed && !isReloading,
+                    isFailed: state.isFailed,
                   ),
             layoutBuilder: (currentChild, previousChildren) {
               return Stack(

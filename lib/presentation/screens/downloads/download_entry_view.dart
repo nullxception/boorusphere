@@ -8,7 +8,6 @@ import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
-import 'package:boorusphere/presentation/utils/extensions/images.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -142,7 +141,14 @@ class DownloadEntryView extends HookConsumerWidget {
           ],
         ),
       ),
-      leading: DownloadImagePreview(entry: entry, headers: headers.data),
+      leading: ExtendedImage.network(
+        entry.post.previewFile,
+        headers: headers.data,
+        width: 42,
+        shape: BoxShape.rectangle,
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        fit: BoxFit.cover,
+      ),
       trailing: _EntryPopupMenu(entry: entry, progress: progress),
       dense: true,
       onTap: !progress.status.isDownloaded || !entry.isFileExists
@@ -164,8 +170,6 @@ class DownloadImagePreview extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final retries = useState(0);
-
     return ExtendedImage.network(
       entry.post.previewFile,
       headers: headers,
@@ -173,13 +177,6 @@ class DownloadImagePreview extends HookWidget {
       shape: BoxShape.rectangle,
       borderRadius: const BorderRadius.all(Radius.circular(5)),
       fit: BoxFit.cover,
-      loadStateChanged: (state) {
-        if (state.isFailed && retries.value < 5) {
-          state.reload(() {
-            retries.value += 1;
-          });
-        }
-      },
     );
   }
 }
