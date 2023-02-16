@@ -30,17 +30,12 @@ class TimelineController extends ChangeNotifier {
     }
 
     if (scrollController.isIndexStateInLayoutRange(dest)) {
-      scrollController.scrollToIndex(
-        dest,
-        duration: const Duration(milliseconds: 16),
-        preferPosition: AutoScrollPosition.middle,
-      );
+      scrollController.scrollToIndex(dest);
     } else {
       scrollController
           .scrollToIndex(
             dest,
             duration: const Duration(milliseconds: 800),
-            preferPosition: AutoScrollPosition.middle,
           )
           .whenComplete(() => scrollController.highlight(dest,
               highlightDuration: const Duration(milliseconds: 150)));
