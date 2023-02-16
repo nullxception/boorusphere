@@ -41,19 +41,6 @@ class Timeline extends ConsumerWidget {
     final flexibleGrid = (screenWidth / 200).round() + grid;
     final scrollController = controller.scrollController;
 
-    FilterQuality filterQuality;
-    switch (grid) {
-      case 0:
-        filterQuality = FilterQuality.medium;
-        break;
-      case 1:
-        filterQuality = FilterQuality.low;
-        break;
-      default:
-        filterQuality = FilterQuality.none;
-        break;
-    }
-
     return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
       key: ObjectKey(flexibleGrid),
@@ -80,7 +67,6 @@ class Timeline extends ConsumerWidget {
                 child: _Thumbnail(
                   post: post,
                   blurExplicit: blurExplicit,
-                  filterQuality: filterQuality,
                 ),
                 flightShuttleBuilder: (flightContext, animation,
                     flightDirection, fromHeroContext, toHeroContext) {
@@ -124,12 +110,10 @@ class _Thumbnail extends HookConsumerWidget {
   const _Thumbnail({
     required this.post,
     this.blurExplicit = false,
-    this.filterQuality = FilterQuality.low,
   });
 
   final Post post;
   final bool blurExplicit;
-  final FilterQuality filterQuality;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -137,43 +121,36 @@ class _Thumbnail extends HookConsumerWidget {
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,
-      child: ExtendedImage.network(
-        post.previewFile,
-        headers: headers.data,
-        filterQuality: filterQuality,
-        fit: BoxFit.cover,
-        beforePaintImage: (canvas, rect, image, paint) {
-          if (blurExplicit && post.rating == PostRating.explicit) {
-            paint.imageFilter = ImageFilter.blur(
-              sigmaX: 8,
-              sigmaY: 8,
-              tileMode: TileMode.decal,
+      child: ImageFiltered(
+        imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+        enabled: blurExplicit && post.rating == PostRating.explicit,
+        child: ExtendedImage.network(
+          post.previewFile,
+          headers: headers.data,
+          fit: BoxFit.cover,
+          enableLoadState: false,
+          loadStateChanged: (state) {
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 150),
+              child: state.isCompleted
+                  ? state.completedWidget
+                  : _Placeholder(
+                      key: ValueKey(post.id),
+                      isFailed: state.isFailed,
+                    ),
+              layoutBuilder: (currentChild, previousChildren) {
+                return Stack(
+                  alignment: Alignment.center,
+                  fit: StackFit.passthrough,
+                  children: [
+                    ...previousChildren,
+                    if (currentChild != null) currentChild,
+                  ],
+                );
+              },
             );
-          }
-          return false;
-        },
-        enableLoadState: false,
-        loadStateChanged: (state) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            child: state.isCompleted
-                ? state.completedWidget
-                : _Placeholder(
-                    key: ValueKey(post.id),
-                    isFailed: state.isFailed,
-                  ),
-            layoutBuilder: (currentChild, previousChildren) {
-              return Stack(
-                alignment: Alignment.center,
-                fit: StackFit.passthrough,
-                children: [
-                  ...previousChildren,
-                  if (currentChild != null) currentChild,
-                ],
-              );
-            },
-          );
-        },
+          },
+        ),
       ),
     );
   }
