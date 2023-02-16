@@ -42,10 +42,10 @@ dependencies:
   deep_pick: ^0.10.0
   device_info_plus: ^8.0.0
   dio_cookie_manager: ^2.0.0
-  dio_smart_retry: ^1.3.2
-  dio: ^4.0.6
+  dio_smart_retry: ^5.0.0
+  dio: ^5.0.0
   dynamic_color: ^1.4.0
-  extended_image: ^6.2.1
+  extended_image: ^7.0.2
   fast_immutable_collections: ^8.0.0
   flutter_cache_manager: ^3.0.0-nullsafety.1
   flutter_downloader: ^1.9.0
