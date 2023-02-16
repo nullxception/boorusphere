@@ -152,12 +152,12 @@ scripts:
     core: flutter pub run build_runner build --delete-conflicting-outputs
     lang:
       - flutter pub run slang
-      - flutter format --fix lib/presentation/i18n
+      - dart format --fix lib/presentation/i18n
     all:
       - $gen:core
       - $gen:lang
   test:
-    fmt: flutter format --output=none --set-exit-if-changed lib/
+    fmt: dart format --output=none --set-exit-if-changed lib/
     ref: flutter analyze
     all:
       - $test:fmt
