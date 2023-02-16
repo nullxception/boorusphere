@@ -35,9 +35,24 @@ class Timeline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
+    final blurExplicit =
+        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + grid;
     final scrollController = controller.scrollController;
+
+    FilterQuality filterQuality;
+    switch (grid) {
+      case 0:
+        filterQuality = FilterQuality.medium;
+        break;
+      case 1:
+        filterQuality = FilterQuality.low;
+        break;
+      default:
+        filterQuality = FilterQuality.none;
+        break;
+    }
 
     return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
@@ -62,7 +77,11 @@ class Timeline extends ConsumerWidget {
             child: GestureDetector(
               child: Hero(
                 tag: buildHeroTag(post),
-                child: _Thumbnail(post: post),
+                child: _Thumbnail(
+                  post: post,
+                  blurExplicit: blurExplicit,
+                  filterQuality: filterQuality,
+                ),
                 flightShuttleBuilder: (flightContext, animation,
                     flightDirection, fromHeroContext, toHeroContext) {
                   final Hero toHero = toHeroContext.widget as Hero;
@@ -102,25 +121,18 @@ class Timeline extends ConsumerWidget {
 }
 
 class _Thumbnail extends HookConsumerWidget {
-  const _Thumbnail({required this.post});
-  final Post post;
+  const _Thumbnail({
+    required this.post,
+    this.blurExplicit = false,
+    this.filterQuality = FilterQuality.low,
+  });
 
-  FilterQuality _thumbnailQuality(int gridExtra) {
-    switch (gridExtra) {
-      case 0:
-        return FilterQuality.medium;
-      case 1:
-        return FilterQuality.low;
-      default:
-        return FilterQuality.none;
-    }
-  }
+  final Post post;
+  final bool blurExplicit;
+  final FilterQuality filterQuality;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
-    final blurExplicitPost =
-        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
     final headers = usePostHeaders(ref, post);
 
     return AspectRatio(
@@ -128,10 +140,10 @@ class _Thumbnail extends HookConsumerWidget {
       child: ExtendedImage.network(
         post.previewFile,
         headers: headers.data,
-        filterQuality: _thumbnailQuality(grid),
+        filterQuality: filterQuality,
         fit: BoxFit.cover,
         beforePaintImage: (canvas, rect, image, paint) {
-          if (blurExplicitPost && post.rating == PostRating.explicit) {
+          if (blurExplicit && post.rating == PostRating.explicit) {
             paint.imageFilter = ImageFilter.blur(
               sigmaX: 8,
               sigmaY: 8,
