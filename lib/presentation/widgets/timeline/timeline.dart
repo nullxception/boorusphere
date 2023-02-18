@@ -93,8 +93,7 @@ class Timeline extends ConsumerWidget {
                     beginPage: index,
                     posts: posts,
                     heroTagBuilder: buildHeroTag,
-                    onPop: controller.revealAt,
-                    onLoadMore: controller.onLoadMore,
+                    timelineController: controller,
                   ),
                 );
               },

@@ -1,34 +1,36 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
-import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-part 'suggestion_state.g.dart';
+final suggestionStateProvider =
+    ChangeNotifierProvider.autoDispose<SuggestionState>(
+        (ref) => throw UnimplementedError());
 
-@riverpod
-class SuggestionState extends _$SuggestionState {
-  late BooruRepo _repo;
-  late ServerData _server;
+class SuggestionState extends ChangeNotifier {
+  SuggestionState(this.ref, this.serverId);
 
-  @override
-  FetchResult<ISet<String>> build() {
-    _server = ref.watch(serverSettingStateProvider.select((it) => it.active));
-    _repo = ref.read(booruRepoProvider(_server));
-    return const FetchResult.data(ISetConst({}));
-  }
+  final Ref ref;
+  final String serverId;
+  FetchResult<ISet<String>> state = const FetchResult.loading(ISetConst({}));
+
+  ServerData get server => ref.read(serverDataStateProvider).getById(serverId);
 
   Future<void> get(String query) async {
-    if (_server == ServerData.empty) {
+    if (server == ServerData.empty) {
       state = const FetchResult.data(ISetConst({}));
+      notifyListeners();
       return;
     }
 
     state = FetchResult.loading(state.data);
+    notifyListeners();
     try {
-      final res = await _repo.getSuggestion(query);
+      final res =
+          await ref.read(booruRepoProvider(server)).getSuggestion(query);
       res.when(
         data: (data, src) {
           final blockedTags = ref.read(blockedTagsRepoProvider);
@@ -38,6 +40,7 @@ class SuggestionState extends _$SuggestionState {
               .toISet();
 
           state = FetchResult.data(result);
+          notifyListeners();
         },
         error: (res, error, stackTrace) {
           state = FetchResult.error(
@@ -46,10 +49,12 @@ class SuggestionState extends _$SuggestionState {
             stackTrace: stackTrace,
             code: res.statusCode ?? 0,
           );
+          notifyListeners();
         },
       );
     } catch (e, s) {
       state = FetchResult.error(state.data, error: e, stackTrace: s);
+      notifyListeners();
     }
   }
 }

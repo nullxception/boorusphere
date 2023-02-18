@@ -3,6 +3,8 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -10,18 +12,27 @@ import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+final favoritesPageArgsProvider =
+    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
+
 class FavoritesPage extends ConsumerWidget {
-  const FavoritesPage({super.key});
+  const FavoritesPage({super.key, this.args});
+  final PageArgs? args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritePostState = ref.watch(favoritePostStateProvider);
-    return favoritePostState.isNotEmpty
-        ? _Pager(favoritePostState)
-        : _EmptyView();
+    final savedServer =
+        ref.read(serverSettingStateProvider.select((it) => it.active));
+    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+    return ProviderScope(
+      overrides: [favoritesPageArgsProvider.overrideWith((ref) => pageArgs)],
+      child: favoritePostState.isNotEmpty
+          ? _Pager(favoritePostState)
+          : _EmptyView(),
+    );
   }
 }
 
@@ -126,15 +137,16 @@ class _Tab extends StatelessWidget {
   }
 }
 
-class _Content extends HookWidget {
+class _Content extends HookConsumerWidget {
   const _Content({required this.posts, required this.server});
 
   final Iterable<Post> posts;
   final ServerData server;
 
   @override
-  Widget build(BuildContext context) {
-    final controller = useTimelineController();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageArgs = ref.watch(favoritesPageArgsProvider);
+    final controller = useTimelineController(pageArgs: pageArgs);
 
     return CustomScrollView(
       controller: controller.scrollController,

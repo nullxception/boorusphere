@@ -1,23 +1,18 @@
-import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
+import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final searchBarController = ChangeNotifierProvider.autoDispose((ref) {
-  final query = ref.watch(pageStateProvider.select(
-    (it) => it.data.option.query,
-  ));
-  return SearchBarController(ref, query);
-});
+final searchBarControllerProvider =
+    ChangeNotifierProvider.autoDispose<SearchBarController>(
+        (ref) => throw UnimplementedError());
 
 class SearchBarController extends ChangeNotifier {
   SearchBarController(this.ref, this.initial) {
     textEditingController.addListener(_fetch);
-
-    ref.onDispose(() {
-      textEditingController.removeListener(_fetch);
-    });
   }
 
   final Ref ref;
@@ -40,16 +35,17 @@ class SearchBarController extends ChangeNotifier {
 
   _fetch() {
     if (isOpen) {
-      ref.read(suggestionStateProvider.notifier).get(value);
+      ref.read(suggestionStateProvider).get(value);
     }
   }
 
-  void submit(String value) {
-    _value = value;
+  void submit(BuildContext context, String newValue) {
+    _value = initial;
     close();
-    ref
-        .read(pageStateProvider.notifier)
-        .update((state) => state.copyWith(query: value, clear: true));
+    final pageArgs = ref.read(homePageArgsProvider);
+    context.router.push(HomeRoute(
+      args: pageArgs.copyWith(query: newValue),
+    ));
   }
 
   void append(String newValue) {
@@ -94,5 +90,11 @@ class SearchBarController extends ChangeNotifier {
       textEditingController.clear();
       notifyListeners();
     }
+  }
+
+  @override
+  void dispose() {
+    textEditingController.removeListener(_fetch);
+    super.dispose();
   }
 }

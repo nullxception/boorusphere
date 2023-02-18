@@ -1,7 +1,9 @@
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
-import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/screens/home/home_status.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -9,6 +11,7 @@ import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeContent extends HookConsumerWidget {
@@ -16,25 +19,53 @@ class HomeContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
+    final pageState = ref.watch(pageStateProvider);
+    final pageArgs = ref.watch(homePageArgsProvider);
+    final serverData = ref.watch(serverDataStateProvider);
     final blockedTags = ref.watch(blockedTagsStateProvider.select(
       (state) => state.values
-          .where((it) => it.serverId.isEmpty || it.serverId == server.id)
+          .where((it) =>
+              it.serverId.isEmpty ||
+              it.serverId == serverData.getById(pageArgs.serverId).id)
           .map((it) => it.name),
     ));
-    final pageState = ref.watch(pageStateProvider);
-    final filteredPost = pageState.data.posts
-        .where((it) => !it.allTags.any(blockedTags.contains));
-    final controller = useTimelineController(onLoadMore: () {
-      ref.read(pageStateProvider.notifier).loadMore();
-    });
+    final posts = useState(<Post>{});
+    final filteredPosts =
+        posts.value.where((it) => !it.allTags.any(blockedTags.contains));
+
+    useEffect(() {
+      if (serverData.isNotEmpty) {
+        Future(() {
+          pageState.update(
+              (option) => option.copyWith(query: pageArgs.query, clear: true));
+        });
+      }
+    }, [serverData.isNotEmpty]);
+
+    useEffect(() {
+      pageState.state.when(
+        data: (data) {
+          posts.value.addAll(data.posts);
+          posts.value = posts.value;
+        },
+        loading: (data) {
+          if (data.option.clear) {
+            posts.value.clear();
+            posts.value = posts.value;
+          }
+        },
+        error: (data, err, trace, code) {},
+      );
+    }, [pageState.state]);
+
+    final controller =
+        useTimelineController(pageArgs: pageArgs, pageState: pageState);
     final scrollController = controller.scrollController;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!scrollController.hasClients ||
-          pageState is DataFetchResult ||
-          pageState is LoadingFetchResult) return;
+          pageState.state is DataFetchResult ||
+          pageState.state is LoadingFetchResult) return;
 
       if (scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
@@ -45,8 +76,8 @@ class HomeContent extends HookConsumerWidget {
       }
     });
 
-    final isNewSearch =
-        pageState is! DataFetchResult && pageState.data.option.clear;
+    final isNewSearch = pageState.state is! DataFetchResult &&
+        pageState.state.data.option.clear;
 
     return Stack(
       alignment: Alignment.center,
@@ -60,7 +91,7 @@ class HomeContent extends HookConsumerWidget {
                   padding: const EdgeInsets.all(10),
                   sliver: Timeline(
                     controller: controller,
-                    posts: filteredPost,
+                    posts: filteredPosts,
                   ),
                 ),
               ),

@@ -11,6 +11,7 @@ import 'package:boorusphere/presentation/screens/about/licenses_page.dart';
 import 'package:boorusphere/presentation/screens/downloads/downloads_page.dart';
 import 'package:boorusphere/presentation/screens/favorites/favorites_page.dart';
 import 'package:boorusphere/presentation/screens/home/home_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/post_details_page.dart';
 import 'package:boorusphere/presentation/screens/post/post_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_editor_page.dart';
@@ -20,6 +21,7 @@ import 'package:boorusphere/presentation/screens/settings/data_backup_page.dart'
 import 'package:boorusphere/presentation/screens/settings/language_settings_page.dart';
 import 'package:boorusphere/presentation/screens/settings/settings_page.dart';
 import 'package:boorusphere/presentation/screens/tags_blocker/tags_blocker_page.dart';
+import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:flutter/widgets.dart';
 
 part 'app_router.gr.dart';

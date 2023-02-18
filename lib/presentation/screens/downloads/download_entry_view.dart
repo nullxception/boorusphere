@@ -2,10 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/downloads/downloads_page.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
@@ -149,7 +151,11 @@ class DownloadEntryView extends HookConsumerWidget {
         borderRadius: const BorderRadius.all(Radius.circular(5)),
         fit: BoxFit.cover,
       ),
-      trailing: _EntryPopupMenu(entry: entry, progress: progress),
+      trailing: _EntryPopupMenu(
+        entry: entry,
+        progress: progress,
+        server: serverData.getById(entry.post.serverId),
+      ),
       dense: true,
       onTap: !progress.status.isDownloaded || !entry.isFileExists
           ? null
@@ -185,10 +191,12 @@ class _EntryPopupMenu extends ConsumerWidget {
   const _EntryPopupMenu({
     required this.entry,
     required this.progress,
+    required this.server,
   });
 
   final DownloadEntry entry;
   final DownloadProgress progress;
+  final ServerData server;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -215,7 +223,10 @@ class _EntryPopupMenu extends ConsumerWidget {
             downloader.clear(id: entry.id);
             break;
           case 'show-detail':
-            context.router.push(PostDetailsRoute(post: entry.post));
+            context.router.push(PostDetailsRoute(
+              post: entry.post,
+              args: ref.read(downloadsPageArgsProvider),
+            ));
             break;
           default:
             break;

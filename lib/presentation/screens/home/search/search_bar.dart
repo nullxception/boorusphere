@@ -1,7 +1,8 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
+import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
@@ -17,15 +18,16 @@ class SearchBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchBar = ref.watch(searchBarController);
+    final searchBar = ref.watch(searchBarControllerProvider);
     final delta = useState([0.0, 0.0]);
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
     final isBlurAllowed =
         ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
+    final pageArgs = ref.watch(homePageArgsProvider);
     final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
+        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
     final onScrolling = useCallback(() {
       final position = scrollController.position;
       final threshold = SearchBar.innerHeight;
@@ -110,7 +112,9 @@ class SearchBar extends HookConsumerWidget {
                       textAlign:
                           searchBar.isOpen ? TextAlign.start : TextAlign.center,
                       readOnly: !searchBar.isOpen,
-                      onSubmitted: searchBar.submit,
+                      onSubmitted: (str) {
+                        searchBar.submit(context, str);
+                      },
                       onTap: searchBar.isOpen ? null : searchBar.open,
                       style: DefaultTextStyle.of(context)
                           .style
@@ -182,9 +186,10 @@ class _LeadingButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pageArgs = ref.watch(homePageArgsProvider);
     final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
-    final searchBar = ref.watch(searchBarController);
+        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
+    final searchBar = ref.watch(searchBarControllerProvider);
 
     return _CollapsibleButton(
       collapsed: collapsed,
@@ -192,7 +197,7 @@ class _LeadingButton extends ConsumerWidget {
         if (searchBar.isOpen) {
           searchBar.close();
         } else {
-          ref.read(homeDrawerController).toggle();
+          ref.read(homeDrawerControllerProvider).toggle();
         }
       },
       child: AnimatedSwitcher(

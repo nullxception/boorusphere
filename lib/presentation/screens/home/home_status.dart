@@ -5,7 +5,9 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
@@ -14,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomeStatus extends ConsumerWidget {
+class HomeStatus extends HookConsumerWidget {
   const HomeStatus({super.key});
 
   @override
@@ -25,14 +27,13 @@ class HomeStatus extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        pageState.when(
+        pageState.state.when(
           data: (data) {
             return Container(
               height: 50,
               alignment: Alignment.topCenter,
               child: ElevatedButton(
-                onPressed: () =>
-                    ref.read(pageStateProvider.notifier).loadMore(),
+                onPressed: pageState.loadMore,
                 child: Text(context.t.loadMore),
               ),
             );
@@ -97,8 +98,10 @@ class _ErrorStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pageState = ref.watch(pageStateProvider);
+    final pageArgs = ref.watch(homePageArgsProvider);
     final server =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
+        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
 
     return Center(
       child: NoticeCard(
@@ -120,13 +123,15 @@ class _ErrorStatus extends ConsumerWidget {
                       await ref
                           .read(serverSettingStateProvider.notifier)
                           .setSafeMode(false);
-                      unawaited(ref.read(pageStateProvider.notifier).load());
+                      if (context.mounted) {
+                        unawaited(pageState.load());
+                      }
                     },
                     child: Text(context.t.disableSafeMode),
                   ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 0),
-                  onPressed: () => ref.read(pageStateProvider.notifier).load(),
+                  onPressed: pageState.load,
                   child: Text(context.t.retry),
                 ),
               ],

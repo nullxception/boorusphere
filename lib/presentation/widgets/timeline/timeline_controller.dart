@@ -1,25 +1,30 @@
+import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 TimelineController useTimelineController({
   List<Object?> keys = const [],
-  void Function()? onLoadMore,
+  required PageArgs pageArgs,
+  PageState? pageState,
 }) {
   return useMemoized(
-    () => TimelineController(onLoadMore: onLoadMore),
+    () => TimelineController(pageArgs: pageArgs, pageState: pageState),
     keys,
   );
 }
 
 class TimelineController extends ChangeNotifier {
   TimelineController({
-    this.onLoadMore,
+    this.pageState,
+    required this.pageArgs,
   }) {
     _scrollController.addListener(_autoLoadMore);
   }
 
-  final void Function()? onLoadMore;
+  final PageState? pageState;
+  final PageArgs pageArgs;
   final _scrollController = AutoScrollController(axis: Axis.vertical);
 
   AutoScrollController get scrollController => _scrollController;
@@ -43,7 +48,7 @@ class TimelineController extends ChangeNotifier {
   }
 
   void loadMoreData() {
-    onLoadMore?.call();
+    pageState?.loadMore();
   }
 
   void _autoLoadMore() {

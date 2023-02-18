@@ -12,7 +12,8 @@ class SearchScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOpen = ref.watch(searchBarController.select((it) => it.isOpen));
+    final isOpen =
+        ref.watch(searchBarControllerProvider.select((it) => it.isOpen));
     final animator =
         useAnimationController(duration: const Duration(milliseconds: 300));
     final animation =

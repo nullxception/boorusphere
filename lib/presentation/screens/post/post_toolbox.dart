@@ -3,6 +3,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/post/post_page.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
@@ -48,7 +49,7 @@ class PostToolbox extends HookConsumerWidget {
   }
 }
 
-class PostDetailsButton extends StatelessWidget {
+class PostDetailsButton extends ConsumerWidget {
   const PostDetailsButton({
     super.key,
     required this.post,
@@ -57,12 +58,13 @@ class PostDetailsButton extends StatelessWidget {
   final Post post;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       padding: const EdgeInsets.all(16),
       color: Colors.white,
       icon: const Icon(Icons.info),
-      onPressed: () => context.router.push(PostDetailsRoute(post: post)),
+      onPressed: () => context.router.push(
+          PostDetailsRoute(post: post, args: ref.read(postPageArgsProvider))),
     );
   }
 }

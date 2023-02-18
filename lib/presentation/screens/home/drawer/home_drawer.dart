@@ -8,6 +8,7 @@ import 'package:boorusphere/presentation/provider/settings/server_setting_state.
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
+import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
@@ -76,25 +77,26 @@ class HomeDrawer extends StatelessWidget {
   }
 }
 
-class _Footer extends StatelessWidget {
+class _Footer extends ConsumerWidget {
   const _Footer();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageArgs = ref.watch(homePageArgsProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _BackToHomeTile(),
         ListTile(
           title: Text(context.t.downloads.title),
           leading: const Icon(Icons.cloud_download),
-          onTap: () => context.router.push(const DownloadsRoute()),
+          onTap: () => context.router.push(DownloadsRoute(args: pageArgs)),
         ),
         ListTile(
           title: Text(context.t.favorites.title),
           leading: const Icon(Icons.favorite_border),
-          onTap: () => context.router.push(const FavoritesRoute()),
+          onTap: () => context.router.push(FavoritesRoute(args: pageArgs)),
         ),
         ListTile(
           title: Text(context.t.servers.title),
@@ -224,35 +226,16 @@ class AppVersionTile extends ConsumerWidget {
   }
 }
 
-class _BackToHomeTile extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final query =
-        ref.watch(pageStateProvider.select((it) => it.data.option.query));
-    return Visibility(
-      visible: query.isNotEmpty,
-      child: ListTile(
-        title: Text(context.t.goHome),
-        leading: const Icon(Icons.home_outlined),
-        onTap: () {
-          ref
-              .read(pageStateProvider.notifier)
-              .update((state) => state.copyWith(query: '', clear: true));
-          ref.read(homeDrawerController).close();
-        },
-      ),
-    );
-  }
-}
-
 class _ServerSelection extends ConsumerWidget {
   const _ServerSelection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
+    final pageState = ref.watch(pageStateProvider);
+    final pageArgs = ref.watch(homePageArgsProvider);
     final serverActive =
-        ref.watch(serverSettingStateProvider.select((it) => it.active));
+        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,10 +261,14 @@ class _ServerSelection extends ConsumerWidget {
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(serverSettingStateProvider.notifier).setActiveServer(it);
-              if (it.id == serverActive.id) {
-                ref.invalidate(pageStateProvider);
-              }
-              ref.read(homeDrawerController).close();
+              ref.read(homeDrawerControllerProvider).close().then((value) {
+                if (it.id != serverActive.id) {
+                  context.router.push(
+                      HomeRoute(args: pageArgs.copyWith(serverId: it.id)));
+                } else {
+                  pageState.reset();
+                }
+              });
             },
           ),
         );

@@ -1,8 +1,8 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
-import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/precache_posts.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -14,27 +14,29 @@ import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/utils/hooks/extended_page_controller.dart';
 import 'package:boorusphere/presentation/widgets/slidefade_visibility.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
+import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wakelock/wakelock.dart';
 
+final postPageArgsProvider =
+    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
+
 class PostPage extends HookConsumerWidget {
   const PostPage({
     super.key,
     required this.beginPage,
     required this.posts,
+    required this.timelineController,
     this.heroTagBuilder,
-    this.onPop,
-    this.onLoadMore,
   });
 
   final int beginPage;
   final Iterable<Post> posts;
   final Object Function(Post)? heroTagBuilder;
-  final void Function(int)? onPop;
-  final void Function()? onLoadMore;
+  final TimelineController timelineController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,13 +46,13 @@ class PostPage extends HookConsumerWidget {
         useExtendedPageController(initialPage: currentPage.value);
     final loadOriginal =
         ref.watch(contentSettingStateProvider.select((it) => it.loadOriginal));
-    final pageState = ref.watch(pageStateProvider);
     final fullscreen = ref.watch(fullscreenStateProvider);
 
     final post =
         posts.isEmpty ? Post.empty : posts.elementAt(currentPage.value);
     final precachePosts = usePrecachePosts(ref, posts);
     final showAppbar = useState(true);
+    final pageState = useListenable(timelineController.pageState);
 
     useEffect(() {
       showAppbar.value = !fullscreen;
@@ -61,92 +63,97 @@ class PostPage extends HookConsumerWidget {
       return Wakelock.disable;
     }, []);
 
-    return WillPopScope(
-      onWillPop: () async {
-        ref.watch(fullscreenStateProvider.notifier).reset();
-        context.scaffoldMessenger.removeCurrentSnackBar();
-        onPop?.call(currentPage.value);
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: StyledOverlayRegion(
-          nightMode: true,
-          child: Stack(
-            children: [
-              Padding(
-                // android back gesture is not ignored by PageView
-                // add tiny padding to avoid it
-                padding: const EdgeInsets.symmetric(horizontal: 1),
-                child: ExtendedImageGesturePageView.builder(
-                  controller: pageController,
-                  onPageChanged: (index) {
-                    context.scaffoldMessenger.hideCurrentSnackBar();
-                    currentPage.value = index;
-                    final offset = index + 1;
-                    final threshold =
-                        posts.length / 100 * (100 - loadMoreThreshold);
-                    if (offset + threshold > posts.length) {
-                      onLoadMore?.call();
-                    }
-                  },
-                  itemCount: posts.length,
-                  itemBuilder: (_, index) {
-                    precachePosts(index, loadOriginal);
-                    final post = posts.elementAt(index);
-                    final heroTag = heroTagBuilder?.call(post);
-                    final Widget widget;
-                    switch (post.content.type) {
-                      case PostType.photo:
-                        widget = PostImage(post: post, heroTag: heroTag);
-                        break;
-                      case PostType.video:
-                        widget = PostVideo(
-                          post: post,
-                          heroTag: heroTag,
-                          onToolboxVisibilityChange: (visible) {
-                            showAppbar.value = visible;
-                          },
-                        );
-                        break;
-                      default:
-                        widget = PostUnknown(post: post, heroTag: heroTag);
-                        break;
-                    }
-                    return HeroMode(
-                      enabled: index == currentPage.value,
-                      child: widget,
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: SlideFadeVisibility(
-                  direction: HidingDirection.toTop,
-                  visible: showAppbar.value,
-                  child: _PostAppBar(
-                    subtitle: post.describeTags,
-                    title: pageState is LoadingFetchResult
-                        ? '#${currentPage.value + 1} of (loading...)'
-                        : '#${currentPage.value + 1} of ${posts.length}',
+    return ProviderScope(
+      overrides: [
+        postPageArgsProvider.overrideWith((ref) => timelineController.pageArgs)
+      ],
+      child: WillPopScope(
+        onWillPop: () async {
+          ref.watch(fullscreenStateProvider.notifier).reset();
+          context.scaffoldMessenger.removeCurrentSnackBar();
+          timelineController.revealAt(currentPage.value);
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: StyledOverlayRegion(
+            nightMode: true,
+            child: Stack(
+              children: [
+                Padding(
+                  // android back gesture is not ignored by PageView
+                  // add tiny padding to avoid it
+                  padding: const EdgeInsets.symmetric(horizontal: 1),
+                  child: ExtendedImageGesturePageView.builder(
+                    controller: pageController,
+                    onPageChanged: (index) {
+                      context.scaffoldMessenger.hideCurrentSnackBar();
+                      currentPage.value = index;
+                      final offset = index + 1;
+                      final threshold =
+                          posts.length / 100 * (100 - loadMoreThreshold);
+                      if (offset + threshold > posts.length - 1) {
+                        pageState?.loadMore();
+                      }
+                    },
+                    itemCount: posts.length,
+                    itemBuilder: (_, index) {
+                      precachePosts(index, loadOriginal);
+                      final post = posts.elementAt(index);
+                      final heroTag = heroTagBuilder?.call(post);
+                      final Widget widget;
+                      switch (post.content.type) {
+                        case PostType.photo:
+                          widget = PostImage(post: post, heroTag: heroTag);
+                          break;
+                        case PostType.video:
+                          widget = PostVideo(
+                            post: post,
+                            heroTag: heroTag,
+                            onToolboxVisibilityChange: (visible) {
+                              showAppbar.value = visible;
+                            },
+                          );
+                          break;
+                        default:
+                          widget = PostUnknown(post: post, heroTag: heroTag);
+                          break;
+                      }
+                      return HeroMode(
+                        enabled: index == currentPage.value,
+                        child: widget,
+                      );
+                    },
                   ),
                 ),
-              ),
-              if (!post.content.isVideo)
                 Positioned(
-                  bottom: 0,
+                  top: 0,
                   left: 0,
                   right: 0,
                   child: SlideFadeVisibility(
-                    direction: HidingDirection.toBottom,
-                    visible: !fullscreen,
-                    child: PostToolbox(post),
+                    direction: HidingDirection.toTop,
+                    visible: showAppbar.value,
+                    child: _PostAppBar(
+                      subtitle: post.describeTags,
+                      title: pageState?.state is LoadingFetchResult
+                          ? '#${currentPage.value + 1} of (loading...)'
+                          : '#${currentPage.value + 1} of ${posts.length}',
+                    ),
                   ),
                 ),
-            ],
+                if (!post.content.isVideo)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: SlideFadeVisibility(
+                      direction: HidingDirection.toBottom,
+                      visible: !fullscreen,
+                      child: PostToolbox(post),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

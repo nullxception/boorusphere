@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/search_history_repo.dart';
-import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -35,9 +35,7 @@ class SearchHistoryState extends _$SearchHistoryState {
     return _repo.all;
   }
 
-  Future<void> save(String value) async {
-    final server =
-        ref.read(serverSettingStateProvider.select((it) => it.active));
+  Future<void> save(String value, ServerData server) async {
     await _repo.save(value.trim(), server.id);
     state = _repo.all;
   }

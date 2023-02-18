@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final homeDrawerController = ChangeNotifierProvider((ref) {
-  return HomeDrawerController(ref);
-});
+final homeDrawerControllerProvider = Provider.autoDispose<HomeDrawerController>(
+    (ref) => throw UnimplementedError());
 
-class HomeDrawerController extends ChangeNotifier {
-  HomeDrawerController(this.ref);
-
-  final Ref ref;
-
+class HomeDrawerController {
   AnimationController? _animator;
-  bool get isOpen => _animator?.isCompleted ?? false;
 
   void setAnimator(AnimationController controller) {
     _animator = controller;
@@ -21,8 +15,8 @@ class HomeDrawerController extends ChangeNotifier {
     _animator?.forward();
   }
 
-  void close() {
-    _animator?.reverse();
+  Future<void> close() async {
+    await _animator?.reverse();
   }
 
   void toggle() {

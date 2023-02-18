@@ -2,7 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
-import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
@@ -20,15 +21,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
-  const PostDetailsPage({super.key, required this.post});
+  const PostDetailsPage({super.key, required this.post, required this.args});
   final Post post;
+  final PageArgs args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final headers = usePostHeaders(ref, post);
     final selectedtag = useState(<String>[]);
-    final pageQuery =
-        ref.watch(pageStateProvider.select((it) => it.data.option.query));
 
     onTagPressed(tag) {
       if (!selectedtag.value.contains(tag)) {
@@ -43,10 +43,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
     updateSearch(Iterable<String> tags) {
       final newQuery = Set.from(tags).join(' ');
       if (newQuery.isEmpty) return;
-      ref.read(pageStateProvider.notifier).update((state) {
-        return state.copyWith(query: newQuery, clear: true);
-      });
-      context.router.popUntilRoot();
+      context.router.push(HomeRoute(args: args.copyWith(query: newQuery)));
     }
 
     String ratingDesc;
@@ -213,7 +210,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
             label: context.t.actionTag.append,
             onTap: () {
               if (selectedtag.value.isEmpty) return;
-              updateSearch([...pageQuery.toWordList(), ...selectedtag.value]);
+              updateSearch([...args.query.toWordList(), ...selectedtag.value]);
             },
           ),
           SpeedDialChild(

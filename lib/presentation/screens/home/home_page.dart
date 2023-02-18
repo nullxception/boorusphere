@@ -1,8 +1,13 @@
 import 'package:async/async.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/page_state.dart';
+import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
 import 'package:boorusphere/presentation/screens/home/home_content.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
@@ -10,12 +15,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+final homePageArgsProvider =
+    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
+
 class HomePage extends HookConsumerWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.args});
+
+  final PageArgs? args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchBar = ref.watch(searchBarController);
+    final savedServer =
+        ref.read(serverSettingStateProvider.select((it) => it.active));
+    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+    return Scaffold(
+      extendBody: true,
+      body: StyledOverlayRegion(
+        child: ProviderScope(
+          overrides: [
+            homePageArgsProvider.overrideWith((ref) => pageArgs),
+            pageStateProvider
+                .overrideWith((ref) => PageState(ref, pageArgs.serverId)),
+            suggestionStateProvider
+                .overrideWith((ref) => SuggestionState(ref, pageArgs.serverId)),
+            searchBarControllerProvider.overrideWith(
+                (ref) => SearchBarController(ref, pageArgs.query)),
+            homeDrawerControllerProvider
+                .overrideWith((ref) => HomeDrawerController()),
+          ],
+          child: _Home(),
+        ),
+      ),
+    );
+  }
+}
+
+class _Home extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchBar = ref.watch(searchBarControllerProvider);
     final drawerFocused = useState(false);
     final atHomeScreen = !drawerFocused.value && !searchBar.isOpen;
     final isMounted = useIsMounted();
@@ -31,48 +69,43 @@ class HomePage extends HookConsumerWidget {
       maybePopTimer.cancel();
     }
 
-    return Scaffold(
-      extendBody: true,
-      body: StyledOverlayRegion(
-        child: WillPopScope(
-          onWillPop: () async {
-            if (!isMounted()) return true;
+    return WillPopScope(
+      onWillPop: () async {
+        if (!isMounted() || context.router.canPop()) return true;
 
-            if (!atHomeScreen) {
-              maybePopTimer.cancel();
-              context.scaffoldMessenger.hideCurrentSnackBar();
-              if (searchBar.isOpen) {
-                searchBar.close();
-              }
-              return false;
-            }
+        if (!atHomeScreen) {
+          maybePopTimer.cancel();
+          context.scaffoldMessenger.hideCurrentSnackBar();
+          if (searchBar.isOpen) {
+            searchBar.close();
+          }
+          return false;
+        }
 
-            if (!allowPop.value) {
-              allowPop.value = true;
-              context.scaffoldMessenger.showSnackBar(SnackBar(
-                content: Text(context.t.retryPopBack),
-                duration: maybePopTimeout,
-              ));
-              maybePopTimer.cancel();
-              maybePopTimer.reset();
-              return false;
-            }
+        if (!allowPop.value) {
+          allowPop.value = true;
+          context.scaffoldMessenger.showSnackBar(SnackBar(
+            content: Text(context.t.retryPopBack),
+            duration: maybePopTimeout,
+          ));
+          maybePopTimer.cancel();
+          maybePopTimer.reset();
+          return false;
+        }
 
-            return true;
-          },
-          child: _SlidableContainer(
-            edgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
-            onSlideStatus: (status) {
-              final focused = status != AnimationStatus.dismissed;
-              drawerFocused.value = focused;
-              if (focused) {
-                clearMaybePop();
-                context.scaffoldMessenger.hideCurrentSnackBar();
-              }
-            },
-            body: const HomeContent(),
-          ),
-        ),
+        return true;
+      },
+      child: _SlidableContainer(
+        edgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
+        onSlideStatus: (status) {
+          final focused = status != AnimationStatus.dismissed;
+          drawerFocused.value = focused;
+          if (focused) {
+            clearMaybePop();
+            context.scaffoldMessenger.hideCurrentSnackBar();
+          }
+        },
+        body: const HomeContent(),
       ),
     );
   }
@@ -91,7 +124,6 @@ class _SlidableContainer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final slidingDrawer = ref.watch(homeDrawerController);
     final animator =
         useAnimationController(duration: const Duration(milliseconds: 300));
     final tween = useMemoized(
@@ -108,12 +140,16 @@ class _SlidableContainer extends HookConsumerWidget {
     }, []);
 
     useEffect(() {
-      slidingDrawer.setAnimator(animator);
       animator.addListener(animationListener);
       return () {
         animator.removeListener(animationListener);
       };
     }, []);
+
+    final drawer = ref.watch(homeDrawerControllerProvider);
+    useEffect(() {
+      drawer.setAnimator(animator);
+    }, [drawer]);
 
     return GestureDetector(
       onHorizontalDragStart: (details) {
@@ -174,7 +210,7 @@ class _SlidableContainer extends HookConsumerWidget {
                 offset: Offset(slide, 0),
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: animator.isCompleted ? slidingDrawer.close : null,
+                  onTap: animator.isCompleted ? drawer.close : null,
                   child: IgnorePointer(
                     ignoring: animator.isCompleted,
                     child: child,

@@ -3,8 +3,9 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
-import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
@@ -20,10 +21,10 @@ class SearchSuggestion extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchBar = ref.watch(searchBarController);
-    final server = ref.watch(serverSettingStateProvider.select(
-      (it) => it.active,
-    ));
+    final searchBar = ref.watch(searchBarControllerProvider);
+    final pageArgs = ref.watch(homePageArgsProvider);
+    final server =
+        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
     final suggestion = ref.watch(suggestionStateProvider);
     final history = ref.watch(filterHistoryProvider(searchBar.value));
     final isBlurAllowed = ref.watch(uiSettingStateProvider.select(
@@ -34,8 +35,8 @@ class SearchSuggestion extends HookConsumerWidget {
       Future(() {
         if (searchBar.isOpen &&
             suggestion is! LoadingFetchResult &&
-            suggestion.data.isEmpty) {
-          ref.read(suggestionStateProvider.notifier).get(searchBar.value);
+            suggestion.state.data.isEmpty) {
+          suggestion.get(searchBar.value);
         }
       });
     }, [searchBar.isOpen]);
@@ -114,7 +115,9 @@ class SearchSuggestion extends HookConsumerWidget {
                                 text: entry.value.query,
                                 server: entry.value.server,
                               ),
-                              onTap: searchBar.submit,
+                              onTap: (str) {
+                                searchBar.submit(context, str);
+                              },
                               onAdded: searchBar.appendTyped,
                             ),
                           ),
@@ -151,7 +154,7 @@ class SearchSuggestion extends HookConsumerWidget {
                       ),
                     ),
                   if (server.canSuggestTags)
-                    suggestion.when(
+                    suggestion.state.when(
                       data: (data) {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
@@ -164,7 +167,9 @@ class SearchSuggestion extends HookConsumerWidget {
                                     isHistory: false,
                                     text: data.elementAt(index),
                                   ),
-                                  onTap: searchBar.submit,
+                                  onTap: (str) {
+                                    searchBar.submit(context, str);
+                                  },
                                   onAdded: searchBar.appendTyped,
                                 ),
                               );
