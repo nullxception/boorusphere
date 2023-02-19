@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
@@ -28,6 +29,7 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
 
   int _skipCount = 0;
   int _page = 0;
+  final _posts = <Post>[];
   ServerData get server => ref.read(serverDataStateProvider).getById(serverId);
 
   Iterable<String> get blockedTags {
@@ -59,19 +61,15 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
     }
 
     try {
-      if (hasListeners) {
-        state = state.copyWith(data: state.data.copyWith(option: newOption));
-      }
+      state = state.copyWith(data: state.data.copyWith(option: newOption));
 
       await _fetch();
     } catch (error, stackTrace) {
-      if (hasListeners) {
-        state = FetchResult.error(
-          state.data,
-          error: error,
-          stackTrace: stackTrace,
-        );
-      }
+      state = FetchResult.error(
+        state.data,
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -85,8 +83,9 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
     final repo = ref.read(booruRepoProvider(server));
     if (state.data.option.clear) {
       _page = 1;
+      _posts.clear();
     }
-    state = FetchResult.loading(state.data);
+    state = FetchResult.loading(state.data.copyWith(posts: _posts));
 
     if (state.data.option.query.toWordList().any(blockedTags.contains)) {
       state = FetchResult.error(state.data, error: BooruError.tagsBlocked);
@@ -115,7 +114,8 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
         _skipCount = 0;
 
         if (lastHashCode != repo.hashCode) return;
-        state = FetchResult.data(state.data.copyWith(posts: posts));
+        _posts.addAll(posts);
+        state = FetchResult.data(state.data.copyWith(posts: _posts));
       },
       error: (res, error, stackTrace) {
         state = FetchResult.error(

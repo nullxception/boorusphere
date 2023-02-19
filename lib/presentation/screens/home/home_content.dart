@@ -1,4 +1,3 @@
-import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
@@ -29,9 +28,9 @@ class HomeContent extends HookConsumerWidget {
               it.serverId == serverData.getById(pageArgs.serverId).id)
           .map((it) => it.name),
     ));
-    final posts = useState(<Post>{});
-    final filteredPosts =
-        posts.value.where((it) => !it.allTags.any(blockedTags.contains));
+
+    final filteredPosts = pageState.data.posts
+        .where((it) => !it.allTags.any(blockedTags.contains));
 
     useEffect(() {
       if (serverData.isNotEmpty) {
@@ -41,22 +40,6 @@ class HomeContent extends HookConsumerWidget {
         });
       }
     }, [serverData.isNotEmpty]);
-
-    useEffect(() {
-      pageState.when(
-        data: (data) {
-          posts.value.addAll(data.posts);
-          posts.value = posts.value;
-        },
-        loading: (data) {
-          if (data.option.clear) {
-            posts.value.clear();
-            posts.value = posts.value;
-          }
-        },
-        error: (data, err, trace, code) {},
-      );
-    }, [pageState]);
 
     final controller = useTimelineController(
       pageArgs: pageArgs,
