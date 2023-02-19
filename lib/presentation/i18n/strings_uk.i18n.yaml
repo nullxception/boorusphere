@@ -26,7 +26,7 @@ unblur: Покажи мені
 unsupported_media: ${file_ext} не підтримується
 open_externally: Відкрити зовні
 retry_pop_back: Натисніть ще раз, щоб вийти
-go_home: Назад додому
+home: Домашня сторінка
 recently: Недавно
 search_hint: Пошук у ${server_name}...
 version: Версія ${version}

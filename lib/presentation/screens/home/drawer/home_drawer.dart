@@ -88,6 +88,7 @@ class _Footer extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        _HomeTile(),
         ListTile(
           title: Text(context.t.downloads.title),
           leading: const Icon(Icons.cloud_download),
@@ -222,6 +223,24 @@ class AppVersionTile extends ConsumerWidget {
         );
       },
       orElse: () => currentTile,
+    );
+  }
+}
+
+class _HomeTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageArgs = ref.watch(homePageArgsProvider);
+    return Visibility(
+      visible: pageArgs.query.isNotEmpty,
+      child: ListTile(
+        title: Text(context.t.home),
+        leading: const Icon(Icons.home_outlined),
+        onTap: () {
+          ref.read(homeDrawerControllerProvider).close();
+          context.router.push(HomeRoute(args: pageArgs.copyWith(query: '')));
+        },
+      ),
     );
   }
 }
