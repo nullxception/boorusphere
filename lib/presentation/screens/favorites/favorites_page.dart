@@ -89,50 +89,37 @@ class _Pager extends ConsumerWidget {
               _Content(server: page.key, posts: page.value),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
+        bottomNavigationBar: Container(
           color: context.colorScheme.background.withOpacity(0.97),
-          elevation: 0,
-          child: TabBar(
-            labelStyle: const TextStyle(fontSize: 12),
-            padding: const EdgeInsets.all(8),
-            isScrollable: true,
-            tabs: [
-              for (final page in pages) _Tab(server: page.key),
-            ],
-            indicator: BoxDecoration(
-              color: context.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(16),
+          child: SafeArea(
+            child: TabBar(
+              dividerColor: Colors.transparent,
+              labelStyle: const TextStyle(fontSize: 12),
+              padding: const EdgeInsets.all(8),
+              isScrollable: true,
+              labelPadding: const EdgeInsets.only(left: 8, right: 8),
+              tabs: [
+                for (final page in pages)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Tab(
+                      text: page.key.name,
+                      icon: Favicon(
+                        url: page.key.homepage,
+                        size: 24,
+                        shape: BoxShape.rectangle,
+                      ),
+                    ),
+                  ),
+              ],
+              indicator: BoxDecoration(
+                color: context.colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Tab extends StatelessWidget {
-  const _Tab({required this.server});
-
-  final ServerData server;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Favicon(
-            url: server.homepage,
-            size: 16,
-            shape: BoxShape.circle,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(server.name),
-        ),
-      ],
     );
   }
 }
