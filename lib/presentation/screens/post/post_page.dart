@@ -1,5 +1,4 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
@@ -52,7 +51,7 @@ class PostPage extends HookConsumerWidget {
         posts.isEmpty ? Post.empty : posts.elementAt(currentPage.value);
     final precachePosts = usePrecachePosts(ref, posts);
     final showAppbar = useState(true);
-    final pageState = useListenable(timelineController.pageState);
+    final isLoadingMore = useState(false);
 
     useEffect(() {
       showAppbar.value = !fullscreen;
@@ -86,14 +85,18 @@ class PostPage extends HookConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 1),
                   child: ExtendedImageGesturePageView.builder(
                     controller: pageController,
-                    onPageChanged: (index) {
+                    onPageChanged: (index) async {
                       context.scaffoldMessenger.hideCurrentSnackBar();
                       currentPage.value = index;
                       final offset = index + 1;
                       final threshold =
                           posts.length / 100 * (100 - loadMoreThreshold);
                       if (offset + threshold > posts.length - 1) {
-                        pageState?.loadMore();
+                        isLoadingMore.value = true;
+                        await timelineController.onLoadMore?.call();
+                        await Future.delayed(kThemeAnimationDuration, () {
+                          isLoadingMore.value = false;
+                        });
                       }
                     },
                     itemCount: posts.length,
@@ -135,7 +138,7 @@ class PostPage extends HookConsumerWidget {
                     visible: showAppbar.value,
                     child: _PostAppBar(
                       subtitle: post.describeTags,
-                      title: pageState?.state is LoadingFetchResult
+                      title: isLoadingMore.value
                           ? '#${currentPage.value + 1} of (loading...)'
                           : '#${currentPage.value + 1} of ${posts.length}',
                     ),

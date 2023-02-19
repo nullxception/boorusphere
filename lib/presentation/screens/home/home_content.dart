@@ -36,14 +36,14 @@ class HomeContent extends HookConsumerWidget {
     useEffect(() {
       if (serverData.isNotEmpty) {
         Future(() {
-          pageState.update(
+          ref.read(pageStateProvider.notifier).update(
               (option) => option.copyWith(query: pageArgs.query, clear: true));
         });
       }
     }, [serverData.isNotEmpty]);
 
     useEffect(() {
-      pageState.state.when(
+      pageState.when(
         data: (data) {
           posts.value.addAll(data.posts);
           posts.value = posts.value;
@@ -56,16 +56,18 @@ class HomeContent extends HookConsumerWidget {
         },
         error: (data, err, trace, code) {},
       );
-    }, [pageState.state]);
+    }, [pageState]);
 
-    final controller =
-        useTimelineController(pageArgs: pageArgs, pageState: pageState);
+    final controller = useTimelineController(
+      pageArgs: pageArgs,
+      onLoadMore: ref.read(pageStateProvider.notifier).loadMore,
+    );
     final scrollController = controller.scrollController;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!scrollController.hasClients ||
-          pageState.state is DataFetchResult ||
-          pageState.state is LoadingFetchResult) return;
+          pageState is DataFetchResult ||
+          pageState is LoadingFetchResult) return;
 
       if (scrollController.position.extentAfter < 300) {
         scrollController.animateTo(
@@ -76,8 +78,8 @@ class HomeContent extends HookConsumerWidget {
       }
     });
 
-    final isNewSearch = pageState.state is! DataFetchResult &&
-        pageState.state.data.option.clear;
+    final isNewSearch =
+        pageState is! DataFetchResult && pageState.data.option.clear;
 
     return Stack(
       alignment: Alignment.center,

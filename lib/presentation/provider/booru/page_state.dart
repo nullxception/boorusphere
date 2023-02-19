@@ -12,14 +12,16 @@ import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final pageStateProvider = ChangeNotifierProvider.autoDispose<PageState>(
-    (ref) => throw UnimplementedError());
+final pageStateProvider =
+    StateNotifierProvider.autoDispose<PageState, FetchResult<PageData>>(
+        (ref) => throw UnimplementedError());
 
-class PageState extends ChangeNotifier {
-  PageState(this.ref, this.serverId);
+class PageState extends StateNotifier<FetchResult<PageData>> {
+  PageState(this.ref, this.serverId)
+      : super(const FetchResult.loading(
+            PageData(posts: [], option: PageOption(query: '', clear: true))));
 
   final Ref ref;
   final String serverId;
@@ -27,11 +29,6 @@ class PageState extends ChangeNotifier {
   int _skipCount = 0;
   int _page = 0;
   ServerData get server => ref.read(serverDataStateProvider).getById(serverId);
-
-  FetchResult<PageData> state = const FetchResult.loading(PageData(
-    posts: [],
-    option: PageOption(query: '', clear: true),
-  ));
 
   Iterable<String> get blockedTags {
     return ref
@@ -64,7 +61,6 @@ class PageState extends ChangeNotifier {
     try {
       if (hasListeners) {
         state = state.copyWith(data: state.data.copyWith(option: newOption));
-        notifyListeners();
       }
 
       await _fetch();
@@ -75,15 +71,14 @@ class PageState extends ChangeNotifier {
           error: error,
           stackTrace: stackTrace,
         );
-        notifyListeners();
       }
     }
   }
 
-  void loadMore() {
+  Future<void> loadMore() async {
     if (state is! DataFetchResult) return;
 
-    update((it) => it.copyWith(clear: false));
+    await update((it) => it.copyWith(clear: false));
   }
 
   Future<void> _fetch() async {
@@ -91,10 +86,7 @@ class PageState extends ChangeNotifier {
     if (state.data.option.clear) {
       _page = 1;
     }
-    if (hasListeners) {
-      state = FetchResult.loading(state.data);
-      notifyListeners();
-    }
+    state = FetchResult.loading(state.data);
 
     if (state.data.option.query.toWordList().any(blockedTags.contains)) {
       state = FetchResult.error(state.data, error: BooruError.tagsBlocked);
@@ -107,10 +99,7 @@ class PageState extends ChangeNotifier {
       data: (posts, src) async {
         if (lastHashCode != repo.hashCode) return;
         if (posts.isEmpty) {
-          if (hasListeners) {
-            state = FetchResult.error(state.data, error: BooruError.empty);
-            notifyListeners();
-          }
+          state = FetchResult.error(state.data, error: BooruError.empty);
           return;
         }
 
@@ -126,21 +115,15 @@ class PageState extends ChangeNotifier {
         _skipCount = 0;
 
         if (lastHashCode != repo.hashCode) return;
-        if (hasListeners) {
-          state = FetchResult.data(state.data.copyWith(posts: posts));
-          notifyListeners();
-        }
+        state = FetchResult.data(state.data.copyWith(posts: posts));
       },
       error: (res, error, stackTrace) {
-        if (hasListeners) {
-          state = FetchResult.error(
-            state.data,
-            error: error,
-            stackTrace: stackTrace,
-            code: res.statusCode ?? 0,
-          );
-          notifyListeners();
-        }
+        state = FetchResult.error(
+          state.data,
+          error: error,
+          stackTrace: stackTrace,
+          code: res.statusCode ?? 0,
+        );
       },
     );
   }

@@ -27,13 +27,13 @@ class HomeStatus extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        pageState.state.when(
+        pageState.when(
           data: (data) {
             return Container(
               height: 50,
               alignment: Alignment.topCenter,
               child: ElevatedButton(
-                onPressed: pageState.loadMore,
+                onPressed: ref.read(pageStateProvider.notifier).loadMore,
                 child: Text(context.t.loadMore),
               ),
             );
@@ -98,7 +98,6 @@ class _ErrorStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageState = ref.watch(pageStateProvider);
     final pageArgs = ref.watch(homePageArgsProvider);
     final server =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
@@ -124,14 +123,14 @@ class _ErrorStatus extends ConsumerWidget {
                           .read(serverSettingStateProvider.notifier)
                           .setSafeMode(false);
                       if (context.mounted) {
-                        unawaited(pageState.load());
+                        unawaited(ref.read(pageStateProvider.notifier).load());
                       }
                     },
                     child: Text(context.t.disableSafeMode),
                   ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 0),
-                  onPressed: pageState.load,
+                  onPressed: ref.read(pageStateProvider.notifier).load,
                   child: Text(context.t.retry),
                 ),
               ],

@@ -232,7 +232,6 @@ class _ServerSelection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final pageState = ref.watch(pageStateProvider);
     final pageArgs = ref.watch(homePageArgsProvider);
     final serverActive =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
@@ -266,7 +265,7 @@ class _ServerSelection extends ConsumerWidget {
                   context.router.push(
                       HomeRoute(args: pageArgs.copyWith(serverId: it.id)));
                 } else {
-                  pageState.reset();
+                  ref.read(pageStateProvider.notifier).reset();
                 }
               });
             },
