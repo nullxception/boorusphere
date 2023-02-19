@@ -91,7 +91,7 @@ class BooruRepoImpl implements BooruRepo {
     final url = server.searchUrlOf(
       option.query,
       index,
-      option.safeMode,
+      option.searchRating,
       option.limit,
     );
     final res = await networkSource.fetchPage(url);

@@ -172,9 +172,6 @@ settings:
   blur_content:
     title: "Müstehcen içeriği bulanıklaştır"
     desc: "Müstehcen dereceli gönderilen bulanıklaştırılır"
-  strict_safe_mode:
-    title: "Katı Güvenli Mod"
-    desc: "Yalnızca 'safe' olarak derecelenen içerikleri al. Not: 'safe' olarak derecelenen içerikler hep güvenli içerik çıkarmayı garanti etmez"
   ime_incognito:
     title: "Gizli Klavye"
     desc: "Destekleniyorsa, klavye için gizli modu etkinleştir."

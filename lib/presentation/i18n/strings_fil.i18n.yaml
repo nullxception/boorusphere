@@ -169,9 +169,6 @@ settings:
   blur_content:
     title: "I-blur ang mga explicit/maselan na content"
     desc: "Ang mga content na minarkahang explicit ay ibu-blur"
-  strict_safe_mode:
-    title: "Striktong Safe Mode"
-    desc: "I fetch lamanga ang mga content na minarkahang 'safe'. Alalahanin na ang mga minarkahang safe ay hindi nag ga-guarantee ng safe-for-work content"
   ime_incognito:
     title: "Incognito Keyboard"
     desc: "I-enable ang incognito-mode para sa keyboard kung maaari."

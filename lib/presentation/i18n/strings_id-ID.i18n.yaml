@@ -172,9 +172,6 @@ settings:
   blur_content:
     title: "Sensor konten eksplisit"
     desc: "Konten yang dinilai eksplisit akan disensor"
-  strict_safe_mode:
-    title: "Mode Ketat"
-    desc: "Hanya ambil konten yang telah dinilai 'Aman'. Perhatikan bahwa ini tidak menjamin aman untuk dilihat publik"
   ime_incognito:
     title: "Keyboard Mode Incognito"
     desc: "Aktifkan mode incognito untuk keyboard jika memungkinkan."

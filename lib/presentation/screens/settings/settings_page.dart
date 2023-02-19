@@ -41,7 +41,6 @@ class SettingsPage extends StatelessWidget {
               title: Text(context.t.settings.safeMode),
               children: const [
                 _BlurContent(),
-                _StrictSafeMode(),
                 _ImeIncognito(),
               ],
             ),
@@ -194,25 +193,6 @@ class _BlurContent extends ConsumerWidget {
         ref
             .read(contentSettingStateProvider.notifier)
             .setBlurExplicitPost(value);
-      },
-    );
-  }
-}
-
-class _StrictSafeMode extends ConsumerWidget {
-  const _StrictSafeMode();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile(
-      title: Text(context.t.settings.strictSafeMode.title),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Text(context.t.settings.strictSafeMode.desc),
-      ),
-      value: ref.watch(serverSettingStateProvider.select((it) => it.safeMode)),
-      onChanged: (value) {
-        ref.read(serverSettingStateProvider.notifier).setSafeMode(value);
       },
     );
   }

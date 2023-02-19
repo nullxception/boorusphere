@@ -48,6 +48,7 @@ rating:
   questionable: "Questionable"
   explicit: "Explicit"
   safe: "Safe"
+  all: "All"
 
 page_status:
   http_error: "Cannot get result from ${server_name}"
@@ -172,9 +173,6 @@ settings:
   blur_content:
     title: "Blur explicit content"
     desc: "Content rated as explicit will be blurred"
-  strict_safe_mode:
-    title: "Strict Safe Mode"
-    desc: "Only fetch content that rated as 'safe'. Note that rated as 'safe' doesn't guarantee safe-for-work"
   ime_incognito:
     title: "Incognito Keyboard"
     desc: "Enable incognito-mode for keyboard if supported."

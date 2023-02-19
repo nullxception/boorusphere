@@ -3,6 +3,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/server_setting.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -19,7 +20,7 @@ class ServerSettingState extends _$ServerSettingState {
       active: _repo.get(Setting.serverActive, or: ServerData.empty),
       postLimit:
           _repo.get(Setting.serverPostLimit, or: PageOption.defaultLimit),
-      safeMode: _repo.get(Setting.serverSafeMode, or: true),
+      searchRating: _repo.get(Setting.searchRating, or: SearchRating.safe),
     );
   }
 
@@ -33,8 +34,8 @@ class ServerSettingState extends _$ServerSettingState {
     await _repo.put(Setting.serverPostLimit, value);
   }
 
-  Future<void> setSafeMode(bool value) async {
-    state = state.copyWith(safeMode: value);
-    await _repo.put(Setting.serverSafeMode, value);
+  Future<void> setSearchRating(SearchRating value) async {
+    state = state.copyWith(searchRating: value);
+    await _repo.put(Setting.searchRating, value);
   }
 }

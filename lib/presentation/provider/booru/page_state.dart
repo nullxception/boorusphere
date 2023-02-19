@@ -49,7 +49,7 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
     final settings = ref.read(serverSettingStateProvider);
     final newOption = state.data.option.copyWith(
       limit: settings.postLimit,
-      safeMode: settings.safeMode,
+      searchRating: settings.searchRating,
     );
 
     if (newOption.query.isNotEmpty) {

@@ -6,6 +6,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -115,13 +116,13 @@ class _ErrorStatus extends ConsumerWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (data.option.safeMode)
+                if (data.option.searchRating == SearchRating.safe)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(elevation: 0),
                     onPressed: () async {
                       await ref
                           .read(serverSettingStateProvider.notifier)
-                          .setSafeMode(false);
+                          .setSearchRating(SearchRating.all);
                       if (context.mounted) {
                         unawaited(ref.read(pageStateProvider.notifier).load());
                       }

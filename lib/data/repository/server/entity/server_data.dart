@@ -1,3 +1,4 @@
+import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -24,13 +25,29 @@ class ServerData with _$ServerData {
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
-  String searchUrlOf(String query, int page, bool safeMode, int postLimit) {
-    final tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
-    final safeTags =
-        safeMode && !homepage.contains('//safe') ? '$tags rating:safe' : tags;
+  String searchUrlOf(
+    String query,
+    int page,
+    SearchRating searchRating,
+    int postLimit,
+  ) {
+    String tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
+    switch (searchRating) {
+      case SearchRating.safe:
+        tags += ' rating:s';
+        break;
+      case SearchRating.questionable:
+        tags += ' rating:q';
+        break;
+      case SearchRating.explicit:
+        tags += ' rating:e';
+        break;
+      default:
+        break;
+    }
 
     return '$homepage/$searchUrl'
-        .replaceAll('{tags}', Uri.encodeComponent(safeTags))
+        .replaceAll('{tags}', Uri.encodeComponent(tags))
         .replaceAll('{page-id}', '$page')
         .replaceAll('{post-limit}', '$postLimit');
   }

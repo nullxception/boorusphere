@@ -1,5 +1,7 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
 import 'package:boorusphere/presentation/screens/home/home_page.dart';
@@ -85,60 +87,72 @@ class SearchBar extends HookConsumerWidget {
           child: SafeArea(
             top: false,
             maintainBottomViewPadding: true,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
-                borderRadius: const BorderRadius.all(Radius.circular(15)),
-              ),
-              margin: collapsed
-                  ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
-                  : const EdgeInsets.fromLTRB(16, 11, 16, 11),
-              child: Row(
-                children: [
-                  _LeadingButton(collapsed: collapsed),
-                  Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      enableIMEPersonalizedLearning: !imeIncognito,
-                      controller: searchBar.textEditingController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: searchBar.value.isEmpty
-                            ? context.t.searchHint(serverName: server.name)
-                            : searchBar.value,
-                        isDense: true,
-                      ),
-                      textAlign:
-                          searchBar.isOpen ? TextAlign.start : TextAlign.center,
-                      readOnly: !searchBar.isOpen,
-                      onSubmitted: (str) {
-                        searchBar.submit(context, str);
-                      },
-                      onTap: searchBar.isOpen ? null : searchBar.open,
-                      style: DefaultTextStyle.of(context)
-                          .style
-                          .copyWith(fontSize: 13),
-                    ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (searchBar.isOpen)
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(18, 11, 18, 0),
+                    child: _OptionBar(),
                   ),
-                  if (!searchBar.isOpen)
-                    _TrailingButton(
-                        collapsed: collapsed,
-                        scrollController: scrollController),
-                  if (searchBar.isOpen && searchBar.value != searchBar.initial)
-                    IconButton(
-                      icon: const Icon(Icons.rotate_left),
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      onPressed: searchBar.reset,
-                    ),
-                  if (searchBar.isOpen)
-                    IconButton(
-                      icon: const Icon(Icons.close_rounded),
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      onPressed: searchBar.clear,
-                    ),
-                ],
-              ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  ),
+                  margin: collapsed
+                      ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
+                      : const EdgeInsets.fromLTRB(16, 11, 16, 11),
+                  child: Row(
+                    children: [
+                      _LeadingButton(collapsed: collapsed),
+                      Expanded(
+                        child: TextField(
+                          autofocus: true,
+                          enableIMEPersonalizedLearning: !imeIncognito,
+                          controller: searchBar.textEditingController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: searchBar.value.isEmpty
+                                ? context.t.searchHint(serverName: server.name)
+                                : searchBar.value,
+                            isDense: true,
+                          ),
+                          textAlign: searchBar.isOpen
+                              ? TextAlign.start
+                              : TextAlign.center,
+                          readOnly: !searchBar.isOpen,
+                          onSubmitted: (str) {
+                            searchBar.submit(context, str);
+                          },
+                          onTap: searchBar.isOpen ? null : searchBar.open,
+                          style: DefaultTextStyle.of(context)
+                              .style
+                              .copyWith(fontSize: 13),
+                        ),
+                      ),
+                      if (!searchBar.isOpen)
+                        _TrailingButton(
+                            collapsed: collapsed,
+                            scrollController: scrollController),
+                      if (searchBar.isOpen &&
+                          searchBar.value != searchBar.initial)
+                        IconButton(
+                          icon: const Icon(Icons.rotate_left),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                          onPressed: searchBar.reset,
+                        ),
+                      if (searchBar.isOpen)
+                        IconButton(
+                          icon: const Icon(Icons.close_rounded),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                          onPressed: searchBar.clear,
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -147,6 +161,109 @@ class SearchBar extends HookConsumerWidget {
   }
 
   static double innerHeight = kBottomNavigationBarHeight + 12;
+}
+
+class _OptionBar extends ConsumerWidget {
+  const _OptionBar();
+  Future<SearchRating?> selectRating(
+      BuildContext context, SearchRating current) {
+    return showDialog<SearchRating>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: context.colorScheme.background,
+          title: Text(context.t.rating.title),
+          icon: const Icon(Icons.star),
+          contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile(
+                value: SearchRating.safe,
+                groupValue: current,
+                title: Text(context.t.rating.safe),
+                onChanged: (x) {
+                  context.navigator.pop(x);
+                },
+              ),
+              RadioListTile(
+                value: SearchRating.questionable,
+                groupValue: current,
+                title: Text(context.t.rating.questionable),
+                onChanged: (x) {
+                  context.navigator.pop(x);
+                },
+              ),
+              RadioListTile(
+                value: SearchRating.explicit,
+                groupValue: current,
+                title: Text(context.t.rating.explicit),
+                onChanged: (x) {
+                  context.navigator.pop(x);
+                },
+              ),
+              RadioListTile(
+                value: SearchRating.all,
+                groupValue: current,
+                title: Text(context.t.rating.all),
+                onChanged: (x) {
+                  context.navigator.pop(x);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rating =
+        ref.watch(serverSettingStateProvider.select((it) => it.searchRating));
+
+    String ratingDesc;
+    switch (rating) {
+      case SearchRating.safe:
+        ratingDesc = context.t.rating.safe;
+        break;
+      case SearchRating.questionable:
+        ratingDesc = context.t.rating.questionable;
+        break;
+      case SearchRating.explicit:
+        ratingDesc = context.t.rating.explicit;
+        break;
+      default:
+        ratingDesc = context.t.rating.all;
+        break;
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () async {
+            final selected = await selectRating(context, rating);
+            if (selected != null) {
+              await ref
+                  .read(serverSettingStateProvider.notifier)
+                  .setSearchRating(selected);
+            }
+          },
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            minimumSize: const Size(1, 1),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            backgroundColor: context.colorScheme.primaryContainer,
+            elevation: 0,
+          ),
+          child: Text(
+            '${context.t.rating.title}: $ratingDesc',
+            style: TextStyle(color: context.colorScheme.onSurface),
+          ),
+        )
+      ],
+    );
+  }
 }
 
 class _CollapsibleButton extends StatelessWidget {
