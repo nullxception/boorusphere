@@ -11,7 +11,7 @@ final suggestionStateProvider = StateNotifierProvider.autoDispose<
 
 class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
   SuggestionState(this.ref, this.serverId)
-      : super(const FetchResult.data(ISetConst({})));
+      : super(const FetchResult.idle(ISetConst({})));
 
   final Ref ref;
   final String serverId;

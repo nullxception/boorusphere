@@ -35,7 +35,6 @@ class SearchSuggestion extends HookConsumerWidget {
       Future(() {
         if (searchBar.isOpen && suggestion is! LoadingFetchResult) {
           ref.watch(suggestionStateProvider.notifier).get(searchBar.value);
-          print('searchBar.isOpen');
         }
       });
     }, [searchBar.isOpen]);
@@ -154,6 +153,11 @@ class SearchSuggestion extends HookConsumerWidget {
                     ),
                   if (server.canSuggestTags)
                     suggestion.when(
+                      idle: (data) {
+                        return const SliverToBoxAdapter(
+                          child: SizedBox.shrink(),
+                        );
+                      },
                       data: (data) {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(

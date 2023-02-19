@@ -29,6 +29,9 @@ class HomeStatus extends HookConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         pageState.when(
+          idle: (data) {
+            return const SizedBox.shrink();
+          },
           data: (data) {
             return Container(
               height: 50,

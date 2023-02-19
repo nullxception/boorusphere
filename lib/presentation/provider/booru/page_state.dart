@@ -21,8 +21,7 @@ final pageStateProvider =
 
 class PageState extends StateNotifier<FetchResult<PageData>> {
   PageState(this.ref, this.serverId)
-      : super(const FetchResult.loading(
-            PageData(posts: [], option: PageOption(query: '', clear: true))));
+      : super(const FetchResult.idle(PageData()));
 
   final Ref ref;
   final String serverId;
