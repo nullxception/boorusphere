@@ -106,7 +106,14 @@ class SearchBar extends HookConsumerWidget {
                       : const EdgeInsets.fromLTRB(16, 11, 16, 11),
                   child: Row(
                     children: [
-                      _LeadingButton(collapsed: collapsed),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          _LeadingButton(collapsed: collapsed),
+                          if (!searchBar.isOpen)
+                            Positioned(right: 8, child: _RatingIndicator()),
+                        ],
+                      ),
                       Expanded(
                         child: TextField(
                           autofocus: true,
@@ -134,8 +141,9 @@ class SearchBar extends HookConsumerWidget {
                       ),
                       if (!searchBar.isOpen)
                         _TrailingButton(
-                            collapsed: collapsed,
-                            scrollController: scrollController),
+                          collapsed: collapsed,
+                          scrollController: scrollController,
+                        ),
                       if (searchBar.isOpen &&
                           searchBar.value != searchBar.initial)
                         IconButton(
@@ -342,6 +350,46 @@ class _LeadingButton extends ConsumerWidget {
                 url: server.homepage,
                 iconSize: 18,
               ),
+      ),
+    );
+  }
+}
+
+class _RatingIndicator extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rating =
+        ref.watch(serverSettingStateProvider.select((it) => it.searchRating));
+
+    String letter = 's';
+    switch (rating) {
+      case SearchRating.questionable:
+        letter = 'q';
+        break;
+      case SearchRating.explicit:
+        letter = 'e';
+        break;
+      default:
+        break;
+    }
+    Color color = Colors.green.shade800;
+    switch (rating) {
+      case SearchRating.questionable:
+        color = Colors.grey.shade800;
+        break;
+      case SearchRating.explicit:
+        color = Colors.red.shade800;
+        break;
+      default:
+        break;
+    }
+    return Visibility(
+      visible: rating != SearchRating.all,
+      child: Container(
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        padding: const EdgeInsets.all(4),
+        child: Text(letter,
+            style: const TextStyle(fontSize: 10, color: Colors.white)),
       ),
     );
   }
