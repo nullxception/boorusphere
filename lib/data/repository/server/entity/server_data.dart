@@ -1,4 +1,4 @@
-import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -28,18 +28,18 @@ class ServerData with _$ServerData {
   String searchUrlOf(
     String query,
     int page,
-    SearchRating searchRating,
+    BooruRating searchRating,
     int postLimit,
   ) {
     String tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
     switch (searchRating) {
-      case SearchRating.safe:
+      case BooruRating.safe:
         tags += ' rating:s';
         break;
-      case SearchRating.questionable:
+      case BooruRating.questionable:
         tags += ' rating:q';
         break;
-      case SearchRating.explicit:
+      case BooruRating.explicit:
         tags += ' rating:e';
         break;
       default:

@@ -1,6 +1,6 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
@@ -174,9 +174,8 @@ class SearchBar extends HookConsumerWidget {
 class _OptionBar extends ConsumerWidget {
   const _OptionBar();
 
-  Future<SearchRating?> selectRating(
-      BuildContext context, SearchRating current) {
-    return showDialog<SearchRating>(
+  Future<BooruRating?> selectRating(BuildContext context, BooruRating current) {
+    return showDialog<BooruRating>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -186,7 +185,7 @@ class _OptionBar extends ConsumerWidget {
           contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: SearchRating.values
+            children: BooruRating.values
                 .map((e) => RadioListTile(
                       value: e,
                       groupValue: current,
@@ -216,7 +215,7 @@ class _OptionBar extends ConsumerWidget {
             if (selected != null) {
               await ref
                   .read(serverSettingStateProvider.notifier)
-                  .setSearchRating(selected);
+                  .setRating(selected);
             }
           },
           style: OutlinedButton.styleFrom(
@@ -327,10 +326,10 @@ class _RatingIndicator extends ConsumerWidget {
 
     String letter = 's';
     switch (rating) {
-      case SearchRating.questionable:
+      case BooruRating.questionable:
         letter = 'q';
         break;
-      case SearchRating.explicit:
+      case BooruRating.explicit:
         letter = 'e';
         break;
       default:
@@ -338,17 +337,17 @@ class _RatingIndicator extends ConsumerWidget {
     }
     Color color = Colors.green.shade800;
     switch (rating) {
-      case SearchRating.questionable:
+      case BooruRating.questionable:
         color = Colors.grey.shade800;
         break;
-      case SearchRating.explicit:
+      case BooruRating.explicit:
         color = Colors.red.shade800;
         break;
       default:
         break;
     }
     return Visibility(
-      visible: rating != SearchRating.all,
+      visible: rating != BooruRating.all,
       child: Container(
         decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         padding: const EdgeInsets.all(4),

@@ -1,4 +1,4 @@
-import 'package:boorusphere/presentation/provider/settings/entity/search_rating.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'page_option.freezed.dart';
@@ -9,7 +9,7 @@ class PageOption with _$PageOption {
     @Default('') String query,
     @Default(false) bool clear,
     @Default(PageOption.defaultLimit) int limit,
-    @Default(SearchRating.safe) SearchRating searchRating,
+    @Default(BooruRating.safe) BooruRating searchRating,
   }) = _PageOption;
   const PageOption._();
 

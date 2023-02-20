@@ -2,6 +2,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
@@ -30,7 +31,7 @@ class PostImage extends HookConsumerWidget {
     final contentSetting = ref.watch(contentSettingStateProvider);
     final headers = usePostHeaders(ref, post);
     final isBlur = useState(
-        post.rating == PostRating.explicit && contentSetting.blurExplicit);
+        post.rating == BooruRating.explicit && contentSetting.blurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
     // GlobalKey to keep the hero state across blur and ExtendedImage's loadState changes
@@ -40,7 +41,7 @@ class PostImage extends HookConsumerWidget {
     final isMounted = useIsMounted();
 
     useEffect(() {
-      if (post.rating != PostRating.explicit || !contentSetting.blurExplicit) {
+      if (post.rating != BooruRating.explicit || !contentSetting.blurExplicit) {
         return;
       }
 
@@ -119,7 +120,8 @@ class PostImage extends HookConsumerWidget {
                 animation.removeListener(onAnimating);
               },
             ),
-          if (post.rating == PostRating.explicit && contentSetting.blurExplicit)
+          if (post.rating == BooruRating.explicit &&
+              contentSetting.blurExplicit)
             FadeTransition(
               opacity: Tween<double>(begin: 0, end: 1).animate(
                 CurvedAnimation(

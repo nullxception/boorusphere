@@ -1,6 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -28,7 +29,7 @@ class PostUnknown extends ConsumerWidget {
           tag: heroTag ?? post.id,
           child: PostPlaceholderImage(
             post: post,
-            shouldBlur: blurExplicitPost && post.rating == PostRating.explicit,
+            shouldBlur: blurExplicitPost && post.rating == BooruRating.explicit,
           ),
         ),
         Positioned(

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
@@ -48,10 +49,10 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
 
     String ratingDesc;
     switch (post.rating) {
-      case PostRating.safe:
+      case BooruRating.safe:
         ratingDesc = context.t.rating.safe;
         break;
-      case PostRating.explicit:
+      case BooruRating.explicit:
         ratingDesc = context.t.rating.explicit;
         break;
       default:
