@@ -1,3 +1,10 @@
+## 1.3.1
+* Add support for "rating:sensitive" parse and selection
+* Fix buggy back-stack on search screen and homepage's sidebar
+* Fix rating selection query compatibility issue
+* Fix some UI bug on favorites-page's content viewer
+* Update Bahasa Indonesia
+
 ## 1.3.0
 * Add rating selection to search screen
 * Add settings to only blur content on timeline
