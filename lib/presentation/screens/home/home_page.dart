@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async/async.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
@@ -54,8 +56,8 @@ class _Home extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarControllerProvider);
-    final drawerFocused = useState(false);
-    final atHomeScreen = !drawerFocused.value && !searchBar.isOpen;
+    final drawer = ref.watch(homeDrawerControllerProvider);
+    final atHomeScreen = !drawer.isOpen && !searchBar.isOpen;
     final isMounted = useIsMounted();
     final allowPop = useState(false);
     const maybePopTimeout = Duration(seconds: 1);
@@ -73,13 +75,16 @@ class _Home extends HookConsumerWidget {
       onWillPop: () async {
         if (!isMounted() || context.router.canPop()) return true;
 
-        if (!atHomeScreen) {
+        if (drawer.isOpen || searchBar.isOpen) {
           maybePopTimer.cancel();
           context.scaffoldMessenger.hideCurrentSnackBar();
-          if (searchBar.isOpen) {
+          if (drawer.isOpen) {
+            unawaited(drawer.close());
+            return false;
+          } else if (searchBar.isOpen) {
             searchBar.close();
+            return false;
           }
-          return false;
         }
 
         if (!allowPop.value) {
@@ -98,9 +103,7 @@ class _Home extends HookConsumerWidget {
       child: _SlidableContainer(
         edgeDragWidth: atHomeScreen ? context.mediaQuery.size.width : 0,
         onSlideStatus: (status) {
-          final focused = status != AnimationStatus.dismissed;
-          drawerFocused.value = focused;
-          if (focused) {
+          if (status != AnimationStatus.dismissed) {
             clearMaybePop();
             context.scaffoldMessenger.hideCurrentSnackBar();
           }
