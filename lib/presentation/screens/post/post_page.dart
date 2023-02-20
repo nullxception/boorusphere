@@ -52,6 +52,7 @@ class PostPage extends HookConsumerWidget {
     final precachePosts = usePrecachePosts(ref, posts);
     final showAppbar = useState(true);
     final isLoadingMore = useState(false);
+    final loadMore = timelineController.onLoadMore;
 
     useEffect(() {
       showAppbar.value = !fullscreen;
@@ -88,12 +89,14 @@ class PostPage extends HookConsumerWidget {
                     onPageChanged: (index) async {
                       context.scaffoldMessenger.hideCurrentSnackBar();
                       currentPage.value = index;
+                      if (loadMore == null) return;
+
                       final offset = index + 1;
                       final threshold =
                           posts.length / 100 * (100 - loadMoreThreshold);
                       if (offset + threshold > posts.length - 1) {
                         isLoadingMore.value = true;
-                        await timelineController.onLoadMore?.call();
+                        await loadMore();
                         await Future.delayed(kThemeAnimationDuration, () {
                           isLoadingMore.value = false;
                         });
