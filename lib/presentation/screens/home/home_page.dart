@@ -86,7 +86,7 @@ class _Home extends HookConsumerWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        if (!isMounted() || context.router.canPop()) return true;
+        if (!isMounted()) return true;
 
         if (drawer.isOpen || searchBar.isOpen) {
           maybePopTimer.cancel();
@@ -99,6 +99,8 @@ class _Home extends HookConsumerWidget {
             return false;
           }
         }
+
+        if (context.router.canPop()) return true;
 
         if (!allowPop.value) {
           allowPop.value = true;
