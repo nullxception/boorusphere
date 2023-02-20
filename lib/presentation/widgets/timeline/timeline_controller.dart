@@ -1,21 +1,11 @@
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-TimelineController useTimelineController({
-  List<Object?> keys = const [],
-  required PageArgs pageArgs,
-  Future<void> Function()? onLoadMore,
-}) {
-  return useMemoized(
-    () => TimelineController(
-      pageArgs: pageArgs,
-      onLoadMore: onLoadMore,
-    ),
-    keys,
-  );
-}
+final timelineControllerProvider =
+    ChangeNotifierProvider.autoDispose<TimelineController>(
+        (ref) => throw UnimplementedError());
 
 class TimelineController extends ChangeNotifier {
   TimelineController({

@@ -19,27 +19,24 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 class Timeline extends ConsumerWidget {
-  const Timeline({
-    super.key,
-    required this.controller,
-    required this.posts,
-  });
+  const Timeline({super.key, required this.posts});
 
-  final TimelineController controller;
   final Iterable<Post> posts;
-
-  String buildHeroTag(Post post) {
-    return '${controller.hashCode}-${post.serverId}@${post.id}';
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
     final blurExplicit =
         ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
+    final timelineController = ref.watch(timelineControllerProvider);
+
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + grid;
-    final scrollController = controller.scrollController;
+    final scrollController = timelineController.scrollController;
+
+    String buildHeroTag(Post post) {
+      return '${timelineController.hashCode}-${post.serverId}@${post.id}';
+    }
 
     return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
@@ -93,7 +90,7 @@ class Timeline extends ConsumerWidget {
                     beginPage: index,
                     posts: posts,
                     heroTagBuilder: buildHeroTag,
-                    timelineController: controller,
+                    timelineController: timelineController,
                   ),
                 );
               },

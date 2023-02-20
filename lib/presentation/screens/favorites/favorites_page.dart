@@ -68,6 +68,8 @@ class _Pager extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverDataState = ref.watch(serverDataStateProvider);
+    final pageArgs = ref.watch(favoritesPageArgsProvider);
+
     final pages = posts
         .groupListsBy(
           (e) => serverDataState.getById(e.serverId, or: ServerData.empty),
@@ -86,7 +88,14 @@ class _Pager extends ConsumerWidget {
         body: TabBarView(
           children: [
             for (final page in pages)
-              _Content(server: page.key, posts: page.value),
+              ProviderScope(
+                overrides: [
+                  timelineControllerProvider.overrideWith(
+                    (ref) => TimelineController(pageArgs: pageArgs),
+                  ),
+                ],
+                child: _Content(server: page.key, posts: page.value),
+              ),
           ],
         ),
         bottomNavigationBar: Container(
@@ -124,7 +133,7 @@ class _Pager extends ConsumerWidget {
   }
 }
 
-class _Content extends HookConsumerWidget {
+class _Content extends ConsumerWidget {
   const _Content({required this.posts, required this.server});
 
   final Iterable<Post> posts;
@@ -132,16 +141,15 @@ class _Content extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(favoritesPageArgsProvider);
-    final controller = useTimelineController(pageArgs: pageArgs);
+    final timelineController = ref.watch(timelineControllerProvider);
 
     return CustomScrollView(
-      controller: controller.scrollController,
+      controller: timelineController.scrollController,
       slivers: [
         SliverSafeArea(
           sliver: SliverPadding(
             padding: const EdgeInsets.all(10),
-            sliver: Timeline(controller: controller, posts: posts),
+            sliver: Timeline(posts: posts),
           ),
         ),
       ],

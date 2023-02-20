@@ -13,6 +13,7 @@ import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
+import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,7 +21,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final homePageArgsProvider =
     Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
 
-class HomePage extends HookConsumerWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key, this.args});
 
   final PageArgs? args;
@@ -30,20 +31,32 @@ class HomePage extends HookConsumerWidget {
     final savedServer =
         ref.read(serverSettingStateProvider.select((it) => it.active));
     final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+
     return Scaffold(
       extendBody: true,
       body: StyledOverlayRegion(
         child: ProviderScope(
           overrides: [
             homePageArgsProvider.overrideWith((ref) => pageArgs),
-            pageStateProvider
-                .overrideWith((ref) => PageState(ref, pageArgs.serverId)),
-            suggestionStateProvider
-                .overrideWith((ref) => SuggestionState(ref, pageArgs.serverId)),
+            pageStateProvider.overrideWith(
+              (ref) => PageState(ref, pageArgs.serverId),
+            ),
+            suggestionStateProvider.overrideWith(
+              (ref) => SuggestionState(ref, pageArgs.serverId),
+            ),
             searchBarControllerProvider.overrideWith(
-                (ref) => SearchBarController(ref, pageArgs.query)),
-            homeDrawerControllerProvider
-                .overrideWith((ref) => HomeDrawerController()),
+              (ref) => SearchBarController(ref, pageArgs.query),
+            ),
+            homeDrawerControllerProvider.overrideWith(
+              (ref) => HomeDrawerController(),
+            ),
+            timelineControllerProvider.overrideWith(
+              (ref) => TimelineController(
+                pageArgs: pageArgs,
+                onLoadMore: () =>
+                    ref.read(pageStateProvider.notifier).loadMore(),
+              ),
+            ),
           ],
           child: _Home(),
         ),

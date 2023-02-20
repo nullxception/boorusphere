@@ -41,11 +41,8 @@ class HomeContent extends HookConsumerWidget {
       }
     }, [serverData.isNotEmpty]);
 
-    final controller = useTimelineController(
-      pageArgs: pageArgs,
-      onLoadMore: ref.read(pageStateProvider.notifier).loadMore,
-    );
-    final scrollController = controller.scrollController;
+    final timelineController = ref.watch(timelineControllerProvider);
+    final scrollController = timelineController.scrollController;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!scrollController.hasClients ||
@@ -75,7 +72,6 @@ class HomeContent extends HookConsumerWidget {
                 sliver: SliverPadding(
                   padding: const EdgeInsets.all(10),
                   sliver: Timeline(
-                    controller: controller,
                     posts: filteredPosts,
                   ),
                 ),
