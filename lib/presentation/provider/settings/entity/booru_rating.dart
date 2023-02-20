@@ -12,10 +12,10 @@ enum BooruRating {
   safe,
   @HiveField(2)
   questionable,
-  @HiveField(3)
-  explicit,
   @HiveField(4)
-  sensitive;
+  sensitive,
+  @HiveField(3)
+  explicit;
 
   String describe(BuildContext context) {
     switch (this) {
