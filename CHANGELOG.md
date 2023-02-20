@@ -1,10 +1,10 @@
 ## 1.3.0
-- Add rating selection to search screen
-- Add settings to only blur content on timeline
-- Fix favorites page bottom bar
-- Fix restore data permission on Android 12
-- Initial support for backstack navigation
-- Remove safe-mode on settings page (replaced with rating selection)
+* Add rating selection to search screen
+* Add settings to only blur content on timeline
+* Fix favorites page bottom bar
+* Fix restore data permission on Android 12
+* Initial support for backstack navigation
+* Remove safe-mode on settings page (replaced with rating selection)
 
 ## 1.2.9
 * Fix loading danbooru image on unstable connection
