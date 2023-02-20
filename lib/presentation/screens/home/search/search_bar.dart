@@ -349,6 +349,9 @@ class _RatingIndicator extends ConsumerWidget {
       case BooruRating.questionable:
         letter = 'q';
         break;
+      case BooruRating.sensitive:
+        letter = 'v';
+        break;
       case BooruRating.explicit:
         letter = 'e';
         break;
@@ -359,6 +362,9 @@ class _RatingIndicator extends ConsumerWidget {
     switch (rating) {
       case BooruRating.questionable:
         color = Colors.grey.shade800;
+        break;
+      case BooruRating.sensitive:
+        color = Colors.yellow.shade900;
         break;
       case BooruRating.explicit:
         color = Colors.red.shade800;
