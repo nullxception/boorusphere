@@ -1,6 +1,7 @@
 enum Setting {
   downloadsGroupByServer,
   postBlurExplicit,
+  postBlurTimelineOnly,
   postLoadOriginal,
   serverActive,
   serverPostLimit,

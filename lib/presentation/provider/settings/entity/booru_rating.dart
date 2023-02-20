@@ -27,4 +27,6 @@ enum BooruRating {
         return context.t.rating.all;
     }
   }
+
+  bool get isExplicit => this == BooruRating.explicit;
 }

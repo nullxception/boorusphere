@@ -6,7 +6,6 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -66,11 +65,12 @@ class PostVideo extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controllerFuture = ref.watch(videoPlayerControllerProvider(post));
-    final blurExplicit =
-        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
+    final contentSettings = ref.watch(contentSettingStateProvider);
+    final shouldBlurExplicit =
+        contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
 
     final isMounted = useIsMounted();
-    final shouldBlur = post.rating == BooruRating.explicit && blurExplicit;
+    final shouldBlur = post.rating.isExplicit && shouldBlurExplicit;
     final isBlur = useState(shouldBlur);
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));

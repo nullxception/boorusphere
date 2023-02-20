@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
@@ -123,7 +122,7 @@ class _Thumbnail extends HookConsumerWidget {
       aspectRatio: post.aspectRatio,
       child: ImageFiltered(
         imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-        enabled: blurExplicit && post.rating == BooruRating.explicit,
+        enabled: blurExplicit && post.rating.isExplicit,
         child: ExtendedImage.network(
           post.previewFile,
           headers: headers.data,

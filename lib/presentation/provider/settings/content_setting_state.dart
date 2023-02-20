@@ -15,6 +15,7 @@ class ContentSettingState extends _$ContentSettingState {
     _repo = ref.read(settingRepoProvider);
     return ContentSetting(
       blurExplicit: _repo.get(Setting.postBlurExplicit, or: true),
+      blurTimelineOnly: _repo.get(Setting.postBlurTimelineOnly, or: false),
       loadOriginal: _repo.get(Setting.postLoadOriginal, or: false),
       videoMuted: _repo.get(Setting.videoPlayerMuted, or: false),
     );
@@ -23,6 +24,11 @@ class ContentSettingState extends _$ContentSettingState {
   Future<void> setBlurExplicitPost(bool value) async {
     state = state.copyWith(blurExplicit: value);
     await _repo.put(Setting.postBlurExplicit, value);
+  }
+
+  Future<void> setBlurTimelineOnly(bool value) async {
+    state = state.copyWith(blurTimelineOnly: value);
+    await _repo.put(Setting.postBlurTimelineOnly, value);
   }
 
   Future<void> setLoadOriginalPost(bool value) async {

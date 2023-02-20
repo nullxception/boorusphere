@@ -6,6 +6,7 @@ part 'content_setting.freezed.dart';
 class ContentSetting with _$ContentSetting {
   const factory ContentSetting({
     @Default(true) bool blurExplicit,
+    @Default(false) bool blurTimelineOnly,
     @Default(false) bool loadOriginal,
     @Default(false) bool videoMuted,
   }) = _ContentSetting;

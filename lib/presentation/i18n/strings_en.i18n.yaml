@@ -173,6 +173,9 @@ settings:
   blur_content:
     title: "Blur explicit content"
     desc: "Content rated as explicit will be blurred"
+  blur_timeline_only:
+    title: "Only blur content on timeline"
+    desc: "Explicit-rated content will not be blurred on view-mode"
   ime_incognito:
     title: "Incognito Keyboard"
     desc: "Enable incognito-mode for keyboard if supported."

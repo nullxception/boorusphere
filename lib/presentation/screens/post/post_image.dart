@@ -29,9 +29,10 @@ class PostImage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contentSetting = ref.watch(contentSettingStateProvider);
+    final shouldBlurExplicit =
+        contentSetting.blurExplicit && !contentSetting.blurTimelineOnly;
     final headers = usePostHeaders(ref, post);
-    final isBlur = useState(
-        post.rating == BooruRating.explicit && contentSetting.blurExplicit);
+    final isBlur = useState(post.rating.isExplicit && shouldBlurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
     // GlobalKey to keep the hero state across blur and ExtendedImage's loadState changes
@@ -41,7 +42,7 @@ class PostImage extends HookConsumerWidget {
     final isMounted = useIsMounted();
 
     useEffect(() {
-      if (post.rating != BooruRating.explicit || !contentSetting.blurExplicit) {
+      if (post.rating != BooruRating.explicit || !shouldBlurExplicit) {
         return;
       }
 
@@ -120,8 +121,7 @@ class PostImage extends HookConsumerWidget {
                 animation.removeListener(onAnimating);
               },
             ),
-          if (post.rating == BooruRating.explicit &&
-              contentSetting.blurExplicit)
+          if (post.rating.isExplicit && shouldBlurExplicit)
             FadeTransition(
               opacity: Tween<double>(begin: 0, end: 1).animate(
                 CurvedAnimation(

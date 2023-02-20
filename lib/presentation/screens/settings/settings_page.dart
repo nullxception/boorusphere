@@ -41,6 +41,7 @@ class SettingsPage extends StatelessWidget {
               title: Text(context.t.settings.safeMode),
               children: const [
                 _BlurContent(),
+                _BlurTimelineOnly(),
                 _ImeIncognito(),
               ],
             ),
@@ -194,6 +195,29 @@ class _BlurContent extends ConsumerWidget {
             .read(contentSettingStateProvider.notifier)
             .setBlurExplicitPost(value);
       },
+    );
+  }
+}
+
+class _BlurTimelineOnly extends ConsumerWidget {
+  const _BlurTimelineOnly();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final contentSettings = ref.watch(contentSettingStateProvider);
+
+    setBlurTimelineOnly(value) {
+      ref.read(contentSettingStateProvider.notifier).setBlurTimelineOnly(value);
+    }
+
+    return SwitchListTile(
+      title: Text(context.t.settings.blurTimelineOnly.title),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(context.t.settings.blurTimelineOnly.desc),
+      ),
+      value: contentSettings.blurTimelineOnly,
+      onChanged: contentSettings.blurExplicit ? setBlurTimelineOnly : null,
     );
   }
 }
