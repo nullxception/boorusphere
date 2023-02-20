@@ -34,13 +34,13 @@ class ServerData with _$ServerData {
     String tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
     switch (searchRating) {
       case BooruRating.safe:
-        tags += ' rating:s';
+        tags += ' rating:safe';
         break;
       case BooruRating.questionable:
-        tags += ' rating:q';
+        tags += ' rating:questionable';
         break;
       case BooruRating.explicit:
-        tags += ' rating:e';
+        tags += ' rating:explicit';
         break;
       case BooruRating.sensitive:
         tags += ' rating:sensitive';
