@@ -47,6 +47,9 @@ rating:
   questionable: "Dipertanyakan"
   explicit: "Eksplisit"
   safe: "Aman"
+  sensitive: "Sensitif"
+  all: "Semua"
+  disable_rating_safe: "Matikan penilaian aman"
 
 page_status:
   http_error: "Tidak bisa mendapatkan hasil dari ${server_name}"
@@ -171,6 +174,9 @@ settings:
   blur_content:
     title: "Sensor konten eksplisit"
     desc: "Konten yang dinilai eksplisit akan disensor"
+  blur_timeline_only:
+    title: "Hanya sensor konten di timeline"
+    desc: "Konten eksplisit tidak akan disensor pada mode pratinjau"
   ime_incognito:
     title: "Keyboard Mode Incognito"
     desc: "Aktifkan mode incognito untuk keyboard jika memungkinkan."
