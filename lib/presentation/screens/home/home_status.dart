@@ -130,7 +130,7 @@ class _ErrorStatus extends ConsumerWidget {
                         unawaited(ref.read(pageStateProvider.notifier).load());
                       }
                     },
-                    child: Text(context.t.disableSafeMode),
+                    child: Text(context.t.rating.disableRatingSafe),
                   ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 0),

@@ -42,7 +42,6 @@ reset: Скинути
 reset_to_default: Скинути до заводських налаштувань
 load_more: Завантажити більше
 clearing: Очищення...
-disable_safe_mode: Відключити безпечний режим
 file_sample: Зразок файла
 oss_license: Ліцензія з відкритим програмним кодом
 load_image_failed: Не вдалось завантажити зображення

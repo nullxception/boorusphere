@@ -13,7 +13,6 @@ reset_to_default: "Reset to default"
 scan: "Scan"
 load_more: "Load more"
 clearing: "Clearing..."
-disable_safe_mode: "Disable safe mode"
 details: "Details"
 location: "Location"
 source: "Source"
@@ -50,6 +49,7 @@ rating:
   safe: "Safe"
   sensitive: "Sensitive"
   all: "All"
+  disable_rating_safe: "Disable rating:safe"
 
 page_status:
   http_error: "Cannot get result from ${server_name}"
