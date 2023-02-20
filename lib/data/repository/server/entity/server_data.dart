@@ -42,6 +42,9 @@ class ServerData with _$ServerData {
       case BooruRating.explicit:
         tags += ' rating:e';
         break;
+      case BooruRating.sensitive:
+        tags += ' rating:sensitive';
+        break;
       default:
         break;
     }

@@ -195,6 +195,11 @@ class _OptionBar extends StatelessWidget {
 class _RatingButton extends ConsumerWidget {
   const _RatingButton();
 
+  String rateDesc(BuildContext context, BooruRating rating) {
+    final desc = rating.describe(context);
+    return desc.isEmpty ? context.t.rating.all : desc;
+  }
+
   Future<BooruRating?> selectRating(BuildContext context, BooruRating current) {
     return showDialog<BooruRating>(
       context: context,
@@ -210,7 +215,7 @@ class _RatingButton extends ConsumerWidget {
                 .map((e) => RadioListTile(
                       value: e,
                       groupValue: current,
-                      title: Text(e.getString(context)),
+                      title: Text(rateDesc(context, e)),
                       onChanged: (x) {
                         context.navigator.pop(x);
                       },
@@ -226,7 +231,7 @@ class _RatingButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rating =
         ref.watch(serverSettingStateProvider.select((it) => it.searchRating));
-    final label = '${context.t.rating.title}: ${rating.getString(context)}';
+    final label = '${context.t.rating.title}: ${rateDesc(context, rating)}';
 
     return TextButton(
       onPressed: () async {

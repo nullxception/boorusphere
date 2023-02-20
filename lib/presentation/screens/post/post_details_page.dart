@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
@@ -47,18 +46,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
       context.router.push(HomeRoute(args: args.copyWith(query: newQuery)));
     }
 
-    String ratingDesc;
-    switch (post.rating) {
-      case BooruRating.safe:
-        ratingDesc = context.t.rating.safe;
-        break;
-      case BooruRating.explicit:
-        ratingDesc = context.t.rating.explicit;
-        break;
-      default:
-        ratingDesc = context.t.rating.questionable;
-        break;
-    }
+    final rating = post.rating.describe(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(context.t.details)),
@@ -66,13 +54,14 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
         child: SafeArea(
           child: ListView(
             children: [
-              ListTile(
-                title: Text(context.t.rating.title),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(ratingDesc),
+              if (rating.isNotEmpty)
+                ListTile(
+                  title: Text(context.t.rating.title),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(rating),
+                  ),
                 ),
-              ),
               if (post.postUrl.isNotEmpty)
                 ListTile(
                   title: Text(context.t.location),

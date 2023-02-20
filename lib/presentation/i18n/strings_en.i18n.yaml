@@ -48,6 +48,7 @@ rating:
   questionable: "Questionable"
   explicit: "Explicit"
   safe: "Safe"
+  sensitive: "Sensitive"
   all: "All"
 
 page_status:

@@ -41,18 +41,7 @@ extension PostExt on Post {
   PixelSize get prescreensize =>
       PixelSize(width: previewWidth, height: previewHeight);
 
-  BooruRating get rating {
-    switch (rateValue) {
-      case 'explicit':
-      case 'e':
-        return BooruRating.explicit;
-      case 'safe':
-      case 's':
-        return BooruRating.safe;
-      default:
-        return BooruRating.questionable;
-    }
-  }
+  BooruRating get rating => BooruRating.parse(rateValue);
 
   Content get content {
     final sample = sampleFile.asContent();

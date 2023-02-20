@@ -13,9 +13,11 @@ enum BooruRating {
   @HiveField(2)
   questionable,
   @HiveField(3)
-  explicit;
+  explicit,
+  @HiveField(4)
+  sensitive;
 
-  String getString(BuildContext context) {
+  String describe(BuildContext context) {
     switch (this) {
       case BooruRating.safe:
         return context.t.rating.safe;
@@ -23,10 +25,27 @@ enum BooruRating {
         return context.t.rating.questionable;
       case BooruRating.explicit:
         return context.t.rating.explicit;
+      case BooruRating.sensitive:
+        return context.t.rating.sensitive;
       default:
-        return context.t.rating.all;
+        return '';
     }
   }
 
   bool get isExplicit => this == BooruRating.explicit;
+
+  static BooruRating parse(String metadata) {
+    switch (metadata) {
+      case 'sensitive':
+        return BooruRating.sensitive;
+      case 'explicit':
+      case 'e':
+        return BooruRating.explicit;
+      case 'safe':
+      case 's':
+        return BooruRating.safe;
+      default:
+        return BooruRating.questionable;
+    }
+  }
 }
