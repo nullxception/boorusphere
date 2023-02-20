@@ -173,6 +173,7 @@ class SearchBar extends HookConsumerWidget {
 
 class _OptionBar extends ConsumerWidget {
   const _OptionBar();
+
   Future<SearchRating?> selectRating(
       BuildContext context, SearchRating current) {
     return showDialog<SearchRating>(
@@ -185,40 +186,16 @@ class _OptionBar extends ConsumerWidget {
           contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile(
-                value: SearchRating.safe,
-                groupValue: current,
-                title: Text(context.t.rating.safe),
-                onChanged: (x) {
-                  context.navigator.pop(x);
-                },
-              ),
-              RadioListTile(
-                value: SearchRating.questionable,
-                groupValue: current,
-                title: Text(context.t.rating.questionable),
-                onChanged: (x) {
-                  context.navigator.pop(x);
-                },
-              ),
-              RadioListTile(
-                value: SearchRating.explicit,
-                groupValue: current,
-                title: Text(context.t.rating.explicit),
-                onChanged: (x) {
-                  context.navigator.pop(x);
-                },
-              ),
-              RadioListTile(
-                value: SearchRating.all,
-                groupValue: current,
-                title: Text(context.t.rating.all),
-                onChanged: (x) {
-                  context.navigator.pop(x);
-                },
-              ),
-            ],
+            children: SearchRating.values
+                .map((e) => RadioListTile(
+                      value: e,
+                      groupValue: current,
+                      title: Text(e.getString(context)),
+                      onChanged: (x) {
+                        context.navigator.pop(x);
+                      },
+                    ))
+                .toList(),
           ),
         );
       },
@@ -230,23 +207,8 @@ class _OptionBar extends ConsumerWidget {
     final rating =
         ref.watch(serverSettingStateProvider.select((it) => it.searchRating));
 
-    String ratingDesc;
-    switch (rating) {
-      case SearchRating.safe:
-        ratingDesc = context.t.rating.safe;
-        break;
-      case SearchRating.questionable:
-        ratingDesc = context.t.rating.questionable;
-        break;
-      case SearchRating.explicit:
-        ratingDesc = context.t.rating.explicit;
-        break;
-      default:
-        ratingDesc = context.t.rating.all;
-        break;
-    }
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TextButton(
           onPressed: () async {
@@ -258,14 +220,16 @@ class _OptionBar extends ConsumerWidget {
             }
           },
           style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
             minimumSize: const Size(1, 1),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            backgroundColor: context.colorScheme.primaryContainer,
+            side:
+                BorderSide(width: 1, color: context.colorScheme.surfaceVariant),
             elevation: 0,
           ),
           child: Text(
-            '${context.t.rating.title}: $ratingDesc',
+            '${context.t.rating.title}: ${rating.getString(context)}'
+                .toLowerCase(),
             style: TextStyle(color: context.colorScheme.onSurface),
           ),
         )
