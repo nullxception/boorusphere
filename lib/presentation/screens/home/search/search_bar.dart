@@ -25,11 +25,6 @@ class SearchBar extends HookConsumerWidget {
     final collapsed = !searchBar.isOpen && delta.value.first > 0;
     final isBlurAllowed =
         ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
-    final imeIncognito =
-        ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
-    final pageArgs = ref.watch(homePageArgsProvider);
-    final server =
-        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
     final onScrolling = useCallback(() {
       final position = scrollController.position;
       final threshold = SearchBar.innerHeight;
@@ -75,14 +70,19 @@ class SearchBar extends HookConsumerWidget {
         sigmaY: 8,
         blur: isBlurAllowed,
         child: Container(
-          color: context.theme.scaffoldBackgroundColor.withOpacity(
-            context.isLightThemed
-                ? isBlurAllowed
-                    ? 0.7
-                    : 0.92
-                : isBlurAllowed
-                    ? 0.85
-                    : 0.97,
+          decoration: BoxDecoration(
+            color: context.theme.scaffoldBackgroundColor.withOpacity(
+              context.isLightThemed
+                  ? isBlurAllowed
+                      ? 0.7
+                      : 0.92
+                  : isBlurAllowed
+                      ? 0.85
+                      : 0.97,
+            ),
+            border: Border(
+              top: BorderSide(color: context.colorScheme.outlineVariant),
+            ),
           ),
           child: SafeArea(
             top: false,
@@ -90,16 +90,12 @@ class SearchBar extends HookConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (searchBar.isOpen)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(18, 11, 18, 0),
-                    child: _OptionBar(),
-                  ),
+                if (searchBar.isOpen) const _OptionBar(),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
                   ),
                   margin: collapsed
                       ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
@@ -114,31 +110,7 @@ class SearchBar extends HookConsumerWidget {
                             Positioned(right: 8, child: _RatingIndicator()),
                         ],
                       ),
-                      Expanded(
-                        child: TextField(
-                          autofocus: true,
-                          enableIMEPersonalizedLearning: !imeIncognito,
-                          controller: searchBar.textEditingController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: searchBar.value.isEmpty
-                                ? context.t.searchHint(serverName: server.name)
-                                : searchBar.value,
-                            isDense: true,
-                          ),
-                          textAlign: searchBar.isOpen
-                              ? TextAlign.start
-                              : TextAlign.center,
-                          readOnly: !searchBar.isOpen,
-                          onSubmitted: (str) {
-                            searchBar.submit(context, str);
-                          },
-                          onTap: searchBar.isOpen ? null : searchBar.open,
-                          style: DefaultTextStyle.of(context)
-                              .style
-                              .copyWith(fontSize: 13),
-                        ),
-                      ),
+                      const Expanded(child: _SearchField()),
                       if (!searchBar.isOpen)
                         _TrailingButton(
                           collapsed: collapsed,
@@ -146,16 +118,14 @@ class SearchBar extends HookConsumerWidget {
                         ),
                       if (searchBar.isOpen &&
                           searchBar.value != searchBar.initial)
-                        IconButton(
-                          icon: const Icon(Icons.rotate_left),
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          onPressed: searchBar.reset,
+                        _Button(
+                          onTap: searchBar.reset,
+                          child: const Icon(Icons.rotate_left),
                         ),
                       if (searchBar.isOpen)
-                        IconButton(
-                          icon: const Icon(Icons.close_rounded),
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          onPressed: searchBar.clear,
+                        _Button(
+                          onTap: searchBar.clear,
+                          child: const Icon(Icons.close_rounded),
                         ),
                     ],
                   ),
@@ -171,8 +141,59 @@ class SearchBar extends HookConsumerWidget {
   static double innerHeight = kBottomNavigationBarHeight + 12;
 }
 
-class _OptionBar extends ConsumerWidget {
+class _SearchField extends HookConsumerWidget {
+  const _SearchField();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchBar = ref.watch(searchBarControllerProvider);
+    final imeIncognito =
+        ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
+    final pageArgs = ref.watch(homePageArgsProvider);
+    final server =
+        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
+
+    return TextField(
+      autofocus: true,
+      enableIMEPersonalizedLearning: !imeIncognito,
+      controller: searchBar.textEditingController,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: searchBar.value.isEmpty
+            ? context.t.searchHint(serverName: server.name)
+            : searchBar.value,
+        isDense: true,
+      ),
+      textAlign: searchBar.isOpen ? TextAlign.start : TextAlign.center,
+      readOnly: !searchBar.isOpen,
+      onSubmitted: (str) {
+        searchBar.submit(context, str);
+      },
+      onTap: searchBar.isOpen ? null : searchBar.open,
+      style: DefaultTextStyle.of(context).style.copyWith(fontSize: 13),
+    );
+  }
+}
+
+class _OptionBar extends StatelessWidget {
   const _OptionBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 11, 18, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          _RatingButton(),
+        ],
+      ),
+    );
+  }
+}
+
+class _RatingButton extends ConsumerWidget {
+  const _RatingButton();
 
   Future<BooruRating?> selectRating(BuildContext context, BooruRating current) {
     return showDialog<BooruRating>(
@@ -205,40 +226,37 @@ class _OptionBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rating =
         ref.watch(serverSettingStateProvider.select((it) => it.searchRating));
+    final label = '${context.t.rating.title}: ${rating.getString(context)}';
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TextButton(
-          onPressed: () async {
-            final selected = await selectRating(context, rating);
-            if (selected != null) {
-              await ref
-                  .read(serverSettingStateProvider.notifier)
-                  .setRating(selected);
-            }
-          },
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-            minimumSize: const Size(1, 1),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            side:
-                BorderSide(width: 1, color: context.colorScheme.surfaceVariant),
-            elevation: 0,
-          ),
-          child: Text(
-            '${context.t.rating.title}: ${rating.getString(context)}'
-                .toLowerCase(),
-            style: TextStyle(color: context.colorScheme.onSurface),
-          ),
-        )
-      ],
+    return TextButton(
+      onPressed: () async {
+        final selected = await selectRating(context, rating);
+        if (selected != null) {
+          await ref
+              .read(serverSettingStateProvider.notifier)
+              .setRating(selected);
+        }
+      },
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        minimumSize: const Size(1, 1),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        side: BorderSide(
+          width: 1,
+          color: context.colorScheme.surfaceVariant,
+        ),
+        elevation: 0,
+      ),
+      child: Text(
+        label.toLowerCase(),
+        style: TextStyle(color: context.colorScheme.onSurface),
+      ),
     );
   }
 }
 
-class _CollapsibleButton extends StatelessWidget {
-  const _CollapsibleButton({
+class _Button extends StatelessWidget {
+  const _Button({
     this.collapsed = false,
     required this.onTap,
     this.child,
@@ -252,11 +270,8 @@ class _CollapsibleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: AnimatedPadding(
-        duration: const Duration(milliseconds: 300),
-        padding: collapsed
-            ? const EdgeInsets.fromLTRB(16, 6, 16, 6)
-            : const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
         child: AnimatedScale(
           duration: const Duration(milliseconds: 300),
           scale: collapsed ? 0.75 : 1,
@@ -279,7 +294,7 @@ class _LeadingButton extends ConsumerWidget {
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
     final searchBar = ref.watch(searchBarControllerProvider);
 
-    return _CollapsibleButton(
+    return _Button(
       collapsed: collapsed,
       onTap: () {
         if (searchBar.isOpen) {
@@ -375,7 +390,7 @@ class _TrailingButton extends ConsumerWidget {
           curve: Curves.easeInOutCubic);
     }
 
-    return _CollapsibleButton(
+    return _Button(
       onTap: collapsed
           ? backToTop
           : ref.read(uiSettingStateProvider.notifier).cycleGrid,
