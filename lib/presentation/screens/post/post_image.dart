@@ -69,6 +69,7 @@ class PostImage extends HookConsumerWidget {
               child: PostPlaceholderImage(
                 post: post,
                 shouldBlur: true,
+                headers: headers.data,
               ),
             )
           else
@@ -91,7 +92,11 @@ class PostImage extends HookConsumerWidget {
                     tag: heroTag ?? post.id,
                     child: state.isCompleted
                         ? state.completedWidget
-                        : PostPlaceholderImage(post: post, shouldBlur: false),
+                        : PostPlaceholderImage(
+                            post: post,
+                            shouldBlur: false,
+                            headers: headers.data,
+                          ),
                   ),
                 );
               },

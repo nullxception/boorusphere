@@ -1,6 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class PostUnknown extends ConsumerWidget {
+class PostUnknown extends HookConsumerWidget {
   const PostUnknown({super.key, required this.post, this.heroTag});
 
   final Post post;
@@ -18,6 +19,7 @@ class PostUnknown extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final headers = usePostHeaders(ref, post);
     final contentSettings = ref.watch(contentSettingStateProvider);
     final shouldBlurExplicit =
         contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
@@ -31,6 +33,7 @@ class PostUnknown extends ConsumerWidget {
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: shouldBlurExplicit && post.rating.isExplicit,
+            headers: headers.data,
           ),
         ),
         Positioned(

@@ -6,6 +6,7 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -69,6 +70,7 @@ class PostVideo extends HookConsumerWidget {
     final shouldBlurExplicit =
         contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
 
+    final headers = usePostHeaders(ref, post);
     final isMounted = useIsMounted();
     final shouldBlur = post.rating.isExplicit && shouldBlurExplicit;
     final isBlur = useState(shouldBlur);
@@ -95,13 +97,18 @@ class PostVideo extends HookConsumerWidget {
             child: AspectRatio(
               aspectRatio: post.aspectRatio,
               child: isBlur.value
-                  ? PostPlaceholderImage(post: post, shouldBlur: true)
+                  ? PostPlaceholderImage(
+                      post: post,
+                      headers: headers.data,
+                      shouldBlur: true,
+                    )
                   : controllerFuture.maybeWhen(
                       data: (controller) => Stack(
                         fit: StackFit.passthrough,
                         children: [
                           PostPlaceholderImage(
                             post: post,
+                            headers: headers.data,
                             shouldBlur: false,
                           ),
                           VideoPlayer(controller),
@@ -109,6 +116,7 @@ class PostVideo extends HookConsumerWidget {
                       ),
                       orElse: () => PostPlaceholderImage(
                         post: post,
+                        headers: headers.data,
                         shouldBlur: false,
                       ),
                     ),
