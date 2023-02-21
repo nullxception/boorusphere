@@ -117,36 +117,46 @@ class _Thumbnail extends HookConsumerWidget {
 
     return AspectRatio(
       aspectRatio: post.aspectRatio,
-      child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-        enabled: blurExplicit && post.rating.isExplicit,
-        child: ExtendedImage.network(
-          post.previewFile,
-          headers: headers.data,
-          fit: BoxFit.cover,
-          enableLoadState: false,
-          loadStateChanged: (state) {
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 150),
-              child: state.isCompleted
-                  ? state.completedWidget
-                  : _Placeholder(
-                      key: ValueKey(post.id),
-                      isFailed: state.isFailed,
-                    ),
-              layoutBuilder: (currentChild, previousChildren) {
-                return Stack(
-                  alignment: Alignment.center,
-                  fit: StackFit.passthrough,
-                  children: [
-                    ...previousChildren,
-                    if (currentChild != null) currentChild,
-                  ],
-                );
-              },
+      child: ExtendedImage.network(
+        post.previewFile,
+        headers: headers.data,
+        fit: BoxFit.cover,
+        enableLoadState: false,
+        beforePaintImage: (canvas, rect, image, paint) {
+          if (blurExplicit && post.rating.isExplicit) {
+            paint.imageFilter = ImageFilter.blur(
+              sigmaX: 5,
+              sigmaY: 5,
+              tileMode: TileMode.decal,
             );
-          },
-        ),
+          }
+          return false;
+        },
+        loadStateChanged: (state) {
+          if (state.wasSynchronouslyLoaded && state.isCompleted) {
+            return state.completedWidget;
+          }
+
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            child: state.isCompleted
+                ? state.completedWidget
+                : _Placeholder(
+                    key: ValueKey(post.id),
+                    isFailed: state.isFailed,
+                  ),
+            layoutBuilder: (currentChild, previousChildren) {
+              return Stack(
+                alignment: Alignment.center,
+                fit: StackFit.passthrough,
+                children: [
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }

@@ -20,15 +20,21 @@ class PostPlaceholderImage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final headers = usePostHeaders(ref, post);
 
-    return ImageFiltered(
-      imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-      enabled: shouldBlur,
-      child: ExtendedImage.network(
-        post.previewFile,
-        headers: headers.data,
-        fit: BoxFit.contain,
-        enableLoadState: false,
-      ),
+    return ExtendedImage.network(
+      post.previewFile,
+      headers: headers.data,
+      fit: BoxFit.contain,
+      enableLoadState: false,
+      beforePaintImage: (canvas, rect, image, paint) {
+        if (shouldBlur) {
+          paint.imageFilter = ImageFilter.blur(
+            sigmaX: 5,
+            sigmaY: 5,
+            tileMode: TileMode.decal,
+          );
+        }
+        return false;
+      },
     );
   }
 }
