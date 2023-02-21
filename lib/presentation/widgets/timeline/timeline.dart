@@ -6,6 +6,7 @@ import 'package:boorusphere/presentation/provider/settings/content_setting_state
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
+import 'package:boorusphere/presentation/utils/entity/content.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
@@ -120,7 +121,10 @@ class _Thumbnail extends HookConsumerWidget {
     final image = AspectRatio(
         aspectRatio: isLong ? 0.5 : post.aspectRatio,
         child: ExtendedImage.network(
-          post.previewFile,
+          // load sample photo when it's above 35:9
+          post.aspectRatio < 0.26 && post.sampleFile.asContent().isPhoto
+              ? post.sampleFile
+              : post.previewFile,
           headers: headers.data,
           fit: BoxFit.cover,
           enableLoadState: false,
