@@ -114,51 +114,76 @@ class _Thumbnail extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final headers = usePostHeaders(ref, post);
+    // limit timeline thumbnail to 18:9
+    final isLong = post.aspectRatio < 0.5;
 
-    return AspectRatio(
-      aspectRatio: post.aspectRatio,
-      child: ExtendedImage.network(
-        post.previewFile,
-        headers: headers.data,
-        fit: BoxFit.cover,
-        enableLoadState: false,
-        beforePaintImage: (canvas, rect, image, paint) {
-          if (blurExplicit && post.rating.isExplicit) {
-            paint.imageFilter = ImageFilter.blur(
-              sigmaX: 5,
-              sigmaY: 5,
-              tileMode: TileMode.decal,
-            );
-          }
-          return false;
-        },
-        loadStateChanged: (state) {
-          if (state.wasSynchronouslyLoaded && state.isCompleted) {
-            return state.completedWidget;
-          }
-
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            child: state.isCompleted
-                ? state.completedWidget
-                : _Placeholder(
-                    key: ValueKey(post.id),
-                    isFailed: state.isFailed,
-                  ),
-            layoutBuilder: (currentChild, previousChildren) {
-              return Stack(
-                alignment: Alignment.center,
-                fit: StackFit.passthrough,
-                children: [
-                  ...previousChildren,
-                  if (currentChild != null) currentChild,
-                ],
+    final image = AspectRatio(
+        aspectRatio: isLong ? 0.5 : post.aspectRatio,
+        child: ExtendedImage.network(
+          post.previewFile,
+          headers: headers.data,
+          fit: BoxFit.cover,
+          enableLoadState: false,
+          beforePaintImage: (canvas, rect, image, paint) {
+            if (blurExplicit && post.rating.isExplicit) {
+              paint.imageFilter = ImageFilter.blur(
+                sigmaX: 5,
+                sigmaY: 5,
+                tileMode: TileMode.decal,
               );
-            },
-          );
-        },
-      ),
-    );
+            }
+            return false;
+          },
+          loadStateChanged: (state) {
+            if (state.wasSynchronouslyLoaded && state.isCompleted) {
+              return state.completedWidget;
+            }
+
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 150),
+              child: state.isCompleted
+                  ? state.completedWidget
+                  : _Placeholder(
+                      key: ValueKey(post.id),
+                      isFailed: state.isFailed,
+                    ),
+              layoutBuilder: (currentChild, previousChildren) {
+                return Stack(
+                  alignment: Alignment.center,
+                  fit: StackFit.passthrough,
+                  children: [
+                    ...previousChildren,
+                    if (currentChild != null) currentChild,
+                  ],
+                );
+              },
+            );
+          },
+        ));
+
+    return isLong
+        ? Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              image,
+              Card(
+                color: context.colorScheme.background.withOpacity(0.8),
+                elevation: 0,
+                margin: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(22, 6, 22, 4),
+                  child: Icon(Icons.gradient, size: 16),
+                ),
+              )
+            ],
+          )
+        : image;
   }
 }
 
