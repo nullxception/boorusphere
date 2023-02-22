@@ -103,8 +103,10 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
 
         _page++;
 
+        final newPosts =
+            posts.where((it) => !_posts.any((post) => post.id == it.id));
         final displayedPosts =
-            posts.where((it) => !it.allTags.any(blockedTags.contains));
+            newPosts.where((it) => !it.allTags.any(blockedTags.contains));
         if (displayedPosts.isEmpty) {
           if (_skipCount > 3) return;
           _skipCount++;
