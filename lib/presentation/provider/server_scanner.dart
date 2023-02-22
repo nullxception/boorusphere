@@ -62,7 +62,10 @@ class ServerScanner {
     try {
       final res = await client.get(
         '$host/$test',
-        options: Options(validateStatus: (it) => it == 200),
+        options: Options(
+          validateStatus: (it) => it == 200,
+          responseType: type == _PayloadType.post ? ResponseType.stream : null,
+        ),
         cancelToken: _cancelToken,
       );
 
