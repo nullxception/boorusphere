@@ -33,10 +33,12 @@ class _ScanResult {
   const _ScanResult({
     this.origin = '',
     this.query = '',
+    this.hasFileUrl = false,
   });
 
   final String origin;
   final String query;
+  final bool hasFileUrl;
 
   static const empty = _ScanResult();
 }
@@ -78,14 +80,17 @@ class ServerScanner {
       }
 
       final contentType = res.headers['content-type'] ?? [];
+      final strData = res.data.toString();
       if (contentType.any((it) => it.contains(RegExp(r'(json|xml)'))) &&
-          res.data.toString().isEmpty) {
+          strData.isEmpty) {
         return _ScanResult.empty;
       }
 
+      final fileUrlRegExp = RegExp("https?://.*/.+\\.[a-zA-Z]{2,4}[\"']");
       return _ScanResult(
         origin: origin,
         query: contentType.any((it) => it.contains('html')) ? '' : query,
+        hasFileUrl: strData.contains(fileUrlRegExp),
       );
     } on DioError {
       return _ScanResult.empty;
@@ -101,11 +106,15 @@ class ServerScanner {
       queries.map((q) => _tryQuery(host, q, type)),
     );
 
+    final firstFound = result.firstWhere(
+      (it) => it.query.isNotEmpty,
+      orElse: () => _ScanResult(origin: host),
+    );
+
     return _Payload(
-      result: result.firstWhere(
-        (it) => it.query.isNotEmpty,
-        orElse: () => _ScanResult(origin: host),
-      ),
+      result: type == _PayloadType.search
+          ? result.firstWhere((it) => it.hasFileUrl, orElse: () => firstFound)
+          : firstFound,
       type: type,
     );
   }
