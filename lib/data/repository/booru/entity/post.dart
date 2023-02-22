@@ -28,6 +28,7 @@ class Post with _$Post {
     @HiveField(17, defaultValue: []) @Default([]) List<String> tagsCopyright,
     @HiveField(18, defaultValue: []) @Default([]) List<String> tagsGeneral,
     @HiveField(19, defaultValue: []) @Default([]) List<String> tagsMeta,
+    @HiveField(20, defaultValue: 0) @Default(0) int score,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);

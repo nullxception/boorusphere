@@ -62,6 +62,13 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                     child: Text(rating),
                   ),
                 ),
+              ListTile(
+                title: Text(context.t.score),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(post.score.toString()),
+                ),
+              ),
               if (post.postUrl.isNotEmpty)
                 ListTile(
                   title: Text(context.t.location),

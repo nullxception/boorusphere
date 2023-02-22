@@ -41,6 +41,7 @@ version: "Versi ${version}"
 backup: "Cadangkan"
 restore: "Pulihkan"
 searchHistory: "Histori Pencarian"
+score: "Skor"
 
 rating:
   title: "Penilaian"

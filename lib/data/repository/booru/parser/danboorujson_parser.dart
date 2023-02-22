@@ -38,6 +38,7 @@ class DanbooruJsonParser extends BooruParser {
       final tagsCopyright = pick(post, 'tag_string_copyright').toWordList();
       final tagsGeneral = pick(post, 'tag_string_general').toWordList();
       final tagsMeta = pick(post, 'tag_string_meta').toWordList();
+      final score = pick(post, 'score').asIntOrNull() ?? 0;
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -66,6 +67,7 @@ class DanbooruJsonParser extends BooruParser {
             tagsCopyright: tagsCopyright.map(decodeTags).toList(),
             tagsGeneral: tagsGeneral.map(decodeTags).toList(),
             tagsMeta: tagsMeta.map(decodeTags).toList(),
+            score: score,
           ),
         );
       }

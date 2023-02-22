@@ -65,6 +65,7 @@ class ShimmieXmlParser extends BooruParser {
       final previewHeight = pick(post, 'preview_height').asIntOrNull() ?? -1;
       final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
       final source = pick(post, 'source').asStringOrNull() ?? '';
+      final score = pick(post, 'score').asIntOrNull() ?? 0;
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
@@ -88,6 +89,7 @@ class ShimmieXmlParser extends BooruParser {
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
+            score: score,
           ),
         );
       }

@@ -54,6 +54,7 @@ class E621JsonParser extends BooruParser {
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
       final postUrl = id < 0 ? '' : server.postUrlOf(id);
+      final score = pick(post, 'score', 'total').asIntOrNull() ?? 0;
 
       if (hasFile && hasContent) {
         result.add(
@@ -78,6 +79,7 @@ class E621JsonParser extends BooruParser {
             tagsCopyright: tagsCopyright.map(decodeTags).toList(),
             tagsGeneral: tagsGeneral.map(decodeTags).toList(),
             tagsMeta: tagsMeta.map(decodeTags).toList(),
+            score: score,
           ),
         );
       }

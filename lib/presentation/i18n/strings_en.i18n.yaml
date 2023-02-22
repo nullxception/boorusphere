@@ -41,6 +41,7 @@ version: "Version ${version}"
 backup: "Backup"
 restore: "Restore"
 searchHistory: "Search History"
+score: "Score"
 
 rating:
   title: "Rating"
