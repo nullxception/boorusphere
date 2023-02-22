@@ -64,10 +64,10 @@ class HomeContent extends HookConsumerWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (!isNewSearch)
-          CustomScrollView(
-            controller: scrollController,
-            slivers: [
+        CustomScrollView(
+          controller: scrollController,
+          slivers: [
+            if (!isNewSearch)
               SliverSafeArea(
                 sliver: SliverPadding(
                   padding: const EdgeInsets.all(10),
@@ -76,16 +76,17 @@ class HomeContent extends HookConsumerWidget {
                   ),
                 ),
               ),
+            if (!isNewSearch)
               SliverPadding(
                 padding: EdgeInsets.only(
                   bottom: context.mediaQuery.viewPadding.bottom * 1.8 + 92,
                 ),
                 sliver: const SliverToBoxAdapter(child: HomeStatus()),
-              ),
-            ],
-          )
-        else
-          const HomeStatus(),
+              )
+            else
+              const SliverFillRemaining(child: HomeStatus()),
+          ],
+        ),
         const _EdgeShadow(),
         SearchScreen(scrollController: scrollController),
       ],
