@@ -152,6 +152,7 @@ class ServerScanner {
     'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
     'post/index.json?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
+    'api/v1/json/search/images?q={tags}&per_page={post-limit}&page={page-id}',
     // XML
     'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}',
     'post/index.xml?limit={post-limit}&page={page-id}&tags={tags}',
@@ -164,6 +165,7 @@ class ServerScanner {
     'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
     'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}&json=1',
+    'api/v1/json/search/tags?q={tag-part}',
     // XML
     'api/internal/autocomplete?s={tag-part}',
     'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}',

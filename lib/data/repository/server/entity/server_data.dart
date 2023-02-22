@@ -61,18 +61,22 @@ class ServerData with _$ServerData {
         .replaceAll('{tag-limit}', '20');
 
     final encq = Uri.encodeComponent(query);
-    if (canSuggestTags) {
-      if (query.isEmpty) {
-        return [url.replaceAll(RegExp(r'[*%]{tag-part}[*%]'), '')];
-      }
-      return [
-        url.replaceAll(RegExp(r'[*%]{tag-part}'), encq),
-        url.replaceAll(RegExp(r'{tag-part}[*%]'), encq),
-        url.replaceAll('{tag-part}', encq),
-      ].where((it) => !it.contains('{tag-part}')).toSet();
-    } else {
+    if (!canSuggestTags) {
       throw Exception('no suggestion config for server $name');
     }
+
+    if (query.isEmpty) {
+      if (url.contains('name_pattern=')) {
+        return [url.replaceAll(RegExp(r'[*%]*{tag-part}[*%]*'), '')];
+      }
+      return [url.replaceAll(RegExp(r'[*%]*{tag-part}[*%]*'), '*')];
+    }
+
+    return [
+      url.replaceAll(RegExp(r'[*%]{tag-part}'), encq),
+      url.replaceAll(RegExp(r'{tag-part}[*%]'), encq),
+      url.replaceAll('{tag-part}', encq),
+    ].where((it) => !it.contains('{tag-part}')).toSet();
   }
 
   String postUrlOf(int id) {
