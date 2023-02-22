@@ -81,7 +81,7 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
   Future<void> _fetch() async {
     final repo = ref.read(booruRepoProvider(server));
     if (state.data.option.clear) {
-      _page = 1;
+      _page = 0;
       _posts.clear();
     }
     state = FetchResult.loading(state.data.copyWith(posts: _posts));
