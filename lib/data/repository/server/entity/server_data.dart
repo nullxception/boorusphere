@@ -49,8 +49,13 @@ class ServerData with _$ServerData {
         break;
     }
 
+    // booru-on-rails doesn't support rating:x
+    if (searchUrl.contains('api/v1/json/search')) {
+      tags = tags.replaceAll('rating:', '');
+    }
+
     return '$homepage/$searchUrl'
-        .replaceAll('{tags}', Uri.encodeComponent(tags))
+        .replaceAll('{tags}', Uri.encodeComponent(tags.trim()))
         .replaceAll('{page-id}', '$page')
         .replaceAll('{post-limit}', '$postLimit');
   }
