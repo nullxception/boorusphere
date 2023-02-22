@@ -74,9 +74,7 @@ class _ThumbnailCard extends HookConsumerWidget {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
-        // saveLayer() is used here to avoid artifacts that frequently
-        // happened while scrolling
-        clipBehavior: Clip.antiAliasWithSaveLayer,
+        clipBehavior: Clip.hardEdge,
         child: GestureDetector(
           child: Hero(
             tag: buildHeroTag(post),
