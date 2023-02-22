@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
@@ -53,8 +55,13 @@ class PostImage extends HookConsumerWidget {
       });
     }, []);
 
+    final deviceRatio = context.mediaQuery.size.aspectRatio;
+    final imageRatio = post.aspectRatio;
+    final scaleRatio = deviceRatio < imageRatio
+        ? imageRatio / deviceRatio
+        : deviceRatio / imageRatio;
+
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
       onTap: () {
         ref.read(fullscreenStateProvider.notifier).toggle();
       },
@@ -80,8 +87,12 @@ class PostImage extends HookConsumerWidget {
               headers: headers.data,
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
-              initGestureConfigHandler: (state) =>
-                  GestureConfig(inPageView: true),
+              initGestureConfigHandler: (state) {
+                return GestureConfig(
+                  maxScale: scaleRatio * 5,
+                  inPageView: true,
+                );
+              },
               handleLoadingProgress: true,
               loadStateChanged: (state) {
                 return _PostImageStatus(
@@ -110,7 +121,10 @@ class PostImage extends HookConsumerWidget {
                 final downOffset = state.pointerDownPosition;
                 final begin = state.gestureDetails?.totalScale ?? 1;
                 final animation = zoomAnimator.drive(
-                  Tween<double>(begin: begin, end: begin == 1 ? 2 : 1),
+                  Tween<double>(
+                    begin: begin,
+                    end: begin == 1 ? max(2, scaleRatio) : 1.0,
+                  ),
                 );
 
                 void onAnimating() {
