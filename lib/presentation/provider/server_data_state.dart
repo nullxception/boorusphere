@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/domain/repository/server_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,11 +7,8 @@ part 'server_data_state.g.dart';
 
 @Riverpod(keepAlive: true)
 class ServerDataState extends _$ServerDataState {
-  late ServerRepo _repo;
-
   @override
   List<ServerData> build() {
-    _repo = ref.read(serverRepoProvider);
     // execute it anonymously since we can't update other state
     // while constructing a state
     Future(_populate);
@@ -26,8 +22,9 @@ class ServerDataState extends _$ServerDataState {
       ref.read(serverSettingStateProvider.notifier);
 
   Future<void> _populate() async {
-    await _repo.populate();
-    state = _repo.servers;
+    final repo = ref.read(serverRepoProvider);
+    await repo.populate();
+    state = repo.servers;
 
     if (state.isNotEmpty && active == ServerData.empty) {
       await settings
@@ -36,8 +33,9 @@ class ServerDataState extends _$ServerDataState {
   }
 
   Future<void> add(ServerData data) async {
-    await _repo.add(data);
-    state = _repo.servers;
+    final repo = ref.read(serverRepoProvider);
+    await repo.add(data);
+    state = repo.servers;
   }
 
   Future<void> remove(ServerData data) async {
@@ -45,24 +43,27 @@ class ServerDataState extends _$ServerDataState {
       throw Exception('Last server cannot be deleted');
     }
 
-    await _repo.remove(data);
-    state = _repo.servers;
+    final repo = ref.read(serverRepoProvider);
+    await repo.remove(data);
+    state = repo.servers;
     if (active == data) {
       await settings.setActiveServer(state.first);
     }
   }
 
   Future<void> edit(ServerData from, ServerData to) async {
-    final data = await _repo.edit(from, to);
-    state = _repo.servers;
+    final repo = ref.read(serverRepoProvider);
+    final data = await repo.edit(from, to);
+    state = repo.servers;
     if (active == from) {
       await settings.setActiveServer(data);
     }
   }
 
   Future<void> reset() async {
-    await _repo.reset();
-    state = _repo.servers;
+    final repo = ref.read(serverRepoProvider);
+    await repo.reset();
+    state = repo.servers;
     await settings.setActiveServer(state.first);
   }
 }

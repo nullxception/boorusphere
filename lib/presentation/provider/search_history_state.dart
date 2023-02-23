@@ -1,7 +1,6 @@
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/domain/repository/search_history_repo.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -27,26 +26,27 @@ Map<int, SearchHistory> filterHistory(FilterHistoryRef ref, String query) {
 
 @riverpod
 class SearchHistoryState extends _$SearchHistoryState {
-  late SearchHistoryRepo _repo;
-
   @override
   Map<int, SearchHistory> build() {
-    _repo = ref.read(searchHistoryRepoProvider);
-    return _repo.all;
+    final repo = ref.read(searchHistoryRepoProvider);
+    return repo.all;
   }
 
   Future<void> save(String value, ServerData server) async {
-    await _repo.save(value.trim(), server.id);
-    state = _repo.all;
+    final repo = ref.read(searchHistoryRepoProvider);
+    await repo.save(value.trim(), server.id);
+    state = repo.all;
   }
 
   Future<void> delete(key) async {
-    await _repo.delete(key);
-    state = _repo.all;
+    final repo = ref.read(searchHistoryRepoProvider);
+    await repo.delete(key);
+    state = repo.all;
   }
 
   Future<void> clear() async {
-    await _repo.clear();
-    state = _repo.all;
+    final repo = ref.read(searchHistoryRepoProvider);
+    await repo.clear();
+    state = repo.all;
   }
 }

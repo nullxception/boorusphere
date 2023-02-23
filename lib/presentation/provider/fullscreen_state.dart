@@ -6,12 +6,12 @@ part 'fullscreen_state.g.dart';
 
 @riverpod
 class FullscreenState extends _$FullscreenState {
-  late List<DeviceOrientation> lastOrientations;
+  List<DeviceOrientation> _lastOrientations = [];
 
   @override
   bool build() {
     ref.onDispose(reset);
-    lastOrientations = [];
+    _lastOrientations = [];
     return false;
   }
 
@@ -21,8 +21,8 @@ class FullscreenState extends _$FullscreenState {
         ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
         : <DeviceOrientation>[];
 
-    if (orientations != lastOrientations) {
-      lastOrientations = orientations;
+    if (orientations != _lastOrientations) {
+      _lastOrientations = orientations;
       await SystemChrome.setPreferredOrientations(orientations);
     }
 
