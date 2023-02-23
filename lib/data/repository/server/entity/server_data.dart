@@ -86,7 +86,7 @@ class ServerData with _$ServerData {
 
   String postUrlOf(int id) {
     if (postUrl.isEmpty) {
-      return '';
+      return homepage;
     }
 
     final query = postUrl.replaceAll('{post-id}', id.toString());

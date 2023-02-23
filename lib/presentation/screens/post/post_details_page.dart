@@ -69,7 +69,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                   child: Text(post.score.toString()),
                 ),
               ),
-              if (post.postUrl.isNotEmpty)
+              if (post.postUrl.contains(post.id.toString()))
                 ListTile(
                   title: Text(context.t.location),
                   subtitle: _LinkSubtitle(post.postUrl),
