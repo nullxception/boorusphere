@@ -1,3 +1,4 @@
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
 import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
@@ -54,6 +55,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
+        await cookieJarProvider.initialize(),
         await envRepoProvider.initialize(),
       ],
       child: TranslationProvider(child: const Boorusphere()),
