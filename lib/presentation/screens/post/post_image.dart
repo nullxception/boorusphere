@@ -76,7 +76,6 @@ class PostImage extends HookConsumerWidget {
               child: PostPlaceholderImage(
                 post: post,
                 shouldBlur: true,
-                headers: headers.data,
               ),
             )
           else
@@ -84,7 +83,7 @@ class PostImage extends HookConsumerWidget {
               contentSetting.loadOriginal
                   ? post.originalFile
                   : post.content.url,
-              headers: headers.data,
+              headers: headers,
               fit: BoxFit.contain,
               mode: ExtendedImageMode.gesture,
               initGestureConfigHandler: (state) {
@@ -106,7 +105,7 @@ class PostImage extends HookConsumerWidget {
                         : PostPlaceholderImage(
                             post: post,
                             shouldBlur: false,
-                            headers: headers.data,
+                            headers: headers,
                           ),
                   ),
                 );

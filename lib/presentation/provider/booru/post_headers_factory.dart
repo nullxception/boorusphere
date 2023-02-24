@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:boorusphere/data/dio/headers_factory.dart';
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
-import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -33,14 +34,13 @@ class PostHeadersFactory {
     return uri.replace(path: uri.hasAbsolutePath ? path : '/').toString();
   }
 
-  Future<Map<String, String>> build(Post post) async {
+  Map<String, String> build(Post post, {List<Cookie> cookies = const []}) {
     final url = post.postUrl.isEmpty ? post.content.url : post.postUrl;
     final referer = _createReferer(url);
-    final cookies = await cookieJar.loadForRequest(referer.toUri());
 
     return HeadersFactory.builder()
-        .setReferer(referer)
         .setCookies(cookies)
+        .setReferer(referer)
         .setUserAgent(versionRepo.current)
         .build();
   }

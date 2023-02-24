@@ -89,7 +89,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
                         ? ExtendedNetworkImageProvider(
                             post.sampleFile,
                             cache: true,
-                            headers: headers.data,
+                            headers: headers,
                           ).resolvePixelSize()
                         : Future.value(post.sampleSize),
                     builder: (context, snapshot) {

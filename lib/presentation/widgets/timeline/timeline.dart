@@ -136,7 +136,7 @@ class _ThumbnailImage extends HookConsumerWidget {
         post.aspectRatio < 0.26 && post.sampleFile.asContent().isPhoto
             ? post.sampleFile
             : post.previewFile,
-        headers: headers.data,
+        headers: headers,
         fit: BoxFit.cover,
         enableLoadState: false,
         beforePaintImage: (canvas, rect, image, paint) {

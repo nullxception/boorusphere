@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/cache.dart';
@@ -12,6 +13,7 @@ import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dar
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/file.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -38,7 +40,10 @@ Future<VideoPlayerController> videoPlayerController(
   });
 
   final cache = ref.watch(cacheManagerProvider);
-  final headers = await ref.read(postHeadersFactoryProvider).build(post);
+  final cookieJar = ref.read(cookieJarProvider);
+  final cookies = await cookieJar.loadForRequest(post.content.url.toUri());
+  final headers =
+      ref.read(postHeadersFactoryProvider).build(post, cookies: cookies);
   source = CancelableOperation.fromFuture(
     cache.getSingleFile(post.content.url, headers: headers),
   );
@@ -99,7 +104,7 @@ class PostVideo extends HookConsumerWidget {
               child: isBlur.value
                   ? PostPlaceholderImage(
                       post: post,
-                      headers: headers.data,
+                      headers: headers,
                       shouldBlur: true,
                     )
                   : controllerFuture.maybeWhen(
@@ -108,7 +113,7 @@ class PostVideo extends HookConsumerWidget {
                         children: [
                           PostPlaceholderImage(
                             post: post,
-                            headers: headers.data,
+                            headers: headers,
                             shouldBlur: false,
                           ),
                           VideoPlayer(controller),
@@ -116,7 +121,7 @@ class PostVideo extends HookConsumerWidget {
                       ),
                       orElse: () => PostPlaceholderImage(
                         post: post,
-                        headers: headers.data,
+                        headers: headers,
                         shouldBlur: false,
                       ),
                     ),

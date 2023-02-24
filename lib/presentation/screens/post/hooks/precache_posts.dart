@@ -41,7 +41,7 @@ class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
     unawaited(precacheImage(
       ExtendedNetworkImageProvider(
         displayOriginal ? post.originalFile : post.content.url,
-        headers: await ref.read(postHeadersFactoryProvider).build(post),
+        headers: ref.read(postHeadersFactoryProvider).build(post),
         // params below follows the default value on
         // the ExtendedImage.network() factory
         cache: true,

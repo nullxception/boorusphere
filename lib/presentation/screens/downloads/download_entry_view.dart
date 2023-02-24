@@ -145,7 +145,7 @@ class DownloadEntryView extends HookConsumerWidget {
       ),
       leading: ExtendedImage.network(
         entry.post.previewFile,
-        headers: headers.data,
+        headers: headers,
         width: 42,
         shape: BoxShape.rectangle,
         borderRadius: const BorderRadius.all(Radius.circular(5)),

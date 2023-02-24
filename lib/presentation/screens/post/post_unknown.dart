@@ -33,7 +33,7 @@ class PostUnknown extends HookConsumerWidget {
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: shouldBlurExplicit && post.rating.isExplicit,
-            headers: headers.data,
+            headers: headers,
           ),
         ),
         Positioned(
