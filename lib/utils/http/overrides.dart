@@ -27,9 +27,17 @@ class CustomHttpClient extends BaseHttpClient {
     Future<HttpClientRequest> httpClientRequest,
   ) async {
     final req = await httpClientRequest;
+
+    final ua = req.headers[HttpHeaders.userAgentHeader];
+    if (ua != null) {
+      ua.removeWhere((it) => it.startsWith('Dart/'));
+      req.headers.set(HttpHeaders.userAgentHeader, ua);
+    }
+
     final cookies = await cookieJar.loadForRequest(req.uri);
     if (cookies.isNotEmpty) {
-      req.headers.set('Cookie', CookieManager.getCookies(cookies));
+      req.headers
+          .set(HttpHeaders.cookieHeader, CookieManager.getCookies(cookies));
     }
     return req;
   }
