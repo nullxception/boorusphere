@@ -91,11 +91,9 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
       return;
     }
 
-    final lastHashCode = repo.hashCode;
     final pageResult = await repo.getPage(state.data.option, _page);
     return pageResult.when<void>(
       data: (posts, src) async {
-        if (lastHashCode != repo.hashCode) return;
         if (posts.isEmpty) {
           state = FetchResult.error(state.data, error: BooruError.empty);
           return;
@@ -114,7 +112,6 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
         }
         _skipCount = 0;
 
-        if (lastHashCode != repo.hashCode) return;
         _posts.addAll(posts);
         state = FetchResult.data(state.data.copyWith(posts: _posts));
       },
