@@ -53,7 +53,7 @@ class E621JsonParser extends BooruParser {
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
-      final postUrl = id < 0 ? '' : server.postUrlOf(id);
+      final postUrl = server.postUrlOf(id);
       final score = pick(post, 'score', 'total').asIntOrNull() ?? 0;
 
       if (hasFile && hasContent) {

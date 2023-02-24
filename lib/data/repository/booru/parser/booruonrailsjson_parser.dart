@@ -34,18 +34,14 @@ class BooruOnRailsJsonParser extends BooruParser {
       final tags = pick(post, 'tags').asStringList();
       final width = pick(post, 'width').asIntOrNull() ?? -1;
       final height = pick(post, 'height').asIntOrNull() ?? -1;
-      final rating = tags
-          .where((element) =>
-              element == 'explicit' ||
-              element == 'safe' ||
-              element == 'questionable')
-          .firstOrNull;
+      final rating = tags.where(
+          (tag) => tag == 'explicit' || tag == 'safe' || tag == 'questionable');
       final source = pick(post, 'source_url').asStringOrNull() ?? '';
       final score = pick(post, 'score').asIntOrNull() ?? 0;
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
-      final postUrl = id < 0 ? '' : server.postUrlOf(id);
+      final postUrl = server.postUrlOf(id);
 
       if (hasFile && hasContent) {
         result.add(
@@ -63,7 +59,7 @@ class BooruOnRailsJsonParser extends BooruParser {
             previewHeight: -1,
             serverId: server.id,
             postUrl: postUrl,
-            rateValue: rating ?? '',
+            rateValue: rating.firstOrNull ?? '',
             source: source,
             score: score,
           ),

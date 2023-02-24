@@ -70,7 +70,7 @@ class SafebooruXmlParser extends BooruParser {
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
       final hasContent = width > 0 && height > 0;
-      final postUrl = id < 0 ? '' : server.postUrlOf(id);
+      final postUrl = server.postUrlOf(id);
 
       if (hasFile && hasContent) {
         result.add(
