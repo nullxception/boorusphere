@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class DownloaderDialog extends HookConsumerWidget {
+class DownloaderDialog extends ConsumerWidget {
   const DownloaderDialog({
     super.key,
     required this.post,
@@ -37,7 +37,7 @@ class DownloaderDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final headers = usePostHeaders(ref, post);
+    final headers = ref.watch(postHeadersFactoryProvider(post));
 
     return SafeArea(
       child: Padding(

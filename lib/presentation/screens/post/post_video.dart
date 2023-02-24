@@ -7,7 +7,6 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/cache.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -42,8 +41,7 @@ Future<VideoPlayerController> videoPlayerController(
   final cache = ref.watch(cacheManagerProvider);
   final cookieJar = ref.read(cookieJarProvider);
   final cookies = await cookieJar.loadForRequest(post.content.url.toUri());
-  final headers =
-      ref.read(postHeadersFactoryProvider).build(post, cookies: cookies);
+  final headers = ref.read(postHeadersFactoryProvider(post, cookies: cookies));
   source = CancelableOperation.fromFuture(
     cache.getSingleFile(post.content.url, headers: headers),
   );
@@ -70,12 +68,11 @@ class PostVideo extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final headers = ref.watch(postHeadersFactoryProvider(post));
     final controllerFuture = ref.watch(videoPlayerControllerProvider(post));
     final contentSettings = ref.watch(contentSettingStateProvider);
     final shouldBlurExplicit =
         contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
-
-    final headers = usePostHeaders(ref, post);
     final isMounted = useIsMounted();
     final shouldBlur = post.rating.isExplicit && shouldBlurExplicit;
     final isBlur = useState(shouldBlur);

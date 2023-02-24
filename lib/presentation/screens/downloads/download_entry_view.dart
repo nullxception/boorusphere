@@ -4,11 +4,11 @@ import 'package:boorusphere/data/repository/download/entity/download_progress.da
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/downloads/downloads_page.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
@@ -19,7 +19,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
-class DownloadEntryView extends HookConsumerWidget {
+class DownloadEntryView extends ConsumerWidget {
   const DownloadEntryView({
     super.key,
     required this.entry,
@@ -88,7 +88,7 @@ class DownloadEntryView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final headers = usePostHeaders(ref, entry.post);
+    final headers = ref.watch(postHeadersFactoryProvider(entry.post));
 
     return ListTile(
       title: Text(

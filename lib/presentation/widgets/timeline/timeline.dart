@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/utils/entity/content.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
@@ -114,7 +114,7 @@ class _ThumbnailCard extends HookConsumerWidget {
   }
 }
 
-class _ThumbnailImage extends HookConsumerWidget {
+class _ThumbnailImage extends ConsumerWidget {
   const _ThumbnailImage({
     required this.post,
     this.blurExplicit = false,
@@ -125,7 +125,7 @@ class _ThumbnailImage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final headers = usePostHeaders(ref, post);
+    final headers = ref.watch(postHeadersFactoryProvider(post));
     // limit timeline thumbnail to 18:9
     final isLong = post.aspectRatio < 0.5;
 

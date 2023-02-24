@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
@@ -33,7 +33,7 @@ class PostImage extends HookConsumerWidget {
     final contentSetting = ref.watch(contentSettingStateProvider);
     final shouldBlurExplicit =
         contentSetting.blurExplicit && !contentSetting.blurTimelineOnly;
-    final headers = usePostHeaders(ref, post);
+    final headers = ref.watch(postHeadersFactoryProvider(post));
     final isBlur = useState(post.rating.isExplicit && shouldBlurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));

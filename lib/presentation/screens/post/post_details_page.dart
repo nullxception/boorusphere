@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/post_headers.dart';
 import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -27,7 +27,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final headers = usePostHeaders(ref, post);
+    final headers = ref.watch(postHeadersFactoryProvider(post));
     final selectedtag = useState(<String>[]);
 
     onTagPressed(tag) {
