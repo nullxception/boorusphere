@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
@@ -8,6 +11,7 @@ import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
 import 'package:boorusphere/presentation/widgets/bouncing_scroll.dart';
 import 'package:boorusphere/utils/file_utils.dart';
+import 'package:boorusphere/utils/http/overrides.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -25,7 +29,15 @@ class Boorusphere extends HookConsumerWidget {
     final isMidnight =
         ref.watch(uiSettingStateProvider.select((ui) => ui.midnightMode));
     final envRepo = ref.watch(envRepoProvider);
+    final cookieJar = ref.watch(cookieJarProvider);
     final router = useMemoized(AppRouter.new);
+
+    useEffect(() {
+      HttpOverrides.global = CustomHttpOverrides(cookieJar: cookieJar);
+      return () {
+        HttpOverrides.global = null;
+      };
+    }, [cookieJar]);
 
     useEffect(() {
       LocaleHelper.update(locale);
