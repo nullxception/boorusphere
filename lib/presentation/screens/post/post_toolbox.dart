@@ -125,7 +125,7 @@ class PostFavoriteButton extends HookConsumerWidget {
   }
 }
 
-class PostDownloadButton extends ConsumerWidget {
+class PostDownloadButton extends HookConsumerWidget {
   const PostDownloadButton({super.key, required this.post});
 
   final Post post;
@@ -133,12 +133,17 @@ class PostDownloadButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(downloadStateProvider).getProgressByPost(post);
+    final pending = useState(false);
 
     return Stack(
       alignment: Alignment.center,
       children: [
         CircularProgressIndicator(
-          value: progress.status.isDownloading ? progress.progress.ratio : 0,
+          value: pending.value
+              ? null
+              : progress.status.isDownloading
+                  ? progress.progress.ratio
+                  : 0,
         ),
         IconButton(
           padding: const EdgeInsets.all(16),
@@ -146,9 +151,15 @@ class PostDownloadButton extends ConsumerWidget {
           icon: Icon(progress.status.isDownloaded
               ? Icons.download_done
               : Icons.download),
-          onPressed: () {
-            DownloaderDialog.show(context, ref, post);
-          },
+          onPressed: pending.value ||
+                  progress.status.isDownloaded ||
+                  progress.status.isDownloading
+              ? null
+              : () async {
+                  pending.value = true;
+                  await DownloaderDialog.show(context, ref, post);
+                  pending.value = false;
+                },
           disabledColor: context.colorScheme.primary,
         ),
       ],
