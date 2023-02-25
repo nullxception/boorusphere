@@ -97,17 +97,17 @@ class DownloaderDialog extends ConsumerWidget {
     );
   }
 
-  static show(
+  static Future<void> show(
     BuildContext context,
     WidgetRef ref,
     Post post, {
     Function(String type)? onItemClick,
-  }) {
+  }) async {
     final quality =
         ref.read(downloadSettingStateProvider.select((it) => it.quality));
 
     if (quality == DownloadQuality.ask) {
-      showModalBottomSheet(
+      await showModalBottomSheet(
           context: context,
           builder: (_) =>
               DownloaderDialog(post: post, onItemClick: onItemClick));
@@ -115,14 +115,13 @@ class DownloaderDialog extends ConsumerWidget {
       return;
     }
 
-    checkNotificationPermission(context).then((value) {
-      if (!value) return;
+    final isGranted = await checkNotificationPermission(context);
+    if (!isGranted) return;
 
-      ref.read(downloaderProvider).download(post,
-          url: quality == DownloadQuality.sample
-              ? post.sampleFile
-              : post.originalFile);
-    });
+    await ref.read(downloaderProvider).download(post,
+        url: quality == DownloadQuality.sample
+            ? post.sampleFile
+            : post.originalFile);
   }
 }
 
