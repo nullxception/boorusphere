@@ -42,6 +42,7 @@ backup: "Backup"
 restore: "Restore"
 searchHistory: "Search History"
 score: "Score"
+always_ask: "Always ask"
 
 rating:
   title: "Rating"
@@ -110,6 +111,7 @@ downloads:
   ungroup: "Ungroup"
   group_by_server: "Group by server"
   no_permission: "Cannot download a file; missing notification permission"
+  quality: "Download quality"
   status:
     empty: "Empty"
     pending: "Pending"

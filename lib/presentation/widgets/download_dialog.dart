@@ -4,6 +4,8 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
+import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
@@ -95,14 +97,32 @@ class DownloaderDialog extends ConsumerWidget {
     );
   }
 
-  static show({
-    required BuildContext context,
-    required Post post,
+  static show(
+    BuildContext context,
+    WidgetRef ref,
+    Post post, {
     Function(String type)? onItemClick,
   }) {
-    showModalBottomSheet(
-        context: context,
-        builder: (_) => DownloaderDialog(post: post, onItemClick: onItemClick));
+    final quality =
+        ref.read(downloadSettingStateProvider.select((it) => it.quality));
+
+    if (quality == DownloadQuality.ask) {
+      showModalBottomSheet(
+          context: context,
+          builder: (_) =>
+              DownloaderDialog(post: post, onItemClick: onItemClick));
+
+      return;
+    }
+
+    checkNotificationPermission(context).then((value) {
+      if (!value) return;
+
+      ref.read(downloaderProvider).download(post,
+          url: quality == DownloadQuality.sample
+              ? post.sampleFile
+              : post.originalFile);
+    });
   }
 }
 

@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
+import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
@@ -27,6 +29,7 @@ class SettingsPage extends StatelessWidget {
               title: Text(context.t.downloads.title),
               children: const [
                 _HideMedia(),
+                _DownloadQuality(),
               ],
             ),
             _Section(
@@ -121,6 +124,59 @@ class _HideMedia extends HookWidget {
             markMayNeedRebuild();
           },
         );
+      },
+    );
+  }
+}
+
+class _DownloadQuality extends ConsumerWidget {
+  const _DownloadQuality();
+
+  Future<DownloadQuality?> selectQuality(
+      BuildContext context, DownloadQuality current) {
+    return showDialog<DownloadQuality>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: context.colorScheme.background,
+          title: Text(context.t.downloads.quality),
+          icon: const Icon(Icons.file_download),
+          contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: DownloadQuality.values
+                .map((e) => RadioListTile(
+                      value: e,
+                      groupValue: current,
+                      title: Text(e.describe(context)),
+                      onChanged: (x) {
+                        context.navigator.pop(x);
+                      },
+                    ))
+                .toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quality =
+        ref.watch(downloadSettingStateProvider.select((it) => it.quality));
+    return ListTile(
+      title: Text(context.t.downloads.quality),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(quality.describe(context)),
+      ),
+      onTap: () async {
+        final result = await selectQuality(context, quality);
+        if (result != null) {
+          await ref
+              .read(downloadSettingStateProvider.notifier)
+              .setQuality(result);
+        }
       },
     );
   }

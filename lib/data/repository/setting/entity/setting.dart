@@ -1,5 +1,6 @@
 enum Setting {
   downloadsGroupByServer,
+  downloadsQuality,
   postBlurExplicit,
   postBlurTimelineOnly,
   postLoadOriginal,

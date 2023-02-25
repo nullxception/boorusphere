@@ -206,8 +206,9 @@ class _EntryPopupMenu extends ConsumerWidget {
         switch (value) {
           case 'redownload':
             DownloaderDialog.show(
-              context: context,
-              post: entry.post,
+              context,
+              ref,
+              entry.post,
               onItemClick: (type) async {
                 await downloader.clear(id: entry.id);
               },

@@ -16,6 +16,7 @@ import 'package:boorusphere/presentation/boorusphere.dart';
 import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
+import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,6 +33,7 @@ void main() async {
   Hive.registerAdapter(DownloadEntryAdapter());
   Hive.registerAdapter(FavoritePostAdapter());
   Hive.registerAdapter(BooruRatingAdapter());
+  Hive.registerAdapter(DownloadQualityAdapter());
 
   await Future.wait([
     ServerLocalSource.prepare(),

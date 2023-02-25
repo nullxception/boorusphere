@@ -147,7 +147,7 @@ class PostDownloadButton extends ConsumerWidget {
               ? Icons.download_done
               : Icons.download),
           onPressed: () {
-            DownloaderDialog.show(context: context, post: post);
+            DownloaderDialog.show(context, ref, post);
           },
           disabledColor: context.colorScheme.primary,
         ),
