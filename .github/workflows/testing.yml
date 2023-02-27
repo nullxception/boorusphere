@@ -18,11 +18,10 @@ jobs:
         with:
           channel: "stable"
           cache: true
-      - name: Install derry
-        run: flutter pub global activate derry
-      - name: Sync
-        run: derry sync
-      - name: Generate
-        run: derry gen all
-      - name: Test
-        run: derry test all
+      - run: flutter clean
+      - run: flutter pub get
+      - run: flutter pub run build_runner build --delete-conflicting-outputs
+      - run: flutter pub run slang
+      - run: dart format --fix lib/presentation/i18n
+      - run: dart format --output=none --set-exit-if-changed lib/
+      - run: flutter analyze
