@@ -36,7 +36,7 @@ open_externally: "外部で開く"
 retry_pop_back: "もう一度バックボタンを押して終了"
 home: "ホームページ"
 recently: "最近"
-search_hint: "${server_name} で検索"
+search_hint: "${server_name}... で検索"
 version: "バージョン ${version}"
 backup: "バックアップ"
 restore: "復元"
@@ -48,6 +48,9 @@ rating:
   explicit: "明示的な"
   safe: "安全"
 
+  sensitive: センシティブ
+  all: すべて
+  disable_rating_safe: レーティングを無効にする:セーフ
 page_status:
   http_error: "${server_name} から結果を取得できません"
   no_result:
@@ -63,7 +66,7 @@ suggestion:
   suggested: "${server_name} での提案"
   desc: "${server_name} に"
   empty: "'${query} ' に一致するタグはありません"
-  http_error: "${server_name}で ${query}の結果を得ることができません。"
+  http_error: "${server_name}で '${query}'の結果を得ることができません"
 
 action_tag:
   copy: "タグをコピー"
@@ -115,6 +118,7 @@ downloads:
     canceled: "キャンセルされました"
     paused: "一時停止"
 
+  quality: ダウンロード品質
 favorites:
   title: "お気に入り"
   placeholder: "保存したコンテンツがここに表示されます"
@@ -185,6 +189,9 @@ settings:
     desc: "読み込まれたコンテンツをキャッシュからクリア"
     done: "キャッシュをクリアしました"
 
+  blur_timeline_only:
+    title: タイムライン上のコンテンツのみブラー
+    desc: ビューモードでは明示的なコンテンツはぼかされません
 data_backup:
   title: "バックアップと復元"
   desc: "アプリデータのバックアップと復元"
@@ -198,3 +205,5 @@ data_backup:
     success: "アプリデータが復元されました"
     invalid: "バックアップファイルが無効です"
     warning: "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？"
+score: スコア
+always_ask: 常に問いかける
