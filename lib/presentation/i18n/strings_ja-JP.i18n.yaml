@@ -41,16 +41,18 @@ version: "バージョン ${version}"
 backup: "バックアップ"
 restore: "復元"
 searchHistory: "履歴を検索"
+score: "スコア"
+always_ask: "常に問いかける"
 
 rating:
   title: "評価"
   questionable: "疑問点"
   explicit: "明示的な"
   safe: "安全"
+  sensitive: "センシティブ"
+  all: "すべて"
+  disable_rating_safe: "レーティングを無効にする:セーフ"
 
-  sensitive: センシティブ
-  all: すべて
-  disable_rating_safe: レーティングを無効にする:セーフ
 page_status:
   http_error: "${server_name} から結果を取得できません"
   no_result:
@@ -117,8 +119,8 @@ downloads:
     failed: "失敗しました"
     canceled: "キャンセルされました"
     paused: "一時停止"
+    quality: "ダウンロード品質"
 
-  quality: ダウンロード品質
 favorites:
   title: "お気に入り"
   placeholder: "保存したコンテンツがここに表示されます"
@@ -175,6 +177,9 @@ settings:
   blur_content:
     title: "明示的な内容をぼかす"
     desc: "明示的に評価された内容がぼやけます"
+  blur_timeline_only:
+    title: "タイムライン上のコンテンツのみブラー"
+    desc: "ビューモードでは明示的なコンテンツはぼかされません"
   ime_incognito:
     title: "シークレットキーボード"
     desc: "サポートされている場合、キーボードのシークレットモードを有効にします。"
@@ -189,9 +194,6 @@ settings:
     desc: "読み込まれたコンテンツをキャッシュからクリア"
     done: "キャッシュをクリアしました"
 
-  blur_timeline_only:
-    title: タイムライン上のコンテンツのみブラー
-    desc: ビューモードでは明示的なコンテンツはぼかされません
 data_backup:
   title: "バックアップと復元"
   desc: "アプリデータのバックアップと復元"
@@ -205,5 +207,3 @@ data_backup:
     success: "アプリデータが復元されました"
     invalid: "バックアップファイルが無効です"
     warning: "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？"
-score: スコア
-always_ask: 常に問いかける
