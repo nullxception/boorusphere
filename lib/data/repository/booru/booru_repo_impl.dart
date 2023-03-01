@@ -15,7 +15,6 @@ import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart'
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:collection/collection.dart';
 
 class BooruRepoImpl implements BooruRepo {
   BooruRepoImpl({required this.networkSource, required this.server});
@@ -42,45 +41,21 @@ class BooruRepoImpl implements BooruRepo {
     final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
     final res = await networkSource.fetchSuggestion(server, word);
     try {
-      final data = res
-          .map((resp) {
-            if (resp.statusCode != 200) {
-              throw BooruError.httpError;
-            }
+      if (res.statusCode != 200) {
+        throw BooruError.httpError;
+      }
 
-            try {
-              return parser
-                  .firstWhere((it) => it.canParseSuggestion(resp))
-                  .parseSuggestion(resp);
-            } on StateError {
-              throw BooruError.empty;
-            }
-          })
-          .reduce((value, element) => {...value, ...element})
-          .sortedByCompare<String>(
-            (element) => element,
-            (a, b) {
-              if (a.startsWith(word)) return -1;
-              if (a.endsWith(word)) return 0;
-              return 1;
-            },
-          );
+      final data = parser
+          .firstWhere((it) => it.canParseSuggestion(res))
+          .parseSuggestion(res);
 
-      return BooruResult.data(data);
+      return BooruResult.data(data.toList());
     } catch (e, s) {
       if (query.isEmpty) {
         // the server did not support empty tag matches (hot/trending tags)
         return const BooruResult.data([]);
-      } else if (e == BooruError.httpError) {
-        return BooruResult.error(
-            res.firstWhere(
-              (element) => element.statusCode != 200,
-              orElse: () => res.first,
-            ),
-            error: e,
-            stackTrace: s);
       } else {
-        return BooruResult.error(res.last, error: e, stackTrace: s);
+        return BooruResult.error(res, error: e, stackTrace: s);
       }
     }
   }

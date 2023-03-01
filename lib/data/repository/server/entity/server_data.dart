@@ -60,7 +60,7 @@ class ServerData with _$ServerData {
         .replaceAll('{post-limit}', '$postLimit');
   }
 
-  Iterable<String> suggestionUrlsOf(String query) {
+  String suggestionUrlsOf(String query) {
     final url = '$homepage/$tagSuggestionUrl'
         .replaceAll('{post-limit}', '20')
         .replaceAll('{tag-limit}', '20');
@@ -72,16 +72,11 @@ class ServerData with _$ServerData {
 
     if (query.isEmpty) {
       if (url.contains('name_pattern=')) {
-        return [url.replaceAll(RegExp(r'[*%]*{tag-part}[*%]*'), '')];
+        return url.replaceAll(RegExp(r'[*%]*{tag-part}[*%]*'), '');
       }
-      return [url.replaceAll(RegExp(r'[*%]*{tag-part}[*%]*'), '*')];
+      return url.replaceAll(RegExp(r'[*%]*{tag-part}[*%]*'), '*');
     }
-
-    return [
-      url.replaceAll(RegExp(r'[*%]{tag-part}'), encq),
-      url.replaceAll(RegExp(r'{tag-part}[*%]'), encq),
-      url.replaceAll('{tag-part}', encq),
-    ].where((it) => !it.contains('{tag-part}')).toSet();
+    return url.replaceAll('{tag-part}', encq);
   }
 
   String postUrlOf(int id) {

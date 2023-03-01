@@ -5,9 +5,9 @@ class BooruNetworkSource {
   BooruNetworkSource(this.client);
   final Dio client;
 
-  Future<List<Response>> fetchSuggestion(ServerData server, String word) {
-    final urls = server.suggestionUrlsOf(word);
-    return Future.wait(urls.map(client.get));
+  Future<Response> fetchSuggestion(ServerData server, String word) {
+    final url = server.suggestionUrlsOf(word);
+    return client.get(url);
   }
 
   Future<Response> fetchPage(String url) => client.get(url);
