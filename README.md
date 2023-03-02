@@ -4,6 +4,8 @@
 
 Simple, content-focused booru viewer for Android
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nullxception/boorusphere/testing.yml?label=tests&style=flat-square)
+
 <a href="https://github.com/nullxception/boorusphere/releases">
     <img src="assets/button-GHReleases.png" alt="github release page" width="170">
 </a>
