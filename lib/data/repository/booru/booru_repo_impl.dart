@@ -46,7 +46,10 @@ class BooruRepoImpl implements BooruRepo {
       }
 
       final data = parser
-          .firstWhere((it) => it.canParseSuggestion(res))
+          .firstWhere(
+            (it) => it.canParseSuggestion(res),
+            orElse: () => throw BooruError.empty,
+          )
           .parseSuggestion(res);
 
       return BooruResult.data(data.toList());
