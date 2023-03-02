@@ -38,21 +38,26 @@ home: "Anasayfa"
 recently: "Geçenlerde"
 search_hint: "${server_name} üzerinde ara..."
 version: "Sürüm ${version}"
-backup: "Yedekleme"
-restore: "Geri Yükleme"
+backup: "Yedekle"
+restore: "Geri Yükle"
 searchHistory: "Arama Geçmişi"
+score: "Puan"
+always_ask: "Her zaman sor"
 
 rating:
   title: "Derecelendirme"
   questionable: "Şüpheli"
   explicit: "Müstehcen"
   safe: "Güvenli"
+  sensitive: "Hassas"
+  all: "Tümü"
+  disable_rating_safe: "rating:safe'i devre dışı bırak"
 
 page_status:
   http_error: "${server_name} sunucusundan sonuç alınamadı"
   no_result:
     one: "Hiçbir sonuç bulunamadı"
-    other: "Daha fazla sonuç yok"
+    other: "Sonuç bulunamadı"
   no_result_for_query:
     one: "${query} için hiçbir sonuç bulunamadı"
     other: "${query} için hiçbir sonuç bulunamadı"
@@ -106,6 +111,7 @@ downloads:
   ungroup: "Grupsuzlaştır"
   group_by_server: "Sunucuya göre grupla"
   no_permission: "Bir dosya indirilemedi; eksik bildirim izni"
+  quality:  "İndirme kalitesi"
   status:
     empty: "Boş"
     pending: "Bekliyor"
@@ -138,7 +144,7 @@ servers:
   homepage_hint: "Ana sayfa, örneğin: https://verycoolbooru.com"
   use_custom_api: "Özel API adresi kullan"
   use_custom_api_desc: "Sunucu ana sayfadan başka API adresine sahipse kullanışlıdır"
-  addr_error: "geçerli bir adres değil"
+  addr_error: "Adres geçerli değil"
   api_addr: "API Adresi"
   api_addr_hint: "API adresi, örneğin: https://api-v69.verycoolbooru.com"
   already_exists: "${name} için zaten sunucu verisi mevcut"
@@ -171,6 +177,9 @@ settings:
   blur_content:
     title: "Müstehcen içeriği bulanıklaştır"
     desc: "Müstehcen dereceli gönderilen bulanıklaştırılır"
+    blur_timeline_only:
+    title: "İçerikleri yalnızca zaman tünelinde bulanıklaştır"
+    desc: "Müstehcen dereceli içerikler görünüm modunda bulanıklaştırılmaz"
   ime_incognito:
     title: "Gizli Klavye"
     desc: "Destekleniyorsa, klavye için gizli modu etkinleştir."
@@ -187,14 +196,14 @@ settings:
 
 data_backup:
   title: "Yedekleme ve Geri Yükleme"
-  desc: "Uygulama verisini yedekle ve geri yükle"
+  desc: "Uygulama verilerini yedekle ve geri yükle"
   backup:
-    title: "Veriyi yedekle"
-    desc: "Uygulama verisini bir dosyaya yedekle"
+    title: "Verileri yedekle"
+    desc: "Uygulama verilerini bir dosyaya yedekle"
     success: "Yedek şurada oluşturuldu :\n${dest}"
   restore:
-    title: "Veriyi geri yükle"
-    desc: "Uygulama verisini bir geri yükleme dosyasından geri yükle"
-    success: "Uygulama verisi geri yüklendi"
-    invalid: "Geçersiz yedek dosyası"
-    warning: "Uyarı! bu işlem varolan her verinin üzerine yazacaktır.\nDevam etmek istediğinize emin misiniz ?"
+    title: "Verileri geri yükle"
+    desc: "Uygulama verilerini bir geri yükleme dosyasından geri yükle"
+    success: "Uygulama verileri geri yüklendi"
+    invalid: "Yedek dosyası geçersiz"
+    warning: "Uyarı! bu işlem varolan her verinin üzerine yazılacaktır.\nDevam etmek istediğinize emin misiniz?"
