@@ -1,6 +1,6 @@
 <img src="assets/icons/exported/legacy-circle.png" alt="boorusphere icon" height="92" align="right">
 
-# Boorusphere ![GitHub release (latest by date)](https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square)
+# Boorusphere ![GitHub release (latest by date)](https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nullxception/boorusphere/testing.yml?label=tests&style=flat-square)
 
 Simple, content-focused booru viewer for Android
 
