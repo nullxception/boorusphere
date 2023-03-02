@@ -36,17 +36,22 @@ open_externally: "外部で開く"
 retry_pop_back: "もう一度バックボタンを押して終了"
 home: "ホームページ"
 recently: "最近"
-search_hint: "${server_name} で検索"
+search_hint: "${server_name}... で検索"
 version: "バージョン ${version}"
 backup: "バックアップ"
 restore: "復元"
 searchHistory: "履歴を検索"
+score: "スコア"
+always_ask: "常に問いかける"
 
 rating:
   title: "評価"
   questionable: "疑問点"
   explicit: "明示的な"
   safe: "安全"
+  sensitive: "センシティブ"
+  all: "すべて"
+  disable_rating_safe: "レーティングを無効にする:セーフ"
 
 page_status:
   http_error: "${server_name} から結果を取得できません"
@@ -63,7 +68,7 @@ suggestion:
   suggested: "${server_name} での提案"
   desc: "${server_name} に"
   empty: "'${query} ' に一致するタグはありません"
-  http_error: "${server_name}で ${query}の結果を得ることができません。"
+  http_error: "${server_name}で '${query}'の結果を得ることができません"
 
 action_tag:
   copy: "タグをコピー"
@@ -106,6 +111,7 @@ downloads:
   ungroup: "グループ解除"
   group_by_server: "サーバーでグループ化"
   no_permission: "ファイルをダウンロードできません。通知権限がありません"
+  quality: "ダウンロード品質"
   status:
     empty: "なし"
     pending: "保留中"
@@ -171,6 +177,9 @@ settings:
   blur_content:
     title: "明示的な内容をぼかす"
     desc: "明示的に評価された内容がぼやけます"
+  blur_timeline_only:
+    title: "タイムライン上のコンテンツのみブラー"
+    desc: "ビューモードでは明示的なコンテンツはぼかされません"
   ime_incognito:
     title: "シークレットキーボード"
     desc: "サポートされている場合、キーボードのシークレットモードを有効にします。"
