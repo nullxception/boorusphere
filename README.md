@@ -1,6 +1,6 @@
 <img src="assets/icons/exported/legacy-circle.png" alt="boorusphere icon" height="92" align="right">
 
-# Boorusphere
+# Boorusphere ![GitHub release (latest by date)](https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square)
 
 Simple, content-focused booru viewer for Android
 
@@ -13,12 +13,35 @@ Simple, content-focused booru viewer for Android
 
 # Preview
 
-<p align="center">
-    <img width="23%" src="assets/previews/screen0.jpg" alt="screenshot of application menu"/>
-    <img width="23%" src="assets/previews/screen1.jpg" alt="screenshot of search result"/>
-    <img width="23%" src="assets/previews/screen2.jpg" alt="screenshot of photo preview"/>
-    <img width="23%" src="assets/previews/screen3.jpg" alt="screenshot of video preview"/>
-</p>
+<details open>
+    <summary>Feature and Content</summary>
+        <p align="center">
+         <img width="23%" src="assets/previews/content/screen0.jpg" alt="screenshot of photo preview"/>
+         <img width="23%" src="assets/previews/content/screen1.jpg" alt="screenshot of of video preview"/>
+         <img width="23%" src="assets/previews/content/screen2.jpg" alt="screenshot of tag searching"/>
+         <img width="23%" src="assets/previews/content/screen3.jpg" alt="screenshot of search bar"/>
+     </p>
+</details>
+
+<details>
+    <summary>Light Theme</summary>
+        <p align="center">
+         <img width="23%" src="assets/previews/light/screen0.jpg" alt="screenshot of application version"/>
+         <img width="23%" src="assets/previews/light/screen1.jpg" alt="screenshot of settings"/>
+         <img width="23%" src="assets/previews/light/screen2.jpg" alt="screenshot of download option"/>
+         <img width="23%" src="assets/previews/light/screen3.jpg" alt="screenshot of content infomation"/>
+     </p>
+</details>
+
+<details>
+    <summary>Dark Theme</summary>
+        <p align="center">
+         <img width="23%" src="assets/previews/dark/screen0.jpg" alt="screenshot of application version"/>
+         <img width="23%" src="assets/previews/dark/screen1.jpg" alt="screenshot of settings"/>
+         <img width="23%" src="assets/previews/dark/screen2.jpg" alt="screenshot of download option"/>
+         <img width="23%" src="assets/previews/dark/screen3.jpg" alt="screenshot of content infomation"/>
+     </p>
+</details><br/>
 
 # Building
 
