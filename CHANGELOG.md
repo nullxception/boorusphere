@@ -1,3 +1,15 @@
+## 1.3.2
+* Add option to select default quality when downloading
+* Add support for booru-on-rails
+* Add support for parsing post score
+* Fix wrong page number starting point causing some of content to be missing
+* Improve image zoom scaling algorithm
+* Improve search suggestion
+* Improve thumbnails rendering and limit it's height on very long picture (such as manga)
+* Improve server url scanner
+* Update Japanese and Thai translation (by @rinme)
+* Update Ukrainian translation (by @CakesTwix)
+
 ## 1.3.1
 * Add support for "rating:sensitive" parse and selection
 * Fix buggy back-stack on search screen and homepage's sidebar
