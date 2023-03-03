@@ -111,7 +111,7 @@ downloads:
   ungroup: "Grupsuzlaştır"
   group_by_server: "Sunucuya göre grupla"
   no_permission: "Bir dosya indirilemedi; eksik bildirim izni"
-  quality:  "İndirme kalitesi"
+  quality: "İndirme kalitesi"
   status:
     empty: "Boş"
     pending: "Bekliyor"
@@ -177,7 +177,7 @@ settings:
   blur_content:
     title: "Müstehcen içeriği bulanıklaştır"
     desc: "Müstehcen dereceli gönderilen bulanıklaştırılır"
-    blur_timeline_only:
+  blur_timeline_only:
     title: "İçerikleri yalnızca zaman tünelinde bulanıklaştır"
     desc: "Müstehcen dereceli içerikler görünüm modunda bulanıklaştırılmaz"
   ime_incognito:
