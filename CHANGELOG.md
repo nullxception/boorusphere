@@ -1,3 +1,6 @@
+## 1.3.3
+* Update Turkish translation (by @kyoyacchi)
+
 ## 1.3.2
 * Add option to select default quality when downloading
 * Add support for booru-on-rails
