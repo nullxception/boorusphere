@@ -10,45 +10,44 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPost {
-  VideoPost({
-    this.downloadProgress = const DownloadProgress('', 0, 0),
+class VideoPostSource {
+  VideoPostSource({
+    this.progress = const DownloadProgress('', 0, 0),
     this.controller,
   });
 
-  final DownloadProgress downloadProgress;
+  final DownloadProgress progress;
   final VideoPlayerController? controller;
 
-  VideoPost copyWith({
-    DownloadProgress? downloadProgress,
+  VideoPostSource copyWith({
+    DownloadProgress? progress,
     VideoPlayerController? controller,
   }) {
-    return VideoPost(
-      downloadProgress: downloadProgress ?? this.downloadProgress,
+    return VideoPostSource(
+      progress: progress ?? this.progress,
       controller: controller ?? this.controller,
     );
   }
 
   @override
-  bool operator ==(covariant VideoPost other) {
+  bool operator ==(covariant VideoPostSource other) {
     if (identical(this, other)) return true;
 
-    return other.downloadProgress == downloadProgress &&
-        other.controller == controller;
+    return other.progress == progress && other.controller == controller;
   }
 
   @override
-  int get hashCode => downloadProgress.hashCode ^ controller.hashCode;
+  int get hashCode => progress.hashCode ^ controller.hashCode;
 }
 
-VideoPost useVideoPost(
+VideoPostSource useVideoPost(
   WidgetRef ref,
   Post post,
 ) {
   return use(_VideoPostHook(ref, post));
 }
 
-class _VideoPostHook extends Hook<VideoPost> {
+class _VideoPostHook extends Hook<VideoPostSource> {
   const _VideoPostHook(this.ref, this.post);
 
   final WidgetRef ref;
@@ -58,11 +57,11 @@ class _VideoPostHook extends Hook<VideoPost> {
   _VideoPostState createState() => _VideoPostState();
 }
 
-class _VideoPostState extends HookState<VideoPost, _VideoPostHook> {
+class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
   _VideoPostState();
 
   VideoPlayerController? controller;
-  VideoPost videoPost = VideoPost();
+  VideoPostSource source = VideoPostSource();
 
   WidgetRef get ref => hook.ref;
   Post get post => hook.post;
@@ -70,7 +69,7 @@ class _VideoPostState extends HookState<VideoPost, _VideoPostHook> {
   void onFileStream(FileResponse event) {
     if (event is DownloadProgress) {
       setState(() {
-        videoPost = videoPost.copyWith(downloadProgress: event);
+        source = source.copyWith(progress: event);
       });
     } else if (event is FileInfo) {
       controller = VideoPlayerController.file(event.file,
@@ -80,8 +79,7 @@ class _VideoPostState extends HookState<VideoPost, _VideoPostHook> {
       final prog = DownloadProgress(event.originalUrl, size, size);
 
       setState(() {
-        videoPost =
-            videoPost.copyWith(controller: controller, downloadProgress: prog);
+        source = source.copyWith(controller: controller, progress: prog);
       });
     }
   }
@@ -105,7 +103,7 @@ class _VideoPostState extends HookState<VideoPost, _VideoPostHook> {
   }
 
   @override
-  VideoPost build(BuildContext context) => videoPost;
+  VideoPostSource build(BuildContext context) => source;
 
   @override
   void dispose() {
