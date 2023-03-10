@@ -30,7 +30,7 @@ class PostVideo extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final headers = ref.watch(postHeadersFactoryProvider(post));
-    final maybeController = useVideoPost(ref, post);
+    final videoPostData = useVideoPost(ref, post);
     final contentSettings = ref.watch(contentSettingStateProvider);
     final shouldBlurExplicit =
         contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
@@ -54,7 +54,7 @@ class PostVideo extends HookConsumerWidget {
       onToolboxVisibilityChange.call(value);
     }
 
-    final controller = isBlur.value ? null : maybeController;
+    final controller = isBlur.value ? null : videoPostData.controller;
     final videoMuted =
         ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
     final fullscreen = ref.watch(fullscreenStateProvider);
