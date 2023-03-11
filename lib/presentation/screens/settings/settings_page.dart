@@ -77,7 +77,7 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const sectionPadding = EdgeInsets.fromLTRB(22, 12, 22, 12);
+    const sectionPadding = EdgeInsets.fromLTRB(16, 12, 16, 12);
     final sectionStyle = context.theme.textTheme.titleSmall!
         .copyWith(color: context.colorScheme.primary);
 

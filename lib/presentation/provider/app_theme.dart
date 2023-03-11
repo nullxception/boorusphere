@@ -76,7 +76,6 @@ class AppThemeDataNotifier {
       ),
       listTileTheme: origin.listTileTheme.copyWith(
         minVerticalPadding: 12,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 22),
       ),
       colorScheme: colorScheme.copyWith(
         background: colorScheme.surface,
