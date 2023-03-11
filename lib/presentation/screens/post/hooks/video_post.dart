@@ -45,18 +45,12 @@ VideoPostSource useVideoPostSource(
   required Post post,
   required bool active,
 }) {
-  return use(_VideoPostHook(
-    ref,
-    post: post,
-    active: active,
-    keys: [post, active],
-  ));
+  return use(_VideoPostHook(ref, post: post, active: active));
 }
 
 class _VideoPostHook extends Hook<VideoPostSource> {
   const _VideoPostHook(
     this.ref, {
-    super.keys,
     required this.post,
     required this.active,
   });
@@ -72,7 +66,6 @@ class _VideoPostHook extends Hook<VideoPostSource> {
 class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
   _VideoPostState();
 
-  VideoPlayerController? controller;
   VideoPostSource source = VideoPostSource();
 
   void onFileStream(FileResponse event) {
@@ -83,7 +76,7 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
         source = source.copyWith(progress: event);
       });
     } else if (event is FileInfo) {
-      controller = VideoPlayerController.file(event.file,
+      final controller = VideoPlayerController.file(event.file,
           videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
         ..setLooping(true);
       final size = event.file.statSync().size;
@@ -96,6 +89,8 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
   }
 
   Future<void> createController() async {
+    if (!hook.active) return;
+
     final cache = hook.ref.read(cacheManagerProvider);
     final cookieJar = hook.ref.read(cookieJarProvider);
     final cookies =
@@ -109,11 +104,25 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
         .listen(onFileStream);
   }
 
+  void destroyController() {
+    source.controller?.pause();
+    source.controller?.dispose();
+    source = VideoPostSource();
+  }
+
   @override
   void initHook() {
     super.initHook();
-    if (!hook.active) return;
     createController();
+  }
+
+  @override
+  void didUpdateHook(_VideoPostHook oldHook) {
+    super.didUpdateHook(oldHook);
+    if (oldHook.active != hook.active) {
+      destroyController();
+      createController();
+    }
   }
 
   @override
@@ -121,8 +130,7 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
 
   @override
   void dispose() {
-    controller?.pause();
-    controller?.dispose();
+    destroyController();
     super.dispose();
   }
 
