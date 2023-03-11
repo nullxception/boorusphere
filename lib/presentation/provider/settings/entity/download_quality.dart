@@ -23,4 +23,9 @@ enum DownloadQuality {
         return context.t.alwaysAsk;
     }
   }
+
+  static DownloadQuality fromName(String name) {
+    return DownloadQuality.values
+        .firstWhere((it) => it.name == name, orElse: () => DownloadQuality.ask);
+  }
 }
