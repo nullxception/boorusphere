@@ -1,3 +1,10 @@
+## 1.3.4
+* Add buffering indicator to the video player
+* Add pull-to-refresh on home screen
+* Fix backup archive creation after 1.3.0 (caused by rating selection)
+* Fix restoring large backup archive
+* Update flutter to 3.7.7
+
 ## 1.3.3
 * Update Turkish translation (by @kyoyacchi)
 
