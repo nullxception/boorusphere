@@ -278,28 +278,37 @@ class _Progress extends StatelessWidget {
 
   final VideoPostSource source;
 
+  double _getProgressValue(VideoPostSource src) {
+    return src.progress.downloaded / (src.progress.totalSize ?? 1);
+  }
+
+  bool _isDownloading(VideoPostSource src) {
+    final value = _getProgressValue(src);
+    return value > 0 && value < 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = source.controller;
 
-    if (source.progress.downloaded < 0.1) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 16, bottom: 16),
-        child: LinearProgressIndicator(
-          value: 0,
-          backgroundColor: Colors.white.withAlpha(20),
-        ),
-      );
-    }
-
     if (controller == null || !controller.value.isInitialized) {
       return Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 16),
-        child: LinearProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(
-            Colors.redAccent.shade700,
-          ),
-          backgroundColor: Colors.white.withAlpha(20),
+        child: Stack(
+          children: [
+            if (_isDownloading(source))
+              LinearProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.white.withAlpha(100),
+                ),
+                value: _getProgressValue(source),
+                backgroundColor: Colors.transparent,
+              ),
+            LinearProgressIndicator(
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+              backgroundColor: Colors.white.withAlpha(20),
+            ),
+          ],
         ),
       );
     }
@@ -307,7 +316,7 @@ class _Progress extends StatelessWidget {
     return VideoProgressIndicator(
       controller,
       colors: VideoProgressColors(
-        playedColor: Colors.redAccent.shade700,
+        playedColor: Colors.red,
         backgroundColor: Colors.white.withAlpha(20),
       ),
       allowScrubbing: true,
