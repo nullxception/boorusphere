@@ -67,6 +67,8 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
   Post get post => hook.post;
 
   void onFileStream(FileResponse event) {
+    if (!context.mounted) return;
+
     if (event is DownloadProgress) {
       setState(() {
         source = source.copyWith(progress: event);
