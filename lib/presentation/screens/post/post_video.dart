@@ -128,21 +128,24 @@ class PostVideo extends HookConsumerWidget {
                   children: [
                     _PlayPauseOverlay(
                       isPlaying: isPlaying.value,
-                      controller: controller,
-                      onPlayChange: (value) {
-                        isPlaying.value = value;
+                      onPressed: () {
                         if (controller != null) {
+                          isPlaying.value = !controller.value.isPlaying;
+                          controller.value.isPlaying
+                              ? controller.pause()
+                              : controller.play();
                           scheduleHide();
+                        } else {
+                          isPlaying.value = !isPlaying.value;
                         }
                       },
                     ),
                     _ToolboxOverlay(
                       isPlaying: isPlaying.value,
-                      controller: controller,
+                      source: source,
                       post: post,
                       isMuted: videoMuted,
                       isFullscreen: fullscreen,
-                      disableProgressBar: isBlur.value,
                       onAutoHideRequest: scheduleHide,
                       onPlayChange: (value) {
                         isPlaying.value = value;
@@ -178,29 +181,25 @@ class PostVideo extends HookConsumerWidget {
 
 class _ToolboxOverlay extends ConsumerWidget {
   const _ToolboxOverlay({
-    required this.controller,
     required this.post,
+    required this.source,
     required this.isPlaying,
     required this.isMuted,
     required this.isFullscreen,
-    required this.disableProgressBar,
     this.onAutoHideRequest,
     this.onPlayChange,
   });
 
   final bool isPlaying;
-  final VideoPlayerController? controller;
+  final VideoPostSource source;
   final Post post;
   final bool isMuted;
   final bool isFullscreen;
-  final bool disableProgressBar;
   final void Function()? onAutoHideRequest;
   final void Function(bool value)? onPlayChange;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = this.controller;
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -217,7 +216,7 @@ class _ToolboxOverlay extends ConsumerWidget {
                 final mute = await ref
                     .read(contentSettingStateProvider.notifier)
                     .toggleVideoPlayerMute();
-                await controller?.setVolume(mute ? 0 : 1);
+                await source.controller?.setVolume(mute ? 0 : 1);
               },
               icon: Icon(
                 isMuted ? Icons.volume_mute : Icons.volume_up,
@@ -241,10 +240,7 @@ class _ToolboxOverlay extends ConsumerWidget {
             ),
           ],
         ),
-        _Progress(
-          controller: controller,
-          enabled: !disableProgressBar,
-        ),
+        _Progress(source: source),
       ],
     );
   }
@@ -253,18 +249,14 @@ class _ToolboxOverlay extends ConsumerWidget {
 class _PlayPauseOverlay extends StatelessWidget {
   const _PlayPauseOverlay({
     required this.isPlaying,
-    required this.controller,
-    required this.onPlayChange,
+    required this.onPressed,
   });
 
   final bool isPlaying;
-  final VideoPlayerController? controller;
-  final void Function(bool value)? onPlayChange;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final controller = this.controller;
-
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: Colors.black38,
@@ -275,30 +267,22 @@ class _PlayPauseOverlay extends StatelessWidget {
         color: Colors.white,
         iconSize: 72,
         icon: Icon(isPlaying ? Icons.pause_outlined : Icons.play_arrow),
-        onPressed: () {
-          if (controller != null) {
-            onPlayChange?.call(!controller.value.isPlaying);
-            controller.value.isPlaying ? controller.pause() : controller.play();
-          } else {
-            onPlayChange?.call(!isPlaying);
-          }
-        },
+        onPressed: onPressed,
       ),
     );
   }
 }
 
 class _Progress extends StatelessWidget {
-  const _Progress({this.controller, this.enabled = true});
+  const _Progress({required this.source});
 
-  final VideoPlayerController? controller;
-  final bool enabled;
+  final VideoPostSource source;
 
   @override
   Widget build(BuildContext context) {
-    final player = controller;
+    final controller = source.controller;
 
-    if (!enabled) {
+    if (source.progress.downloaded < 0.1) {
       return Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: LinearProgressIndicator(
@@ -308,7 +292,7 @@ class _Progress extends StatelessWidget {
       );
     }
 
-    if (player == null || !player.value.isInitialized) {
+    if (controller == null || !controller.value.isInitialized) {
       return Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: LinearProgressIndicator(
@@ -321,7 +305,7 @@ class _Progress extends StatelessWidget {
     }
 
     return VideoProgressIndicator(
-      player,
+      controller,
       colors: VideoProgressColors(
         playedColor: Colors.redAccent.shade700,
         backgroundColor: Colors.white.withAlpha(20),
