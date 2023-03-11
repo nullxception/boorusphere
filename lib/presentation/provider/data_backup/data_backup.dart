@@ -79,16 +79,15 @@ class DataBackupState extends _$DataBackupState {
       initialDirectory: backupsDir.absolute.path,
       type: FileType.custom,
       allowedExtensions: ['zip'],
-      withReadStream: true,
     );
 
-    final bytes = await result?.files.single.readStream?.first;
-    if (bytes == null) {
+    final path = result?.files.single.path;
+    if (path == null) {
       state = const BackupResult.idle();
       return;
     }
-
-    final decoder = ZipDecoder().decodeBytes(bytes);
+    final stream = InputFileStream(path);
+    final decoder = ZipDecoder().decodeBuffer(stream);
     if (!decoder.files.any((it) => it.name == '$appId.json')) {
       state = const BackupResult.error();
       return;
