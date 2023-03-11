@@ -28,6 +28,8 @@ class ErrorInfo extends HookWidget {
     final e = error is DioError ? (error as DioError).error : error;
     if (e is HandshakeException) {
       return 'Cannot establish a secure connection';
+    } else if (e is HttpException) {
+      return 'Connection failed';
     } else if (e is SocketException) {
       return e.address != null
           ? 'Failed to connect to ${e.address?.host}'
@@ -39,12 +41,7 @@ class ErrorInfo extends HookWidget {
       // let's try to obtain exception message
       return (e as dynamic).message;
     } catch (_) {
-      return e
-          .toString()
-          .split(':')
-          .skipWhile((it) => it.contains(RegExp(r'eption$')))
-          .join(':')
-          .trim();
+      return e.toString();
     }
   }
 
