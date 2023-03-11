@@ -1,3 +1,6 @@
+## 1.3.5
+* Fix backup archive creation after 1.3.2 (caused by download quality selection)
+
 ## 1.3.4
 * Add buffering indicator to the video player
 * Add pull-to-refresh on home screen
