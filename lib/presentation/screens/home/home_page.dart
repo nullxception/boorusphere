@@ -71,12 +71,11 @@ class _Home extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarControllerProvider);
     final drawer = ref.watch(homeDrawerControllerProvider);
     final atHomeScreen = !drawer.isOpen && !searchBar.isOpen;
-    final isMounted = useIsMounted();
     final allowPop = useState(false);
     const maybePopTimeout = Duration(seconds: 1);
     final maybePopTimer = useMemoized(
       () => RestartableTimer(maybePopTimeout, () {
-        if (isMounted()) allowPop.value = false;
+        if (context.mounted) allowPop.value = false;
       }),
     );
     clearMaybePop() {
@@ -86,7 +85,7 @@ class _Home extends HookConsumerWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        if (!isMounted()) return true;
+        if (!context.mounted) return true;
 
         if (drawer.isOpen || searchBar.isOpen) {
           maybePopTimer.cancel();

@@ -41,7 +41,6 @@ class PostImage extends HookConsumerWidget {
     final imageHeroKey = useMemoized(GlobalKey.new);
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
-    final isMounted = useIsMounted();
 
     useEffect(() {
       if (post.rating != BooruRating.explicit || !shouldBlurExplicit) {
@@ -49,7 +48,7 @@ class PostImage extends HookConsumerWidget {
       }
 
       Future(() {
-        if (isMounted()) {
+        if (context.mounted) {
           blurNoticeAnimator.forward();
         }
       });

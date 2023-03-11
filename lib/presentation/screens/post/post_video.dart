@@ -34,7 +34,6 @@ class PostVideo extends HookConsumerWidget {
     final contentSettings = ref.watch(contentSettingStateProvider);
     final shouldBlurExplicit =
         contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
-    final isMounted = useIsMounted();
     final shouldBlur = post.rating.isExplicit && shouldBlurExplicit;
     final isBlur = useState(shouldBlur);
     final blurNoticeAnimator =
@@ -43,7 +42,7 @@ class PostVideo extends HookConsumerWidget {
 
     useEffect(() {
       Future(() {
-        if (isMounted() && shouldBlur) {
+        if (context.mounted && shouldBlur) {
           blurNoticeAnimator.forward();
         }
       });
@@ -63,10 +62,10 @@ class PostVideo extends HookConsumerWidget {
     final hideTimer = useState<Timer?>(null);
 
     scheduleHide() {
-      if (!isMounted()) return;
+      if (!context.mounted) return;
       hideTimer.value?.cancel();
       hideTimer.value = Timer(const Duration(seconds: 2), () {
-        if (isMounted()) {
+        if (context.mounted) {
           onVisibilityChange.call(false);
         }
       });
@@ -81,7 +80,7 @@ class PostVideo extends HookConsumerWidget {
 
         controller.addListener(onFirstFrame);
         await controller.setVolume(videoMuted ? 0 : 1);
-        if (isPlaying.value && isMounted()) {
+        if (isPlaying.value && context.mounted) {
           await controller.play();
           scheduleHide();
         }
