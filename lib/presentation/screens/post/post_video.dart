@@ -30,15 +30,35 @@ class PostVideo extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final headers = ref.watch(postHeadersFactoryProvider(post));
-    final source = useVideoPost(ref, post);
     final contentSettings = ref.watch(contentSettingStateProvider);
+    final fullscreen = ref.watch(fullscreenStateProvider);
     final shouldBlurExplicit =
         contentSettings.blurExplicit && !contentSettings.blurTimelineOnly;
     final shouldBlur = post.rating.isExplicit && shouldBlurExplicit;
     final isBlur = useState(shouldBlur);
     final blurNoticeAnimator =
-        useAnimationController(duration: const Duration(milliseconds: 200));
+        useAnimationController(duration: kThemeChangeDuration);
     final showOverlay = useState(true);
+    final markMayNeedRebuild = useMarkMayNeedRebuild();
+    final isPlaying = useState(true);
+    final hideTimer = useState(Timer(const Duration(seconds: 2), () {}));
+    final source = useVideoPostSource(ref, post);
+    final controller = isBlur.value ? null : source.controller;
+
+    onVisibilityChange(bool value) {
+      showOverlay.value = value;
+      onToolboxVisibilityChange.call(value);
+    }
+
+    scheduleHide() {
+      if (!context.mounted) return;
+      hideTimer.value.cancel();
+      hideTimer.value = Timer(const Duration(seconds: 2), () {
+        if (context.mounted) {
+          onVisibilityChange.call(false);
+        }
+      });
+    }
 
     useEffect(() {
       Future(() {
@@ -48,29 +68,6 @@ class PostVideo extends HookConsumerWidget {
       });
     }, []);
 
-    onVisibilityChange(bool value) {
-      showOverlay.value = value;
-      onToolboxVisibilityChange.call(value);
-    }
-
-    final controller = isBlur.value ? null : source.controller;
-    final videoMuted =
-        ref.watch(contentSettingStateProvider.select((it) => it.videoMuted));
-    final fullscreen = ref.watch(fullscreenStateProvider);
-    final markMayNeedRebuild = useMarkMayNeedRebuild();
-    final isPlaying = useState(true);
-    final hideTimer = useState<Timer?>(null);
-
-    scheduleHide() {
-      if (!context.mounted) return;
-      hideTimer.value?.cancel();
-      hideTimer.value = Timer(const Duration(seconds: 2), () {
-        if (context.mounted) {
-          onVisibilityChange.call(false);
-        }
-      });
-    }
-
     useEffect(() {
       controller?.initialize().whenComplete(() async {
         onFirstFrame() {
@@ -79,7 +76,7 @@ class PostVideo extends HookConsumerWidget {
         }
 
         controller.addListener(onFirstFrame);
-        await controller.setVolume(videoMuted ? 0 : 1);
+        await controller.setVolume(contentSettings.videoMuted ? 0 : 1);
         if (isPlaying.value && context.mounted) {
           await controller.play();
           scheduleHide();
@@ -143,7 +140,7 @@ class PostVideo extends HookConsumerWidget {
                       isPlaying: isPlaying.value,
                       source: source,
                       post: post,
-                      isMuted: videoMuted,
+                      isMuted: contentSettings.videoMuted,
                       isFullscreen: fullscreen,
                       onAutoHideRequest: scheduleHide,
                       onPlayChange: (value) {

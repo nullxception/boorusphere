@@ -40,10 +40,7 @@ class VideoPostSource {
   int get hashCode => progress.hashCode ^ controller.hashCode;
 }
 
-VideoPostSource useVideoPost(
-  WidgetRef ref,
-  Post post,
-) {
+VideoPostSource useVideoPostSource(WidgetRef ref, Post post) {
   return use(_VideoPostHook(ref, post));
 }
 
@@ -62,9 +59,6 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
 
   VideoPlayerController? controller;
   VideoPostSource source = VideoPostSource();
-
-  WidgetRef get ref => hook.ref;
-  Post get post => hook.post;
 
   void onFileStream(FileResponse event) {
     if (!context.mounted) return;
@@ -86,15 +80,17 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
     }
   }
 
-  createController() async {
-    final cache = ref.read(cacheManagerProvider);
-    final cookieJar = ref.read(cookieJarProvider);
-    final cookies = await cookieJar.loadForRequest(post.content.url.toUri());
+  Future<void> createController() async {
+    final cache = hook.ref.read(cacheManagerProvider);
+    final cookieJar = hook.ref.read(cookieJarProvider);
+    final cookies =
+        await cookieJar.loadForRequest(hook.post.content.url.toUri());
     final headers =
-        ref.read(postHeadersFactoryProvider(post, cookies: cookies));
+        hook.ref.read(postHeadersFactoryProvider(hook.post, cookies: cookies));
 
     cache
-        .getFileStream(post.content.url, headers: headers, withProgress: true)
+        .getFileStream(hook.post.content.url,
+            headers: headers, withProgress: true)
         .listen(onFileStream);
   }
 
