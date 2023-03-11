@@ -19,12 +19,14 @@ class PostVideo extends HookConsumerWidget {
   const PostVideo({
     super.key,
     required this.post,
+    required this.active,
     this.heroTag,
     required this.onToolboxVisibilityChange,
   });
 
   final Post post;
   final Object? heroTag;
+  final bool active;
   final void Function(bool visible) onToolboxVisibilityChange;
 
   @override
@@ -42,7 +44,7 @@ class PostVideo extends HookConsumerWidget {
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     final isPlaying = useState(true);
     final hideTimer = useState(Timer(const Duration(seconds: 2), () {}));
-    final source = useVideoPostSource(ref, post);
+    final source = useVideoPostSource(ref, post: post, active: active);
     final controller = isBlur.value ? null : source.controller;
 
     onVisibilityChange(bool value) {

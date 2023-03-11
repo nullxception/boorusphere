@@ -1,8 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
-import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
-import 'package:boorusphere/presentation/screens/post/hooks/precache_posts.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/screens/post/post_unknown.dart';
@@ -43,13 +41,10 @@ class PostPage extends HookConsumerWidget {
     final currentPage = useState(beginPage);
     final pageController =
         useExtendedPageController(initialPage: currentPage.value);
-    final loadOriginal =
-        ref.watch(contentSettingStateProvider.select((it) => it.loadOriginal));
     final fullscreen = ref.watch(fullscreenStateProvider);
 
     final post =
         posts.isEmpty ? Post.empty : posts.elementAt(currentPage.value);
-    final precachePosts = usePrecachePosts(ref, posts);
     final showAppbar = useState(true);
     final isLoadingMore = useState(false);
     final loadMore = timelineController.onLoadMore;
@@ -80,57 +75,56 @@ class PostPage extends HookConsumerWidget {
             nightMode: true,
             child: Stack(
               children: [
-                Padding(
-                  // android back gesture is not ignored by PageView
-                  // add tiny padding to avoid it
-                  padding: const EdgeInsets.symmetric(horizontal: 1),
-                  child: ExtendedImageGesturePageView.builder(
-                    controller: pageController,
-                    onPageChanged: (index) async {
-                      context.scaffoldMessenger.hideCurrentSnackBar();
-                      currentPage.value = index;
-                      if (loadMore == null) return;
+                ExtendedImageGesturePageView.builder(
+                  controller: pageController,
+                  onPageChanged: (index) async {
+                    currentPage.value = index;
+                    context.scaffoldMessenger.hideCurrentSnackBar();
+                    if (loadMore == null) return;
 
-                      final offset = index + 1;
-                      final threshold =
-                          posts.length / 100 * (100 - loadMoreThreshold);
-                      if (offset + threshold > posts.length - 1) {
-                        isLoadingMore.value = true;
-                        await loadMore();
-                        await Future.delayed(kThemeAnimationDuration, () {
-                          isLoadingMore.value = false;
-                        });
-                      }
-                    },
-                    itemCount: posts.length,
-                    itemBuilder: (_, index) {
-                      precachePosts(index, loadOriginal);
-                      final post = posts.elementAt(index);
-                      final heroTag = heroTagBuilder?.call(post);
-                      final Widget widget;
-                      switch (post.content.type) {
-                        case PostType.photo:
-                          widget = PostImage(post: post, heroTag: heroTag);
-                          break;
-                        case PostType.video:
-                          widget = PostVideo(
-                            post: post,
-                            heroTag: heroTag,
-                            onToolboxVisibilityChange: (visible) {
-                              showAppbar.value = visible;
-                            },
-                          );
-                          break;
-                        default:
-                          widget = PostUnknown(post: post, heroTag: heroTag);
-                          break;
-                      }
-                      return HeroMode(
+                    final offset = index + 1;
+                    final threshold =
+                        posts.length / 100 * (100 - loadMoreThreshold);
+                    if (offset + threshold > posts.length - 1) {
+                      isLoadingMore.value = true;
+                      await loadMore();
+                      await Future.delayed(kThemeAnimationDuration, () {
+                        isLoadingMore.value = false;
+                      });
+                    }
+                  },
+                  preloadPagesCount: 1,
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts.elementAt(index);
+                    final heroTag = heroTagBuilder?.call(post);
+                    final Widget widget;
+                    switch (post.content.type) {
+                      case PostType.photo:
+                        widget = PostImage(post: post, heroTag: heroTag);
+                        break;
+                      case PostType.video:
+                        widget = PostVideo(
+                          post: post,
+                          heroTag: heroTag,
+                          active: currentPage.value == index,
+                          onToolboxVisibilityChange: (visible) {
+                            showAppbar.value = visible;
+                          },
+                        );
+                        break;
+                      default:
+                        widget = PostUnknown(post: post, heroTag: heroTag);
+                        break;
+                    }
+                    return ColoredBox(
+                      color: Colors.black,
+                      child: HeroMode(
                         enabled: index == currentPage.value,
                         child: widget,
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
                 Positioned(
                   top: 0,

@@ -40,15 +40,30 @@ class VideoPostSource {
   int get hashCode => progress.hashCode ^ controller.hashCode;
 }
 
-VideoPostSource useVideoPostSource(WidgetRef ref, Post post) {
-  return use(_VideoPostHook(ref, post));
+VideoPostSource useVideoPostSource(
+  WidgetRef ref, {
+  required Post post,
+  required bool active,
+}) {
+  return use(_VideoPostHook(
+    ref,
+    post: post,
+    active: active,
+    keys: [post, active],
+  ));
 }
 
 class _VideoPostHook extends Hook<VideoPostSource> {
-  const _VideoPostHook(this.ref, this.post);
+  const _VideoPostHook(
+    this.ref, {
+    super.keys,
+    required this.post,
+    required this.active,
+  });
 
   final WidgetRef ref;
   final Post post;
+  final bool active;
 
   @override
   _VideoPostState createState() => _VideoPostState();
@@ -97,6 +112,7 @@ class _VideoPostState extends HookState<VideoPostSource, _VideoPostHook> {
   @override
   void initHook() {
     super.initHook();
+    if (!hook.active) return;
     createController();
   }
 
