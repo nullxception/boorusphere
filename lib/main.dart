@@ -57,8 +57,8 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        await cookieJarProvider.initialize(),
-        await envRepoProvider.initialize(),
+        cookieJarProvider.overrideWithValue(await provideCookieJar()),
+        envRepoProvider.overrideWithValue(await provideEnvRepo()),
       ],
       child: TranslationProvider(child: const Boorusphere()),
     ),

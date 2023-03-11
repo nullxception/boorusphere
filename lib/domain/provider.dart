@@ -21,7 +21,6 @@ import 'package:boorusphere/domain/repository/server_repo.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info/package_info.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -32,15 +31,11 @@ EnvRepo envRepo(EnvRepoRef ref) {
   throw UnimplementedError('must be initialized manually');
 }
 
-extension EnvRepoProviderExt on Provider<EnvRepo> {
-  Future<Override> initialize() async {
-    return overrideWithValue(
-      EnvRepoImpl(
-        packageInfo: await PackageInfo.fromPlatform(),
-        androidInfo: await DeviceInfoPlugin().androidInfo,
-      ),
-    );
-  }
+Future<EnvRepo> provideEnvRepo() async {
+  return EnvRepoImpl(
+    packageInfo: await PackageInfo.fromPlatform(),
+    androidInfo: await DeviceInfoPlugin().androidInfo,
+  );
 }
 
 @riverpod

@@ -19,7 +19,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -31,15 +30,11 @@ CookieJar cookieJar(CookieJarRef ref) {
   return CookieJar();
 }
 
-extension CookieJarProviderExt on Provider<CookieJar> {
-  Future<Override> initialize() async {
-    final dir = await getApplicationDocumentsDirectory();
-    return overrideWithValue(
-      PersistCookieJar(
-        storage: FileStorage(path.join(dir.path, 'cookies')),
-      ),
-    );
-  }
+Future<CookieJar> provideCookieJar() async {
+  final dir = await getApplicationDocumentsDirectory();
+  return PersistCookieJar(
+    storage: FileStorage(path.join(dir.path, 'cookies')),
+  );
 }
 
 @riverpod
