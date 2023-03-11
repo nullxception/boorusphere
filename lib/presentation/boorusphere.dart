@@ -9,7 +9,6 @@ import 'package:boorusphere/presentation/provider/download/flutter_downloader_ha
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
-import 'package:boorusphere/presentation/widgets/bouncing_scroll.dart';
 import 'package:boorusphere/utils/file_utils.dart';
 import 'package:boorusphere/utils/http/overrides.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +67,7 @@ class Boorusphere extends HookConsumerWidget {
         locale: TranslationProvider.of(context).flutterLocale,
         supportedLocales: AppLocaleUtils.supportedLocales,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        builder: (context, child) => ScrollConfiguration(
-          behavior: const BouncingScrollBehavior(),
-          child: child ?? Container(),
-        ),
+        builder: (context, child) => child ?? Container(),
       ),
     );
   }
