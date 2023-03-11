@@ -1,4 +1,3 @@
-import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:flutter/material.dart';
 
 class NoticeCard extends StatelessWidget {
@@ -18,7 +17,6 @@ class NoticeCard extends StatelessWidget {
     return Card(
       elevation: 0,
       margin: margin,
-      color: context.theme.cardColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),

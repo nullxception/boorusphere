@@ -61,7 +61,7 @@ class QuickBar extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: context.theme.cardColor,
+          color: context.colorScheme.surface,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Row(

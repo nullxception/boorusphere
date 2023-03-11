@@ -12,7 +12,7 @@ class PostExplicitWarningCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(16)),
-        color: context.theme.cardColor,
+        color: context.colorScheme.surface,
       ),
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(left: 32, right: 32),

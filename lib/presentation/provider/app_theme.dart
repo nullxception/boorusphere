@@ -43,26 +43,23 @@ class AppThemeDataNotifier {
   ThemeData _createThemeData(ColorScheme? scheme, Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     final defScheme = isDark ? defDarkScheme : defLightScheme;
-    final colorScheme = scheme?.harmonized() ?? defScheme;
+    final harmonized = scheme?.harmonized() ?? defScheme;
+    final colorScheme = harmonized.copyWith(
+      background: harmonized.surface.shade(isDark ? 30 : 3),
+      outlineVariant: harmonized.outlineVariant.withOpacity(0.3),
+    );
     final origin = isDark ? ThemeData.dark() : ThemeData.light();
     return origin.copyWith(
       useMaterial3: true,
+      colorScheme: colorScheme,
       appBarTheme: AppBarTheme(
-        backgroundColor:
-            isDark ? colorScheme.surface.darken(2) : colorScheme.surface,
+        backgroundColor: colorScheme.background,
         foregroundColor: colorScheme.onSurface,
-        elevation: 0,
       ),
-      canvasColor: colorScheme.surface,
-      cardColor: isDark
-          ? colorScheme.surface.lighten(3)
-          : colorScheme.surface.darken(2),
-      scaffoldBackgroundColor:
-          isDark ? colorScheme.surface.darken(2) : colorScheme.surface,
+      canvasColor: colorScheme.background,
+      scaffoldBackgroundColor: colorScheme.background,
       drawerTheme: origin.drawerTheme.copyWith(
-        backgroundColor: isDark
-            ? colorScheme.surface.shade(40)
-            : colorScheme.surface.shade(3),
+        backgroundColor: colorScheme.surface,
       ),
       snackBarTheme: origin.snackBarTheme.copyWith(
         shape: const RoundedRectangleBorder(
@@ -76,10 +73,7 @@ class AppThemeDataNotifier {
       ),
       listTileTheme: origin.listTileTheme.copyWith(
         minVerticalPadding: 12,
-      ),
-      colorScheme: colorScheme.copyWith(
-        background: colorScheme.surface,
-        outlineVariant: colorScheme.outlineVariant.withOpacity(0.3),
+        iconColor: colorScheme.onSurfaceVariant,
       ),
     );
   }
@@ -90,22 +84,18 @@ class AppThemeDataNotifier {
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.black,
         foregroundColor: origin.colorScheme.onSurface,
-        elevation: 0,
       ),
       primaryColor: Colors.black,
       canvasColor: Colors.black,
-      cardColor: origin.colorScheme.background.darken(3),
+      scaffoldBackgroundColor: Colors.black,
       drawerTheme: origin.drawerTheme.copyWith(
         backgroundColor: Colors.black,
       ),
-      scaffoldBackgroundColor: Colors.black,
-      colorScheme: origin.colorScheme
-          .copyWith(
-            brightness: Brightness.dark,
-            surface: origin.colorScheme.background,
-            background: Colors.black,
-          )
-          .copyWith(background: Colors.black),
+      colorScheme: origin.colorScheme.copyWith(
+        brightness: Brightness.dark,
+        background: Colors.black,
+        surface: origin.colorScheme.background,
+      ),
     );
   }
 
