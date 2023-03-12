@@ -9,12 +9,10 @@ import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/home_page.dart';
-import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeStatus extends HookConsumerWidget {
@@ -46,11 +44,7 @@ class HomeStatus extends HookConsumerWidget {
             return Container(
               height: 50,
               alignment: Alignment.topCenter,
-              child: SpinKitFoldingCube(
-                size: 24,
-                color: context.colorScheme.primary,
-                duration: const Duration(seconds: 1),
-              ),
+              child: const RefreshProgressIndicator(),
             );
           },
           error: (data, error, stackTrace, code) {

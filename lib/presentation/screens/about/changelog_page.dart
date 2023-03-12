@@ -2,10 +2,8 @@ import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/changelog_state.dart';
-import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ChangelogPage extends ConsumerWidget {
@@ -65,14 +63,8 @@ class ChangelogPage extends ConsumerWidget {
           loading: () => Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: SpinKitFoldingCube(
-                  size: 24,
-                  color: context.colorScheme.primary,
-                  duration: const Duration(seconds: 1),
-                ),
-              ),
+            children: const [
+              Center(child: RefreshProgressIndicator()),
             ],
           ),
         ),
