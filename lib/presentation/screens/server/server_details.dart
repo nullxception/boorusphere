@@ -36,6 +36,43 @@ class ServerDetails extends HookConsumerWidget {
     final cSuggestUrl = useTextEditingController(text: data.tagSuggestionUrl);
     final cPostUrl = useTextEditingController(text: data.postUrl);
 
+    openPresetPage() {
+      context.router.push(
+        ServerPresetRoute(
+          onReturned: (newData) {
+            cSearchUrl.text = newData.searchUrl;
+            cSuggestUrl.text = newData.tagSuggestionUrl;
+            cPostUrl.text = newData.postUrl;
+          },
+        ),
+      );
+    }
+
+    onSave() {
+      if (formKey.currentState?.validate() != true) {
+        return;
+      }
+
+      final newData = isEditing
+          ? data.copyWith(
+              alias: cAlias.text,
+              homepage: cHomepage.text,
+              apiAddr: cApiAddr.text,
+              searchUrl: cSearchUrl.text,
+              tagSuggestionUrl: cSuggestUrl.text,
+              postUrl: cPostUrl.text,
+            )
+          : data.copyWith(
+              id: cName.text,
+              homepage: cHomepage.text,
+              apiAddr: cApiAddr.text,
+              searchUrl: cSearchUrl.text,
+              tagSuggestionUrl: cSuggestUrl.text,
+              postUrl: cPostUrl.text,
+            );
+      onSubmitted.call(newData);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -106,17 +143,7 @@ class ServerDetails extends HookConsumerWidget {
                         style: context.theme.textTheme.titleMedium,
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          context.router.push(
-                            ServerPresetRoute(
-                              onReturned: (newData) {
-                                cSearchUrl.text = newData.searchUrl;
-                                cSuggestUrl.text = newData.tagSuggestionUrl;
-                                cPostUrl.text = newData.postUrl;
-                              },
-                            ),
-                          );
-                        },
+                        onPressed: openPresetPage,
                         child: Text(context.t.servers.preset),
                       ),
                     ],
@@ -131,6 +158,16 @@ class ServerDetails extends HookConsumerWidget {
                     border: const UnderlineInputBorder(),
                     labelText: context.t.serverQuery.search,
                   ),
+                  validator: (value) {
+                    if (value != null &&
+                        value.contains('{tags}') &&
+                        value.contains('{page-id}') &&
+                        value.contains('{post-limit}')) {
+                      return null;
+                    }
+
+                    return context.t.servers.invalidSearchQuery;
+                  },
                 ),
                 TextFormField(
                   minLines: 1,
@@ -158,30 +195,7 @@ class ServerDetails extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() != true) {
-                return;
-              }
-
-              final newData = isEditing
-                  ? data.copyWith(
-                      alias: cAlias.text,
-                      homepage: cHomepage.text,
-                      apiAddr: cApiAddr.text,
-                      searchUrl: cSearchUrl.text,
-                      tagSuggestionUrl: cSuggestUrl.text,
-                      postUrl: cPostUrl.text,
-                    )
-                  : data.copyWith(
-                      id: cName.text,
-                      homepage: cHomepage.text,
-                      apiAddr: cApiAddr.text,
-                      searchUrl: cSearchUrl.text,
-                      tagSuggestionUrl: cSuggestUrl.text,
-                      postUrl: cPostUrl.text,
-                    );
-              onSubmitted.call(newData);
-            },
+            onPressed: onSave,
             child: Text(context.t.save),
           ),
         ),

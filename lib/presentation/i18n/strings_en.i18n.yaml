@@ -148,6 +148,7 @@ servers:
   api_addr: "API Address"
   api_addr_hint: "API address, example: https://api-v69.verycoolbooru.com"
   already_exists: "Server data for ${name} already exists"
+  invalid_search_query: "Invalid search query"
 
 server_query:
   title: "Query"
