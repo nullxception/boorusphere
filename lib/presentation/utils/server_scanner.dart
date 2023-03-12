@@ -1,17 +1,8 @@
 import 'dart:async';
 
-import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'server_scanner.g.dart';
-
-@riverpod
-ServerScanner serverScanner(ServerScannerRef ref) {
-  return ServerScanner(ref.watch(dioProvider));
-}
 
 enum _PayloadType {
   search,
