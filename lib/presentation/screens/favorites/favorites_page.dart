@@ -98,8 +98,16 @@ class _Pager extends ConsumerWidget {
               ),
           ],
         ),
-        bottomNavigationBar: Container(
-          color: context.colorScheme.background.withOpacity(0.97),
+        bottomNavigationBar: Material(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(18),
+              topRight: Radius.circular(18),
+            ),
+          ),
+          color: context.theme.appBarTheme.backgroundColor,
+          surfaceTintColor: context.colorScheme.surfaceTint,
+          elevation: 3,
           child: SafeArea(
             child: TabBar(
               dividerColor: Colors.transparent,
@@ -122,7 +130,7 @@ class _Pager extends ConsumerWidget {
                   ),
               ],
               indicator: BoxDecoration(
-                color: context.colorScheme.surfaceVariant,
+                color: context.colorScheme.background,
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
