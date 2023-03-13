@@ -56,10 +56,10 @@ rating:
 page_status:
   http_error: "Cannot get result from ${server_name}"
   no_result:
-    one: "No result found"
+    zero: "No result found"
     other: "No more result"
   no_result_for_query:
-    one: "No result found for ${query}"
+    zero: "No result found for ${query}"
     other: "No more result for ${query}"
   blocked: "'${query}' is blocked by Tags Blocker"
 

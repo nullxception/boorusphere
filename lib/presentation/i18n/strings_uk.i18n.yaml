@@ -53,10 +53,10 @@ on_media_blurred: Цей носій може містити матеріали, 
 page_status:
   http_error: Не вдається отримати результат від ${server_name}
   no_result:
-    one: Не знайдено результатів
+    zero: Не знайдено результатів
     other: Більше ніякого результату
   no_result_for_query:
-    one: Не знайдено результатів для ${query}
+    zero: Не знайдено результатів для ${query}
     other: Більше ніякого результату для ${query}
   blocked: "'${query}' заблоковано блокуванням тегів"
 suggestion:

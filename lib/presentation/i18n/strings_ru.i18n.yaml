@@ -51,10 +51,10 @@ rating:
 page_status:
   http_error: "Не удалось получить результат от ${server_name}"
   no_result:
-    one: "Ничего не найдено"
+    zero: "Ничего не найдено"
     other: "Больше никакого результата"
   no_result_for_query:
-    one: "Ничего не найдено для ${query}"
+    zero: "Ничего не найдено для ${query}"
     other: "Никакого результата для ${query}"
   blocked: "'${query}' заблокирован Блокировщиком Тегов"
 

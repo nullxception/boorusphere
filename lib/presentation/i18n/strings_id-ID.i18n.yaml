@@ -55,10 +55,10 @@ rating:
 page_status:
   http_error: "Tidak bisa mendapatkan hasil dari ${server_name}"
   no_result:
-    one: "Tidak ada hasil yang ditemukan"
+    zero: "Tidak ada hasil yang ditemukan"
     other: "Tidak ada lagi hasil"
   no_result_for_query:
-    one: "Tidak ada hasil yang ditemukan untuk ${query}"
+    zero: "Tidak ada hasil yang ditemukan untuk ${query}"
     other: "Tidak ada lagi hasil untuk ${query}"
   blocked: "'${query}' diblokir oleh Tags Blocker"
 

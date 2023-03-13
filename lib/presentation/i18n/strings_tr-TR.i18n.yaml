@@ -56,10 +56,10 @@ rating:
 page_status:
   http_error: "${server_name} sunucusundan sonuç alınamadı"
   no_result:
-    one: "Hiçbir sonuç bulunamadı"
+    zero: "Hiçbir sonuç bulunamadı"
     other: "Sonuç bulunamadı"
   no_result_for_query:
-    one: "${query} için hiçbir sonuç bulunamadı"
+    zero: "${query} için hiçbir sonuç bulunamadı"
     other: "${query} için hiçbir sonuç bulunamadı"
   blocked: "'${query}' Etiket Engelleyici tarafından engellendi"
 

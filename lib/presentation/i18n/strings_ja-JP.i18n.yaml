@@ -56,10 +56,10 @@ rating:
 page_status:
   http_error: "${server_name} から結果を取得できません"
   no_result:
-    one: "結果が見つかりません"
+    zero: "結果が見つかりません"
     other: "これ以上の結果はありません"
   no_result_for_query:
-    one: "${query} の結果が見つかりませんでした"
+    zero: "${query} の結果が見つかりませんでした"
     other: "${query} の結果はこれ以上ありません"
   blocked: "'${query}' はタグブロッカーによってブロックされています"
 

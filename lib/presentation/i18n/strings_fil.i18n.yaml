@@ -48,10 +48,10 @@ rating:
 page_status:
   http_error: "Hindi makakuha ng resulta mula sa ${server_name}"
   no_result:
-    one: "Walang natagpuang resulta"
+    zero: "Walang natagpuang resulta"
     other: "Wala nang iba pang resulta"
   no_result_for_query:
-    one: "Walang natagpuang resulta para sa ${query}"
+    zero: "Walang natagpuang resulta para sa ${query}"
     other: "Wala nang iba pang resulta para sa ${query}"
   blocked: "Binlock ng Tag Blocker ang '${query}'"
 

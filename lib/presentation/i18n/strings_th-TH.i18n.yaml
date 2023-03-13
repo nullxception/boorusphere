@@ -56,10 +56,10 @@ rating:
 page_status:
   http_error: "ไม่สามารถรับผลลัพธ์จาก ${server_name} ได้"
   no_result:
-    one: "ไม่พบผลลัพธ์"
+    zero: "ไม่พบผลลัพธ์"
     other: "ไม่มีผลลัพธ์เพิ่มเติม"
   no_result_for_query:
-    one: "ไม่พบผลลัพธ์สำหรับ ${query}"
+    zero: "ไม่พบผลลัพธ์สำหรับ ${query}"
     other: "ไม่มีผลลัพธ์เพิ่มเติมสำหรับ ${query}"
   blocked: "'${query}' เป็นแท็กที่ถูกบล็อกไว้"
 
