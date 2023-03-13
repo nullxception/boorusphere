@@ -22,24 +22,6 @@ class TimelineController extends ChangeNotifier {
 
   AutoScrollController get scrollController => _scrollController;
 
-  void revealAt(int dest) {
-    if (!scrollController.hasClients || scrollController.isAutoScrolling) {
-      return;
-    }
-
-    if (scrollController.isIndexStateInLayoutRange(dest)) {
-      scrollController.scrollToIndex(dest);
-    } else {
-      scrollController
-          .scrollToIndex(
-            dest,
-            duration: const Duration(milliseconds: 800),
-          )
-          .whenComplete(() => scrollController.highlight(dest,
-              highlightDuration: const Duration(milliseconds: 150)));
-    }
-  }
-
   Future<void> _autoLoadMore() async {
     if (!scrollController.hasClients) return;
     if (scrollController.position.extentAfter < 200) {
@@ -51,5 +33,11 @@ class TimelineController extends ChangeNotifier {
   void dispose() {
     _scrollController.removeListener(_autoLoadMore);
     super.dispose();
+  }
+
+  void scrollTo(int index) {
+    if (!scrollController.hasClients) return;
+
+    scrollController.scrollToIndex(index);
   }
 }

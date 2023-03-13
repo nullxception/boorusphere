@@ -3,7 +3,6 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/changelog_state.dart';
-import 'package:boorusphere/presentation/routes/chill_page_route.dart';
 import 'package:boorusphere/presentation/routes/slide_page_route.dart';
 import 'package:boorusphere/presentation/screens/about/about_page.dart';
 import 'package:boorusphere/presentation/screens/about/changelog_page.dart';
@@ -13,7 +12,6 @@ import 'package:boorusphere/presentation/screens/favorites/favorites_page.dart';
 import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/post_details_page.dart';
-import 'package:boorusphere/presentation/screens/post/post_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_editor_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_page.dart';
 import 'package:boorusphere/presentation/screens/server/server_preset_page.dart';
@@ -21,7 +19,6 @@ import 'package:boorusphere/presentation/screens/settings/data_backup_page.dart'
 import 'package:boorusphere/presentation/screens/settings/language_settings_page.dart';
 import 'package:boorusphere/presentation/screens/settings/settings_page.dart';
 import 'package:boorusphere/presentation/screens/tags_blocker/tags_blocker_page.dart';
-import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:flutter/widgets.dart';
 
 part 'app_router.gr.dart';
@@ -30,10 +27,6 @@ part 'app_router.gr.dart';
   replaceInRouteName: 'Page,Route',
   routes: [
     AutoRoute(page: HomePage, initial: true),
-    CustomRoute(
-      page: PostPage,
-      customRouteBuilder: ChillPageRoute.build,
-    ),
     CustomRoute(
       page: PostDetailsPage,
       customRouteBuilder: SlidePageRoute.build,

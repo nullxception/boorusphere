@@ -1,11 +1,11 @@
 import 'dart:ui';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/routes/rematerial.dart';
+import 'package:boorusphere/presentation/screens/post/post_page.dart';
 import 'package:boorusphere/presentation/utils/entity/content.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
@@ -53,8 +53,8 @@ class _ThumbnailCard extends HookConsumerWidget {
   final int index;
   final Iterable<Post> posts;
 
-  String buildHeroTag(post) {
-    return '${posts.hashCode}@${post.serverId}@${post.id}';
+  String buildHeroTag(Post post) {
+    return '${post.id}-${post.serverId}';
   }
 
   @override
@@ -99,12 +99,17 @@ class _ThumbnailCard extends HookConsumerWidget {
           ),
           onTap: () {
             context.scaffoldMessenger.removeCurrentSnackBar();
-            context.router.push(
-              PostRoute(
-                beginPage: index,
-                posts: posts,
-                heroTagBuilder: buildHeroTag,
-                timelineController: ref.read(timelineControllerProvider),
+            context.navigator.push(
+              ReMaterialPageRoute(
+                opaque: false,
+                builder: (context) {
+                  return PostPage(
+                    beginPage: index,
+                    posts: posts,
+                    heroTagBuilder: buildHeroTag,
+                    timelineController: ref.read(timelineControllerProvider),
+                  );
+                },
               ),
             );
           },

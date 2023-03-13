@@ -66,7 +66,7 @@ class PostPage extends HookConsumerWidget {
         onWillPop: () async {
           ref.watch(fullscreenStateProvider.notifier).reset();
           context.scaffoldMessenger.removeCurrentSnackBar();
-          timelineController.revealAt(currentPage.value);
+          timelineController.scrollTo(currentPage.value);
           return true;
         },
         child: Scaffold(
@@ -78,6 +78,7 @@ class PostPage extends HookConsumerWidget {
                 ExtendedImageGesturePageView.builder(
                   controller: pageController,
                   onPageChanged: (index) async {
+                    timelineController.scrollTo(index);
                     currentPage.value = index;
                     context.scaffoldMessenger.hideCurrentSnackBar();
                     if (loadMore == null) return;
