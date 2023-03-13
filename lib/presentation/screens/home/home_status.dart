@@ -115,7 +115,6 @@ class _ErrorStatus extends ConsumerWidget {
               children: [
                 if (data.option.searchRating == BooruRating.safe)
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(elevation: 0),
                     onPressed: () async {
                       await ref
                           .read(serverSettingStateProvider.notifier)
@@ -127,7 +126,6 @@ class _ErrorStatus extends ConsumerWidget {
                     child: Text(context.t.rating.disableRatingSafe),
                   ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(elevation: 0),
                   onPressed: ref.read(pageStateProvider.notifier).load,
                   child: Text(context.t.retry),
                 ),
