@@ -25,7 +25,6 @@ class ServerPage extends ConsumerWidget {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      backgroundColor: context.colorScheme.background,
                       title: Text(context.t.resetToDefault),
                       icon: const Icon(Icons.restore),
                       content: Text(context.t.servers.resetWarning),

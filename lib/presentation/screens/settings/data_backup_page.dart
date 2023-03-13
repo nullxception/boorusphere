@@ -27,7 +27,6 @@ class _Content extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: context.colorScheme.background,
           title: Text(context.t.dataBackup.restore.title),
           icon: const Icon(Icons.restore),
           content: Text(context.t.dataBackup.restore.warning),
@@ -125,7 +124,6 @@ class _BackupSelectionDialog extends HookWidget {
   Widget build(BuildContext context) {
     final option = useState(const BackupOption());
     return AlertDialog(
-      backgroundColor: context.colorScheme.background,
       title: Text(context.t.dataBackup.backup.title),
       icon: const Icon(Icons.restore),
       content: Column(

@@ -58,6 +58,7 @@ class AppThemeDataNotifier {
       ),
       canvasColor: colorScheme.background,
       scaffoldBackgroundColor: colorScheme.background,
+      dialogBackgroundColor: colorScheme.background,
       drawerTheme: origin.drawerTheme.copyWith(
         backgroundColor: colorScheme.surface,
       ),

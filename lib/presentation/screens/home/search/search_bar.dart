@@ -205,7 +205,6 @@ class _RatingButton extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: context.colorScheme.background,
           title: Text(context.t.rating.title),
           icon: const Icon(Icons.star),
           contentPadding: const EdgeInsets.only(top: 16, bottom: 16),

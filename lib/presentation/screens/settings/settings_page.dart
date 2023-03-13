@@ -138,7 +138,6 @@ class _DownloadQuality extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: context.colorScheme.background,
           title: Text(context.t.downloads.quality),
           icon: const Icon(Icons.file_download),
           contentPadding: const EdgeInsets.only(top: 16, bottom: 16),

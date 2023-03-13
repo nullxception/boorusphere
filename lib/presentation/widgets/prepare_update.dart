@@ -27,7 +27,6 @@ class UpdatePrepareDialog extends HookConsumerWidget {
         return false;
       },
       child: AlertDialog(
-        backgroundColor: context.colorScheme.background,
         content: Row(
           children: [
             const SizedBox(
