@@ -66,7 +66,6 @@ class PostPage extends HookConsumerWidget {
         onWillPop: () async {
           ref.watch(fullscreenStateProvider.notifier).reset();
           context.scaffoldMessenger.removeCurrentSnackBar();
-          timelineController.scrollTo(currentPage.value);
           return true;
         },
         child: Scaffold(
