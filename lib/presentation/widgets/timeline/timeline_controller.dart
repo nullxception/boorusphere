@@ -9,22 +9,16 @@ final timelineControllerProvider =
 
 class TimelineController extends ChangeNotifier {
   TimelineController({
-    this.onLoadMore,
+    required this.scrollController,
     required this.pageArgs,
-    Rect Function()? viewportBoundaryGetter,
+    this.onLoadMore,
   }) {
-    _scrollController = AutoScrollController(
-        axis: Axis.vertical,
-        viewportBoundaryGetter:
-            viewportBoundaryGetter ?? defaultViewportBoundaryGetter);
-    _scrollController.addListener(_autoLoadMore);
+    scrollController.addListener(_autoLoadMore);
   }
 
-  late AutoScrollController _scrollController;
-  final Future<void> Function()? onLoadMore;
+  final AutoScrollController scrollController;
   final PageArgs pageArgs;
-
-  AutoScrollController get scrollController => _scrollController;
+  final Future<void> Function()? onLoadMore;
 
   Future<void> _autoLoadMore() async {
     if (!scrollController.hasClients) return;
@@ -33,15 +27,15 @@ class TimelineController extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    _scrollController.removeListener(_autoLoadMore);
-    super.dispose();
-  }
-
   void scrollTo(int index) {
     if (!scrollController.hasClients) return;
 
     scrollController.scrollToIndex(index);
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(_autoLoadMore);
+    super.dispose();
   }
 }

@@ -18,6 +18,7 @@ import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.da
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 final homePageArgsProvider =
     Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
@@ -59,9 +60,11 @@ class HomePage extends ConsumerWidget {
             timelineControllerProvider.overrideWith(
               (ref) => TimelineController(
                 pageArgs: pageArgs,
+                scrollController: AutoScrollController(
+                  viewportBoundaryGetter: () => _timelineBoundary(context),
+                ),
                 onLoadMore: () =>
                     ref.read(pageStateProvider.notifier).loadMore(),
-                viewportBoundaryGetter: () => _timelineBoundary(context),
               ),
             ),
           ],

@@ -13,6 +13,7 @@ import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.da
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 final favoritesPageArgsProvider =
     Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
@@ -91,7 +92,10 @@ class _Pager extends ConsumerWidget {
               ProviderScope(
                 overrides: [
                   timelineControllerProvider.overrideWith(
-                    (ref) => TimelineController(pageArgs: pageArgs),
+                    (ref) => TimelineController(
+                      pageArgs: pageArgs,
+                      scrollController: AutoScrollController(),
+                    ),
                   ),
                 ],
                 child: _Content(server: page.key, posts: page.value),
