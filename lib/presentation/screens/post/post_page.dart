@@ -54,6 +54,7 @@ class PostPage extends HookConsumerWidget {
     }, [fullscreen]);
 
     useEffect(() {
+      Future(() => timelineController.scrollTo(currentPage.value));
       Wakelock.enable();
       return Wakelock.disable;
     }, []);
