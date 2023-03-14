@@ -11,14 +11,18 @@ class TimelineController extends ChangeNotifier {
   TimelineController({
     this.onLoadMore,
     required this.pageArgs,
+    Rect Function()? viewportBoundaryGetter,
   }) {
+    _scrollController = AutoScrollController(
+        axis: Axis.vertical,
+        viewportBoundaryGetter:
+            viewportBoundaryGetter ?? defaultViewportBoundaryGetter);
     _scrollController.addListener(_autoLoadMore);
   }
 
+  late AutoScrollController _scrollController;
   final Future<void> Function()? onLoadMore;
-
   final PageArgs pageArgs;
-  final _scrollController = AutoScrollController(axis: Axis.vertical);
 
   AutoScrollController get scrollController => _scrollController;
 

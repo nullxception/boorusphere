@@ -10,6 +10,7 @@ import 'package:boorusphere/presentation/screens/home/drawer/home_drawer.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
 import 'package:boorusphere/presentation/screens/home/home_content.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search/search_bar.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
@@ -25,6 +26,11 @@ class HomePage extends ConsumerWidget {
   const HomePage({super.key, this.args});
 
   final PageArgs? args;
+
+  Rect _timelineBoundary(BuildContext context) {
+    final bottom = context.mediaQuery.padding.bottom + SearchBar.innerHeight;
+    return Rect.fromLTRB(0, 0, 0, bottom);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,6 +61,7 @@ class HomePage extends ConsumerWidget {
                 pageArgs: pageArgs,
                 onLoadMore: () =>
                     ref.read(pageStateProvider.notifier).loadMore(),
+                viewportBoundaryGetter: () => _timelineBoundary(context),
               ),
             ),
           ],
