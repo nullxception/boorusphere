@@ -78,19 +78,21 @@ class _ThumbnailCard extends HookConsumerWidget {
         child: GestureDetector(
           child: Hero(
             tag: buildHeroTag(post),
+            placeholderBuilder: (context, heroSize, child) => child,
             flightShuttleBuilder: (flightContext, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               final Hero toHero = toHeroContext.widget as Hero;
+              final isLong = post.aspectRatio < 0.5;
+              final isPop = flightDirection == HeroFlightDirection.pop;
+
               return Stack(
                 alignment: Alignment.center,
                 children: [
                   AspectRatio(
-                    aspectRatio: post.aspectRatio,
+                    aspectRatio: isPop && isLong ? 0.5 : post.aspectRatio,
                     // clip incoming child to avoid overflow that might be
                     // caused by blurExplicit enabled
-                    child: flightDirection == HeroFlightDirection.pop
-                        ? ClipRect(child: toHero.child)
-                        : toHero.child,
+                    child: isPop ? ClipRect(child: toHero.child) : toHero.child,
                   ),
                 ],
               );
