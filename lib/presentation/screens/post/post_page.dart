@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/screens/post/post_unknown.dart';
@@ -23,17 +22,14 @@ class PostPage extends HookConsumerWidget {
     super.key,
     required this.beginPage,
     required this.posts,
-    required this.timelineController,
-    required this.args,
   });
 
   final int beginPage;
   final Iterable<Post> posts;
-  final TimelineController timelineController;
-  final PageArgs args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final timelineController = ref.watch(timelineControllerProvider);
     const loadMoreThreshold = 90;
     final currentPage = useState(beginPage);
     final pageController =
@@ -56,98 +52,95 @@ class PostPage extends HookConsumerWidget {
       return Wakelock.disable;
     }, []);
 
-    return ProviderScope(
-      overrides: [pageArgsProvider.overrideWith((ref) => args)],
-      child: WillPopScope(
-        onWillPop: () async {
-          ref.watch(fullscreenStateProvider.notifier).reset();
-          context.scaffoldMessenger.removeCurrentSnackBar();
-          return true;
-        },
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: StyledOverlayRegion(
-            nightMode: true,
-            child: Stack(
-              children: [
-                ExtendedImageGesturePageView.builder(
-                  controller: pageController,
-                  onPageChanged: (index) async {
-                    timelineController.scrollTo(index);
-                    currentPage.value = index;
-                    context.scaffoldMessenger.hideCurrentSnackBar();
-                    if (loadMore == null) return;
+    return WillPopScope(
+      onWillPop: () async {
+        ref.watch(fullscreenStateProvider.notifier).reset();
+        context.scaffoldMessenger.removeCurrentSnackBar();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: StyledOverlayRegion(
+          nightMode: true,
+          child: Stack(
+            children: [
+              ExtendedImageGesturePageView.builder(
+                controller: pageController,
+                onPageChanged: (index) async {
+                  timelineController.scrollTo(index);
+                  currentPage.value = index;
+                  context.scaffoldMessenger.hideCurrentSnackBar();
+                  if (loadMore == null) return;
 
-                    final offset = index + 1;
-                    final threshold =
-                        posts.length / 100 * (100 - loadMoreThreshold);
-                    if (offset + threshold > posts.length - 1) {
-                      isLoadingMore.value = true;
-                      await loadMore();
-                      await Future.delayed(kThemeAnimationDuration, () {
-                        isLoadingMore.value = false;
-                      });
-                    }
-                  },
-                  preloadPagesCount: 1,
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    final post = posts.elementAt(index);
-                    final Widget widget;
-                    switch (post.content.type) {
-                      case PostType.photo:
-                        widget = PostImage(post: post);
-                        break;
-                      case PostType.video:
-                        widget = PostVideo(
-                          post: post,
-                          active: currentPage.value == index,
-                          onToolboxVisibilityChange: (visible) {
-                            showAppbar.value = visible;
-                          },
-                        );
-                        break;
-                      default:
-                        widget = PostUnknown(post: post);
-                        break;
-                    }
-                    return ColoredBox(
-                      color: Colors.black,
-                      child: HeroMode(
-                        enabled: index == currentPage.value,
-                        child: widget,
-                      ),
-                    );
-                  },
+                  final offset = index + 1;
+                  final threshold =
+                      posts.length / 100 * (100 - loadMoreThreshold);
+                  if (offset + threshold > posts.length - 1) {
+                    isLoadingMore.value = true;
+                    await loadMore();
+                    await Future.delayed(kThemeAnimationDuration, () {
+                      isLoadingMore.value = false;
+                    });
+                  }
+                },
+                preloadPagesCount: 1,
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  final post = posts.elementAt(index);
+                  final Widget widget;
+                  switch (post.content.type) {
+                    case PostType.photo:
+                      widget = PostImage(post: post);
+                      break;
+                    case PostType.video:
+                      widget = PostVideo(
+                        post: post,
+                        active: currentPage.value == index,
+                        onToolboxVisibilityChange: (visible) {
+                          showAppbar.value = visible;
+                        },
+                      );
+                      break;
+                    default:
+                      widget = PostUnknown(post: post);
+                      break;
+                  }
+                  return ColoredBox(
+                    color: Colors.black,
+                    child: HeroMode(
+                      enabled: index == currentPage.value,
+                      child: widget,
+                    ),
+                  );
+                },
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: SlideFadeVisibility(
+                  direction: HidingDirection.toTop,
+                  visible: showAppbar.value,
+                  child: _PostAppBar(
+                    subtitle: post.describeTags,
+                    title: isLoadingMore.value
+                        ? '#${currentPage.value + 1} of (loading...)'
+                        : '#${currentPage.value + 1} of ${posts.length}',
+                  ),
                 ),
+              ),
+              if (!post.content.isVideo)
                 Positioned(
-                  top: 0,
+                  bottom: 0,
                   left: 0,
                   right: 0,
                   child: SlideFadeVisibility(
-                    direction: HidingDirection.toTop,
-                    visible: showAppbar.value,
-                    child: _PostAppBar(
-                      subtitle: post.describeTags,
-                      title: isLoadingMore.value
-                          ? '#${currentPage.value + 1} of (loading...)'
-                          : '#${currentPage.value + 1} of ${posts.length}',
-                    ),
+                    direction: HidingDirection.toBottom,
+                    visible: !fullscreen,
+                    child: PostToolbox(post),
                   ),
                 ),
-                if (!post.content.isVideo)
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: SlideFadeVisibility(
-                      direction: HidingDirection.toBottom,
-                      visible: !fullscreen,
-                      child: PostToolbox(post),
-                    ),
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
