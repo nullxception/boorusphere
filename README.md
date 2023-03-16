@@ -16,11 +16,23 @@ Simple, content-focused booru viewer for Android
 # Preview
 
 <p align="center">
-    <img width="23%" src="assets/previews/screen0.jpg" alt="screenshot of application menu"/>
-    <img width="23%" src="assets/previews/screen1.jpg" alt="screenshot of search result"/>
-    <img width="23%" src="assets/previews/screen2.jpg" alt="screenshot of photo preview"/>
-    <img width="23%" src="assets/previews/screen3.jpg" alt="screenshot of video preview"/>
+    <img width="24.5%" src="assets/previews/drawer.webp" />
+    <img width="24.5%" src="assets/previews/home.webp" />
+    <img width="24.5%" src="assets/previews/search.webp" />
+    <img width="24.5%" src="assets/previews/favorites.webp" />
 </p>
+
+# Features
+
+- Simple and intuitive UI
+- Support various booru-based imageboards
+- Support playing videos and animated images (GIF, WEBM)
+- Save favorites content
+- Search with tag suggestion
+- Download images and videos
+- Block tags from search result
+- Backup and restore data
+- and many more ...
 
 # Building
 
