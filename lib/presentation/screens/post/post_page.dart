@@ -24,12 +24,10 @@ class PostPage extends HookConsumerWidget {
     required this.beginPage,
     required this.posts,
     required this.timelineController,
-    this.heroTagBuilder,
   });
 
   final int beginPage;
   final Iterable<Post> posts;
-  final Object Function(Post)? heroTagBuilder;
   final TimelineController timelineController;
 
   @override
@@ -95,16 +93,14 @@ class PostPage extends HookConsumerWidget {
                   itemCount: posts.length,
                   itemBuilder: (context, index) {
                     final post = posts.elementAt(index);
-                    final heroTag = heroTagBuilder?.call(post);
                     final Widget widget;
                     switch (post.content.type) {
                       case PostType.photo:
-                        widget = PostImage(post: post, heroTag: heroTag);
+                        widget = PostImage(post: post);
                         break;
                       case PostType.video:
                         widget = PostVideo(
                           post: post,
-                          heroTag: heroTag,
                           active: currentPage.value == index,
                           onToolboxVisibilityChange: (visible) {
                             showAppbar.value = visible;
@@ -112,7 +108,7 @@ class PostPage extends HookConsumerWidget {
                         );
                         break;
                       default:
-                        widget = PostUnknown(post: post, heroTag: heroTag);
+                        widget = PostUnknown(post: post);
                         break;
                     }
                     return ColoredBox(

@@ -52,4 +52,8 @@ extension PostExt on Post {
 
     return sample;
   }
+
+  String get heroTag {
+    return '$id-$serverId';
+  }
 }

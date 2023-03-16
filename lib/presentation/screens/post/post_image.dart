@@ -22,11 +22,9 @@ class PostImage extends HookConsumerWidget {
   const PostImage({
     super.key,
     required this.post,
-    this.heroTag,
   });
 
   final Post post;
-  final Object? heroTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,7 +69,7 @@ class PostImage extends HookConsumerWidget {
           if (isBlur.value)
             Hero(
               key: imageHeroKey,
-              tag: heroTag ?? post.id,
+              tag: post.heroTag,
               child: PostPlaceholderImage(
                 post: post,
                 shouldBlur: true,
@@ -98,7 +96,7 @@ class PostImage extends HookConsumerWidget {
                   state: state,
                   child: Hero(
                     key: imageHeroKey,
-                    tag: heroTag ?? post.id,
+                    tag: post.heroTag,
                     child: state.isCompleted
                         ? state.completedWidget
                         : PostPlaceholderImage(

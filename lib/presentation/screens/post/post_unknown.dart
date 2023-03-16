@@ -12,10 +12,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PostUnknown extends ConsumerWidget {
-  const PostUnknown({super.key, required this.post, this.heroTag});
+  const PostUnknown({super.key, required this.post});
 
   final Post post;
-  final Object? heroTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +28,7 @@ class PostUnknown extends ConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         Hero(
-          tag: heroTag ?? post.id,
+          tag: post.heroTag,
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: shouldBlurExplicit && post.rating.isExplicit,

@@ -53,10 +53,6 @@ class _ThumbnailCard extends HookConsumerWidget {
   final int index;
   final Iterable<Post> posts;
 
-  String buildHeroTag(Post post) {
-    return '${post.id}-${post.serverId}';
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final post = useMemoized(() => posts.elementAt(index));
@@ -77,7 +73,7 @@ class _ThumbnailCard extends HookConsumerWidget {
         clipBehavior: Clip.hardEdge,
         child: GestureDetector(
           child: Hero(
-            tag: buildHeroTag(post),
+            tag: post.heroTag,
             placeholderBuilder: (context, heroSize, child) => child,
             flightShuttleBuilder: (flightContext, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
@@ -108,7 +104,6 @@ class _ThumbnailCard extends HookConsumerWidget {
                   return PostPage(
                     beginPage: index,
                     posts: posts,
-                    heroTagBuilder: buildHeroTag,
                     timelineController: ref.read(timelineControllerProvider),
                   );
                 },

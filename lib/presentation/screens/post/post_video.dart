@@ -20,12 +20,10 @@ class PostVideo extends HookConsumerWidget {
     super.key,
     required this.post,
     required this.active,
-    this.heroTag,
     required this.onToolboxVisibilityChange,
   });
 
   final Post post;
-  final Object? heroTag;
   final bool active;
   final void Function(bool visible) onToolboxVisibilityChange;
 
@@ -92,7 +90,7 @@ class PostVideo extends HookConsumerWidget {
       children: [
         Hero(
           key: ValueKey(post),
-          tag: heroTag ?? post.id,
+          tag: post.heroTag,
           child: Center(
             child: AspectRatio(
               aspectRatio: post.aspectRatio,
