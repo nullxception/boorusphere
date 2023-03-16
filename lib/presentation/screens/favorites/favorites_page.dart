@@ -93,12 +93,6 @@ class _Pager extends ConsumerWidget {
           ],
         ),
         bottomNavigationBar: Material(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(18),
-              topRight: Radius.circular(18),
-            ),
-          ),
           color: context.theme.appBarTheme.backgroundColor,
           surfaceTintColor: context.colorScheme.surfaceTint,
           elevation: 3,
@@ -109,6 +103,7 @@ class _Pager extends ConsumerWidget {
               padding: const EdgeInsets.all(8),
               isScrollable: true,
               labelPadding: const EdgeInsets.only(left: 8, right: 8),
+              splashFactory: NoSplash.splashFactory,
               tabs: [
                 for (final page in pages)
                   Padding(
@@ -117,7 +112,7 @@ class _Pager extends ConsumerWidget {
                       text: page.key.name,
                       icon: Favicon(
                         url: page.key.homepage,
-                        size: 24,
+                        size: 16,
                         shape: BoxShape.rectangle,
                       ),
                     ),
