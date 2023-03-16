@@ -2,8 +2,8 @@ import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
 import 'package:boorusphere/presentation/screens/home/home_status.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
@@ -19,7 +19,7 @@ class HomeContent extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageState = ref.watch(pageStateProvider);
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     final serverData = ref.watch(serverDataStateProvider);
     final blockedTags = ref.watch(blockedTagsStateProvider.select(
       (state) => state.values

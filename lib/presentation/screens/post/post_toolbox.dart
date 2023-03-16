@@ -3,7 +3,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
-import 'package:boorusphere/presentation/screens/post/post_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
@@ -63,8 +63,8 @@ class PostDetailsButton extends ConsumerWidget {
       padding: const EdgeInsets.all(16),
       color: Colors.white,
       icon: const Icon(Icons.info),
-      onPressed: () => context.router.push(
-          PostDetailsRoute(post: post, args: ref.read(postPageArgsProvider))),
+      onPressed: () => context.router
+          .push(PostDetailsRoute(post: post, args: ref.read(pageArgsProvider))),
     );
   }
 }

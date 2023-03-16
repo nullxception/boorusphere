@@ -20,9 +20,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-final homePageArgsProvider =
-    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
-
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, this.args});
 
@@ -44,7 +41,7 @@ class HomePage extends ConsumerWidget {
       body: StyledOverlayRegion(
         child: ProviderScope(
           overrides: [
-            homePageArgsProvider.overrideWith((ref) => pageArgs),
+            pageArgsProvider.overrideWith((ref) => pageArgs),
             pageStateProvider.overrideWith(
               (ref) => PageState(ref, pageArgs.serverId),
             ),

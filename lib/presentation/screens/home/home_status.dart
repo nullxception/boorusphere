@@ -8,7 +8,7 @@ import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -96,7 +96,7 @@ class _ErrorStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     final server =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
 

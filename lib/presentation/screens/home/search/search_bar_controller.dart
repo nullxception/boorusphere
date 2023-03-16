@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,7 +42,7 @@ class SearchBarController extends ChangeNotifier {
   void submit(BuildContext context, String newValue) {
     _value = initial;
     close();
-    final pageArgs = ref.read(homePageArgsProvider);
+    final pageArgs = ref.read(pageArgsProvider);
     context.router.push(HomeRoute(
       args: pageArgs.copyWith(query: newValue),
     ));

@@ -15,9 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-final favoritesPageArgsProvider =
-    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
-
 class FavoritesPage extends ConsumerWidget {
   const FavoritesPage({super.key, this.args});
   final PageArgs? args;
@@ -29,7 +26,7 @@ class FavoritesPage extends ConsumerWidget {
         ref.read(serverSettingStateProvider.select((it) => it.active));
     final pageArgs = args ?? PageArgs(serverId: savedServer.id);
     return ProviderScope(
-      overrides: [favoritesPageArgsProvider.overrideWith((ref) => pageArgs)],
+      overrides: [pageArgsProvider.overrideWith((ref) => pageArgs)],
       child: favoritePostState.isNotEmpty
           ? _Pager(favoritePostState)
           : _EmptyView(),
@@ -69,7 +66,7 @@ class _Pager extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverDataState = ref.watch(serverDataStateProvider);
-    final pageArgs = ref.watch(favoritesPageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
 
     final pages = posts
         .groupListsBy(

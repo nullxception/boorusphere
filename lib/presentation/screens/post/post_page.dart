@@ -18,9 +18,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wakelock/wakelock.dart';
 
-final postPageArgsProvider =
-    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
-
 class PostPage extends HookConsumerWidget {
   const PostPage({
     super.key,
@@ -61,7 +58,7 @@ class PostPage extends HookConsumerWidget {
 
     return ProviderScope(
       overrides: [
-        postPageArgsProvider.overrideWith((ref) => timelineController.pageArgs)
+        pageArgsProvider.overrideWith((ref) => timelineController.pageArgs)
       ],
       child: WillPopScope(
         onWillPop: () async {

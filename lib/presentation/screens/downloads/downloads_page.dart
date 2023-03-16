@@ -11,9 +11,6 @@ import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final downloadsPageArgsProvider =
-    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
-
 class DownloadsPage extends ConsumerWidget {
   const DownloadsPage({super.key, this.args});
   final PageArgs? args;
@@ -29,7 +26,7 @@ class DownloadsPage extends ConsumerWidget {
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));
 
     return ProviderScope(
-      overrides: [downloadsPageArgsProvider.overrideWith((ref) => pageArgs)],
+      overrides: [pageArgsProvider.overrideWith((ref) => pageArgs)],
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.t.downloads.title),

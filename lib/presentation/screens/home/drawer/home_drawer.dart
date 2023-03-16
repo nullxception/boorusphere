@@ -8,7 +8,7 @@ import 'package:boorusphere/presentation/provider/settings/server_setting_state.
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
@@ -82,7 +82,7 @@ class _Footer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +230,7 @@ class AppVersionTile extends ConsumerWidget {
 class _HomeTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     return Visibility(
       visible: pageArgs.query.isNotEmpty,
       child: ListTile(
@@ -251,7 +251,7 @@ class _ServerSelection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     final serverActive =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
 

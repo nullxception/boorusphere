@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
@@ -21,7 +21,7 @@ class SearchSuggestion extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchBar = ref.watch(searchBarControllerProvider);
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     final server =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
     final suggestion = ref.watch(suggestionStateProvider);

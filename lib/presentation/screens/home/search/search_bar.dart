@@ -4,7 +4,7 @@ import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.d
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
@@ -149,7 +149,7 @@ class _SearchField extends HookConsumerWidget {
     final searchBar = ref.watch(searchBarControllerProvider);
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     final server =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
 
@@ -293,7 +293,7 @@ class _LeadingButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(homePageArgsProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
     final server =
         ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
     final searchBar = ref.watch(searchBarControllerProvider);

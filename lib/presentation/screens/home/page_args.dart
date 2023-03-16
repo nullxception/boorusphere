@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'page_args.freezed.dart';
 
@@ -10,3 +11,6 @@ class PageArgs with _$PageArgs {
   }) = _PageArgs;
   const PageArgs._();
 }
+
+final pageArgsProvider =
+    Provider.autoDispose<PageArgs>((ref) => throw UnimplementedError());
