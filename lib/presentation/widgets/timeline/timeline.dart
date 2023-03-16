@@ -5,6 +5,7 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/rematerial.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/post/post_page.dart';
 import 'package:boorusphere/presentation/utils/entity/content.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -105,6 +106,7 @@ class _ThumbnailCard extends HookConsumerWidget {
                     beginPage: index,
                     posts: posts,
                     timelineController: ref.read(timelineControllerProvider),
+                    args: ref.read(pageArgsProvider),
                   );
                 },
               ),

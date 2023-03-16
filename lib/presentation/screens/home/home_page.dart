@@ -56,7 +56,6 @@ class HomePage extends ConsumerWidget {
             ),
             timelineControllerProvider.overrideWith(
               (ref) => TimelineController(
-                pageArgs: pageArgs,
                 scrollController: AutoScrollController(
                   viewportBoundaryGetter: () => _timelineBoundary(context),
                 ),

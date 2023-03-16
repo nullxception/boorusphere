@@ -26,7 +26,11 @@ class FavoritesPage extends ConsumerWidget {
         ref.read(serverSettingStateProvider.select((it) => it.active));
     final pageArgs = args ?? PageArgs(serverId: savedServer.id);
     return ProviderScope(
-      overrides: [pageArgsProvider.overrideWith((ref) => pageArgs)],
+      overrides: [
+        pageArgsProvider.overrideWith((ref) => pageArgs),
+        timelineControllerProvider.overrideWith((ref) =>
+            TimelineController(scrollController: AutoScrollController())),
+      ],
       child: favoritePostState.isNotEmpty
           ? _Pager(favoritePostState)
           : _EmptyView(),
@@ -66,7 +70,6 @@ class _Pager extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverDataState = ref.watch(serverDataStateProvider);
-    final pageArgs = ref.watch(pageArgsProvider);
 
     final pages = posts
         .groupListsBy(
@@ -86,17 +89,7 @@ class _Pager extends ConsumerWidget {
         body: TabBarView(
           children: [
             for (final page in pages)
-              ProviderScope(
-                overrides: [
-                  timelineControllerProvider.overrideWith(
-                    (ref) => TimelineController(
-                      pageArgs: pageArgs,
-                      scrollController: AutoScrollController(),
-                    ),
-                  ),
-                ],
-                child: _Content(server: page.key, posts: page.value),
-              ),
+              _Content(server: page.key, posts: page.value),
           ],
         ),
         bottomNavigationBar: Material(

@@ -24,11 +24,13 @@ class PostPage extends HookConsumerWidget {
     required this.beginPage,
     required this.posts,
     required this.timelineController,
+    required this.args,
   });
 
   final int beginPage;
   final Iterable<Post> posts;
   final TimelineController timelineController;
+  final PageArgs args;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,9 +57,7 @@ class PostPage extends HookConsumerWidget {
     }, []);
 
     return ProviderScope(
-      overrides: [
-        pageArgsProvider.overrideWith((ref) => timelineController.pageArgs)
-      ],
+      overrides: [pageArgsProvider.overrideWith((ref) => args)],
       child: WillPopScope(
         onWillPop: () async {
           ref.watch(fullscreenStateProvider.notifier).reset();
