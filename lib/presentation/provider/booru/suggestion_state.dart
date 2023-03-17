@@ -18,13 +18,17 @@ class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
 
   ServerData get server => ref.read(serverDataStateProvider).getById(serverId);
 
+  String? _lastQuery;
+
   Future<void> get(String query) async {
+    if (_lastQuery == query) return;
     if (server == ServerData.empty) {
       state = const FetchResult.data(ISetConst({}));
       return;
     }
 
     state = FetchResult.loading(state.data);
+    _lastQuery = query;
     try {
       final res =
           await ref.read(booruRepoProvider(server)).getSuggestion(query);
@@ -35,10 +39,11 @@ class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
               .where((it) =>
                   !blockedTags.get().values.map((e) => e.name).contains(it))
               .toISet();
-
+          if (query != _lastQuery) return;
           state = FetchResult.data(result);
         },
         error: (res, error, stackTrace) {
+          if (query != _lastQuery) return;
           state = FetchResult.error(
             state.data,
             error: error,
@@ -48,6 +53,7 @@ class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
         },
       );
     } catch (e, s) {
+      if (query != _lastQuery) return;
       state = FetchResult.error(state.data, error: e, stackTrace: s);
     }
   }
