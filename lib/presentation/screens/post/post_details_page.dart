@@ -5,7 +5,6 @@ import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
-import 'package:boorusphere/presentation/screens/post/tag.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
@@ -250,11 +249,17 @@ class _TagsView extends StatelessWidget {
         Wrap(
           children: [
             for (final tag in tags)
-              Tag(
-                tag: tag,
-                onPressed: (isActive) => onSelected?.call(tag),
-                active: isSelected?.call(tag) ?? false,
-              )
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: FilterChip(
+                  label: Text(tag),
+                  labelPadding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  onSelected: (value) => onSelected?.call(tag),
+                  selected: isSelected?.call(tag) ?? false,
+                  showCheckmark: false,
+                ),
+              ),
           ],
         ),
       ],
