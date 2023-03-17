@@ -213,9 +213,7 @@ class SearchSuggestion extends HookConsumerWidget {
                       },
                     ),
                   const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: kBottomNavigationBarHeight + 16,
-                    ),
+                    child: SizedBox(height: kBottomNavigationBarHeight + 38),
                   )
                 ],
               ),
