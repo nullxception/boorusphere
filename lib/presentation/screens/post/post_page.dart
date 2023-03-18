@@ -79,7 +79,9 @@ class PostPage extends HookConsumerWidget {
                     isLoadingMore.value = true;
                     await loadMore();
                     await Future.delayed(kThemeAnimationDuration, () {
-                      isLoadingMore.value = false;
+                      if (context.mounted) {
+                        isLoadingMore.value = false;
+                      }
                     });
                   }
                 },
