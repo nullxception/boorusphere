@@ -8,7 +8,7 @@ part 'server_data_state.g.dart';
 @Riverpod(keepAlive: true)
 class ServerDataState extends _$ServerDataState {
   @override
-  List<ServerData> build() {
+  Iterable<ServerData> build() {
     // execute it anonymously since we can't update other state
     // while constructing a state
     Future(_populate);

@@ -37,7 +37,7 @@ class BooruRepoImpl implements BooruRepo {
       ];
 
   @override
-  Future<BooruResult<List<String>>> getSuggestion(String query) async {
+  Future<BooruResult<Set<String>>> getSuggestion(String query) async {
     final queries = query.toWordList();
     final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
     final res = await networkSource.fetchSuggestion(server, word);
@@ -50,16 +50,16 @@ class BooruRepoImpl implements BooruRepo {
         .parseSuggestion(res);
 
     if (data.isEmpty && word.isEmpty) {
-      return const BooruResult.data([]);
+      return const BooruResult.data({});
     } else if (data.isEmpty) {
       return BooruResult.error(res, error: BooruError.empty);
     } else {
-      return BooruResult.data(data.toList());
+      return BooruResult.data(data.toSet());
     }
   }
 
   @override
-  Future<BooruResult<List<Post>>> getPage(PageOption option, int index) async {
+  Future<BooruResult<Set<Post>>> getPage(PageOption option, int index) async {
     final url = server.searchUrlOf(
         option.query, index, option.searchRating, option.limit);
     final res = await networkSource.fetchPage(url);
@@ -73,6 +73,6 @@ class BooruRepoImpl implements BooruRepo {
 
     return data.isEmpty
         ? BooruResult.error(res, error: BooruError.empty)
-        : BooruResult.data(data, src: url);
+        : BooruResult.data(data.toSet(), src: url);
   }
 }

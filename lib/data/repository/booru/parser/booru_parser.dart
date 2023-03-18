@@ -9,15 +9,15 @@ abstract class BooruParser {
   final ServerData server;
 
   bool canParsePage(Response res);
-  List<Post> parsePage(Response res) {
+  Iterable<Post> parsePage(Response res) {
     debugPrint('$runtimeType.parsePage: ${res.realUri}');
     return [];
   }
 
   bool canParseSuggestion(Response res);
-  Set<String> parseSuggestion(Response res) {
+  Iterable<String> parseSuggestion(Response res) {
     debugPrint('$runtimeType.parseSuggestion: ${res.realUri}');
-    return {};
+    return [];
   }
 
   String normalizeUrl(String urlString) {

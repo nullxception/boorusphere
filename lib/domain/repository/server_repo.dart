@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 
 abstract class ServerRepo {
-  List<ServerData> get servers;
+  Iterable<ServerData> get servers;
   late Map<String, ServerData> defaults;
   Future<void> populate();
   Future<void> add(ServerData data);

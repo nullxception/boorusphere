@@ -2,16 +2,15 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final suggestionStateProvider = StateNotifierProvider.autoDispose<
-    SuggestionState,
-    FetchResult<ISet<String>>>((ref) => throw UnimplementedError());
+    SuggestionState, FetchResult<Iterable<String>>>((ref) {
+  throw UnimplementedError();
+});
 
-class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
-  SuggestionState(this.ref, this.serverId)
-      : super(const FetchResult.idle(ISetConst({})));
+class SuggestionState extends StateNotifier<FetchResult<Iterable<String>>> {
+  SuggestionState(this.ref, this.serverId) : super(const FetchResult.idle([]));
 
   final Ref ref;
   final String serverId;
@@ -23,7 +22,7 @@ class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
   Future<void> get(String query) async {
     if (_lastQuery == query) return;
     if (server == ServerData.empty) {
-      state = const FetchResult.data(ISetConst({}));
+      state = const FetchResult.data([]);
       return;
     }
 
@@ -38,7 +37,7 @@ class SuggestionState extends StateNotifier<FetchResult<ISet<String>>> {
           final result = data
               .where((it) =>
                   !blockedTags.get().values.map((e) => e.name).contains(it))
-              .toISet();
+              .toSet();
           if (query != _lastQuery) return;
           state = FetchResult.data(result);
         },

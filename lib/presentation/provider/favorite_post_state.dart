@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'favorite_post_state.g.dart';
@@ -8,7 +7,7 @@ part 'favorite_post_state.g.dart';
 @riverpod
 class FavoritePostState extends _$FavoritePostState {
   @override
-  IList<Post> build() {
+  Iterable<Post> build() {
     final repo = ref.read(favoritePostRepoProvider);
     return repo.get();
   }
