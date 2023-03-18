@@ -11,6 +11,5 @@ class FetchResult<T> with _$FetchResult<T> {
     T data, {
     Object? error,
     StackTrace? stackTrace,
-    @Default(0) int code,
   }) = ErrorFetchResult;
 }

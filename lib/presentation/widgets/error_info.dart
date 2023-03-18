@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -25,7 +24,7 @@ class ErrorInfo extends HookWidget {
   final EdgeInsets padding;
 
   String get description {
-    final e = error is DioError ? (error as DioError).error : error;
+    final e = error;
     if (e is HandshakeException) {
       return 'Cannot establish a secure connection';
     } else if (e is HttpException) {

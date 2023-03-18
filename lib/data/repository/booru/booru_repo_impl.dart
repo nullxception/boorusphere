@@ -1,6 +1,4 @@
 import 'package:boorusphere/data/repository/booru/datasource/booru_network_source.dart';
-import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
-import 'package:boorusphere/data/repository/booru/entity/booru_result.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
@@ -15,7 +13,6 @@ import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dar
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
-import 'package:boorusphere/utils/extensions/string.dart';
 
 class BooruRepoImpl implements BooruRepo {
   BooruRepoImpl({required this.networkSource, required this.server});
@@ -37,42 +34,24 @@ class BooruRepoImpl implements BooruRepo {
       ];
 
   @override
-  Future<BooruResult<Set<String>>> getSuggestion(String query) async {
-    final queries = query.toWordList();
-    final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
+  Future<Set<String>> getSuggestion(String word) async {
     final res = await networkSource.fetchSuggestion(server, word);
-    if (res.statusCode != 200) {
-      return BooruResult.error(res, error: BooruError.httpError);
-    }
-
     final data = parser
         .firstWhere((it) => it.canParseSuggestion(res), orElse: NoParser.new)
         .parseSuggestion(res);
 
-    if (data.isEmpty && word.isEmpty) {
-      return const BooruResult.data({});
-    } else if (data.isEmpty) {
-      return BooruResult.error(res, error: BooruError.empty);
-    } else {
-      return BooruResult.data(data.toSet());
-    }
+    return data.toSet();
   }
 
   @override
-  Future<BooruResult<Set<Post>>> getPage(PageOption option, int index) async {
+  Future<Set<Post>> getPage(PageOption option, int index) async {
     final url = server.searchUrlOf(
         option.query, index, option.searchRating, option.limit);
     final res = await networkSource.fetchPage(url);
-    if (res.statusCode != 200) {
-      return BooruResult.error(res, error: BooruError.httpError);
-    }
-
     final data = parser
         .firstWhere((it) => it.canParsePage(res), orElse: NoParser.new)
         .parsePage(res);
 
-    return data.isEmpty
-        ? BooruResult.error(res, error: BooruError.empty)
-        : BooruResult.data(data.toSet(), src: url);
+    return data.toSet();
   }
 }

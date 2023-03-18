@@ -11,6 +11,7 @@ import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -188,18 +189,19 @@ class SearchSuggestion extends HookConsumerWidget {
                           ),
                         );
                       },
-                      error: (data, error, stackTrace, code) {
+                      error: (data, error, stackTrace) {
                         final Object? msg;
                         if (error == BooruError.empty) {
                           msg = context.t.suggestion
                               .empty(query: searchBar.value);
-                        } else if (error == BooruError.httpError) {
+                        } else if (error is DioError &&
+                            error.response?.statusCode != null) {
                           msg = context.t.suggestion
                               .httpError(
                                 query: searchBar.value,
                                 serverName: server.name,
                               )
-                              .withHttpErrCode(code);
+                              .withDioErrorCode(error);
                         } else {
                           msg = error;
                         }

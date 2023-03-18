@@ -91,39 +91,36 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
       return;
     }
 
-    final pageResult = await repo.getPage(state.data.option, _page);
-    return pageResult.when<void>(
-      data: (posts, src) async {
-        if (posts.isEmpty) {
-          state = FetchResult.error(state.data, error: BooruError.empty);
-          return;
-        }
+    try {
+      final posts = await repo.getPage(state.data.option, _page);
+      if (posts.isEmpty) {
+        state = FetchResult.error(state.data, error: BooruError.empty);
+        return;
+      }
 
-        _page++;
+      _page++;
 
-        final newPosts =
-            posts.where((it) => !_posts.any((post) => post.id == it.id));
-        final displayedPosts =
-            newPosts.where((it) => !it.allTags.any(blockedTags.contains));
-        if (displayedPosts.isEmpty) {
-          if (_skipCount > 3) return;
-          _skipCount++;
-          return Future.delayed(const Duration(milliseconds: 150), _fetch);
-        }
-        _skipCount = 0;
+      final newPosts =
+          posts.where((it) => !_posts.any((post) => post.id == it.id));
+      final displayedPosts =
+          newPosts.where((it) => !it.allTags.any(blockedTags.contains));
+      if (displayedPosts.isEmpty) {
+        if (_skipCount > 3) return;
+        _skipCount++;
+        return Future.delayed(const Duration(milliseconds: 150), _fetch);
+      }
+      _skipCount = 0;
 
-        _posts.addAll(posts);
-        state = FetchResult.data(state.data.copyWith(posts: _posts));
-      },
-      error: (res, error, stackTrace) {
-        state = FetchResult.error(
-          state.data,
-          error: error,
-          stackTrace: stackTrace,
-          code: res.statusCode ?? 0,
-        );
-      },
-    );
+      _posts.addAll(posts);
+      if (_posts.isEmpty) {
+        state = FetchResult.error(state.data, error: BooruError.empty);
+        return;
+      }
+
+      state = FetchResult.data(state.data.copyWith(posts: _posts));
+    } catch (err, stack) {
+      state = FetchResult.error(state.data, error: err, stackTrace: stack);
+    }
   }
 
   void reset() {

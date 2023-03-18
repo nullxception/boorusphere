@@ -12,6 +12,7 @@ import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -47,12 +48,11 @@ class HomeStatus extends HookConsumerWidget {
               child: const RefreshProgressIndicator(),
             );
           },
-          error: (data, error, stackTrace, code) {
+          error: (data, error, stackTrace) {
             return _ErrorStatus(
               data: data,
               error: error,
               stackTrace: stackTrace,
-              code: code,
             );
           },
         ),
@@ -63,34 +63,30 @@ class HomeStatus extends HookConsumerWidget {
 
 class _ErrorStatus extends ConsumerWidget {
   const _ErrorStatus({
-    required this.code,
     required this.data,
     this.error,
     this.stackTrace,
   });
 
-  final int code;
   final PageData data;
   final Object? error;
   final StackTrace? stackTrace;
 
   Object? buildError(BuildContext context, ServerData server) {
-    final t = context.t;
-    final q = data.option.query;
-    final size = data.posts.length;
-    switch (error) {
-      case BooruError.httpError:
-        return t.pageStatus
-            .httpError(serverName: server.name)
-            .withHttpErrCode(code);
-      case BooruError.empty:
-        return q.isEmpty
-            ? t.pageStatus.noResult(n: size)
-            : t.pageStatus.noResultForQuery(n: size, query: q);
-      case BooruError.tagsBlocked:
-        return t.pageStatus.blocked(query: q);
-      default:
-        return error;
+    final e = error;
+    if (e is DioError && e.response?.statusCode != null) {
+      return context.t.pageStatus
+          .httpError(serverName: server.name)
+          .withDioErrorCode(e);
+    } else if (e == BooruError.empty) {
+      return data.option.query.isEmpty
+          ? context.t.pageStatus.noResult(n: data.posts.length)
+          : context.t.pageStatus
+              .noResultForQuery(n: data.posts.length, query: data.option.query);
+    } else if (e == BooruError.tagsBlocked) {
+      return context.t.pageStatus.blocked(query: data.option.query);
+    } else {
+      return e;
     }
   }
 

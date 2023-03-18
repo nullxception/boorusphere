@@ -1,7 +1,9 @@
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final suggestionStateProvider = StateNotifierProvider.autoDispose<
@@ -29,31 +31,25 @@ class SuggestionState extends StateNotifier<FetchResult<Iterable<String>>> {
     state = FetchResult.loading(state.data);
     _lastQuery = query;
     try {
-      final res =
-          await ref.read(booruRepoProvider(server)).getSuggestion(query);
-      res.when(
-        data: (data, src) {
-          final blockedTags = ref.read(blockedTagsRepoProvider);
-          final result = data
-              .where((it) =>
-                  !blockedTags.get().values.map((e) => e.name).contains(it))
-              .toSet();
-          if (query != _lastQuery) return;
-          state = FetchResult.data(result);
-        },
-        error: (res, error, stackTrace) {
-          if (query != _lastQuery) return;
-          state = FetchResult.error(
-            state.data,
-            error: error,
-            stackTrace: stackTrace,
-            code: res.statusCode ?? 0,
-          );
-        },
-      );
-    } catch (e, s) {
+      final queries = query.toWordList();
+      final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
+      final res = await ref.read(booruRepoProvider(server)).getSuggestion(word);
+      final blockedTags = ref.read(blockedTagsRepoProvider);
+      final result = res
+          .where(
+              (it) => !blockedTags.get().values.map((e) => e.name).contains(it))
+          .toSet();
       if (query != _lastQuery) return;
-      state = FetchResult.error(state.data, error: e, stackTrace: s);
+
+      if (result.isEmpty && word.isNotEmpty) {
+        state = FetchResult.error(state.data, error: BooruError.empty);
+        return;
+      }
+
+      state = FetchResult.data(result);
+    } catch (err, stack) {
+      if (query != _lastQuery) return;
+      state = FetchResult.error(state.data, error: err, stackTrace: stack);
     }
   }
 }
