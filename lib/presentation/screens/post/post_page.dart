@@ -13,6 +13,7 @@ import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wakelock/wakelock.dart';
@@ -67,8 +68,12 @@ class PostPage extends HookConsumerWidget {
               ExtendedImageGesturePageView.builder(
                 controller: pageController,
                 onPageChanged: (index) async {
+                  SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                    if (context.mounted) {
+                      currentPage.value = index;
+                    }
+                  });
                   timelineController.scrollTo(index);
-                  currentPage.value = index;
                   context.scaffoldMessenger.hideCurrentSnackBar();
                   if (loadMore == null) return;
 
