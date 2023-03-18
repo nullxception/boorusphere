@@ -10,6 +10,7 @@ import 'package:boorusphere/data/repository/booru/parser/e621json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/no_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
@@ -40,57 +41,38 @@ class BooruRepoImpl implements BooruRepo {
     final queries = query.toWordList();
     final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
     final res = await networkSource.fetchSuggestion(server, word);
-    try {
-      if (res.statusCode != 200) {
-        throw BooruError.httpError;
-      }
+    if (res.statusCode != 200) {
+      return BooruResult.error(res, error: BooruError.httpError);
+    }
 
-      final data = parser
-          .firstWhere(
-            (it) => it.canParseSuggestion(res),
-            orElse: () => throw BooruError.empty,
-          )
-          .parseSuggestion(res);
+    final data = parser
+        .firstWhere((it) => it.canParseSuggestion(res), orElse: NoParser.new)
+        .parseSuggestion(res);
 
+    if (data.isEmpty && word.isEmpty) {
+      return const BooruResult.data([]);
+    } else if (data.isEmpty) {
+      return BooruResult.error(res, error: BooruError.empty);
+    } else {
       return BooruResult.data(data.toList());
-    } catch (e, s) {
-      if (query.isEmpty) {
-        // the server did not support empty tag matches (hot/trending tags)
-        return const BooruResult.data([]);
-      } else {
-        return BooruResult.error(res, error: e, stackTrace: s);
-      }
     }
   }
 
   @override
-  Future<BooruResult<List<Post>>> getPage(
-    PageOption option,
-    int index,
-  ) async {
+  Future<BooruResult<List<Post>>> getPage(PageOption option, int index) async {
     final url = server.searchUrlOf(
-      option.query,
-      index,
-      option.searchRating,
-      option.limit,
-    );
+        option.query, index, option.searchRating, option.limit);
     final res = await networkSource.fetchPage(url);
     if (res.statusCode != 200) {
       return BooruResult.error(res, error: BooruError.httpError);
     }
 
-    try {
-      return BooruResult.data(
-        parser.firstWhere(
-          (it) => it.canParsePage(res),
-          orElse: () {
-            throw BooruError.empty;
-          },
-        ).parsePage(res),
-        src: url,
-      );
-    } on BooruError catch (e) {
-      return BooruResult.error(res, error: e);
-    }
+    final data = parser
+        .firstWhere((it) => it.canParsePage(res), orElse: NoParser.new)
+        .parsePage(res);
+
+    return data.isEmpty
+        ? BooruResult.error(res, error: BooruError.empty)
+        : BooruResult.data(data, src: url);
   }
 }
