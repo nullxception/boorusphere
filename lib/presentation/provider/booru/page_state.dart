@@ -13,29 +13,36 @@ import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final pageStateProvider =
-    StateNotifierProvider.autoDispose<PageState, FetchResult<PageData>>(
-        (ref) => throw UnimplementedError());
+part 'page_state.g.dart';
 
-class PageState extends StateNotifier<FetchResult<PageData>> {
-  PageState(this.ref, this.serverId)
-      : super(const FetchResult.idle(PageData()));
+@riverpod
+class PageState extends _$PageState {
+  PageState({this.serverId = ''});
 
-  final Ref ref;
   final String serverId;
-
+  final _posts = <Post>[];
   int _skipCount = 0;
   int _page = 0;
-  final _posts = <Post>[];
-  ServerData get server => ref.read(serverDataStateProvider).getById(serverId);
+
+  @override
+  FetchResult<PageData> build() {
+    _skipCount = 0;
+    _page = 0;
+    _posts.clear();
+    return const FetchResult.idle(PageData());
+  }
+
+  ServerData get _server {
+    return ref.read(serverDataStateProvider).getById(serverId);
+  }
 
   Iterable<String> get blockedTags {
     return ref
         .read(blockedTagsStateProvider)
         .values
-        .where((it) => it.serverId.isEmpty || it.serverId == server.id)
+        .where((it) => it.serverId.isEmpty || it.serverId == _server.id)
         .map((it) => it.name);
   }
 
@@ -46,7 +53,7 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
   }
 
   Future<void> load() async {
-    if (server == ServerData.empty) return;
+    if (_server == ServerData.empty) return;
     final settings = ref.read(serverSettingStateProvider);
     final newOption = state.data.option.copyWith(
       limit: settings.postLimit,
@@ -56,7 +63,7 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
     if (newOption.query.isNotEmpty) {
       await ref
           .read(searchHistoryStateProvider.notifier)
-          .save(newOption.query, server);
+          .save(newOption.query, _server);
     }
 
     try {
@@ -79,7 +86,7 @@ class PageState extends StateNotifier<FetchResult<PageData>> {
   }
 
   Future<void> _fetch() async {
-    final repo = ref.read(booruRepoProvider(server));
+    final repo = ref.read(booruRepoProvider(_server));
     if (state.data.option.clear) {
       _page = 0;
       _posts.clear();

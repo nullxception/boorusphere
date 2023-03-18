@@ -4,25 +4,27 @@ import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final suggestionStateProvider = StateNotifierProvider.autoDispose<
-    SuggestionState, FetchResult<Iterable<String>>>((ref) {
-  throw UnimplementedError();
-});
+part 'suggestion_state.g.dart';
 
-class SuggestionState extends StateNotifier<FetchResult<Iterable<String>>> {
-  SuggestionState(this.ref, this.serverId) : super(const FetchResult.idle([]));
+@riverpod
+class SuggestionState extends _$SuggestionState {
+  SuggestionState({this.serverId = ''});
 
-  final Ref ref;
   final String serverId;
-
-  ServerData get server => ref.read(serverDataStateProvider).getById(serverId);
 
   String? _lastQuery;
 
+  @override
+  FetchResult<Iterable<String>> build() {
+    _lastQuery = null;
+    return const FetchResult.idle([]);
+  }
+
   Future<void> get(String query) async {
     if (_lastQuery == query) return;
+    final server = ref.read(serverDataStateProvider).getById(serverId);
     if (server == ServerData.empty) {
       state = const FetchResult.data([]);
       return;
