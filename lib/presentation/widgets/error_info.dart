@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -23,8 +24,7 @@ class ErrorInfo extends HookWidget {
   final TextStyle? style;
   final EdgeInsets padding;
 
-  String get description {
-    final e = error;
+  String descibeError(e) {
     if (e is HandshakeException) {
       return 'Cannot establish a secure connection';
     } else if (e is HttpException) {
@@ -35,12 +35,15 @@ class ErrorInfo extends HookWidget {
           : 'Connection failed';
     } else if (e is TimeoutException) {
       return 'Connection timeout';
+    } else if (e is DioError) {
+      return descibeError(e.error);
     }
+
     try {
       // let's try to obtain exception message
-      return (e as dynamic).message;
+      return e.message;
     } catch (_) {
-      return e.toString();
+      return '$e';
     }
   }
 
@@ -63,7 +66,7 @@ class ErrorInfo extends HookWidget {
           children: [
             DefaultTextStyle(
               style: style ?? DefaultTextStyle.of(context).style,
-              child: Text(description, textAlign: textAlign),
+              child: Text(descibeError(error), textAlign: textAlign),
             ),
             if (showTrace.value && stackTrace != null)
               Column(
