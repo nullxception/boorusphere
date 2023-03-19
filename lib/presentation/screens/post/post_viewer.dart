@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
+import 'package:boorusphere/presentation/routes/rematerial.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/screens/post/post_unknown.dart';
@@ -18,21 +19,40 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wakelock/wakelock.dart';
 
-class PostPage extends HookConsumerWidget {
-  const PostPage({
+class PostViewer extends HookConsumerWidget {
+  const PostViewer({
     super.key,
-    required this.beginPage,
+    required this.initial,
     required this.posts,
   });
 
-  final int beginPage;
+  final int initial;
   final Iterable<Post> posts;
+
+  static void open(
+    BuildContext context, {
+    required int index,
+    required Iterable<Post> posts,
+  }) {
+    final parentContainer = ProviderScope.containerOf(context);
+    context.navigator.push(
+      ReMaterialPageRoute(
+        opaque: false,
+        builder: (_) {
+          return ProviderScope(
+            parent: parentContainer,
+            child: PostViewer(initial: index, posts: posts),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timelineController = ref.watch(timelineControllerProvider);
     const loadMoreThreshold = 90;
-    final currentPage = useState(beginPage);
+    final currentPage = useState(initial);
     final pageController =
         useExtendedPageController(initialPage: currentPage.value);
     final fullscreen = ref.watch(fullscreenStateProvider);

@@ -4,8 +4,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/presentation/routes/rematerial.dart';
-import 'package:boorusphere/presentation/screens/post/post_page.dart';
+import 'package:boorusphere/presentation/screens/post/post_viewer.dart';
 import 'package:boorusphere/presentation/utils/entity/content.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/images.dart';
@@ -97,18 +96,7 @@ class _ThumbnailCard extends HookConsumerWidget {
           ),
           onTap: () {
             context.scaffoldMessenger.removeCurrentSnackBar();
-            final parentContainer = ProviderScope.containerOf(context);
-            context.navigator.push(
-              ReMaterialPageRoute(
-                opaque: false,
-                builder: (_) {
-                  return ProviderScope(
-                    parent: parentContainer,
-                    child: PostPage(beginPage: index, posts: posts),
-                  );
-                },
-              ),
-            );
+            PostViewer.open(context, index: index, posts: posts);
           },
         ),
       ),
