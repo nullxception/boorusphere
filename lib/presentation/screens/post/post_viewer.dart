@@ -122,7 +122,6 @@ class PostViewer extends HookConsumerWidget {
                     case PostType.video:
                       widget = PostVideo(
                         post: post,
-                        active: currentPage.value == index,
                         onToolboxVisibilityChange: (visible) {
                           showAppbar.value = visible;
                         },
@@ -132,12 +131,9 @@ class PostViewer extends HookConsumerWidget {
                       widget = PostUnknown(post: post);
                       break;
                   }
-                  return ColoredBox(
-                    color: Colors.black,
-                    child: HeroMode(
-                      enabled: index == currentPage.value,
-                      child: widget,
-                    ),
+                  return HeroMode(
+                    enabled: index == currentPage.value,
+                    child: widget,
                   );
                 },
               ),

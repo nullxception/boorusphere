@@ -19,16 +19,16 @@ class PostVideo extends HookConsumerWidget {
   const PostVideo({
     super.key,
     required this.post,
-    required this.active,
     required this.onToolboxVisibilityChange,
   });
 
   final Post post;
-  final bool active;
   final void Function(bool visible) onToolboxVisibilityChange;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final heroMode = context.findAncestorWidgetOfExactType<HeroMode>();
+    final isActive = heroMode?.enabled ?? false;
     final headers = ref.watch(postHeadersFactoryProvider(post));
     final contentSettings = ref.watch(contentSettingStateProvider);
     final fullscreen = ref.watch(fullscreenStateProvider);
@@ -42,7 +42,7 @@ class PostVideo extends HookConsumerWidget {
     final markMayNeedRebuild = useMarkMayNeedRebuild();
     final isPlaying = useState(true);
     final hideTimer = useState(Timer(const Duration(seconds: 2), () {}));
-    final source = useVideoPostSource(ref, post: post, active: active);
+    final source = useVideoPostSource(ref, post: post, active: isActive);
     final controller = isBlur.value ? null : source.controller;
 
     onVisibilityChange(bool value) {
