@@ -52,54 +52,36 @@ class PageState extends _$PageState {
 
   Future<void> load() async {
     if (_server == ServerData.empty) return;
-    final settings = ref.read(serverSettingStateProvider);
-    final newOption = state.data.option.copyWith(
-      limit: settings.postLimit,
-      searchRating: settings.searchRating,
-    );
-
-    if (newOption.query.isNotEmpty) {
-      await ref
-          .read(searchHistoryStateProvider.notifier)
-          .save(newOption.query, _server);
-    }
-
-    try {
-      state = state.copyWith(data: state.data.copyWith(option: newOption));
-
-      await _fetch();
-    } catch (error, stackTrace) {
-      state = FetchResult.error(
-        state.data,
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
-  }
-
-  Future<void> loadMore() async {
-    if (state is! DataFetchResult) return;
-
-    await update((it) => it.copyWith(clear: false));
-  }
-
-  Future<void> _fetch() async {
-    final repo = ref.read(booruRepoProvider(_server));
-    if (state.data.option.clear) {
-      _page = 0;
-      _posts.clear();
-    }
-    state = FetchResult.loading(state.data.copyWith(posts: _posts));
-
-    if (state.data.option.query.toWordList().any(blockedTags.contains)) {
+    final query = state.data.option.query;
+    if (query.toWordList().any(blockedTags.contains)) {
       state = FetchResult.error(state.data, error: BooruError.tagsBlocked);
       return;
     }
 
+    if (query.isNotEmpty) {
+      await ref.read(searchHistoryStateProvider.notifier).save(query, _server);
+    }
+
+    final settings = ref.read(serverSettingStateProvider);
+    final option = state.data.option.copyWith(
+      limit: settings.postLimit,
+      searchRating: settings.searchRating,
+    );
+
+    if (option.clear) {
+      _page = 0;
+      _posts.clear();
+    }
+
+    state = FetchResult.loading(
+      state.data.copyWith(posts: _posts, option: option),
+    );
+
     try {
+      final repo = ref.read(booruRepoProvider(_server));
       var skipCount = 0;
       while (skipCount <= 3) {
-        final res = await repo.getPage(state.data.option, _page);
+        final res = await repo.getPage(option, _page);
         if (res.isEmpty) {
           state = FetchResult.error(state.data, error: BooruError.empty);
           return;
@@ -123,8 +105,9 @@ class PageState extends _$PageState {
     }
   }
 
-  void reset() {
-    _page = 0;
-    update((it) => it.copyWith(clear: true));
+  Future<void> loadMore() async {
+    if (state is! DataFetchResult) return;
+
+    await update((it) => it.copyWith(clear: false));
   }
 }

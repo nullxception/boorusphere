@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
@@ -66,7 +68,9 @@ class HomeContent extends HookConsumerWidget {
       children: [
         RefreshIndicator(
           onRefresh: () async {
-            ref.read(pageStateProvider.notifier).reset();
+            unawaited(ref
+                .read(pageStateProvider.notifier)
+                .update((it) => it.copyWith(clear: true)));
           },
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),

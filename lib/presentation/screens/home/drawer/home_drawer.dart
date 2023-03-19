@@ -284,7 +284,9 @@ class _ServerSelection extends ConsumerWidget {
                   context.router.push(
                       HomeRoute(args: pageArgs.copyWith(serverId: it.id)));
                 } else {
-                  ref.read(pageStateProvider.notifier).reset();
+                  ref
+                      .read(pageStateProvider.notifier)
+                      .update((it) => it.copyWith(clear: true));
                 }
               });
             },
