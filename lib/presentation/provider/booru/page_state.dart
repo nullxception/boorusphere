@@ -23,12 +23,10 @@ class PageState extends _$PageState {
 
   final String serverId;
   final _posts = <Post>[];
-  int _skipCount = 0;
   int _page = 0;
 
   @override
   FetchResult<PageData> build() {
-    _skipCount = 0;
     _page = 0;
     _posts.clear();
     return const FetchResult.idle(PageData());
@@ -99,30 +97,27 @@ class PageState extends _$PageState {
     }
 
     try {
-      final res = await repo.getPage(state.data.option, _page);
-      if (res.isEmpty) {
-        state = FetchResult.error(state.data, error: BooruError.empty);
-        return;
-      }
+      var skipCount = 0;
+      while (skipCount <= 3) {
+        final res = await repo.getPage(state.data.option, _page);
+        if (res.isEmpty) {
+          state = FetchResult.error(state.data, error: BooruError.empty);
+          return;
+        }
+        _page++;
 
-      _page++;
+        final posts =
+            res.where((it) => !_posts.any((post) => post.id == it.id));
+        final displayedPosts =
+            posts.where((it) => !it.allTags.any(blockedTags.contains));
+        if (displayedPosts.isNotEmpty) {
+          _posts.addAll(posts);
+          state = FetchResult.data(state.data.copyWith(posts: _posts));
+          break;
+        }
 
-      final posts = res.where((it) => !_posts.any((post) => post.id == it.id));
-      final displayedPosts =
-          posts.where((it) => !it.allTags.any(blockedTags.contains));
-      if (displayedPosts.isEmpty) {
-        if (_skipCount > 3) return;
-        _skipCount++;
-        return Future.delayed(const Duration(milliseconds: 150), _fetch);
+        skipCount++;
       }
-      _skipCount = 0;
-      if (posts.isEmpty) {
-        state = FetchResult.error(state.data, error: BooruError.empty);
-        return;
-      }
-
-      _posts.addAll(posts);
-      state = FetchResult.data(state.data.copyWith(posts: _posts));
     } catch (err, stack) {
       state = FetchResult.error(state.data, error: err, stackTrace: stack);
     }
@@ -130,7 +125,6 @@ class PageState extends _$PageState {
 
   void reset() {
     _page = 0;
-    _skipCount = 0;
     update((it) => it.copyWith(clear: true));
   }
 }
