@@ -80,7 +80,7 @@ class DownloadsPage extends ConsumerWidget {
                   ],
                 )
               : ExpandableGroupListView<DownloadEntry, String>(
-                  items: downloadState.entries.reversed.toList(),
+                  items: downloadState.entries.toList().reversed,
                   groupedBy: (entry) => entry.post.serverId,
                   groupTitle: (id) => Text(serverData.getById(id).name),
                   itemBuilder: (entry) => DownloadEntryView(

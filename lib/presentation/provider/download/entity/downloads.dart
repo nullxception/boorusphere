@@ -1,7 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'downloads.freezed.dart';
@@ -9,8 +8,8 @@ part 'downloads.freezed.dart';
 @freezed
 class Downloads with _$Downloads {
   const factory Downloads({
-    @Default(IListConst([])) IList<DownloadEntry> entries,
-    @Default(ISetConst({})) ISet<DownloadProgress> progresses,
+    @Default([]) Iterable<DownloadEntry> entries,
+    @Default({}) Iterable<DownloadProgress> progresses,
   }) = _Downloads;
   const Downloads._();
 

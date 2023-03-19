@@ -13,14 +13,14 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
     this.ungroup = false,
   });
 
-  final List<T> items;
+  final Iterable<T> items;
   final E Function(T entry) groupedBy;
   final Widget Function(E key) groupTitle;
   final Widget Function(T entry) itemBuilder;
   final bool ungroup;
   final bool expanded;
 
-  Iterable<MapEntry<E, List<T>>> get grouped =>
+  Iterable<MapEntry<E, Iterable<T>>> get grouped =>
       groupBy(items, groupedBy).entries;
 
   @override
@@ -30,7 +30,7 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
       itemCount: ungroup ? items.length : grouped.length,
       itemBuilder: (context, i) {
         return ungroup
-            ? itemBuilder(items[i])
+            ? itemBuilder(items.elementAt(i))
             : Theme(
                 data: context.theme.copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
