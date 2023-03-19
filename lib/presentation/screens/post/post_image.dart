@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
@@ -66,17 +67,10 @@ class PostImage extends HookConsumerWidget {
         alignment: Alignment.center,
         fit: StackFit.passthrough,
         children: [
-          if (isBlur.value)
-            Hero(
-              key: imageHeroKey,
-              tag: post.heroTag,
-              child: PostPlaceholderImage(
-                post: post,
-                shouldBlur: true,
-              ),
-            )
-          else
-            ExtendedImage.network(
+          Hero(
+            key: imageHeroKey,
+            tag: post.heroTag,
+            child: ExtendedImage.network(
               contentSetting.loadOriginal
                   ? post.originalFile
                   : post.content.url,
@@ -90,20 +84,28 @@ class PostImage extends HookConsumerWidget {
                 );
               },
               handleLoadingProgress: true,
+              beforePaintImage: (canvas, rect, image, paint) {
+                if (isBlur.value) {
+                  paint.imageFilter = ImageFilter.blur(
+                    sigmaX: 5,
+                    sigmaY: 5,
+                    tileMode: TileMode.decal,
+                  );
+                }
+                return false;
+              },
               loadStateChanged: (state) {
+                if (isBlur.value || state.isCompleted) {
+                  return null;
+                }
+
                 return _PostImageStatus(
                   key: ValueKey(post.id),
                   state: state,
-                  child: Hero(
-                    key: imageHeroKey,
-                    tag: post.heroTag,
-                    child: state.isCompleted
-                        ? state.completedWidget
-                        : PostPlaceholderImage(
-                            post: post,
-                            shouldBlur: false,
-                            headers: headers,
-                          ),
+                  child: PostPlaceholderImage(
+                    post: post,
+                    shouldBlur: isBlur.value,
+                    headers: headers,
                   ),
                 );
               },
@@ -136,6 +138,7 @@ class PostImage extends HookConsumerWidget {
                 animation.removeListener(onAnimating);
               },
             ),
+          ),
           if (post.rating.isExplicit && shouldBlurExplicit)
             FadeTransition(
               opacity: Tween<double>(begin: 0, end: 1).animate(
