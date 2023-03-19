@@ -20,28 +20,37 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
   final bool ungroup;
   final bool expanded;
 
-  Iterable<MapEntry<E, Iterable<T>>> get grouped =>
-      groupBy(items, groupedBy).entries;
+  Map<E, Iterable<T>> get grouped {
+    return groupBy(items, groupedBy);
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 48),
       itemCount: ungroup ? items.length : grouped.length,
-      itemBuilder: (context, i) {
-        return ungroup
-            ? itemBuilder(items.elementAt(i))
-            : Theme(
-                data: context.theme.copyWith(dividerColor: Colors.transparent),
-                child: ExpansionTile(
-                  title: groupTitle(grouped.elementAt(i).key),
-                  initiallyExpanded: expanded,
-                  textColor: context.colorScheme.onBackground,
-                  children:
-                      grouped.elementAt(i).value.map(itemBuilder).toList(),
-                ),
-              );
+      itemBuilder: (context, index) {
+        if (!ungroup) {
+          final group = grouped.entries.atReverse(index);
+          return Theme(
+            data: context.theme.copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: groupTitle(group.key),
+              initiallyExpanded: expanded,
+              textColor: context.colorScheme.onBackground,
+              children: group.value.map(itemBuilder).toList(),
+            ),
+          );
+        }
+
+        return itemBuilder(items.atReverse(index));
       },
     );
+  }
+}
+
+extension _IterableExt<T> on Iterable<T> {
+  T atReverse(int index) {
+    return elementAt(length - index - 1);
   }
 }
