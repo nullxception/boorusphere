@@ -26,7 +26,11 @@ part 'app_router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
-    AutoRoute(page: HomePage, initial: true),
+    CustomRoute(
+      page: HomePage,
+      initial: true,
+      customRouteBuilder: SlidePageRoute.build,
+    ),
     CustomRoute(
       page: PostDetailsPage,
       customRouteBuilder: SlidePageRoute.build,
