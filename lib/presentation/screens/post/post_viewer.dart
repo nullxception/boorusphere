@@ -1,6 +1,8 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
+import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/routes/rematerial.dart';
+import 'package:boorusphere/presentation/screens/post/hooks/precache_posts.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
 import 'package:boorusphere/presentation/screens/post/post_unknown.dart';
@@ -62,6 +64,9 @@ class PostViewer extends HookConsumerWidget {
     final showAppbar = useState(true);
     final isLoadingMore = useState(false);
     final loadMore = timelineController.onLoadMore;
+    final loadOriginal =
+        ref.watch(contentSettingStateProvider.select((it) => it.loadOriginal));
+    final precachePosts = usePrecachePosts(ref, posts);
 
     useEffect(() {
       showAppbar.value = !fullscreen;
@@ -110,9 +115,10 @@ class PostViewer extends HookConsumerWidget {
                     });
                   }
                 },
-                preloadPagesCount: 1,
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
+                  precachePosts(index, loadOriginal);
+
                   final post = posts.elementAt(index);
                   final Widget widget;
                   switch (post.content.type) {
