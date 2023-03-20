@@ -38,6 +38,7 @@ class PostImage extends HookConsumerWidget {
         useAnimationController(duration: const Duration(milliseconds: 150));
     final blurNoticeAnimator =
         useAnimationController(duration: const Duration(milliseconds: 200));
+    final imageLoadState = useStreamController<ExtendedImageState>();
 
     useEffect(() {
       if (post.rating != BooruRating.explicit || !shouldBlurExplicit) {
@@ -61,98 +62,112 @@ class PostImage extends HookConsumerWidget {
       onTap: () {
         ref.read(fullscreenStateProvider.notifier).toggle();
       },
-      child: ExtendedImage.network(
-        contentSetting.loadOriginal ? post.originalFile : post.content.url,
-        headers: headers,
-        fit: BoxFit.contain,
-        mode: ExtendedImageMode.gesture,
-        initGestureConfigHandler: (state) {
-          return GestureConfig(
-            maxScale: scaleRatio * 5,
-            inPageView: true,
-          );
-        },
-        handleLoadingProgress: true,
-        beforePaintImage: (canvas, rect, image, paint) {
-          if (isBlur.value) {
-            paint.imageFilter = ImageFilter.blur(
-              sigmaX: 5,
-              sigmaY: 5,
-              tileMode: TileMode.decal,
-            );
-          }
-          return false;
-        },
-        loadStateChanged: (state) {
-          return Stack(
-            alignment: Alignment.center,
-            fit: StackFit.passthrough,
-            children: [
-              Hero(
-                tag: post.heroTag,
-                child: state.isCompleted
+      child: Stack(
+        alignment: Alignment.center,
+        fit: StackFit.passthrough,
+        children: [
+          Hero(
+            tag: post.heroTag,
+            child: ExtendedImage.network(
+              contentSetting.loadOriginal
+                  ? post.originalFile
+                  : post.content.url,
+              headers: headers,
+              fit: BoxFit.contain,
+              mode: ExtendedImageMode.gesture,
+              initGestureConfigHandler: (state) {
+                return GestureConfig(
+                  maxScale: scaleRatio * 5,
+                  inPageView: true,
+                );
+              },
+              handleLoadingProgress: true,
+              beforePaintImage: (canvas, rect, image, paint) {
+                if (isBlur.value) {
+                  paint.imageFilter = ImageFilter.blur(
+                    sigmaX: 5,
+                    sigmaY: 5,
+                    tileMode: TileMode.decal,
+                  );
+                }
+                return false;
+              },
+              loadStateChanged: (state) {
+                imageLoadState.add(state);
+
+                return state.isCompleted
                     ? state.completedWidget
                     : PostPlaceholderImage(
                         post: post,
                         shouldBlur: isBlur.value,
                         headers: headers,
-                      ),
-              ),
-              if (!isBlur.value)
-                Positioned(
-                  bottom: context.mediaQuery.viewInsets.bottom +
-                      kBottomNavigationBarHeight +
-                      32,
-                  child: _PostImageStatus(state: state),
-                ),
-              if (post.rating.isExplicit && shouldBlurExplicit)
-                FadeTransition(
-                  opacity: Tween<double>(begin: 0, end: 1).animate(
-                    CurvedAnimation(
-                      parent: blurNoticeAnimator,
-                      curve: Curves.easeInCubic,
-                    ),
-                  ),
-                  child: Center(
-                    child: PostExplicitWarningCard(
-                      onConfirm: () {
-                        blurNoticeAnimator.reverse();
-                        isBlur.value = false;
-                      },
-                    ),
-                  ),
-                ),
-            ],
-          );
-        },
-        onDoubleTap: (state) async {
-          if (zoomAnimator.isAnimating) {
-            // It should be impossible for human to do quadruple-tap
-            // at 150 ms. Still, better than no guards at all
-            return;
-          }
+                      );
+              },
+              onDoubleTap: (state) async {
+                if (zoomAnimator.isAnimating) {
+                  // It should be impossible for human to do quadruple-tap
+                  // at 150 ms. Still, better than no guards at all
+                  return;
+                }
 
-          final downOffset = state.pointerDownPosition;
-          final begin = state.gestureDetails?.totalScale ?? 1;
-          final animation = zoomAnimator.drive(
-            Tween<double>(
-              begin: begin,
-              end: begin == 1 ? max(2, scaleRatio) : 1.0,
+                final downOffset = state.pointerDownPosition;
+                final begin = state.gestureDetails?.totalScale ?? 1;
+                final animation = zoomAnimator.drive(
+                  Tween<double>(
+                    begin: begin,
+                    end: begin == 1 ? max(2, scaleRatio) : 1.0,
+                  ),
+                );
+
+                void onAnimating() {
+                  state.handleDoubleTap(
+                      scale: animation.value, doubleTapPosition: downOffset);
+                }
+
+                if (zoomAnimator.isCompleted) {
+                  zoomAnimator.reset();
+                }
+                animation.addListener(onAnimating);
+                await zoomAnimator.forward();
+                animation.removeListener(onAnimating);
+              },
             ),
-          );
-
-          void onAnimating() {
-            state.handleDoubleTap(
-                scale: animation.value, doubleTapPosition: downOffset);
-          }
-
-          if (zoomAnimator.isCompleted) {
-            zoomAnimator.reset();
-          }
-          animation.addListener(onAnimating);
-          await zoomAnimator.forward();
-          animation.removeListener(onAnimating);
-        },
+          ),
+          if (!isBlur.value)
+            Positioned(
+              bottom: context.mediaQuery.viewInsets.bottom +
+                  kBottomNavigationBarHeight +
+                  32,
+              child: StreamBuilder(
+                stream: imageLoadState.stream,
+                builder: (context, snapshot) {
+                  final data = snapshot.data;
+                  if (data is ExtendedImageState) {
+                    return _PostImageStatus(state: data);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ),
+          if (post.rating.isExplicit && shouldBlurExplicit)
+            FadeTransition(
+              opacity: Tween<double>(begin: 0, end: 1).animate(
+                CurvedAnimation(
+                  parent: blurNoticeAnimator,
+                  curve: Curves.easeInCubic,
+                ),
+              ),
+              child: Center(
+                child: PostExplicitWarningCard(
+                  onConfirm: () {
+                    blurNoticeAnimator.reverse();
+                    isBlur.value = false;
+                  },
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
