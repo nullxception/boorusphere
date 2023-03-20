@@ -1,0 +1,231 @@
+{
+  "language_name": "Bahasa Indonesia",
+  "language_alias": "Indonesian (id-ID)",
+  "save": "Simpan",
+  "cancel": "Batalkan",
+  "clear": "Bersihkan",
+  "retry": "Coba lagi",
+  "remove": "Hapus",
+  "edit": "Edit",
+  "add": "Tambah",
+  "reset": "Setel ulang",
+  "reset_to_default": "Setel ulang ke bawaan",
+  "scan": "Pindai",
+  "load_more": "Muat lebih banyak",
+  "clearing": "Membersihkan...",
+  "details": "Rincian",
+  "location": "Lokasi",
+  "source": "Sumber",
+  "file_sample": "File contoh",
+  "file_og": "File asli",
+  "tags": "Tag",
+  "meta": "Meta",
+  "artist": "Artis",
+  "character": "Karakter",
+  "copyright": "Hak Cipta",
+  "general": "General",
+  "oss_license": "Lisensi sumber terbuka",
+  "github": "GitHub",
+  "open_settings": "Buka Pengaturan",
+  "copy_success": "Disalin ke clipboard",
+  "load_image_failed": "Gagal memuat konten",
+  "on_media_blurred": "Media ini mungkin berisi konten yang tidak aman untuk dilihat publik",
+  "unblur": "Perlihatkan",
+  "unsupported_media": "${file_ext} tidak didukung",
+  "open_externally": "Buka secara eksternal",
+  "retry_pop_back": "Tekan kembali lagi untuk keluar",
+  "home": "Beranda",
+  "recently": "Baru-baru ini",
+  "search_hint": "Cari di ${server_name}...",
+  "version": "Versi ${version}",
+  "backup": "Cadangkan",
+  "restore": "Pulihkan",
+  "searchHistory": "Histori Pencarian",
+  "score": "Skor",
+  "always_ask": "Always ask",
+  "rating": {
+    "title": "Penilaian",
+    "questionable": "Dipertanyakan",
+    "explicit": "Eksplisit",
+    "safe": "Aman",
+    "sensitive": "Sensitif",
+    "all": "Semua",
+    "disable_rating_safe": "Matikan penilaian aman"
+  },
+  "page_status": {
+    "http_error": "Tidak bisa mendapatkan hasil dari ${server_name}",
+    "no_result": {
+      "zero": "Tidak ada hasil yang ditemukan",
+      "other": "Tidak ada lagi hasil"
+    },
+    "no_result_for_query": {
+      "zero": "Tidak ada hasil yang ditemukan untuk ${query}",
+      "other": "Tidak ada lagi hasil untuk ${query}"
+    },
+    "blocked": "'${query}' diblokir oleh Tags Blocker"
+  },
+  "suggestion": {
+    "not_supported": "${server_name} tidak mendukung saran pencarian",
+    "suggested": "Disarankan di ${server_name}",
+    "desc": "di ${server_name}",
+    "empty": "Tidak ada tag yang cocok dengan '${query}'",
+    "http_error": "Tidak bisa mendapatkan hasil untuk '${query}' di ${server_name}"
+  },
+  "action_tag": {
+    "copy": "Salin tag",
+    "block": "Blokir tag yang dipilih",
+    "blocked": "Ditambahkan ke pemblokir tag",
+    "append": "Tambahkan tag ke pencarian saat ini",
+    "search": "Cari tag"
+  },
+  "updater": {
+    "check": "Periksa pembaruan",
+    "checking": "Memeriksa pembaruan...",
+    "download": "Unduh ${version}",
+    "available": "Pembaruan tersedia: ${version}",
+    "preparing": "Mempersiapkan pembaruan...",
+    "on_latest": "Kamu telah menggunakan versi terbaru",
+    "on_new_version": "Versi baru tersedia",
+    "install": "Pasang pembaruan",
+    "progress": "Mengunduh: ${progress}%"
+  },
+  "changelog": {
+    "title": "Perubahan",
+    "view": "Lihat perubahan",
+    "none": "Tidak ada changelog yang tersedia"
+  },
+  "license": {
+    "package": "paket: ${name}",
+    "title": {
+      "one": "Lisensi",
+      "other": "Lisensi"
+    },
+    "counted": {
+      "one": "${n} lisensi",
+      "other": "${n} lisensi"
+    }
+  },
+  "downloads": {
+    "title": "Unduhan",
+    "no_file": "File telah dipindahkan",
+    "redownload": "Unduh ulang",
+    "detail": "Tampilkan detail",
+    "placeholder": "File yang kamu unduh akan muncul di sini",
+    "ungroup": "Batalkan grup",
+    "group_by_server": "Kelompokkan berdasarkan server",
+    "no_permission": "Tidak dapat mengunduh file; gagal mendapatkan izin",
+    "quality": "Download quality",
+    "status": {
+      "empty": "Kosong",
+      "pending": "Menunggu",
+      "downloading": "Mengunduh",
+      "downloaded": "Terunduh",
+      "failed": "Gagal",
+      "canceled": "Dibatalkan",
+      "paused": "Tertunda"
+    }
+  },
+  "favorites": {
+    "title": "Favorit",
+    "placeholder": "Konten yang kamu suka akan berada di sini"
+  },
+  "tags_blocker": {
+    "title": "Pemblokir Tag",
+    "desc": "Kamu dapat memblokir beberapa tag sekaligus dengan cara memisahkannya dengan spasi",
+    "empty": "Belum ada tag yang diblokir",
+    "hint": "Contoh: red_shirt blue_shoes"
+  },
+  "servers": {
+    "title": "Server",
+    "reset_warning": "Apakah kamu yakin ingin mengatur ulang daftar server ke bawaan ?\n\nIni akan menghapus semua server yang kamu tambahkan",
+    "remove_last_error": "Server terakhir tidak dapat dihapus",
+    "preset": "Dari Preset",
+    "select": "Pilih Server",
+    "add": "Tambahkan server baru",
+    "edit": "Edit ${name}",
+    "alias": "Alias",
+    "homepage": "Beranda",
+    "homepage_hint": "Beranda, contoh: https://verycoolbooru.com",
+    "use_custom_api": "Gunakan alamat API khusus",
+    "use_custom_api_desc": "Berguna jika server memiliki alamat API yang berbeda dari beranda",
+    "addr_error": "bukan alamat yang valid",
+    "api_addr": "Alamat API",
+    "api_addr_hint": "Alamat API, contoh: https://api-v69.verycoolbooru.com",
+    "already_exists": "Data server untuk ${name} sudah ada",
+    "invalid_search_query": "Invalid search query"
+  },
+  "server_query": {
+    "title": "Query",
+    "search": "Query pencarian",
+    "suggestion": "Query saran pencarian",
+    "post": "Query Web posting"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "interface": "Antarmuka",
+    "safe_mode": "Mode aman",
+    "misc": "Lain-lain",
+    "lang": {
+      "title": "Bahasa",
+      "auto": {
+        "title": "Otomatis",
+        "desc": "Ikuti bahasa sistem jika memungkinkan"
+      }
+    },
+    "midnight_theme": {
+      "title": "Tema Tengah Malam",
+      "desc": "Gunakan warna yang lebih gelap untuk mode malam"
+    },
+    "ui_blur": {
+      "title": "Aktifkan blur",
+      "desc": "Aktifkan latar belakang blur pada berbagai elemen UI"
+    },
+    "hide_media": {
+      "title": "Sembunyikan media yang diunduh",
+      "desc": "Cegah aplikasi galeri eksternal menampilkan file yang diunduh"
+    },
+    "blur_content": {
+      "title": "Sensor konten eksplisit",
+      "desc": "Konten yang dinilai eksplisit akan disensor"
+    },
+    "blur_timeline_only": {
+      "title": "Hanya sensor konten di timeline",
+      "desc": "Konten eksplisit tidak akan disensor pada mode pratinjau"
+    },
+    "ime_incognito": {
+      "title": "Keyboard Mode Incognito",
+      "desc": "Aktifkan mode incognito untuk keyboard jika memungkinkan."
+    },
+    "load_og": {
+      "title": "Tampilkan konten asli",
+      "desc": "Muat konten original saat membuka post"
+    },
+    "post_limit": {
+      "title": "Maksimum konten setiap muatan",
+      "desc": "Hasil mungkin kurang dari yang diharapkan (disebabkan oleh tag yang diblokir atau data yang tidak valid)"
+    },
+    "clear_cache": {
+      "title": "Hapus cache",
+      "desc": "Hapus konten yang tersimpan di cache",
+      "done": "Cache dibersihkan"
+    }
+  },
+  "data_backup": {
+    "title": "Cadangan dan Pulihkan",
+    "desc": "Mencadangkan atau memulihkan data aplikasi",
+    "backup": {
+      "title": "Mencadangkan data",
+      "desc": "Buat file cadangan data aplikasi",
+      "success": "File cadangan telah dibuat :\n${dest}",
+      "loading": "Membuat cadangan data..."
+    },
+    "restore": {
+      "title": "Memulihkan data",
+      "desc": "Pulihkan data aplikasi dari file cadangan",
+      "success": "Data aplikasi telah dipulihkan",
+      "invalid": "File cadangan tidak valid",
+      "warning": "Perhatian! tindakan ini akan menimpa data yang ada.\nApakah kamu yakin ingin melanjutkan?",
+      "loading": "Memulihkan data..."
+    }
+  }
+}

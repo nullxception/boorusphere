@@ -1,0 +1,231 @@
+{
+  "language_name": "Türkçe",
+  "language_alias": "Turkish (tr-TR)",
+  "save": "Kaydet",
+  "cancel": "İptal",
+  "clear": "Temizle",
+  "retry": "Tekrar dene",
+  "remove": "Kaldır",
+  "edit": "Düzenle",
+  "add": "Ekle",
+  "reset": "Sıfırla",
+  "reset_to_default": "Varsayılana sıfırla",
+  "scan": "Tara",
+  "load_more": "Daha fazlasını yükle",
+  "clearing": "Temizleniyor...",
+  "details": "Ayrıntılar",
+  "location": "Konum",
+  "source": "Kaynak",
+  "file_sample": "Örnek dosya",
+  "file_og": "Orijinal dosya",
+  "tags": "Etiketler",
+  "meta": "Üst Veri",
+  "artist": "Sanatçı",
+  "character": "Karakter",
+  "copyright": "Telif hakkı",
+  "general": "Genel",
+  "oss_license": "Açık kaynak lisansı",
+  "github": "GitHub",
+  "open_settings": "Ayarları Aç",
+  "copy_success": "Panoya kopyalandı",
+  "load_image_failed": "Görsel yüklenemedi",
+  "on_media_blurred": "Bu medya herkese açık olarak görüntülenmek için güvenli olmayan içerik içeriyor olabilir.",
+  "unblur": "Göster",
+  "unsupported_media": "${file_ext} desteklenmiyor",
+  "open_externally": "Harici olarak aç",
+  "retry_pop_back": "Çıkmak için geri düğmesine tekrar basın",
+  "home": "Anasayfa",
+  "recently": "Geçenlerde",
+  "search_hint": "${server_name} üzerinde ara...",
+  "version": "Sürüm ${version}",
+  "backup": "Yedekle",
+  "restore": "Geri Yükle",
+  "searchHistory": "Arama Geçmişi",
+  "score": "Puan",
+  "always_ask": "Her zaman sor",
+  "rating": {
+    "title": "Derecelendirme",
+    "questionable": "Şüpheli",
+    "explicit": "Müstehcen",
+    "safe": "Güvenli",
+    "sensitive": "Hassas",
+    "all": "Tümü",
+    "disable_rating_safe": "rating:safe'i devre dışı bırak"
+  },
+  "page_status": {
+    "http_error": "${server_name} sunucusundan sonuç alınamadı",
+    "no_result": {
+      "zero": "Hiçbir sonuç bulunamadı",
+      "other": "Sonuç bulunamadı"
+    },
+    "no_result_for_query": {
+      "zero": "${query} için hiçbir sonuç bulunamadı",
+      "other": "${query} için hiçbir sonuç bulunamadı"
+    },
+    "blocked": "'${query}' Etiket Engelleyici tarafından engellendi"
+  },
+  "suggestion": {
+    "not_supported": "${server_name} arama önerisini desteklemiyor",
+    "suggested": "${server_name} sunucusu için önerilenler",
+    "desc": "${server_name} sunucusunda",
+    "empty": "'${query}' ile eşleşen hiçbir etiket yok",
+    "http_error": "'${query}' için ${server_name} sunucusunda hiçbir sonuç alınamadı"
+  },
+  "action_tag": {
+    "copy": "Etiketi kopyala",
+    "block": "Seçilen etiketi engelle",
+    "blocked": "Etiket engelleyicisine engellendi",
+    "append": "Mevcut aramaya etiketi ekle",
+    "search": "Etiketi ara"
+  },
+  "updater": {
+    "check": "Güncellemeleri denetle",
+    "checking": "Güncellemeler denetleniyor...",
+    "download": "${version} sürümünü indir",
+    "available": "Güncelleme mevcut: ${version}",
+    "preparing": "Güncelleme hazırlanıyor...",
+    "on_latest": "En son sürümdesiniz",
+    "on_new_version": "Yeni sürüm mevcut",
+    "install": "Güncellemeyi yükle",
+    "progress": "İndiriliyor: %${progress}"
+  },
+  "changelog": {
+    "title": "Değişim kaydı",
+    "view": "Değişiklikleri görüntüle",
+    "none": "Değişim kaydı mevcut değil"
+  },
+  "license": {
+    "package": "paket: ${name}",
+    "title": {
+      "one": "Lisans",
+      "other": "Lisans"
+    },
+    "counted": {
+      "one": "${n} lisans",
+      "other": "${n} lisans"
+    }
+  },
+  "downloads": {
+    "title": "İndirilenler",
+    "no_file": "Dosya taşındı",
+    "redownload": "Tekrar indir",
+    "detail": "Ayrıntıları göster",
+    "placeholder": "İndirilen dosyalarınız burada yer alacaktır",
+    "ungroup": "Grupsuzlaştır",
+    "group_by_server": "Sunucuya göre grupla",
+    "no_permission": "Bir dosya indirilemedi; eksik bildirim izni",
+    "quality": "İndirme kalitesi",
+    "status": {
+      "empty": "Boş",
+      "pending": "Bekliyor",
+      "downloading": "İndiriliyor",
+      "downloaded": "İndirildi",
+      "failed": "Başarısız oldu",
+      "canceled": "İptal edildi",
+      "paused": "Duraklatıldı"
+    }
+  },
+  "favorites": {
+    "title": "Favoriler",
+    "placeholder": "Kaydedilen içerikleriniz burada yer alacaktır"
+  },
+  "tags_blocker": {
+    "title": "Etiket Engelleyicisi",
+    "desc": "Boşluk ile ayırarak çoklu etiket engelleyebilirsiniz",
+    "empty": "Henüz hiçbir etiket engellenmedi",
+    "hint": "Örnek: red_shirt blue_shoes"
+  },
+  "servers": {
+    "title": "Sunucu",
+    "reset_warning": "Sunucu listenizi varsayılana sıfırlamak istediğinize emin misiniz ?\n\nTüm eklenen sunucular silinecektir",
+    "remove_last_error": "Son sunucu kaldırılamaz",
+    "preset": "Ön tanımlılardan",
+    "select": "Sunucu Seç",
+    "add": "Yeni sunucu ekle",
+    "edit": "${name} sunucusunu düzenle",
+    "alias": "Diğer ad",
+    "homepage": "Ana sayfa",
+    "homepage_hint": "Ana sayfa, örneğin: https://verycoolbooru.com",
+    "use_custom_api": "Özel API adresi kullan",
+    "use_custom_api_desc": "Sunucu ana sayfadan başka API adresine sahipse kullanışlıdır",
+    "addr_error": "Adres geçerli değil",
+    "api_addr": "API Adresi",
+    "api_addr_hint": "API adresi, örneğin: https://api-v69.verycoolbooru.com",
+    "already_exists": "${name} için zaten sunucu verisi mevcut",
+    "invalid_search_query": "Invalid search query"
+  },
+  "server_query": {
+    "title": "Sorgu",
+    "search": "Arama Sorgusu",
+    "suggestion": "Etiket Öneri Sorgusu",
+    "post": "Web Gönderi Sorgusu"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "interface": "Arayüz",
+    "safe_mode": "Güvenli mod",
+    "misc": "Çeşitli",
+    "lang": {
+      "title": "Dil",
+      "auto": {
+        "title": "Otomatik",
+        "desc": "Sistem diline uy (mümkünse)"
+      }
+    },
+    "midnight_theme": {
+      "title": "Gece yarısı teması",
+      "desc": "Koyu mod için daha karanlık renk kullan"
+    },
+    "ui_blur": {
+      "title": "Bulanıklaştırmayı etkinleştir",
+      "desc": "Çeşitli UI elementlerinde bulanık arkaplanı etkinleştir"
+    },
+    "hide_media": {
+      "title": "İndirilen medyayı gizle",
+      "desc": "Harici galeri uygulamasında indirilen dosyaların gösterilmesini engelle"
+    },
+    "blur_content": {
+      "title": "Müstehcen içeriği bulanıklaştır",
+      "desc": "Müstehcen dereceli gönderilen bulanıklaştırılır"
+    },
+    "blur_timeline_only": {
+      "title": "İçerikleri yalnızca zaman tünelinde bulanıklaştır",
+      "desc": "Müstehcen dereceli içerikler görünüm modunda bulanıklaştırılmaz"
+    },
+    "ime_incognito": {
+      "title": "Gizli Klavye",
+      "desc": "Destekleniyorsa, klavye için gizli modu etkinleştir."
+    },
+    "load_og": {
+      "title": "Orijinal içeriği göster",
+      "desc": "Gönderiyi açınca örnek dosya yerine orijinal dosyayı göster"
+    },
+    "post_limit": {
+      "title": "Maks içerik yüklemesi",
+      "desc": "Sonuç beklenenden daha az olabilir (engellenen etiketlerden veya geçersiz veriden dolayı kaynaklanabilir)"
+    },
+    "clear_cache": {
+      "title": "Önbelleği temizle",
+      "desc": "Önbellekten yüklenen içeriği temizle",
+      "done": "Önbellek temizlendi"
+    }
+  },
+  "data_backup": {
+    "title": "Yedekleme ve Geri Yükleme",
+    "desc": "Uygulama verilerini yedekle ve geri yükle",
+    "backup": {
+      "title": "Verileri yedekle",
+      "desc": "Uygulama verilerini bir dosyaya yedekle",
+      "success": "Yedek şurada oluşturuldu :\n${dest}",
+      "loading": "Creating backup..."
+    },
+    "restore": {
+      "title": "Verileri geri yükle",
+      "desc": "Uygulama verilerini bir geri yükleme dosyasından geri yükle",
+      "success": "Uygulama verileri geri yüklendi",
+      "invalid": "Yedek dosyası geçersiz",
+      "warning": "Uyarı! bu işlem varolan her verinin üzerine yazılacaktır.\nDevam etmek istediğinize emin misiniz?",
+      "loading": "Restoring data..."
+    }
+  }
+}
