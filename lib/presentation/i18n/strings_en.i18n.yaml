@@ -202,9 +202,11 @@ data_backup:
     title: "Backup data"
     desc: "Backup app data into a file"
     success: "Backup created at :\n${dest}"
+    loading: "Creating backup..."
   restore:
     title: "Restore data"
     desc: "Restore app data from backup file"
     success: "App data has been restored"
     invalid: "Invalid backup file"
     warning: "Warning! this action will overwrite any existing data.\nAre you sure you want to continue ?"
+    loading: "Restoring data..."

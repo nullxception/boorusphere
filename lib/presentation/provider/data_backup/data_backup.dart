@@ -30,6 +30,8 @@ part 'data_backup.g.dart';
 
 typedef BackupItem = MapEntry<String, Object>;
 
+enum DataBackupType { backup, restore }
+
 @riverpod
 class DataBackupState extends _$DataBackupState {
   @override
@@ -71,7 +73,7 @@ class DataBackupState extends _$DataBackupState {
     ref.invalidate(serverSettingStateProvider);
   }
 
-  Future<void> import({Future<bool?> Function()? onConfirm}) async {
+  Future<void> restore({Future<bool?> Function()? onConfirm}) async {
     final backupsDir = await _backupDir();
     await FilePicker.platform.clearTemporaryFiles();
 
@@ -100,6 +102,7 @@ class DataBackupState extends _$DataBackupState {
       return;
     }
 
+    state = const BackupResult.loading(DataBackupType.restore);
     for (final json in decoder.files) {
       final content = utf8.decode(json.content);
       switch (json.name.replaceAll('.json', '')) {
@@ -127,9 +130,10 @@ class DataBackupState extends _$DataBackupState {
     state = const BackupResult.imported();
   }
 
-  Future<void> export({BackupOption option = const BackupOption()}) async {
+  Future<void> backup({BackupOption option = const BackupOption()}) async {
     if (!option.isValid()) return;
 
+    state = const BackupResult.loading(DataBackupType.backup);
     final server = ref.read(serverLocalSourceProvider).export();
     final blockedTags = ref.read(blockedTagsLocalSourceProvider).export();
     final favoritePost = ref.read(favoritePostLocalSourceProvider).export();

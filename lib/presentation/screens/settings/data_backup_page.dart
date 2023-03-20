@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:boorusphere/presentation/provider/data_backup/entity/backup_option.dart';
@@ -19,7 +21,7 @@ class DataBackupPage extends StatelessWidget {
   }
 }
 
-class _Content extends ConsumerWidget {
+class _Content extends HookConsumerWidget {
   const _Content();
 
   Future<bool?> _warningDialog(BuildContext context) {
@@ -53,7 +55,16 @@ class _Content extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const subtitlePadding = EdgeInsets.only(top: 8);
     ref.listen<BackupResult?>(dataBackupStateProvider, (prev, next) {
-      next?.maybeWhen(
+      next?.when(
+        loading: (type) {
+          showDialog(
+            context: context,
+            builder: (_) => ProviderScope(
+              parent: ProviderScope.containerOf(context),
+              child: _LoadingDialog(type: type),
+            ),
+          );
+        },
         imported: () {
           context.scaffoldMessenger.showSnackBar(SnackBar(
             content: Text(context.t.dataBackup.restore.success),
@@ -72,7 +83,7 @@ class _Content extends ConsumerWidget {
             duration: const Duration(seconds: 1),
           ));
         },
-        orElse: () {},
+        idle: () {},
       );
     });
 
@@ -84,19 +95,16 @@ class _Content extends ConsumerWidget {
             padding: subtitlePadding,
             child: Text(context.t.dataBackup.backup.desc),
           ),
-          onTap: () {
-            showDialog(
+          onTap: () async {
+            final result = await showDialog<BackupOption?>(
               context: context,
-              builder: (context) {
-                return _BackupSelectionDialog(
-                  onBackup: (option) {
-                    ref
-                        .read(dataBackupStateProvider.notifier)
-                        .export(option: option);
-                  },
-                );
-              },
+              builder: (context) => _BackupSelectionDialog(),
             );
+            if (result != null) {
+              unawaited(ref
+                  .read(dataBackupStateProvider.notifier)
+                  .backup(option: result));
+            }
           },
         ),
         ListTile(
@@ -108,7 +116,7 @@ class _Content extends ConsumerWidget {
           onTap: () {
             ref
                 .read(dataBackupStateProvider.notifier)
-                .import(onConfirm: () => _warningDialog(context));
+                .restore(onConfirm: () => _warningDialog(context));
           },
         ),
       ],
@@ -116,10 +124,37 @@ class _Content extends ConsumerWidget {
   }
 }
 
-class _BackupSelectionDialog extends HookWidget {
-  const _BackupSelectionDialog({required this.onBackup});
-  final void Function(BackupOption option) onBackup;
+class _LoadingDialog extends HookConsumerWidget {
+  const _LoadingDialog({required this.type});
 
+  final DataBackupType type;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(dataBackupStateProvider, (previous, next) {
+      if (next != null && next is! LoadingBackupResult) {
+        context.navigator.pop();
+      }
+    });
+    return Dialog(
+      child: Row(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: CircularProgressIndicator(),
+          ),
+          Text(
+            type == DataBackupType.backup
+                ? context.t.dataBackup.backup.loading
+                : context.t.dataBackup.restore.loading,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BackupSelectionDialog extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final option = useState(const BackupOption());
@@ -179,8 +214,8 @@ class _BackupSelectionDialog extends HookWidget {
         ElevatedButton(
           onPressed: option.value.isValid()
               ? () {
-                  context.navigator.pop();
-                  onBackup(option.value);
+                  final result = option.value;
+                  context.navigator.pop(result);
                 }
               : null,
           child: Text(context.t.backup),
