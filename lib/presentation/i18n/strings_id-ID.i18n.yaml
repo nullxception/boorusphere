@@ -199,9 +199,11 @@ data_backup:
     title: "Mencadangkan data"
     desc: "Buat file cadangan data aplikasi"
     success: "File cadangan telah dibuat :\n${dest}"
+    loading: "Membuat cadangan data..."
   restore:
     title: "Memulihkan data"
     desc: "Pulihkan data aplikasi dari file cadangan"
     success: "Data aplikasi telah dipulihkan"
     invalid: "File cadangan tidak valid"
     warning: "Perhatian! tindakan ini akan menimpa data yang ada.\nApakah kamu yakin ingin melanjutkan?"
+    loading: "Memulihkan data..."
