@@ -74,7 +74,9 @@ class PostImage extends HookConsumerWidget {
                   : post.content.url,
               headers: headers,
               fit: BoxFit.contain,
-              mode: ExtendedImageMode.gesture,
+              mode: isBlur.value
+                  ? ExtendedImageMode.none
+                  : ExtendedImageMode.gesture,
               initGestureConfigHandler: (state) {
                 return GestureConfig(
                   maxScale: scaleRatio * 5,
