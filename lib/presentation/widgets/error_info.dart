@@ -26,18 +26,21 @@ class ErrorInfo extends HookWidget {
 
   String get descibeError {
     dynamic e = error;
+    String? host;
     if (e == null) {
       return "Something went wrong and we don't know why";
     }
 
     while (true) {
       if (e is HandshakeException) {
-        return 'Cannot establish a secure connection';
-      } else if (e is HttpException) {
-        return 'Connection failed';
-      } else if (e is SocketException) {
-        return e.address != null
-            ? 'Failed to connect to ${e.address?.host}'
+        final hostInfo = host != null ? ' to $host' : '';
+        return 'Cannot establish a secure connection$hostInfo';
+      } else if (e is HttpException || e is SocketException) {
+        if (host == null && e is SocketException) {
+          host = e.address?.host;
+        }
+        return host != null
+            ? 'Failed to connect to $host'
             : 'Connection failed';
       } else if (e is TimeoutException) {
         return 'Connection timeout';
@@ -49,7 +52,7 @@ class ErrorInfo extends HookWidget {
           return '$e';
         }
       }
-
+      host = e.requestOptions.uri.host;
       e = e.error;
     }
   }
