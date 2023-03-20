@@ -123,7 +123,9 @@
       "failed": "Failed",
       "canceled": "Canceled",
       "paused": "Paused"
-    }
+    },
+    "filter_by_status": "Filter by status",
+    "no_filter": "No filter"
   },
   "favorites": {
     "title": "Favorites",

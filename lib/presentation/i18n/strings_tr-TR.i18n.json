@@ -123,7 +123,9 @@
       "failed": "Başarısız oldu",
       "canceled": "İptal edildi",
       "paused": "Duraklatıldı"
-    }
+    },
+    "filter_by_status": "Filter by status",
+    "no_filter": "No filter"
   },
   "favorites": {
     "title": "Favoriler",

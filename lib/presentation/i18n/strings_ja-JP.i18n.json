@@ -123,7 +123,9 @@
       "failed": "失敗しました",
       "canceled": "キャンセルされました",
       "paused": "一時停止"
-    }
+    },
+    "filter_by_status": "Filter by status",
+    "no_filter": "No filter"
   },
   "favorites": {
     "title": "お気に入り",

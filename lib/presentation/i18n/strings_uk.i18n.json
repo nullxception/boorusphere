@@ -123,7 +123,9 @@
       "failed": "Не вийшло",
       "canceled": "Скасовано",
       "paused": "Призупинено"
-    }
+    },
+    "filter_by_status": "Filter by status",
+    "no_filter": "No filter"
   },
   "favorites": {
     "title": "Улюблені",

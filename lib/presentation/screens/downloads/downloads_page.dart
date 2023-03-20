@@ -5,13 +5,16 @@ import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_entry_view.dart';
+import 'package:boorusphere/presentation/screens/downloads/download_filter.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/expandable_group_list_view.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DownloadsPage extends ConsumerWidget {
+class DownloadsPage extends HookConsumerWidget {
   const DownloadsPage({super.key, this.args});
   final PageArgs? args;
 
@@ -24,6 +27,12 @@ class DownloadsPage extends ConsumerWidget {
     final downloadState = ref.watch(downloadStateProvider);
     final groupByServer = ref
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));
+    final filter = useState(DownloadFilter.none);
+    final filteredEntries = filter.value != DownloadFilter.none
+        ? downloadState.entries.where((element) =>
+            downloadState.getProgressById(element.id).status ==
+            filter.value.toStatus())
+        : downloadState.entries;
 
     return ProviderScope(
       overrides: [pageArgsProvider.overrideWith((ref) => pageArgs)],
@@ -35,6 +44,13 @@ class DownloadsPage extends ConsumerWidget {
               PopupMenuButton(
                 onSelected: (value) {
                   switch (value) {
+                    case 'filter':
+                      showFilterDialog(context, filter.value).then((value) {
+                        if (value != null) {
+                          filter.value = value;
+                        }
+                      });
+                      break;
                     case 'clear-all':
                       ref.read(downloadStateProvider.notifier).clear();
                       break;
@@ -49,6 +65,10 @@ class DownloadsPage extends ConsumerWidget {
                 },
                 itemBuilder: (context) {
                   return [
+                    PopupMenuItem(
+                      value: 'filter',
+                      child: Text(context.t.downloads.filterByStatus),
+                    ),
                     PopupMenuItem(
                       value: 'group-by-server',
                       child: Text(
@@ -67,7 +87,7 @@ class DownloadsPage extends ConsumerWidget {
           ],
         ),
         body: SafeArea(
-          child: downloadState.entries.isEmpty
+          child: filteredEntries.isEmpty
               ? Column(
                   children: [
                     Center(
@@ -80,7 +100,7 @@ class DownloadsPage extends ConsumerWidget {
                   ],
                 )
               : ExpandableGroupListView<DownloadEntry, String>(
-                  items: downloadState.entries,
+                  items: filteredEntries,
                   groupedBy: (entry) => entry.post.serverId,
                   groupTitle: (id) => Text(serverData.getById(id).name),
                   itemBuilder: (entry) => DownloadEntryView(
@@ -93,5 +113,31 @@ class DownloadsPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<DownloadFilter?> showFilterDialog(
+      BuildContext context, DownloadFilter current) {
+    return showDialog<DownloadFilter?>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(context.t.downloads.filterByStatus),
+            icon: const Icon(Icons.file_download),
+            contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: DownloadFilter.values
+                  .map((e) => RadioListTile(
+                        value: e,
+                        groupValue: current,
+                        title: Text(e.describe(context)),
+                        onChanged: (value) {
+                          context.navigator.pop(value);
+                        },
+                      ))
+                  .toList(),
+            ),
+          );
+        });
   }
 }
