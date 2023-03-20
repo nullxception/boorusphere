@@ -24,26 +24,33 @@ class ErrorInfo extends HookWidget {
   final TextStyle? style;
   final EdgeInsets padding;
 
-  String descibeError(e) {
-    if (e is HandshakeException) {
-      return 'Cannot establish a secure connection';
-    } else if (e is HttpException) {
-      return 'Connection failed';
-    } else if (e is SocketException) {
-      return e.address != null
-          ? 'Failed to connect to ${e.address?.host}'
-          : 'Connection failed';
-    } else if (e is TimeoutException) {
-      return 'Connection timeout';
-    } else if (e is DioError) {
-      return descibeError(e.error);
+  String get descibeError {
+    dynamic e = error;
+    if (e == null) {
+      return "Something went wrong and we don't know why";
     }
 
-    try {
-      // let's try to obtain exception message
-      return e.message;
-    } catch (_) {
-      return '$e';
+    while (true) {
+      if (e is HandshakeException) {
+        return 'Cannot establish a secure connection';
+      } else if (e is HttpException) {
+        return 'Connection failed';
+      } else if (e is SocketException) {
+        return e.address != null
+            ? 'Failed to connect to ${e.address?.host}'
+            : 'Connection failed';
+      } else if (e is TimeoutException) {
+        return 'Connection timeout';
+      } else if (e is! DioError) {
+        try {
+          // let's try to obtain exception message
+          return e.message;
+        } catch (_) {
+          return '$e';
+        }
+      }
+
+      e = e.error;
     }
   }
 
@@ -66,7 +73,7 @@ class ErrorInfo extends HookWidget {
           children: [
             DefaultTextStyle(
               style: style ?? DefaultTextStyle.of(context).style,
-              child: Text(descibeError(error), textAlign: textAlign),
+              child: Text(descibeError, textAlign: textAlign),
             ),
             if (showTrace.value && stackTrace != null)
               Column(
