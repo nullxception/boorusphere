@@ -279,16 +279,18 @@ class _ServerSelection extends ConsumerWidget {
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
               ref.read(serverSettingStateProvider.notifier).setActiveServer(it);
-              ref.read(homeDrawerControllerProvider).close().then((value) {
-                if (it.id != serverActive.id) {
-                  context.router.push(
-                      HomeRoute(args: pageArgs.copyWith(serverId: it.id)));
-                } else {
+              if (it.id != serverActive.id) {
+                ref.read(homeDrawerControllerProvider).close();
+                context.router.push(
+                  HomeRoute(args: pageArgs.copyWith(serverId: it.id)),
+                );
+              } else {
+                ref.read(homeDrawerControllerProvider).close().then((_) {
                   ref
                       .read(pageStateProvider.notifier)
                       .update((it) => it.copyWith(clear: true));
-                }
-              });
+                });
+              }
             },
           ),
         );
