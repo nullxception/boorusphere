@@ -52,13 +52,13 @@ class SlidePageRoute<T> extends PageRoute<T> {
     );
     return SlideTransition(
       position: Tween(
-        begin: const Offset(0.2, 0),
+        begin: const Offset(0.1, 0),
         end: Offset.zero,
       ).animate(nextAnimation),
       child: SlideTransition(
         position: Tween(
           begin: Offset.zero,
-          end: const Offset(-0.2, 0),
+          end: const Offset(-0.1, 0),
         ).animate(prevAnimation),
         child: FadeTransition(
           opacity: Tween(
