@@ -52,6 +52,8 @@ class QuickBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = this.title;
+    final actionTitle = this.actionTitle;
     return ConstrainedBox(
       constraints: const BoxConstraints(
         minWidth: 50,
@@ -63,27 +65,29 @@ class QuickBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           color: context.colorScheme.surface,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (title != null)
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Material(
-                  textStyle: context.theme.textTheme.bodySmall,
-                  type: MaterialType.transparency,
-                  child: title!,
+                child: DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: context.theme.textTheme.bodySmall?.fontSize ?? 12,
+                    color: context.colorScheme.onSurface,
+                  ),
+                  child: title,
                 ),
               ),
             if (actionTitle != null)
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  elevation: 0,
                   textStyle: context.theme.textTheme.bodySmall,
+                  visualDensity: VisualDensity.compact,
                 ),
                 onPressed: onPressed,
-                child: actionTitle!,
+                child: actionTitle,
               ),
             if (useProgressBar)
               Container(
