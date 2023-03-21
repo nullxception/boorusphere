@@ -1,16 +1,23 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+
+enum SlidePageType { open, close, both }
 
 class SlidePageRoute<T> extends PageRoute<T> {
   SlidePageRoute({
     required this.builder,
     super.settings,
     this.duration = const Duration(milliseconds: 300),
-    this.barrierColor,
+    this.barrierColor = Colors.transparent,
     this.barrierLabel,
     this.maintainState = true,
+    this.type = SlidePageType.both,
+    this.opaque = true,
   });
 
   final Duration duration;
+
+  final SlidePageType type;
+
   final Widget Function(BuildContext context) builder;
 
   @override
@@ -23,25 +30,21 @@ class SlidePageRoute<T> extends PageRoute<T> {
   final bool maintainState;
 
   @override
+  final bool opaque;
+
+  @override
   Duration get transitionDuration => duration;
 
   @override
   Duration get reverseTransitionDuration => duration;
 
-  static PageRoute<T> build<T>(
-    BuildContext context,
-    Widget child,
-    RouteSettings? settings,
-  ) {
-    return SlidePageRoute(
-      settings: settings,
-      builder: (context) => child,
-    );
-  }
-
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     final nextAnimation = CurvedAnimation(
       parent: animation,
       curve: Curves.easeInOutCubic,
@@ -50,36 +53,51 @@ class SlidePageRoute<T> extends PageRoute<T> {
       parent: secondaryAnimation,
       curve: Curves.easeInOutCubic,
     );
-    return SlideTransition(
-      position: Tween(
-        begin: const Offset(0.1, 0),
-        end: Offset.zero,
+
+    final fade = FadeTransition(
+      opacity: Tween(
+        begin: 0.0,
+        end: 1.0,
       ).animate(nextAnimation),
-      child: SlideTransition(
+      child: child,
+    );
+
+    Widget open(Widget child) {
+      return SlideTransition(
+        position: Tween(
+          begin: const Offset(0.1, 0),
+          end: Offset.zero,
+        ).animate(nextAnimation),
+        child: child,
+      );
+    }
+
+    Widget close(Widget child) {
+      return SlideTransition(
         position: Tween(
           begin: Offset.zero,
           end: const Offset(-0.1, 0),
         ).animate(prevAnimation),
-        child: FadeTransition(
-          opacity: Tween(
-            begin: 0.0,
-            end: 1.0,
-          ).animate(nextAnimation),
-          child: FadeTransition(
-            opacity: Tween(
-              begin: 1.0,
-              end: 0.0,
-            ).animate(prevAnimation),
-            child: child,
-          ),
-        ),
-      ),
-    );
+        child: child,
+      );
+    }
+
+    switch (type) {
+      case SlidePageType.open:
+        return open(fade);
+      case SlidePageType.close:
+        return close(fade);
+      default:
+        return open(close(fade));
+    }
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return builder(context);
   }
 }

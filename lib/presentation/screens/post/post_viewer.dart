@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
-import 'package:boorusphere/presentation/routes/rematerial.dart';
+import 'package:boorusphere/presentation/routes/slide_page_route.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/precache_posts.dart';
 import 'package:boorusphere/presentation/screens/post/post_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
@@ -38,8 +38,9 @@ class PostViewer extends HookConsumerWidget {
   }) {
     final parentContainer = ProviderScope.containerOf(context);
     context.navigator.push(
-      ReMaterialPageRoute(
+      SlidePageRoute(
         opaque: false,
+        type: SlidePageType.close,
         builder: (_) {
           return ProviderScope(
             parent: parentContainer,
