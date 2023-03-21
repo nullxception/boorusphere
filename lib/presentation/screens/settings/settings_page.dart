@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/provider/settings/download_setting_stat
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
 import 'package:boorusphere/utils/file_utils.dart';
@@ -15,6 +15,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+@RoutePage()
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 

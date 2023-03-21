@@ -36,10 +36,10 @@ dependencies:
     sdk: flutter
   archive: ^3.3.5
   async: ^2.8.2
-  auto_route: ^5.0.0
+  auto_route: ^6.0.0+1
   collection: ^1.16.0
   cookie_jar: ^3.0.1
-  deep_pick: ^0.10.0
+  deep_pick: ^1.0.0
   device_info_plus: ^8.0.0
   dio_cookie_manager: ^2.0.0
   dio_smart_retry: ^5.0.0
@@ -81,7 +81,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  auto_route_generator: ^5.0.0
+  auto_route_generator: ^6.0.0
   build_runner: ^2.0.5
   flutter_launcher_icons: ^0.12.0
   flutter_lints: ^2.0.1

@@ -6,7 +6,7 @@ import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';

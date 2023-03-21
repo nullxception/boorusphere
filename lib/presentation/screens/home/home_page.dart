@@ -20,6 +20,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+@RoutePage()
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, this.args});
 

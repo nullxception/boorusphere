@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+@RoutePage()
 class DownloadsPage extends HookConsumerWidget {
   const DownloadsPage({super.key, this.args});
   final PageArgs? args;

@@ -4,6 +4,7 @@ import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+@RoutePage()
 class LanguageSettingsPage extends StatelessWidget {
   const LanguageSettingsPage({super.key});
 

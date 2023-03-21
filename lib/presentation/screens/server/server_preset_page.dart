@@ -7,6 +7,7 @@ import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+@RoutePage()
 class ServerPresetPage extends ConsumerWidget {
   const ServerPresetPage({super.key, this.onReturned});
 

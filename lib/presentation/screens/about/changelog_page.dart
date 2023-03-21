@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
@@ -6,6 +7,7 @@ import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+@RoutePage()
 class ChangelogPage extends ConsumerWidget {
   const ChangelogPage({
     super.key,

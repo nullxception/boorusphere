@@ -3,7 +3,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
-import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -19,6 +19,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+@RoutePage()
 class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
   const PostDetailsPage({super.key, required this.post, required this.args});
   final Post post;

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
-import 'package:boorusphere/presentation/routes/app_router.dart';
+import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';

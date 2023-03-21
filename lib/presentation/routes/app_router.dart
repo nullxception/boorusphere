@@ -1,88 +1,67 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/data/repository/version/entity/app_version.dart';
-import 'package:boorusphere/presentation/provider/changelog_state.dart';
+import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/routes/slide_page_route.dart';
-import 'package:boorusphere/presentation/screens/about/about_page.dart';
-import 'package:boorusphere/presentation/screens/about/changelog_page.dart';
-import 'package:boorusphere/presentation/screens/about/licenses_page.dart';
-import 'package:boorusphere/presentation/screens/downloads/downloads_page.dart';
-import 'package:boorusphere/presentation/screens/favorites/favorites_page.dart';
-import 'package:boorusphere/presentation/screens/home/home_page.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
-import 'package:boorusphere/presentation/screens/post/post_details_page.dart';
-import 'package:boorusphere/presentation/screens/server/server_editor_page.dart';
-import 'package:boorusphere/presentation/screens/server/server_page.dart';
-import 'package:boorusphere/presentation/screens/server/server_preset_page.dart';
-import 'package:boorusphere/presentation/screens/settings/data_backup_page.dart';
-import 'package:boorusphere/presentation/screens/settings/language_settings_page.dart';
-import 'package:boorusphere/presentation/screens/settings/settings_page.dart';
-import 'package:boorusphere/presentation/screens/tags_blocker/tags_blocker_page.dart';
-import 'package:flutter/widgets.dart';
 
-part 'app_router.gr.dart';
-
-@MaterialAutoRouter(
-  replaceInRouteName: 'Page,Route',
-  routes: [
+@AutoRouterConfig()
+class AppRouter extends $AppRouter {
+  @override
+  final List<AutoRoute> routes = [
     CustomRoute(
-      page: HomePage,
-      initial: true,
+      page: HomeRoute.page,
+      path: '/',
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: PostDetailsPage,
+      page: PostDetailsRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: DownloadsPage,
+      page: DownloadsRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: ServerEditorPage,
+      page: ServerEditorRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: ServerPage,
+      page: ServerRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: ServerPresetPage,
+      page: ServerPresetRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: TagsBlockerPage,
+      page: TagsBlockerRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: SettingsPage,
+      page: SettingsRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: LanguageSettingsPage,
+      page: LanguageSettingsRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: DataBackupPage,
+      page: DataBackupRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: AboutPage,
+      page: AboutRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: ChangelogPage,
+      page: ChangelogRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: LicensesPage,
+      page: LicensesRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
     CustomRoute(
-      page: FavoritesPage,
+      page: FavoritesRoute.page,
       customRouteBuilder: SlidePageRoute.build,
     ),
-  ],
-)
-class AppRouter extends _$AppRouter {}
+  ];
+}

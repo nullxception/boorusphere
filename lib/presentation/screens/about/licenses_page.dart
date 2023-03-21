@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/routes/slide_page_route.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -36,6 +37,7 @@ class LicenseData {
   }
 }
 
+@RoutePage()
 class LicensesPage extends ConsumerWidget {
   const LicensesPage({super.key});
 

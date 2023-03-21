@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+@RoutePage()
 class FavoritesPage extends ConsumerWidget {
   const FavoritesPage({super.key, this.args});
   final PageArgs? args;
