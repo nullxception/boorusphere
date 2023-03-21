@@ -29,7 +29,7 @@
   "open_settings": "Buka Pengaturan",
   "copy_success": "Disalin ke clipboard",
   "load_image_failed": "Gagal memuat konten",
-  "unsafe_content": "Content is not safe",
+  "unsafe_content": "Berisi konten eksplisit",
   "unblur": "Perlihatkan",
   "unsupported_media": "${file_ext} tidak didukung",
   "open_externally": "Buka secara eksternal",
@@ -42,7 +42,7 @@
   "restore": "Pulihkan",
   "searchHistory": "Histori Pencarian",
   "score": "Skor",
-  "always_ask": "Always ask",
+  "always_ask": "Selalu tanya",
   "rating": {
     "title": "Penilaian",
     "questionable": "Dipertanyakan",
@@ -107,14 +107,14 @@
   },
   "downloads": {
     "title": "Unduhan",
-    "no_file": "File telah dipindahkan",
+    "no_file": "File dipindahkan",
     "redownload": "Unduh ulang",
     "detail": "Tampilkan detail",
     "placeholder": "File yang kamu unduh akan muncul di sini",
     "ungroup": "Batalkan grup",
-    "group_by_server": "Kelompokkan berdasarkan server",
+    "group_by_server": "Pengelompokan server",
     "no_permission": "Tidak dapat mengunduh file; gagal mendapatkan izin",
-    "quality": "Download quality",
+    "quality": "Kualitas unduhan",
     "status": {
       "empty": "Kosong",
       "pending": "Menunggu",
@@ -124,8 +124,8 @@
       "canceled": "Dibatalkan",
       "paused": "Tertunda"
     },
-    "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    "filter_by_status": "Filter status",
+    "no_filter": "Tanpa filter"
   },
   "favorites": {
     "title": "Favorit",
@@ -150,11 +150,11 @@
     "homepage_hint": "Beranda, contoh: https://verycoolbooru.com",
     "use_custom_api": "Gunakan alamat API khusus",
     "use_custom_api_desc": "Berguna jika server memiliki alamat API yang berbeda dari beranda",
-    "addr_error": "bukan alamat yang valid",
+    "addr_error": "Alamat tidak valid",
     "api_addr": "Alamat API",
     "api_addr_hint": "Alamat API, contoh: https://api-v69.verycoolbooru.com",
     "already_exists": "Data server untuk ${name} sudah ada",
-    "invalid_search_query": "Invalid search query"
+    "invalid_search_query": "Search query tidak valid"
   },
   "server_query": {
     "title": "Query",
