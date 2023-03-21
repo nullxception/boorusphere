@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/screens/post/hooks/video_post.dart';
-import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/post_toolbox.dart';
+import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
 import 'package:flutter/material.dart';
@@ -154,20 +155,14 @@ class PostVideo extends HookConsumerWidget {
           ),
         ),
         if (isBlur.value)
-          FadeTransition(
-            opacity: Tween<double>(begin: 0, end: 1).animate(
-              CurvedAnimation(
-                parent: blurNoticeAnimator,
-                curve: Curves.easeInCubic,
-              ),
-            ),
-            child: Center(
-              child: PostExplicitWarningCard(
-                onConfirm: () async {
-                  await blurNoticeAnimator.reverse();
-                  isBlur.value = false;
-                },
-              ),
+          Positioned(
+            bottom: QuickBar.preferredBottomPosition(context) + 24,
+            child: QuickBar.action(
+              title: Text(context.t.unsafeContent),
+              actionTitle: Text(context.t.unblur),
+              onPressed: () {
+                isBlur.value = false;
+              },
             ),
           ),
       ],

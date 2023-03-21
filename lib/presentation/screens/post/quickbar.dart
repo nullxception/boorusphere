@@ -110,4 +110,10 @@ class QuickBar extends StatelessWidget {
       ),
     );
   }
+
+  static double preferredBottomPosition(BuildContext context) {
+    return context.mediaQuery.viewPadding.bottom +
+        kBottomNavigationBarHeight +
+        24;
+  }
 }

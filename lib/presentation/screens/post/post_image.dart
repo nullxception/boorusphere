@@ -7,7 +7,6 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/fullscreen_state.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
-import 'package:boorusphere/presentation/screens/post/post_explicit_warning.dart';
 import 'package:boorusphere/presentation/screens/post/post_placeholder_image.dart';
 import 'package:boorusphere/presentation/screens/post/quickbar.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -36,20 +35,12 @@ class PostImage extends HookConsumerWidget {
     final isBlur = useState(post.rating.isExplicit && shouldBlurExplicit);
     final zoomAnimator =
         useAnimationController(duration: const Duration(milliseconds: 150));
-    final blurNoticeAnimator =
-        useAnimationController(duration: const Duration(milliseconds: 200));
     final imageLoadState = useStreamController<ExtendedImageState>();
 
     useEffect(() {
       if (post.rating != BooruRating.explicit || !shouldBlurExplicit) {
         return;
       }
-
-      Future(() {
-        if (context.mounted) {
-          blurNoticeAnimator.forward();
-        }
-      });
     }, []);
 
     final deviceRatio = context.mediaQuery.size.aspectRatio;
@@ -137,9 +128,7 @@ class PostImage extends HookConsumerWidget {
           ),
           if (!isBlur.value)
             Positioned(
-              bottom: context.mediaQuery.viewInsets.bottom +
-                  kBottomNavigationBarHeight +
-                  32,
+              bottom: QuickBar.preferredBottomPosition(context),
               child: StreamBuilder(
                 stream: imageLoadState.stream,
                 builder: (context, snapshot) {
@@ -152,21 +141,15 @@ class PostImage extends HookConsumerWidget {
                 },
               ),
             ),
-          if (post.rating.isExplicit && shouldBlurExplicit)
-            FadeTransition(
-              opacity: Tween<double>(begin: 0, end: 1).animate(
-                CurvedAnimation(
-                  parent: blurNoticeAnimator,
-                  curve: Curves.easeInCubic,
-                ),
-              ),
-              child: Center(
-                child: PostExplicitWarningCard(
-                  onConfirm: () {
-                    blurNoticeAnimator.reverse();
-                    isBlur.value = false;
-                  },
-                ),
+          if (isBlur.value)
+            Positioned(
+              bottom: QuickBar.preferredBottomPosition(context),
+              child: QuickBar.action(
+                title: Text(context.t.unsafeContent),
+                actionTitle: Text(context.t.unblur),
+                onPressed: () {
+                  isBlur.value = false;
+                },
               ),
             ),
         ],

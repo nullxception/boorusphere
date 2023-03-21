@@ -29,7 +29,7 @@
   "open_settings": "Buka Pengaturan",
   "copy_success": "Disalin ke clipboard",
   "load_image_failed": "Gagal memuat konten",
-  "on_media_blurred": "Media ini mungkin berisi konten yang tidak aman untuk dilihat publik",
+  "unsafe_content": "Content is not safe",
   "unblur": "Perlihatkan",
   "unsupported_media": "${file_ext} tidak didukung",
   "open_externally": "Buka secara eksternal",

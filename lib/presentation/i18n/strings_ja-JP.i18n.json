@@ -29,7 +29,7 @@
   "open_settings": "設定を開く",
   "copy_success": "クリップボードにコピーしました",
   "load_image_failed": "画像の読み込みに失敗しました",
-  "on_media_blurred": "このメディアには、一般に公開するには安全でない素材が含まれている可能性があります",
+  "unsafe_content": "Content is not safe",
   "unblur": "表示",
   "unsupported_media": "${file_ext} はサポートされていません",
   "open_externally": "外部で開く",

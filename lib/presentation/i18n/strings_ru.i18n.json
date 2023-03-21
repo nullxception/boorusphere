@@ -29,7 +29,7 @@
   "open_settings": "Открыть настройки",
   "copy_success": "Скопировано в буфер",
   "load_image_failed": "Не удалось загрузить контент",
-  "on_media_blurred": "Этот контент может содержать материалы, которые небезопасны для публичного просмотра",
+  "unsafe_content": "Content is not safe",
   "unblur": "Показать",
   "unsupported_media": "${file_ext} не поддерживается",
   "open_externally": "Открыт снаружи",

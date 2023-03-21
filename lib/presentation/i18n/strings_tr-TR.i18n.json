@@ -29,7 +29,7 @@
   "open_settings": "Ayarları Aç",
   "copy_success": "Panoya kopyalandı",
   "load_image_failed": "Görsel yüklenemedi",
-  "on_media_blurred": "Bu medya herkese açık olarak görüntülenmek için güvenli olmayan içerik içeriyor olabilir.",
+  "unsafe_content": "Content is not safe",
   "unblur": "Göster",
   "unsupported_media": "${file_ext} desteklenmiyor",
   "open_externally": "Harici olarak aç",

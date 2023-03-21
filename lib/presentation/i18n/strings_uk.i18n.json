@@ -29,7 +29,7 @@
   "open_settings": "Відкрити налаштування",
   "copy_success": "Скопійовано до буферу обміну",
   "load_image_failed": "Не вдалось завантажити зображення",
-  "on_media_blurred": "Цей носій може містити матеріали, які не є безпечними для публічного перегляду",
+  "unsafe_content": "Content is not safe",
   "unblur": "Покажи мені",
   "unsupported_media": "${file_ext} не підтримується",
   "open_externally": "Відкрити зовні",

@@ -29,7 +29,7 @@
   "open_settings": "เปิดตั้งค่า",
   "copy_success": "คัดลอกไปยังคลิปบอร์ดแล้ว",
   "load_image_failed": "เกิดข้อผิดพลาดในการโหลดภาพ",
-  "on_media_blurred": "สื่อนี้อาจมีเนื้อหาที่ไม่ปลอดภัยสำหรับการรับชมในที่สาธารณะ",
+  "unsafe_content": "Content is not safe",
   "unblur": "แสดงเลย",
   "unsupported_media": "${file_ext} ไม่ถูกรองรับ",
   "open_externally": "เปิดภายนอก",

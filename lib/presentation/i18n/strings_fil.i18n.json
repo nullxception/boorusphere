@@ -29,7 +29,7 @@
   "open_settings": "Buksan ang Settings",
   "copy_success": "Nakopya sa clipboard",
   "load_image_failed": "Nabigong i-load ang image",
-  "on_media_blurred": "Maaaring naglalaman ng maselang kontent ang mediang ito na hindi kaaya-ayang tingnan sa pampublikong lugar",
+  "unsafe_content": "Content is not safe",
   "unblur": "Ipakita",
   "unsupported_media": "Hindi sinusoportahan ang file type na ${file_ext}",
   "open_externally": "Buksan sa ibang app",
