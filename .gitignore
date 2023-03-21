@@ -51,3 +51,6 @@ lib/**/*.config.dart
 lib/**/*.freezed.dart
 lib/**/*.g.dart
 lib/**/*.gr.dart
+
+# slang analysis result
+lib/**/_*_translations.json
