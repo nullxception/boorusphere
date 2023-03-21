@@ -30,46 +30,40 @@ class _PrecachePostsHook extends Hook<_Precacher> {
 class _PrecachePostsState extends HookState<_Precacher, _PrecachePostsHook> {
   _PrecachePostsState();
 
-  bool _mounted = true;
-
-  void _precache(Post post, bool og) {
-    if (!post.content.isPhoto || !_mounted) return;
+  Future<void> _precacheImagePost(Post post, bool og) async {
+    if (!post.content.isPhoto || !context.mounted) return;
     final image = ExtendedNetworkImageProvider(
       og ? post.originalFile : post.content.url,
       headers: hook.ref.read(postHeadersFactoryProvider(post)),
-      // params below follows the default value on
-      // the ExtendedImage.network() factory
       cache: true,
       retries: 3,
     );
-
-    precacheImage(image, context).ignore();
+    final status = await image.obtainCacheStatus(
+      configuration: ImageConfiguration.empty,
+    );
+    if (context.mounted && (status?.untracked ?? true)) {
+      await precacheImage(image, context);
+    }
   }
 
   void _precachePosts(i, showOG) {
-    if (!_mounted) return;
+    if (!context.mounted) return;
 
     final next = i + 1;
     final prev = i - 1;
     final posts = hook.posts;
 
     if (prev >= 0) {
-      _precache(posts.elementAt(prev), showOG);
+      _precacheImagePost(posts.elementAt(prev), showOG);
     }
 
     if (next < posts.length) {
-      _precache(posts.elementAt(next), showOG);
+      _precacheImagePost(posts.elementAt(next), showOG);
     }
   }
 
   @override
   _Precacher build(BuildContext context) => _precachePosts;
-
-  @override
-  void dispose() {
-    _mounted = false;
-    super.dispose();
-  }
 
   @override
   String get debugLabel => 'usePrecachePosts';
