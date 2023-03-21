@@ -139,7 +139,7 @@ class PostViewer extends HookConsumerWidget {
                   }
                   return HeroMode(
                     enabled: index == currentPage.value,
-                    child: widget,
+                    child: ClipRect(child: widget),
                   );
                 },
               ),
