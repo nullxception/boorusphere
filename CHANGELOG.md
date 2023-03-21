@@ -1,3 +1,8 @@
+## 1.3.6
+* DownloadsPage: add option to filter downloads by status
+* Several UI updates, fixes, and improvement
+* Update Indonesian language
+
 ## 1.3.5
 * Fix backup archive creation after 1.3.2 (caused by download quality selection)
 
