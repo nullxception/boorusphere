@@ -3,6 +3,14 @@ description: Suggest an idea for improvement
 title: "Feature: <title>"
 labels: [enhancement, needs triage]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Welcome!
+
+        Before filling an issues, we just want to make sure that this app is just a booru viewer.
+        It wasn't mean to be, and will never be a full booru client (that support login, comments, vote score, etc),
+        so any suggestion regarding those will be closed, thanks.
   - type: dropdown
     attributes:
       label: Type
@@ -27,18 +35,12 @@ body:
   - type: textarea
     attributes:
       label: Additional context
-      description: Add additional context here.
     validations:
       required: false
   - type: checkboxes
     id: acknowledgements
     attributes:
       label: Acknowledgements
-      description: Your issue will be closed if you haven't done these steps.
       options:
         - label: I have searched the existing issues and this is a new and no duplicate or related to another open issue.
-          required: true
-        - label: I have written a short but informative title.
-          required: true
-        - label: I filled out all of the requested information in this issue properly.
           required: true
