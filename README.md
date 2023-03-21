@@ -4,22 +4,31 @@
 
 Simple, content-focused booru viewer for Android
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nullxception/boorusphere/testing.yml?label=tests&style=flat-square)
-
-<a href="https://github.com/nullxception/boorusphere/releases">
-    <img src="assets/button-GHReleases.png" alt="github release page" width="170">
-</a>
-<a href="https://apt.izzysoft.de/fdroid/index/apk/io.chaldeaprjkt.boorusphere">
-    <img src="assets/button-IzzyOnDroid.png" alt="IzzyOnDroid release page" width="170">
-</a>
+<p>
+    <a href="https://github.com/nullxception/boorusphere/releases/latest">
+        <img alt="Latest release" src="https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square">
+    </a>
+    <img alt="Workflow status" src="https://img.shields.io/github/actions/workflow/status/nullxception/boorusphere/testing.yml?style=flat-square">
+    <a href="https://github.com/nullxception/boorusphere/blob/main/LICENSE.md">
+        <img alt="License" src="https://img.shields.io/github/license/nullxception/boorusphere?color=violet&style=flat-square">
+    </a>
+</p>
+<p>
+    <a href="https://github.com/nullxception/boorusphere/releases">
+        <img src="assets/button-GHReleases.png" alt="GitHub release" width="160">
+    </a>
+    <a href="https://apt.izzysoft.de/fdroid/index/apk/io.chaldeaprjkt.boorusphere">
+        <img src="assets/button-IzzyOnDroid.png" alt="IzzyOnDroid release" width="160">
+    </a>
+</p>
 
 # Preview
 
-<p align="center">
-    <img width="24.5%" src="assets/previews/drawer.webp" />
-    <img width="24.5%" src="assets/previews/home.webp" />
-    <img width="24.5%" src="assets/previews/search.webp" />
-    <img width="24.5%" src="assets/previews/favorites.webp" />
+<p align="justify">
+    <img width="24%" src="assets/previews/drawer.webp" />
+    <img width="24%" src="assets/previews/home.webp" />
+    <img width="24%" src="assets/previews/search.webp" />
+    <img width="24%" src="assets/previews/favorites.webp" />
 </p>
 
 # Features
@@ -60,7 +69,3 @@ $ flutter run
 ```
 
 For more details, see [Flutter's build modes](https://docs.flutter.dev/testing/build-modes).
-
-# License
-
-This work is licensed under [BSD 3-Clause License](LICENSE.md).
