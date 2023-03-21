@@ -14,8 +14,9 @@ extension DoubleExt on double {
 
 extension ImageChunkEventExt on ImageChunkEvent {
   double? get progressRatio {
-    if (expectedTotalBytes != null) {
-      return cumulativeBytesLoaded / expectedTotalBytes!;
+    final total = expectedTotalBytes;
+    if (total != null) {
+      return cumulativeBytesLoaded / total;
     }
   }
 

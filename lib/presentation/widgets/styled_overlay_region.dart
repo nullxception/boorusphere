@@ -17,6 +17,7 @@ class StyledOverlayRegion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = this.theme;
     final envRepo = ref.watch(envRepoProvider);
     final isNightMode = nightMode ?? context.brightness == Brightness.dark;
     final foregroundBrightness =
@@ -37,7 +38,7 @@ class StyledOverlayRegion extends ConsumerWidget {
       // opt-out SDK 28 and below from transparent navigationBar
       // due to lack of SystemUiMode.edgeToEdge
       value: envRepo.sdkVersion > 28 ? style : defStyle,
-      child: theme != null ? Theme(data: theme!, child: child) : child,
+      child: theme != null ? Theme(data: theme, child: child) : child,
     );
   }
 }
