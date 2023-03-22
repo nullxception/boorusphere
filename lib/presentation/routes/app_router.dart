@@ -30,9 +30,9 @@ class AppRouter extends $AppRouter {
 
   @override
   final List<AutoRoute> routes = [
+    AutoRoute(page: InitialDirectorRoute.page, path: '/'),
     CustomRoute(
       page: HomeRoute.page,
-      path: '/',
       customRouteBuilder: _homeRouteBuilder,
     ),
     CustomRoute(
