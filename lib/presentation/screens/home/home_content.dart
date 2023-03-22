@@ -25,9 +25,8 @@ class HomeContent extends HookConsumerWidget {
     final serverData = ref.watch(serverDataStateProvider);
     final blockedTags = ref.watch(blockedTagsStateProvider.select(
       (state) => state.values
-          .where((it) =>
-              it.serverId.isEmpty ||
-              it.serverId == serverData.getById(pageArgs.serverId).id)
+          .where(
+              (it) => it.serverId.isEmpty || it.serverId == pageArgs.serverId)
           .map((it) => it.name),
     ));
 

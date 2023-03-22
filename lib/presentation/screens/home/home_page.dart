@@ -44,13 +44,13 @@ class HomePage extends ConsumerWidget {
           overrides: [
             pageArgsProvider.overrideWith((ref) => pageArgs),
             pageStateProvider.overrideWith(
-              () => PageState(serverId: pageArgs.serverId),
+              () => PageState(pageArgs: pageArgs),
             ),
             suggestionStateProvider.overrideWith(
-              () => SuggestionState(serverId: pageArgs.serverId),
+              () => SuggestionState(pageArgs: pageArgs),
             ),
             searchBarControllerProvider.overrideWith(
-              (ref) => SearchBarController(ref, pageArgs.query),
+              (ref) => SearchBarController(ref, pageArgs: pageArgs),
             ),
             homeDrawerControllerProvider.overrideWith(
               (ref) => HomeDrawerController(),

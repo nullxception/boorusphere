@@ -11,12 +11,12 @@ final searchBarControllerProvider =
         (ref) => throw UnimplementedError());
 
 class SearchBarController extends ChangeNotifier {
-  SearchBarController(this.ref, this.initial) {
+  SearchBarController(this.ref, {required this.pageArgs}) {
     textEditingController.addListener(_fetch);
   }
 
   final Ref ref;
-  final String initial;
+  final PageArgs pageArgs;
 
   late final textEditingController = TextEditingController(text: initial);
 
@@ -24,6 +24,7 @@ class SearchBarController extends ChangeNotifier {
 
   bool get isOpen => _open;
   String get value => textEditingController.value.text;
+  String get initial => pageArgs.query;
 
   set _value(String value) {
     textEditingController.value = TextEditingValue(
@@ -42,7 +43,6 @@ class SearchBarController extends ChangeNotifier {
   void submit(BuildContext context, String newValue) {
     _value = initial;
     close();
-    final pageArgs = ref.read(pageArgsProvider);
     context.router.push(HomeRoute(
       args: pageArgs.copyWith(query: newValue),
     ));

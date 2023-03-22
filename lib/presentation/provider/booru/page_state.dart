@@ -11,6 +11,7 @@ import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,9 +20,9 @@ part 'page_state.g.dart';
 
 @riverpod
 class PageState extends _$PageState {
-  PageState({this.serverId = ''});
+  PageState({this.pageArgs = const PageArgs()});
 
-  final String serverId;
+  final PageArgs pageArgs;
   final _posts = <Post>[];
   int _page = 0;
 
@@ -33,7 +34,7 @@ class PageState extends _$PageState {
   }
 
   ServerData get _server {
-    return ref.read(serverDataStateProvider).getById(serverId);
+    return ref.read(serverDataStateProvider).getById(pageArgs.serverId);
   }
 
   Iterable<String> get blockedTags {
