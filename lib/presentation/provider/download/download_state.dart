@@ -1,7 +1,9 @@
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/download/entity/downloads.dart';
+import 'package:boorusphere/presentation/provider/download/entity/download_item.dart';
+import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'download_state.g.dart';
@@ -9,70 +11,73 @@ part 'download_state.g.dart';
 @riverpod
 class DownloadState extends _$DownloadState {
   @override
-  Downloads build() {
+  Iterable<DownloadItem> build() {
     Future(_populate);
-    return const Downloads();
+    return [];
   }
 
   Future<void> _populate() async {
     final repo = ref.read(downloadRepoProvider);
-    state = Downloads(
-      entries: repo.getEntries(),
-      progresses: await repo.getProgress(),
-    );
+    final progresses = await repo.getProgress();
+    state = repo.getEntries().map(
+          (entry) => DownloadItem(
+            entry: entry,
+            progress: progresses.firstWhere(
+              (it) => it.id == entry.id,
+              orElse: () => DownloadProgress.none,
+            ),
+          ),
+        );
   }
 
   Future<void> add(DownloadEntry entry) async {
     final repo = ref.read(downloadRepoProvider);
     await repo.add(entry);
-    state = state.copyWith(
-      entries: [
-        ...state.entries.where((it) => it.id != entry.id),
-        entry,
-      ],
-    );
+    state = [
+      ...state.where((it) => it.entry.id != entry.id),
+      DownloadItem(entry: entry),
+    ];
   }
 
   Future<void> remove(String id) async {
     final repo = ref.read(downloadRepoProvider);
     await repo.remove(id);
-    state = state.copyWith(
-      entries: [
-        ...state.entries.where((it) => it.id != id),
-      ],
-      progresses: {
-        ...state.progresses.where((it) => it.id != id),
-      },
-    );
+    state = [...state.where((it) => it.entry.id != id)];
   }
 
   Future<void> update(String id, DownloadEntry entry) async {
     final repo = ref.read(downloadRepoProvider);
     await repo.remove(id);
     await repo.add(entry);
-    state = state.copyWith(
-      entries: [
-        ...state.entries.where((it) => it.id != entry.id),
-        entry,
-      ],
-      progresses: {
-        ...state.progresses.where((it) => it.id != id && it.id != entry.id),
-      },
-    );
+    state = [
+      ...state.where((it) => it.entry.id != id),
+      DownloadItem(entry: entry),
+    ];
   }
 
   updateProgress(DownloadProgress progress) {
-    state = state.copyWith(
-      progresses: {
-        ...state.progresses.where((it) => it.id != progress.id),
-        progress,
-      },
-    );
+    final item = state.singleWhereOrNull((it) => it.entry.id == progress.id);
+    state = [
+      ...state.where((it) => it.entry.id != progress.id),
+      if (item != null) item.copyWith(progress: progress)
+    ];
   }
 
   Future<void> clear() async {
     final repo = ref.read(downloadRepoProvider);
     await repo.clear();
-    state = const Downloads();
+    state = [];
+  }
+}
+
+extension DownloadItemsExt on Iterable<DownloadItem> {
+  DownloadProgress getProgressById(String id) {
+    final item = firstWhereOrNull((it) => it.entry.id == id);
+    return item?.progress ?? DownloadProgress.none;
+  }
+
+  DownloadProgress getProgressByPost(Post post) {
+    final item = firstWhereOrNull((it) => it.entry.post == post);
+    return item?.progress ?? DownloadProgress.none;
   }
 }

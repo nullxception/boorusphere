@@ -1,6 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
+import 'package:boorusphere/presentation/provider/download/entity/download_item.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:boorusphere/utils/file_utils.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -44,8 +45,8 @@ class Downloader {
     if (newId != null) {
       final newEntry = ref
           .read(downloadStateProvider)
-          .entries
-          .firstWhere((it) => it.id == id, orElse: () => DownloadEntry.empty)
+          .firstWhere((it) => it.entry.id == id, orElse: DownloadItem.new)
+          .entry
           .copyWith(id: newId);
 
       await ref.read(downloadStateProvider.notifier).update(id, newEntry);

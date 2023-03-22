@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
-import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
+import 'package:boorusphere/presentation/provider/download/entity/download_item.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
@@ -19,22 +19,20 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:separated_row/separated_row.dart';
 
-class DownloadEntryView extends ConsumerWidget {
-  const DownloadEntryView({
+class DownloadItemView extends ConsumerWidget {
+  const DownloadItemView({
     super.key,
-    required this.entry,
-    required this.progress,
+    required this.item,
     required this.groupByServer,
   });
 
-  final DownloadEntry entry;
-  final DownloadProgress progress;
+  final DownloadItem item;
   final bool groupByServer;
 
   IconData _buildStatusIcon() {
-    switch (progress.status) {
+    switch (item.progress.status) {
       case DownloadStatus.downloaded:
-        return entry.isFileExists
+        return item.entry.isFileExists
             ? Icons.download_done_rounded
             : Icons.error_outline_rounded;
       case DownloadStatus.downloading:
@@ -48,9 +46,9 @@ class DownloadEntryView extends ConsumerWidget {
   }
 
   Color _buildStatusColor(ColorScheme scheme) {
-    switch (progress.status) {
+    switch (item.progress.status) {
       case DownloadStatus.downloaded:
-        return entry.isFileExists
+        return item.entry.isFileExists
             ? Colors.lightBlueAccent
             : scheme.onBackground.withAlpha(125);
       case DownloadStatus.canceled:
@@ -62,12 +60,12 @@ class DownloadEntryView extends ConsumerWidget {
   }
 
   String _buildStatusDesc(BuildContext context) {
-    if (progress.status.isDownloaded && !entry.isFileExists) {
+    if (item.progress.status.isDownloaded && !item.entry.isFileExists) {
       return context.t.downloads.noFile;
     }
 
     final status = context.t.downloads.status;
-    switch (progress.status) {
+    switch (item.progress.status) {
       case DownloadStatus.pending:
         return status.pending;
       case DownloadStatus.downloading:
@@ -88,11 +86,11 @@ class DownloadEntryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final headers = ref.watch(postHeadersFactoryProvider(entry.post));
+    final headers = ref.watch(postHeadersFactoryProvider(item.entry.post));
 
     return ListTile(
       title: Text(
-        Uri.decodeFull(entry.destination.fileName),
+        Uri.decodeFull(item.entry.destination.fileName),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
@@ -104,23 +102,23 @@ class DownloadEntryView extends ConsumerWidget {
               separatorBuilder: (_, __) => const SizedBox(width: 6),
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (progress.status.isDownloading ||
-                    progress.status.isPending) ...[
+                if (item.progress.status.isDownloading ||
+                    item.progress.status.isPending) ...[
                   SizedBox(
                     height: 18,
                     width: 18,
                     child: Padding(
                       padding: const EdgeInsets.all(3),
                       child: CircularProgressIndicator(
-                        value: progress.status.isPending
+                        value: item.progress.status.isPending
                             ? null
-                            : progress.progress.ratio,
+                            : item.progress.progress.ratio,
                         strokeWidth: 2.5,
                         backgroundColor: context.colorScheme.surfaceVariant,
                       ),
                     ),
                   ),
-                  Text('${progress.progress}%'),
+                  Text('${item.progress.progress}%'),
                 ] else
                   Icon(
                     _buildStatusIcon(),
@@ -137,14 +135,14 @@ class DownloadEntryView extends ConsumerWidget {
                   width: 18,
                   child: Center(child: Text('•')),
                 ),
-                Text(serverData.getById(entry.post.serverId).name),
+                Text(serverData.getById(item.entry.post.serverId).name),
               ],
             ),
           ],
         ),
       ),
       leading: ExtendedImage.network(
-        entry.post.previewFile,
+        item.entry.post.previewFile,
         headers: headers,
         width: 42,
         shape: BoxShape.rectangle,
@@ -152,14 +150,13 @@ class DownloadEntryView extends ConsumerWidget {
         fit: BoxFit.cover,
       ),
       trailing: _EntryPopupMenu(
-        entry: entry,
-        progress: progress,
-        server: serverData.getById(entry.post.serverId),
+        item: item,
+        server: serverData.getById(item.entry.post.serverId),
       ),
       dense: true,
-      onTap: !progress.status.isDownloaded || !entry.isFileExists
+      onTap: !item.progress.status.isDownloaded || !item.entry.isFileExists
           ? null
-          : () => ref.read(downloaderProvider).openFile(id: entry.id),
+          : () => ref.read(downloaderProvider).openFile(id: item.entry.id),
     );
   }
 }
@@ -189,13 +186,11 @@ class DownloadImagePreview extends HookWidget {
 
 class _EntryPopupMenu extends ConsumerWidget {
   const _EntryPopupMenu({
-    required this.entry,
-    required this.progress,
+    required this.item,
     required this.server,
   });
 
-  final DownloadEntry entry;
-  final DownloadProgress progress;
+  final DownloadItem item;
   final ServerData server;
 
   @override
@@ -208,24 +203,24 @@ class _EntryPopupMenu extends ConsumerWidget {
             DownloaderDialog.show(
               context,
               ref,
-              entry.post,
+              item.entry.post,
               onItemClick: (type) async {
-                await downloader.clear(id: entry.id);
+                await downloader.clear(id: item.entry.id);
               },
             );
             break;
           case 'retry':
-            downloader.retry(id: entry.id);
+            downloader.retry(id: item.entry.id);
             break;
           case 'cancel':
-            downloader.cancel(id: entry.id);
+            downloader.cancel(id: item.entry.id);
             break;
           case 'clear':
-            downloader.clear(id: entry.id);
+            downloader.clear(id: item.entry.id);
             break;
           case 'show-detail':
             context.router.push(PostDetailsRoute(
-              post: entry.post,
+              post: item.entry.post,
               session: ref.read(searchSessionProvider),
             ));
             break;
@@ -235,17 +230,17 @@ class _EntryPopupMenu extends ConsumerWidget {
       },
       itemBuilder: (context) {
         return [
-          if (progress.status.isDownloaded && !entry.isFileExists)
+          if (item.progress.status.isDownloaded && !item.entry.isFileExists)
             PopupMenuItem(
               value: 'redownload',
               child: Text(context.t.downloads.redownload),
             ),
-          if (progress.status.isCanceled || progress.status.isFailed)
+          if (item.progress.status.isCanceled || item.progress.status.isFailed)
             PopupMenuItem(
               value: 'retry',
               child: Text(context.t.retry),
             ),
-          if (progress.status.isDownloading)
+          if (item.progress.status.isDownloading)
             PopupMenuItem(
               value: 'cancel',
               child: Text(context.t.cancel),

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
+import 'package:boorusphere/presentation/provider/download/entity/download_item.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
@@ -31,10 +31,9 @@ class DownloadsPage extends HookConsumerWidget {
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));
     final filter = useState(DownloadFilter.none);
     final filteredEntries = filter.value != DownloadFilter.none
-        ? downloadState.entries.where((element) =>
-            downloadState.getProgressById(element.id).status ==
-            filter.value.toStatus())
-        : downloadState.entries;
+        ? downloadState
+            .where((it) => it.progress.status == filter.value.toStatus())
+        : downloadState;
 
     return ProviderScope(
       overrides: [searchSessionProvider.overrideWith((ref) => session)],
@@ -42,7 +41,7 @@ class DownloadsPage extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(context.t.downloads.title),
           actions: [
-            if (downloadState.entries.isNotEmpty)
+            if (downloadState.isNotEmpty)
               PopupMenuButton(
                 onSelected: (value) {
                   switch (value) {
@@ -101,13 +100,12 @@ class DownloadsPage extends HookConsumerWidget {
                     ),
                   ],
                 )
-              : ExpandableGroupListView<DownloadEntry, String>(
+              : ExpandableGroupListView<DownloadItem, String>(
                   items: filteredEntries,
-                  groupedBy: (entry) => entry.post.serverId,
+                  groupedBy: (item) => item.entry.post.serverId,
                   groupTitle: (id) => Text(serverData.getById(id).name),
-                  itemBuilder: (entry) => DownloadEntryView(
-                    entry: entry,
-                    progress: downloadState.getProgressById(entry.id),
+                  itemBuilder: (item) => DownloadItemView(
+                    item: item,
                     groupByServer: groupByServer,
                   ),
                   ungroup: !groupByServer,
