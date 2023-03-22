@@ -3,7 +3,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,9 +11,9 @@ part 'suggestion_state.g.dart';
 
 @riverpod
 class SuggestionState extends _$SuggestionState {
-  SuggestionState({this.pageArgs = const PageArgs()});
+  SuggestionState({this.session = const SearchSession()});
 
-  final PageArgs pageArgs;
+  final SearchSession session;
 
   String? _lastQuery;
 
@@ -25,7 +25,7 @@ class SuggestionState extends _$SuggestionState {
 
   Future<void> get(String query) async {
     if (_lastQuery == query) return;
-    final server = ref.read(serverDataStateProvider).getById(pageArgs.serverId);
+    final server = ref.read(serverDataStateProvider).getById(session.serverId);
     if (server == ServerData.empty) {
       state = const FetchResult.data([]);
       return;

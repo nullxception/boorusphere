@@ -5,7 +5,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -18,18 +18,18 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 @RoutePage()
 class FavoritesPage extends ConsumerWidget {
-  const FavoritesPage({super.key, this.args});
-  final PageArgs? args;
+  const FavoritesPage({super.key, this.session});
+  final SearchSession? session;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritePostState = ref.watch(favoritePostStateProvider);
     final savedServer =
         ref.read(serverSettingStateProvider.select((it) => it.active));
-    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+    final session = this.session ?? SearchSession(serverId: savedServer.id);
     return ProviderScope(
       overrides: [
-        pageArgsProvider.overrideWith((ref) => pageArgs),
+        searchSessionProvider.overrideWith((ref) => session),
         timelineControllerProvider.overrideWith((ref) =>
             TimelineController(scrollController: AutoScrollController())),
       ],

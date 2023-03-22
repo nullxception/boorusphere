@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_data_state.g.dart';
@@ -37,7 +37,7 @@ class ServerDataState extends _$ServerDataState {
     state = repo.servers;
   }
 
-  Future<void> remove(PageArgs pageArgs, ServerData data) async {
+  Future<void> remove(SearchSession session, ServerData data) async {
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
@@ -45,16 +45,17 @@ class ServerDataState extends _$ServerDataState {
     final repo = ref.read(serverRepoProvider);
     await repo.remove(data);
     state = repo.servers;
-    if (pageArgs.serverId == data.id) {
+    if (session.serverId == data.id) {
       await settings.setActiveServer(state.first);
     }
   }
 
-  Future<void> edit(PageArgs pageArgs, ServerData from, ServerData to) async {
+  Future<void> edit(
+      SearchSession session, ServerData from, ServerData to) async {
     final repo = ref.read(serverRepoProvider);
     final data = await repo.edit(from, to);
     state = repo.servers;
-    if (pageArgs.serverId == from.id) {
+    if (session.serverId == from.id) {
       await settings.setActiveServer(data);
     }
   }

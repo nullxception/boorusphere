@@ -9,9 +9,9 @@ import 'package:boorusphere/presentation/provider/settings/server_setting_state.
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
 import 'package:boorusphere/presentation/screens/home/home_content.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
@@ -22,9 +22,9 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 @RoutePage()
 class HomePage extends ConsumerWidget {
-  const HomePage({super.key, this.args});
+  const HomePage({super.key, this.session});
 
-  final PageArgs? args;
+  final SearchSession? session;
 
   Rect _timelineBoundary(BuildContext context) {
     final bottom = context.mediaQuery.padding.bottom + SearchBar.innerHeight;
@@ -35,22 +35,22 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final savedServer =
         ref.read(serverSettingStateProvider.select((it) => it.active));
-    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+    final session = this.session ?? SearchSession(serverId: savedServer.id);
 
     return Scaffold(
       extendBody: true,
       body: StyledOverlayRegion(
         child: ProviderScope(
           overrides: [
-            pageArgsProvider.overrideWith((ref) => pageArgs),
+            searchSessionProvider.overrideWith((ref) => session),
             pageStateProvider.overrideWith(
-              () => PageState(pageArgs: pageArgs),
+              () => PageState(session: session),
             ),
             suggestionStateProvider.overrideWith(
-              () => SuggestionState(pageArgs: pageArgs),
+              () => SuggestionState(session: session),
             ),
             searchBarControllerProvider.overrideWith(
-              (ref) => SearchBarController(ref, pageArgs: pageArgs),
+              (ref) => SearchBarController(ref, session: session),
             ),
             homeDrawerControllerProvider.overrideWith(
               (ref) => HomeDrawerController(),

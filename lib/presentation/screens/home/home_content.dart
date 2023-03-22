@@ -5,8 +5,8 @@ import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/screens/home/home_status.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_screen.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline.dart';
@@ -21,12 +21,11 @@ class HomeContent extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageState = ref.watch(pageStateProvider);
-    final pageArgs = ref.watch(pageArgsProvider);
+    final session = ref.watch(searchSessionProvider);
     final serverData = ref.watch(serverDataStateProvider);
     final blockedTags = ref.watch(blockedTagsStateProvider.select(
       (state) => state.values
-          .where(
-              (it) => it.serverId.isEmpty || it.serverId == pageArgs.serverId)
+          .where((it) => it.serverId.isEmpty || it.serverId == session.serverId)
           .map((it) => it.name),
     ));
 
@@ -37,7 +36,7 @@ class HomeContent extends HookConsumerWidget {
       if (serverData.isNotEmpty) {
         Future(() {
           ref.read(pageStateProvider.notifier).update(
-              (option) => option.copyWith(query: pageArgs.query, clear: true));
+              (option) => option.copyWith(query: session.query, clear: true));
         });
       }
     }, [serverData.isNotEmpty]);

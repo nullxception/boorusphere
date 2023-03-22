@@ -7,7 +7,7 @@ import 'package:boorusphere/presentation/provider/settings/download_setting_stat
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_entry_view.dart';
 import 'package:boorusphere/presentation/screens/downloads/download_filter.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/expandable_group_list_view.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
@@ -17,14 +17,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
 class DownloadsPage extends HookConsumerWidget {
-  const DownloadsPage({super.key, this.args});
-  final PageArgs? args;
+  const DownloadsPage({super.key, this.session});
+  final SearchSession? session;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final savedServer =
         ref.read(serverSettingStateProvider.select((it) => it.active));
-    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+    final session = this.session ?? SearchSession(serverId: savedServer.id);
     final serverData = ref.watch(serverDataStateProvider);
     final downloadState = ref.watch(downloadStateProvider);
     final groupByServer = ref
@@ -37,7 +37,7 @@ class DownloadsPage extends HookConsumerWidget {
         : downloadState.entries;
 
     return ProviderScope(
-      overrides: [pageArgsProvider.overrideWith((ref) => pageArgs)],
+      overrides: [searchSessionProvider.overrideWith((ref) => session)],
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.t.downloads.title),

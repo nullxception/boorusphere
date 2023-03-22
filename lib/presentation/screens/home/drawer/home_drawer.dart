@@ -8,7 +8,7 @@ import 'package:boorusphere/presentation/provider/settings/server_setting_state.
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:boorusphere/presentation/widgets/prepare_update.dart';
@@ -82,7 +82,7 @@ class _Footer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(pageArgsProvider);
+    final session = ref.watch(searchSessionProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,17 +92,17 @@ class _Footer extends ConsumerWidget {
         ListTile(
           title: Text(context.t.downloads.title),
           leading: const Icon(Icons.cloud_download),
-          onTap: () => context.router.push(DownloadsRoute(args: pageArgs)),
+          onTap: () => context.router.push(DownloadsRoute(session: session)),
         ),
         ListTile(
           title: Text(context.t.favorites.title),
           leading: const Icon(Icons.favorite_border),
-          onTap: () => context.router.push(FavoritesRoute(args: pageArgs)),
+          onTap: () => context.router.push(FavoritesRoute(session: session)),
         ),
         ListTile(
           title: Text(context.t.servers.title),
           leading: const Icon(Icons.public),
-          onTap: () => context.router.push(ServerRoute(args: pageArgs)),
+          onTap: () => context.router.push(ServerRoute(session: session)),
         ),
         ListTile(
           title: Text(context.t.tagsBlocker.title),
@@ -230,15 +230,15 @@ class AppVersionTile extends ConsumerWidget {
 class _HomeTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageArgs = ref.watch(pageArgsProvider);
+    final session = ref.watch(searchSessionProvider);
     return Visibility(
-      visible: pageArgs.query.isNotEmpty,
+      visible: session.query.isNotEmpty,
       child: ListTile(
         title: Text(context.t.home),
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref.read(homeDrawerControllerProvider).close();
-          context.router.push(HomeRoute(args: pageArgs.copyWith(query: '')));
+          context.router.push(HomeRoute(session: session.copyWith(query: '')));
         },
       ),
     );
@@ -251,9 +251,9 @@ class _ServerSelection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final pageArgs = ref.watch(pageArgsProvider);
+    final session = ref.watch(searchSessionProvider);
     final serverActive =
-        ref.watch(serverDataStateProvider).getById(pageArgs.serverId);
+        ref.watch(serverDataStateProvider).getById(session.serverId);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,7 +282,7 @@ class _ServerSelection extends ConsumerWidget {
               ref.read(homeDrawerControllerProvider).close().then((value) {
                 if (it.id != serverActive.id) {
                   context.router.push(
-                      HomeRoute(args: pageArgs.copyWith(serverId: it.id)));
+                      HomeRoute(session: session.copyWith(serverId: it.id)));
                 } else {
                   ref
                       .read(pageStateProvider.notifier)

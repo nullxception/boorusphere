@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,12 +11,12 @@ final searchBarControllerProvider =
         (ref) => throw UnimplementedError());
 
 class SearchBarController extends ChangeNotifier {
-  SearchBarController(this.ref, {required this.pageArgs}) {
+  SearchBarController(this.ref, {required this.session}) {
     textEditingController.addListener(_fetch);
   }
 
   final Ref ref;
-  final PageArgs pageArgs;
+  final SearchSession session;
 
   late final textEditingController = TextEditingController(text: initial);
 
@@ -24,7 +24,7 @@ class SearchBarController extends ChangeNotifier {
 
   bool get isOpen => _open;
   String get value => textEditingController.value.text;
-  String get initial => pageArgs.query;
+  String get initial => session.query;
 
   set _value(String value) {
     textEditingController.value = TextEditingValue(
@@ -43,9 +43,7 @@ class SearchBarController extends ChangeNotifier {
   void submit(BuildContext context, String newValue) {
     _value = initial;
     close();
-    context.router.push(HomeRoute(
-      args: pageArgs.copyWith(query: newValue),
-    ));
+    context.router.push(HomeRoute(session: session.copyWith(query: newValue)));
   }
 
   void append(String newValue) {

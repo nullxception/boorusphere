@@ -3,7 +3,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +11,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
 class ServerPage extends ConsumerWidget {
-  const ServerPage({super.key, this.args});
-  final PageArgs? args;
+  const ServerPage({super.key, this.session});
+  final SearchSession? session;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final savedServer =
         ref.read(serverSettingStateProvider.select((it) => it.active));
-    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+    final session = this.session ?? SearchSession(serverId: savedServer.id);
 
     return ProviderScope(
       overrides: [
-        pageArgsProvider.overrideWith((ref) => pageArgs),
+        searchSessionProvider.overrideWith((ref) => session),
       ],
       child: const _Content(),
     );
@@ -34,7 +34,7 @@ class _Content extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final pageArgs = ref.watch(pageArgsProvider);
+    final session = ref.watch(searchSessionProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -112,7 +112,7 @@ class _Content extends ConsumerWidget {
 
                           ref
                               .read(serverDataStateProvider.notifier)
-                              .remove(pageArgs, it);
+                              .remove(session, it);
                           break;
                         default:
                           break;

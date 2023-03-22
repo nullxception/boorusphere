@@ -8,7 +8,7 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
-import 'package:boorusphere/presentation/screens/home/page_args.dart';
+import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
@@ -226,7 +226,7 @@ class _EntryPopupMenu extends ConsumerWidget {
           case 'show-detail':
             context.router.push(PostDetailsRoute(
               post: entry.post,
-              args: ref.read(pageArgsProvider),
+              session: ref.read(searchSessionProvider),
             ));
             break;
           default:
