@@ -7,6 +7,7 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/flutter_downloader_handle.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/routes/app_route_observer.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
 import 'package:boorusphere/utils/file_utils.dart';
@@ -62,7 +63,11 @@ class Boorusphere extends HookConsumerWidget {
         theme: appTheme.day,
         darkTheme: isMidnight ? appTheme.midnight : appTheme.night,
         themeMode: theme,
-        routerConfig: router.config(),
+        routerConfig: router.config(
+          navigatorObservers: () => [
+            AppRouteObserver(ref),
+          ],
+        ),
         locale: TranslationProvider.of(context).flutterLocale,
         supportedLocales: AppLocaleUtils.supportedLocales,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,

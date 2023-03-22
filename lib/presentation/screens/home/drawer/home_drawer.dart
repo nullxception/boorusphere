@@ -4,7 +4,6 @@ import 'package:boorusphere/presentation/provider/app_updater.dart';
 import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
-import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_controller.dart';
@@ -278,7 +277,6 @@ class _ServerSelection extends ConsumerWidget {
             selectedTileColor: context.colorScheme.primary
                 .withAlpha(context.isLightThemed ? 50 : 25),
             onTap: () {
-              ref.read(serverSettingStateProvider.notifier).setActiveServer(it);
               ref.read(homeDrawerControllerProvider).close().then((value) {
                 if (it.id != serverActive.id) {
                   context.router.push(
