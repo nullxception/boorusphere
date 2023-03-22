@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +11,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
 class ServerPage extends ConsumerWidget {
-  const ServerPage({super.key});
+  const ServerPage({super.key, this.args});
+  final PageArgs? args;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final savedServer =
+        ref.read(serverSettingStateProvider.select((it) => it.active));
+    final pageArgs = args ?? PageArgs(serverId: savedServer.id);
+
+    return ProviderScope(
+      overrides: [
+        pageArgsProvider.overrideWith((ref) => pageArgs),
+      ],
+      child: const _Content(),
+    );
+  }
+}
+
+class _Content extends ConsumerWidget {
+  const _Content();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
+    final pageArgs = ref.watch(pageArgsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -89,7 +110,9 @@ class ServerPage extends ConsumerWidget {
                             break;
                           }
 
-                          ref.read(serverDataStateProvider.notifier).remove(it);
+                          ref
+                              .read(serverDataStateProvider.notifier)
+                              .remove(pageArgs, it);
                           break;
                         default:
                           break;

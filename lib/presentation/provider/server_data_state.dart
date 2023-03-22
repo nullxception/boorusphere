@@ -1,6 +1,7 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/screens/home/page_args.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_data_state.g.dart';
@@ -15,18 +16,16 @@ class ServerDataState extends _$ServerDataState {
     return [];
   }
 
-  ServerData get active =>
-      ref.read(serverSettingStateProvider.select((it) => it.active));
-
   ServerSettingState get settings =>
       ref.read(serverSettingStateProvider.notifier);
 
   Future<void> _populate() async {
+    final serverSetting = ref.read(serverSettingStateProvider);
     final repo = ref.read(serverRepoProvider);
     await repo.populate();
     state = repo.servers;
 
-    if (state.isNotEmpty && active == ServerData.empty) {
+    if (state.isNotEmpty && serverSetting.active == ServerData.empty) {
       await settings
           .setActiveServer(state.firstWhere((it) => it.id.startsWith('Safe')));
     }
@@ -38,7 +37,7 @@ class ServerDataState extends _$ServerDataState {
     state = repo.servers;
   }
 
-  Future<void> remove(ServerData data) async {
+  Future<void> remove(PageArgs pageArgs, ServerData data) async {
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
@@ -46,16 +45,16 @@ class ServerDataState extends _$ServerDataState {
     final repo = ref.read(serverRepoProvider);
     await repo.remove(data);
     state = repo.servers;
-    if (active == data) {
+    if (pageArgs.serverId == data.id) {
       await settings.setActiveServer(state.first);
     }
   }
 
-  Future<void> edit(ServerData from, ServerData to) async {
+  Future<void> edit(PageArgs pageArgs, ServerData from, ServerData to) async {
     final repo = ref.read(serverRepoProvider);
     final data = await repo.edit(from, to);
     state = repo.servers;
-    if (active == from) {
+    if (pageArgs.serverId == from.id) {
       await settings.setActiveServer(data);
     }
   }

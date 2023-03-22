@@ -102,7 +102,7 @@ class _Footer extends ConsumerWidget {
         ListTile(
           title: Text(context.t.servers.title),
           leading: const Icon(Icons.public),
-          onTap: () => context.router.push(const ServerRoute()),
+          onTap: () => context.router.push(ServerRoute(args: pageArgs)),
         ),
         ListTile(
           title: Text(context.t.tagsBlocker.title),
