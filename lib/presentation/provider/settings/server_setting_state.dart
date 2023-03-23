@@ -1,5 +1,4 @@
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
@@ -14,16 +13,16 @@ class ServerSettingState extends _$ServerSettingState {
   ServerSetting build() {
     final repo = ref.read(settingRepoProvider);
     return ServerSetting(
-      active: repo.get(Setting.serverActive, or: ServerData.empty),
+      lastActiveId: repo.get(Setting.serverLastActiveId, or: ''),
       postLimit: repo.get(Setting.serverPostLimit, or: PageOption.defaultLimit),
       searchRating: repo.get(Setting.searchRating, or: BooruRating.safe),
     );
   }
 
-  Future<void> setActiveServer(ServerData value) async {
+  Future<void> setLastActiveId(String newId) async {
     final repo = ref.read(settingRepoProvider);
-    state = state.copyWith(active: value);
-    await repo.put(Setting.serverActive, value);
+    state = state.copyWith(lastActiveId: newId);
+    await repo.put(Setting.serverLastActiveId, newId);
   }
 
   Future<void> setPostLimit(int value) async {

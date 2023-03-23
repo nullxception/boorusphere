@@ -22,9 +22,9 @@ class DownloadsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedServer =
-        ref.read(serverSettingStateProvider.select((it) => it.active));
-    final session = this.session ?? SearchSession(serverId: savedServer.id);
+    final savedServerId =
+        ref.read(serverSettingStateProvider.select((it) => it.lastActiveId));
+    final session = this.session ?? SearchSession(serverId: savedServerId);
     final serverData = ref.watch(serverDataStateProvider);
     final downloadState = ref.watch(downloadStateProvider);
     final groupByServer = ref

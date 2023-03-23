@@ -25,9 +25,12 @@ class ServerDataState extends _$ServerDataState {
     await repo.populate();
     state = repo.servers;
 
-    if (state.isNotEmpty && serverSetting.active == ServerData.empty) {
-      await settings
-          .setActiveServer(state.firstWhere((it) => it.id.startsWith('Safe')));
+    if (state.isNotEmpty && serverSetting.lastActiveId.isEmpty) {
+      final server = state.firstWhere(
+        (it) => it.id.startsWith('Safe'),
+        orElse: () => state.first,
+      );
+      await settings.setLastActiveId(server.id);
     }
   }
 
@@ -45,26 +48,20 @@ class ServerDataState extends _$ServerDataState {
     final repo = ref.read(serverRepoProvider);
     await repo.remove(data);
     state = repo.servers;
-    if (session.serverId == data.id) {
-      await settings.setActiveServer(state.first);
-    }
   }
 
   Future<void> edit(
       SearchSession session, ServerData from, ServerData to) async {
     final repo = ref.read(serverRepoProvider);
-    final data = await repo.edit(from, to);
+    await repo.edit(from, to);
     state = repo.servers;
-    if (session.serverId == from.id) {
-      await settings.setActiveServer(data);
-    }
   }
 
   Future<void> reset() async {
     final repo = ref.read(serverRepoProvider);
     await repo.reset();
     state = repo.servers;
-    await settings.setActiveServer(state.first);
+    await settings.setLastActiveId(state.first.id);
   }
 }
 

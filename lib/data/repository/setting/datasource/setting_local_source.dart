@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
@@ -25,8 +24,6 @@ class SettingLocalSource {
         await box.put(key, DownloadQuality.fromName(value));
       } else if (key == Setting.searchRating.name) {
         await box.put(key, BooruRating.fromName(value));
-      } else if (key == Setting.serverActive.name) {
-        await box.put(key, ServerData.fromJson(Map.from(value)));
       } else {
         await box.put(key, value);
       }
@@ -41,8 +38,6 @@ class SettingLocalSource {
           return MapEntry(key, value.name);
         } else if (value is BooruRating) {
           return MapEntry(key, value.name);
-        } else if (key == Setting.serverActive.name) {
-          return MapEntry(key, value.toJson());
         } else {
           return MapEntry(key, value);
         }

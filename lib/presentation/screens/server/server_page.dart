@@ -15,9 +15,9 @@ class ServerPage extends ConsumerWidget {
   final SearchSession? session;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedServer =
-        ref.read(serverSettingStateProvider.select((it) => it.active));
-    final session = this.session ?? SearchSession(serverId: savedServer.id);
+    final savedServerId =
+        ref.read(serverSettingStateProvider.select((it) => it.lastActiveId));
+    final session = this.session ?? SearchSession(serverId: savedServerId);
 
     return ProviderScope(
       overrides: [

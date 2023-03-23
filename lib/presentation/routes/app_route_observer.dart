@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:flutter/scheduler.dart';
@@ -19,13 +18,10 @@ class AppRouteObserver extends AutoRouterObserver {
   }
 
   void _setLastActiveServer(String id) {
-    final lastActive = ref.read(serverSettingStateProvider).active;
-    if (id.isEmpty || lastActive.id == id) return;
+    final lastActive = ref.read(serverSettingStateProvider).lastActiveId;
+    if (id.isEmpty || lastActive == id) return;
 
-    final server = ref.read(serverDataStateProvider).getById(id);
-    if (server.id.isEmpty) return;
-
-    ref.read(serverSettingStateProvider.notifier).setActiveServer(server);
+    ref.read(serverSettingStateProvider.notifier).setLastActiveId(id);
   }
 
   @override

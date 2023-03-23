@@ -4,7 +4,7 @@ enum Setting {
   postBlurExplicit,
   postBlurTimelineOnly,
   postLoadOriginal,
-  serverActive,
+  serverLastActiveId,
   serverPostLimit,
   serverSafeMode,
   uiMidnightMode,
