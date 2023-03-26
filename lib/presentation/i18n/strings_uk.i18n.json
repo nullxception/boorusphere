@@ -29,7 +29,7 @@
   "open_settings": "Відкрити налаштування",
   "copy_success": "Скопійовано до буферу обміну",
   "load_image_failed": "Не вдалось завантажити зображення",
-  "unsafe_content": "Content is not safe",
+  "unsafe_content": "Контент не є безпечним",
   "unblur": "Покажи мені",
   "unsupported_media": "${file_ext} не підтримується",
   "open_externally": "Відкрити зовні",
@@ -42,7 +42,7 @@
   "restore": "Відновити",
   "searchHistory": "Історія пошуків",
   "score": "Оцінка",
-  "always_ask": "Always ask",
+  "always_ask": "Завжди запитувати",
   "rating": {
     "title": "Рейтинг",
     "questionable": "Під питанням",
@@ -114,7 +114,7 @@
     "ungroup": "Розгрупувати",
     "group_by_server": "Групування за серверами",
     "no_permission": "Не вдається завантажити файл; відсутній дозвіл на сповіщення",
-    "quality": "Download quality",
+    "quality": "Качество файла",
     "status": {
       "empty": "Порожньо",
       "pending": "Очікування",
@@ -124,8 +124,8 @@
       "canceled": "Скасовано",
       "paused": "Призупинено"
     },
-    "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    "filter_by_status": "Фільтрувати за статусом",
+    "no_filter": "Немає фільтра"
   },
   "favorites": {
     "title": "Улюблені",
@@ -154,7 +154,7 @@
     "api_addr": "Адреса API",
     "api_addr_hint": "Адреса API, приклад: https://api-v69.verycoolbooru.com",
     "already_exists": "Дані сервера для ${name} вже існують",
-    "invalid_search_query": "Invalid search query"
+    "invalid_search_query": "Некоректний пошуковий запит"
   },
   "server_query": {
     "title": "Запит",
@@ -219,7 +219,7 @@
       "title": "Резервне копіювання даних",
       "desc": "Резервне копіювання даних програми у файл",
       "success": "Резервна копія, створена за адресою :\n${dest}",
-      "loading": "Creating backup..."
+      "loading": "Створення резервної копії..."
     },
     "restore": {
       "title": "Відновити дані",
@@ -227,7 +227,7 @@
       "success": "Дані програми відновлено",
       "invalid": "Невірний файл резервної копії",
       "warning": "Увага! Ця дія перезапише всі існуючі дані.\nВи впевнені, що хочете продовжити?",
-      "loading": "Restoring data..."
+      "loading": "Відновлення даних..."
     }
   }
 }
