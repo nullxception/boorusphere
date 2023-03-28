@@ -29,12 +29,12 @@
   "open_settings": "Ayarları Aç",
   "copy_success": "Panoya kopyalandı",
   "load_image_failed": "Görsel yüklenemedi",
-  "unsafe_content": "Content is not safe",
+  "unsafe_content": "İçerik güvenli değil",
   "unblur": "Göster",
   "unsupported_media": "${file_ext} desteklenmiyor",
   "open_externally": "Harici olarak aç",
   "retry_pop_back": "Çıkmak için geri düğmesine tekrar basın",
-  "home": "Anasayfa",
+  "home": "Ana sayfa",
   "recently": "Geçenlerde",
   "search_hint": "${server_name} üzerinde ara...",
   "version": "Sürüm ${version}",
@@ -60,9 +60,9 @@
     },
     "no_result_for_query": {
       "zero": "${query} için hiçbir sonuç bulunamadı",
-      "other": "${query} için hiçbir sonuç bulunamadı"
+      "other": "${query} için sonuç bulunamadı"
     },
-    "blocked": "'${query}' Etiket Engelleyici tarafından engellendi"
+    "blocked": "'${query}' Etiketi Etiket Engelleyici tarafından engellendi"
   },
   "suggestion": {
     "not_supported": "${server_name} arama önerisini desteklemiyor",
@@ -74,7 +74,7 @@
   "action_tag": {
     "copy": "Etiketi kopyala",
     "block": "Seçilen etiketi engelle",
-    "blocked": "Etiket engelleyicisine engellendi",
+    "blocked": "Etiket engellendi",
     "append": "Mevcut aramaya etiketi ekle",
     "search": "Etiketi ara"
   },
@@ -124,15 +124,15 @@
       "canceled": "İptal edildi",
       "paused": "Duraklatıldı"
     },
-    "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    "filter_by_status": "Duruma göre filtrele",
+    "no_filter": "Filtresiz"
   },
   "favorites": {
     "title": "Favoriler",
     "placeholder": "Kaydedilen içerikleriniz burada yer alacaktır"
   },
   "tags_blocker": {
-    "title": "Etiket Engelleyicisi",
+    "title": "Etiket Engelleyici",
     "desc": "Boşluk ile ayırarak çoklu etiket engelleyebilirsiniz",
     "empty": "Henüz hiçbir etiket engellenmedi",
     "hint": "Örnek: red_shirt blue_shoes"
@@ -154,7 +154,7 @@
     "api_addr": "API Adresi",
     "api_addr_hint": "API adresi, örneğin: https://api-v69.verycoolbooru.com",
     "already_exists": "${name} için zaten sunucu verisi mevcut",
-    "invalid_search_query": "Invalid search query"
+    "invalid_search_query": "Arama sorgusu geçersiz"
   },
   "server_query": {
     "title": "Sorgu",
@@ -219,7 +219,7 @@
       "title": "Verileri yedekle",
       "desc": "Uygulama verilerini bir dosyaya yedekle",
       "success": "Yedek şurada oluşturuldu :\n${dest}",
-      "loading": "Creating backup..."
+      "loading": "Yedek oluşturuluyor..."
     },
     "restore": {
       "title": "Verileri geri yükle",
@@ -227,7 +227,7 @@
       "success": "Uygulama verileri geri yüklendi",
       "invalid": "Yedek dosyası geçersiz",
       "warning": "Uyarı! bu işlem varolan her verinin üzerine yazılacaktır.\nDevam etmek istediğinize emin misiniz?",
-      "loading": "Restoring data..."
+      "loading": "Veriler geri yükleniyor..."
     }
   }
 }
