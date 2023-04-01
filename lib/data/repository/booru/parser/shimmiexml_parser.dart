@@ -78,7 +78,7 @@ class ShimmieXmlParser extends BooruParser {
             originalFile: normalizeUrl(originalFile),
             sampleFile: normalizeUrl(sampleFile),
             previewFile: normalizeUrl(previewFile),
-            tags: tags.map(decodeTags).toList(),
+            tags: tags.map(decodeTag).toList(),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
@@ -108,8 +108,8 @@ class ShimmieXmlParser extends BooruParser {
     super.parseSuggestion(res);
     Map<String, num> counted = Map.from(res.data);
     return counted.entries
-        .where((element) => element.value > 0)
-        .map((e) => e.key)
+        .where((it) => it.value > 0)
+        .map((it) => decodeTag(it.key))
         .toSet();
   }
 }

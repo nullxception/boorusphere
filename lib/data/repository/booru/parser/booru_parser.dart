@@ -2,6 +2,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:html_unescape/html_unescape_small.dart';
 
 abstract class BooruParser {
   BooruParser(this.server);
@@ -46,9 +47,10 @@ abstract class BooruParser {
     }
   }
 
-  String decodeTags(String str) {
+  String decodeTag(String str) {
     try {
-      return Uri.decodeQueryComponent(str);
+      final unescaped = HtmlUnescape().convert(str);
+      return Uri.decodeQueryComponent(unescaped);
     } on ArgumentError {
       return str;
     }

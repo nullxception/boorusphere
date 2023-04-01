@@ -79,7 +79,7 @@ class SafebooruXmlParser extends BooruParser {
             originalFile: normalizeUrl(originalFile),
             sampleFile: normalizeUrl(sampleFile),
             previewFile: normalizeUrl(previewFile),
-            tags: tags.map(decodeTags).toList(),
+            tags: tags.map(decodeTag).toList(),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
@@ -138,7 +138,7 @@ class SafebooruXmlParser extends BooruParser {
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
       final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
-      if (postCount > 0) result.add(decodeTags(tag));
+      if (postCount > 0 && tag.isNotEmpty) result.add(decodeTag(tag));
     }
 
     return result;
