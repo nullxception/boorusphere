@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
@@ -20,6 +22,7 @@ class SearchBarController extends ChangeNotifier {
 
   late final textEditingController = TextEditingController(text: initial);
 
+  Timer? _textTimer;
   bool _open = false;
 
   bool get isOpen => _open;
@@ -35,9 +38,11 @@ class SearchBarController extends ChangeNotifier {
   }
 
   _fetch() {
-    if (isOpen) {
+    if (!isOpen) return;
+    if (_textTimer?.isActive ?? false) _textTimer?.cancel();
+    _textTimer = Timer(const Duration(milliseconds: 300), () {
       ref.read(suggestionStateProvider.notifier).get(value);
-    }
+    });
   }
 
   void submit(BuildContext context, String newValue) {
@@ -76,6 +81,7 @@ class SearchBarController extends ChangeNotifier {
   }
 
   void close() {
+    _textTimer?.cancel();
     _open = false;
     notifyListeners();
   }
@@ -92,6 +98,7 @@ class SearchBarController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _textTimer?.cancel();
     textEditingController.removeListener(_fetch);
     super.dispose();
   }
