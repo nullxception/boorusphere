@@ -1,3 +1,9 @@
+## 1.3.7
+* Fix search suggestion text is not properly decoded/unescaped
+* Relax search suggestion fetching update
+* Update Turkish translation (by @kyoyacchi)
+* Update Ukrainian translation (by @CakesTwix)
+
 ## 1.3.6
 * DownloadsPage: add option to filter downloads by status
 * Several UI updates, fixes, and improvement
