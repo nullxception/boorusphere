@@ -27,7 +27,8 @@ class HomePage extends ConsumerWidget {
   final SearchSession? session;
 
   Rect _timelineBoundary(BuildContext context) {
-    final bottom = context.mediaQuery.padding.bottom + SearchBar.innerHeight;
+    final bottom =
+        context.mediaQuery.padding.bottom + HomeSearchBar.innerHeight;
     return Rect.fromLTRB(0, 0, 0, bottom);
   }
 

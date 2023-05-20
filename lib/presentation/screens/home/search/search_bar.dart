@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SearchBar extends HookConsumerWidget {
-  const SearchBar({super.key, required this.scrollController});
+class HomeSearchBar extends HookConsumerWidget {
+  const HomeSearchBar({super.key, required this.scrollController});
 
   final ScrollController scrollController;
 
@@ -27,7 +27,7 @@ class SearchBar extends HookConsumerWidget {
         ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
     final onScrolling = useCallback(() {
       final position = scrollController.position;
-      final threshold = SearchBar.innerHeight;
+      final threshold = innerHeight;
       if (delta.value.first > 0 &&
           position.viewportDimension > position.maxScrollExtent) {
         // reset back to default (!collapsed) because there's nothing to scroll
@@ -179,11 +179,11 @@ class _OptionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 11, 18, 0),
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(18, 11, 18, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: const [
+        children: [
           _RatingButton(),
         ],
       ),

@@ -39,7 +39,7 @@ class SearchScreen extends HookConsumerWidget {
             child: const SearchSuggestion(),
           ),
         ),
-        SearchBar(scrollController: scrollController),
+        HomeSearchBar(scrollController: scrollController),
       ],
     );
   }

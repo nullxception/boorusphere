@@ -45,19 +45,19 @@ class HomeDrawer extends StatelessWidget {
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 24),
                     ),
-                    child: Column(
+                    child: const Column(
                       children: [
                         Align(
                           alignment: Alignment.topLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               _Header(),
                               _ServerSelection(),
                             ],
                           ),
                         ),
-                        const Expanded(
+                        Expanded(
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: _Footer(),

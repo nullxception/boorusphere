@@ -47,10 +47,9 @@ class FlutterDownloaderHandle {
   @pragma('vm:entry-point')
   static void _onProgressUpdated(
     String id,
-    DownloadTaskStatus status,
+    int status,
     int progress,
   ) {
-    IsolateNameServer.lookupPortByName(_name)
-        ?.send([id, status.value, progress]);
+    IsolateNameServer.lookupPortByName(_name)?.send([id, status, progress]);
   }
 }

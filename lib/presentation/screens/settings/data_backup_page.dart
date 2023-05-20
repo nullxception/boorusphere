@@ -134,7 +134,7 @@ class _LoadingDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(dataBackupStateProvider, (previous, next) {
-      if (next != null && next is! LoadingBackupResult) {
+      if (next is! LoadingBackupResult) {
         context.navigator.pop();
       }
     });
