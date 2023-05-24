@@ -22,6 +22,5 @@ jobs:
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: dart run slang
-      - run: dart format --fix lib/presentation/i18n
-      - run: dart format --output=none --set-exit-if-changed lib/
+      - run: find lib -iname '*.dart' -not -iname '*.freezed.dart' -not -iname '*.g.dart' | xargs dart format --output=none --set-exit-if-changed
       - run: flutter analyze
