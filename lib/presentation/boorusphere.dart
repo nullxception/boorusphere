@@ -68,11 +68,23 @@ class Boorusphere extends HookConsumerWidget {
             AppRouteObserver(ref),
           ],
         ),
-        locale: TranslationProvider.of(context).flutterLocale,
+        locale: TranslationProvider.of(context).locale.digestedFlutterLocale,
         supportedLocales: AppLocaleUtils.supportedLocales,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         builder: (context, child) => child ?? Container(),
       ),
     );
+  }
+}
+
+// Convert slang locale to flutter locale
+extension on AppLocale {
+  Locale get digestedFlutterLocale {
+    if (this == AppLocale.uwu) {
+      return AppLocale.en.flutterLocale;
+    }
+
+    // Return the actual locale
+    return flutterLocale;
   }
 }
