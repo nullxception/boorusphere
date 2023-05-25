@@ -1,3 +1,8 @@
+## 1.3.6
+* Update flutter to 3.10.1
+* Add UwUgish (or UwUnglish? oh my lord...) language (by @rinme and @Tienisto)
+* Update homepage and updater url to http://github.com/asyncmash/boorusphere
+
 ## 1.3.7
 * Fix search suggestion text is not properly decoded/unescaped
 * Relax search suggestion fetching update
