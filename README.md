@@ -5,16 +5,16 @@
 Simple, content-focused booru viewer for Android
 
 <p>
-    <a href="https://github.com/nullxception/boorusphere/releases/latest">
-        <img alt="Latest release" src="https://img.shields.io/github/v/release/nullxception/boorusphere?style=flat-square">
+    <a href="https://github.com/asyncmash/boorusphere/releases/latest">
+        <img alt="Latest release" src="https://img.shields.io/github/v/release/asyncmash/boorusphere?style=flat-square">
     </a>
-    <img alt="Workflow status" src="https://img.shields.io/github/actions/workflow/status/nullxception/boorusphere/testing.yml?style=flat-square">
-    <a href="https://github.com/nullxception/boorusphere/blob/main/LICENSE.md">
-        <img alt="License" src="https://img.shields.io/github/license/nullxception/boorusphere?color=violet&style=flat-square">
+    <img alt="Workflow status" src="https://img.shields.io/github/actions/workflow/status/asyncmash/boorusphere/testing.yml?style=flat-square">
+    <a href="https://github.com/asyncmash/boorusphere/blob/main/LICENSE.md">
+        <img alt="License" src="https://img.shields.io/github/license/asyncmash/boorusphere?color=violet&style=flat-square">
     </a>
 </p>
 <p>
-    <a href="https://github.com/nullxception/boorusphere/releases">
+    <a href="https://github.com/asyncmash/boorusphere/releases">
         <img src="assets/button-GHReleases.png" alt="GitHub release" width="160">
     </a>
     <a href="https://apt.izzysoft.de/fdroid/index/apk/io.chaldeaprjkt.boorusphere">
