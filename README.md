@@ -25,10 +25,10 @@ Simple, content-focused booru viewer for Android
 # Preview
 
 <p align="justify">
-    <img width="24%" src="assets/previews/drawer.webp" />
-    <img width="24%" src="assets/previews/home.webp" />
-    <img width="24%" src="assets/previews/search.webp" />
-    <img width="24%" src="assets/previews/favorites.webp" />
+    <img width="24%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" />
+    <img width="24%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" />
+    <img width="24%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" />
+    <img width="24%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" />
 </p>
 
 # Features

@@ -1,0 +1,10 @@
+Boorusphere is a booru imageboards viewer that focus on providing a simple yet intuitive user interface.
+
+- Support various booru-based imageboards
+- Support playing videos and animated images (GIF, WEBM)
+- Save favorites content
+- Search with tag suggestion
+- Download images and videos
+- Block tags from search result
+- Backup and restore data
+- and many more ...
