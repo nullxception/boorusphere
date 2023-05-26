@@ -19,6 +19,6 @@ class VersionNetworkSource {
     return AppVersion.zero;
   }
 
-  static const gitUrl = 'https://github.com/asyncmash/boorusphere';
+  static const gitUrl = 'https://github.com/nullxception/boorusphere';
   static const pubspecUrl = '$gitUrl/raw/main/pubspec.yaml';
 }
