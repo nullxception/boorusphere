@@ -1,10 +1,14 @@
-name: Tests
+name: Testing
 
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'fastlane/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'fastlane/**'
 
 jobs:
   analysis:
