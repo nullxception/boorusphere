@@ -78,6 +78,7 @@ dependencies:
   xml2json: ^6.0.0
   yaml: ^3.1.0
   html_unescape: ^2.0.0
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

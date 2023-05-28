@@ -15,8 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-class PostVideo extends HookConsumerWidget {
+class PostVideo extends StatefulWidget {
   const PostVideo({
     super.key,
     required this.post,
@@ -27,9 +28,46 @@ class PostVideo extends HookConsumerWidget {
   final void Function(bool visible) onToolboxVisibilityChange;
 
   @override
+  State<PostVideo> createState() => _PostVideoState();
+}
+
+class _PostVideoState extends State<PostVideo> {
+  bool _visible = true;
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: ValueKey(widget.post.id),
+      onVisibilityChanged: (info) {
+        setState(() {
+          _visible = info.visibleFraction > 0;
+        });
+      },
+      child: _PostVideoContent(
+        key: widget.key,
+        post: widget.post,
+        onToolboxVisibilityChange: widget.onToolboxVisibilityChange,
+        isVisible: _visible,
+      ),
+    );
+  }
+}
+
+class _PostVideoContent extends HookConsumerWidget {
+  const _PostVideoContent({
+    super.key,
+    required this.post,
+    required this.onToolboxVisibilityChange,
+    required this.isVisible,
+  });
+
+  final Post post;
+  final bool isVisible;
+  final void Function(bool visible) onToolboxVisibilityChange;
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final heroMode = context.findAncestorWidgetOfExactType<HeroMode>();
-    final isActive = heroMode?.enabled ?? false;
+    final isActive = (heroMode?.enabled ?? false) && isVisible;
     final headers = ref.watch(postHeadersFactoryProvider(post));
     final contentSettings = ref.watch(contentSettingStateProvider);
     final fullscreen = ref.watch(fullscreenStateProvider);
@@ -67,6 +105,13 @@ class PostVideo extends HookConsumerWidget {
           blurNoticeAnimator.forward();
         }
       });
+    }, []);
+
+    useEffect(() {
+      debugPrint('watching video');
+      return () {
+        debugPrint('leaving video');
+      };
     }, []);
 
     useEffect(() {
