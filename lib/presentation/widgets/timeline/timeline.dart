@@ -41,10 +41,13 @@ class Timeline extends ConsumerWidget {
       childCount: posts.length,
       itemBuilder: (context, index) {
         return _ThumbnailCard(
-          index: index,
-          posts: posts,
+          postdata: (index, posts.elementAt(index)),
           controller: scrollController,
           blurExplicit: blurExplicit,
+          onTap: () {
+            context.scaffoldMessenger.removeCurrentSnackBar();
+            PostViewer.open(context, index: index, posts: posts);
+          },
         );
       },
     );
@@ -53,23 +56,23 @@ class Timeline extends ConsumerWidget {
 
 class _ThumbnailCard extends HookConsumerWidget {
   const _ThumbnailCard({
-    required this.index,
-    required this.posts,
+    required this.postdata,
     required this.controller,
     required this.blurExplicit,
+    this.onTap,
   });
 
-  final int index;
-  final Iterable<Post> posts;
+  final (int, Post) postdata;
   final AutoScrollController controller;
   final bool blurExplicit;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final post = posts.elementAt(index);
+    final (index, post) = postdata;
 
     return AutoScrollTag(
-      key: ValueKey(index),
+      key: ValueKey(post),
       controller: controller,
       index: index,
       highlightColor: context.theme.colorScheme.surfaceTint,
@@ -79,6 +82,7 @@ class _ThumbnailCard extends HookConsumerWidget {
         ),
         clipBehavior: Clip.hardEdge,
         child: GestureDetector(
+          onTap: onTap,
           child: Hero(
             tag: post.heroTag,
             placeholderBuilder: (context, heroSize, child) => child,
@@ -102,10 +106,6 @@ class _ThumbnailCard extends HookConsumerWidget {
             },
             child: _ThumbnailImage(post: post, blurExplicit: blurExplicit),
           ),
-          onTap: () {
-            context.scaffoldMessenger.removeCurrentSnackBar();
-            PostViewer.open(context, index: index, posts: posts);
-          },
         ),
       ),
     );
