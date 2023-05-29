@@ -41,6 +41,7 @@ class Timeline extends ConsumerWidget {
       childCount: posts.length,
       itemBuilder: (context, index) {
         return _ThumbnailCard(
+          gridSize: flexibleGrid,
           postdata: (index, posts.elementAt(index)),
           controller: scrollController,
           blurExplicit: blurExplicit,
@@ -60,12 +61,14 @@ class _ThumbnailCard extends HookConsumerWidget {
     required this.controller,
     required this.blurExplicit,
     this.onTap,
+    required this.gridSize,
   });
 
   final (int, Post) postdata;
   final AutoScrollController controller;
   final bool blurExplicit;
   final void Function()? onTap;
+  final int gridSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -104,7 +107,8 @@ class _ThumbnailCard extends HookConsumerWidget {
                 ],
               );
             },
-            child: _ThumbnailImage(post: post, blurExplicit: blurExplicit),
+            child: _ThumbnailImage(
+                post: post, blurExplicit: blurExplicit, gridSize: gridSize),
           ),
         ),
       ),
@@ -116,16 +120,22 @@ class _ThumbnailImage extends ConsumerWidget {
   const _ThumbnailImage({
     required this.post,
     this.blurExplicit = false,
+    required this.gridSize,
   });
 
   final Post post;
   final bool blurExplicit;
+  final int gridSize;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final headers = ref.watch(postHeadersFactoryProvider(post));
     // limit timeline thumbnail to 18:9
     final isLong = post.aspectRatio < 0.5;
+    final screen =
+        context.mediaQuery.size * context.mediaQuery.devicePixelRatio;
+    final cacheWidth = screen.width / (gridSize * 1.3);
+    final cacheHeight = cacheWidth / post.aspectRatio;
 
     final image = AspectRatio(
       aspectRatio: isLong ? 0.5 : post.aspectRatio,
@@ -136,6 +146,8 @@ class _ThumbnailImage extends ConsumerWidget {
             : post.previewFile,
         headers: headers,
         fit: BoxFit.cover,
+        cacheWidth: cacheWidth.round(),
+        cacheHeight: cacheHeight.round(),
         enableLoadState: false,
         beforePaintImage: (canvas, rect, image, paint) {
           if (blurExplicit && post.rating.isExplicit) {
