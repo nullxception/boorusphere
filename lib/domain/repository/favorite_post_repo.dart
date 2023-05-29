@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 
-abstract class FavoritePostRepo {
+abstract interface class FavoritePostRepo {
   Iterable<Post> get();
   Future<void> clear();
   Future<void> remove(Post post);

@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 
-abstract class DownloadRepo {
+abstract interface class DownloadRepo {
   Iterable<DownloadEntry> getEntries();
   Future<Iterable<DownloadProgress>> getProgress();
   Future<void> add(DownloadEntry entry);
