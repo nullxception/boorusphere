@@ -12,7 +12,6 @@ import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -29,6 +28,10 @@ class Timeline extends ConsumerWidget {
     final grid = ref.watch(uiSettingStateProvider.select((ui) => ui.grid));
     final screenWidth = context.mediaQuery.size.width;
     final flexibleGrid = (screenWidth / 200).round() + grid;
+    final scrollController = ref
+        .watch(timelineControllerProvider.select((it) => it.scrollController));
+    final blurExplicit =
+        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
 
     return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
@@ -37,7 +40,12 @@ class Timeline extends ConsumerWidget {
       crossAxisSpacing: 5,
       childCount: posts.length,
       itemBuilder: (context, index) {
-        return _ThumbnailCard(index: index, posts: posts);
+        return _ThumbnailCard(
+          index: index,
+          posts: posts,
+          controller: scrollController,
+          blurExplicit: blurExplicit,
+        );
       },
     );
   }
@@ -47,22 +55,22 @@ class _ThumbnailCard extends HookConsumerWidget {
   const _ThumbnailCard({
     required this.index,
     required this.posts,
+    required this.controller,
+    required this.blurExplicit,
   });
 
   final int index;
   final Iterable<Post> posts;
+  final AutoScrollController controller;
+  final bool blurExplicit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final post = useMemoized(() => posts.elementAt(index));
-    final scrollController = ref
-        .watch(timelineControllerProvider.select((it) => it.scrollController));
-    final blurExplicit =
-        ref.watch(contentSettingStateProvider.select((it) => it.blurExplicit));
+    final post = posts.elementAt(index);
 
     return AutoScrollTag(
       key: ValueKey(index),
-      controller: scrollController,
+      controller: controller,
       index: index,
       highlightColor: context.theme.colorScheme.surfaceTint,
       child: Card(
