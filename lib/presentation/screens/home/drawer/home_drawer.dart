@@ -237,7 +237,9 @@ class _HomeTile extends ConsumerWidget {
         leading: const Icon(Icons.home_outlined),
         onTap: () {
           ref.read(homeDrawerControllerProvider).close();
-          context.router.push(HomeRoute(session: session.copyWith(query: '')));
+          context.router.pushAndPopUntil(
+              HomeRoute(session: session.copyWith(query: '')),
+              predicate: (r) => false);
         },
       ),
     );
