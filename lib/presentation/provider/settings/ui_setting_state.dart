@@ -13,7 +13,6 @@ class UiSettingState extends _$UiSettingState {
   UiSetting build() {
     final repo = ref.read(settingRepoProvider);
     return UiSetting(
-      blur: repo.get(Setting.uiBlur, or: true),
       grid: repo.get(Setting.uiTimelineGrid, or: 1),
       locale: localeFromStr(repo.get(Setting.uiLanguage, or: '')),
       themeMode: ThemeMode
@@ -29,14 +28,6 @@ class UiSettingState extends _$UiSettingState {
 
     await repo.put(Setting.uiTimelineGrid, state.grid);
     return state.grid;
-  }
-
-  Future<bool> showBlur(bool value) async {
-    state = state.copyWith(blur: value);
-    final repo = ref.read(settingRepoProvider);
-
-    await repo.put(Setting.uiBlur, value);
-    return state.blur;
   }
 
   AppLocale? localeFromStr(String name) {

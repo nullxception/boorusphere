@@ -38,7 +38,6 @@ class SettingsPage extends StatelessWidget {
               children: const [
                 _Language(),
                 _MidnightMode(),
-                _UiBlur(),
               ],
             ),
             _Section(
@@ -209,25 +208,6 @@ class _MidnightMode extends ConsumerWidget {
       value: ref.watch(uiSettingStateProvider.select((ui) => ui.midnightMode)),
       onChanged: (value) {
         ref.read(uiSettingStateProvider.notifier).setMidnightMode(value);
-      },
-    );
-  }
-}
-
-class _UiBlur extends ConsumerWidget {
-  const _UiBlur();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile(
-      title: Text(context.t.settings.uiBlur.title),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Text(context.t.settings.uiBlur.desc),
-      ),
-      value: ref.watch(uiSettingStateProvider.select((ui) => ui.blur)),
-      onChanged: (value) {
-        ref.read(uiSettingStateProvider.notifier).showBlur(value);
       },
     );
   }

@@ -178,10 +178,6 @@
       "title": "Midnight Theme",
       "desc": "Gumamit pa ng mas dark na kulay para sa dark mode"
     },
-    "ui_blur": {
-      "title": "I-enable ang blur",
-      "desc": "I-enable ang blur para sa mga UI elements"
-    },
     "hide_media": {
       "title": "Itago ang media na nadownload",
       "desc": "Huwag ipakita sa external gallery apps ang mga nadownload na files"

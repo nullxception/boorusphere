@@ -178,10 +178,6 @@
       "title": "Tema Tengah Malam",
       "desc": "Gunakan warna yang lebih gelap untuk mode malam"
     },
-    "ui_blur": {
-      "title": "Aktifkan blur",
-      "desc": "Aktifkan latar belakang blur pada berbagai elemen UI"
-    },
     "hide_media": {
       "title": "Sembunyikan media yang diunduh",
       "desc": "Cegah aplikasi galeri eksternal menampilkan file yang diunduh"
