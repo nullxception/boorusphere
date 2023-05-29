@@ -36,8 +36,8 @@ class Timeline extends ConsumerWidget {
     return SliverMasonryGrid.count(
       crossAxisCount: flexibleGrid,
       key: ObjectKey(flexibleGrid),
-      mainAxisSpacing: 5,
-      crossAxisSpacing: 5,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
       childCount: posts.length,
       itemBuilder: (context, index) {
         return _ThumbnailCard(
@@ -79,10 +79,8 @@ class _ThumbnailCard extends HookConsumerWidget {
       controller: controller,
       index: index,
       highlightColor: context.theme.colorScheme.surfaceTint,
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-        ),
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
         clipBehavior: Clip.hardEdge,
         child: GestureDetector(
           onTap: onTap,
