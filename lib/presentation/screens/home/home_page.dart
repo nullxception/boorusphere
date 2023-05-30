@@ -151,9 +151,7 @@ class _SlidableContainer extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final animator =
         useAnimationController(duration: const Duration(milliseconds: 300));
-    final tween = useMemoized(
-        () => CurveTween(curve: Curves.easeInOutSine).animate(animator),
-        [animator]);
+    final tween = CurveTween(curve: Curves.easeInOutSine).animate(animator);
     final maxDrawerWidth =
         (context.mediaQuery.size.width).clamp(0.0, 410.0) - 84;
     final canBeDragged = useState(true);
