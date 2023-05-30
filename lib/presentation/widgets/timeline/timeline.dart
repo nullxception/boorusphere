@@ -75,7 +75,7 @@ class _ThumbnailCard extends HookConsumerWidget {
     final (index, post) = postdata;
 
     return AutoScrollTag(
-      key: ValueKey(post),
+      key: ValueKey(post.viewId),
       controller: controller,
       index: index,
       highlightColor: context.theme.colorScheme.surfaceTint,
@@ -85,7 +85,7 @@ class _ThumbnailCard extends HookConsumerWidget {
         child: GestureDetector(
           onTap: onTap,
           child: Hero(
-            tag: post.heroTag,
+            tag: post.viewId,
             flightShuttleBuilder: (flightContext, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               final Hero toHero = toHeroContext.widget as Hero;

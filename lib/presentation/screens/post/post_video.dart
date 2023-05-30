@@ -135,8 +135,8 @@ class _PostVideoContent extends HookConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         Hero(
-          key: ValueKey(post),
-          tag: post.heroTag,
+          key: ValueKey(post.viewId),
+          tag: post.viewId,
           child: Center(
             child: AspectRatio(
               aspectRatio: post.aspectRatio,

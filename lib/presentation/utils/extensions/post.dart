@@ -53,7 +53,7 @@ extension PostExt on Post {
     return sample;
   }
 
-  String get heroTag {
+  String get viewId {
     return '$id-$serverId';
   }
 }

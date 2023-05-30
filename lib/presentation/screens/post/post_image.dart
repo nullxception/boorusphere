@@ -58,7 +58,7 @@ class PostImage extends HookConsumerWidget {
         fit: StackFit.passthrough,
         children: [
           Hero(
-            tag: post.heroTag,
+            tag: post.viewId,
             child: ExtendedImage.network(
               contentSetting.loadOriginal
                   ? post.originalFile

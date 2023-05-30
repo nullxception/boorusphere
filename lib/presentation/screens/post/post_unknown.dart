@@ -28,7 +28,7 @@ class PostUnknown extends ConsumerWidget {
       fit: StackFit.passthrough,
       children: [
         Hero(
-          tag: post.heroTag,
+          tag: post.viewId,
           child: PostPlaceholderImage(
             post: post,
             shouldBlur: shouldBlurExplicit && post.rating.isExplicit,
