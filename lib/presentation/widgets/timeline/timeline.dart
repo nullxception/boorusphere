@@ -86,7 +86,6 @@ class _ThumbnailCard extends HookConsumerWidget {
           onTap: onTap,
           child: Hero(
             tag: post.heroTag,
-            placeholderBuilder: (context, heroSize, child) => child,
             flightShuttleBuilder: (flightContext, animation, flightDirection,
                 fromHeroContext, toHeroContext) {
               final Hero toHero = toHeroContext.widget as Hero;
