@@ -1,7 +1,12 @@
-## 1.3.6
+## 1.3.9
+* Fix video player keeps playing when navigating to the next screen
+* Apply high-framerate workaround for crappy OS such as OxygenOS
+* Cleanup previous routes when pressing Home on sidebar
+* Fix some UI performance issue
+
+## 1.3.8
 * Update flutter to 3.10.1
 * Add UwUgish (or UwUnglish? oh my lord...) language (by @rinme and @Tienisto)
-* Update homepage and updater url to http://github.com/nullxception/boorusphere
 
 ## 1.3.7
 * Fix search suggestion text is not properly decoded/unescaped
