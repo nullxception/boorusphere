@@ -14,6 +14,7 @@ import 'package:boorusphere/utils/file_utils.dart';
 import 'package:boorusphere/utils/http/overrides.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,6 +32,11 @@ class Boorusphere extends HookConsumerWidget {
     final envRepo = ref.watch(envRepoProvider);
     final cookieJar = ref.watch(cookieJarProvider);
     final router = useMemoized(AppRouter.new);
+
+    useEffect(() {
+      FlutterDisplayMode.setHighRefreshRate();
+      return () {};
+    }, []);
 
     useEffect(() {
       HttpOverrides.global = CustomHttpOverrides(cookieJar: cookieJar);
