@@ -61,62 +61,59 @@ class HomeSearchBar extends HookConsumerWidget {
       }
     });
 
-    return RepaintBoundary(
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.theme.scaffoldBackgroundColor.withOpacity(0.95),
-          border: Border(
-            top: BorderSide(color: context.colorScheme.outlineVariant),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: context.theme.scaffoldBackgroundColor.withOpacity(0.95),
+        border: Border(
+          top: BorderSide(color: context.colorScheme.outlineVariant),
         ),
-        child: SafeArea(
-          top: false,
-          maintainBottomViewPadding: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (searchBar.isOpen) const _OptionBar(),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                margin: collapsed
-                    ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
-                    : const EdgeInsets.fromLTRB(16, 11, 16, 11),
-                child: Row(
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        _LeadingButton(collapsed: collapsed),
-                        if (!searchBar.isOpen)
-                          Positioned(right: 8, child: _RatingIndicator()),
-                      ],
-                    ),
-                    const Expanded(child: _SearchField()),
-                    if (!searchBar.isOpen)
-                      _TrailingButton(
-                        collapsed: collapsed,
-                        scrollController: scrollController,
-                      ),
-                    if (searchBar.isOpen &&
-                        searchBar.value != searchBar.initial)
-                      _Button(
-                        onTap: searchBar.reset,
-                        child: const Icon(Icons.rotate_left),
-                      ),
-                    if (searchBar.isOpen)
-                      _Button(
-                        onTap: searchBar.clear,
-                        child: const Icon(Icons.close_rounded),
-                      ),
-                  ],
-                ),
+      ),
+      child: SafeArea(
+        top: false,
+        maintainBottomViewPadding: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (searchBar.isOpen) const _OptionBar(),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(collapsed ? 0 : 0.2),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
-            ],
-          ),
+              margin: collapsed
+                  ? const EdgeInsets.fromLTRB(32, 4, 32, 0)
+                  : const EdgeInsets.fromLTRB(16, 11, 16, 11),
+              child: Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      _LeadingButton(collapsed: collapsed),
+                      if (!searchBar.isOpen)
+                        Positioned(right: 8, child: _RatingIndicator()),
+                    ],
+                  ),
+                  const Expanded(child: _SearchField()),
+                  if (!searchBar.isOpen)
+                    _TrailingButton(
+                      collapsed: collapsed,
+                      scrollController: scrollController,
+                    ),
+                  if (searchBar.isOpen && searchBar.value != searchBar.initial)
+                    _Button(
+                      onTap: searchBar.reset,
+                      child: const Icon(Icons.rotate_left),
+                    ),
+                  if (searchBar.isOpen)
+                    _Button(
+                      onTap: searchBar.clear,
+                      child: const Icon(Icons.close_rounded),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
