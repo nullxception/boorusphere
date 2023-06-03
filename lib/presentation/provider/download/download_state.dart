@@ -80,4 +80,8 @@ extension DownloadItemsExt on Iterable<DownloadItem> {
     final item = firstWhereOrNull((it) => it.entry.post == post);
     return item?.progress ?? DownloadProgress.none;
   }
+
+  Iterable<DownloadItem> whereNotReserved() {
+    return whereNot((it) => it.entry.post == Post.appReserved);
+  }
 }

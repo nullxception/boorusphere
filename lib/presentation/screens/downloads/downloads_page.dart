@@ -26,7 +26,7 @@ class DownloadsPage extends HookConsumerWidget {
         ref.read(serverSettingStateProvider.select((it) => it.lastActiveId));
     final session = this.session ?? SearchSession(serverId: savedServerId);
     final serverData = ref.watch(serverDataStateProvider);
-    final downloadState = ref.watch(downloadStateProvider);
+    final downloadState = ref.watch(downloadStateProvider).whereNotReserved();
     final groupByServer = ref
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));
     final filter = useState(DownloadFilter.none);

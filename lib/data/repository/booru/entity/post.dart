@@ -34,4 +34,5 @@ class Post with _$Post {
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
   static const empty = Post();
+  static const appReserved = Post(id: -100);
 }

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:boorusphere/constant/app.dart';
+import 'package:boorusphere/data/repository/booru/entity/post.dart';
+import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
@@ -47,6 +49,7 @@ class AppUpdater {
         query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
     if (tasks == null) return;
     for (var task in tasks) {
+      await ref.read(downloadStateProvider.notifier).remove(task.taskId);
       await FlutterDownloader.remove(
         taskId: task.taskId,
         shouldDeleteContent: removeFile,
@@ -78,6 +81,12 @@ class AppUpdater {
     if (newId != null) {
       _version = version;
       id = newId;
+      final entry = DownloadEntry(
+        id: newId,
+        post: Post.appReserved,
+        destination: appDir.absolute.path,
+      );
+      await ref.read(downloadStateProvider.notifier).add(entry);
     }
   }
 
