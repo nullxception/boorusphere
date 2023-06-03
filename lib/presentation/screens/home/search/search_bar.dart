@@ -134,7 +134,8 @@ class _SearchField extends HookConsumerWidget {
     final server = ref.watch(serverDataStateProvider).getById(session.serverId);
 
     return TextField(
-      autofocus: true,
+      autofocus: searchBar.isOpen,
+      canRequestFocus: searchBar.isOpen,
       enableIMEPersonalizedLearning: !imeIncognito,
       controller: searchBar.textEditingController,
       decoration: InputDecoration(
