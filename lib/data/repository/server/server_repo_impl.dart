@@ -14,7 +14,7 @@ class ServerRepoImpl implements ServerRepo {
 
   @override
   Future<void> populate() async {
-    defaults = await localSource.loadServerJson();
+    defaults = localSource.defaultServers;
     await localSource.populate();
   }
 

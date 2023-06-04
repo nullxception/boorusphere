@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:boorusphere/data/dio/app_dio.dart';
 import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
 import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
@@ -37,6 +39,20 @@ Future<CookieJar> provideCookieJar() async {
   );
 }
 
+@Riverpod(keepAlive: true)
+Map<String, ServerData> defaultServers(DefaultServersRef ref) {
+  return {};
+}
+
+Future<Map<String, ServerData>> provideDefaultServers() async {
+  final json = await rootBundle.loadString('assets/servers.json');
+  final servers = jsonDecode(json) as List;
+  return Map.fromEntries(servers.map((it) {
+    final value = ServerData.fromJson(it);
+    return MapEntry(value.key, value);
+  }));
+}
+
 @riverpod
 VersionNetworkSource versionNetworkSource(VersionNetworkSourceRef ref) {
   final dio = ref.watch(dioProvider);
@@ -52,7 +68,8 @@ SettingLocalSource settingLocalSource(SettingLocalSourceRef ref) {
 @riverpod
 ServerLocalSource serverLocalSource(ServerLocalSourceRef ref) {
   final box = Hive.box<ServerData>(ServerLocalSource.key);
-  return ServerLocalSource(assetBundle: rootBundle, box: box);
+  final defaultServers = ref.watch(defaultServersProvider);
+  return ServerLocalSource(defaultServers: defaultServers, box: box);
 }
 
 @riverpod

@@ -59,6 +59,7 @@ void main() async {
     ProviderScope(
       overrides: [
         cookieJarProvider.overrideWithValue(await provideCookieJar()),
+        defaultServersProvider.overrideWithValue(await provideDefaultServers()),
         envRepoProvider.overrideWithValue(await provideEnvRepo()),
       ],
       child: TranslationProvider(child: const Boorusphere()),

@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
-import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class ServerLocalSource {
-  ServerLocalSource({required this.assetBundle, required this.box});
-  final AssetBundle assetBundle;
+  ServerLocalSource({required this.defaultServers, required this.box});
+
+  final Map<String, ServerData> defaultServers;
   final Box<ServerData> box;
 
   List<ServerData> get servers => box.values.toList();
@@ -24,18 +24,8 @@ class ServerLocalSource {
     await box.flush();
   }
 
-  Future<Map<String, ServerData>> loadServerJson() async {
-    final json = await assetBundle.loadString('assets/servers.json');
-    final servers = jsonDecode(json) as List;
-
-    return Map.fromEntries(servers.map((it) {
-      final value = ServerData.fromJson(it);
-      return MapEntry(value.key, value);
-    }));
-  }
-
   Future<void> populate() async {
-    final def = await loadServerJson();
+    final def = defaultServers;
     if (def.isEmpty) return;
 
     if (box.isEmpty) {
@@ -62,9 +52,8 @@ class ServerLocalSource {
   }
 
   Future<void> reset() async {
-    final defaults = await loadServerJson();
     await box.deleteAll(box.keys);
-    await box.putAll(defaults);
+    await box.putAll(defaultServers);
   }
 
   Future<void> remove(ServerData data) async {
