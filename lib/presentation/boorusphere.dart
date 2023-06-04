@@ -6,6 +6,7 @@ import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/flutter_downloader_handle.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/routes/app_route_observer.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
@@ -22,6 +23,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class Boorusphere extends HookConsumerWidget {
   const Boorusphere({super.key});
 
+  Future<void> initializeAsyncStates(
+    WidgetRef ref,
+    Function onCompleted,
+  ) async {
+    await ref.read(serverDataStateProvider.notifier).populate();
+    await ref.read(downloadStateProvider.notifier).populate();
+    await FlutterDisplayMode.setHighRefreshRate();
+    onCompleted();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(uiSettingStateProvider.select((ui) => ui.locale));
@@ -32,11 +43,17 @@ class Boorusphere extends HookConsumerWidget {
     final envRepo = ref.watch(envRepoProvider);
     final cookieJar = ref.watch(cookieJarProvider);
     final router = useMemoized(AppRouter.new);
+    final initialized = useState(false);
 
     useEffect(() {
-      FlutterDisplayMode.setHighRefreshRate();
-      return () {};
+      initializeAsyncStates(ref, () {
+        initialized.value = true;
+      });
     }, []);
+
+    if (!initialized.value) {
+      return const SizedBox.shrink();
+    }
 
     useEffect(() {
       HttpOverrides.global = CustomHttpOverrides(cookieJar: cookieJar);

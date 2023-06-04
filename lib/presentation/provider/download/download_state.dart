@@ -12,11 +12,11 @@ part 'download_state.g.dart';
 class DownloadState extends _$DownloadState {
   @override
   Iterable<DownloadItem> build() {
-    Future(_populate);
+    // populate later
     return [];
   }
 
-  Future<void> _populate() async {
+  Future<void> populate() async {
     final repo = ref.read(downloadRepoProvider);
     final progresses = await repo.getProgress();
     state = repo.getEntries().map(

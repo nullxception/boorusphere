@@ -10,16 +10,14 @@ part 'server_data_state.g.dart';
 class ServerDataState extends _$ServerDataState {
   @override
   Iterable<ServerData> build() {
-    // execute it anonymously since we can't update other state
-    // while constructing a state
-    Future(_populate);
+    // populate later
     return [];
   }
 
   ServerSettingState get settings =>
       ref.read(serverSettingStateProvider.notifier);
 
-  Future<void> _populate() async {
+  Future<void> populate() async {
     final serverSetting = ref.read(serverSettingStateProvider);
     final repo = ref.read(serverRepoProvider);
     await repo.populate();
