@@ -9,7 +9,7 @@ class VersionNetworkSource {
   Future<AppVersion> get() async {
     final res = await client.get(pubspecUrl);
     final data = res.data;
-    if (res.statusCode == 200 && data is String) {
+    if (res.statusCode == 200 && data is String && data.contains('version:')) {
       final version = loadYaml(data)['version'];
       if (version is String && version.contains('+')) {
         return AppVersion.fromString(version);
