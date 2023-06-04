@@ -89,8 +89,10 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.1
   freezed: ^2.1.0+1
+  full_coverage: ^1.0.0
   hive_generator: ^2.0.0
   json_serializable: ^6.7.0
+  mocktail: ^0.3.0
   riverpod_generator: ^2.0.0
   slang_build_runner: ^3.6.0
 
