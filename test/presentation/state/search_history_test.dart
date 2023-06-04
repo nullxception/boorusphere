@@ -42,8 +42,15 @@ void main() async {
       expect(state().length, 3);
     });
 
+    test('filter', () {
+      expect(ref.read(FilterHistoryProvider('o')).values.first.query, 'foo');
+      expect(ref.read(FilterHistoryProvider('r')).values.first.query, 'bar');
+      expect(ref.read(FilterHistoryProvider('z')).values.first.query, 'baz');
+      expect(ref.read(FilterHistoryProvider('m')).length, 0);
+    });
+
     test('remove last', () async {
-      await notifier().delete(state().keys.first);
+      await notifier().delete(state().keys.last);
       expect(state().length, 2);
     });
 
