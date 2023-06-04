@@ -4,10 +4,12 @@ import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/extensions/strings.dart';
+import 'package:boorusphere/presentation/widgets/blur_backdrop.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,9 @@ class SearchSuggestion extends HookConsumerWidget {
     final server = ref.watch(serverDataStateProvider).getById(session.serverId);
     final suggestion = ref.watch(suggestionStateProvider);
     final history = ref.watch(filterHistoryProvider(searchBar.value));
+    final isBlurAllowed = ref.watch(uiSettingStateProvider.select(
+      (ui) => ui.blur,
+    ));
 
     useEffect(() {
       Future(() {
@@ -34,175 +39,188 @@ class SearchSuggestion extends HookConsumerWidget {
     }, [searchBar.isOpen]);
 
     return Container(
-      color: context.theme.scaffoldBackgroundColor.withOpacity(0.95),
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                if (history.isNotEmpty)
-                  SliverPadding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    sliver: SliverToBoxAdapter(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      color: context.theme.scaffoldBackgroundColor.withOpacity(
+        context.isLightThemed
+            ? isBlurAllowed
+                ? 0.9
+                : 0.95
+            : isBlurAllowed
+                ? 0.9
+                : 0.98,
+      ),
+      child: BlurBackdrop(
+        sigmaX: 12,
+        sigmaY: 12,
+        blur: isBlurAllowed,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  if (history.isNotEmpty)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      sliver: SliverToBoxAdapter(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(context.t.recently),
+                            TextButton(
+                              onPressed: ref
+                                  .read(searchHistoryStateProvider.notifier)
+                                  .clear,
+                              child: Text(context.t.clear),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final reversed = history.entries.length - 1 - index;
+                        final entry = history.entries.elementAt(reversed);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Dismissible(
+                            key: Key(entry.key.toString()),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {
+                              ref
+                                  .read(searchHistoryStateProvider.notifier)
+                                  .delete(entry.key);
+                            },
+                            background: Container(
+                              color: Colors.red,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(context.t.remove),
+                                  const Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child:
+                                        Icon(Icons.delete, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: _SuggestionEntryTile(
+                              data: SuggestionEntry(
+                                isHistory: true,
+                                text: entry.value.query,
+                                server: entry.value.server,
+                              ),
+                              onTap: (str) {
+                                searchBar.submit(context, str);
+                              },
+                              onAdded: searchBar.appendTyped,
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: history.entries.length,
+                    ),
+                  ),
+                  if (!server.canSuggestTags)
+                    SliverToBoxAdapter(
+                      child: Column(
                         children: [
-                          Text(context.t.recently),
-                          TextButton(
-                            onPressed: ref
-                                .read(searchHistoryStateProvider.notifier)
-                                .clear,
-                            child: Text(context.t.clear),
+                          const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(Icons.search_off),
+                          ),
+                          Text(
+                            context.t.suggestion.notSupported(
+                              serverName: server.name,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final reversed = history.entries.length - 1 - index;
-                      final entry = history.entries.elementAt(reversed);
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Dismissible(
-                          key: Key(entry.key.toString()),
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) {
-                            ref
-                                .read(searchHistoryStateProvider.notifier)
-                                .delete(entry.key);
-                          },
-                          background: Container(
-                            color: Colors.red,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(context.t.remove),
-                                const Padding(
-                                  padding: EdgeInsets.all(16.0),
-                                  child:
-                                      Icon(Icons.delete, color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          child: _SuggestionEntryTile(
-                            data: SuggestionEntry(
-                              isHistory: true,
-                              text: entry.value.query,
-                              server: entry.value.server,
-                            ),
-                            onTap: (str) {
-                              searchBar.submit(context, str);
-                            },
-                            onAdded: searchBar.appendTyped,
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: history.entries.length,
-                  ),
-                ),
-                if (!server.canSuggestTags)
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Icon(Icons.search_off),
-                        ),
-                        Text(
-                          context.t.suggestion.notSupported(
+                  if (server.canSuggestTags)
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          context.t.suggestion.suggested(
                             serverName: server.name,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                if (server.canSuggestTags)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        context.t.suggestion.suggested(
-                          serverName: server.name,
-                        ),
                       ),
                     ),
-                  ),
-                if (server.canSuggestTags)
-                  suggestion.when(
-                    idle: (data) {
-                      return const SliverToBoxAdapter(
-                        child: SizedBox.shrink(),
-                      );
-                    },
-                    data: (data) {
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: _SuggestionEntryTile(
-                                data: SuggestionEntry(
-                                  isHistory: false,
-                                  text: data.elementAt(index),
+                  if (server.canSuggestTags)
+                    suggestion.when(
+                      idle: (data) {
+                        return const SliverToBoxAdapter(
+                          child: SizedBox.shrink(),
+                        );
+                      },
+                      data: (data) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: _SuggestionEntryTile(
+                                  data: SuggestionEntry(
+                                    isHistory: false,
+                                    text: data.elementAt(index),
+                                  ),
+                                  onTap: (str) {
+                                    searchBar.submit(context, str);
+                                  },
+                                  onAdded: searchBar.appendTyped,
                                 ),
-                                onTap: (str) {
-                                  searchBar.submit(context, str);
-                                },
-                                onAdded: searchBar.appendTyped,
-                              ),
-                            );
-                          },
-                          childCount: data.length,
-                        ),
-                      );
-                    },
-                    loading: (data) {
-                      return const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 128,
-                          child: Center(child: RefreshProgressIndicator()),
-                        ),
-                      );
-                    },
-                    error: (data, error, stackTrace) {
-                      final Object? msg;
-                      if (error == BooruError.empty) {
-                        msg =
-                            context.t.suggestion.empty(query: searchBar.value);
-                      } else if (error is DioError &&
-                          error.response?.statusCode != null) {
-                        msg = context.t.suggestion
-                            .httpError(
-                              query: searchBar.value,
-                              serverName: server.name,
-                            )
-                            .withDioErrorCode(error);
-                      } else {
-                        msg = error;
-                      }
+                              );
+                            },
+                            childCount: data.length,
+                          ),
+                        );
+                      },
+                      loading: (data) {
+                        return const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 128,
+                            child: Center(child: RefreshProgressIndicator()),
+                          ),
+                        );
+                      },
+                      error: (data, error, stackTrace) {
+                        final Object? msg;
+                        if (error == BooruError.empty) {
+                          msg = context.t.suggestion
+                              .empty(query: searchBar.value);
+                        } else if (error is DioError &&
+                            error.response?.statusCode != null) {
+                          msg = context.t.suggestion
+                              .httpError(
+                                query: searchBar.value,
+                                serverName: server.name,
+                              )
+                              .withDioErrorCode(error);
+                        } else {
+                          msg = error;
+                        }
 
-                      return SliverPadding(
-                        padding: const EdgeInsets.all(16),
-                        sliver: SliverToBoxAdapter(
-                          child: ErrorInfo(error: msg),
-                        ),
-                      );
-                    },
-                  ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: kBottomNavigationBarHeight + 38),
-                )
-              ],
+                        return SliverPadding(
+                          padding: const EdgeInsets.all(16),
+                          sliver: SliverToBoxAdapter(
+                            child: ErrorInfo(error: msg),
+                          ),
+                        );
+                      },
+                    ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: kBottomNavigationBarHeight + 38),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ enum Setting {
   serverPostLimit,
   serverSafeMode,
   uiMidnightMode,
+  uiBlur,
   uiThemeMode,
   uiTimelineGrid,
   uiLanguage,

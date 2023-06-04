@@ -178,6 +178,10 @@
       "title": "Gece yarısı teması",
       "desc": "Koyu mod için daha karanlık renk kullan"
     },
+    "ui_blur": {
+      "title": "Bulanıklaştırmayı etkinleştir",
+      "desc": "Çeşitli UI elementlerinde bulanık arkaplanı etkinleştir"
+    },
     "hide_media": {
       "title": "İndirilen medyayı gizle",
       "desc": "Harici galeri uygulamasında indirilen dosyaların gösterilmesini engelle"

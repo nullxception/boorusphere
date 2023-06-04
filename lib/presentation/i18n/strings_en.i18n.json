@@ -178,6 +178,10 @@
       "title": "Midnight Theme",
       "desc": "Use darker color for the dark-mode"
     },
+    "ui_blur": {
+      "title": "Enable blur",
+      "desc": "Enable blur background on various UI elements"
+    },
     "hide_media": {
       "title": "Hide downloaded media",
       "desc": "Prevent external gallery app from showing downloaded files"
