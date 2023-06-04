@@ -4,7 +4,6 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
-import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/server_scanner.dart';
@@ -25,7 +24,6 @@ class ServerEditorPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dio = ref.watch(dioProvider);
-    final session = ref.watch(searchSessionProvider);
     final scanner = useMemoized(() => ServerScanner(dio), [dio]);
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final imeIncognito =
@@ -170,7 +168,7 @@ class ServerEditorPage extends HookConsumerWidget {
                           ref.read(serverDataStateProvider.notifier);
 
                       if (isEditing) {
-                        serverDataNotifier.edit(session, server, data);
+                        serverDataNotifier.edit(server, data);
                       } else {
                         serverDataNotifier.add(data);
                       }

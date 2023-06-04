@@ -34,7 +34,6 @@ class _Content extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
-    final session = ref.watch(searchSessionProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -110,9 +109,7 @@ class _Content extends ConsumerWidget {
                             break;
                           }
 
-                          ref
-                              .read(serverDataStateProvider.notifier)
-                              .remove(session, it);
+                          ref.read(serverDataStateProvider.notifier).remove(it);
                           break;
                         default:
                           break;
