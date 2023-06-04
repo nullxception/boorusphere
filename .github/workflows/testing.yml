@@ -14,7 +14,7 @@ on:
 
 jobs:
   analysis:
-    name: Static analysis
+    name: Perform static analysis and unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,9 +24,19 @@ jobs:
         with:
           channel: "stable"
           cache: true
-      - run: flutter clean
-      - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
-      - run: dart run slang
-      - run: find lib -iname '*.dart' -not -iname '*.freezed.dart' -not -iname '*.g.dart' | xargs dart format --output=none --set-exit-if-changed
-      - run: flutter analyze
+      - name: Get dependencies
+        run: |
+          flutter clean
+          flutter pub get
+      - name: Run code generators
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+          dart run slang
+      - name: Check formatting
+        run: find lib -iname '*.dart' -not -iname '*.freezed.dart' -not -iname '*.g.dart' | xargs dart format --output=none --set-exit-if-changed
+      - name: Analyze code
+        run: flutter analyze
+      - name: Perform unit testing
+        run: |
+          dart run full_coverage
+          flutter test --coverage
