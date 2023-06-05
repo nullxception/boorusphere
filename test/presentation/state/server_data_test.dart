@@ -80,6 +80,22 @@ void main() async {
       );
     });
 
+    test('removeAll', () async {
+      Future<void> removeAll() async {
+        for (var server in state()) {
+          await notifier().remove(server);
+        }
+      }
+
+      expect(
+        removeAll,
+        throwsA(
+          isA<Exception>()
+              .having((e) => e.toString(), 'desc', contains('Last server')),
+        ),
+      );
+    });
+
     test('reset', () async {
       await notifier().reset();
 
