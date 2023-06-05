@@ -61,9 +61,13 @@ void main() async {
 
     test('cycle themeMode', () async {
       await notifier().setThemeMode(ThemeMode.light);
-      await notifier().cycleThemeMode();
 
+      await notifier().cycleThemeMode();
       expect(state().themeMode, ThemeMode.system);
+      await notifier().cycleThemeMode();
+      expect(state().themeMode, ThemeMode.dark);
+      await notifier().cycleThemeMode();
+      expect(state().themeMode, ThemeMode.light);
     });
 
     test('midnightMode', () async {
