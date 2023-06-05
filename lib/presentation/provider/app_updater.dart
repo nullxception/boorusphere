@@ -44,7 +44,7 @@ class AppUpdater {
     return Directory(path.join(dir.absolute.path, 'app-update'));
   }
 
-  _clear({bool removeFile = false}) async {
+  Future<void> clear() async {
     final tasks = await FlutterDownloader.loadTasksWithRawQuery(
         query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
     if (tasks == null) return;
@@ -52,14 +52,14 @@ class AppUpdater {
       await ref.read(downloadStateProvider.notifier).remove(task.taskId);
       await FlutterDownloader.remove(
         taskId: task.taskId,
-        shouldDeleteContent: removeFile,
+        shouldDeleteContent: true,
       );
     }
     id = '';
   }
 
   Future<void> start(AppVersion version) async {
-    await stop();
+    await clear();
     final file = _fileName(version);
     final url =
         '${VersionNetworkSource.gitUrl}/releases/download/$version/$file';
@@ -90,10 +90,6 @@ class AppUpdater {
     }
   }
 
-  Future<void> stop() async {
-    _clear(removeFile: true);
-  }
-
   Future<void> expose() async {
     final file = _fileName(_version);
     final appDir = await _dir;
@@ -114,6 +110,5 @@ class AppUpdater {
 
   Future<void> install() async {
     await FlutterDownloader.open(taskId: id);
-    await _clear();
   }
 }

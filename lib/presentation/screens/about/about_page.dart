@@ -227,7 +227,7 @@ class _Downloader extends ConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              ref.read(appUpdaterProvider).stop();
+              ref.read(appUpdaterProvider).clear();
             },
             icon: const Icon(Icons.close),
           ),
