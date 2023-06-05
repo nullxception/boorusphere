@@ -1,4 +1,5 @@
 import 'package:boorusphere/data/provider.dart';
+import 'package:boorusphere/data/repository/app_state/app_state_repo_impl.dart';
 import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
 import 'package:boorusphere/data/repository/booru/booru_repo_impl.dart';
 import 'package:boorusphere/data/repository/changelog/changelog_repo_impl.dart';
@@ -10,6 +11,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/server/server_repo_impl.dart';
 import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
 import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
+import 'package:boorusphere/domain/repository/app_state_repo.dart';
 import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
 import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/domain/repository/changelog_repo.dart';
@@ -102,4 +104,10 @@ DownloadRepo downloadRepo(DownloadRepoRef ref) {
   return DownloadRepoImpl(
     ref.watch(downloaderSourceProvider),
   );
+}
+
+@riverpod
+AppStateRepo appStateRepo(AppStateRepoRef ref) {
+  final box = AppStateRepoImpl.hiveBox();
+  return AppStateRepoImpl(box);
 }
