@@ -9,7 +9,7 @@ class ChangelogNetworkSource {
   Future<String> load() async {
     final res = await client.get(url);
     final data = res.data;
-    return data is String && data.contains('## 1') ? data : '';
+    return data is String && data.contains(RegExp(r'## [0-9]+\.')) ? data : '';
   }
 
   static const url = '${VersionNetworkSource.gitUrl}/raw/main/CHANGELOG.md';
