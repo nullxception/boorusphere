@@ -49,8 +49,14 @@ void main() async {
 
     test('locale', () async {
       await notifier().setLocale(AppLocale.idId);
-
       expect(state().locale, AppLocale.idId);
+      expect(LocaleSettings.currentLocale, AppLocale.idId);
+    });
+
+    test('base locale', () async {
+      await notifier().setLocale(null);
+      expect(state().locale, null);
+      expect(LocaleSettings.currentLocale, AppLocale.en);
     });
 
     test('cycle themeMode', () async {
