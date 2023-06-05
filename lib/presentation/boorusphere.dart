@@ -4,6 +4,7 @@ import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/app_updater.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/flutter_downloader_handle.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -67,11 +68,14 @@ class Boorusphere extends HookConsumerWidget {
     }, [locale]);
 
     useEffect(() {
-      ref.read(downloaderHandleProvider).listen((progress) {
-        ref.read(downloadStateProvider.notifier).updateProgress(progress);
+      ref.read(downloaderHandleProvider).listen((progress) async {
+        final appUpdater = ref.read(appUpdaterProvider);
         if (progress.status.isDownloaded) {
-          FileUtils.rescanDownloadDir();
+          if (appUpdater.id == progress.id) await appUpdater.expose();
+          await FileUtils.rescanDownloadDir();
         }
+
+        ref.read(downloadStateProvider.notifier).updateProgress(progress);
       });
     }, []);
 

@@ -10,7 +10,6 @@ import 'package:boorusphere/presentation/screens/home/drawer/home_drawer_control
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/favicon.dart';
-import 'package:boorusphere/presentation/widgets/prepare_update.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -214,7 +213,7 @@ class AppVersionTile extends ConsumerWidget {
           ),
           onTap: () {
             if (updateProgress.status.isDownloaded) {
-              UpdatePrepareDialog.show(context);
+              ref.watch(appUpdaterProvider).install();
             } else {
               context.router.push(const AboutRoute());
             }

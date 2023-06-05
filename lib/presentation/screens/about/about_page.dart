@@ -9,7 +9,6 @@ import 'package:boorusphere/presentation/provider/changelog_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/download_dialog.dart';
-import 'package:boorusphere/presentation/widgets/prepare_update.dart';
 import 'package:boorusphere/utils/extensions/number.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -237,7 +236,7 @@ class _Downloader extends ConsumerWidget {
         if (progress.status.isDownloaded)
           ElevatedButton(
             onPressed: () {
-              UpdatePrepareDialog.show(context);
+              ref.watch(appUpdaterProvider).install();
             },
             child: Text(context.t.updater.install),
           ),
