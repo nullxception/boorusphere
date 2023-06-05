@@ -22,38 +22,19 @@ class FileUtils {
     return File('${dir.absolute.path}/.nomedia');
   }
 
-  static bool isWritable(String dirPath) {
-    final f = File('$dirPath/.boorusphere.tmp');
-    try {
-      f.writeAsStringSync('', mode: FileMode.append, flush: true);
-      if (!f.existsSync()) {
-        return false;
-      }
-
-      f.deleteSync();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
   static Future<bool> get hasNoMediaFile async {
     final file = await noMediaFile;
     return file.existsSync();
   }
 
   static Future<void> createDownloadDir() async {
-    final path = await downloadPath;
-
-    if (!isWritable(path)) {
-      await Permission.storage.request();
+    final status = await Permission.storage.request();
+    if (status != PermissionStatus.granted) {
+      return;
     }
 
     final dir = await downloadDir;
-    final dirExists = dir.existsSync();
-    if (isWritable(path) && !dirExists) {
-      await dir.create();
-    }
+    await dir.create();
   }
 
   static Future<void> rescanDir(Directory dir) async {
