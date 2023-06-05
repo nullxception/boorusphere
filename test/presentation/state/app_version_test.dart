@@ -27,11 +27,12 @@ void main() async {
         envRepoProvider.overrideWithValue(FakeEnvRepoImpl()),
       ]);
 
+      const edgeVersion = '9.9.9';
       final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
       dioAdapter.onGet(
           VersionNetworkSource.pubspecUrl, (server) => server.reply(200, '''
 # comments
-version: 9.9.9+99
+version: $edgeVersion+99
 
 '''));
 
@@ -46,14 +47,21 @@ version: 9.9.9+99
       });
 
       await ref.read(appVersionsStateProvider.future);
+      final versions = ref.read(appVersionsStateProvider).value;
+      expect(versions?.current, AppVersion.fromString('1.1.1'));
+      expect(versions?.latest, AppVersion.fromString(edgeVersion));
       expect(
-        ref.read(appVersionsStateProvider).value?.current,
-        AppVersion.fromString('1.1.1'),
+        versions?.latest.apkUrl,
+        contains('download/$edgeVersion/boorusphere-$edgeVersion'),
       );
-      expect(
-        ref.read(appVersionsStateProvider).value?.latest,
-        AppVersion.fromString('9.9.9'),
-      );
+    });
+
+    test('isNewerThan', () {
+      final first = AppVersion.fromString('9.9.1');
+      final second = AppVersion.fromString('9.9.2');
+      expect(second.isNewerThan(first), true);
+      expect(first.isNewerThan(second), false);
+      expect(first.isNewerThan(first), false);
     });
 
     test('empty response', () async {
