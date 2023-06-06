@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'download_state.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class DownloadState extends _$DownloadState {
   @override
   Iterable<DownloadItem> build() {
