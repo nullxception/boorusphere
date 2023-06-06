@@ -31,6 +31,13 @@ class Boorusphere extends HookConsumerWidget {
     await ref.read(serverDataStateProvider.notifier).populate();
     await ref.read(downloadStateProvider.notifier).populate();
     await FlutterDisplayMode.setHighRefreshRate();
+
+    final envRepo = ref.read(envRepoProvider);
+    final appStateRepo = ref.read(appStateRepoProvider);
+    if (envRepo.appVersion.isNewerThan(appStateRepo.version)) {
+      await appStateRepo.storeVersion(envRepo.appVersion);
+    }
+
     onCompleted();
   }
 
