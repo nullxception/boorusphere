@@ -93,10 +93,10 @@ class AppUpdater {
   Future<void> expose() async {
     final file = _fileName(_version);
     final appDir = await _dir;
-    final downloadDir = (await FileUtils.downloadDir).absolute.path;
-    final extAppDir = Directory(path.join(downloadDir, 'app-update'));
+    final updatePath = path.join(FileUtils.instance.downloadPath, 'app-update');
+    final extAppDir = Directory(updatePath);
 
-    await FileUtils.createDownloadDir();
+    await FileUtils.instance.createDownloadDir();
     appDir.createSync();
     extAppDir.createSync();
 

@@ -22,18 +22,18 @@ class Downloader {
 
   Future<void> download(Post post, {String? url}) async {
     final fileUrl = url ?? post.originalFile;
-    final dir = await FileUtils.downloadDir;
+    final targetPath = FileUtils.instance.downloadPath;
 
-    await FileUtils.createDownloadDir();
+    await FileUtils.instance.createDownloadDir();
 
     final taskId = await FlutterDownloader.enqueue(
         url: fileUrl,
-        savedDir: dir.absolute.path,
+        savedDir: targetPath,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
-      final destination = '${dir.absolute.path}/${fileUrl.fileName}';
+      final destination = '$targetPath/${fileUrl.fileName}';
       final entry =
           DownloadEntry(id: taskId, post: post, destination: destination);
       await ref.read(downloadStateProvider.notifier).add(entry);

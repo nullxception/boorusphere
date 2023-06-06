@@ -2,70 +2,71 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:media_scanner/media_scanner.dart';
+import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 
 class FileUtils {
-  static const downloadDirName = 'Boorusphere';
-  static const pathChannel = MethodChannel('io.chaldeaprjkt.boorusphere/path');
+  FileUtils._({required String platformDownloadPath})
+      : _platformDownloadPath = platformDownloadPath;
 
-  static Future<String> get downloadPath async {
-    return await pathChannel.invokeMethod('getDownload');
+  final String _platformDownloadPath;
+
+  String get downloadPath {
+    return path.join(_platformDownloadPath, 'Boorusphere');
   }
 
-  static Future<Directory> get downloadDir async {
-    final path = await downloadPath;
-    return Directory('$path/$downloadDirName');
+  File get noMediaFile {
+    return File(path.join(downloadPath, '.nomedia'));
   }
 
-  static Future<File> get noMediaFile async {
-    final dir = await downloadDir;
-    return File('${dir.absolute.path}/.nomedia');
-  }
-
-  static Future<bool> get hasNoMediaFile async {
-    final file = await noMediaFile;
-    return file.existsSync();
-  }
-
-  static Future<void> createDownloadDir() async {
+  Future<void> createDownloadDir() async {
     final status = await Permission.storage.request();
     if (status != PermissionStatus.granted) {
       return;
     }
 
-    final dir = await downloadDir;
-    await dir.create();
+    await Directory(downloadPath).create();
   }
 
-  static Future<void> rescanDir(Directory dir) async {
+  Future<void> rescan(String dirPath) async {
     if (Platform.isAndroid) {
-      await MediaScanner.loadMedia(path: dir.path);
+      await MediaScanner.loadMedia(path: dirPath);
     }
   }
 
-  static Future<void> rescanDownloadDir() async {
-    final dir = await downloadDir;
-    if (Platform.isAndroid) {
-      await MediaScanner.loadMedia(path: dir.path);
-    }
+  Future<void> rescanDownloadDir() async {
+    await rescan(downloadPath);
   }
 
-  static Future<void> createNoMediaFile() async {
-    await FileUtils.createDownloadDir();
-    final file = await noMediaFile;
-    final dir = file.parent;
-    if (!file.existsSync()) {
-      await file.create();
+  Future<void> createNoMediaFile() async {
+    await createDownloadDir();
+    if (!noMediaFile.existsSync()) {
+      await noMediaFile.create();
     }
-    await rescanDir(dir);
+    await rescan(noMediaFile.parent.path);
   }
 
-  static Future<void> removeNoMediaFile() async {
-    final file = await noMediaFile;
-    final dir = file.parent;
-    if (file.existsSync()) {
-      await file.delete();
+  Future<void> removeNoMediaFile() async {
+    if (noMediaFile.existsSync()) {
+      await noMediaFile.delete();
     }
-    await rescanDir(dir);
+    await rescan(noMediaFile.parent.path);
+  }
+
+  static FileUtils? _instance;
+
+  static FileUtils get instance {
+    final instance = _instance;
+    if (instance == null) {
+      throw Exception('FileUtils must be initialized');
+    }
+
+    return instance;
+  }
+
+  static Future<void> initialize() async {
+    const channel = MethodChannel('io.chaldeaprjkt.boorusphere/path');
+    final downloadPath = await channel.invokeMethod('getDownload');
+    _instance = FileUtils._(platformDownloadPath: downloadPath);
   }
 }

@@ -80,7 +80,7 @@ class Boorusphere extends HookConsumerWidget {
         final appUpdater = ref.read(appUpdaterProvider);
         if (progress.status.isDownloaded) {
           if (appUpdater.id == progress.id) await appUpdater.expose();
-          await FileUtils.rescanDownloadDir();
+          await FileUtils.instance.rescanDownloadDir();
         }
 
         ref.read(downloadStateProvider.notifier).updateProgress(progress);

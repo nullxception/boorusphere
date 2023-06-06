@@ -105,26 +105,18 @@ class _HideMedia extends HookWidget {
   Widget build(BuildContext context) {
     final markMayNeedRebuild = useMarkMayNeedRebuild();
 
-    return FutureBuilder(
-      future: FileUtils.hasNoMediaFile,
-      initialData: false,
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-        final value = data is bool ? data : false;
-        return SwitchListTile(
-          title: Text(context.t.settings.hideMedia.title),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(context.t.settings.hideMedia.desc),
-          ),
-          value: value,
-          onChanged: (isEnabled) async {
-            isEnabled
-                ? await FileUtils.createNoMediaFile()
-                : await FileUtils.removeNoMediaFile();
-            markMayNeedRebuild();
-          },
-        );
+    return SwitchListTile(
+      title: Text(context.t.settings.hideMedia.title),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(context.t.settings.hideMedia.desc),
+      ),
+      value: FileUtils.instance.noMediaFile.existsSync(),
+      onChanged: (isEnabled) async {
+        isEnabled
+            ? await FileUtils.instance.createNoMediaFile()
+            : await FileUtils.instance.removeNoMediaFile();
+        markMayNeedRebuild();
       },
     );
   }

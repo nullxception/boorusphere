@@ -22,7 +22,7 @@ import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart
 import 'package:boorusphere/utils/file_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -41,7 +41,7 @@ class DataBackupState extends _$DataBackupState {
 
   Future<Directory> _tempDir() async {
     final basedir = await getTemporaryDirectory();
-    final temp = Directory(join(basedir.path, '.backup.tmp'));
+    final temp = Directory(path.join(basedir.path, '.backup.tmp'));
     if (temp.existsSync()) {
       temp.deleteSync(recursive: true);
     }
@@ -50,9 +50,9 @@ class DataBackupState extends _$DataBackupState {
   }
 
   Future<Directory> _backupDir() async {
-    final downloadDir = (await FileUtils.downloadDir).absolute.path;
-    final dir = Directory(join(downloadDir, 'backups'));
-    await FileUtils.createDownloadDir();
+    final backupPath = path.join(FileUtils.instance.downloadPath, 'backups');
+    final dir = Directory(backupPath);
+    await FileUtils.instance.createDownloadDir();
     dir.createSync();
     return dir;
   }
@@ -167,14 +167,14 @@ class DataBackupState extends _$DataBackupState {
     final dir = await _backupDir();
     final time = DateFormat('yyyy-MM-dd-HH-mm-ss').format(DateTime.now());
     final name = '${appId}_backup_$time.zip';
-    final zip = File(join(dir.path, name));
+    final zip = File(path.join(dir.path, name));
     if (zip.existsSync()) {
       zip.deleteSync();
     }
 
     await File(encoder.zipPath).copy(zip.path);
     temp.deleteSync(recursive: true);
-    await FileUtils.rescanDir(zip.parent);
+    await FileUtils.instance.rescan(zip.parent.path);
     state = BackupResult.exported(zip.path);
   }
 
