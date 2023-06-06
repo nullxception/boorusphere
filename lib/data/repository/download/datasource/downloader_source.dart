@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
-import 'package:boorusphere/data/repository/download/entity/download_status.dart';
+import 'package:boorusphere/presentation/utils/extensions/flutter_downloader.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 
@@ -18,7 +18,7 @@ class DownloaderSource {
     return tasks.map(
       (it) => DownloadProgress(
         id: it.taskId,
-        status: DownloadStatus.fromIndex(it.status.value),
+        status: it.status.toDownloadStatus(),
         progress: it.progress,
         timestamp: it.timeCreated,
       ),
