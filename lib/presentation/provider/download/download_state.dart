@@ -12,13 +12,8 @@ part 'download_state.g.dart';
 class DownloadEntryState extends _$DownloadEntryState {
   @override
   Iterable<DownloadEntry> build() {
-    // populate later
-    return [];
-  }
-
-  Future<void> populate() async {
     final repo = ref.read(downloadsRepoProvider);
-    state = repo.getEntries();
+    return repo.getEntries();
   }
 
   Future<void> add(DownloadEntry entry) async {
@@ -59,13 +54,8 @@ class DownloadEntryState extends _$DownloadEntryState {
 class DownloadProgressState extends _$DownloadProgressState {
   @override
   Iterable<DownloadProgress> build() {
-    // populate later
-    return [];
-  }
-
-  Future<void> populate() async {
     final repo = ref.read(downloadsRepoProvider);
-    state = repo.getProgresses();
+    return repo.getProgresses();
   }
 
   Future<void> update(DownloadProgress progress) async {
