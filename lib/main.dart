@@ -20,7 +20,7 @@ import 'package:boorusphere/presentation/i18n/helper.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
-import 'package:boorusphere/utils/file_utils.dart';
+import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,7 +28,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await FileUtils.initialize();
 
   Hive.registerAdapter(ServersAdapter());
   Hive.registerAdapter(BooruTagAdapter());
@@ -65,6 +64,8 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
+        sharedStorageHandleProvider
+            .overrideWithValue(await provideSharedStorageHandle()),
         cookieJarProvider.overrideWithValue(await provideCookieJar()),
         defaultServersProvider.overrideWithValue(await provideDefaultServers()),
         envRepoProvider.overrideWithValue(await provideEnvRepo()),

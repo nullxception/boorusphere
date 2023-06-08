@@ -17,8 +17,8 @@ import 'package:boorusphere/presentation/provider/settings/content_setting_state
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:boorusphere/presentation/provider/tags_blocker_state.dart';
-import 'package:boorusphere/utils/file_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -49,11 +49,9 @@ class DataBackupState extends _$DataBackupState {
   }
 
   Future<Directory> _backupDir() async {
-    final backupPath = path.join(FileUtils.instance.downloadPath, 'backups');
-    final dir = Directory(backupPath);
-    await FileUtils.instance.createDownloadDir();
-    dir.createSync();
-    return dir;
+    final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
+    await sharedStorageHandle.init();
+    return sharedStorageHandle.createSubDir('backups');
   }
 
   Future<BackupItem> _metadata() async {
@@ -173,7 +171,7 @@ class DataBackupState extends _$DataBackupState {
 
     await File(encoder.zipPath).copy(zip.path);
     temp.deleteSync(recursive: true);
-    await FileUtils.instance.rescan(zip.parent.path);
+    await ref.read(sharedStorageHandleProvider).rescan();
     state = BackupResult.exported(zip.path);
   }
 

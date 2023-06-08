@@ -5,14 +5,13 @@ import 'package:boorusphere/presentation/provider/settings/download_setting_stat
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/utils/hooks/markmayneedrebuild.dart';
-import 'package:boorusphere/utils/file_utils.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -98,12 +97,13 @@ class _Section extends StatelessWidget {
   }
 }
 
-class _HideMedia extends HookWidget {
+class _HideMedia extends HookConsumerWidget {
   const _HideMedia();
 
   @override
-  Widget build(BuildContext context) {
-    final markMayNeedRebuild = useMarkMayNeedRebuild();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sharedStorageHandle = ref.watch(sharedStorageHandleProvider);
+    final markRebuild = useMarkMayNeedRebuild();
 
     return SwitchListTile(
       title: Text(context.t.settings.hideMedia.title),
@@ -111,12 +111,10 @@ class _HideMedia extends HookWidget {
         padding: const EdgeInsets.only(top: 8),
         child: Text(context.t.settings.hideMedia.desc),
       ),
-      value: FileUtils.instance.noMediaFile.existsSync(),
-      onChanged: (isEnabled) async {
-        isEnabled
-            ? await FileUtils.instance.createNoMediaFile()
-            : await FileUtils.instance.removeNoMediaFile();
-        markMayNeedRebuild();
+      value: sharedStorageHandle.isHidden,
+      onChanged: (value) async {
+        await sharedStorageHandle.hide(value);
+        markRebuild();
       },
     );
   }

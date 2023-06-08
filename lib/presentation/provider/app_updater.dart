@@ -7,7 +7,7 @@ import 'package:boorusphere/data/repository/downloads/entity/download_progress.d
 import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
-import 'package:boorusphere/utils/file_utils.dart';
+import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -39,9 +39,9 @@ class AppUpdater {
     return 'boorusphere-$version-$kAppArch.apk';
   }
 
-  Future<Directory> get _dir async {
-    final dir = await getApplicationSupportDirectory();
-    return Directory(path.join(dir.absolute.path, 'app-update'));
+  Future<Directory> get _tmpDir async {
+    final tmp = await getTemporaryDirectory();
+    return Directory(path.join(tmp.absolute.path, 'app-update'));
   }
 
   Future<void> clear() async {
@@ -62,19 +62,28 @@ class AppUpdater {
     await clear();
     final file = _fileName(version);
     final url = '${AppVersionRepo.gitUrl}/releases/download/$version/$file';
-    final dir = await getApplicationSupportDirectory();
-    final appDir = Directory(path.join(dir.absolute.path, 'app-update'));
-    appDir.createSync();
-    final appFile = File(path.join(appDir.absolute.path, file));
-    if (appFile.existsSync()) {
-      appFile.deleteSync();
+
+    final tmp = await _tmpDir;
+    if (!tmp.existsSync()) {
+      try {
+        tmp.createSync();
+        // ignore: empty_catches
+      } catch (e) {}
+    }
+
+    final apk = File(path.join(tmp.absolute.path, file));
+    if (apk.existsSync()) {
+      try {
+        apk.deleteSync();
+        // ignore: empty_catches
+      } catch (e) {}
     }
 
     final newId = await FlutterDownloader.enqueue(
       url: url,
-      savedDir: appDir.absolute.path,
+      savedDir: tmp.absolute.path,
       showNotification: true,
-      openFileFromNotification: false,
+      openFileFromNotification: true,
     );
 
     if (newId != null) {
@@ -83,27 +92,28 @@ class AppUpdater {
       final entry = DownloadEntry(
         id: newId,
         post: Post.appReserved,
-        destination: appDir.absolute.path,
+        destination: apk.absolute.path,
       );
       await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
   }
 
   Future<void> expose() async {
+    final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
     final file = _fileName(_version);
-    final appDir = await _dir;
-    final updatePath = path.join(FileUtils.instance.downloadPath, 'app-update');
-    final extAppDir = Directory(updatePath);
+    final srcDir = await _tmpDir;
 
-    await FileUtils.instance.createDownloadDir();
-    appDir.createSync();
-    extAppDir.createSync();
+    await sharedStorageHandle.init();
+    final destDir = sharedStorageHandle.createSubDir('app-update');
 
-    final appFile = File(path.join(appDir.absolute.path, file));
-    final extAppFile = File(path.join(extAppDir.absolute.path, file));
+    final srcApk = File(path.join(srcDir.absolute.path, file));
+    final destApk = File(path.join(destDir.absolute.path, file));
 
-    if (appFile.existsSync() && !extAppFile.existsSync()) {
-      await appFile.copy(extAppFile.absolute.path);
+    if (srcApk.existsSync() && !destApk.existsSync()) {
+      try {
+        await srcApk.copy(destApk.absolute.path);
+        // ignore: empty_catches
+      } catch (e) {}
     }
   }
 

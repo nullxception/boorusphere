@@ -9,10 +9,10 @@ import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/flutter_downloader_handle.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:boorusphere/presentation/routes/app_route_observer.dart';
 import 'package:boorusphere/presentation/routes/app_router.dart';
 import 'package:boorusphere/presentation/widgets/app_theme_builder.dart';
-import 'package:boorusphere/utils/file_utils.dart';
 import 'package:boorusphere/utils/http/overrides.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -79,7 +79,7 @@ class Boorusphere extends HookConsumerWidget {
         final appUpdater = ref.read(appUpdaterProvider);
         if (progress.status.isDownloaded) {
           if (appUpdater.id == progress.id) await appUpdater.expose();
-          await FileUtils.instance.rescanDownloadDir();
+          await ref.read(sharedStorageHandleProvider).rescan();
         }
 
         await ref.read(downloadProgressStateProvider.notifier).update(progress);
