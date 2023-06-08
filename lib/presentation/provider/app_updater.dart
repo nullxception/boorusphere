@@ -24,7 +24,7 @@ AppUpdater appUpdater(AppUpdaterRef ref) {
 @riverpod
 DownloadProgress appUpdateProgress(AppUpdateProgressRef ref) {
   final id = ref.watch(appUpdaterProvider.select((it) => it.id));
-  return ref.watch(downloadStateProvider).getProgressById(id);
+  return ref.watch(downloadProgressStateProvider).getById(id);
 }
 
 class AppUpdater {
@@ -49,7 +49,7 @@ class AppUpdater {
         query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
     if (tasks == null) return;
     for (var task in tasks) {
-      await ref.read(downloadStateProvider.notifier).remove(task.taskId);
+      await ref.read(downloadEntryStateProvider.notifier).remove(task.taskId);
       await FlutterDownloader.remove(
         taskId: task.taskId,
         shouldDeleteContent: true,
@@ -85,7 +85,7 @@ class AppUpdater {
         post: Post.appReserved,
         destination: appDir.absolute.path,
       );
-      await ref.read(downloadStateProvider.notifier).add(entry);
+      await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
   }
 

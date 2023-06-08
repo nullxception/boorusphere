@@ -4,8 +4,10 @@ import 'package:boorusphere/data/repository/downloads/entity/download_progress.d
 abstract interface class DownloadsRepo {
   Iterable<DownloadEntry> getEntries();
   Iterable<DownloadProgress> getProgresses();
+  Future<void> addEntry(DownloadEntry entry);
   Future<void> updateProgress(DownloadProgress progress);
-  Future<void> add(DownloadEntry entry);
-  Future<void> remove(String id);
-  Future<void> clear();
+  Future<void> removeEntry(String id);
+  Future<void> removeProgress(String id);
+  Future<void> clearEntries();
+  Future<void> clearProgresses();
 }

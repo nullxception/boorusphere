@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
-import 'package:boorusphere/presentation/provider/download/entity/download_item.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
@@ -26,14 +26,18 @@ class DownloadsPage extends HookConsumerWidget {
         ref.read(serverSettingStateProvider.select((it) => it.lastActiveId));
     final session = this.session ?? SearchSession(serverId: savedServerId);
     final serverData = ref.watch(serverDataStateProvider);
-    final downloadState = ref.watch(downloadStateProvider).whereNotReserved();
+    final downloadEntries =
+        ref.watch(downloadEntryStateProvider).whereNotReserved();
+    final downloadProgressState = ref.watch(downloadProgressStateProvider);
     final groupByServer = ref
         .watch(downloadSettingStateProvider.select((it) => it.groupByServer));
     final filter = useState(DownloadFilter.none);
-    final filteredEntries = filter.value != DownloadFilter.none
-        ? downloadState
-            .where((it) => it.progress.status == filter.value.toStatus())
-        : downloadState;
+    var filteredEntries = downloadEntries;
+    if (filter.value != DownloadFilter.none) {
+      filteredEntries = downloadEntries.where((it) =>
+          downloadProgressState.getById(it.id).status ==
+          filter.value.toStatus());
+    }
 
     return ProviderScope(
       overrides: [searchSessionProvider.overrideWith((ref) => session)],
@@ -41,7 +45,7 @@ class DownloadsPage extends HookConsumerWidget {
         appBar: AppBar(
           title: Text(context.t.downloads.title),
           actions: [
-            if (downloadState.isNotEmpty)
+            if (downloadEntries.isNotEmpty)
               PopupMenuButton(
                 onSelected: (value) {
                   switch (value) {
@@ -53,7 +57,7 @@ class DownloadsPage extends HookConsumerWidget {
                       });
                       break;
                     case 'clear-all':
-                      ref.read(downloadStateProvider.notifier).clear();
+                      ref.read(downloadEntryStateProvider.notifier).clear();
                       break;
                     case 'group-by-server':
                       ref
@@ -100,12 +104,12 @@ class DownloadsPage extends HookConsumerWidget {
                     ),
                   ],
                 )
-              : ExpandableGroupListView<DownloadItem, String>(
+              : ExpandableGroupListView<DownloadEntry, String>(
                   items: filteredEntries,
-                  groupedBy: (item) => item.entry.post.serverId,
+                  groupedBy: (item) => item.post.serverId,
                   groupTitle: (id) => Text(serverData.getById(id).name),
-                  itemBuilder: (item) => DownloadItemView(
-                    item: item,
+                  itemBuilder: (item) => DownloadEntryView(
+                    entry: item,
                     groupByServer: groupByServer,
                   ),
                   ungroup: !groupByServer,
@@ -116,28 +120,31 @@ class DownloadsPage extends HookConsumerWidget {
   }
 
   Future<DownloadFilter?> showFilterDialog(
-      BuildContext context, DownloadFilter current) {
+    BuildContext context,
+    DownloadFilter current,
+  ) {
     return showDialog<DownloadFilter?>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(context.t.downloads.filterByStatus),
-            icon: const Icon(Icons.file_download),
-            contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: DownloadFilter.values
-                  .map((e) => RadioListTile(
-                        value: e,
-                        groupValue: current,
-                        title: Text(e.describe(context)),
-                        onChanged: (value) {
-                          context.navigator.pop(value);
-                        },
-                      ))
-                  .toList(),
-            ),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(context.t.downloads.filterByStatus),
+          icon: const Icon(Icons.file_download),
+          contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: DownloadFilter.values
+                .map((e) => RadioListTile(
+                      value: e,
+                      groupValue: current,
+                      title: Text(e.describe(context)),
+                      onChanged: (value) {
+                        context.navigator.pop(value);
+                      },
+                    ))
+                .toList(),
+          ),
+        );
+      },
+    );
   }
 }

@@ -19,7 +19,7 @@ class UserDownloadsRepo implements DownloadsRepo {
   Iterable<DownloadProgress> getProgresses() => progressBox.values;
 
   @override
-  Future<void> add(DownloadEntry entry) async {
+  Future<void> addEntry(DownloadEntry entry) async {
     await entryBox.put(entry.id, entry);
   }
 
@@ -29,13 +29,17 @@ class UserDownloadsRepo implements DownloadsRepo {
   }
 
   @override
-  Future<void> remove(String id) async {
+  Future<void> removeEntry(String id) async {
     await entryBox.delete(id);
+  }
+
+  @override
+  Future<void> removeProgress(String id) async {
     await progressBox.delete(id);
   }
 
   @override
-  Future<void> clear() async {
+  Future<void> clearEntries() async {
     final tasks = await FlutterDownloader.loadTasks();
     if (tasks != null) {
       await Future.wait(tasks.map(
@@ -45,6 +49,10 @@ class UserDownloadsRepo implements DownloadsRepo {
     }
 
     await entryBox.deleteAll(entryBox.keys);
+  }
+
+  @override
+  Future<void> clearProgresses() async {
     await progressBox.deleteAll(progressBox.keys);
   }
 

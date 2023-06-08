@@ -132,10 +132,8 @@ class PostDownloadButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progress = ref
-        .watch(downloadStateProvider)
-        .whereNotReserved()
-        .getProgressByPost(post);
+    final entry = ref.watch(downloadEntryStateProvider).getByPost(post);
+    final progress = ref.watch(downloadProgressStateProvider).getById(entry.id);
 
     final pending = useState(false);
 
