@@ -125,7 +125,9 @@
       "paused": "Paused"
     },
     "filter_by_status": "Fiwtew by status",
-    "no_filter": "Nyo fiwtew"
+    "no_filter": "Nyo fiwtew",
+    "clear_all": "Cweaw aww!",
+    "clear_all_warning": "R u suwe u want to cweaw aww the downwoad wecowd ?"
   },
   "favorites": {
     "title": "Favowites",

@@ -57,7 +57,11 @@ class DownloadsPage extends HookConsumerWidget {
                       });
                       break;
                     case 'clear-all':
-                      ref.read(downloadEntryStateProvider.notifier).clear();
+                      showClearDialog(context).then((value) {
+                        if (value ?? false) {
+                          ref.read(downloadEntryStateProvider.notifier).clear();
+                        }
+                      });
                       break;
                     case 'group-by-server':
                       ref
@@ -84,7 +88,7 @@ class DownloadsPage extends HookConsumerWidget {
                     ),
                     PopupMenuItem(
                       value: 'clear-all',
-                      child: Text(context.t.clear),
+                      child: Text(context.t.downloads.clearAll),
                     ),
                   ];
                 },
@@ -143,6 +147,33 @@ class DownloadsPage extends HookConsumerWidget {
                     ))
                 .toList(),
           ),
+        );
+      },
+    );
+  }
+
+  Future<bool?> showClearDialog(BuildContext context) {
+    return showDialog<bool?>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(context.t.downloads.clearAll),
+          icon: const Icon(Icons.delete_forever),
+          content: Text(context.t.downloads.clearAllWarning),
+          actions: [
+            TextButton(
+              onPressed: () {
+                context.navigator.pop();
+              },
+              child: Text(context.t.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.navigator.pop(true);
+              },
+              child: Text(context.t.clear),
+            ),
+          ],
         );
       },
     );

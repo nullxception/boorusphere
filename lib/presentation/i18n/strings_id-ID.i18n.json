@@ -125,7 +125,9 @@
       "paused": "Tertunda"
     },
     "filter_by_status": "Filter status",
-    "no_filter": "Tanpa filter"
+    "no_filter": "Tanpa filter",
+    "clear_all": "Bersihkan semua",
+    "clear_all_warning": "Apa kamu yakin ingin membersihkan semua laporan unduhan ?"
   },
   "favorites": {
     "title": "Favorit",

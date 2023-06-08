@@ -125,7 +125,9 @@
       "paused": "Paused"
     },
     "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    "no_filter": "No filter",
+    "clear_all": "Clear all",
+    "clear_all_warning": "Are you sure you want to clear all the download record ?"
   },
   "favorites": {
     "title": "Favorites",
