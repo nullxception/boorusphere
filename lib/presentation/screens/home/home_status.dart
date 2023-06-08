@@ -74,10 +74,10 @@ class _ErrorStatus extends ConsumerWidget {
 
   Object? buildError(BuildContext context, ServerData server) {
     final e = error;
-    if (e is DioError && e.response?.statusCode != null) {
+    if (e is DioException && e.response?.statusCode != null) {
       return context.t.pageStatus
           .httpError(serverName: server.name)
-          .withDioErrorCode(e);
+          .withDioExceptionCode(e);
     } else if (e == BooruError.empty) {
       return data.option.query.isEmpty
           ? context.t.pageStatus.noResult(n: data.posts.length)

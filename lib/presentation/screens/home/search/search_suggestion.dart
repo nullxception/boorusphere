@@ -193,14 +193,14 @@ class SearchSuggestion extends HookConsumerWidget {
                         if (error == BooruError.empty) {
                           msg = context.t.suggestion
                               .empty(query: searchBar.value);
-                        } else if (error is DioError &&
+                        } else if (error is DioException &&
                             error.response?.statusCode != null) {
                           msg = context.t.suggestion
                               .httpError(
                                 query: searchBar.value,
                                 serverName: server.name,
                               )
-                              .withDioErrorCode(error);
+                              .withDioExceptionCode(error);
                         } else {
                           msg = error;
                         }

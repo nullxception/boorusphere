@@ -83,7 +83,7 @@ class ServerScanner {
         query: contentType.any((it) => it.contains('html')) ? '' : query,
         hasFileUrl: strData.contains(fileUrlRegExp),
       );
-    } on DioError {
+    } on DioException {
       return _ScanResult.empty;
     }
   }

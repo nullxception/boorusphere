@@ -44,7 +44,7 @@ class ErrorInfo extends HookWidget {
             : 'Connection failed';
       } else if (e is TimeoutException) {
         return 'Connection timeout';
-      } else if (e is! DioError) {
+      } else if (e is! DioException) {
         try {
           // let's try to obtain exception message
           return e.message;
