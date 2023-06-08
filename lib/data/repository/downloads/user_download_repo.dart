@@ -4,7 +4,7 @@ import 'package:boorusphere/data/repository/downloads/entity/download_status.dar
 import 'package:boorusphere/domain/repository/downloads_repo.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart' as sqflite;
 
 class UserDownloadsRepo implements DownloadsRepo {
   UserDownloadsRepo({required this.entryBox, required this.progressBox});
@@ -61,45 +61,59 @@ class UserDownloadsRepo implements DownloadsRepo {
 
   static Future<void> prepare() async {
     await Hive.openBox<DownloadEntry>(entryKey);
-    await Hive.openBox<DownloadProgress>(progressKey);
-    await _migrateFlutterDownloaderProgress();
+    final progressBox = await Hive.openBox<DownloadProgress>(progressKey);
+    await _migrateProgresses(progressBox);
     await FlutterDownloader.initialize();
   }
+}
 
-  static Future<void> _migrateFlutterDownloaderProgress() async {
-    final db = await openDatabase('download_tasks.db');
-    try {
-      final table = await db.query('task',
-          columns: ['task_id', 'progress', 'time_created', 'status']);
-      final progs = table.map((x) {
-        String id = x['task_id'].toString();
-        int prog = int.tryParse(x['progress'].toString()) ?? 0;
-        int timestamp = int.tryParse(x['time_created'].toString()) ?? 0;
-        int status = x['status'] as int;
-        final progress = DownloadProgress(
-          id: id,
-          status: switch (status) {
-            1 => DownloadStatus.pending,
-            2 => DownloadStatus.downloading,
-            3 => DownloadStatus.downloaded,
-            4 => DownloadStatus.failed,
-            5 => DownloadStatus.canceled,
-            6 => DownloadStatus.paused,
-            _ => DownloadStatus.empty
-          },
-          progress: prog,
-          timestamp: timestamp,
-        );
-        return MapEntry(id, progress);
-      });
+Future<void> _migrateProgresses(Box<DownloadProgress> box) async {
+  const dbName = 'download_tasks.db';
+  if (!(await sqflite.databaseExists(dbName))) {
+    return;
+  }
 
-      if (progs.isNotEmpty) {
-        final box = Hive.box<DownloadProgress>(progressKey);
-        final absentProgs = progs.where((x) => box.keys.contains(x.key));
-        await box.putAll(Map.fromEntries(absentProgs));
-      }
-    } finally {
-      await db.close();
+  final db = await sqflite.openReadOnlyDatabase(dbName);
+  try {
+    final checkTable = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='task'",
+    );
+    if (checkTable.isEmpty) {
+      return;
     }
+
+    final table = await db.query('task');
+    final tasks = <MapEntry<String, DownloadProgress>>[];
+    for (var x in table) {
+      String id = x['task_id'].toString();
+      if (box.keys.contains(id)) {
+        continue;
+      }
+
+      int prog = int.tryParse(x['progress'].toString()) ?? 0;
+      int timestamp = int.tryParse(x['time_created'].toString()) ?? 0;
+      int status = int.tryParse(x['status'].toString()) ?? 0;
+      final progress = DownloadProgress(
+        id: id,
+        status: switch (status) {
+          1 => DownloadStatus.pending,
+          2 => DownloadStatus.downloading,
+          3 => DownloadStatus.downloaded,
+          4 => DownloadStatus.failed,
+          5 => DownloadStatus.canceled,
+          6 => DownloadStatus.paused,
+          _ => DownloadStatus.empty
+        },
+        progress: prog,
+        timestamp: timestamp,
+      );
+      tasks.add(MapEntry(id, progress));
+    }
+
+    if (tasks.isNotEmpty) {
+      await box.putAll(Map.fromEntries(tasks));
+    }
+  } finally {
+    await db.close();
   }
 }
