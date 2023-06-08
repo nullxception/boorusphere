@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 
-abstract interface class ServerRepo {
+abstract interface class ServerDataRepo {
   Iterable<ServerData> get servers;
   Map<String, ServerData> get defaults;
   Future<void> populate();

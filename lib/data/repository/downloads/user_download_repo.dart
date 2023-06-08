@@ -1,13 +1,13 @@
-import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
-import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
-import 'package:boorusphere/data/repository/download/entity/download_status.dart';
-import 'package:boorusphere/domain/repository/download_repo.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_status.dart';
+import 'package:boorusphere/domain/repository/downloads_repo.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DownloadRepoImpl implements DownloadRepo {
-  DownloadRepoImpl({required this.entryBox, required this.progressBox});
+class UserDownloadsRepo implements DownloadsRepo {
+  UserDownloadsRepo({required this.entryBox, required this.progressBox});
 
   final Box<DownloadEntry> entryBox;
   final Box<DownloadProgress> progressBox;

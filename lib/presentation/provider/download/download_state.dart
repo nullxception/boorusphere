@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
-import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/download/entity/download_item.dart';
 import 'package:collection/collection.dart';
@@ -17,7 +17,7 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> populate() async {
-    final repo = ref.read(downloadRepoProvider);
+    final repo = ref.read(downloadsRepoProvider);
     final progresses = repo.getProgresses();
     state = repo.getEntries().map(
           (entry) => DownloadItem(
@@ -31,7 +31,7 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> add(DownloadEntry entry) async {
-    final repo = ref.read(downloadRepoProvider);
+    final repo = ref.read(downloadsRepoProvider);
     await repo.add(entry);
     state = [
       ...state.where((it) => it.entry.id != entry.id),
@@ -40,13 +40,13 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> remove(String id) async {
-    final repo = ref.read(downloadRepoProvider);
+    final repo = ref.read(downloadsRepoProvider);
     await repo.remove(id);
     state = [...state.where((it) => it.entry.id != id)];
   }
 
   Future<void> update(String id, DownloadEntry entry) async {
-    final repo = ref.read(downloadRepoProvider);
+    final repo = ref.read(downloadsRepoProvider);
     await repo.remove(id);
     await repo.add(entry);
     state = [
@@ -56,7 +56,7 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> updateProgress(DownloadProgress progress) async {
-    final repo = ref.read(downloadRepoProvider);
+    final repo = ref.read(downloadsRepoProvider);
     await repo.updateProgress(progress);
     final item = state.singleWhereOrNull((it) => it.entry.id == progress.id);
     state = [
@@ -66,7 +66,7 @@ class DownloadState extends _$DownloadState {
   }
 
   Future<void> clear() async {
-    final repo = ref.read(downloadRepoProvider);
+    final repo = ref.read(downloadsRepoProvider);
     await repo.clear();
     state = [];
   }

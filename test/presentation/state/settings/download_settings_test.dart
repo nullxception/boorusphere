@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
+import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/download_setting.dart';
@@ -20,7 +20,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await SettingRepoImpl.prepare();
+      await UserSettingsRepo.prepare();
       ref.listen<DownloadSetting>(
         downloadSettingStateProvider,
         listener.call,

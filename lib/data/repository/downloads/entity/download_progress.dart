@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/download/entity/download_status.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 

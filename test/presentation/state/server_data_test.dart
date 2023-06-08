@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/data/repository/server/server_repo_impl.dart';
-import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
+import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,8 +32,8 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await ServerRepoImpl.prepare();
-      await SettingRepoImpl.prepare();
+      await UserServerDataRepo.prepare();
+      await UserSettingsRepo.prepare();
       await notifier().populate();
 
       ref.listen(

@@ -5,12 +5,12 @@ import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
+import 'package:boorusphere/presentation/provider/tags_blocker_state.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/post.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -39,7 +39,7 @@ class PageState extends _$PageState {
 
   Iterable<String> get blockedTags {
     return ref
-        .read(blockedTagsStateProvider)
+        .read(tagsBlockerStateProvider)
         .values
         .where((it) => it.serverId.isEmpty || it.serverId == _server.id)
         .map((it) => it.name);
@@ -79,7 +79,7 @@ class PageState extends _$PageState {
     );
 
     try {
-      final repo = ref.read(booruRepoProvider(_server));
+      final repo = ref.read(imageboardRepoProvider(_server));
       var skipCount = 0;
       while (skipCount <= 3) {
         final res = await repo.getPage(option, _page);

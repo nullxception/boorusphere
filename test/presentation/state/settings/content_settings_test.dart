@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
+import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/content_setting.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +19,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await SettingRepoImpl.prepare();
+      await UserSettingsRepo.prepare();
       ref.listen<ContentSetting>(
         contentSettingStateProvider,
         listener.call,

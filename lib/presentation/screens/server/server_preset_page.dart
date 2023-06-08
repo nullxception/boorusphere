@@ -15,7 +15,8 @@ class ServerPresetPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final defaults = ref.watch(serverRepoProvider.select((it) => it.defaults));
+    final defaults =
+        ref.watch(serverDataRepoProvider.select((it) => it.defaults));
     final servers = ref.watch(serverDataStateProvider);
     final all = {...defaults.values, ...servers};
 

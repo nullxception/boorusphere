@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/app_state/app_state_repo_impl.dart';
+import 'package:boorusphere/data/repository/app_state/current_app_state_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/app_state_repo.dart';
@@ -17,7 +17,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await AppStateRepoImpl.prepare();
+      await CurrentAppStateRepo.prepare();
       ref.listen(appStateRepoProvider, listener.call, fireImmediately: true);
     });
 

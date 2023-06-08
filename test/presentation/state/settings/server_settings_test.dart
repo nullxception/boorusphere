@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
+import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/server_setting.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
@@ -17,7 +17,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await SettingRepoImpl.prepare();
+      await UserSettingsRepo.prepare();
       ref.listen<ServerSetting>(
         serverSettingStateProvider,
         listener.call,

@@ -2,8 +2,8 @@ import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/repository/app_state_repo.dart';
 import 'package:hive/hive.dart';
 
-class AppStateRepoImpl implements AppStateRepo {
-  AppStateRepoImpl(this.box);
+class CurrentAppStateRepo implements AppStateRepo {
+  CurrentAppStateRepo(this.box);
   final Box box;
 
   @override

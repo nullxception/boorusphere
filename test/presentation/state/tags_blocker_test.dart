@@ -1,6 +1,6 @@
-import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
-import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
-import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
+import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
+import 'package:boorusphere/data/repository/tags_blocker/entity/booru_tag.dart';
+import 'package:boorusphere/presentation/provider/tags_blocker_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -10,19 +10,19 @@ import '../../utils/riverpod.dart';
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('blocked tags', () {
+  group('tags blocker', () {
     const serverId = 'TestBooru';
     final ref = ProviderContainer();
     final listener = FakePodListener<Map<int?, BooruTag>>();
 
-    notifier() => ref.read(blockedTagsStateProvider.notifier);
-    state() => ref.read(blockedTagsStateProvider);
+    notifier() => ref.read(tagsBlockerStateProvider.notifier);
+    state() => ref.read(tagsBlockerStateProvider);
 
     setUpAll(() async {
       initializeTestHive();
-      await BlockedTagsRepoImpl.prepare();
+      await BooruTagsBlockerRepo.prepare();
       ref.listen(
-        blockedTagsStateProvider,
+        tagsBlockerStateProvider,
         listener.call,
         fireImmediately: true,
       );

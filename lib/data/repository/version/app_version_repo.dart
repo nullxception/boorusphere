@@ -4,8 +4,8 @@ import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:yaml/yaml.dart';
 
-class VersionRepoImpl implements VersionRepo {
-  VersionRepoImpl({required this.envRepo, required this.client});
+class AppVersionRepo implements VersionRepo {
+  AppVersionRepo({required this.envRepo, required this.client});
 
   final EnvRepo envRepo;
   final Dio client;

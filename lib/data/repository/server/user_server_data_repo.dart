@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/repository/server_repo.dart';
+import 'package:boorusphere/domain/repository/server_data_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
-class ServerRepoImpl implements ServerRepo {
-  ServerRepoImpl({
+class UserServerDataRepo implements ServerDataRepo {
+  UserServerDataRepo({
     required Map<String, ServerData> defaultServers,
     required this.box,
   }) : _defaults = defaultServers;

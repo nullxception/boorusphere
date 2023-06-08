@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
-import 'package:boorusphere/data/repository/search_history/search_history_repo_impl.dart';
+import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +21,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await SearchHistoryRepoImpl.prepare();
+      await UserSearchHistoryRepo.prepare();
       ref.listen(
         searchHistoryStateProvider,
         listener.call,

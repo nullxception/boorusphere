@@ -11,7 +11,7 @@ part 'ui_setting_state.g.dart';
 class UiSettingState extends _$UiSettingState {
   @override
   UiSetting build() {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     return UiSetting(
       blur: repo.get(Setting.uiBlur, or: true),
       grid: repo.get(Setting.uiTimelineGrid, or: 1),
@@ -25,7 +25,7 @@ class UiSettingState extends _$UiSettingState {
 
   Future<int> cycleGrid() async {
     state = state.copyWith(grid: state.grid < 2 ? state.grid + 1 : 0);
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
 
     await repo.put(Setting.uiTimelineGrid, state.grid);
     return state.grid;
@@ -33,7 +33,7 @@ class UiSettingState extends _$UiSettingState {
 
   Future<bool> showBlur(bool value) async {
     state = state.copyWith(blur: value);
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
 
     await repo.put(Setting.uiBlur, value);
     return state.blur;
@@ -48,7 +48,7 @@ class UiSettingState extends _$UiSettingState {
   }
 
   Future<AppLocale?> setLocale(AppLocale? locale) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(locale: locale);
     if (locale == null) {
       LocaleSettings.useDeviceLocale();
@@ -61,7 +61,7 @@ class UiSettingState extends _$UiSettingState {
   }
 
   Future<ThemeMode> setThemeMode(ThemeMode mode) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
 
     state = state.copyWith(themeMode: mode);
     await repo.put(Setting.uiThemeMode, mode.index);
@@ -84,14 +84,14 @@ class UiSettingState extends _$UiSettingState {
   }
 
   Future<bool> setMidnightMode(bool value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(midnightMode: value);
     await repo.put(Setting.uiMidnightMode, value);
     return state.midnightMode;
   }
 
   Future<bool> setImeIncognito(bool value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(imeIncognito: value);
     await repo.put(Setting.imeIncognito, value);
     return state.imeIncognito;

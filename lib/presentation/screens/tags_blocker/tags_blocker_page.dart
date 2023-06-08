@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/provider/tags_blocker_state.dart';
 import 'package:boorusphere/presentation/widgets/notice_card.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
   const _TagsBlockerContent();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final blockedTags = ref.watch(blockedTagsStateProvider);
+    final blockedTags = ref.watch(tagsBlockerStateProvider);
     final controller = useTextEditingController();
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
@@ -45,7 +45,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
                 onSubmitted: (value) {
                   final values = value.toWordList();
                   ref
-                      .read(blockedTagsStateProvider.notifier)
+                      .read(tagsBlockerStateProvider.notifier)
                       .pushAll(tags: values);
                   controller.clear();
                 },
@@ -71,7 +71,7 @@ class _TagsBlockerContent extends HookConsumerWidget {
             leading: const Icon(Icons.block),
             trailing: IconButton(
               onPressed: () {
-                ref.read(blockedTagsStateProvider.notifier).delete(tag.key);
+                ref.read(tagsBlockerStateProvider.notifier).delete(tag.key);
               },
               icon: const Icon(Icons.close),
             ),

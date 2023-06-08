@@ -11,7 +11,7 @@ part 'server_setting_state.g.dart';
 class ServerSettingState extends _$ServerSettingState {
   @override
   ServerSetting build() {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     return ServerSetting(
       lastActiveId: repo.get(Setting.serverLastActiveId, or: ''),
       postLimit: repo.get(Setting.serverPostLimit, or: PageOption.defaultLimit),
@@ -20,19 +20,19 @@ class ServerSettingState extends _$ServerSettingState {
   }
 
   Future<void> setLastActiveId(String newId) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(lastActiveId: newId);
     await repo.put(Setting.serverLastActiveId, newId);
   }
 
   Future<void> setPostLimit(int value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(postLimit: value);
     await repo.put(Setting.serverPostLimit, value);
   }
 
   Future<void> setRating(BooruRating value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(searchRating: value);
     await repo.put(Setting.searchRating, value);
   }

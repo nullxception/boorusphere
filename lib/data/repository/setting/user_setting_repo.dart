@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/repository/setting/entity/setting.dart';
-import 'package:boorusphere/domain/repository/setting_repo.dart';
+import 'package:boorusphere/domain/repository/settings_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:hive/hive.dart';
 
-class SettingRepoImpl implements SettingRepo {
-  SettingRepoImpl(this.box);
+class UserSettingsRepo implements SettingsRepo {
+  UserSettingsRepo(this.box);
 
   final Box box;
 

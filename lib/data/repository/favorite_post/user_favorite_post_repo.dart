@@ -6,8 +6,8 @@ import 'package:boorusphere/domain/repository/favorite_post_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
-class FavoritePostRepoImpl implements FavoritePostRepo {
-  FavoritePostRepoImpl(this.box);
+class UserFavoritePostRepo implements FavoritePostRepo {
+  UserFavoritePostRepo(this.box);
 
   final Box<FavoritePost> box;
 

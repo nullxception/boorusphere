@@ -2,13 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
-import 'package:boorusphere/data/repository/favorite_post/favorite_post_repo_impl.dart';
-import 'package:boorusphere/data/repository/search_history/search_history_repo_impl.dart';
-import 'package:boorusphere/data/repository/server/server_repo_impl.dart';
-import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
+import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_repo.dart';
+import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
+import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
+import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/data_backup/entity/backup_option.dart';
 import 'package:boorusphere/presentation/provider/data_backup/entity/backup_result.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
@@ -18,6 +17,7 @@ import 'package:boorusphere/presentation/provider/settings/content_setting_state
 import 'package:boorusphere/presentation/provider/settings/download_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
+import 'package:boorusphere/presentation/provider/tags_blocker_state.dart';
 import 'package:boorusphere/utils/file_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
@@ -63,7 +63,7 @@ class DataBackupState extends _$DataBackupState {
 
   void _invalidateProviders() {
     ref.invalidate(serverDataStateProvider);
-    ref.invalidate(blockedTagsStateProvider);
+    ref.invalidate(tagsBlockerStateProvider);
     ref.invalidate(searchHistoryStateProvider);
     ref.invalidate(favoritePostStateProvider);
     ref.invalidate(uiSettingStateProvider);
@@ -105,19 +105,19 @@ class DataBackupState extends _$DataBackupState {
     for (final json in decoder.files) {
       final content = utf8.decode(json.content);
       switch (json.name.replaceAll('.json', '')) {
-        case ServerRepoImpl.key:
-          await ref.read(serverRepoProvider).import(content);
+        case UserServerDataRepo.key:
+          await ref.read(serverDataRepoProvider).import(content);
           break;
-        case BlockedTagsRepoImpl.boxKey:
-          await ref.read(blockedTagsRepoProvider).import(content);
+        case BooruTagsBlockerRepo.boxKey:
+          await ref.read(tagsBlockerRepoProvider).import(content);
           break;
-        case FavoritePostRepoImpl.key:
+        case UserFavoritePostRepo.key:
           await ref.read(favoritePostRepoProvider).import(content);
           break;
-        case SettingRepoImpl.key:
-          await ref.read(settingRepoProvider).import(content);
+        case UserSettingsRepo.key:
+          await ref.read(settingsRepoProvider).import(content);
           break;
-        case SearchHistoryRepoImpl.key:
+        case UserSearchHistoryRepo.key:
           await ref.read(searchHistoryRepoProvider).import(content);
           break;
         default:
@@ -133,10 +133,10 @@ class DataBackupState extends _$DataBackupState {
     if (!option.isValid()) return;
 
     state = const BackupResult.loading(DataBackupType.backup);
-    final server = ref.read(serverRepoProvider).export();
-    final blockedTags = ref.read(blockedTagsRepoProvider).export();
+    final server = ref.read(serverDataRepoProvider).export();
+    final blockedTags = ref.read(tagsBlockerRepoProvider).export();
     final favoritePost = ref.read(favoritePostRepoProvider).export();
-    final setting = ref.read(settingRepoProvider).export();
+    final setting = ref.read(settingsRepoProvider).export();
     final searchHistory = ref.read(searchHistoryRepoProvider).export();
     final temp = await _tempDir();
     final encoder = ZipFileEncoder();

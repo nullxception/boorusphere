@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
-import 'package:boorusphere/data/repository/download/entity/download_status.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_status.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';

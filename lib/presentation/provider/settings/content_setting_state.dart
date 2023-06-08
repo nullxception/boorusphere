@@ -9,7 +9,7 @@ part 'content_setting_state.g.dart';
 class ContentSettingState extends _$ContentSettingState {
   @override
   ContentSetting build() {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     return ContentSetting(
       blurExplicit: repo.get(Setting.postBlurExplicit, or: true),
       blurTimelineOnly: repo.get(Setting.postBlurTimelineOnly, or: false),
@@ -19,25 +19,25 @@ class ContentSettingState extends _$ContentSettingState {
   }
 
   Future<void> setBlurExplicitPost(bool value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(blurExplicit: value);
     await repo.put(Setting.postBlurExplicit, value);
   }
 
   Future<void> setBlurTimelineOnly(bool value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(blurTimelineOnly: value);
     await repo.put(Setting.postBlurTimelineOnly, value);
   }
 
   Future<void> setLoadOriginalPost(bool value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(loadOriginal: value);
     await repo.put(Setting.postLoadOriginal, value);
   }
 
   Future<bool> toggleVideoPlayerMute() async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(videoMuted: !state.videoMuted);
     await repo.put(Setting.videoPlayerMuted, state.videoMuted);
     return state.videoMuted;

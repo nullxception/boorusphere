@@ -1,31 +1,31 @@
 import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/app_state/app_state_repo_impl.dart';
-import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
-import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
-import 'package:boorusphere/data/repository/booru/booru_repo_impl.dart';
-import 'package:boorusphere/data/repository/changelog/changelog_repo_impl.dart';
-import 'package:boorusphere/data/repository/download/download_repo_impl.dart';
-import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
-import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
-import 'package:boorusphere/data/repository/env/env_repo_impl.dart';
+import 'package:boorusphere/data/repository/app_state/current_app_state_repo.dart';
+import 'package:boorusphere/data/repository/booru/booru_repo.dart';
+import 'package:boorusphere/data/repository/changelog/app_changelog_repo.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
+import 'package:boorusphere/data/repository/downloads/user_download_repo.dart';
+import 'package:boorusphere/data/repository/env/current_env_repo.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
-import 'package:boorusphere/data/repository/favorite_post/favorite_post_repo_impl.dart';
+import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_repo.dart';
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
-import 'package:boorusphere/data/repository/search_history/search_history_repo_impl.dart';
+import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/data/repository/server/server_repo_impl.dart';
-import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
-import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
+import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
+import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
+import 'package:boorusphere/data/repository/tags_blocker/entity/booru_tag.dart';
+import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:boorusphere/domain/repository/app_state_repo.dart';
-import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
-import 'package:boorusphere/domain/repository/booru_repo.dart';
 import 'package:boorusphere/domain/repository/changelog_repo.dart';
-import 'package:boorusphere/domain/repository/download_repo.dart';
+import 'package:boorusphere/domain/repository/downloads_repo.dart';
 import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:boorusphere/domain/repository/favorite_post_repo.dart';
+import 'package:boorusphere/domain/repository/imageboards_repo.dart';
 import 'package:boorusphere/domain/repository/search_history_repo.dart';
-import 'package:boorusphere/domain/repository/server_repo.dart';
-import 'package:boorusphere/domain/repository/setting_repo.dart';
+import 'package:boorusphere/domain/repository/server_data_repo.dart';
+import 'package:boorusphere/domain/repository/settings_repo.dart';
+import 'package:boorusphere/domain/repository/tags_blocker_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
@@ -41,21 +41,21 @@ EnvRepo envRepo(EnvRepoRef ref) {
 }
 
 Future<EnvRepo> provideEnvRepo() async {
-  return EnvRepoImpl(
+  return CurrentEnvRepo(
     packageInfo: await PackageInfo.fromPlatform(),
     androidInfo: await DeviceInfoPlugin().androidInfo,
   );
 }
 
 @riverpod
-BlockedTagsRepo blockedTagsRepo(BlockedTagsRepoRef ref) {
-  final box = Hive.box<BooruTag>(BlockedTagsRepoImpl.boxKey);
-  return BlockedTagsRepoImpl(box);
+TagsBlockerRepo tagsBlockerRepo(TagsBlockerRepoRef ref) {
+  final box = Hive.box<BooruTag>(BooruTagsBlockerRepo.boxKey);
+  return BooruTagsBlockerRepo(box);
 }
 
 @riverpod
-BooruRepo booruRepo(BooruRepoRef ref, ServerData server) {
-  return BooruRepoImpl(
+ImageboardRepo imageboardRepo(ImageboardRepoRef ref, ServerData server) {
+  return BooruRepo(
     client: ref.watch(dioProvider),
     server: server,
   );
@@ -63,7 +63,7 @@ BooruRepo booruRepo(BooruRepoRef ref, ServerData server) {
 
 @riverpod
 ChangelogRepo changelogRepo(ChangelogRepoRef ref) {
-  return ChangelogRepoImpl(
+  return AppChangelogRepo(
     bundle: rootBundle,
     client: ref.watch(dioProvider),
   );
@@ -71,46 +71,46 @@ ChangelogRepo changelogRepo(ChangelogRepoRef ref) {
 
 @riverpod
 FavoritePostRepo favoritePostRepo(FavoritePostRepoRef ref) {
-  final box = Hive.box<FavoritePost>(FavoritePostRepoImpl.key);
-  return FavoritePostRepoImpl(box);
+  final box = Hive.box<FavoritePost>(UserFavoritePostRepo.key);
+  return UserFavoritePostRepo(box);
 }
 
 @riverpod
 SearchHistoryRepo searchHistoryRepo(SearchHistoryRepoRef ref) {
-  final box = Hive.box<SearchHistory>(SearchHistoryRepoImpl.key);
-  return SearchHistoryRepoImpl(box);
+  final box = Hive.box<SearchHistory>(UserSearchHistoryRepo.key);
+  return UserSearchHistoryRepo(box);
 }
 
 @riverpod
-ServerRepo serverRepo(ServerRepoRef ref) {
-  final box = Hive.box<ServerData>(ServerRepoImpl.key);
+ServerDataRepo serverDataRepo(ServerDataRepoRef ref) {
+  final box = Hive.box<ServerData>(UserServerDataRepo.key);
   final defaultServers = ref.watch(defaultServersProvider);
-  return ServerRepoImpl(defaultServers: defaultServers, box: box);
+  return UserServerDataRepo(defaultServers: defaultServers, box: box);
 }
 
 @riverpod
-SettingRepo settingRepo(SettingRepoRef ref) {
-  final box = Hive.box(SettingRepoImpl.key);
-  return SettingRepoImpl(box);
+SettingsRepo settingsRepo(SettingsRepoRef ref) {
+  final box = Hive.box(UserSettingsRepo.key);
+  return UserSettingsRepo(box);
 }
 
 @riverpod
 VersionRepo versionRepo(VersionRepoRef ref) {
-  return VersionRepoImpl(
+  return AppVersionRepo(
     envRepo: ref.watch(envRepoProvider),
     client: ref.watch(dioProvider),
   );
 }
 
 @riverpod
-DownloadRepo downloadRepo(DownloadRepoRef ref) {
-  final entryBox = Hive.box<DownloadEntry>(DownloadRepoImpl.entryKey);
-  final progressBox = Hive.box<DownloadProgress>(DownloadRepoImpl.progressKey);
-  return DownloadRepoImpl(entryBox: entryBox, progressBox: progressBox);
+DownloadsRepo downloadsRepo(DownloadsRepoRef ref) {
+  final entryBox = Hive.box<DownloadEntry>(UserDownloadsRepo.entryKey);
+  final progressBox = Hive.box<DownloadProgress>(UserDownloadsRepo.progressKey);
+  return UserDownloadsRepo(entryBox: entryBox, progressBox: progressBox);
 }
 
 @riverpod
 AppStateRepo appStateRepo(AppStateRepoRef ref) {
-  final box = AppStateRepoImpl.hiveBox();
-  return AppStateRepoImpl(box);
+  final box = CurrentAppStateRepo.hiveBox();
+  return CurrentAppStateRepo(box);
 }

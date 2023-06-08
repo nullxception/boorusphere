@@ -1,5 +1,5 @@
 import 'package:boorusphere/constant/app.dart';
-import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
+import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'app_version.freezed.dart';
@@ -36,7 +36,7 @@ class AppVersion with _$AppVersion {
   }
 
   String get apkUrl {
-    return '${VersionRepoImpl.gitUrl}/releases/download/$this/boorusphere-$this-$kAppArch.apk';
+    return '${AppVersionRepo.gitUrl}/releases/download/$this/boorusphere-$this-$kAppArch.apk';
   }
 
   static const zero = AppVersion();

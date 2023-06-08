@@ -11,11 +11,11 @@ import 'package:boorusphere/data/repository/booru/parser/no_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/domain/repository/booru_repo.dart';
+import 'package:boorusphere/domain/repository/imageboards_repo.dart';
 import 'package:dio/dio.dart';
 
-class BooruRepoImpl implements BooruRepo {
-  BooruRepoImpl({required this.client, required this.server});
+class BooruRepo implements ImageboardRepo {
+  BooruRepo({required this.client, required this.server});
 
   final Dio client;
   final _opt = Options(validateStatus: (it) => it == 200);

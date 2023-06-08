@@ -10,7 +10,7 @@ part 'download_setting_state.g.dart';
 class DownloadSettingState extends _$DownloadSettingState {
   @override
   DownloadSetting build() {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     return DownloadSetting(
       groupByServer: repo.get(Setting.downloadsGroupByServer, or: false),
       quality: repo.get(Setting.downloadsQuality, or: DownloadQuality.ask),
@@ -18,13 +18,13 @@ class DownloadSettingState extends _$DownloadSettingState {
   }
 
   Future<void> setGroupByServer(bool value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(groupByServer: value);
     await repo.put(Setting.downloadsGroupByServer, value);
   }
 
   Future<void> setQuality(DownloadQuality value) async {
-    final repo = ref.read(settingRepoProvider);
+    final repo = ref.read(settingsRepoProvider);
     state = state.copyWith(quality: value);
     await repo.put(Setting.downloadsQuality, value);
   }

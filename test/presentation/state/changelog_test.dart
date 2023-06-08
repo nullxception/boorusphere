@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/changelog/changelog_repo_impl.dart';
+import 'package:boorusphere/data/repository/changelog/app_changelog_repo.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
@@ -18,7 +18,7 @@ void main() async {
     test('assets', () async {
       final listener = FakePodListener<AsyncValue<List<ChangelogData>>>();
       final ref = ProviderContainer(overrides: [
-        envRepoProvider.overrideWithValue(FakeEnvRepoImpl()),
+        envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
 
       final logProvider = changelogStateProvider(ChangelogType.assets, null);
@@ -37,11 +37,11 @@ void main() async {
     test('git', () async {
       final listener = FakePodListener<AsyncValue<List<ChangelogData>>>();
       final ref = ProviderContainer(overrides: [
-        envRepoProvider.overrideWithValue(FakeEnvRepoImpl()),
+        envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
 
       final adapter = DioAdapter(dio: ref.read(dioProvider));
-      adapter.onGet(ChangelogRepoImpl.url, (server) => server.reply(200, '''
+      adapter.onGet(AppChangelogRepo.url, (server) => server.reply(200, '''
 ## 999.9.9
 * Fix deez nuts
 '''));
@@ -62,11 +62,11 @@ void main() async {
     test('git but no response', () async {
       final listener = FakePodListener<AsyncValue<List<ChangelogData>>>();
       final ref = ProviderContainer(overrides: [
-        envRepoProvider.overrideWithValue(FakeEnvRepoImpl()),
+        envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
 
       final adapter = DioAdapter(dio: ref.read(dioProvider));
-      adapter.onGet(ChangelogRepoImpl.url, (server) => server.reply(200, ''));
+      adapter.onGet(AppChangelogRepo.url, (server) => server.reply(200, ''));
       final logProvider = changelogStateProvider(
           ChangelogType.git, AppVersion.fromString('9.9.9'));
       ref.listen(logProvider, listener.call, fireImmediately: true);

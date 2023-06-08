@@ -18,7 +18,7 @@ class ServerDataState extends _$ServerDataState {
 
   Future<void> populate() async {
     final serverSetting = ref.read(serverSettingStateProvider);
-    final repo = ref.read(serverRepoProvider);
+    final repo = ref.read(serverDataRepoProvider);
     await repo.populate();
     state = repo.servers;
 
@@ -32,7 +32,7 @@ class ServerDataState extends _$ServerDataState {
   }
 
   Future<void> add(ServerData data) async {
-    final repo = ref.read(serverRepoProvider);
+    final repo = ref.read(serverDataRepoProvider);
     await repo.add(data);
     state = repo.servers;
   }
@@ -42,19 +42,19 @@ class ServerDataState extends _$ServerDataState {
       throw Exception('Last server cannot be deleted');
     }
 
-    final repo = ref.read(serverRepoProvider);
+    final repo = ref.read(serverDataRepoProvider);
     await repo.remove(data);
     state = repo.servers;
   }
 
   Future<void> edit(ServerData from, ServerData to) async {
-    final repo = ref.read(serverRepoProvider);
+    final repo = ref.read(serverDataRepoProvider);
     await repo.edit(from, to);
     state = repo.servers;
   }
 
   Future<void> reset() async {
-    final repo = ref.read(serverRepoProvider);
+    final repo = ref.read(serverDataRepoProvider);
     await repo.reset();
     state = repo.servers;
     await settings.setLastActiveId(state.first.id);

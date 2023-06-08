@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
-import 'package:boorusphere/domain/repository/blocked_tags_repo.dart';
+import 'package:boorusphere/data/repository/tags_blocker/entity/booru_tag.dart';
+import 'package:boorusphere/domain/repository/tags_blocker_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
-class BlockedTagsRepoImpl implements BlockedTagsRepo {
-  BlockedTagsRepoImpl(this.box);
+class BooruTagsBlockerRepo implements TagsBlockerRepo {
+  BooruTagsBlockerRepo(this.box);
 
   final Box<BooruTag> box;
 

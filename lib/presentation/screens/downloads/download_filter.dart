@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/download/entity/download_status.dart';
+import 'package:boorusphere/data/repository/downloads/entity/download_status.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 

@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
+import 'package:boorusphere/presentation/provider/tags_blocker_state.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/entity/pixel_size.dart';
@@ -192,7 +192,7 @@ class PostDetailsPage extends HookConsumerWidget with ClipboardMixins {
               final selectedTags = selectedtag.value;
               if (selectedTags.isNotEmpty) {
                 ref
-                    .read(blockedTagsStateProvider.notifier)
+                    .read(tagsBlockerStateProvider.notifier)
                     .pushAll(tags: selectedTags);
                 context.scaffoldMessenger.showSnackBar(
                   SnackBar(

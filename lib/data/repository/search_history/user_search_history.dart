@@ -5,8 +5,8 @@ import 'package:boorusphere/domain/repository/search_history_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
-class SearchHistoryRepoImpl implements SearchHistoryRepo {
-  SearchHistoryRepoImpl(this.box);
+class UserSearchHistoryRepo implements SearchHistoryRepo {
+  UserSearchHistoryRepo(this.box);
   final Box<SearchHistory> box;
 
   @override

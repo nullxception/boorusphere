@@ -36,8 +36,9 @@ class SuggestionState extends _$SuggestionState {
     try {
       final queries = query.toWordList();
       final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
-      final res = await ref.read(booruRepoProvider(server)).getSuggestion(word);
-      final blockedTags = ref.read(blockedTagsRepoProvider);
+      final res =
+          await ref.read(imageboardRepoProvider(server)).getSuggestion(word);
+      final blockedTags = ref.read(tagsBlockerRepoProvider);
       final result = res
           .where(
               (it) => !blockedTags.get().values.map((e) => e.name).contains(it))

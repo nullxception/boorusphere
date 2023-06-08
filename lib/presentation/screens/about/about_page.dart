@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/constant/app.dart';
+import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
-import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/app_updater.dart';
 import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
@@ -112,7 +112,7 @@ class AboutPage extends ConsumerWidget {
                 leading: const FaIcon(FontAwesomeIcons.github),
                 onTap: () {
                   launchUrlString(
-                    VersionRepoImpl.gitUrl,
+                    AppVersionRepo.gitUrl,
                     mode: LaunchMode.externalApplication,
                   );
                 },
