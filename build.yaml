@@ -5,16 +5,3 @@ global_options:
   hive_generator:hive_generator:
     runs_before:
       - json_serializable:json_serializable
-
-targets:
-  $default:
-    builders:
-      slang_build_runner:
-        options:
-          base_locale: en
-          fallback_strategy: base_locale
-          input_file_pattern: .i18n.json
-          flat_map: false
-          timestamp: false
-          key_case: camel
-          param_case: camel
