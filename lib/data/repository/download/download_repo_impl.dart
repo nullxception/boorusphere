@@ -12,7 +12,7 @@ class DownloadRepoImpl implements DownloadRepo {
   Iterable<DownloadEntry> getEntries() => dataSource.entries;
 
   @override
-  Future<Iterable<DownloadProgress>> getProgress() => dataSource.progress;
+  Iterable<DownloadProgress> getProgresses() => dataSource.progresses;
 
   @override
   Future<void> add(DownloadEntry entry) => dataSource.add(entry);
@@ -22,4 +22,8 @@ class DownloadRepoImpl implements DownloadRepo {
 
   @override
   Future<void> clear() => dataSource.clear();
+
+  @override
+  Future<void> updateProgress(DownloadProgress progress) =>
+      dataSource.updateProgress(progress);
 }

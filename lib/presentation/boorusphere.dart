@@ -83,7 +83,7 @@ class Boorusphere extends HookConsumerWidget {
           await FileUtils.instance.rescanDownloadDir();
         }
 
-        ref.read(downloadStateProvider.notifier).updateProgress(progress);
+        await ref.read(downloadStateProvider.notifier).updateProgress(progress);
       });
     }, []);
 

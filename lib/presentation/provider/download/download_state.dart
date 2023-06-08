@@ -18,7 +18,7 @@ class DownloadState extends _$DownloadState {
 
   Future<void> populate() async {
     final repo = ref.read(downloadRepoProvider);
-    final progresses = await repo.getProgress();
+    final progresses = repo.getProgresses();
     state = repo.getEntries().map(
           (entry) => DownloadItem(
             entry: entry,
@@ -55,7 +55,9 @@ class DownloadState extends _$DownloadState {
     ];
   }
 
-  updateProgress(DownloadProgress progress) {
+  Future<void> updateProgress(DownloadProgress progress) async {
+    final repo = ref.read(downloadRepoProvider);
+    await repo.updateProgress(progress);
     final item = state.singleWhereOrNull((it) => it.entry.id == progress.id);
     state = [
       ...state.where((it) => it.entry.id != progress.id),

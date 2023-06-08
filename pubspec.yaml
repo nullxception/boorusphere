@@ -71,6 +71,7 @@ dependencies:
   shimmer: ^2.0.0
   slang_flutter: ^3.6.0
   slang: ^3.6.0
+  sqflite: ^2.2.8+4
   tinycolor2: ^3.0.0
   url_launcher: ^6.0.3
   video_player: ^2.2.5

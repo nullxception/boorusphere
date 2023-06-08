@@ -5,6 +5,8 @@ import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/datasource/downloader_source.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
+import 'package:boorusphere/data/repository/download/entity/download_status.dart';
 import 'package:boorusphere/data/repository/favorite_post/datasource/favorite_post_local_source.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/data/repository/search_history/datasource/search_history_local_source.dart';
@@ -36,6 +38,8 @@ void main() async {
   Hive.registerAdapter(FavoritePostAdapter());
   Hive.registerAdapter(BooruRatingAdapter());
   Hive.registerAdapter(DownloadQualityAdapter());
+  Hive.registerAdapter(DownloadStatusAdapter());
+  Hive.registerAdapter(DownloadProgressAdapter());
 
   await Future.wait([
     ServerLocalSource.prepare(),
