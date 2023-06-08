@@ -533,6 +533,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  grinder:
+    dependency: "direct dev"
+    description:
+      name: grinder
+      sha256: "48495acdb3df702c55c952c6536faf11631b8401a292eb0d182ef332fc568b56"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.4"
   hive:
     dependency: "direct main"
     description:

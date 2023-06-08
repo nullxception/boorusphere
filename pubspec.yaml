@@ -91,6 +91,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   freezed: ^2.1.0+1
   full_coverage: ^1.0.0
+  grinder: ^0.9.4
   hive_generator: ^2.0.0
   http_mock_adapter: ^0.4.4
   json_serializable: ^6.7.0
@@ -146,20 +147,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
-# Task definition for derry
-scripts:
-  sync:
-    - flutter clean
-    - flutter pub get
-  gen:
-    core: dart run build_runner build --delete-conflicting-outputs
-    lang: dart run slang
-    all:
-      - $gen:core
-      - $gen:lang
-  release:
-    - $sync
-    - $gen:all
-    - flutter build apk --split-per-abi
-    - dart run boorusphere:renameapk

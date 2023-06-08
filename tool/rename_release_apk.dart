@@ -1,9 +1,7 @@
 //
 // Script for renaming apks for release purposes
-// usage:
-// $ flutter pub run :renameapk
 //
-// ignore_for_file: depend_on_referenced_packages, avoid_print
+// ignore_for_file: avoid_print
 
 import 'dart:io';
 
@@ -16,31 +14,27 @@ final variants = {
   'x86_64',
 };
 
-String get outputDir {
+String get _outputDir {
   return path.normalize(
       path.join(Directory.current.path, 'build/app/outputs/flutter-apk'));
 }
 
-YamlMap get pubspec {
+YamlMap get _pubspec {
   final yamlPath =
       path.normalize(path.join(Directory.current.path, 'pubspec.yaml'));
   final content = File(yamlPath).readAsStringSync();
   return loadYaml(content);
 }
 
-String get appVersion {
-  return pubspec['version'];
+String get _appVersion {
+  return _pubspec['version'];
 }
 
-String get appVersionCode {
-  return appVersion.split('+').last;
+String get _appVersionName {
+  return _appVersion.split('+').first;
 }
 
-String get appVersionName {
-  return appVersion.split('+').first;
-}
-
-Future<void> renameOutputApks(
+Future<void> _renameOutputApks(
   String outDir, {
   required String from,
   required String to,
@@ -54,14 +48,14 @@ Future<void> renameOutputApks(
   }
 }
 
-void main(List<String> args) async {
-  if (!Directory(outputDir).existsSync()) {
-    throw FileSystemException('Directory is not exists', outputDir);
+Future<void> renameReleaseApk() async {
+  if (!Directory(_outputDir).existsSync()) {
+    throw FileSystemException('Directory is not exists', _outputDir);
   }
 
   await Future.wait([
-    ...variants.map((arch) => renameOutputApks(outputDir,
+    ...variants.map((arch) => _renameOutputApks(_outputDir,
         from: 'app-$arch-release.apk',
-        to: 'boorusphere-$appVersionName-$arch.apk'))
+        to: 'boorusphere-$_appVersionName-$arch.apk'))
   ]);
 }
