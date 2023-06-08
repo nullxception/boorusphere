@@ -1,11 +1,16 @@
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/app_state/app_state_repo_impl.dart';
 import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
+import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/data/repository/booru/booru_repo_impl.dart';
 import 'package:boorusphere/data/repository/changelog/changelog_repo_impl.dart';
 import 'package:boorusphere/data/repository/download/download_repo_impl.dart';
+import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
+import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/env/env_repo_impl.dart';
+import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/data/repository/favorite_post/favorite_post_repo_impl.dart';
+import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/search_history/search_history_repo_impl.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/data/repository/server/server_repo_impl.dart';
@@ -23,6 +28,8 @@ import 'package:boorusphere/domain/repository/server_repo.dart';
 import 'package:boorusphere/domain/repository/setting_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -42,15 +49,14 @@ Future<EnvRepo> provideEnvRepo() async {
 
 @riverpod
 BlockedTagsRepo blockedTagsRepo(BlockedTagsRepoRef ref) {
-  return BlockedTagsRepoImpl(
-    localSource: ref.watch(blockedTagsLocalSourceProvider),
-  );
+  final box = Hive.box<BooruTag>(BlockedTagsRepoImpl.boxKey);
+  return BlockedTagsRepoImpl(box);
 }
 
 @riverpod
 BooruRepo booruRepo(BooruRepoRef ref, ServerData server) {
   return BooruRepoImpl(
-    networkSource: ref.watch(booruNetworkSourceProvider),
+    client: ref.watch(dioProvider),
     server: server,
   );
 }
@@ -58,52 +64,49 @@ BooruRepo booruRepo(BooruRepoRef ref, ServerData server) {
 @riverpod
 ChangelogRepo changelogRepo(ChangelogRepoRef ref) {
   return ChangelogRepoImpl(
-    localSource: ref.watch(changelogLocalSourceProvider),
-    networkSource: ref.watch(changelogNetworkSourceProvider),
+    bundle: rootBundle,
+    client: ref.watch(dioProvider),
   );
 }
 
 @riverpod
 FavoritePostRepo favoritePostRepo(FavoritePostRepoRef ref) {
-  return FavoritePostRepoImpl(
-    localSource: ref.watch(favoritePostLocalSourceProvider),
-  );
+  final box = Hive.box<FavoritePost>(FavoritePostRepoImpl.key);
+  return FavoritePostRepoImpl(box);
 }
 
 @riverpod
 SearchHistoryRepo searchHistoryRepo(SearchHistoryRepoRef ref) {
-  return SearchHistoryRepoImpl(
-    localSource: ref.watch(searchHistoryLocalSourceProvider),
-  );
+  final box = Hive.box<SearchHistory>(SearchHistoryRepoImpl.key);
+  return SearchHistoryRepoImpl(box);
 }
 
 @riverpod
 ServerRepo serverRepo(ServerRepoRef ref) {
-  return ServerRepoImpl(
-    localSource: ref.watch(serverLocalSourceProvider),
-  );
+  final box = Hive.box<ServerData>(ServerRepoImpl.key);
+  final defaultServers = ref.watch(defaultServersProvider);
+  return ServerRepoImpl(defaultServers: defaultServers, box: box);
 }
 
 @riverpod
 SettingRepo settingRepo(SettingRepoRef ref) {
-  return SettingRepoImpl(
-    localSource: ref.watch(settingLocalSourceProvider),
-  );
+  final box = Hive.box(SettingRepoImpl.key);
+  return SettingRepoImpl(box);
 }
 
 @riverpod
 VersionRepo versionRepo(VersionRepoRef ref) {
   return VersionRepoImpl(
     envRepo: ref.watch(envRepoProvider),
-    networkSource: ref.watch(versionNetworkSourceProvider),
+    client: ref.watch(dioProvider),
   );
 }
 
 @riverpod
 DownloadRepo downloadRepo(DownloadRepoRef ref) {
-  return DownloadRepoImpl(
-    ref.watch(downloaderSourceProvider),
-  );
+  final entryBox = Hive.box<DownloadEntry>(DownloadRepoImpl.entryKey);
+  final progressBox = Hive.box<DownloadProgress>(DownloadRepoImpl.progressKey);
+  return DownloadRepoImpl(entryBox: entryBox, progressBox: progressBox);
 }
 
 @riverpod

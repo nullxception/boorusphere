@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
+import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
 import 'package:boorusphere/data/repository/blocked_tags/entity/booru_tag.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,7 +20,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await BlockedTagsLocalSource.prepare();
+      await BlockedTagsRepoImpl.prepare();
       ref.listen(
         blockedTagsStateProvider,
         listener.call,

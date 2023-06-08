@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/changelog/datasource/changelog_network_source.dart';
+import 'package:boorusphere/data/repository/changelog/changelog_repo_impl.dart';
 import 'package:boorusphere/data/repository/changelog/entity/changelog_data.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
@@ -41,8 +41,7 @@ void main() async {
       ]);
 
       final adapter = DioAdapter(dio: ref.read(dioProvider));
-      adapter.onGet(
-          ChangelogNetworkSource.url, (server) => server.reply(200, '''
+      adapter.onGet(ChangelogRepoImpl.url, (server) => server.reply(200, '''
 ## 999.9.9
 * Fix deez nuts
 '''));
@@ -67,8 +66,7 @@ void main() async {
       ]);
 
       final adapter = DioAdapter(dio: ref.read(dioProvider));
-      adapter.onGet(
-          ChangelogNetworkSource.url, (server) => server.reply(200, ''));
+      adapter.onGet(ChangelogRepoImpl.url, (server) => server.reply(200, ''));
       final logProvider = changelogStateProvider(
           ChangelogType.git, AppVersion.fromString('9.9.9'));
       ref.listen(logProvider, listener.call, fireImmediately: true);

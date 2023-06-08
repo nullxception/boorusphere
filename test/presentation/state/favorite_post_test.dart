@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/favorite_post/datasource/favorite_post_local_source.dart';
+import 'package:boorusphere/data/repository/favorite_post/favorite_post_repo_impl.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +21,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await FavoritePostLocalSource.prepare();
+      await FavoritePostRepoImpl.prepare();
       ref.listen(
         favoritePostStateProvider,
         listener.call,

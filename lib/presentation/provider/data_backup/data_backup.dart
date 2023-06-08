@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/blocked_tags/datasource/blocked_tags_local_source.dart';
-import 'package:boorusphere/data/repository/favorite_post/datasource/favorite_post_local_source.dart';
-import 'package:boorusphere/data/repository/search_history/datasource/search_history_local_source.dart';
-import 'package:boorusphere/data/repository/server/datasource/server_local_source.dart';
-import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
+import 'package:boorusphere/data/repository/blocked_tags/blocked_tags_repo_impl.dart';
+import 'package:boorusphere/data/repository/favorite_post/favorite_post_repo_impl.dart';
+import 'package:boorusphere/data/repository/search_history/search_history_repo_impl.dart';
+import 'package:boorusphere/data/repository/server/server_repo_impl.dart';
+import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/blocked_tags_state.dart';
 import 'package:boorusphere/presentation/provider/data_backup/entity/backup_option.dart';
@@ -106,20 +105,20 @@ class DataBackupState extends _$DataBackupState {
     for (final json in decoder.files) {
       final content = utf8.decode(json.content);
       switch (json.name.replaceAll('.json', '')) {
-        case ServerLocalSource.key:
-          await ref.read(serverLocalSourceProvider).import(content);
+        case ServerRepoImpl.key:
+          await ref.read(serverRepoProvider).import(content);
           break;
-        case BlockedTagsLocalSource.key:
-          await ref.read(blockedTagsLocalSourceProvider).import(content);
+        case BlockedTagsRepoImpl.boxKey:
+          await ref.read(blockedTagsRepoProvider).import(content);
           break;
-        case FavoritePostLocalSource.key:
-          await ref.read(favoritePostLocalSourceProvider).import(content);
+        case FavoritePostRepoImpl.key:
+          await ref.read(favoritePostRepoProvider).import(content);
           break;
-        case SettingLocalSource.key:
-          await ref.read(settingLocalSourceProvider).import(content);
+        case SettingRepoImpl.key:
+          await ref.read(settingRepoProvider).import(content);
           break;
-        case SearchHistoryLocalSource.key:
-          await ref.read(searchHistoryLocalSourceProvider).import(content);
+        case SearchHistoryRepoImpl.key:
+          await ref.read(searchHistoryRepoProvider).import(content);
           break;
         default:
           break;
@@ -134,11 +133,11 @@ class DataBackupState extends _$DataBackupState {
     if (!option.isValid()) return;
 
     state = const BackupResult.loading(DataBackupType.backup);
-    final server = ref.read(serverLocalSourceProvider).export();
-    final blockedTags = ref.read(blockedTagsLocalSourceProvider).export();
-    final favoritePost = ref.read(favoritePostLocalSourceProvider).export();
-    final setting = ref.read(settingLocalSourceProvider).export();
-    final searchHistory = ref.read(searchHistoryLocalSourceProvider).export();
+    final server = ref.read(serverRepoProvider).export();
+    final blockedTags = ref.read(blockedTagsRepoProvider).export();
+    final favoritePost = ref.read(favoritePostRepoProvider).export();
+    final setting = ref.read(settingRepoProvider).export();
+    final searchHistory = ref.read(searchHistoryRepoProvider).export();
     final temp = await _tempDir();
     final encoder = ZipFileEncoder();
     encoder.create('${temp.path}/data.zip');

@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
+import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
@@ -30,7 +30,7 @@ void main() async {
       const edgeVersion = '9.9.9';
       final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
       dioAdapter.onGet(
-          VersionNetworkSource.pubspecUrl, (server) => server.reply(200, '''
+          VersionRepoImpl.pubspecUrl, (server) => server.reply(200, '''
 # comments
 version: $edgeVersion+99
 
@@ -72,7 +72,7 @@ version: $edgeVersion+99
 
       final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
       dioAdapter.onGet(
-        VersionNetworkSource.pubspecUrl,
+        VersionRepoImpl.pubspecUrl,
         (server) => server.reply(200, ''),
       );
 

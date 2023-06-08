@@ -4,8 +4,8 @@ import 'package:boorusphere/constant/app.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/download/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/download/entity/download_progress.dart';
-import 'package:boorusphere/data/repository/version/datasource/version_network_source.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
+import 'package:boorusphere/data/repository/version/version_repo_impl.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/utils/file_utils.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -61,8 +61,7 @@ class AppUpdater {
   Future<void> start(AppVersion version) async {
     await clear();
     final file = _fileName(version);
-    final url =
-        '${VersionNetworkSource.gitUrl}/releases/download/$version/$file';
+    final url = '${VersionRepoImpl.gitUrl}/releases/download/$version/$file';
     final dir = await getApplicationSupportDirectory();
     final appDir = Directory(path.join(dir.absolute.path, 'app-update'));
     appDir.createSync();

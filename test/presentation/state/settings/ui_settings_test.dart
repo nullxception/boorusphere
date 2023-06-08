@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/setting/datasource/setting_local_source.dart';
+import 'package:boorusphere/data/repository/setting/setting_repo_impl.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/ui_setting.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
@@ -21,7 +21,7 @@ void main() async {
 
     setUpAll(() async {
       initializeTestHive();
-      await SettingLocalSource.prepare();
+      await SettingRepoImpl.prepare();
       ref.listen<UiSetting>(
         uiSettingStateProvider,
         listener.call,
