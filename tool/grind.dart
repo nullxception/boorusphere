@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -21,26 +19,24 @@ listTasks() {
     }
 
     final deps = context.grinder.getImmediateDependencies(task);
+    final ansi = context.grinder.ansi;
     final label = task.name;
     final diff = label.length - task.name.length;
-    buf.write('  ${label.padRight(20 + diff)} ');
-    final depTasks = deps.map((d) => d.name).join(', ');
-    final depText = '@Depends($depTasks)';
+    buf.write('${ansi.blue}${label.padRight(10 + diff)}${ansi.none}');
 
     if (task.description?.isNotEmpty ?? false) {
-      buf.writeln(task.description);
-      if (deps.isNotEmpty) {
-        buf.writeln('  ${''.padRight(20)} $depText');
-      }
-      continue;
+      buf.writeln(' ${task.description}');
     }
 
+    final depTasks =
+        deps.map((d) => '${ansi.blue}${d.name}${ansi.none}').join(', ');
+    final depText = '  󱞩 ${ansi.red}depends on${ansi.none}: $depTasks';
     if (deps.isNotEmpty) {
       buf.writeln(depText);
     }
   }
 
-  print(buf);
+  log(buf.toString());
 }
 
 @Task('Generate code')
