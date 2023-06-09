@@ -73,6 +73,21 @@ Future<void> genlang() async {
   await Pub.runAsync('slang', runOptions: utf8Opt);
 }
 
+@Task('Generate pigeon bindings')
+Future<void> pigeons() async {
+  final files = Directory('pigeons')
+      .listSync(recursive: true)
+      .where((x) => x is File && x.path.endsWith('.pi.dart'))
+      .map((x) => x.path);
+
+  await Pub.runAsync('pigeon',
+      arguments: [
+        '--input',
+        ...files,
+      ],
+      runOptions: utf8Opt);
+}
+
 @Task('Build APKs')
 @Depends(clean, sync, gencode, genlang)
 Future<void> buildapk() async {
@@ -95,7 +110,7 @@ Future<void> checkfmt() async {
       .where((x) =>
           x is File &&
           x.path.endsWith('.dart') &&
-          !x.path.contains(RegExp(r'\.(g|gr|freezed)\.dart$')))
+          !x.path.contains(RegExp(r'\.(freezed|g|gr|pi)\.dart$')))
       .map((x) => x.path);
 
   await runAsync(

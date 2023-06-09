@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart';
+import 'package:boorusphere/pigeon/storage_util.pi.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
@@ -14,8 +14,7 @@ SharedStorageHandle sharedStorageHandle(SharedStorageHandleRef ref) {
 }
 
 Future<SharedStorageHandle> provideSharedStorageHandle() async {
-  const channel = MethodChannel('io.chaldeaprjkt.boorusphere/path');
-  final downloadPath = await channel.invokeMethod('getDownload');
+  final downloadPath = await StorageUtil().getDownloadPath();
   return SharedStorageHandle(downloadPath: downloadPath);
 }
 
