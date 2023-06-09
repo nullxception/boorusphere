@@ -15,7 +15,7 @@ private fun wrapResult(result: Any?): List<Any?> {
 }
 
 private fun wrapError(exception: Throwable): List<Any?> {
-  if (exception is FlutterError) {
+  if (exception is StorageUtilException) {
     return listOf(
       exception.code,
       exception.message,
@@ -36,7 +36,7 @@ private fun wrapError(exception: Throwable): List<Any?> {
  * @property message The error message.
  * @property details The error details. Must be a datatype supported by the api codec.
  */
-class FlutterError (
+class StorageUtilException (
   val code: String,
   override val message: String? = null,
   val details: Any? = null
@@ -45,6 +45,7 @@ class FlutterError (
 interface StorageUtil {
   fun getStoragePath(): String
   fun getDownloadPath(): String
+  fun open(filePath: String)
 
   companion object {
     /** The codec used by StorageUtil. */
@@ -77,6 +78,25 @@ interface StorageUtil {
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.getDownloadPath())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.StorageUtil.open", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val filePathArg = args[0] as String
+            var wrapped: List<Any?>
+            try {
+              api.open(filePathArg)
+              wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }

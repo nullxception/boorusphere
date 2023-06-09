@@ -61,6 +61,7 @@ class Downloader {
   }
 
   void openFile({required String id}) {
-    FlutterDownloader.open(taskId: id);
+    final entry = ref.read(downloadEntryStateProvider).getById(id);
+    ref.read(sharedStorageHandleProvider).open(entry.dest);
   }
 }

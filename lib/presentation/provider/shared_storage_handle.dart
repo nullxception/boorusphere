@@ -81,4 +81,11 @@ class SharedStorageHandle {
     } catch (e) {}
     await rescan();
   }
+
+  Future<void> open(String dest) async {
+    try {
+      await StorageUtil().open(p.join(path, dest));
+      // ignore: empty_catches
+    } catch (e) {}
+  }
 }

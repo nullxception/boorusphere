@@ -8,6 +8,6 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         AppEnv.setUp(flutterEngine.dartExecutor.binaryMessenger, AndroidAppEnv())
-        StorageUtil.setUp(flutterEngine.dartExecutor.binaryMessenger, AndroidStorageUtil())
+        StorageUtil.setUp(flutterEngine.dartExecutor.binaryMessenger, AndroidStorageUtil(this))
     }
 }

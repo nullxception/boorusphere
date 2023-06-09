@@ -85,6 +85,11 @@ extension DownloadProgressesExt on Iterable<DownloadProgress> {
 }
 
 extension DownloadEntriesExt on Iterable<DownloadEntry> {
+  DownloadEntry getById(String id) {
+    final item = firstWhereOrNull((x) => x.id == id);
+    return item ?? DownloadEntry.empty;
+  }
+
   Iterable<DownloadEntry> whereNotReserved() {
     return whereNot((x) => x.post.isReserved);
   }
