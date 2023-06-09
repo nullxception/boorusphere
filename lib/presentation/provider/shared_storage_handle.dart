@@ -56,7 +56,7 @@ class SharedStorageHandle {
   }
 
   bool fileExists(String relativePath) {
-    final file = File(p.join(path, relativePath));
+    final file = File(p.join(path, Uri.decodeFull(relativePath)));
     try {
       return file.existsSync();
       // ignore: empty_catches
@@ -84,7 +84,8 @@ class SharedStorageHandle {
 
   Future<void> open(String dest) async {
     try {
-      await StorageUtil().open(p.join(path, dest));
+      final filePath = p.join(path, Uri.decodeFull(dest));
+      await StorageUtil().open(filePath);
       // ignore: empty_catches
     } catch (e) {}
   }
