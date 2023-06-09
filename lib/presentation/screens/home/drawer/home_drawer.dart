@@ -174,6 +174,7 @@ class AppVersionTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appVersions = ref.watch(appVersionsStateProvider);
     final updateProgress = ref.watch(appUpdateProgressProvider);
+    final appUpdater = ref.watch(appUpdaterProvider);
 
     final currentTile = ListTile(
       title: appVersions.maybeWhen(
@@ -207,16 +208,13 @@ class AppVersionTile extends ConsumerWidget {
           title: Text(context.t.updater.available(version: '${data.latest}')),
           leading: Icon(Icons.info_outline, color: Colors.pink.shade300),
           subtitle: Text(
-            updateProgress.status.isDownloaded
+            updateProgress.status.isDownloaded ||
+                    appUpdater.isExported(data.latest)
                 ? context.t.updater.install
                 : context.t.changelog.view,
           ),
           onTap: () {
-            if (updateProgress.status.isDownloaded) {
-              ref.watch(appUpdaterProvider).install();
-            } else {
-              context.router.push(const AboutRoute());
-            }
+            context.router.push(const AboutRoute());
           },
         );
       },

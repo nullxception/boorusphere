@@ -89,7 +89,7 @@ class AppUpdater {
     }
   }
 
-  Future<void> expose() async {
+  Future<void> exportToSharedDir() async {
     final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
     final file = _fileNameOf(_version);
     final tmp = await getTemporaryDirectory();
@@ -108,11 +108,25 @@ class AppUpdater {
     }
   }
 
-  Future<void> install() async {
-    final file = _fileNameOf(_version);
+  bool isExported(AppVersion version) {
+    final file = _fileNameOf(version);
+    final onUpdateDir = path.join(updateDir, file);
+    return ref.read(sharedStorageHandleProvider).fileExists(onUpdateDir);
+  }
+
+  Future<void> install(AppVersion version) async {
+    final file = _fileNameOf(version);
     final tmp = await getTemporaryDirectory();
-    await ref
-        .read(sharedStorageHandleProvider)
-        .open(file, on: tmp.absolute.path);
+    final onTmp = File(path.join(tmp.absolute.path, file));
+    final handle = ref.read(sharedStorageHandleProvider);
+    if (onTmp.existsSync()) {
+      await handle.open(file, on: tmp.absolute.path);
+      return;
+    }
+
+    final onUpdateDir = path.join(updateDir, file);
+    if (handle.fileExists(onUpdateDir)) {
+      await ref.read(sharedStorageHandleProvider).open(onUpdateDir);
+    }
   }
 }

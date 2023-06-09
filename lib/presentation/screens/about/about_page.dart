@@ -168,13 +168,19 @@ class _Downloader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(appUpdateProgressProvider);
+    final appUpdater = ref.watch(appUpdaterProvider);
+
+    final hasUpdateApk =
+        progress.status.isDownloaded || appUpdater.isExported(version);
+
+    final showDownloadButton = progress.status.isCanceled ||
+        progress.status.isFailed ||
+        progress.status.isEmpty;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (progress.status.isCanceled ||
-            progress.status.isFailed ||
-            progress.status.isEmpty)
+        if (!hasUpdateApk && showDownloadButton)
           ElevatedButton(
             onPressed: () {
               checkNotificationPermission(context).then((hasPerm) {
@@ -233,10 +239,10 @@ class _Downloader extends ConsumerWidget {
           ),
           const SizedBox(width: 16),
         ],
-        if (progress.status.isDownloaded)
+        if (hasUpdateApk)
           ElevatedButton(
             onPressed: () {
-              ref.watch(appUpdaterProvider).install();
+              ref.watch(appUpdaterProvider).install(version);
             },
             child: Text(context.t.updater.install),
           ),
