@@ -46,16 +46,6 @@ listTasks() {
   print(buf);
 }
 
-@Task('Clean')
-Future<void> clean() async {
-  await fun(['clean']);
-}
-
-@Task('Sync dependencies')
-Future<void> sync() async {
-  await fun(['pub', 'get']);
-}
-
 @Task('Generate code')
 Future<void> gencode() async {
   await Pub.runAsync(
@@ -89,7 +79,7 @@ Future<void> pigeons() async {
 }
 
 @Task('Build APKs')
-@Depends(clean, sync, gencode, genlang)
+@Depends(gencode, genlang)
 Future<void> buildapk() async {
   await fun(['build', 'apk', '--split-per-abi']);
 }
