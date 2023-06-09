@@ -43,6 +43,7 @@
   "searchHistory": "Search History",
   "score": "Score",
   "always_ask": "Always ask",
+  "action_continue": "Continue",
   "rating": {
     "title": "Rating",
     "questionable": "Questionable",
@@ -92,7 +93,8 @@
   "changelog": {
     "title": "Changelog",
     "view": "View changes",
-    "none": "No changelog available"
+    "none": "No changelog available",
+    "whats_new": "What's new in ${version}"
   },
   "license": {
     "package": "package: ${name}",

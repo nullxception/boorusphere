@@ -94,21 +94,28 @@ class ChangelogDataView extends StatelessWidget {
               child: Text(
                 '${changelog.version}',
                 style: const TextStyle(
-                    fontSize: 22, height: 1.3, fontWeight: FontWeight.w300),
+                    fontSize: 22, height: 1.5, fontWeight: FontWeight.w300),
               ),
             ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: changelog.logs
-                  .map(
-                    (it) => Text(
-                      '\u2022  $it',
-                      style: const TextStyle(height: 1.3),
+              children: changelog.logs.map((it) {
+                const style = TextStyle(height: 1.5);
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Text('●', style: style),
                     ),
-                  )
-                  .toList(),
+                    Expanded(
+                      child: Text(it, style: style),
+                    ),
+                  ],
+                );
+              }).toList(),
             ),
           ),
         ],

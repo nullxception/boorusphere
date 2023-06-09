@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/booru/suggestion_state.dart';
@@ -12,16 +13,18 @@ import 'package:boorusphere/presentation/screens/home/home_content.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar.dart';
 import 'package:boorusphere/presentation/screens/home/search/search_bar_controller.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
+import 'package:boorusphere/presentation/screens/home/whats_new_bottom_sheet.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/styled_overlay_region.dart';
 import 'package:boorusphere/presentation/widgets/timeline/timeline_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 @RoutePage()
-class HomePage extends ConsumerWidget {
+class HomePage extends HookConsumerWidget {
   const HomePage({super.key, this.session});
 
   final SearchSession? session;
@@ -37,6 +40,19 @@ class HomePage extends ConsumerWidget {
     final savedServerId =
         ref.read(serverSettingStateProvider.select((it) => it.lastActiveId));
     final session = this.session ?? SearchSession(serverId: savedServerId);
+    final envRepo = ref.read(envRepoProvider);
+    final appStateRepo = ref.read(appStateRepoProvider);
+
+    useEffect(() {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+        if (envRepo.appVersion.isNewerThan(appStateRepo.version)) {
+          await appStateRepo.storeVersion(envRepo.appVersion);
+          if (context.mounted) {
+            WhatsNewBottomSheet.show(context);
+          }
+        }
+      });
+    }, []);
 
     return Scaffold(
       extendBody: true,

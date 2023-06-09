@@ -34,7 +34,6 @@ class Boorusphere extends HookConsumerWidget {
     final envRepo = ref.read(envRepoProvider);
     final appStateRepo = ref.read(appStateRepoProvider);
     if (envRepo.appVersion.isNewerThan(appStateRepo.version)) {
-      await appStateRepo.storeVersion(envRepo.appVersion);
       await ref.read(appUpdaterProvider).clear();
     }
 
