@@ -77,20 +77,17 @@ Future<void> pigeons() async {
       runOptions: utf8Opt);
 }
 
-@Task('Build APKs')
-@Depends(gencode, genlang)
-Future<void> buildapk() async {
-  await fun(['build', 'apk', '--split-per-abi']);
-}
-
 @Task('Rename APKs')
 Future<void> renameapk() {
   return renameReleaseApk();
 }
 
 @Task('Release')
-@Depends(buildapk, renameapk)
-void release() {}
+@Depends(gencode, genlang)
+Future<void> release() async {
+  await fun(['build', 'apk', '--split-per-abi']);
+  await renameapk();
+}
 
 @Task('Check formatting')
 Future<void> checkfmt() async {
