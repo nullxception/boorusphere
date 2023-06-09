@@ -29,8 +29,8 @@ void main() async {
     });
 
     tearDownAll(() async {
-      ref.dispose();
       await destroyTestHive();
+      ref.dispose();
     });
 
     test('push', () async {

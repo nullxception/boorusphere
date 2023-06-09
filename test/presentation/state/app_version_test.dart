@@ -42,9 +42,7 @@ version: $edgeVersion+99
         fireImmediately: true,
       );
 
-      addTearDown(() async {
-        ref.dispose();
-      });
+      addTearDown(ref.dispose);
 
       await ref.read(appVersionsStateProvider.future);
       final versions = ref.read(appVersionsStateProvider).value;
@@ -82,9 +80,7 @@ version: $edgeVersion+99
         fireImmediately: true,
       );
 
-      addTearDown(() async {
-        ref.dispose();
-      });
+      addTearDown(ref.dispose);
 
       await ref.read(appVersionsStateProvider.future);
       expect(
