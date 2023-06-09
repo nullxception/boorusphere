@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:boorusphere/constant/app.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
+import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,11 +41,6 @@ class AppUpdater {
 
   final updateDir = 'app-update';
 
-  Future<Directory> get _tmpDir async {
-    final tmp = await getTemporaryDirectory();
-    return Directory(path.join(tmp.absolute.path, updateDir));
-  }
-
   Future<void> clear() async {
     final tasks = await FlutterDownloader.loadTasksWithRawQuery(
         query: 'SELECT * FROM task WHERE file_name LIKE \'%.apk\'');
@@ -65,7 +60,7 @@ class AppUpdater {
     final fileName = _fileNameOf(version);
     final url = '${AppVersionRepo.gitUrl}/releases/download/$version/$fileName';
 
-    final tmp = await _tmpDir;
+    final tmp = await getTemporaryDirectory();
     if (!tmp.existsSync()) {
       try {
         tmp.createSync();
@@ -81,34 +76,28 @@ class AppUpdater {
       } catch (e) {}
     }
 
-    final newId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: tmp.absolute.path,
-      showNotification: true,
-      openFileFromNotification: true,
-    );
+    final newId = await ref.read(downloaderProvider).download(
+          Post.appReserved,
+          url: url,
+          targetPath: tmp.absolute.path,
+          dest: (fileName) => path.join(updateDir, fileName),
+        );
 
     if (newId != null) {
       _version = version;
       id = newId;
-      final entry = DownloadEntry(
-        id: newId,
-        post: Post.appReserved,
-        dest: path.join(updateDir, fileName),
-      );
-      await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
   }
 
   Future<void> expose() async {
     final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
     final file = _fileNameOf(_version);
-    final srcDir = await _tmpDir;
+    final tmp = await getTemporaryDirectory();
 
     await sharedStorageHandle.init();
     final destDir = sharedStorageHandle.createSubDir(updateDir);
 
-    final srcApk = File(path.join(srcDir.absolute.path, file));
+    final srcApk = File(path.join(tmp.absolute.path, file));
     final destApk = File(path.join(destDir.absolute.path, file));
 
     if (srcApk.existsSync() && !destApk.existsSync()) {
@@ -120,6 +109,10 @@ class AppUpdater {
   }
 
   Future<void> install() async {
-    await FlutterDownloader.open(taskId: id);
+    final file = _fileNameOf(_version);
+    final tmp = await getTemporaryDirectory();
+    await ref
+        .read(sharedStorageHandleProvider)
+        .open(file, on: tmp.absolute.path);
   }
 }

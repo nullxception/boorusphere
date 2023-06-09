@@ -19,24 +19,32 @@ class Downloader {
 
   final Ref ref;
 
-  Future<void> download(Post post, {String? url}) async {
+  Future<String?> download(
+    Post post, {
+    String? url,
+    String? targetPath,
+    String Function(String fileName)? dest,
+  }) async {
     final fileUrl = url ?? post.originalFile;
     final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
-    final targetPath = sharedStorageHandle.path;
 
     await sharedStorageHandle.init();
 
     final taskId = await FlutterDownloader.enqueue(
         url: fileUrl,
-        savedDir: targetPath,
+        savedDir: targetPath ?? sharedStorageHandle.path,
         showNotification: true,
         openFileFromNotification: true);
 
     if (taskId != null) {
-      final entry =
-          DownloadEntry(id: taskId, post: post, dest: fileUrl.fileName);
+      final entry = DownloadEntry(
+        id: taskId,
+        post: post,
+        dest: dest?.call(fileUrl.fileName) ?? fileUrl.fileName,
+      );
       await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
+    return taskId;
   }
 
   Future<void> retry({required String id}) async {
