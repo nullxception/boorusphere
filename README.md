@@ -84,8 +84,63 @@ dart run slang
 flutter run
 ```
 
-> Protip:
->
-> - Run [build_runner](https://pub.dev/packages/build_runner) after editing some areas that needs a code generator such as entities and routing.
-> - Run [slang](https://pub.dev/packages/slang) after editing translation files (\*.i18n.json).
-> - [build_runner](https://pub.dev/packages/build_runner) and [slang](https://pub.dev/packages/slang) has some features that will be helpful during development such as auto-rebuild and translation analysis, so it's highly recommended to check the documentations and familiarize yourself with it.
+### Protip:
+
+- Run [build_runner](https://pub.dev/packages/build_runner) after editing some areas that needs a code generator such as entities and routing.
+- Run [slang](https://pub.dev/packages/slang) after editing translation files (\*.i18n.json).
+- [build_runner](https://pub.dev/packages/build_runner) and [slang](https://pub.dev/packages/slang) has some features that will be helpful during development such as auto-rebuild and translation analysis, so it's highly recommended to check the documentations and familiarize yourself with it.
+
+# Translation
+
+### Translating untranslated strings
+
+- Run slang analyzer to check for missing translations
+
+```bash
+dart run slang analyze --outdir=i18n
+```
+
+- Open [i18n/\_missing_translations.json](i18n/_missing_translations.json) and then translate your language of choice.
+
+- After editing the file, you can apply it to the actual json translation file by running:
+
+```bash
+dart run slang apply --outdir=i18n
+
+dart run slang analyze --outdir=i18n # update analyzation result files
+```
+
+### Note
+
+You can leave untranslated strings on [i18n/\_missing_translations.json](i18n/_missing_translations.json).<br/>
+It's perfectly fine and recommended to leave it unchanged rather than adding it on the actual translation json but leaving it untranslated.
+
+### Adding a new language
+
+You can copy [i18n/strings_en.i18n.json](i18n/strings_en.i18n.json) to `i18n/strings_<language-code>.i18n.json`.<br/>
+At this point, feel free to pull request your new language here and we'll take care of adapting to the app code.
+
+Or if you want to build and test yourself, then:
+
+- Run slang to generate the strings.g.dart
+
+```bash
+dart run slang
+```
+
+- Run slang analyzer to check for missing translations
+
+```bash
+dart run slang analyze --outdir=i18n
+```
+
+- Build and run the app as usual
+
+- If there's an error about pluralization, you can edit [lib/main.dart](lib/main.dart) and add your new locale to the existing fallback plural resolver list
+
+```dart
+LocaleHelper.useFallbackPluralResolver([
+    ....
+    AppLocale.yourNewLanguageCode,
+]);
+```
