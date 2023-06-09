@@ -11,9 +11,8 @@ main(args) => grind(args);
 
 final utf8Opt = RunOptions(stdoutEncoding: utf8, stderrEncoding: utf8);
 
-fun(List<String> args) {
-  runAsync('flutter', arguments: args, runOptions: utf8Opt);
-}
+Future<void> fun(List<String> args) =>
+    runAsync('flutter', arguments: args, runOptions: utf8Opt);
 
 @DefaultTask()
 listTasks() {
