@@ -61,14 +61,9 @@ Future<void> pigeons() async {
   final files = Directory('pigeons')
       .listSync(recursive: true)
       .where((x) => x is File && x.path.endsWith('.pi.dart'))
-      .map((x) => x.path);
+      .fold(<String>[], (prev, x) => [...prev, '--input', x.path]);
 
-  await Pub.runAsync('pigeon',
-      arguments: [
-        '--input',
-        ...files,
-      ],
-      runOptions: utf8Opt);
+  await Pub.runAsync('pigeon', arguments: files, runOptions: utf8Opt);
 }
 
 @Task('Check formatting')
