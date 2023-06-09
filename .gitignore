@@ -52,9 +52,6 @@ lib/**/*.freezed.dart
 lib/**/*.g.dart
 lib/**/*.gr.dart
 
-# slang analysis result
-lib/**/_*_translations.json
-
 # test stuff
 coverage/lcov.info
 test/full_coverage_test.dart

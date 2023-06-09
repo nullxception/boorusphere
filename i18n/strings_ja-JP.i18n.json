@@ -123,9 +123,7 @@
       "failed": "失敗しました",
       "canceled": "キャンセルされました",
       "paused": "一時停止"
-    },
-    "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    }
   },
   "favorites": {
     "title": "お気に入り",
@@ -153,8 +151,7 @@
     "addr_error": "有効な「アドレス」ではない",
     "api_addr": "APIアドレス",
     "api_addr_hint": "API アドレス、例: https://api-v69.verycoolbooru.com",
-    "already_exists": "${name} のサーバーデータは既に存在します",
-    "invalid_search_query": "Invalid search query"
+    "already_exists": "${name} のサーバーデータは既に存在します"
   },
   "server_query": {
     "title": "クエリ",
@@ -218,16 +215,14 @@
     "backup": {
       "title": "データのバックアップ",
       "desc": "アプリのデータをファイルにバックアップ",
-      "success": "バックアップ作成日時 :\n${dest}",
-      "loading": "Creating backup..."
+      "success": "バックアップ作成日時 :\n${dest}"
     },
     "restore": {
       "title": "データを復元",
       "desc": "アプリのデータをバックアップ ファイルから復元",
       "success": "アプリデータが復元されました",
       "invalid": "バックアップファイルが無効です",
-      "warning": "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？",
-      "loading": "Restoring data..."
+      "warning": "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？"
     }
   }
 }

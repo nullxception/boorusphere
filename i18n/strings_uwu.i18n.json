@@ -1,16 +1,12 @@
 {
   "language_name": "UwUgish",
   "language_alias": "Engwish",
-  "save": "Save",
   "cancel": "Cancew",
   "clear": "C-C-Cweaw",
   "retry": "Wetwy",
   "remove": "Wemuv",
-  "edit": "Edit",
-  "add": "Add",
   "reset": "Weset",
   "reset_to_default": "Weset t-to defauwt",
-  "scan": "Scan",
   "load_more": "Woad mowe",
   "clearing": "Cweawing... *looks at you*",
   "details": "Detaiws",
@@ -18,19 +14,14 @@
   "source": "Souwce",
   "file_sample": "Sampwe fiwe",
   "file_og": "Owiginyaw fiwe",
-  "tags": "Tags",
-  "meta": "Meta",
   "artist": "Awtist",
   "character": "chawactew ^-^",
   "copyright": "Copywight",
   "general": "Genyewaw",
   "oss_license": "Open souwce wicense",
-  "github": "GitHub",
-  "open_settings": "Open Settings",
   "copy_success": "Copied t-to cwipboawd *sees bulge*",
   "load_image_failed": "Faiwed t-to woad image",
   "unsafe_content": "Content is nyot safe!~",
-  "unblur": "Show me",
   "unsupported_media": "${file_ext} is nyot suppowted",
   "open_externally": "Open extewnyawwy",
   "retry_pop_back": "Pwess back again *sees bulge* t-to exit",
@@ -49,7 +40,6 @@
     "questionable": "Questionyabwe",
     "explicit": "E-E-Expwicit",
     "safe": "safe *twerks*",
-    "sensitive": "Sensitive",
     "all": "aww >w<",
     "disable_rating_safe": "Disabwe rating:safe *huggles tightly*"
   },
@@ -73,7 +63,6 @@
     "http_error": "Cannyot get w-wesuwt fow '${query}' on ${server_name}"
   },
   "action_tag": {
-    "copy": "Copy tag",
     "block": "Bwock sewected tag",
     "blocked": "Added t-to tags bwockew",
     "append": "Add tag t-to cuwwent seawch",
@@ -92,11 +81,9 @@
   },
   "changelog": {
     "title": "Changewog",
-    "view": "View changes",
     "none": "Nyo changewog avaiwabwe"
   },
   "license": {
-    "package": "package: ${name}",
     "title": {
       "one": "Wicense",
       "other": "Wicenses"
@@ -150,7 +137,6 @@
     "edit": "Edit ${name}",
     "alias": "awias (・`ω´・)",
     "homepage": "Homepage",
-    "homepage_hint": "Homepage, example: https://verycoolbooru.com",
     "use_custom_api": "Use custom API addwess",
     "use_custom_api_desc": "Usefuw if sewvew has diffewent API addwess than the x3 homepage",
     "addr_error": "nyot a vawid *looks at you* addwess",
@@ -166,14 +152,12 @@
     "post": "Web Post Quewy"
   },
   "settings": {
-    "title": "Settings",
     "interface": "Intewface",
     "safe_mode": "safe *twerks* mode",
     "misc": "Miscewwanyeous",
     "lang": {
       "title": "Wanguage",
       "auto": {
-        "title": "Automatic",
         "desc": "Fowwow system wanguage (if p-p-possibwe)"
       }
     },

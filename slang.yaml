@@ -1,6 +1,9 @@
 base_locale: en
 fallback_strategy: base_locale
+input_directory: i18n
 input_file_pattern: .i18n.json
+output_directory: lib/presentation/i18n
+output_file_name: strings.g.dart
 flat_map: false
 timestamp: false
 key_case: camel

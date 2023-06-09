@@ -41,16 +41,11 @@
   "backup": "Резервная копия",
   "restore": "Восстановить",
   "searchHistory": "История поиска",
-  "score": "Score",
-  "always_ask": "Always ask",
   "rating": {
     "title": "Рейтинг",
     "questionable": "Сомнительный",
     "explicit": "Откровенный",
-    "safe": "Безопасный",
-    "sensitive": "Sensitive",
-    "all": "All",
-    "disable_rating_safe": "Disable rating:safe"
+    "safe": "Безопасный"
   },
   "page_status": {
     "http_error": "Не удалось получить результат от ${server_name}",
@@ -123,9 +118,7 @@
       "failed": "Ошибка",
       "canceled": "Отменено",
       "paused": "На паузе"
-    },
-    "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    }
   },
   "favorites": {
     "title": "Избранное",
@@ -153,8 +146,7 @@
     "addr_error": "неверный адрес",
     "api_addr": "Адрес API",
     "api_addr_hint": "Адрес API, пример: https://api-v69.verycoolbooru.com",
-    "already_exists": "Данные сервера для ${name} уже существуют",
-    "invalid_search_query": "Invalid search query"
+    "already_exists": "Данные сервера для ${name} уже существуют"
   },
   "server_query": {
     "title": "Запрос",
@@ -189,10 +181,6 @@
     "blur_content": {
       "title": "Размывать откровенный контент",
       "desc": "Контент, оцененный как откровенный, будет размыт"
-    },
-    "blur_timeline_only": {
-      "title": "Only blur content on timeline",
-      "desc": "Explicit-rated content will not be blurred on view-mode"
     },
     "ime_incognito": {
       "title": "Инкогнито клавиатура",
