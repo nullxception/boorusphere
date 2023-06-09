@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
 import 'package:boorusphere/presentation/provider/booru/page_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -27,35 +28,28 @@ class HomeStatus extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        pageState.when(
-          idle: (data) {
-            return const SizedBox.shrink();
-          },
-          data: (data) {
-            return Container(
+        switch (pageState) {
+          IdleFetchResult() => const SizedBox.shrink(),
+          DataFetchResult() => Container(
               height: 50,
               alignment: Alignment.topCenter,
               child: ElevatedButton(
                 onPressed: ref.read(pageStateProvider.notifier).loadMore,
                 child: Text(context.t.loadMore),
               ),
-            );
-          },
-          loading: (data) {
-            return Container(
+            ),
+          LoadingFetchResult() => Container(
               height: 50,
               alignment: Alignment.topCenter,
               child: const RefreshProgressIndicator(),
-            );
-          },
-          error: (data, error, stackTrace) {
-            return _ErrorStatus(
+            ),
+          ErrorFetchResult(:final data, :final error, :final stackTrace) =>
+            _ErrorStatus(
               data: data,
               error: error,
               stackTrace: stackTrace,
-            );
-          },
-        ),
+            ),
+        },
       ],
     );
   }

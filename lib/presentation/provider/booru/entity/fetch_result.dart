@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'fetch_result.freezed.dart';
 
 @freezed
-class FetchResult<T> with _$FetchResult<T> {
+sealed class FetchResult<T> with _$FetchResult<T> {
   const factory FetchResult.idle(T data) = IdleFetchResult;
   const factory FetchResult.data(T data) = DataFetchResult;
   const factory FetchResult.loading(T data) = LoadingFetchResult;

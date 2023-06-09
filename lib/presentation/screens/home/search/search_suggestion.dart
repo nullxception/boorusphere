@@ -151,14 +151,11 @@ class SearchSuggestion extends HookConsumerWidget {
                       ),
                     ),
                   if (server.canSuggestTags)
-                    suggestion.when(
-                      idle: (data) {
-                        return const SliverToBoxAdapter(
+                    switch (suggestion) {
+                      IdleFetchResult() => const SliverToBoxAdapter(
                           child: SizedBox.shrink(),
-                        );
-                      },
-                      data: (data) {
-                        return SliverList(
+                        ),
+                      DataFetchResult(:final data) => SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               return Padding(
@@ -178,41 +175,19 @@ class SearchSuggestion extends HookConsumerWidget {
                             },
                             childCount: data.length,
                           ),
-                        );
-                      },
-                      loading: (data) {
-                        return const SliverToBoxAdapter(
+                        ),
+                      LoadingFetchResult() => const SliverToBoxAdapter(
                           child: SizedBox(
                             height: 128,
                             child: Center(child: RefreshProgressIndicator()),
                           ),
-                        );
-                      },
-                      error: (data, error, stackTrace) {
-                        final Object? msg;
-                        if (error == BooruError.empty) {
-                          msg = context.t.suggestion
-                              .empty(query: searchBar.value);
-                        } else if (error is DioException &&
-                            error.response?.statusCode != null) {
-                          msg = context.t.suggestion
-                              .httpError(
-                                query: searchBar.value,
-                                serverName: server.name,
-                              )
-                              .withDioExceptionCode(error);
-                        } else {
-                          msg = error;
-                        }
-
-                        return SliverPadding(
-                          padding: const EdgeInsets.all(16),
-                          sliver: SliverToBoxAdapter(
-                            child: ErrorInfo(error: msg),
-                          ),
-                        );
-                      },
-                    ),
+                        ),
+                      ErrorFetchResult(:final error) => _ErrorSuggestion(
+                          error: error,
+                          query: searchBar.value,
+                          serverName: server.name,
+                        ),
+                    },
                   const SliverToBoxAdapter(
                     child: SizedBox(height: kBottomNavigationBarHeight + 38),
                   )
@@ -221,6 +196,41 @@ class SearchSuggestion extends HookConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ErrorSuggestion extends StatelessWidget {
+  const _ErrorSuggestion({
+    required this.query,
+    required this.serverName,
+    required this.error,
+  });
+
+  final String query;
+  final String serverName;
+  final Object? error;
+
+  @override
+  Widget build(BuildContext context) {
+    final err = error;
+    Object? msg;
+
+    if (err == BooruError.empty) {
+      msg = context.t.suggestion.empty(query: query);
+    } else if (err is DioException && err.response?.statusCode != null) {
+      msg = context.t.suggestion
+          .httpError(query: query, serverName: serverName)
+          .withDioExceptionCode(err);
+    } else {
+      msg = err;
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(16),
+      sliver: SliverToBoxAdapter(
+        child: ErrorInfo(error: msg),
       ),
     );
   }
