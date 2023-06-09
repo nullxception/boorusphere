@@ -27,10 +27,9 @@ import 'package:boorusphere/domain/repository/server_data_repo.dart';
 import 'package:boorusphere/domain/repository/settings_repo.dart';
 import 'package:boorusphere/domain/repository/tags_blocker_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:boorusphere/pigeon/app_env.pi.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:package_info/package_info.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'provider.g.dart';
@@ -41,10 +40,7 @@ EnvRepo envRepo(EnvRepoRef ref) {
 }
 
 Future<EnvRepo> provideEnvRepo() async {
-  return CurrentEnvRepo(
-    packageInfo: await PackageInfo.fromPlatform(),
-    androidInfo: await DeviceInfoPlugin().androidInfo,
-  );
+  return CurrentEnvRepo(env: await AppEnv().get());
 }
 
 @riverpod

@@ -40,7 +40,6 @@ dependencies:
   collection: ^1.16.0
   cookie_jar: ^4.0.1
   deep_pick: ^1.0.0
-  device_info_plus: ^8.0.0
   dio_cookie_manager: ^3.0.0
   dio_smart_retry: ^5.0.0
   dio: ^5.0.0
