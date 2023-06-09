@@ -93,7 +93,8 @@
   "changelog": {
     "title": "Perubahan",
     "view": "Lihat perubahan",
-    "none": "Tidak ada changelog yang tersedia"
+    "none": "Tidak ada changelog yang tersedia",
+    "whats_new": "Yang baru di versi ${version}"
   },
   "license": {
     "package": "paket: ${name}",

@@ -80,11 +80,7 @@
       }
     }
   },
-  "id-ID": {
-    "changelog": {
-      "whats_new": "What's new in ${version}"
-    }
-  },
+  "id-ID": {},
   "ja-JP": {
     "action_continue": "Continue",
     "changelog": {
