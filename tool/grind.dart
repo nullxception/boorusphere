@@ -5,8 +5,6 @@ import 'dart:io';
 
 import 'package:grinder/grinder.dart';
 
-import 'rename_release_apk.dart';
-
 main(args) => grind(args);
 
 final utf8Opt = RunOptions(stdoutEncoding: utf8, stderrEncoding: utf8);
@@ -77,18 +75,6 @@ Future<void> pigeons() async {
       runOptions: utf8Opt);
 }
 
-@Task('Rename APKs')
-Future<void> renameapk() {
-  return renameReleaseApk();
-}
-
-@Task('Release')
-@Depends(gencode, genlang)
-Future<void> release() async {
-  await fun(['build', 'apk', '--split-per-abi']);
-  await renameapk();
-}
-
 @Task('Check formatting')
 Future<void> checkfmt() async {
   final files = Directory('lib')
@@ -126,3 +112,14 @@ Future<void> unittest() async {
 @Task('Test all things')
 @Depends(analyze, unittest)
 void test() {}
+
+@Task('Release')
+@Depends(gencode, genlang)
+Future<void> release() async {
+  await fun(['build', 'apk', '--split-per-abi']);
+  await Pub.runAsync(
+    'boorusphere',
+    script: 'rename_release_apk',
+    runOptions: utf8Opt,
+  );
+}

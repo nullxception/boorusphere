@@ -48,7 +48,7 @@ Future<void> _renameOutputApks(
   }
 }
 
-Future<void> renameReleaseApk() async {
+void main() async {
   if (!Directory(_outputDir).existsSync()) {
     throw FileSystemException('Directory is not exists', _outputDir);
   }
