@@ -2,8 +2,10 @@ import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart
 import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_status.dart';
 import 'package:boorusphere/domain/repository/downloads_repo.dart';
+import 'package:boorusphere/pigeon/storage_util.pi.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hive/hive.dart';
+import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 class UserDownloadsRepo implements DownloadsRepo {
@@ -60,11 +62,29 @@ class UserDownloadsRepo implements DownloadsRepo {
   static const String progressKey = 'download_progresses';
 
   static Future<void> prepare() async {
-    await Hive.openBox<DownloadEntry>(entryKey);
+    final entryBox = await Hive.openBox<DownloadEntry>(entryKey);
     final progressBox = await Hive.openBox<DownloadProgress>(progressKey);
+    await _adaptEntryDest(entryBox);
     await _migrateProgresses(progressBox);
     await FlutterDownloader.initialize();
   }
+}
+
+Future<void> _adaptEntryDest(Box<DownloadEntry> box) async {
+  if (box.isEmpty) {
+    return;
+  }
+  var downloadPath = await StorageUtil().getDownloadPath();
+  downloadPath = path.join(downloadPath, 'Boorusphere');
+  final newEntries = <MapEntry<String, DownloadEntry>>[];
+  for (final entry in box.values) {
+    if (!path.isAbsolute(entry.dest)) {
+      continue;
+    }
+    final newDest = path.relative(entry.dest, from: downloadPath);
+    newEntries.add(MapEntry(entry.id, entry.copyWith(dest: newDest)));
+  }
+  await box.putAll(Map.fromEntries(newEntries));
 }
 
 Future<void> _migrateProgresses(Box<DownloadProgress> box) async {

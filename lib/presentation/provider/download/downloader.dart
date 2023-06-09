@@ -33,9 +33,8 @@ class Downloader {
         openFileFromNotification: true);
 
     if (taskId != null) {
-      final destination = '$targetPath/${fileUrl.fileName}';
       final entry =
-          DownloadEntry(id: taskId, post: post, destination: destination);
+          DownloadEntry(id: taskId, post: post, dest: fileUrl.fileName);
       await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
   }

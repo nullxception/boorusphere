@@ -8,6 +8,7 @@ import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dar
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:boorusphere/presentation/routes/app_router.gr.dart';
 import 'package:boorusphere/presentation/screens/home/search_session.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
@@ -30,10 +31,10 @@ class DownloadEntryView extends ConsumerWidget {
   final DownloadEntry entry;
   final bool groupByServer;
 
-  IconData _buildStatusIcon(DownloadProgress progress) {
+  IconData _buildStatusIcon(DownloadProgress progress, bool isFileExists) {
     switch (progress.status) {
       case DownloadStatus.downloaded:
-        return entry.isFileExists
+        return isFileExists
             ? Icons.download_done_rounded
             : Icons.error_outline_rounded;
       case DownloadStatus.downloading:
@@ -46,10 +47,11 @@ class DownloadEntryView extends ConsumerWidget {
     }
   }
 
-  Color _buildStatusColor(ColorScheme scheme, DownloadProgress progress) {
+  Color _buildStatusColor(
+      ColorScheme scheme, DownloadProgress progress, bool isFileExists) {
     switch (progress.status) {
       case DownloadStatus.downloaded:
-        return entry.isFileExists
+        return isFileExists
             ? Colors.lightBlueAccent
             : scheme.onBackground.withAlpha(125);
       case DownloadStatus.canceled:
@@ -60,8 +62,9 @@ class DownloadEntryView extends ConsumerWidget {
     }
   }
 
-  String _buildStatusDesc(BuildContext context, DownloadProgress progress) {
-    if (progress.status.isDownloaded && !entry.isFileExists) {
+  String _buildStatusDesc(
+      BuildContext context, DownloadProgress progress, bool isFileExists) {
+    if (progress.status.isDownloaded && !isFileExists) {
       return context.t.downloads.noFile;
     }
 
@@ -89,10 +92,12 @@ class DownloadEntryView extends ConsumerWidget {
     final serverData = ref.watch(serverDataStateProvider);
     final headers = ref.watch(postHeadersFactoryProvider(entry.post));
     final progress = ref.watch(downloadProgressStateProvider).getById(entry.id);
+    final isFileExists =
+        ref.watch(sharedStorageHandleProvider).fileExists(entry.dest);
 
     return ListTile(
       title: Text(
-        Uri.decodeFull(entry.destination.fileName),
+        Uri.decodeFull(entry.dest.fileName),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
@@ -123,11 +128,12 @@ class DownloadEntryView extends ConsumerWidget {
                   Text('${progress.progress}%'),
                 ] else
                   Icon(
-                    _buildStatusIcon(progress),
-                    color: _buildStatusColor(context.colorScheme, progress),
+                    _buildStatusIcon(progress, isFileExists),
+                    color: _buildStatusColor(
+                        context.colorScheme, progress, isFileExists),
                     size: 18,
                   ),
-                Text(_buildStatusDesc(context, progress)),
+                Text(_buildStatusDesc(context, progress, isFileExists)),
               ],
             ),
             Row(
@@ -157,7 +163,7 @@ class DownloadEntryView extends ConsumerWidget {
         server: serverData.getById(entry.post.serverId),
       ),
       dense: true,
-      onTap: !progress.status.isDownloaded || !entry.isFileExists
+      onTap: !progress.status.isDownloaded || !isFileExists
           ? null
           : () => ref.read(downloaderProvider).openFile(id: entry.id),
     );
@@ -200,6 +206,9 @@ class _EntryPopupMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isFileExists =
+        ref.watch(sharedStorageHandleProvider).fileExists(entry.dest);
+
     return PopupMenuButton(
       onSelected: (value) {
         final downloader = ref.read(downloaderProvider);
@@ -235,7 +244,7 @@ class _EntryPopupMenu extends ConsumerWidget {
       },
       itemBuilder: (context) {
         return [
-          if (progress.status.isDownloaded && !entry.isFileExists)
+          if (progress.status.isDownloaded && !isFileExists)
             PopupMenuItem(
               value: 'redownload',
               child: Text(context.t.downloads.redownload),

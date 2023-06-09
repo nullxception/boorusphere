@@ -35,13 +35,15 @@ class AppUpdater {
   String id = '';
   AppVersion _version = AppVersion.zero;
 
-  String _fileName(AppVersion version) {
+  String _fileNameOf(AppVersion version) {
     return 'boorusphere-$version-$kAppArch.apk';
   }
 
+  final updateDir = 'app-update';
+
   Future<Directory> get _tmpDir async {
     final tmp = await getTemporaryDirectory();
-    return Directory(path.join(tmp.absolute.path, 'app-update'));
+    return Directory(path.join(tmp.absolute.path, updateDir));
   }
 
   Future<void> clear() async {
@@ -60,8 +62,8 @@ class AppUpdater {
 
   Future<void> start(AppVersion version) async {
     await clear();
-    final file = _fileName(version);
-    final url = '${AppVersionRepo.gitUrl}/releases/download/$version/$file';
+    final fileName = _fileNameOf(version);
+    final url = '${AppVersionRepo.gitUrl}/releases/download/$version/$fileName';
 
     final tmp = await _tmpDir;
     if (!tmp.existsSync()) {
@@ -71,7 +73,7 @@ class AppUpdater {
       } catch (e) {}
     }
 
-    final apk = File(path.join(tmp.absolute.path, file));
+    final apk = File(path.join(tmp.absolute.path, fileName));
     if (apk.existsSync()) {
       try {
         apk.deleteSync();
@@ -92,7 +94,7 @@ class AppUpdater {
       final entry = DownloadEntry(
         id: newId,
         post: Post.appReserved,
-        destination: apk.absolute.path,
+        dest: path.join(updateDir, fileName),
       );
       await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
@@ -100,11 +102,11 @@ class AppUpdater {
 
   Future<void> expose() async {
     final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
-    final file = _fileName(_version);
+    final file = _fileNameOf(_version);
     final srcDir = await _tmpDir;
 
     await sharedStorageHandle.init();
-    final destDir = sharedStorageHandle.createSubDir('app-update');
+    final destDir = sharedStorageHandle.createSubDir(updateDir);
 
     final srcApk = File(path.join(srcDir.absolute.path, file));
     final destApk = File(path.join(destDir.absolute.path, file));

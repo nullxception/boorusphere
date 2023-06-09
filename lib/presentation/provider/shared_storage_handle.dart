@@ -55,6 +55,15 @@ class SharedStorageHandle {
     return dir;
   }
 
+  bool fileExists(String relativePath) {
+    final file = File(p.join(path, relativePath));
+    try {
+      return file.existsSync();
+      // ignore: empty_catches
+    } catch (e) {}
+    return false;
+  }
+
   Future<void> rescan() async {
     await MediaScanner.loadMedia(path: path);
   }
