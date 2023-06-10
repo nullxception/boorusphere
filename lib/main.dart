@@ -50,16 +50,7 @@ void main() async {
     CurrentAppStateRepo.prepare(),
   ]);
 
-  LocaleHelper.useFallbackPluralResolver([
-    AppLocale.fil,
-    AppLocale.idId,
-    AppLocale.jaJp,
-    AppLocale.thTh,
-    AppLocale.trTr,
-    AppLocale.ru,
-    AppLocale.uk,
-    AppLocale.uwu,
-  ]);
+  LocaleHelper.setupPluralResolver();
 
   runApp(
     ProviderScope(

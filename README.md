@@ -135,12 +135,3 @@ dart run slang analyze --outdir=i18n
 ```
 
 - Build and run the app as usual
-
-- If there's an error about pluralization, you can edit [lib/main.dart](lib/main.dart) and add your new locale to the existing fallback plural resolver list
-
-```dart
-LocaleHelper.useFallbackPluralResolver([
-    ....
-    AppLocale.yourNewLanguageCode,
-]);
-```

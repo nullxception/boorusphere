@@ -1,4 +1,5 @@
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:collection/collection.dart';
 
 String _defCardinalResolver(
   num n, {
@@ -40,7 +41,10 @@ String _defOrdinalResolver(
 }
 
 class LocaleHelper {
-  static void useFallbackPluralResolver(Iterable<AppLocale> locales) {
+  static void setupPluralResolver({
+    Iterable<AppLocale> ignores = const <AppLocale>[AppLocale.en],
+  }) {
+    final locales = AppLocale.values.whereNot((x) => ignores.contains(x));
     for (final locale in locales) {
       LocaleSettings.setPluralResolver(
         locale: locale,
