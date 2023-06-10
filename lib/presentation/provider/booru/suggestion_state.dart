@@ -15,16 +15,29 @@ class SuggestionState extends _$SuggestionState {
 
   final SearchSession session;
 
-  String? _lastQuery;
+  String? _lastWord;
 
   @override
   FetchResult<Iterable<String>> build() {
-    _lastQuery = null;
+    _lastWord = null;
     return const FetchResult.idle([]);
   }
 
+  String _lastWordOf(String query) {
+    final queries = query.toWordList();
+    if (queries.isEmpty || query.endsWith(' ')) {
+      return '';
+    }
+
+    return queries.last;
+  }
+
   Future<void> get(String query) async {
-    if (_lastQuery == query) return;
+    final word = _lastWordOf(query);
+    if (_lastWord == word) {
+      return;
+    }
+
     final server = ref.read(serverDataStateProvider).getById(session.serverId);
     if (server == ServerData.empty) {
       state = const FetchResult.data([]);
@@ -32,10 +45,8 @@ class SuggestionState extends _$SuggestionState {
     }
 
     state = FetchResult.loading(state.data);
-    _lastQuery = query;
+    _lastWord = word;
     try {
-      final queries = query.toWordList();
-      final word = queries.isEmpty || query.endsWith(' ') ? '' : queries.last;
       final res =
           await ref.read(imageboardRepoProvider(server)).getSuggestion(word);
       final blockedTags = ref.read(tagsBlockerRepoProvider);
@@ -43,7 +54,7 @@ class SuggestionState extends _$SuggestionState {
           .where(
               (it) => !blockedTags.get().values.map((e) => e.name).contains(it))
           .toSet();
-      if (query != _lastQuery) return;
+      if (word != _lastWord) return;
 
       if (result.isEmpty && word.isNotEmpty) {
         state = FetchResult.error(state.data, error: BooruError.empty);
@@ -52,7 +63,9 @@ class SuggestionState extends _$SuggestionState {
 
       state = FetchResult.data(result);
     } catch (err, stack) {
-      if (query != _lastQuery) return;
+      if (word != _lastWord) {
+        return;
+      }
       state = FetchResult.error(state.data, error: err, stackTrace: stack);
     }
   }
