@@ -1,20 +1,24 @@
-name: Testing
+name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - dev
     paths-ignore:
       - "fastlane/**"
       - "**.md"
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - dev
     paths-ignore:
       - "fastlane/**"
       - "**.md"
 
 jobs:
-  analysis:
-    name: Perform static analysis and unit tests
+  check:
+    name: Analyze and test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,6 +36,8 @@ jobs:
           flutter pub get
       - name: Run code generators
         run: grind gencode genlang
+      - name: Check code formatting
+        run: grind chkfmt
       - name: Analyze code
         run: grind analyze
       - name: Perform testing
