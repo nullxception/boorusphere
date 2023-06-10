@@ -14,7 +14,9 @@ final searchBarControllerProvider =
 
 class SearchBarController extends ChangeNotifier {
   SearchBarController(this.ref, {required this.session}) {
-    textEditingController.addListener(_fetch);
+    textEditingController
+      ..addListener(_fetch)
+      ..addListener(notifyListeners);
   }
 
   final Ref ref;
@@ -99,7 +101,9 @@ class SearchBarController extends ChangeNotifier {
   @override
   void dispose() {
     _textTimer?.cancel();
-    textEditingController.removeListener(_fetch);
+    textEditingController
+      ..removeListener(notifyListeners)
+      ..removeListener(_fetch);
     super.dispose();
   }
 }
