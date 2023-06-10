@@ -1,3 +1,13 @@
+## 1.4.0
+
+* Add warning popup when using menu > clear all on Downloads screen
+* Fix built-in updater did not works (bug since 1.3.8)
+* Fix search suggestion and history filtering method
+* Fix some jank on homepage caused by unnecessary layout rebuilds
+* Optimize search screen UI performance
+* Show recent changelog after updating the app
+* Update flutter to 3.10.4
+
 ## 1.3.9
 * Fix video player keeps playing when navigating to the next screen
 * Apply high-framerate workaround for crappy OS such as OxygenOS
