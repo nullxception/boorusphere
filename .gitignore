@@ -55,3 +55,6 @@ lib/**/*.gr.dart
 # test stuff
 coverage/lcov.info
 test/full_coverage_test.dart
+
+# Releases
+releasenote.md

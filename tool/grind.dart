@@ -110,3 +110,9 @@ Future<void> release() async {
   await fun(['build', 'apk', '--split-per-abi']);
   await Pub.runAsync('boorusphere', script: 'renameapks', runOptions: utf8Opt);
 }
+
+@Task('Create release notes')
+Future<void> releaseNote() async {
+  await Pub.runAsync('boorusphere',
+      script: 'mkreleasenote', runOptions: utf8Opt);
+}
