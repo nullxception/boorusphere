@@ -108,9 +108,5 @@ void test() {}
 @Depends(gencode, genlang)
 Future<void> release() async {
   await fun(['build', 'apk', '--split-per-abi']);
-  await Pub.runAsync(
-    'boorusphere',
-    script: 'rename_release_apk',
-    runOptions: utf8Opt,
-  );
+  await Pub.runAsync('boorusphere', script: 'renameapks', runOptions: utf8Opt);
 }

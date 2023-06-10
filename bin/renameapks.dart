@@ -1,8 +1,8 @@
 //
 // Script for renaming apks for release purposes
 //
-// ignore_for_file: avoid_print
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
@@ -43,7 +43,7 @@ Future<void> _renameOutputApks(
   final toPath = path.normalize(path.join(outDir, to));
   final apk = File(fromPath);
   if (apk.existsSync()) {
-    print(':: Renaming $from to $to');
+    log(':: Renaming $from to $to');
     await apk.rename(toPath);
   }
 }
