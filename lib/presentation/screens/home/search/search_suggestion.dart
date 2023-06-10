@@ -21,22 +21,8 @@ class SearchSuggestion extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchBar = ref.watch(searchBarControllerProvider);
-    final session = ref.watch(searchSessionProvider);
-    final server = ref.watch(serverDataStateProvider).getById(session.serverId);
-    final suggestion = ref.watch(suggestionStateProvider);
-    final history = ref.watch(filterHistoryProvider(searchBar.value));
-    final isBlurAllowed = ref.watch(uiSettingStateProvider.select(
-      (ui) => ui.blur,
-    ));
-
-    useEffect(() {
-      Future(() {
-        if (searchBar.isOpen && suggestion is! LoadingFetchResult) {
-          ref.watch(suggestionStateProvider.notifier).get(searchBar.value);
-        }
-      });
-    }, [searchBar.isOpen]);
+    final isBlurAllowed =
+        ref.watch(uiSettingStateProvider.select((ui) => ui.blur));
 
     return Container(
       color: context.theme.scaffoldBackgroundColor.withOpacity(
@@ -52,143 +38,17 @@ class SearchSuggestion extends HookConsumerWidget {
         sigmaX: 12,
         sigmaY: 12,
         blur: isBlurAllowed,
-        child: Stack(
+        child: const Stack(
           alignment: Alignment.bottomCenter,
           children: [
             SafeArea(
               child: CustomScrollView(
                 slivers: [
-                  if (history.isNotEmpty)
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      sliver: SliverToBoxAdapter(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(context.t.recently),
-                            TextButton(
-                              onPressed: ref
-                                  .read(searchHistoryStateProvider.notifier)
-                                  .clear,
-                              child: Text(context.t.clear),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final reversed = history.entries.length - 1 - index;
-                        final entry = history.entries.elementAt(reversed);
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Dismissible(
-                            key: Key(entry.key.toString()),
-                            direction: DismissDirection.endToStart,
-                            onDismissed: (direction) {
-                              ref
-                                  .read(searchHistoryStateProvider.notifier)
-                                  .delete(entry.key);
-                            },
-                            background: Container(
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(context.t.remove),
-                                  const Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child:
-                                        Icon(Icons.delete, color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            child: _SuggestionEntryTile(
-                              data: SuggestionEntry(
-                                isHistory: true,
-                                text: entry.value.query,
-                                server: entry.value.server,
-                              ),
-                              onTap: (str) {
-                                searchBar.submit(context, str);
-                              },
-                              onAdded: searchBar.appendTyped,
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: history.entries.length,
-                    ),
-                  ),
-                  if (!server.canSuggestTags)
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Icon(Icons.search_off),
-                          ),
-                          Text(
-                            context.t.suggestion.notSupported(
-                              serverName: server.name,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (server.canSuggestTags)
-                    SliverPadding(
-                      padding: const EdgeInsets.all(16),
-                      sliver: SliverToBoxAdapter(
-                        child: Text(
-                          context.t.suggestion.suggested(
-                            serverName: server.name,
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (server.canSuggestTags)
-                    switch (suggestion) {
-                      IdleFetchResult() => const SliverToBoxAdapter(
-                          child: SizedBox.shrink(),
-                        ),
-                      DataFetchResult(:final data) => SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: _SuggestionEntryTile(
-                                  data: SuggestionEntry(
-                                    isHistory: false,
-                                    text: data.elementAt(index),
-                                  ),
-                                  onTap: (str) {
-                                    searchBar.submit(context, str);
-                                  },
-                                  onAdded: searchBar.appendTyped,
-                                ),
-                              );
-                            },
-                            childCount: data.length,
-                          ),
-                        ),
-                      LoadingFetchResult() => const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 128,
-                            child: Center(child: RefreshProgressIndicator()),
-                          ),
-                        ),
-                      ErrorFetchResult(:final error) => _ErrorSuggestion(
-                          error: error,
-                          query: searchBar.value,
-                          serverName: server.name,
-                        ),
-                    },
-                  const SliverToBoxAdapter(
+                  _SearchHistoryHeader(),
+                  _SearchHistory(),
+                  _SuggestionHeader(),
+                  _Suggestion(),
+                  SliverToBoxAdapter(
                     child: SizedBox(height: kBottomNavigationBarHeight + 38),
                   )
                 ],
@@ -198,6 +58,181 @@ class SearchSuggestion extends HookConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class _SearchHistoryHeader extends ConsumerWidget {
+  const _SearchHistoryHeader();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchBar = ref.watch(searchBarControllerProvider);
+    final history = ref.watch(filterHistoryProvider(searchBar.value));
+    if (history.isEmpty) {
+      return const SliverToBoxAdapter();
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      sliver: SliverToBoxAdapter(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('${context.t.recently}: ${searchBar.value}'),
+            TextButton(
+              onPressed: ref.read(searchHistoryStateProvider.notifier).clear,
+              child: Text(context.t.clear),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchHistory extends HookConsumerWidget {
+  const _SearchHistory();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchBar = ref.watch(searchBarControllerProvider);
+    final history = ref.watch(filterHistoryProvider(searchBar.value));
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final reversed = history.entries.length - 1 - index;
+          final entry = history.entries.elementAt(reversed);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Dismissible(
+              key: Key(entry.key.toString()),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) {
+                ref.read(searchHistoryStateProvider.notifier).delete(entry.key);
+              },
+              background: Container(
+                color: Colors.red,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(context.t.remove),
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Icon(Icons.delete, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              child: _SuggestionEntryTile(
+                data: _SuggestionEntry(
+                  isHistory: true,
+                  text: entry.value.query,
+                  server: entry.value.server,
+                ),
+                onTap: (str) {
+                  searchBar.submit(context, str);
+                },
+                onAdded: searchBar.appendTyped,
+              ),
+            ),
+          );
+        },
+        childCount: history.entries.length,
+      ),
+    );
+  }
+}
+
+class _SuggestionHeader extends ConsumerWidget {
+  const _SuggestionHeader();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(searchSessionProvider);
+    final server = ref.watch(serverDataStateProvider).getById(session.serverId);
+
+    if (!server.canSuggestTags) {
+      return SliverToBoxAdapter(
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Icon(Icons.search_off),
+            ),
+            Text(context.t.suggestion.notSupported(serverName: server.name)),
+          ],
+        ),
+      );
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(16),
+      sliver: SliverToBoxAdapter(
+        child: Text(context.t.suggestion.suggested(serverName: server.name)),
+      ),
+    );
+  }
+}
+
+class _Suggestion extends HookConsumerWidget {
+  const _Suggestion();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(searchSessionProvider);
+    final server = ref.watch(serverDataStateProvider).getById(session.serverId);
+    final searchBar = ref.watch(searchBarControllerProvider);
+    final suggestion = ref.watch(suggestionStateProvider);
+
+    useEffect(() {
+      Future(() {
+        if (searchBar.isOpen && suggestion is! LoadingFetchResult) {
+          ref.watch(suggestionStateProvider.notifier).get(searchBar.value);
+        }
+      });
+    }, [searchBar.isOpen]);
+
+    if (!server.canSuggestTags) {
+      return const SliverToBoxAdapter();
+    }
+
+    return switch (suggestion) {
+      IdleFetchResult() => const SliverToBoxAdapter(
+          child: SizedBox.shrink(),
+        ),
+      DataFetchResult(:final data) => SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: _SuggestionEntryTile(
+                  data: _SuggestionEntry(
+                    isHistory: false,
+                    text: data.elementAt(index),
+                  ),
+                  onTap: (str) {
+                    searchBar.submit(context, str);
+                  },
+                  onAdded: searchBar.appendTyped,
+                ),
+              );
+            },
+            childCount: data.length,
+          ),
+        ),
+      LoadingFetchResult() => const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 128,
+            child: Center(child: RefreshProgressIndicator()),
+          ),
+        ),
+      ErrorFetchResult(:final error) => _ErrorSuggestion(
+          error: error,
+          query: searchBar.value,
+          serverName: server.name,
+        ),
+    };
   }
 }
 
@@ -236,8 +271,8 @@ class _ErrorSuggestion extends StatelessWidget {
   }
 }
 
-class SuggestionEntry {
-  SuggestionEntry({
+class _SuggestionEntry {
+  _SuggestionEntry({
     this.text = '',
     this.server = '',
     required this.isHistory,
@@ -255,7 +290,7 @@ class _SuggestionEntryTile extends StatelessWidget {
     required this.onAdded,
   });
 
-  final SuggestionEntry data;
+  final _SuggestionEntry data;
   final Function(String entry) onTap;
   final Function(String entry) onAdded;
 
