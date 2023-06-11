@@ -4,13 +4,18 @@ import 'dart:convert';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 import 'package:xml2json/xml2json.dart';
 
 class SafebooruXmlParser extends BooruParser {
-  SafebooruXmlParser(super.server);
+  SafebooruXmlParser(this.server);
+  @override
+  final ServerData server;
+
   @override
   bool canParsePage(Response res) {
     final data = res.data;
@@ -24,8 +29,6 @@ class SafebooruXmlParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
-    super.parsePage(res);
-
     final entries = [];
     final xjson = Xml2Json();
     xjson.parse(res.data.replaceAll('\\', ''));
@@ -76,10 +79,10 @@ class SafebooruXmlParser extends BooruParser {
         result.add(
           Post(
             id: id,
-            originalFile: normalizeUrl(originalFile),
-            sampleFile: normalizeUrl(sampleFile),
-            previewFile: normalizeUrl(previewFile),
-            tags: tags.map(decodeTag).toList(),
+            originalFile: BooruUtil.normalizeUrl(server, originalFile),
+            sampleFile: BooruUtil.normalizeUrl(server, sampleFile),
+            previewFile: BooruUtil.normalizeUrl(server, previewFile),
+            tags: tags.map(BooruUtil.decodeTag).toList(),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
@@ -111,8 +114,6 @@ class SafebooruXmlParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
-    super.parseSuggestion(res);
-
     final data = res.data;
     final entries = [];
 
@@ -138,7 +139,9 @@ class SafebooruXmlParser extends BooruParser {
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
       final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
-      if (postCount > 0 && tag.isNotEmpty) result.add(decodeTag(tag));
+      if (postCount > 0 && tag.isNotEmpty) {
+        result.add(BooruUtil.decodeTag(tag));
+      }
     }
 
     return result;

@@ -7,13 +7,12 @@ import 'package:boorusphere/data/repository/booru/parser/e621json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/no_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/szuruboorujson_parser.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
-import 'package:boorusphere/utils/server_url_util.dart';
 import 'package:dio/dio.dart';
 
 class BooruRepo implements ImageboardRepo {
@@ -41,7 +40,7 @@ class BooruRepo implements ImageboardRepo {
   Future<Set<String>> getSuggestion(String word) async {
     final suggestionUrl = server.suggestionUrlsOf(word);
 
-    final (url, headers) = ServerURLUtil.constructHeaders(suggestionUrl);
+    final (url, headers) = BooruUtil.constructHeaders(suggestionUrl);
     final res = await client.get(url, options: _opt.copyWith(headers: headers));
     final data = parser
         .firstWhere((it) => it.canParseSuggestion(res), orElse: NoParser.new)
@@ -54,7 +53,7 @@ class BooruRepo implements ImageboardRepo {
   Future<Set<Post>> getPage(PageOption option, int index) async {
     final searchUrl = server.searchUrlOf(
         option.query, index, option.searchRating, option.limit);
-    final (url, headers) = ServerURLUtil.constructHeaders(searchUrl);
+    final (url, headers) = BooruUtil.constructHeaders(searchUrl);
     final res = await client.get(url, options: _opt.copyWith(headers: headers));
     final data = parser
         .firstWhere((it) => it.canParsePage(res), orElse: NoParser.new)

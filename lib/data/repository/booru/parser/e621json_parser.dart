@@ -1,11 +1,16 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class E621JsonParser extends BooruParser {
-  E621JsonParser(super.server);
+  E621JsonParser(this.server);
+
+  @override
+  final ServerData server;
 
   @override
   bool canParsePage(Response res) {
@@ -60,10 +65,9 @@ class E621JsonParser extends BooruParser {
         result.add(
           Post(
             id: id,
-            originalFile: normalizeUrl(originalFile),
-            sampleFile: normalizeUrl(sampleFile),
-            previewFile: normalizeUrl(previewFile),
-            tags: [],
+            originalFile: BooruUtil.normalizeUrl(server, originalFile),
+            sampleFile: BooruUtil.normalizeUrl(server, sampleFile),
+            previewFile: BooruUtil.normalizeUrl(server, previewFile),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
@@ -74,11 +78,11 @@ class E621JsonParser extends BooruParser {
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
-            tagsArtist: tagsArtist.map(decodeTag).toList(),
-            tagsCharacter: tagsCharacter.map(decodeTag).toList(),
-            tagsCopyright: tagsCopyright.map(decodeTag).toList(),
-            tagsGeneral: tagsGeneral.map(decodeTag).toList(),
-            tagsMeta: tagsMeta.map(decodeTag).toList(),
+            tagsArtist: tagsArtist.map(BooruUtil.decodeTag).toList(),
+            tagsCharacter: tagsCharacter.map(BooruUtil.decodeTag).toList(),
+            tagsCopyright: tagsCopyright.map(BooruUtil.decodeTag).toList(),
+            tagsGeneral: tagsGeneral.map(BooruUtil.decodeTag).toList(),
+            tagsMeta: tagsMeta.map(BooruUtil.decodeTag).toList(),
             score: score,
           ),
         );
@@ -91,5 +95,10 @@ class E621JsonParser extends BooruParser {
   @override
   bool canParseSuggestion(Response res) {
     return false;
+  }
+
+  @override
+  Iterable<String> parseSuggestion(Response res) {
+    throw UnimplementedError();
   }
 }

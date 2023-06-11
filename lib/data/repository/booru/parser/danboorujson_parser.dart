@@ -1,11 +1,16 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class DanbooruJsonParser extends BooruParser {
-  DanbooruJsonParser(super.server);
+  DanbooruJsonParser(this.server);
+
+  @override
+  final ServerData server;
 
   @override
   bool canParsePage(Response res) {
@@ -15,7 +20,6 @@ class DanbooruJsonParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
-    super.parsePage(res);
     final entries = List.from(res.data);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -48,25 +52,21 @@ class DanbooruJsonParser extends BooruParser {
         result.add(
           Post(
             id: id,
-            originalFile: normalizeUrl(originalFile),
-            sampleFile: normalizeUrl(sampleFile),
-            previewFile: normalizeUrl(previewFile),
+            originalFile: BooruUtil.normalizeUrl(server, originalFile),
+            sampleFile: BooruUtil.normalizeUrl(server, sampleFile),
+            previewFile: BooruUtil.normalizeUrl(server, previewFile),
             tags: tags,
             width: width,
             height: height,
-            sampleWidth: 0,
-            sampleHeight: 0,
-            previewWidth: 0,
-            previewHeight: 0,
             serverId: server.id,
             postUrl: postUrl,
             rateValue: rating.isEmpty ? 'q' : rating,
             source: source,
-            tagsArtist: tagsArtist.map(decodeTag).toList(),
-            tagsCharacter: tagsCharacter.map(decodeTag).toList(),
-            tagsCopyright: tagsCopyright.map(decodeTag).toList(),
-            tagsGeneral: tagsGeneral.map(decodeTag).toList(),
-            tagsMeta: tagsMeta.map(decodeTag).toList(),
+            tagsArtist: tagsArtist.map(BooruUtil.decodeTag).toList(),
+            tagsCharacter: tagsCharacter.map(BooruUtil.decodeTag).toList(),
+            tagsCopyright: tagsCopyright.map(BooruUtil.decodeTag).toList(),
+            tagsGeneral: tagsGeneral.map(BooruUtil.decodeTag).toList(),
+            tagsMeta: tagsMeta.map(BooruUtil.decodeTag).toList(),
             score: score,
           ),
         );
@@ -86,14 +86,14 @@ class DanbooruJsonParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
-    super.parseSuggestion(res);
-
     final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
       final postCount = pick(entry, 'post_count').asIntOrNull() ?? 0;
-      if (postCount > 0 && tag.isNotEmpty) result.add(decodeTag(tag));
+      if (postCount > 0 && tag.isNotEmpty) {
+        result.add(BooruUtil.decodeTag(tag));
+      }
     }
 
     return result;

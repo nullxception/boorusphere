@@ -1,10 +1,15 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class SzurubooruJsonParser extends BooruParser {
-  SzurubooruJsonParser(super.server);
+  SzurubooruJsonParser(this.server);
+
+  @override
+  final ServerData server;
 
   @override
   bool canParsePage(Response res) {
@@ -17,7 +22,6 @@ class SzurubooruJsonParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
-    super.parsePage(res);
     final entries = List.from(res.data['results']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -37,7 +41,7 @@ class SzurubooruJsonParser extends BooruParser {
       final tags = pick(post, 'tags').asListOrEmpty((x) {
         final obj = x.asMapOrEmpty()['names'];
         if (obj is List) {
-          return obj.map((e) => decodeTag(e.toString()));
+          return obj.map((e) => BooruUtil.decodeTag(e.toString()));
         }
 
         return <String>[];
@@ -51,8 +55,8 @@ class SzurubooruJsonParser extends BooruParser {
         result.add(
           Post(
             id: id,
-            originalFile: normalizeUrl(originalFile),
-            previewFile: normalizeUrl(previewFile),
+            originalFile: BooruUtil.normalizeUrl(server, originalFile),
+            previewFile: BooruUtil.normalizeUrl(server, previewFile),
             tags: tags.toList(),
             width: width,
             height: height,
@@ -79,7 +83,6 @@ class SzurubooruJsonParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
-    super.parseSuggestion(res);
     final entries = List.from(res.data['results']);
     final result = <String>{};
     for (final entry in entries.whereType<Map<String, dynamic>>()) {

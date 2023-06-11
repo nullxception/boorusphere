@@ -1,11 +1,16 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
+import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class KonachanJsonParser extends BooruParser {
-  KonachanJsonParser(super.server);
+  KonachanJsonParser(this.server);
+
+  @override
+  final ServerData server;
 
   @override
   bool canParsePage(Response res) {
@@ -16,7 +21,6 @@ class KonachanJsonParser extends BooruParser {
 
   @override
   List<Post> parsePage(res) {
-    super.parsePage(res);
     final entries = List.from(res.data);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -48,10 +52,10 @@ class KonachanJsonParser extends BooruParser {
         result.add(
           Post(
             id: id,
-            originalFile: normalizeUrl(originalFile),
-            sampleFile: normalizeUrl(sampleFile),
-            previewFile: normalizeUrl(previewFile),
-            tags: tags.map(decodeTag).toList(),
+            originalFile: BooruUtil.normalizeUrl(server, originalFile),
+            sampleFile: BooruUtil.normalizeUrl(server, sampleFile),
+            previewFile: BooruUtil.normalizeUrl(server, previewFile),
+            tags: tags.map(BooruUtil.decodeTag).toList(),
             width: width,
             height: height,
             sampleWidth: sampleWidth,
@@ -82,13 +86,14 @@ class KonachanJsonParser extends BooruParser {
 
   @override
   Set<String> parseSuggestion(Response res) {
-    super.parseSuggestion(res);
     final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
       final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
-      if (postCount > 0 && tag.isNotEmpty) result.add(decodeTag(tag));
+      if (postCount > 0 && tag.isNotEmpty) {
+        result.add(BooruUtil.decodeTag(tag));
+      }
     }
 
     return result;

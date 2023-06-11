@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
-import 'package:boorusphere/utils/server_url_util.dart';
 import 'package:dio/dio.dart';
 
 enum _PayloadType {
@@ -56,7 +56,7 @@ class ServerScanner {
         .replaceAll('{post-id}', '100');
     try {
       final testUrl = '$host/$test';
-      final (url, headers) = ServerURLUtil.constructHeaders(testUrl);
+      final (url, headers) = BooruUtil.constructHeaders(testUrl);
       final res = await client.get(
         url,
         options: Options(
