@@ -3,6 +3,7 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:path/path.dart' as path;
 
 abstract class BooruParser {
   BooruParser(this.server);
@@ -22,6 +23,10 @@ abstract class BooruParser {
   }
 
   String normalizeUrl(String urlString) {
+    if (urlString.isEmpty) {
+      // wtf are you doing here
+      return '';
+    }
     try {
       final uri = Uri.parse(urlString);
       if (uri.hasScheme && uri.hasAuthority && uri.hasAbsolutePath) {
@@ -32,12 +37,13 @@ abstract class BooruParser {
       final apiAddr = Uri.parse(server.apiAddress);
       final scheme = apiAddr.scheme == 'https' ? Uri.https : Uri.http;
 
-      if (uri.hasAbsolutePath && !uri.hasScheme) {
-        return scheme(
-          !uri.hasAuthority ? apiAddr.authority : uri.authority,
-          uri.path,
-          uri.hasQuery ? uri.queryParametersAll : null,
-        ).toString();
+      if (!uri.hasScheme) {
+        final cpath = path.Context(style: path.Style.url);
+        final newAuth = uri.hasAuthority ? uri.authority : apiAddr.authority;
+        final newPath = cpath.join(apiAddr.path, uri.path);
+        final newQuery = uri.hasQuery ? uri.queryParametersAll : null;
+        final newUri = scheme(newAuth, newPath, newQuery);
+        return newUri.toString();
       }
 
       // nothing we can do when there's no authority and path at all
