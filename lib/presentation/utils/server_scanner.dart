@@ -123,7 +123,7 @@ class ServerScanner {
       },
     );
     final result = await Future.wait<_ScanResult>(
-      queries.map((q) => _tryQuery(host, q, type)),
+      queries.where((x) => x.isNotEmpty).map((x) => _tryQuery(host, x, type)),
     );
 
     final firstFound = result.firstWhere(
