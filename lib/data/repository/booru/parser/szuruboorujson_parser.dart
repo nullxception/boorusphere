@@ -9,6 +9,17 @@ class SzurubooruJsonParser extends BooruParser {
   SzurubooruJsonParser(this.server);
 
   @override
+  final postUrl = 'post/{post-id}';
+
+  @override
+  final searchQuery =
+      'api/posts/?offset={post-offset}&limit={post-limit}&query={tags}#opt?json=1';
+
+  @override
+  final suggestionQuery =
+      'api/tags/?offset=0&limit={post-limit}&query={tag-part}*#opt?json=1';
+
+  @override
   final ServerData server;
 
   @override

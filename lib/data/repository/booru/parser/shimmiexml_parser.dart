@@ -13,6 +13,17 @@ import 'package:xml2json/xml2json.dart';
 
 class ShimmieXmlParser extends BooruParser {
   ShimmieXmlParser(this.server);
+
+  @override
+  final postUrl = 'post/view/{post-id}';
+
+  @override
+  final searchQuery =
+      'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}';
+
+  @override
+  final suggestionQuery = 'api/internal/autocomplete?s={tag-part}';
+
   @override
   final ServerData server;
 

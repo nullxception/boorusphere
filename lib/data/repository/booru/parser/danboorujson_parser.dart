@@ -10,6 +10,17 @@ class DanbooruJsonParser extends BooruParser {
   DanbooruJsonParser(this.server);
 
   @override
+  final postUrl = 'posts/{post-id}';
+
+  @override
+  final suggestionQuery =
+      'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}';
+
+  @override
+  final searchQuery =
+      'posts.json?tags={tags}&page={page-id}&limit={post-limit}';
+
+  @override
   final ServerData server;
 
   @override

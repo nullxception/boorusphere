@@ -13,6 +13,18 @@ import 'package:xml2json/xml2json.dart';
 
 class GelbooruXmlParser extends BooruParser {
   GelbooruXmlParser(this.server);
+
+  @override
+  final postUrl = 'index.php?page=post&s=view&id={post-id}';
+
+  @override
+  final suggestionQuery =
+      'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}';
+
+  @override
+  final searchQuery =
+      'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}';
+
   @override
   final ServerData server;
 

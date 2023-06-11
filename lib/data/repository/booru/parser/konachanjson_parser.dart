@@ -10,6 +10,16 @@ class KonachanJsonParser extends BooruParser {
   KonachanJsonParser(this.server);
 
   @override
+  final postUrl = 'post/show/{post-id}';
+
+  @override
+  final suggestionQuery =
+      'tag.json?name=*{tag-part}*&order=count&limit={post-limit}';
+
+  @override
+  final searchQuery = 'post.json?tags={tags}&page={page-id}&limit={post-limit}';
+
+  @override
   final ServerData server;
 
   @override

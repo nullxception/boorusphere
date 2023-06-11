@@ -1,5 +1,14 @@
 import 'dart:async';
 
+import 'package:boorusphere/data/repository/booru/parser/booruonrailsjson_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/danboorujson_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/danbooruv113json_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/danbooruv113xml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/gelboorujson_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/gelbooruxml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/szuruboorujson_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -41,6 +50,18 @@ class ServerScanner {
   final Dio client;
 
   late CancelToken _cancelToken = CancelToken();
+
+  final parsers = [
+    KonachanJsonParser(ServerData.empty),
+    DanbooruJsonParser(ServerData.empty),
+    DanbooruV113JsonParser(),
+    GelbooruJsonParser(ServerData.empty),
+    BooruOnRailsJsonParser(ServerData.empty),
+    SzurubooruJsonParser(ServerData.empty),
+    ShimmieXmlParser(ServerData.empty),
+    DanbooruV113XmlParser(),
+    GelbooruXmlParser(ServerData.empty),
+  ];
 
   Future<_ScanResult> _tryQuery(
     String host,
@@ -93,11 +114,14 @@ class ServerScanner {
     }
   }
 
-  Future<_Payload> _test(
-    String host,
-    List<String> queries,
-    _PayloadType type,
-  ) async {
+  Future<_Payload> _makeStubRequests(String host, _PayloadType type) async {
+    final queries = parsers.map(
+      (e) => switch (type) {
+        _PayloadType.post => e.postUrl,
+        _PayloadType.search => e.searchQuery,
+        _PayloadType.suggestion => e.suggestionQuery,
+      },
+    );
     final result = await Future.wait<_ScanResult>(
       queries.map((q) => _tryQuery(host, q, type)),
     );
@@ -125,9 +149,9 @@ class ServerScanner {
     final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
 
     final tests = await Future.wait([
-      _test(api, searchQueries, _PayloadType.search),
-      _test(api, suggestionQueries, _PayloadType.suggestion),
-      _test(home, webPostUrls, _PayloadType.post),
+      _makeStubRequests(api, _PayloadType.search),
+      _makeStubRequests(api, _PayloadType.suggestion),
+      _makeStubRequests(home, _PayloadType.post),
     ]);
 
     return tests.fold<ServerData>(
@@ -153,40 +177,4 @@ class ServerScanner {
       },
     );
   }
-
-  static const searchQueries = [
-    // JSON
-    'post.json?tags={tags}&page={page-id}&limit={post-limit}',
-    'posts.json?tags={tags}&page={page-id}&limit={post-limit}',
-    'post/index.json?limit={post-limit}&page={page-id}&tags={tags}',
-    'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
-    'api/v1/json/search/images?q={tags}&per_page={post-limit}&page={page-id}',
-    'api/posts/?offset={post-offset}&limit={post-limit}&query={tags}#opt?json=1',
-    // XML
-    'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}',
-    'post/index.xml?limit={post-limit}&page={page-id}&tags={tags}',
-    'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}',
-  ];
-
-  static const suggestionQueries = [
-    // JSON
-    'tag.json?name=*{tag-part}*&order=count&limit={post-limit}',
-    'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}',
-    'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}',
-    'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}&json=1',
-    'api/v1/json/search/tags?q={tag-part}',
-    'api/tags/?offset=0&limit={post-limit}&query={tag-part}*#opt?json=1',
-    // XML
-    'api/internal/autocomplete?s={tag-part}',
-    'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}',
-    'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}',
-  ];
-
-  static const webPostUrls = [
-    'post/{post-id}',
-    'posts/{post-id}',
-    'post/show/{post-id}',
-    'post/view/{post-id}',
-    'index.php?page=post&s=view&id={post-id}',
-  ];
 }

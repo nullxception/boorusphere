@@ -11,6 +11,13 @@ class BooruOnRailsJsonParser extends BooruParser {
   BooruOnRailsJsonParser(this.server);
 
   @override
+  final suggestionQuery = 'api/v1/json/search/tags?q={tag-part}';
+
+  @override
+  final searchQuery =
+      'api/v1/json/search/images?q={tags}&per_page={post-limit}&page={page-id}';
+
+  @override
   final ServerData server;
 
   @override
@@ -20,7 +27,7 @@ class BooruOnRailsJsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(res) {
+  List<Post> parsePage(Response res) {
     final entries = List.from(res.data['images']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
