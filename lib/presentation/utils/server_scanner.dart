@@ -161,6 +161,7 @@ class ServerScanner {
     'post/index.json?limit={post-limit}&page={page-id}&tags={tags}',
     'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1',
     'api/v1/json/search/images?q={tags}&per_page={post-limit}&page={page-id}',
+    'api/posts/?offset={post-offset}&limit={post-limit}&query={tags}#opt?json=1',
     // XML
     'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}',
     'post/index.xml?limit={post-limit}&page={page-id}&tags={tags}',
@@ -174,6 +175,7 @@ class ServerScanner {
     'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}',
     'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}&json=1',
     'api/v1/json/search/tags?q={tag-part}',
+    'api/tags/?offset=0&limit={post-limit}&query={tag-part}*#opt?json=1',
     // XML
     'api/internal/autocomplete?s={tag-part}',
     'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}',
@@ -181,6 +183,7 @@ class ServerScanner {
   ];
 
   static const webPostUrls = [
+    'post/{post-id}',
     'posts/{post-id}',
     'post/show/{post-id}',
     'post/view/{post-id}',

@@ -32,26 +32,14 @@ class ServerData with _$ServerData {
     int postLimit,
   ) {
     String tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
-    switch (searchRating) {
-      case BooruRating.safe:
-        tags += ' rating:safe';
-        break;
-      case BooruRating.questionable:
-        tags += ' rating:questionable';
-        break;
-      case BooruRating.explicit:
-        tags += ' rating:explicit';
-        break;
-      case BooruRating.sensitive:
-        tags += ' rating:sensitive';
-        break;
-      default:
-        break;
-    }
-
-    // booru-on-rails doesn't support rating:x
-    if (searchUrl.contains('api/v1/json/search')) {
+    if (searchUrl.contains(RegExp(r'.*[\?&]offset=.*#opt\?json=1'))) {
+      // Szurubooru has exclusive-way (but still same shit) of rating
+      tags += ' ${_szuruRateString(searchRating)}';
+    } else if (searchUrl.contains('api/v1/json/search')) {
+      // booru-on-rails didn't support rating
       tags = tags.replaceAll('rating:', '');
+    } else {
+      tags += ' ${_rateString(searchRating)}';
     }
 
     return '$homepage/$searchUrl'
@@ -101,4 +89,23 @@ class ServerData with _$ServerData {
 
   static const ServerData empty = ServerData();
   static const String defaultTag = '*';
+}
+
+String _rateString(BooruRating searchRating) {
+  return switch (searchRating) {
+    BooruRating.safe => 'rating:safe',
+    BooruRating.questionable => 'rating:questionable',
+    BooruRating.explicit => 'rating:explicit',
+    BooruRating.sensitive => 'rating:sensitive',
+    _ => ''
+  };
+}
+
+String _szuruRateString(BooruRating searchRating) {
+  return switch (searchRating) {
+    BooruRating.safe => 'safety:safe',
+    BooruRating.questionable => 'safety:sketchy',
+    BooruRating.sensitive || BooruRating.explicit => 'safety:unsafe',
+    _ => ''
+  };
 }
