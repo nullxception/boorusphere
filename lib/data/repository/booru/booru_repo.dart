@@ -12,6 +12,7 @@ import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dar
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
+import 'package:boorusphere/utils/server_url_util.dart';
 import 'package:dio/dio.dart';
 
 class BooruRepo implements ImageboardRepo {
@@ -36,8 +37,10 @@ class BooruRepo implements ImageboardRepo {
 
   @override
   Future<Set<String>> getSuggestion(String word) async {
-    final url = server.suggestionUrlsOf(word);
-    final res = await client.get(url, options: _opt);
+    final suggestionUrl = server.suggestionUrlsOf(word);
+
+    final (url, headers) = ServerURLUtil.constructHeaders(suggestionUrl);
+    final res = await client.get(url, options: _opt.copyWith(headers: headers));
     final data = parser
         .firstWhere((it) => it.canParseSuggestion(res), orElse: NoParser.new)
         .parseSuggestion(res);
@@ -47,9 +50,10 @@ class BooruRepo implements ImageboardRepo {
 
   @override
   Future<Set<Post>> getPage(PageOption option, int index) async {
-    final url = server.searchUrlOf(
+    final searchUrl = server.searchUrlOf(
         option.query, index, option.searchRating, option.limit);
-    final res = await client.get(url, options: _opt);
+    final (url, headers) = ServerURLUtil.constructHeaders(searchUrl);
+    final res = await client.get(url, options: _opt.copyWith(headers: headers));
     final data = parser
         .firstWhere((it) => it.canParsePage(res), orElse: NoParser.new)
         .parsePage(res);
