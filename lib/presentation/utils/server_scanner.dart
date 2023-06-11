@@ -51,6 +51,7 @@ class ServerScanner {
         .replaceAll('{tag-part}', 'a')
         .replaceAll('{post-limit}', '3')
         .replaceAll('{page-id}', '1')
+        .replaceAll('{post-offset}', '3')
         .replaceAll('{post-id}', '100');
     try {
       final res = await client.get(

@@ -21,6 +21,16 @@ class ServerDetails extends HookConsumerWidget {
   final Function(ServerData) onSubmitted;
   final bool isEditing;
 
+  bool hasProperServerQuery(String? value) {
+    if (value == null) {
+      return false;
+    }
+
+    return value.contains('{tags}') &&
+        value.contains(RegExp(r'\{(page-id|post-offset)\}')) &&
+        value.contains('{post-limit}');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverData = ref.watch(serverDataStateProvider);
@@ -159,10 +169,7 @@ class ServerDetails extends HookConsumerWidget {
                     labelText: context.t.serverQuery.search,
                   ),
                   validator: (value) {
-                    if (value != null &&
-                        value.contains('{tags}') &&
-                        value.contains('{page-id}') &&
-                        value.contains('{post-limit}')) {
+                    if (hasProperServerQuery(value)) {
                       return null;
                     }
 

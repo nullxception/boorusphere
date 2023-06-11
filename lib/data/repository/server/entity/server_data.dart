@@ -57,6 +57,7 @@ class ServerData with _$ServerData {
     return '$homepage/$searchUrl'
         .replaceAll('{tags}', Uri.encodeComponent(tags.trim()))
         .replaceAll('{page-id}', '$page')
+        .replaceAll('{post-offset}', (page * postLimit).toString())
         .replaceAll('{post-limit}', '$postLimit');
   }
 
