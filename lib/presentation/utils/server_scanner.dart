@@ -20,25 +20,15 @@ enum _PayloadType {
   post,
 }
 
-class _Payload {
-  const _Payload({
-    required this.result,
-    required this.type,
-  });
-
-  final _ScanResult result;
-  final _PayloadType type;
-}
-
 class _ScanResult {
   const _ScanResult({
     this.origin = '',
-    this.query = '',
+    this.payloadData = ('', ''),
     this.hasFileUrl = false,
   });
 
   final String origin;
-  final String query;
+  final (String, String) payloadData;
   final bool hasFileUrl;
 
   static const empty = _ScanResult();
@@ -65,10 +55,11 @@ class ServerScanner {
 
   Future<_ScanResult> _tryQuery(
     String host,
-    String query,
+    (String, String) payloadData,
     _PayloadType type,
   ) async {
-    final test = query
+    final (loadName, loadQuery) = payloadData;
+    final test = loadQuery
         .replaceAll('{tags}', '*')
         .replaceAll('{tag-part}', 'a')
         .replaceAll('{post-limit}', '3')
@@ -93,7 +84,7 @@ class ServerScanner {
           : host;
 
       if (type == _PayloadType.post) {
-        return _ScanResult(origin: origin, query: query);
+        return _ScanResult(origin: origin, payloadData: payloadData);
       }
 
       final contentType = res.headers['content-type'] ?? [];
@@ -104,9 +95,12 @@ class ServerScanner {
       }
 
       final fileUrlRegExp = RegExp("https?://.*/.+\\.[a-zA-Z]{2,4}[\"']");
+      final query =
+          contentType.any((it) => it.contains('html')) ? '' : loadQuery;
+
       return _ScanResult(
         origin: origin,
-        query: contentType.any((it) => it.contains('html')) ? '' : query,
+        payloadData: (loadName, query),
         hasFileUrl: strData.contains(fileUrlRegExp),
       );
     } on DioException {
@@ -114,28 +108,29 @@ class ServerScanner {
     }
   }
 
-  Future<_Payload> _makeStubRequests(String host, _PayloadType type) async {
+  Future<(_PayloadType, _ScanResult)> _makeStubRequests(
+      String host, _PayloadType type) async {
     final queries = parsers.map(
       (e) => switch (type) {
-        _PayloadType.post => e.postUrl,
-        _PayloadType.search => e.searchQuery,
-        _PayloadType.suggestion => e.suggestionQuery,
+        _PayloadType.post => (e.id, e.postUrl),
+        _PayloadType.search => (e.id, e.searchQuery),
+        _PayloadType.suggestion => (e.id, e.suggestionQuery),
       },
     );
     final result = await Future.wait<_ScanResult>(
-      queries.where((x) => x.isNotEmpty).map((x) => _tryQuery(host, x, type)),
+      queries.map((x) => _tryQuery(host, x, type)),
     );
 
     final firstFound = result.firstWhere(
-      (it) => it.query.isNotEmpty,
+      (it) => it.payloadData.$2.isNotEmpty,
       orElse: () => _ScanResult(origin: host),
     );
 
-    return _Payload(
-      result: type == _PayloadType.search
+    return (
+      type,
+      type == _PayloadType.search
           ? result.firstWhere((it) => it.hasFileUrl, orElse: () => firstFound)
           : firstFound,
-      type: type,
     );
   }
 
@@ -157,21 +152,26 @@ class ServerScanner {
     return tests.fold<ServerData>(
       ServerData(id: home.toUri().host),
       (prev, it) {
-        switch (it.type) {
+        final (type, res) = it;
+        final (payloadType, payloadUrl) = res.payloadData;
+
+        switch (type) {
           case _PayloadType.search:
             return prev.copyWith(
-              searchUrl: it.result.query,
-              apiAddr: it.result.origin,
+              searchParserId: payloadType,
+              searchUrl: payloadUrl,
+              apiAddr: res.origin,
             );
           case _PayloadType.suggestion:
             return prev.copyWith(
-              tagSuggestionUrl: it.result.query,
-              apiAddr: it.result.origin,
+              suggestionParserId: payloadType,
+              tagSuggestionUrl: payloadUrl,
+              apiAddr: res.origin,
             );
           case _PayloadType.post:
             return prev.copyWith(
-              postUrl: it.result.query,
-              homepage: it.result.origin,
+              postUrl: payloadUrl,
+              homepage: res.origin,
             );
         }
       },
