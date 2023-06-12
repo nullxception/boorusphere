@@ -46,6 +46,16 @@ class ServerDetails extends HookConsumerWidget {
     final cSuggestUrl = useTextEditingController(text: data.tagSuggestionUrl);
     final cPostUrl = useTextEditingController(text: data.postUrl);
 
+    useEffect(() {
+      cName.text = data.id;
+      cAlias.text = data.alias.isEmpty ? data.id : data.alias;
+      cHomepage.text = data.homepage;
+      cApiAddr.text = data.apiAddr;
+      cSearchUrl.text = data.searchUrl;
+      cSuggestUrl.text = data.tagSuggestionUrl;
+      cPostUrl.text = data.postUrl;
+    }, [data]);
+
     openPresetPage() {
       context.router.push(
         ServerPresetRoute(

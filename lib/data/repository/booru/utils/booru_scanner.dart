@@ -15,7 +15,7 @@ import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 
-enum _PayloadType {
+enum _ScanType {
   search,
   suggestion,
   post,
@@ -52,18 +52,30 @@ class BooruScanner {
     GelbooruXmlParser(ServerData.empty),
   ];
 
-  Future<_ScanResult> _tryQuery(
+  final _logsHolder = <String>[];
+  StreamController<List<String>> _logs = StreamController();
+
+  Stream<List<String>> get logs => _logs.stream;
+
+  _log([String msg = '']) {
+    if (!_logs.isClosed) {
+      _logsHolder.add(msg);
+      _logs.add(_logsHolder);
+    }
+  }
+
+  Future<_ScanResult> _scan(
     String host,
     BooruParser parser,
-    _PayloadType type,
+    _ScanType type,
   ) async {
     final loadQuery = switch (type) {
-      _PayloadType.post => parser.postUrl,
-      _PayloadType.search => parser.searchQuery,
-      _PayloadType.suggestion => parser.suggestionQuery,
+      _ScanType.post => parser.postUrl,
+      _ScanType.search => parser.searchQuery,
+      _ScanType.suggestion => parser.suggestionQuery,
     };
 
-    if (loadQuery.isEmpty) {
+    if (loadQuery.isEmpty || _cancelToken.isCancelled) {
       return _ScanResult.empty;
     }
 
@@ -76,12 +88,13 @@ class BooruScanner {
         .replaceAll('{post-id}', '100');
     try {
       final testUrl = '$host/$test';
+      _log('→ checking ${type.name}::${parser.id}...');
       final res = await client.get(
         testUrl,
         options: Options(
           validateStatus: (it) => it == 200,
           headers: parser.headers,
-          responseType: type == _PayloadType.post ? ResponseType.stream : null,
+          responseType: type == _ScanType.post ? ResponseType.stream : null,
         ),
         cancelToken: _cancelToken,
       );
@@ -90,7 +103,7 @@ class BooruScanner {
           ? res.realUri.origin
           : host;
 
-      if (type == _PayloadType.post) {
+      if (type == _ScanType.post) {
         return _ScanResult(origin: origin, parser: parser);
       }
 
@@ -107,65 +120,119 @@ class BooruScanner {
         origin: origin,
         parser: isHTMLContent ? const NoParser() : parser,
       );
-    } on DioException {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        rethrow;
+      }
+
       return _ScanResult.empty;
     }
   }
 
-  Future<(_PayloadType, _ScanResult)> _makeStubRequests(
-      String host, _PayloadType type) async {
-    final result = await Future.wait<_ScanResult>(
-      parsers.map((x) => _tryQuery(host, x, type)),
-    );
+  Stream<_ScanResult> _performScans(String host, _ScanType type) async* {
+    final results = <_ScanResult>[];
+    final requests = parsers.mapIndexed((i, parser) async {
+      if (i > 0) {
+        await Future.delayed(Duration(milliseconds: i * 100));
+      }
+      return _scan(host, parser, type);
+    });
 
-    result.sortBy((x) => x.parser.id.fileExt);
-    final firstFound = result.firstWhere(
+    await for (final result in Future.wait(requests).asStream()) {
+      for (final scanResult in result) {
+        if (scanResult != _ScanResult.empty) {
+          results.add(scanResult);
+        }
+
+        if (_logs.isClosed) return;
+        yield _ScanResult.empty;
+      }
+    }
+
+    results.sortBy((x) => x.parser.id.fileExt);
+    final firstFound = results.firstWhere(
       (it) => it.parser is! NoParser,
       orElse: () => _ScanResult(origin: host),
     );
-    return (type, firstFound);
+
+    _log('✔️ matched: ${type.name}::${firstFound.parser.id}');
+    _log();
+    if (_logs.isClosed) return;
+    yield firstFound;
   }
 
-  void cancel() {
-    _cancelToken.cancel();
-    _cancelToken = CancelToken();
-  }
-
-  Future<ServerData> scan(String homeUrl, String apiUrl) async {
+  Stream<ServerData> scan(String homeUrl, String apiUrl) async* {
     final api = apiUrl.replaceFirst(RegExp(r'/$'), '');
     final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
+    var data = ServerData.empty;
+    _logsHolder.clear();
+    if (_logs.isClosed) {
+      _logs = StreamController();
+    }
 
-    final tests = await Future.wait([
-      _makeStubRequests(api, _PayloadType.search),
-      _makeStubRequests(api, _PayloadType.suggestion),
-      _makeStubRequests(home, _PayloadType.post),
-    ]);
+    _log('🧐 Scanning search query...');
+    _cancelToken = CancelToken();
+    final search = _performScans(api, _ScanType.search);
+    await for (var ev in search) {
+      if (ev == _ScanResult.empty) {
+        if (_logs.isClosed) return;
+        yield data;
+        continue;
+      }
+      data = data.copyWith(
+        searchParserId: ev.parser.id,
+        searchUrl: ev.parser.searchQuery,
+        apiAddr: ev.origin,
+      );
+      if (_logs.isClosed) return;
+      yield data;
+    }
 
-    return tests.fold<ServerData>(
-      ServerData(id: home.toUri().host),
-      (prev, it) {
-        final (type, res) = it;
+    _log('🧐 Scanning suggestion query...');
+    final suggestion = _performScans(api, _ScanType.suggestion);
+    await for (var ev in suggestion) {
+      if (ev == _ScanResult.empty) {
+        if (_logs.isClosed) return;
+        yield data;
+        continue;
+      }
 
-        switch (type) {
-          case _PayloadType.search:
-            return prev.copyWith(
-              searchParserId: res.parser.id,
-              searchUrl: res.parser.searchQuery,
-              apiAddr: res.origin,
-            );
-          case _PayloadType.suggestion:
-            return prev.copyWith(
-              suggestionParserId: res.parser.id,
-              tagSuggestionUrl: res.parser.suggestionQuery,
-              apiAddr: res.origin,
-            );
-          case _PayloadType.post:
-            return prev.copyWith(
-              postUrl: res.parser.postUrl,
-              homepage: res.origin,
-            );
-        }
-      },
+      data = data.copyWith(
+        suggestionParserId: ev.parser.id,
+        tagSuggestionUrl: ev.parser.suggestionQuery,
+        apiAddr: ev.origin,
+      );
+      if (_logs.isClosed) return;
+      yield data;
+    }
+
+    _log('🧐 Scanning web post query...');
+    final post = _performScans(home, _ScanType.post);
+    await for (var ev in post) {
+      if (ev == _ScanResult.empty) {
+        yield data;
+        continue;
+      }
+
+      data = data.copyWith(
+        postUrl: ev.parser.postUrl,
+        homepage: ev.origin,
+      );
+      if (_logs.isClosed) return;
+      yield data;
+    }
+
+    data = data.copyWith(
+      apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
+      id: home.toUri().host,
     );
+    if (_logs.isClosed) return;
+    yield data;
+    await stop();
+  }
+
+  Future<void> stop() async {
+    _cancelToken.cancel();
+    await _logs.close();
   }
 }
