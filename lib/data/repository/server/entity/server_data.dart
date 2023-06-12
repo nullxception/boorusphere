@@ -16,6 +16,8 @@ class ServerData with _$ServerData {
     @HiveField(4, defaultValue: '') @Default('') String apiAddr,
     @HiveField(7, defaultValue: '') @Default('') String tagSuggestionUrl,
     @HiveField(8, defaultValue: '') @Default('') String alias,
+    @HiveField(9, defaultValue: '') @Default('') String searchParserId,
+    @HiveField(10, defaultValue: '') @Default('') String suggestionParserId,
   }) = _ServerData;
 
   factory ServerData.fromJson(Map<String, dynamic> json) =>
