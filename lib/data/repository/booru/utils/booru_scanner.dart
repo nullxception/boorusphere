@@ -34,8 +34,8 @@ class _ScanResult {
   static const empty = _ScanResult();
 }
 
-class ServerScanner {
-  ServerScanner(this.client);
+class BooruScanner {
+  BooruScanner(this.client);
 
   final Dio client;
 

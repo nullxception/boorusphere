@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/provider.dart';
+import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
-import 'package:boorusphere/presentation/utils/server_scanner.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class ServerEditorPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dio = ref.watch(dioProvider);
-    final scanner = useMemoized(() => ServerScanner(dio), [dio]);
+    final scanner = useMemoized(() => BooruScanner(dio), [dio]);
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
