@@ -28,6 +28,7 @@ import 'package:boorusphere/domain/repository/settings_repo.dart';
 import 'package:boorusphere/domain/repository/tags_blocker_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:boorusphere/pigeon/app_env.pi.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,6 +55,7 @@ ImageboardRepo imageboardRepo(ImageboardRepoRef ref, ServerData server) {
   return BooruRepo(
     client: ref.watch(dioProvider),
     server: server,
+    serverDataState: ref.watch(serverDataStateProvider.notifier),
   );
 }
 

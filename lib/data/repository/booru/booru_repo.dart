@@ -13,18 +13,25 @@ import 'package:boorusphere/data/repository/booru/parser/szuruboorujson_parser.d
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
+import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class BooruRepo implements ImageboardRepo {
-  BooruRepo({required this.client, required this.server});
+  BooruRepo({
+    required this.client,
+    required this.server,
+    required this.serverDataState,
+  });
 
   final Dio client;
   final _opt = Options(validateStatus: (it) => it == 200);
+  final ServerDataState serverDataState;
 
   @override
   final ServerData server;
 
-  List<BooruParser> get parser => [
+  List<BooruParser> get parsers => [
         DanbooruJsonParser(server),
         KonachanJsonParser(server),
         GelbooruXmlParser(server),
@@ -38,27 +45,56 @@ class BooruRepo implements ImageboardRepo {
 
   @override
   Future<Set<String>> getSuggestion(String word) async {
+    var parser = parsers.firstWhere((x) => x.id == server.searchParserId,
+        orElse: NoParser.new);
+
     final suggestionUrl = server.suggestionUrlsOf(word);
 
     final (url, headers) = BooruUtil.constructHeaders(suggestionUrl);
     final res = await client.get(url, options: _opt.copyWith(headers: headers));
-    final data = parser
-        .firstWhere((it) => it.canParseSuggestion(res), orElse: NoParser.new)
-        .parseSuggestion(res);
 
-    return data.toSet();
+    if (parser is! NoParser) {
+      debugPrint('getSuggestion: using ${parser.id}_parser');
+      return parser.parseSuggestion(res).toSet();
+    }
+
+    parser = parsers.firstWhere((it) => it.canParseSuggestion(res),
+        orElse: NoParser.new);
+
+    if (parser.id.isNotEmpty) {
+      debugPrint(
+          'getSuggestion: parser resolved, now using ${parser.id}_parser');
+      await serverDataState.edit(
+          server, server.copyWith(suggestionParserId: parser.id));
+    }
+
+    return parser.parseSuggestion(res).toSet();
   }
 
   @override
   Future<Set<Post>> getPage(PageOption option, int index) async {
+    var parser = parsers.firstWhere((x) => x.id == server.searchParserId,
+        orElse: NoParser.new);
+
     final searchUrl = server.searchUrlOf(
         option.query, index, option.searchRating, option.limit);
     final (url, headers) = BooruUtil.constructHeaders(searchUrl);
     final res = await client.get(url, options: _opt.copyWith(headers: headers));
-    final data = parser
-        .firstWhere((it) => it.canParsePage(res), orElse: NoParser.new)
-        .parsePage(res);
 
-    return data.toSet();
+    if (parser is! NoParser) {
+      debugPrint('getPage: using ${parser.id}_parser');
+      return parser.parsePage(res).toSet();
+    }
+
+    parser =
+        parsers.firstWhere((it) => it.canParsePage(res), orElse: NoParser.new);
+
+    if (parser.id.isNotEmpty) {
+      debugPrint('getPage: parser resolved, now using ${parser.id}_parser');
+      await serverDataState.edit(
+          server, server.copyWith(searchParserId: parser.id));
+    }
+
+    return parser.parsePage(res).toSet();
   }
 }
