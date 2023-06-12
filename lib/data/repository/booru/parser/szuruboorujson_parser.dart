@@ -15,14 +15,20 @@ class SzurubooruJsonParser extends BooruParser {
 
   @override
   final searchQuery =
-      'api/posts/?offset={post-offset}&limit={post-limit}&query={tags}#opt?json=1';
+      'api/posts/?offset={post-offset}&limit={post-limit}&query={tags}';
 
   @override
   final suggestionQuery =
-      'api/tags/?offset=0&limit={post-limit}&query={tag-part}*#opt?json=1';
+      'api/tags/?offset=0&limit={post-limit}&query={tag-part}*';
 
   @override
   final ServerData server;
+
+  @override
+  final headers = {
+    'Accept': 'application/json',
+    'Content-type': 'application/json',
+  };
 
   @override
   bool canParsePage(Response res) {
