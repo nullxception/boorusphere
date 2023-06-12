@@ -10,7 +10,6 @@ import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dar
 import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/szuruboorujson_parser.dart';
-import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -50,8 +49,8 @@ class BooruRepo implements ImageboardRepo {
 
     final suggestionUrl = server.suggestionUrlsOf(word);
 
-    final (url, headers) = BooruUtil.constructHeaders(suggestionUrl);
-    final res = await client.get(url, options: _opt.copyWith(headers: headers));
+    final res = await client.get(suggestionUrl,
+        options: _opt.copyWith(headers: parser.headers));
 
     if (parser is! NoParser) {
       debugPrint('getSuggestion: using ${parser.id}_parser');
@@ -78,8 +77,9 @@ class BooruRepo implements ImageboardRepo {
 
     final searchUrl = server.searchUrlOf(
         option.query, index, option.searchRating, option.limit);
-    final (url, headers) = BooruUtil.constructHeaders(searchUrl);
-    final res = await client.get(url, options: _opt.copyWith(headers: headers));
+
+    final res = await client.get(searchUrl,
+        options: _opt.copyWith(headers: parser.headers));
 
     if (parser is! NoParser) {
       debugPrint('getPage: using ${parser.id}_parser');

@@ -3,11 +3,14 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:dio/dio.dart';
 
 abstract class BooruParser {
+  const BooruParser();
+
   String get id;
   ServerData get server => ServerData.empty;
   String get postUrl => '';
   String get suggestionQuery => '';
   String get searchQuery => '';
+  Map<String, String> get headers => {};
   bool canParsePage(Response res) => false;
   Iterable<Post> parsePage(Response res) => [];
   bool canParseSuggestion(Response res) => false;
@@ -15,6 +18,8 @@ abstract class BooruParser {
 }
 
 class NoParser extends BooruParser {
+  const NoParser();
+
   @override
   final id = '';
 }
