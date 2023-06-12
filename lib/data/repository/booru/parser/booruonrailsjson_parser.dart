@@ -9,6 +9,8 @@ import 'package:dio/dio.dart';
 
 class BooruOnRailsJsonParser extends BooruParser {
   BooruOnRailsJsonParser(this.server);
+  @override
+  final id = 'BooruOnRails.json';
 
   @override
   final suggestionQuery = 'api/v1/json/search/tags?q={tag-part}';

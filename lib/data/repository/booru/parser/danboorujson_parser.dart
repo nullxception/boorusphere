@@ -8,6 +8,8 @@ import 'package:dio/dio.dart';
 
 class DanbooruJsonParser extends BooruParser {
   DanbooruJsonParser(this.server);
+  @override
+  final id = 'Danbooru.json';
 
   @override
   final postUrl = 'posts/{post-id}';

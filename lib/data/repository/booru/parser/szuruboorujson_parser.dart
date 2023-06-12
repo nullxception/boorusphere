@@ -7,6 +7,8 @@ import 'package:dio/dio.dart';
 
 class SzurubooruJsonParser extends BooruParser {
   SzurubooruJsonParser(this.server);
+  @override
+  final id = 'Szurubooru.json';
 
   @override
   final postUrl = 'post/{post-id}';

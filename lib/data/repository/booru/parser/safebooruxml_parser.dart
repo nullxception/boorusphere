@@ -14,6 +14,9 @@ import 'package:xml2json/xml2json.dart';
 class SafebooruXmlParser extends BooruParser {
   SafebooruXmlParser(this.server);
   @override
+  final id = 'Safebooru.xml';
+
+  @override
   final ServerData server;
 
   @override

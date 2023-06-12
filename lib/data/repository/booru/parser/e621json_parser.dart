@@ -8,6 +8,8 @@ import 'package:dio/dio.dart';
 
 class E621JsonParser extends BooruParser {
   E621JsonParser(this.server);
+  @override
+  final id = 'E621.json';
 
   @override
   final ServerData server;

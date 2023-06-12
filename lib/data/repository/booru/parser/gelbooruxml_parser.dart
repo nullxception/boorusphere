@@ -13,6 +13,8 @@ import 'package:xml2json/xml2json.dart';
 
 class GelbooruXmlParser extends BooruParser {
   GelbooruXmlParser(this.server);
+  @override
+  final id = 'Gelbooru.xml';
 
   @override
   final postUrl = 'index.php?page=post&s=view&id={post-id}';

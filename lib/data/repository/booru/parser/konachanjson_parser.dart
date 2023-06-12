@@ -8,6 +8,8 @@ import 'package:dio/dio.dart';
 
 class KonachanJsonParser extends BooruParser {
   KonachanJsonParser(this.server);
+  @override
+  final id = 'Konachan.json';
 
   @override
   final postUrl = 'post/show/{post-id}';

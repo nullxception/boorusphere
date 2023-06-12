@@ -13,6 +13,8 @@ import 'package:xml2json/xml2json.dart';
 
 class ShimmieXmlParser extends BooruParser {
   ShimmieXmlParser(this.server);
+  @override
+  final id = 'Shimmie.xml';
 
   @override
   final postUrl = 'post/view/{post-id}';

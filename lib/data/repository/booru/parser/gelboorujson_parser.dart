@@ -9,6 +9,9 @@ import 'package:dio/dio.dart';
 class GelbooruJsonParser extends BooruParser {
   GelbooruJsonParser(this.server);
   @override
+  final id = 'Gelbooru.json';
+
+  @override
   final suggestionQuery =
       'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}&json=1';
 
