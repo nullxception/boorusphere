@@ -1,21 +1,27 @@
 import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/booruonrailsjson_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/danboorujson_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/danbooruv113json_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/danbooruv113xml_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/e621json_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/gelboorujson_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/gelbooruxml_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
-import 'package:boorusphere/data/repository/booru/parser/szuruboorujson_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+BooruScanner useBooruScanner(
+  Dio client,
+  List<BooruParser> parsers, [
+  List<Object?> keys = const [],
+]) {
+  final scanner = useMemoized(() {
+    return BooruScanner(parsers: parsers, client: client);
+  }, [client, parsers, ...keys]);
+
+  useEffect(() {
+    return scanner.stop;
+  }, keys);
+
+  return scanner;
+}
 
 enum _ScanType {
   search,
@@ -27,39 +33,28 @@ class _ScanResult {
   const _ScanResult({
     this.origin = '',
     this.parserId = '',
+    this.authBuilderId,
     this.query = '',
   });
 
   final String origin;
   final String parserId;
   final String query;
+  final String? authBuilderId;
 
   static const empty = _ScanResult();
 }
 
 class BooruScanner {
-  BooruScanner(this.client);
+  BooruScanner({required this.parsers, required this.client});
 
+  final List<BooruParser> parsers;
   final Dio client;
 
   late CancelToken _cancelToken = CancelToken();
 
-  final parsers = [
-    BooruOnRailsJsonParser(ServerData.empty),
-    DanbooruJsonParser(ServerData.empty),
-    DanbooruV113JsonParser(),
-    DanbooruV113XmlParser(),
-    E621JsonParser(ServerData.empty),
-    GelbooruJsonParser(ServerData.empty),
-    GelbooruXmlParser(ServerData.empty),
-    KonachanJsonParser(ServerData.empty),
-    SafebooruXmlParser(ServerData.empty),
-    ShimmieXmlParser(ServerData.empty),
-    SzurubooruJsonParser(ServerData.empty),
-  ];
-
   final _logsHolder = <String>[];
-  StreamController<List<String>> _logs = StreamController();
+  late StreamController<List<String>> _logs = StreamController.broadcast();
 
   Stream<List<String>> get logs => _logs.stream;
 
@@ -71,10 +66,10 @@ class BooruScanner {
   }
 
   Future<_ScanResult> _scan(
-    String host,
-    BooruParser parser,
-    _ScanType type,
-  ) async {
+    String host, {
+    required BooruParser parser,
+    required _ScanType type,
+  }) async {
     final loadQuery = switch (type) {
       _ScanType.post => parser.postUrl,
       _ScanType.search => parser.searchQuery,
@@ -117,13 +112,19 @@ class BooruScanner {
       if (type == _ScanType.search) {
         if (parser.canParsePage(res)) {
           return _ScanResult(
-              origin: origin, parserId: parser.id, query: parser.searchQuery);
+              origin: origin,
+              parserId: parser.id,
+              query: parser.searchQuery,
+              authBuilderId: parser.id);
         }
 
         final realParser = parsers.firstWhere((x) => x.canParsePage(res),
             orElse: NoParser.new);
         return _ScanResult(
-            origin: origin, parserId: realParser.id, query: parser.searchQuery);
+            origin: origin,
+            parserId: realParser.id,
+            query: parser.searchQuery,
+            authBuilderId: parser.id);
       }
 
       if (type == _ScanType.suggestion) {
@@ -152,13 +153,14 @@ class BooruScanner {
     }
   }
 
-  Stream<_ScanResult> _performScans(String host, _ScanType type) async* {
+  Stream<_ScanResult> _performScans(String host,
+      {required _ScanType type}) async* {
     final results = <_ScanResult>[];
     final requests = parsers.mapIndexed((i, parser) async {
       if (i > 0) {
         await Future.delayed(Duration(milliseconds: i * 100));
       }
-      return _scan(host, parser, type);
+      return _scan(host, parser: parser, type: type);
     });
 
     await for (final result in Future.wait(requests).asStream()) {
@@ -167,7 +169,6 @@ class BooruScanner {
           results.add(scanResult);
         }
 
-        if (_logs.isClosed) return;
         yield _ScanResult.empty;
       }
     }
@@ -175,7 +176,8 @@ class BooruScanner {
     results.sortBy((x) => x.parserId.fileExt);
     final firstFound = results.firstWhere(
       (it) => it.query.isNotEmpty && it.parserId.isNotEmpty,
-      orElse: () => _ScanResult(origin: host),
+      orElse: () =>
+          _ScanResult(origin: host, authBuilderId: '', parserId: '', query: ''),
     );
 
     if (firstFound.parserId.isEmpty) {
@@ -185,43 +187,36 @@ class BooruScanner {
     }
 
     _log();
-    if (_logs.isClosed) return;
     yield firstFound;
   }
 
-  Stream<ServerData> scan(String homeUrl, String apiUrl) async* {
+  Future<ServerData> scan(String homeUrl, String apiUrl) async {
     final api = apiUrl.replaceFirst(RegExp(r'/$'), '');
     final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
     var data = ServerData.empty;
+
     _logsHolder.clear();
-    if (_logs.isClosed) {
-      _logs = StreamController();
-    }
+    _logs = StreamController.broadcast();
 
     _log('🧐 Scanning search query...');
     _cancelToken = CancelToken();
-    final search = _performScans(api, _ScanType.search);
+    final search = _performScans(api, type: _ScanType.search);
     await for (var ev in search) {
       if (ev == _ScanResult.empty) {
-        if (_logs.isClosed) return;
-        yield data;
         continue;
       }
+
       data = data.copyWith(
         searchParserId: ev.parserId,
         searchUrl: ev.query,
         apiAddr: ev.origin,
       );
-      if (_logs.isClosed) return;
-      yield data;
     }
 
     _log('🧐 Scanning suggestion query...');
-    final suggestion = _performScans(api, _ScanType.suggestion);
+    final suggestion = _performScans(api, type: _ScanType.suggestion);
     await for (var ev in suggestion) {
       if (ev == _ScanResult.empty) {
-        if (_logs.isClosed) return;
-        yield data;
         continue;
       }
 
@@ -230,15 +225,12 @@ class BooruScanner {
         tagSuggestionUrl: ev.query,
         apiAddr: ev.origin,
       );
-      if (_logs.isClosed) return;
-      yield data;
     }
 
     _log('🧐 Scanning web post query...');
-    final post = _performScans(home, _ScanType.post);
+    final post = _performScans(home, type: _ScanType.post);
     await for (var ev in post) {
       if (ev == _ScanResult.empty) {
-        yield data;
         continue;
       }
 
@@ -246,21 +238,20 @@ class BooruScanner {
         postUrl: ev.query,
         homepage: ev.origin,
       );
-      if (_logs.isClosed) return;
-      yield data;
     }
 
     data = data.copyWith(
       apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
       id: home.toUri().host,
     );
-    if (_logs.isClosed) return;
-    yield data;
+
     await stop();
+    return data;
   }
 
   Future<void> stop() async {
     _cancelToken.cancel();
+    _logsHolder.clear();
     await _logs.close();
   }
 }

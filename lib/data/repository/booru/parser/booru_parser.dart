@@ -6,15 +6,14 @@ abstract class BooruParser {
   const BooruParser();
 
   String get id;
-  ServerData get server => ServerData.empty;
   String get postUrl => '';
   String get suggestionQuery => '';
   String get searchQuery => '';
   Map<String, String> get headers => {};
   bool canParsePage(Response res) => false;
-  Iterable<Post> parsePage(Response res) => [];
+  Iterable<Post> parsePage(ServerData server, Response res) => [];
   bool canParseSuggestion(Response res) => false;
-  Iterable<String> parseSuggestion(Response res) => [];
+  Iterable<String> parseSuggestion(ServerData server, Response res) => [];
 }
 
 class NoParser extends BooruParser {

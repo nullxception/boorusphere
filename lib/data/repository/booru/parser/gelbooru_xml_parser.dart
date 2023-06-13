@@ -1,3 +1,7 @@
+import 'dart:collection';
+import 'dart:convert';
+
+import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
@@ -5,33 +9,57 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
+import 'package:xml2json/xml2json.dart';
 
-class GelbooruJsonParser extends BooruParser {
-  GelbooruJsonParser(this.server);
+class GelbooruXmlParser extends BooruParser {
   @override
-  final id = 'Gelbooru.json';
-
-  @override
-  final suggestionQuery =
-      'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}&json=1';
+  final id = 'Gelbooru.xml';
 
   @override
   final searchQuery =
-      'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}&json=1';
+      'index.php?page=dapi&s=post&q=index&tags={tags}&pid={page-id}&limit={post-limit}';
 
   @override
-  final ServerData server;
+  final suggestionQuery =
+      'index.php?page=dapi&s=tag&q=index&name_pattern=%{tag-part}%&orderby=count&limit={post-limit}';
+
+  @override
+  final postUrl = 'index.php?page=post&s=view&id={post-id}';
 
   @override
   bool canParsePage(Response res) {
     final data = res.data;
-    return data is Map && data.keys.contains('post');
+    final rawString = data.toString();
+    return data is String &&
+        rawString.contains('<?xml') &&
+        rawString.contains('<posts ') &&
+        rawString.contains('<post>') &&
+        rawString.contains('<file_url>');
   }
 
   @override
-  List<Post> parsePage(res) {
-    final entries = List.from(res.data['post']);
+  List<Post> parsePage(ServerData server, Response res) {
+    final entries = [];
+    final xjson = Xml2Json();
+    xjson.parse(res.data.replaceAll('\\', ''));
+
+    final fromParkerConv = jsonDecode(xjson.toParker());
+    if (!fromParkerConv.values.first.keys.contains('post')) {
+      throw BooruError.empty;
+    }
+
+    final posts = fromParkerConv.values.first['post'];
+
+    if (posts is LinkedHashMap) {
+      entries.add(posts);
+    } else if (posts is List) {
+      entries.addAll(posts);
+    } else {
+      throw BooruError.empty;
+    }
+
     final result = <Post>[];
+
     for (final post in entries.whereType<Map<String, dynamic>>()) {
       final id = pick(post, 'id').asIntOrNull() ?? -1;
       if (result.any((it) => it.id == id)) {
@@ -80,19 +108,42 @@ class GelbooruJsonParser extends BooruParser {
         );
       }
     }
-
     return result;
   }
 
   @override
   bool canParseSuggestion(Response res) {
     final data = res.data;
-    return data is Map && data.keys.contains('tag');
+    final rawString = data.toString();
+    return data is String &&
+        rawString.contains('<?xml') &&
+        rawString.contains('<tags') &&
+        rawString.contains('<tag>') &&
+        rawString.contains('<name>');
   }
 
   @override
-  Set<String> parseSuggestion(Response res) {
-    final entries = List.from(res.data['tag']);
+  Set<String> parseSuggestion(ServerData server, Response res) {
+    final data = res.data;
+    final entries = [];
+
+    final xjson = Xml2Json();
+    xjson.parse(data.replaceAll('\\', ''));
+
+    final fromParkerConv = jsonDecode(xjson.toParker());
+    if (!fromParkerConv.values.first.keys.contains('tag')) {
+      throw StateError('no tags');
+    }
+
+    final tags = fromParkerConv.values.first['tag'];
+
+    if (tags is LinkedHashMap) {
+      entries.add(tags);
+    } else if (tags is List) {
+      entries.addAll(tags);
+    } else {
+      throw StateError('no tags');
+    }
 
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {

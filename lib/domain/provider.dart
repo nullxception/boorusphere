@@ -1,6 +1,7 @@
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/app_state/current_app_state_repo.dart';
 import 'package:boorusphere/data/repository/booru/booru_repo.dart';
+import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/changelog/app_changelog_repo.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
@@ -53,6 +54,7 @@ TagsBlockerRepo tagsBlockerRepo(TagsBlockerRepoRef ref) {
 @riverpod
 ImageboardRepo imageboardRepo(ImageboardRepoRef ref, ServerData server) {
   return BooruRepo(
+    parsers: ref.watch(booruParsersProvider),
     client: ref.watch(dioProvider),
     server: server,
     serverDataState: ref.watch(serverDataStateProvider.notifier),
@@ -81,9 +83,10 @@ SearchHistoryRepo searchHistoryRepo(SearchHistoryRepoRef ref) {
 
 @riverpod
 ServerDataRepo serverDataRepo(ServerDataRepoRef ref) {
-  final box = Hive.box<ServerData>(UserServerDataRepo.key);
-  final defaultServers = ref.watch(defaultServersProvider);
-  return UserServerDataRepo(defaultServers: defaultServers, box: box);
+  return UserServerDataRepo(
+    defaultServers: ref.watch(defaultServersProvider),
+    box: Hive.box<ServerData>(UserServerDataRepo.key),
+  );
 }
 
 @riverpod

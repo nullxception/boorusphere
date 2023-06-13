@@ -6,12 +6,8 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class SzurubooruJsonParser extends BooruParser {
-  SzurubooruJsonParser(this.server);
   @override
   final id = 'Szurubooru.json';
-
-  @override
-  final postUrl = 'post/{post-id}';
 
   @override
   final searchQuery =
@@ -22,7 +18,7 @@ class SzurubooruJsonParser extends BooruParser {
       'api/tags/?offset=0&limit={post-limit}&query={tag-part}*';
 
   @override
-  final ServerData server;
+  final postUrl = 'post/{post-id}';
 
   @override
   final headers = {
@@ -40,7 +36,7 @@ class SzurubooruJsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(res) {
+  List<Post> parsePage(ServerData server, res) {
     final entries = List.from(res.data['results']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -101,7 +97,7 @@ class SzurubooruJsonParser extends BooruParser {
   }
 
   @override
-  Set<String> parseSuggestion(Response res) {
+  Set<String> parseSuggestion(ServerData server, Response res) {
     final entries = List.from(res.data['results']);
     final result = <String>{};
     for (final entry in entries.whereType<Map<String, dynamic>>()) {

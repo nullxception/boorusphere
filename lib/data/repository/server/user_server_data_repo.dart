@@ -91,5 +91,8 @@ class UserServerDataRepo implements ServerDataRepo {
   }
 
   static const String key = 'server';
-  static Future<void> prepare() => Hive.openBox<ServerData>(key);
+
+  static Future<void> prepare() async {
+    await Hive.openBox<ServerData>(key);
+  }
 }

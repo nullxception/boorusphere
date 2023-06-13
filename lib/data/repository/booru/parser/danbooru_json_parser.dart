@@ -7,23 +7,19 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class DanbooruJsonParser extends BooruParser {
-  DanbooruJsonParser(this.server);
   @override
   final id = 'Danbooru.json';
-
-  @override
-  final postUrl = 'posts/{post-id}';
-
-  @override
-  final suggestionQuery =
-      'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}';
 
   @override
   final searchQuery =
       'posts.json?tags={tags}&page={page-id}&limit={post-limit}';
 
   @override
-  final ServerData server;
+  final suggestionQuery =
+      'tags.json?search[name_matches]=*{tag-part}*&search[order]=count&limit={post-limit}';
+
+  @override
+  final postUrl = 'posts/{post-id}';
 
   @override
   bool canParsePage(Response res) {
@@ -32,7 +28,7 @@ class DanbooruJsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(res) {
+  List<Post> parsePage(ServerData server, Response res) {
     final entries = List.from(res.data);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -98,7 +94,7 @@ class DanbooruJsonParser extends BooruParser {
   }
 
   @override
-  Set<String> parseSuggestion(Response res) {
+  Set<String> parseSuggestion(ServerData server, Response res) {
     final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {

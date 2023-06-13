@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/provider.dart';
+import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
@@ -50,18 +51,19 @@ class _ServerEditor extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dio = ref.watch(dioProvider);
-    final scanner = useMemoized(() => BooruScanner(dio), [dio]);
+    final parsers = ref.watch(booruParsersProvider);
+    final scanner = useBooruScanner(dio, parsers);
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
-    final data = useState(server);
+    final newServer = useState(server);
     final isScanning = useState(false);
     final useApiAddr = useState(false);
     final error = useState<Object?>(null);
-    final scanHomepageText = useTextEditingController(
+    final homepage = useTextEditingController(
         text: isEditing ? server.homepage : 'https://');
-    final scanApiAddrText =
-        useTextEditingController(text: isEditing ? server.apiAddr : 'https://');
+    final apiAddress = useTextEditingController(
+        text: server.apiAddr.isEmpty ? 'https://' : server.apiAddr);
 
     validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
@@ -79,7 +81,7 @@ class _ServerEditor extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextFormField(
-              controller: scanHomepageText,
+              controller: homepage,
               decoration: InputDecoration(
                 border: const UnderlineInputBorder(),
                 labelText: context.t.servers.homepageHint,
@@ -105,9 +107,9 @@ class _ServerEditor extends HookConsumerWidget {
           ),
           if (useApiAddr.value)
             Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: TextFormField(
-                controller: scanApiAddrText,
+                controller: apiAddress,
                 enableIMEPersonalizedLearning: !imeIncognito,
                 decoration: InputDecoration(
                   border: const UnderlineInputBorder(),
@@ -131,17 +133,12 @@ class _ServerEditor extends HookConsumerWidget {
                   return;
                 }
 
-                data.value = ServerData.empty;
                 isScanning.value = true;
                 error.value = null;
-                final homeAddr = scanHomepageText.text;
-                final apiAddr =
-                    useApiAddr.value ? scanApiAddrText.text : homeAddr;
+                final home = homepage.text;
+                final api = useApiAddr.value ? apiAddress.text : home;
                 try {
-                  final scan = scanner.scan(homeAddr, apiAddr);
-                  await for (var ev in scan) {
-                    data.value = ev;
-                  }
+                  newServer.value = await scanner.scan(home, api);
                 } catch (e) {
                   if (e is DioException && e.type == DioExceptionType.cancel) {
                     isScanning.value = false;
@@ -149,10 +146,11 @@ class _ServerEditor extends HookConsumerWidget {
                   }
 
                   error.value = e;
-                  data.value = ServerData.empty.copyWith(
-                    id: homeAddr.toUri().host,
-                    homepage: homeAddr,
-                  );
+                  newServer.value = newServer.value.copyWith(homepage: home);
+                  if (newServer.value.id.isEmpty) {
+                    newServer.value =
+                        newServer.value.copyWith(id: home.toUri().host);
+                  }
                 }
 
                 isScanning.value = false;
@@ -178,7 +176,7 @@ class _ServerEditor extends HookConsumerWidget {
                 child: Opacity(
                   opacity: isScanning.value ? 0.25 : 1,
                   child: ServerDetails(
-                    data: data.value,
+                    server: newServer.value,
                     isEditing: isEditing,
                     onSubmitted: (data) {
                       final serverDataNotifier =
@@ -189,6 +187,7 @@ class _ServerEditor extends HookConsumerWidget {
                       } else {
                         serverDataNotifier.add(data);
                       }
+
                       context.router.pop();
                     },
                   ),

@@ -5,10 +5,10 @@ class DanbooruV113JsonParser extends BooruParser {
   final id = 'Danbooru-v1.13.json';
 
   @override
-  final suggestionQuery =
-      'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}';
-
-  @override
   final searchQuery =
       'post/index.json?limit={post-limit}&page={page-id}&tags={tags}';
+
+  @override
+  final suggestionQuery =
+      'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}';
 }

@@ -7,12 +7,8 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class E621JsonParser extends BooruParser {
-  E621JsonParser(this.server);
   @override
   final id = 'E621.json';
-
-  @override
-  final ServerData server;
 
   @override
   bool canParsePage(Response res) {
@@ -21,7 +17,7 @@ class E621JsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(res) {
+  List<Post> parsePage(ServerData server, Response res) {
     final entries = List.from(res.data['posts']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -92,15 +88,5 @@ class E621JsonParser extends BooruParser {
     }
 
     return result;
-  }
-
-  @override
-  bool canParseSuggestion(Response res) {
-    return false;
-  }
-
-  @override
-  Iterable<String> parseSuggestion(Response res) {
-    throw UnimplementedError();
   }
 }

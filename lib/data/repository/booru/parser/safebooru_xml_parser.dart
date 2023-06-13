@@ -11,46 +11,33 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 import 'package:xml2json/xml2json.dart';
 
-class ShimmieXmlParser extends BooruParser {
-  ShimmieXmlParser(this.server);
+class SafebooruXmlParser extends BooruParser {
   @override
-  final id = 'Shimmie.xml';
-
-  @override
-  final postUrl = 'post/view/{post-id}';
-
-  @override
-  final searchQuery =
-      'api/danbooru/find_posts/index.xml?tags={tags}&limit={post-limit}&page={page-id}';
-
-  @override
-  final suggestionQuery = 'api/internal/autocomplete?s={tag-part}';
-
-  @override
-  final ServerData server;
+  final id = 'Safebooru.xml';
 
   @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();
     return data is String &&
-        rawString.contains('<posts') &&
-        rawString.contains('<tag ');
+        rawString.contains('<?xml') &&
+        rawString.contains('<posts ') &&
+        rawString.contains('<post ') &&
+        rawString.contains(' file_url="');
   }
 
   @override
-  List<Post> parsePage(res) {
+  List<Post> parsePage(ServerData server, Response res) {
     final entries = [];
     final xjson = Xml2Json();
     xjson.parse(res.data.replaceAll('\\', ''));
 
-    final conv = jsonDecode(xjson.toGData());
-
-    if (!conv.values.first.keys.contains('tag')) {
+    final fromGDataConv = jsonDecode(xjson.toGData());
+    if (!fromGDataConv.values.first.keys.contains('post')) {
       throw BooruError.empty;
     }
 
-    final posts = conv.values.first['tag'];
+    final posts = fromGDataConv.values.first['post'];
 
     if (posts is LinkedHashMap) {
       entries.add(posts);
@@ -115,20 +102,47 @@ class ShimmieXmlParser extends BooruParser {
 
   @override
   bool canParseSuggestion(Response res) {
-    try {
-      Map<String, int>.from(res.data);
-      return true;
-    } catch (e) {
-      return false;
-    }
+    final data = res.data;
+    final rawString = data.toString();
+    return data is String &&
+        rawString.contains('<?xml') &&
+        rawString.contains('<tags') &&
+        rawString.contains('<tag ') &&
+        rawString.contains(' name="');
   }
 
   @override
-  Set<String> parseSuggestion(Response res) {
-    Map<String, int> counted = Map.from(res.data);
-    return counted.entries
-        .where((it) => it.value > 0)
-        .map((it) => BooruUtil.decodeTag(it.key))
-        .toSet();
+  Set<String> parseSuggestion(ServerData server, Response res) {
+    final data = res.data;
+    final entries = [];
+
+    final xjson = Xml2Json();
+    xjson.parse(data.replaceAll('\\', ''));
+
+    final fromGDataConv = jsonDecode(xjson.toGData());
+    if (!fromGDataConv.values.first.keys.contains('tag')) {
+      throw StateError('no tags');
+    }
+
+    final tags = fromGDataConv.values.first['tag'];
+
+    if (tags is LinkedHashMap) {
+      entries.add(tags);
+    } else if (tags is List) {
+      entries.addAll(tags);
+    } else {
+      throw StateError('no tags');
+    }
+
+    final result = <String>{};
+    for (final Map<String, dynamic> entry in entries) {
+      final tag = pick(entry, 'name').asStringOrNull() ?? '';
+      final postCount = pick(entry, 'count').asIntOrNull() ?? 0;
+      if (postCount > 0 && tag.isNotEmpty) {
+        result.add(BooruUtil.decodeTag(tag));
+      }
+    }
+
+    return result;
   }
 }

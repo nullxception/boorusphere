@@ -12,12 +12,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ServerDetails extends HookConsumerWidget {
   const ServerDetails({
     super.key,
-    required this.data,
+    required this.server,
     required this.onSubmitted,
     required this.isEditing,
   });
 
-  final ServerData data;
+  final ServerData server;
   final Function(ServerData) onSubmitted;
   final bool isEditing;
 
@@ -33,28 +33,33 @@ class ServerDetails extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (server.id.isEmpty) {
+      // No server.id means adding a new server
+      return const SizedBox.shrink();
+    }
+
     final serverData = ref.watch(serverDataStateProvider);
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final formKey = useMemoized(GlobalKey<FormState>.new);
-    final cName = useTextEditingController(text: data.id);
+    final cName = useTextEditingController(text: server.id);
     final cAlias = useTextEditingController(
-        text: data.alias.isEmpty ? data.id : data.alias);
-    final cHomepage = useTextEditingController(text: data.homepage);
-    final cApiAddr = useTextEditingController(text: data.apiAddr);
-    final cSearchUrl = useTextEditingController(text: data.searchUrl);
-    final cSuggestUrl = useTextEditingController(text: data.tagSuggestionUrl);
-    final cPostUrl = useTextEditingController(text: data.postUrl);
+        text: server.alias.isEmpty ? server.id : server.alias);
+    final cHomepage = useTextEditingController(text: server.homepage);
+    final cApiAddr = useTextEditingController(text: server.apiAddr);
+    final cSearchUrl = useTextEditingController(text: server.searchUrl);
+    final cSuggestUrl = useTextEditingController(text: server.tagSuggestionUrl);
+    final cPostUrl = useTextEditingController(text: server.postUrl);
 
     useEffect(() {
-      cName.text = data.id;
-      cAlias.text = data.alias.isEmpty ? data.id : data.alias;
-      cHomepage.text = data.homepage;
-      cApiAddr.text = data.apiAddr;
-      cSearchUrl.text = data.searchUrl;
-      cSuggestUrl.text = data.tagSuggestionUrl;
-      cPostUrl.text = data.postUrl;
-    }, [data]);
+      cName.text = server.id;
+      cAlias.text = server.alias.isEmpty ? server.id : server.alias;
+      cHomepage.text = server.homepage;
+      cApiAddr.text = server.apiAddr;
+      cSearchUrl.text = server.searchUrl;
+      cSuggestUrl.text = server.tagSuggestionUrl;
+      cPostUrl.text = server.postUrl;
+    }, [server]);
 
     openPresetPage() {
       context.router.push(
@@ -74,7 +79,7 @@ class ServerDetails extends HookConsumerWidget {
       }
 
       final newData = isEditing
-          ? data.copyWith(
+          ? server.copyWith(
               alias: cAlias.text,
               homepage: cHomepage.text,
               apiAddr: cApiAddr.text,
@@ -82,7 +87,7 @@ class ServerDetails extends HookConsumerWidget {
               tagSuggestionUrl: cSuggestUrl.text,
               postUrl: cPostUrl.text,
             )
-          : data.copyWith(
+          : server.copyWith(
               id: cName.text,
               homepage: cHomepage.text,
               apiAddr: cApiAddr.text,

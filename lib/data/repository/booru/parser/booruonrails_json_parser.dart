@@ -8,19 +8,15 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
 class BooruOnRailsJsonParser extends BooruParser {
-  BooruOnRailsJsonParser(this.server);
   @override
   final id = 'BooruOnRails.json';
-
-  @override
-  final suggestionQuery = 'api/v1/json/search/tags?q={tag-part}';
 
   @override
   final searchQuery =
       'api/v1/json/search/images?q={tags}&per_page={post-limit}&page={page-id}';
 
   @override
-  final ServerData server;
+  final suggestionQuery = 'api/v1/json/search/tags?q={tag-part}';
 
   @override
   bool canParsePage(Response res) {
@@ -29,7 +25,7 @@ class BooruOnRailsJsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(Response res) {
+  List<Post> parsePage(ServerData server, Response res) {
     final entries = List.from(res.data['images']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -88,7 +84,7 @@ class BooruOnRailsJsonParser extends BooruParser {
   }
 
   @override
-  Set<String> parseSuggestion(Response res) {
+  Set<String> parseSuggestion(ServerData server, Response res) {
     final entries = List.from(res.data['tags']);
 
     final result = <String>{};

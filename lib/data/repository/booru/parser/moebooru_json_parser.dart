@@ -1,7 +1,3 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
@@ -9,50 +5,32 @@ import 'package:boorusphere/data/repository/server/entity/server_data.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
-import 'package:xml2json/xml2json.dart';
 
-class SafebooruXmlParser extends BooruParser {
-  SafebooruXmlParser(this.server);
+class MoebooruJsonParser extends BooruParser {
   @override
-  final id = 'Safebooru.xml';
+  final id = 'Moebooru.json';
 
   @override
-  final ServerData server;
+  final searchQuery = 'post.json?tags={tags}&page={page-id}&limit={post-limit}';
+
+  @override
+  final suggestionQuery =
+      'tag.json?name=*{tag-part}*&order=count&limit={post-limit}';
+
+  @override
+  final postUrl = 'post/show/{post-id}';
 
   @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();
-    return data is String &&
-        rawString.contains('<?xml') &&
-        rawString.contains('<posts ') &&
-        rawString.contains('<post ') &&
-        rawString.contains(' file_url="');
+    return data is List && rawString.contains('preview_url');
   }
 
   @override
-  List<Post> parsePage(res) {
-    final entries = [];
-    final xjson = Xml2Json();
-    xjson.parse(res.data.replaceAll('\\', ''));
-
-    final fromGDataConv = jsonDecode(xjson.toGData());
-    if (!fromGDataConv.values.first.keys.contains('post')) {
-      throw BooruError.empty;
-    }
-
-    final posts = fromGDataConv.values.first['post'];
-
-    if (posts is LinkedHashMap) {
-      entries.add(posts);
-    } else if (posts is List) {
-      entries.addAll(posts);
-    } else {
-      throw BooruError.empty;
-    }
-
+  List<Post> parsePage(ServerData server, Response res) {
+    final entries = List.from(res.data);
     final result = <Post>[];
-
     for (final post in entries.whereType<Map<String, dynamic>>()) {
       final id = pick(post, 'id').asIntOrNull() ?? -1;
       if (result.any((it) => it.id == id)) {
@@ -70,8 +48,8 @@ class SafebooruXmlParser extends BooruParser {
       final sampleHeight = pick(post, 'sample_height').asIntOrNull() ?? -1;
       final previewWidth = pick(post, 'preview_width').asIntOrNull() ?? -1;
       final previewHeight = pick(post, 'preview_height').asIntOrNull() ?? -1;
-      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
       final source = pick(post, 'source').asStringOrNull() ?? '';
+      final rating = pick(post, 'rating').asStringOrNull() ?? 'q';
       final score = pick(post, 'score').asIntOrNull() ?? 0;
 
       final hasFile = originalFile.isNotEmpty && previewFile.isNotEmpty;
@@ -101,6 +79,7 @@ class SafebooruXmlParser extends BooruParser {
         );
       }
     }
+
     return result;
   }
 
@@ -108,36 +87,14 @@ class SafebooruXmlParser extends BooruParser {
   bool canParseSuggestion(Response res) {
     final data = res.data;
     final rawString = data.toString();
-    return data is String &&
-        rawString.contains('<?xml') &&
-        rawString.contains('<tags') &&
-        rawString.contains('<tag ') &&
-        rawString.contains(' name="');
+    return data is List &&
+        rawString.contains('name') &&
+        rawString.contains('count');
   }
 
   @override
-  Set<String> parseSuggestion(Response res) {
-    final data = res.data;
-    final entries = [];
-
-    final xjson = Xml2Json();
-    xjson.parse(data.replaceAll('\\', ''));
-
-    final fromGDataConv = jsonDecode(xjson.toGData());
-    if (!fromGDataConv.values.first.keys.contains('tag')) {
-      throw StateError('no tags');
-    }
-
-    final tags = fromGDataConv.values.first['tag'];
-
-    if (tags is LinkedHashMap) {
-      entries.add(tags);
-    } else if (tags is List) {
-      entries.addAll(tags);
-    } else {
-      throw StateError('no tags');
-    }
-
+  Set<String> parseSuggestion(ServerData server, Response res) {
+    final entries = List.from(res.data);
     final result = <String>{};
     for (final Map<String, dynamic> entry in entries) {
       final tag = pick(entry, 'name').asStringOrNull() ?? '';
