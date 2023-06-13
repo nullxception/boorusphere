@@ -5,9 +5,11 @@ import 'package:boorusphere/data/repository/booru/parser/booruonrailsjson_parser
 import 'package:boorusphere/data/repository/booru/parser/danboorujson_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/danbooruv113json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/danbooruv113xml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/e621json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelboorujson_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/konachanjson_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/safebooruxml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/shimmiexml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/szuruboorujson_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server_data.dart';
@@ -24,11 +26,13 @@ enum _ScanType {
 class _ScanResult {
   const _ScanResult({
     this.origin = '',
-    this.parser = const NoParser(),
+    this.parserId = '',
+    this.query = '',
   });
 
   final String origin;
-  final BooruParser parser;
+  final String parserId;
+  final String query;
 
   static const empty = _ScanResult();
 }
@@ -41,15 +45,17 @@ class BooruScanner {
   late CancelToken _cancelToken = CancelToken();
 
   final parsers = [
-    KonachanJsonParser(ServerData.empty),
+    BooruOnRailsJsonParser(ServerData.empty),
     DanbooruJsonParser(ServerData.empty),
     DanbooruV113JsonParser(),
-    GelbooruJsonParser(ServerData.empty),
-    BooruOnRailsJsonParser(ServerData.empty),
-    SzurubooruJsonParser(ServerData.empty),
-    ShimmieXmlParser(ServerData.empty),
     DanbooruV113XmlParser(),
+    E621JsonParser(ServerData.empty),
+    GelbooruJsonParser(ServerData.empty),
     GelbooruXmlParser(ServerData.empty),
+    KonachanJsonParser(ServerData.empty),
+    SafebooruXmlParser(ServerData.empty),
+    ShimmieXmlParser(ServerData.empty),
+    SzurubooruJsonParser(ServerData.empty),
   ];
 
   final _logsHolder = <String>[];
@@ -104,22 +110,39 @@ class BooruScanner {
           : host;
 
       if (type == _ScanType.post) {
-        return _ScanResult(origin: origin, parser: parser);
+        return _ScanResult(
+            origin: origin, parserId: parser.id, query: parser.postUrl);
       }
 
-      final contentType = res.headers['content-type'] ?? [];
-      final strData = res.data.toString();
-      if (contentType.any((it) => it.contains(RegExp(r'(json|xml)'))) &&
-          strData.isEmpty) {
-        return _ScanResult.empty;
+      if (type == _ScanType.search) {
+        if (parser.canParsePage(res)) {
+          return _ScanResult(
+              origin: origin, parserId: parser.id, query: parser.searchQuery);
+        }
+
+        final realParser = parsers.firstWhere((x) => x.canParsePage(res),
+            orElse: NoParser.new);
+        return _ScanResult(
+            origin: origin, parserId: realParser.id, query: parser.searchQuery);
       }
 
-      final isHTMLContent = contentType.any((it) => it.contains('html'));
+      if (type == _ScanType.suggestion) {
+        if (parser.canParseSuggestion(res)) {
+          return _ScanResult(
+              origin: origin,
+              parserId: parser.id,
+              query: parser.suggestionQuery);
+        }
 
-      return _ScanResult(
-        origin: origin,
-        parser: isHTMLContent ? const NoParser() : parser,
-      );
+        final realParser = parsers.firstWhere((x) => x.canParseSuggestion(res),
+            orElse: NoParser.new);
+        return _ScanResult(
+            origin: origin,
+            parserId: realParser.id,
+            query: parser.suggestionQuery);
+      }
+
+      return _ScanResult.empty;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.cancel) {
         rethrow;
@@ -149,13 +172,18 @@ class BooruScanner {
       }
     }
 
-    results.sortBy((x) => x.parser.id.fileExt);
+    results.sortBy((x) => x.parserId.fileExt);
     final firstFound = results.firstWhere(
-      (it) => it.parser is! NoParser,
+      (it) => it.query.isNotEmpty && it.parserId.isNotEmpty,
       orElse: () => _ScanResult(origin: host),
     );
 
-    _log('✔️ matched: ${type.name}::${firstFound.parser.id}');
+    if (firstFound.parserId.isEmpty) {
+      _log('❌ no ${type.name}Query matched');
+    } else {
+      _log('✔️ ${type.name}Query matched: ${firstFound.parserId}');
+    }
+
     _log();
     if (_logs.isClosed) return;
     yield firstFound;
@@ -180,8 +208,8 @@ class BooruScanner {
         continue;
       }
       data = data.copyWith(
-        searchParserId: ev.parser.id,
-        searchUrl: ev.parser.searchQuery,
+        searchParserId: ev.parserId,
+        searchUrl: ev.query,
         apiAddr: ev.origin,
       );
       if (_logs.isClosed) return;
@@ -198,8 +226,8 @@ class BooruScanner {
       }
 
       data = data.copyWith(
-        suggestionParserId: ev.parser.id,
-        tagSuggestionUrl: ev.parser.suggestionQuery,
+        suggestionParserId: ev.parserId,
+        tagSuggestionUrl: ev.query,
         apiAddr: ev.origin,
       );
       if (_logs.isClosed) return;
@@ -215,7 +243,7 @@ class BooruScanner {
       }
 
       data = data.copyWith(
-        postUrl: ev.parser.postUrl,
+        postUrl: ev.query,
         homepage: ev.origin,
       );
       if (_logs.isClosed) return;
