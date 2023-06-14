@@ -3,12 +3,15 @@ import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
+import 'package:boorusphere/presentation/provider/server_auth_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
+import 'package:boorusphere/presentation/widgets/private_text_field.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +68,13 @@ class _ServerEditor extends HookConsumerWidget {
     final apiAddress = useTextEditingController(
         text: server.apiAddr.isEmpty ? 'https://' : server.apiAddr);
 
+    final auth = ref.watch(serverAuthStateProvider).on(server);
+    final userId =
+        useTextEditingController(text: isEditing ? auth.userId : null);
+    final userKey =
+        useTextEditingController(text: isEditing ? auth.userKey : null);
+    final newServerAuth = useState(auth);
+
     validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
         return context.t.servers.addrError;
@@ -119,6 +129,33 @@ class _ServerEditor extends HookConsumerWidget {
               ),
             ),
           Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: Text(
+              'Authorization',
+              style: context.theme.textTheme.titleSmall
+                  ?.copyWith(color: context.colorScheme.primary),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: TextFormField(
+              controller: userId,
+              enableIMEPersonalizedLearning: !imeIncognito,
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                labelText: context.t.servers.userId,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: PrivateTextField(
+              controller: userKey,
+              imeIncognito: imeIncognito,
+              label: context.t.servers.userKey,
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () async {
@@ -138,6 +175,8 @@ class _ServerEditor extends HookConsumerWidget {
                 final home = homepage.text;
                 final api = useApiAddr.value ? apiAddress.text : home;
                 try {
+                  final auth =
+                      ServerAuth(userId: userId.text, userKey: userKey.text);
                   newServer.value = await scanner.scan(home, api);
                 } catch (e) {
                   if (e is DioException && e.type == DioExceptionType.cancel) {
@@ -186,6 +225,12 @@ class _ServerEditor extends HookConsumerWidget {
                       } else {
                         serverPod.add(data);
                       }
+
+                      ref.read(serverAuthStateProvider.notifier).update(
+                          newServerAuth.value.copyWith(
+                              serverId: data.id,
+                              userId: userId.text,
+                              userKey: userKey.text));
 
                       context.router.pop();
                     },

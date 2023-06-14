@@ -1,7 +1,9 @@
+import 'package:boorusphere/data/repository/booru/entity/booru_auth.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/utils/logger.dart';
@@ -13,11 +15,13 @@ class BooruRepo implements ImageboardRepo {
     required this.parsers,
     required this.client,
     required this.server,
+    required this.auth,
     required this.serverState,
   });
 
   final Iterable<BooruParser> parsers;
   final Dio client;
+  final ServerAuth auth;
   final ServerState serverState;
 
   final _opt = Options(validateStatus: (it) => it == 200);
@@ -27,7 +31,20 @@ class BooruRepo implements ImageboardRepo {
   final Server server;
 
   Future<Response> _request(String url, BooruParser parser) {
-    return client.get(url, options: _opt.copyWith(headers: parser.headers));
+    final authData = parsers
+        .firstWhere((x) => x.id == auth.builderId, orElse: NoParser.new)
+        .buildAuth(auth);
+
+    return client.get(
+      url,
+      options: _opt.copyWith(
+        headers: {
+          ...parser.headers,
+          if (authData.type == BooruAuthType.headers)
+            ...Map.from(authData.data),
+        },
+      ),
+    );
   }
 
   @override

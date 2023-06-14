@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:boorusphere/data/repository/booru/entity/booru_auth.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:boorusphere/utils/logger.dart';
 import 'package:collection/collection.dart';
@@ -72,6 +74,7 @@ class BooruScanner {
     String host, {
     required BooruParser parser,
     required _ScanType type,
+    ServerAuth auth = ServerAuth.empty,
   }) async {
     final loadQuery = switch (type) {
       _ScanType.post => parser.postUrl,
@@ -94,11 +97,16 @@ class BooruScanner {
       final testUrl = '$host/$test';
       _uilog('→ checking ${type.name}::${parser.id}...');
       _log.v('Scanning $testUrl');
+      final authData = parser.buildAuth(auth);
       final res = await client.get(
         testUrl,
         options: Options(
           validateStatus: (it) => it == 200,
-          headers: parser.headers,
+          headers: {
+            ...parser.headers,
+            if (authData.type == BooruAuthType.headers)
+              ...Map.from(authData.data),
+          },
           responseType: type == _ScanType.post ? ResponseType.stream : null,
         ),
         cancelToken: _cancelToken,
@@ -157,14 +165,17 @@ class BooruScanner {
     }
   }
 
-  Stream<_ScanResult> _performScans(String host,
-      {required _ScanType type}) async* {
+  Stream<_ScanResult> _performScans(
+    String host, {
+    required _ScanType type,
+    ServerAuth auth = ServerAuth.empty,
+  }) async* {
     final results = <_ScanResult>[];
     final requests = parsers.mapIndexed((i, parser) async {
       if (i > 0) {
         await Future.delayed(Duration(milliseconds: i * 100));
       }
-      return _scan(host, parser: parser, type: type);
+      return _scan(host, parser: parser, type: type, auth: auth);
     });
 
     await for (final result in Future.wait(requests).asStream()) {
@@ -194,17 +205,22 @@ class BooruScanner {
     yield firstFound;
   }
 
-  Future<Server> scan(String homeUrl, String apiUrl) async {
+  Future<Server> scan(
+    String homeUrl,
+    String apiUrl, {
+    ServerAuth auth = ServerAuth.empty,
+  }) async {
     final api = apiUrl.replaceFirst(RegExp(r'/$'), '');
     final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
     var data = Server.empty;
+    var newAuth = auth;
 
     _uiLogsHolder.clear();
     _uiLogs = StreamController.broadcast();
 
     _uilog('🧐 Scanning search query...');
     _cancelToken = CancelToken();
-    final search = _performScans(api, type: _ScanType.search);
+    final search = _performScans(api, type: _ScanType.search, auth: auth);
     await for (var ev in search) {
       if (ev == _ScanResult.empty) {
         continue;
@@ -248,6 +264,7 @@ class BooruScanner {
       apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
       id: home.toUri().host,
     );
+    newAuth = newAuth.copyWith(serverId: data.id);
 
     await stop();
     return data;

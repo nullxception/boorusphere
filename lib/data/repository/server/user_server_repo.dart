@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:boorusphere/domain/repository/server_data_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
@@ -9,16 +10,21 @@ class UserServerRepo implements ServerRepo {
   UserServerRepo({
     required Map<String, Server> defaultServers,
     required this.box,
+    required this.authBox,
   }) : _defaults = defaultServers;
 
   final Map<String, Server> _defaults;
   final Box<Server> box;
+  final Box<ServerAuth> authBox;
 
   @override
   List<Server> get servers => box.values.toList();
 
   @override
   Map<String, Server> get defaults => _defaults;
+
+  @override
+  List<ServerAuth> get authentications => authBox.values.toList();
 
   Future<void> _migrateKeys() async {
     final mapped = Map<String, Server>.from(box.toMap());
@@ -73,6 +79,15 @@ class UserServerRepo implements ServerRepo {
   }
 
   @override
+  Future<void> updateAuth(ServerAuth data) async {
+    if (data.userKey.isEmpty) {
+      await authBox.delete(data.serverId);
+    } else {
+      await authBox.put(data.serverId, data);
+    }
+  }
+
+  @override
   Future<void> import(String src) async {
     final List maps = jsonDecode(src);
     if (maps.isEmpty) return;
@@ -91,8 +106,10 @@ class UserServerRepo implements ServerRepo {
   }
 
   static const String key = 'server';
+  static const String authKey = 'server_auth';
 
   static Future<void> prepare() async {
     await Hive.openBox<Server>(key);
+    await Hive.openBox<ServerAuth>(authKey);
   }
 }

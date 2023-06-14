@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:boorusphere/data/repository/booru/entity/booru_auth.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
@@ -25,6 +29,21 @@ class SzurubooruJsonParser extends BooruParser {
     'Accept': 'application/json',
     'Content-type': 'application/json',
   };
+
+  @override
+  BooruAuth buildAuth(ServerAuth auth) {
+    if (auth == ServerAuth.empty) {
+      return BooruAuth.none;
+    }
+
+    final encKey = base64Encode(utf8.encode('${auth.userId}:${auth.userKey}'));
+    return BooruAuth(
+      type: BooruAuthType.headers,
+      data: {
+        'Authorization': 'Token $encKey',
+      },
+    );
+  }
 
   @override
   bool canParsePage(Response res) {

@@ -10,6 +10,7 @@ import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_rep
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
@@ -32,6 +33,7 @@ void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(ServerAdapter());
+  Hive.registerAdapter(ServerAuthAdapter());
   Hive.registerAdapter(BooruTagAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
   Hive.registerAdapter(PostAdapter());

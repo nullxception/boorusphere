@@ -12,6 +12,7 @@ import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_rep
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/entity/server_auth.dart';
 import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
@@ -29,6 +30,7 @@ import 'package:boorusphere/domain/repository/settings_repo.dart';
 import 'package:boorusphere/domain/repository/tags_blocker_repo.dart';
 import 'package:boorusphere/domain/repository/version_repo.dart';
 import 'package:boorusphere/pigeon/app_env.pi.dart';
+import 'package:boorusphere/presentation/provider/server_auth_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -57,6 +59,7 @@ ImageboardRepo imageboardRepo(ImageboardRepoRef ref, Server server) {
     parsers: ref.watch(booruParsersProvider),
     client: ref.watch(dioProvider),
     server: server,
+    auth: ref.watch(serverAuthStateProvider).on(server),
     serverState: ref.watch(serverStateProvider.notifier),
   );
 }
@@ -86,6 +89,7 @@ ServerRepo serverRepo(ServerRepoRef ref) {
   return UserServerRepo(
     defaultServers: ref.watch(defaultServersProvider),
     box: Hive.box<Server>(UserServerRepo.key),
+    authBox: Hive.box<ServerAuth>(UserServerRepo.authKey),
   );
 }
 
