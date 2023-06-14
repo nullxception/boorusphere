@@ -13,6 +13,7 @@ listTasks() => grutil.tasks();
 @Task('Generate code')
 Future<void> gencode() async {
   await me.pun('build_runner', args: ['build', '--delete-conflicting-outputs']);
+  await me.pun('full_coverage');
 }
 
 @Task('Generate localization')
@@ -55,7 +56,6 @@ Future<void> analyze() async {
 
 @Task('Unit test')
 Future<void> unittest() async {
-  await me.pun('full_coverage');
   await me.fun(['test', '--coverage']);
 }
 
