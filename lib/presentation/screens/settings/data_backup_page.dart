@@ -57,8 +57,8 @@ class _Content extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const subtitlePadding = EdgeInsets.only(top: 8);
     ref.listen<BackupResult?>(dataBackupStateProvider, (prev, next) {
-      next?.when(
-        loading: (type) {
+      switch (next) {
+        case LoadingBackupResult(:final type):
           showDialog(
             context: context,
             builder: (_) => ProviderScope(
@@ -66,27 +66,23 @@ class _Content extends HookConsumerWidget {
               child: _LoadingDialog(type: type),
             ),
           );
-        },
-        imported: () {
+        case ImportedBackupResult():
           context.scaffoldMessenger.showSnackBar(SnackBar(
             content: Text(context.t.dataBackup.restore.success),
             duration: const Duration(seconds: 1),
           ));
-        },
-        exported: (data) {
+        case ExportedBackupResult(:final path):
           context.scaffoldMessenger.showSnackBar(SnackBar(
-            content: Text(context.t.dataBackup.backup.success(dest: data)),
+            content: Text(context.t.dataBackup.backup.success(dest: path)),
             duration: const Duration(seconds: 2),
           ));
-        },
-        error: (error, stackTrace) {
+        case ErrorBackupResult():
           context.scaffoldMessenger.showSnackBar(SnackBar(
             content: Text(context.t.dataBackup.restore.invalid),
             duration: const Duration(seconds: 1),
           ));
-        },
-        idle: () {},
-      );
+        default:
+      }
     });
 
     return ListView(
