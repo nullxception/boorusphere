@@ -1,8 +1,10 @@
+import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/presentation/provider/app_versions/entity/app_versions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_versions_state.g.dart';
+
+typedef AppVersions = ({AppVersion current, AppVersion latest});
 
 @riverpod
 class AppVersionsState extends _$AppVersionsState {
@@ -12,7 +14,7 @@ class AppVersionsState extends _$AppVersionsState {
       state = const AsyncValue.loading();
     });
     final repo = ref.read(versionRepoProvider);
-    return AppVersions(
+    return (
       current: repo.current,
       latest: await repo.fetch(),
     );

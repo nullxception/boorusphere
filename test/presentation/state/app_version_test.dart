@@ -4,7 +4,6 @@ import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
-import 'package:boorusphere/presentation/provider/app_versions/entity/app_versions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
