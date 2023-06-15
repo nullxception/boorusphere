@@ -1,0 +1,149 @@
+{
+    "@attributes": {
+        "limit": 20,
+        "offset": 0,
+        "count": 386
+    },
+    "tag": [
+        {
+            "id": 14200,
+            "name": "book",
+            "count": 108495,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 339127,
+            "name": "holding_book",
+            "count": 25753,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 145674,
+            "name": "open_book",
+            "count": 20106,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 22284,
+            "name": "bookshelf",
+            "count": 14704,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 3620,
+            "name": "notebook",
+            "count": 5378,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 340746,
+            "name": "book_stack",
+            "count": 5321,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 9785,
+            "name": "artbook",
+            "count": 2692,
+            "type": 5,
+            "ambiguous": 0
+        },
+        {
+            "id": 1050,
+            "name": "sketchbook",
+            "count": 2323,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 35090,
+            "name": "melonbooks",
+            "count": 1647,
+            "type": 3,
+            "ambiguous": 0
+        },
+        {
+            "id": 3920,
+            "name": "bookbag",
+            "count": 1625,
+            "type": 6,
+            "ambiguous": 0
+        },
+        {
+            "id": 19023,
+            "name": "bookmark",
+            "count": 1243,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 873195,
+            "name": "holding_notebook",
+            "count": 900,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 127809,
+            "name": "book_hug",
+            "count": 750,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 345985,
+            "name": "floating_book",
+            "count": 702,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 735207,
+            "name": "facebook_username",
+            "count": 700,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 357638,
+            "name": "book_on_lap",
+            "count": 318,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 14930,
+            "name": "sketchbook_full_colors",
+            "count": 286,
+            "type": 3,
+            "ambiguous": 0
+        },
+        {
+            "id": 913063,
+            "name": "holding_sketchbook",
+            "count": 241,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 327284,
+            "name": "book_on_head",
+            "count": 0,
+            "type": 0,
+            "ambiguous": 0
+        },
+        {
+            "id": 235688,
+            "name": "facebook",
+            "count": 0,
+            "type": 3,
+            "ambiguous": 0
+        }
+    ]
+}
