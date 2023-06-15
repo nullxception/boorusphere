@@ -1,3 +1,4 @@
+import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
@@ -26,28 +27,24 @@ class Server with _$Server {
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
-  String searchUrlOf(
-    String query,
-    int page,
-    BooruRating searchRating,
-    int postLimit,
-  ) {
-    String tags = query.trim().isEmpty ? Server.defaultTag : query.trim();
+  String searchUrlOf(PageOption option, {required int page}) {
+    String tags =
+        option.query.trim().isEmpty ? Server.defaultTag : option.query.trim();
     if (searchUrl.contains(RegExp(r'.*[\?&]offset=.*#opt\?json=1'))) {
       // Szurubooru has exclusive-way (but still same shit) of rating
-      tags += ' ${_szuruRateString(searchRating)}';
+      tags += ' ${_szuruRateString(option.searchRating)}';
     } else if (searchUrl.contains('api/v1/json/search')) {
       // booru-on-rails didn't support rating
       tags = tags.replaceAll('rating:', '');
     } else {
-      tags += ' ${_rateString(searchRating)}';
+      tags += ' ${_rateString(option.searchRating)}';
     }
 
     return '$homepage/$searchUrl'
         .replaceAll('{tags}', Uri.encodeComponent(tags.trim()))
         .replaceAll('{page-id}', '$page')
-        .replaceAll('{post-offset}', (page * postLimit).toString())
-        .replaceAll('{post-limit}', '$postLimit');
+        .replaceAll('{post-offset}', (page * option.limit).toString())
+        .replaceAll('{post-limit}', '${option.limit}');
   }
 
   String suggestionUrlsOf(String query) {

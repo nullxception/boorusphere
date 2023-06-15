@@ -60,8 +60,7 @@ class BooruRepo implements ImageboardRepo {
     var parser = parsers.firstWhere((x) => x.id == server.searchParserId,
         orElse: NoParser.new);
 
-    final searchUrl = server.searchUrlOf(
-        option.query, index, option.searchRating, option.limit);
+    final searchUrl = server.searchUrlOf(option, page: index);
     final res = await _request(searchUrl, parser);
 
     if (parser.canParsePage(res)) {
