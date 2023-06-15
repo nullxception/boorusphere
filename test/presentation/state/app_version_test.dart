@@ -1,14 +1,15 @@
 import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/domain/repository/env_repo.dart';
 import 'package:boorusphere/presentation/provider/app_versions/app_versions_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../utils/dio.dart';
+import '../../utils/mocktail.dart';
 import '../../utils/riverpod.dart';
 
 class FakeEnvRepo extends Mock implements EnvRepo {
@@ -18,6 +19,7 @@ class FakeEnvRepo extends Mock implements EnvRepo {
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setupMocktailFallbacks();
 
   group('app version', () {
     test('get', () async {
@@ -31,13 +33,10 @@ void main() async {
       ref.setupTestFor(appVersionsStateProvider);
 
       const edgeVersion = '9.9.9';
-      final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
-      dioAdapter.onGet(
-          AppVersionRepo.pubspecUrl, (server) => server.reply(200, '''
-# comments
-version: $edgeVersion+99
-
-'''));
+      final adapter = DioAdapterMock.on(ref.read(dioProvider));
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+          (invocation) async => ResponseBody.fromString(
+              '\n# comments\nversion: $edgeVersion+99\n', 200));
 
       await ref.read(appVersionsStateProvider.future);
       final versions = ref.read(appVersionsStateProvider).value;
@@ -65,11 +64,10 @@ version: $edgeVersion+99
       ref.setupTestFor(dioProvider);
       ref.setupTestFor(appVersionsStateProvider);
 
-      final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
-      dioAdapter.onGet(
-        AppVersionRepo.pubspecUrl,
-        (server) => server.reply(200, ''),
-      );
+      final adapter = DioAdapterMock();
+      ref.read(dioProvider).httpClientAdapter = adapter;
+      when(() => adapter.fetch(any(), any(), any()))
+          .thenAnswer((invocation) async => ResponseBody.fromString('', 200));
 
       addTearDown(ref.dispose);
 
