@@ -1,5 +1,7 @@
-import 'package:mocktail/mocktail.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FakePodListener<T> extends Mock {
-  void call(T? previous, T value);
+extension ProviderContainerExt on ProviderContainer {
+  void setupTestFor<T>(ProviderListenable<T> provider) {
+    listen(provider, (previous, value) {}, fireImmediately: true);
+  }
 }

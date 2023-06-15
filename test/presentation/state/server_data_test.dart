@@ -25,7 +25,6 @@ void main() async {
     final ref = ProviderContainer(overrides: [
       defaultServersProvider.overrideWithValue(mapDefaultServers()),
     ]);
-    final listener = FakePodListener<Iterable<Server>>();
 
     notifier() => ref.read(serverStateProvider.notifier);
     state() => ref.read(serverStateProvider);
@@ -34,13 +33,9 @@ void main() async {
       initializeTestHive();
       await UserServerRepo.prepare();
       await UserSettingsRepo.prepare();
-      await notifier().populate();
 
-      ref.listen(
-        serverStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
+      ref.setupTestFor(serverStateProvider);
+      await notifier().populate();
     });
 
     tearDownAll(() async {

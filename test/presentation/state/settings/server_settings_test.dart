@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/server_setting.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,16 +12,11 @@ void main() async {
 
   group('ServerSetting', () {
     final ref = ProviderContainer();
-    final listener = FakePodListener<ServerSetting>();
 
     setUpAll(() async {
       initializeTestHive();
       await UserSettingsRepo.prepare();
-      ref.listen<ServerSetting>(
-        serverSettingStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
+      ref.setupTestFor(serverSettingStateProvider);
     });
 
     tearDownAll(() async {

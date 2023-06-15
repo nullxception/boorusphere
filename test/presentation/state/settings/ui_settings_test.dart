@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/ui_setting.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +13,6 @@ void main() async {
 
   group('UiSetting', () {
     final ref = ProviderContainer();
-    final listener = FakePodListener<UiSetting>();
 
     notifier() => ref.read(uiSettingStateProvider.notifier);
     state() => ref.read(uiSettingStateProvider);
@@ -22,11 +20,7 @@ void main() async {
     setUpAll(() async {
       initializeTestHive();
       await UserSettingsRepo.prepare();
-      ref.listen<UiSetting>(
-        uiSettingStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
+      ref.setupTestFor(uiSettingStateProvider);
     });
 
     tearDownAll(() async {

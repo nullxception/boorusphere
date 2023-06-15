@@ -1,7 +1,6 @@
 import 'package:boorusphere/data/repository/app_state/current_app_state_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/domain/repository/app_state_repo.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,8 +15,7 @@ void main() async {
   setUpAll(() async {
     initializeTestHive();
     await CurrentAppStateRepo.prepare();
-    final listener = FakePodListener<AppStateRepo>();
-    ref.listen(appStateRepoProvider, listener.call, fireImmediately: true);
+    ref.setupTestFor(appStateRepoProvider);
   });
 
   tearDownAll(() async {

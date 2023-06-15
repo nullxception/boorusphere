@@ -1,4 +1,3 @@
-import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_repo.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +13,6 @@ void main() async {
   group('favorite post', () {
     final posts = getSamplePosts();
     final ref = ProviderContainer();
-    final listener = FakePodListener<Iterable<Post>>();
 
     notifier() => ref.read(favoritePostStateProvider.notifier);
     state() => ref.read(favoritePostStateProvider);
@@ -22,11 +20,7 @@ void main() async {
     setUpAll(() async {
       initializeTestHive();
       await UserFavoritePostRepo.prepare();
-      ref.listen(
-        favoritePostStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
+      ref.setupTestFor(favoritePostStateProvider);
     });
 
     tearDownAll(() async {

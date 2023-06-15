@@ -1,6 +1,5 @@
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/settings/content_setting_state.dart';
-import 'package:boorusphere/presentation/provider/settings/entity/content_setting.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,7 +11,6 @@ void main() async {
 
   group('ContentSetting', () {
     final ref = ProviderContainer();
-    final listener = FakePodListener<ContentSetting>();
 
     notifier() => ref.read(contentSettingStateProvider.notifier);
     state() => ref.read(contentSettingStateProvider);
@@ -20,11 +18,7 @@ void main() async {
     setUpAll(() async {
       initializeTestHive();
       await UserSettingsRepo.prepare();
-      ref.listen<ContentSetting>(
-        contentSettingStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
+      ref.setupTestFor(contentSettingStateProvider);
     });
 
     tearDownAll(() async {

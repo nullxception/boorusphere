@@ -16,13 +16,12 @@ void main() async {
 
   group('changelog', () {
     test('assets', () async {
-      final listener = FakePodListener<AsyncValue<List<ChangelogData>>>();
       final ref = ProviderContainer(overrides: [
         envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
 
       final logProvider = changelogStateProvider(ChangelogType.assets, null);
-      ref.listen(logProvider, listener.call, fireImmediately: true);
+      ref.setupTestFor(logProvider);
 
       addTearDown(ref.dispose);
 
@@ -35,19 +34,23 @@ void main() async {
     });
 
     test('git', () async {
-      final listener = FakePodListener<AsyncValue<List<ChangelogData>>>();
+      final logProvider = changelogStateProvider(
+        ChangelogType.git,
+        AppVersion.fromString('999.9.9'),
+      );
+
       final ref = ProviderContainer(overrides: [
         envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
+
+      ref.setupTestFor(dioProvider);
+      ref.setupTestFor(logProvider);
 
       final adapter = DioAdapter(dio: ref.read(dioProvider));
       adapter.onGet(AppChangelogRepo.url, (server) => server.reply(200, '''
 ## 999.9.9
 * Fix deez nuts
 '''));
-      final logProvider = changelogStateProvider(
-          ChangelogType.git, AppVersion.fromString('999.9.9'));
-      ref.listen(logProvider, listener.call, fireImmediately: true);
 
       addTearDown(ref.dispose);
 
@@ -60,16 +63,17 @@ void main() async {
     });
 
     test('git but no response', () async {
-      final listener = FakePodListener<AsyncValue<List<ChangelogData>>>();
       final ref = ProviderContainer(overrides: [
         envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
+      final logProvider = changelogStateProvider(
+          ChangelogType.git, AppVersion.fromString('9.9.9'));
+
+      ref.setupTestFor(dioProvider);
+      ref.setupTestFor(logProvider);
 
       final adapter = DioAdapter(dio: ref.read(dioProvider));
       adapter.onGet(AppChangelogRepo.url, (server) => server.reply(200, ''));
-      final logProvider = changelogStateProvider(
-          ChangelogType.git, AppVersion.fromString('9.9.9'));
-      ref.listen(logProvider, listener.call, fireImmediately: true);
 
       addTearDown(ref.dispose);
 

@@ -1,4 +1,3 @@
-import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
 import 'package:boorusphere/presentation/provider/search_history_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +13,6 @@ void main() async {
   group('search history', () {
     final servers = getDefaultServerData();
     final ref = ProviderContainer();
-    final listener = FakePodListener<Map<int, SearchHistory>>();
 
     notifier() => ref.read(searchHistoryStateProvider.notifier);
     state() => ref.read(searchHistoryStateProvider);
@@ -22,11 +20,7 @@ void main() async {
     setUpAll(() async {
       initializeTestHive();
       await UserSearchHistoryRepo.prepare();
-      ref.listen(
-        searchHistoryStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
+      ref.setupTestFor(searchHistoryStateProvider);
     });
 
     tearDownAll(() async {

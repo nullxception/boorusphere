@@ -21,10 +21,14 @@ void main() async {
 
   group('app version', () {
     test('get', () async {
-      final listener = FakePodListener<AsyncValue<AppVersions>>();
       final ref = ProviderContainer(overrides: [
         envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
+
+      addTearDown(ref.dispose);
+
+      ref.setupTestFor(dioProvider);
+      ref.setupTestFor(appVersionsStateProvider);
 
       const edgeVersion = '9.9.9';
       final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
@@ -34,14 +38,6 @@ void main() async {
 version: $edgeVersion+99
 
 '''));
-
-      ref.listen(
-        appVersionsStateProvider,
-        listener.call,
-        fireImmediately: true,
-      );
-
-      addTearDown(ref.dispose);
 
       await ref.read(appVersionsStateProvider.future);
       final versions = ref.read(appVersionsStateProvider).value;
@@ -62,21 +58,17 @@ version: $edgeVersion+99
     });
 
     test('empty response', () async {
-      final listener = FakePodListener<AsyncValue<AppVersions>>();
       final ref = ProviderContainer(overrides: [
         envRepoProvider.overrideWithValue(FakeEnvRepo()),
       ]);
+
+      ref.setupTestFor(dioProvider);
+      ref.setupTestFor(appVersionsStateProvider);
 
       final dioAdapter = DioAdapter(dio: ref.read(dioProvider));
       dioAdapter.onGet(
         AppVersionRepo.pubspecUrl,
         (server) => server.reply(200, ''),
-      );
-
-      ref.listen(
-        appVersionsStateProvider,
-        listener.call,
-        fireImmediately: true,
       );
 
       addTearDown(ref.dispose);
