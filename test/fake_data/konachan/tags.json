@@ -1,0 +1,142 @@
+[
+    {
+        "id": 753,
+        "name": "book",
+        "count": 5972,
+        "type": 0,
+        "ambiguous": false
+    },
+    {
+        "id": 13143,
+        "name": "melonbooks",
+        "count": 103,
+        "type": 3,
+        "ambiguous": false
+    },
+    {
+        "id": 124025,
+        "name": "girls_book_maker_~grimm_to_sannin_no_ohime-sama~",
+        "count": 21,
+        "type": 3,
+        "ambiguous": false
+    },
+    {
+        "id": 84805,
+        "name": "suzuno_(bookshelf)",
+        "count": 14,
+        "type": 1,
+        "ambiguous": false
+    },
+    {
+        "id": 123999,
+        "name": "shirayuki_(girls_book_maker)",
+        "count": 10,
+        "type": 4,
+        "ambiguous": false
+    },
+    {
+        "id": 124028,
+        "name": "cinderella_(girls_book_maker)",
+        "count": 9,
+        "type": 4,
+        "ambiguous": false
+    },
+    {
+        "id": 2140,
+        "name": "sketchbook_full_colors",
+        "count": 7,
+        "type": 3,
+        "ambiguous": false
+    },
+    {
+        "id": 32704,
+        "name": "bookiti",
+        "count": 4,
+        "type": 1,
+        "ambiguous": false
+    },
+    {
+        "id": 32353,
+        "name": "tatakau_shisho:_the_book_of_bantorra",
+        "count": 4,
+        "type": 3,
+        "ambiguous": false
+    },
+    {
+        "id": 42923,
+        "name": "bookseve",
+        "count": 4,
+        "type": 1,
+        "ambiguous": false
+    },
+    {
+        "id": 2804,
+        "name": "bookman",
+        "count": 4,
+        "type": 4,
+        "ambiguous": false
+    },
+    {
+        "id": 123997,
+        "name": "grimm_(girls_book_maker)",
+        "count": 2,
+        "type": 4,
+        "ambiguous": false
+    },
+    {
+        "id": 62745,
+        "name": "old_books",
+        "count": 1,
+        "type": 1,
+        "ambiguous": false
+    },
+    {
+        "id": 110510,
+        "name": "p_book",
+        "count": 1,
+        "type": 1,
+        "ambiguous": false
+    },
+    {
+        "id": 88177,
+        "name": "books",
+        "count": 1,
+        "type": 0,
+        "ambiguous": false
+    },
+    {
+        "id": 116761,
+        "name": "girls_book_maker_-shiawase_no_libretto-",
+        "count": 1,
+        "type": 3,
+        "ambiguous": false
+    },
+    {
+        "id": 125526,
+        "name": "bookshelf",
+        "count": 1,
+        "type": 0,
+        "ambiguous": false
+    },
+    {
+        "id": 95358,
+        "name": "book_of_zhu",
+        "count": 1,
+        "type": 3,
+        "ambiguous": false
+    },
+    {
+        "id": 133906,
+        "name": "notebook",
+        "count": 0,
+        "type": 0,
+        "ambiguous": false
+    },
+    {
+        "id": 127569,
+        "name": "open_book",
+        "count": 0,
+        "type": 0,
+        "ambiguous": false
+    }
+]

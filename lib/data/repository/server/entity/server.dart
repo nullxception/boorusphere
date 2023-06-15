@@ -49,8 +49,8 @@ class Server with _$Server {
 
   String suggestionUrlsOf(String query) {
     final url = '$homepage/$tagSuggestionUrl'
-        .replaceAll('{post-limit}', '20')
-        .replaceAll('{tag-limit}', '20');
+        .replaceAll('{post-limit}', '$tagSuggestionLimit')
+        .replaceAll('{tag-limit}', '$tagSuggestionLimit');
 
     final encq = Uri.encodeComponent(query);
     if (!canSuggestTags) {
@@ -87,6 +87,7 @@ class Server with _$Server {
 
   static const Server empty = Server();
   static const String defaultTag = '*';
+  static const tagSuggestionLimit = 20;
 }
 
 String _rateString(BooruRating searchRating) {
