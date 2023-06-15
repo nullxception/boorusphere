@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
@@ -17,8 +17,8 @@ class ServerDetails extends HookConsumerWidget {
     required this.isEditing,
   });
 
-  final ServerData server;
-  final Function(ServerData) onSubmitted;
+  final Server server;
+  final Function(Server) onSubmitted;
   final bool isEditing;
 
   bool hasProperServerQuery(String? value) {
@@ -38,7 +38,7 @@ class ServerDetails extends HookConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    final serverData = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final formKey = useMemoized(GlobalKey<FormState>.new);
@@ -124,7 +124,7 @@ class ServerDetails extends HookConsumerWidget {
                       labelText: 'Name',
                     ),
                     validator: (value) {
-                      final serverName = serverData.map((it) => it.id);
+                      final serverName = servers.map((it) => it.id);
                       if (!isEditing && serverName.contains(value)) {
                         return context.t.servers
                             .alreadyExists(name: value ?? '');

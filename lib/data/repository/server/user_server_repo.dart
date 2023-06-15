@@ -1,27 +1,27 @@
 import 'dart:convert';
 
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/repository/server_data_repo.dart';
 import 'package:boorusphere/presentation/provider/data_backup/data_backup.dart';
 import 'package:hive/hive.dart';
 
-class UserServerDataRepo implements ServerDataRepo {
-  UserServerDataRepo({
-    required Map<String, ServerData> defaultServers,
+class UserServerRepo implements ServerRepo {
+  UserServerRepo({
+    required Map<String, Server> defaultServers,
     required this.box,
   }) : _defaults = defaultServers;
 
-  final Map<String, ServerData> _defaults;
-  final Box<ServerData> box;
+  final Map<String, Server> _defaults;
+  final Box<Server> box;
 
   @override
-  List<ServerData> get servers => box.values.toList();
+  List<Server> get servers => box.values.toList();
 
   @override
-  Map<String, ServerData> get defaults => _defaults;
+  Map<String, Server> get defaults => _defaults;
 
   Future<void> _migrateKeys() async {
-    final mapped = Map<String, ServerData>.from(box.toMap());
+    final mapped = Map<String, Server>.from(box.toMap());
     for (final data in mapped.entries) {
       if (data.key.startsWith('@')) {
         continue;
@@ -44,7 +44,7 @@ class UserServerDataRepo implements ServerDataRepo {
   }
 
   @override
-  Future<void> add(ServerData data) async {
+  Future<void> add(Server data) async {
     await box.put(
       data.key,
       data.apiAddr == data.homepage ? data.copyWith(apiAddr: '') : data,
@@ -52,7 +52,7 @@ class UserServerDataRepo implements ServerDataRepo {
   }
 
   @override
-  Future<ServerData> edit(ServerData from, ServerData to) async {
+  Future<Server> edit(Server from, Server to) async {
     final data = to.apiAddr == to.homepage
         ? to.copyWith(id: from.id, apiAddr: '')
         : to.copyWith(id: from.id);
@@ -68,7 +68,7 @@ class UserServerDataRepo implements ServerDataRepo {
   }
 
   @override
-  Future<void> remove(ServerData data) async {
+  Future<void> remove(Server data) async {
     await box.delete(data.key);
   }
 
@@ -79,7 +79,7 @@ class UserServerDataRepo implements ServerDataRepo {
     await box.deleteAll(box.keys);
     for (final map in maps) {
       if (map is Map<String, dynamic>) {
-        final server = ServerData.fromJson(map);
+        final server = Server.fromJson(map);
         await add(server);
       }
     }
@@ -93,6 +93,6 @@ class UserServerDataRepo implements ServerDataRepo {
   static const String key = 'server';
 
   static Future<void> prepare() async {
-    await Hive.openBox<ServerData>(key);
+    await Hive.openBox<Server>(key);
   }
 }

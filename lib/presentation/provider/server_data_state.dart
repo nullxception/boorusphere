@@ -1,4 +1,4 @@
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/server_setting_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,9 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'server_data_state.g.dart';
 
 @Riverpod(keepAlive: true)
-class ServerDataState extends _$ServerDataState {
+class ServerState extends _$ServerState {
   @override
-  Iterable<ServerData> build() {
+  Iterable<Server> build() {
     // populate later
     return [];
   }
@@ -18,7 +18,7 @@ class ServerDataState extends _$ServerDataState {
 
   Future<void> populate() async {
     final serverSetting = ref.read(serverSettingStateProvider);
-    final repo = ref.read(serverDataRepoProvider);
+    final repo = ref.read(serverRepoProvider);
     await repo.populate();
     state = repo.servers;
 
@@ -31,40 +31,40 @@ class ServerDataState extends _$ServerDataState {
     }
   }
 
-  Future<void> add(ServerData data) async {
-    final repo = ref.read(serverDataRepoProvider);
+  Future<void> add(Server data) async {
+    final repo = ref.read(serverRepoProvider);
     await repo.add(data);
     state = repo.servers;
   }
 
-  Future<void> remove(ServerData data) async {
+  Future<void> remove(Server data) async {
     if (state.length == 1) {
       throw Exception('Last server cannot be deleted');
     }
 
-    final repo = ref.read(serverDataRepoProvider);
+    final repo = ref.read(serverRepoProvider);
     await repo.remove(data);
     state = repo.servers;
   }
 
-  Future<void> edit(ServerData from, ServerData to) async {
-    final repo = ref.read(serverDataRepoProvider);
+  Future<void> edit(Server from, Server to) async {
+    final repo = ref.read(serverRepoProvider);
     await repo.edit(from, to);
     state = repo.servers;
   }
 
   Future<void> reset() async {
-    final repo = ref.read(serverDataRepoProvider);
+    final repo = ref.read(serverRepoProvider);
     await repo.reset();
     state = repo.servers;
     await settings.setLastActiveId(state.first.id);
   }
 }
 
-extension ServerDataListExt on Iterable<ServerData> {
-  ServerData getById(String id, {ServerData? or}) {
+extension ServerDataListExt on Iterable<Server> {
+  Server getById(String id, {Server? or}) {
     return isEmpty
-        ? ServerData.empty
+        ? Server.empty
         : firstWhere(
             (it) => it.id == id,
             orElse: () => or ?? first,

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_progress.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_status.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
@@ -89,7 +89,7 @@ class DownloadEntryView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
     final headers = ref.watch(postHeadersFactoryProvider(entry.post));
     final progress = ref.watch(downloadProgressStateProvider).getById(entry.id);
     final isFileExists =
@@ -143,7 +143,7 @@ class DownloadEntryView extends ConsumerWidget {
                   width: 18,
                   child: Center(child: Text('•')),
                 ),
-                Text(serverData.getById(entry.post.serverId).name),
+                Text(servers.getById(entry.post.serverId).name),
               ],
             ),
           ],
@@ -160,7 +160,7 @@ class DownloadEntryView extends ConsumerWidget {
       trailing: _EntryPopupMenu(
         entry: entry,
         progress: progress,
-        server: serverData.getById(entry.post.serverId),
+        server: servers.getById(entry.post.serverId),
       ),
       dense: true,
       onTap: !progress.status.isDownloaded || !isFileExists
@@ -202,7 +202,7 @@ class _EntryPopupMenu extends ConsumerWidget {
 
   final DownloadEntry entry;
   final DownloadProgress progress;
-  final ServerData server;
+  final Server server;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

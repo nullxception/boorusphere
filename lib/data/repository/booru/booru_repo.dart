@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:dio/dio.dart';
@@ -12,17 +12,17 @@ class BooruRepo implements ImageboardRepo {
     required this.parsers,
     required this.client,
     required this.server,
-    required this.serverDataState,
+    required this.serverState,
   });
 
   final Iterable<BooruParser> parsers;
   final Dio client;
-  final ServerDataState serverDataState;
+  final ServerState serverState;
 
   final _opt = Options(validateStatus: (it) => it == 200);
 
   @override
-  final ServerData server;
+  final Server server;
 
   Future<Response> _request(String url, BooruParser parser) {
     return client.get(url, options: _opt.copyWith(headers: parser.headers));
@@ -47,7 +47,7 @@ class BooruRepo implements ImageboardRepo {
     if (parser.id.isNotEmpty) {
       debugPrint(
           'getSuggestion: parser resolved, now using ${parser.id}_parser');
-      await serverDataState.edit(
+      await serverState.edit(
           server, server.copyWith(suggestionParserId: parser.id));
     }
 
@@ -73,7 +73,7 @@ class BooruRepo implements ImageboardRepo {
 
     if (parser.id.isNotEmpty) {
       debugPrint('getPage: parser resolved, now using ${parser.id}_parser');
-      await serverDataState.edit(
+      await serverState.edit(
           server, server.copyWith(searchParserId: parser.id));
     }
 

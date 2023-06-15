@@ -1,9 +1,9 @@
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:path/path.dart' as path;
 
 class BooruUtil {
-  static String normalizeUrl(ServerData server, String urlString) {
+  static String normalizeUrl(Server server, String urlString) {
     if (urlString.isEmpty) {
       // wtf are you doing here
       return '';

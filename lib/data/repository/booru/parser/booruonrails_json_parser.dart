@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -25,7 +25,7 @@ class BooruOnRailsJsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(ServerData server, Response res) {
+  List<Post> parsePage(Server server, Response res) {
     final entries = List.from(res.data['images']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -84,7 +84,7 @@ class BooruOnRailsJsonParser extends BooruParser {
   }
 
   @override
-  Set<String> parseSuggestion(ServerData server, Response res) {
+  Set<String> parseSuggestion(Server server, Response res) {
     final entries = List.from(res.data['tags']);
 
     final result = <String>{};

@@ -22,7 +22,7 @@ class HomeContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pageState = ref.watch(pageStateProvider);
     final session = ref.watch(searchSessionProvider);
-    final serverData = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
     final blockedTags = ref.watch(tagsBlockerStateProvider.select(
       (state) => state.values
           .where((it) => it.serverId.isEmpty || it.serverId == session.serverId)
@@ -33,13 +33,13 @@ class HomeContent extends HookConsumerWidget {
         .where((it) => !it.allTags.any(blockedTags.contains));
 
     useEffect(() {
-      if (serverData.isNotEmpty) {
+      if (servers.isNotEmpty) {
         Future(() {
           ref.read(pageStateProvider.notifier).update(
               (option) => option.copyWith(query: session.query, clear: true));
         });
       }
-    }, [serverData.isNotEmpty]);
+    }, [servers.isNotEmpty]);
 
     final timelineController = ref.watch(timelineControllerProvider);
     final scrollController = timelineController.scrollController;

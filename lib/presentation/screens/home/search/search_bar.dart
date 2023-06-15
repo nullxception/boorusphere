@@ -150,7 +150,7 @@ class _SearchField extends HookConsumerWidget {
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final session = ref.watch(searchSessionProvider);
-    final server = ref.watch(serverDataStateProvider).getById(session.serverId);
+    final server = ref.watch(serverStateProvider).getById(session.serverId);
 
     return TextField(
       autofocus: searchBar.isOpen,
@@ -294,7 +294,7 @@ class _LeadingButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(searchSessionProvider);
-    final server = ref.watch(serverDataStateProvider).getById(session.serverId);
+    final server = ref.watch(serverStateProvider).getById(session.serverId);
     final searchBar = ref.watch(searchBarControllerProvider);
 
     return _Button(

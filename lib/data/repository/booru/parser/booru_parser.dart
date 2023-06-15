@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:dio/dio.dart';
 
 abstract class BooruParser {
@@ -11,9 +11,9 @@ abstract class BooruParser {
   String get searchQuery => '';
   Map<String, String> get headers => {};
   bool canParsePage(Response res) => false;
-  Iterable<Post> parsePage(ServerData server, Response res) => [];
+  Iterable<Post> parsePage(Server server, Response res) => [];
   bool canParseSuggestion(Response res) => false;
-  Iterable<String> parseSuggestion(ServerData server, Response res) => [];
+  Iterable<String> parseSuggestion(Server server, Response res) => [];
 }
 
 class NoParser extends BooruParser {

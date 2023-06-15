@@ -5,7 +5,7 @@ import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/utils/extensions/pick.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
@@ -27,7 +27,7 @@ class SafebooruXmlParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(ServerData server, Response res) {
+  List<Post> parsePage(Server server, Response res) {
     final entries = [];
     final xjson = Xml2Json();
     xjson.parse(res.data.replaceAll('\\', ''));
@@ -112,7 +112,7 @@ class SafebooruXmlParser extends BooruParser {
   }
 
   @override
-  Set<String> parseSuggestion(ServerData server, Response res) {
+  Set<String> parseSuggestion(Server server, Response res) {
     final data = res.data;
     final entries = [];
 

@@ -1,5 +1,5 @@
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -38,8 +38,8 @@ class SuggestionState extends _$SuggestionState {
       return;
     }
 
-    final server = ref.read(serverDataStateProvider).getById(session.serverId);
-    if (server == ServerData.empty) {
+    final server = ref.read(serverStateProvider).getById(session.serverId);
+    if (server == Server.empty) {
       state = const FetchResult.data([]);
       return;
     }

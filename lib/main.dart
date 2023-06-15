@@ -9,8 +9,8 @@ import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.d
 import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_repo.dart';
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/entity/booru_tag.dart';
@@ -29,7 +29,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  Hive.registerAdapter(ServersAdapter());
+  Hive.registerAdapter(ServerAdapter());
   Hive.registerAdapter(BooruTagAdapter());
   Hive.registerAdapter(SearchHistoryAdapter());
   Hive.registerAdapter(PostAdapter());
@@ -41,7 +41,7 @@ void main() async {
   Hive.registerAdapter(DownloadProgressAdapter());
 
   await Future.wait([
-    UserServerDataRepo.prepare(),
+    UserServerRepo.prepare(),
     BooruTagsBlockerRepo.prepare(),
     UserFavoritePostRepo.prepare(),
     UserSearchHistoryRepo.prepare(),

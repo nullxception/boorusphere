@@ -2,13 +2,13 @@ import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.d
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-part 'server_data.freezed.dart';
-part 'server_data.g.dart';
+part 'server.freezed.dart';
+part 'server.g.dart';
 
 @freezed
-class ServerData with _$ServerData {
-  @HiveType(typeId: 2, adapterName: 'ServersAdapter')
-  const factory ServerData({
+class Server with _$Server {
+  @HiveType(typeId: 2, adapterName: 'ServerAdapter')
+  const factory Server({
     @HiveField(0, defaultValue: '') @Default('') String id,
     @HiveField(1, defaultValue: '') @Default('') String homepage,
     @HiveField(2, defaultValue: '') @Default('') String postUrl,
@@ -18,12 +18,11 @@ class ServerData with _$ServerData {
     @HiveField(8, defaultValue: '') @Default('') String alias,
     @HiveField(9, defaultValue: '') @Default('') String searchParserId,
     @HiveField(10, defaultValue: '') @Default('') String suggestionParserId,
-  }) = _ServerData;
+  }) = _Server;
 
-  factory ServerData.fromJson(Map<String, dynamic> json) =>
-      _$ServerDataFromJson(json);
+  factory Server.fromJson(Map<String, dynamic> json) => _$ServerFromJson(json);
 
-  const ServerData._();
+  const Server._();
 
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
@@ -33,7 +32,7 @@ class ServerData with _$ServerData {
     BooruRating searchRating,
     int postLimit,
   ) {
-    String tags = query.trim().isEmpty ? ServerData.defaultTag : query.trim();
+    String tags = query.trim().isEmpty ? Server.defaultTag : query.trim();
     if (searchUrl.contains(RegExp(r'.*[\?&]offset=.*#opt\?json=1'))) {
       // Szurubooru has exclusive-way (but still same shit) of rating
       tags += ' ${_szuruRateString(searchRating)}';
@@ -89,7 +88,7 @@ class ServerData with _$ServerData {
 
   String get name => alias.isNotEmpty ? alias : id;
 
-  static const ServerData empty = ServerData();
+  static const Server empty = Server();
   static const String defaultTag = '*';
 }
 

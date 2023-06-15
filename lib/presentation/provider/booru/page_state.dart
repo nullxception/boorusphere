@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
@@ -33,8 +33,8 @@ class PageState extends _$PageState {
     return const FetchResult.idle(PageData());
   }
 
-  ServerData get _server {
-    return ref.read(serverDataStateProvider).getById(session.serverId);
+  Server get _server {
+    return ref.read(serverStateProvider).getById(session.serverId);
   }
 
   Iterable<String> get blockedTags {
@@ -52,7 +52,7 @@ class PageState extends _$PageState {
   }
 
   Future<void> load() async {
-    if (_server == ServerData.empty) return;
+    if (_server == Server.empty) return;
     final query = state.data.option.query;
     if (query.toWordList().any(blockedTags.contains)) {
       state = FetchResult.error(state.data, error: BooruError.tagsBlocked);

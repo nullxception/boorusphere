@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_repo.dart';
 import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
-import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
 import 'package:boorusphere/domain/provider.dart';
@@ -60,7 +60,7 @@ class DataBackupState extends _$DataBackupState {
   }
 
   void _invalidateProviders() {
-    ref.invalidate(serverDataStateProvider);
+    ref.invalidate(serverStateProvider);
     ref.invalidate(tagsBlockerStateProvider);
     ref.invalidate(searchHistoryStateProvider);
     ref.invalidate(favoritePostStateProvider);
@@ -103,8 +103,8 @@ class DataBackupState extends _$DataBackupState {
     for (final json in decoder.files) {
       final content = utf8.decode(json.content);
       switch (json.name.replaceAll('.json', '')) {
-        case UserServerDataRepo.key:
-          await ref.read(serverDataRepoProvider).import(content);
+        case UserServerRepo.key:
+          await ref.read(serverRepoProvider).import(content);
           break;
         case BooruTagsBlockerRepo.boxKey:
           await ref.read(tagsBlockerRepoProvider).import(content);
@@ -131,7 +131,7 @@ class DataBackupState extends _$DataBackupState {
     if (!option.isValid()) return;
 
     state = const BackupResult.loading(DataBackupType.backup);
-    final server = ref.read(serverDataRepoProvider).export();
+    final server = ref.read(serverRepoProvider).export();
     final blockedTags = ref.read(tagsBlockerRepoProvider).export();
     final favoritePost = ref.read(favoritePostRepoProvider).export();
     final setting = ref.read(settingsRepoProvider).export();

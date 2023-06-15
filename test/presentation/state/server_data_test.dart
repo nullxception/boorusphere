@@ -1,6 +1,6 @@
 import 'package:boorusphere/data/provider.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,7 +13,7 @@ import '../../utils/riverpod.dart';
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Map<String, ServerData> mapDefaultServers() {
+  Map<String, Server> mapDefaultServers() {
     return Map.fromEntries(
       getDefaultServerData().map(
         (it) => MapEntry(it.key, it),
@@ -25,19 +25,19 @@ void main() async {
     final ref = ProviderContainer(overrides: [
       defaultServersProvider.overrideWithValue(mapDefaultServers()),
     ]);
-    final listener = FakePodListener<Iterable<ServerData>>();
+    final listener = FakePodListener<Iterable<Server>>();
 
-    notifier() => ref.read(serverDataStateProvider.notifier);
-    state() => ref.read(serverDataStateProvider);
+    notifier() => ref.read(serverStateProvider.notifier);
+    state() => ref.read(serverStateProvider);
 
     setUpAll(() async {
       initializeTestHive();
-      await UserServerDataRepo.prepare();
+      await UserServerRepo.prepare();
       await UserSettingsRepo.prepare();
       await notifier().populate();
 
       ref.listen(
-        serverDataStateProvider,
+        serverStateProvider,
         listener.call,
         fireImmediately: true,
       );
@@ -51,7 +51,7 @@ void main() async {
     test('get', () async {
       expect(state().getById('Yandere').homepage, 'https://yande.re');
       expect(state().getById('deez'), state().first);
-      expect(state().getById('deez', or: ServerData.empty), ServerData.empty);
+      expect(state().getById('deez', or: Server.empty), Server.empty);
     });
 
     test('add', () async {
@@ -75,8 +75,8 @@ void main() async {
       await notifier().remove(server);
 
       expect(
-        state().getById('Yandere', or: ServerData.empty),
-        ServerData.empty,
+        state().getById('Yandere', or: Server.empty),
+        Server.empty,
       );
     });
 

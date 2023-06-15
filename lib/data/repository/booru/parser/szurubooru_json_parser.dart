@@ -1,7 +1,7 @@
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_util.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:dio/dio.dart';
 
@@ -36,7 +36,7 @@ class SzurubooruJsonParser extends BooruParser {
   }
 
   @override
-  List<Post> parsePage(ServerData server, res) {
+  List<Post> parsePage(Server server, res) {
     final entries = List.from(res.data['results']);
     final result = <Post>[];
     for (final post in entries.whereType<Map<String, dynamic>>()) {
@@ -97,7 +97,7 @@ class SzurubooruJsonParser extends BooruParser {
   }
 
   @override
-  Set<String> parseSuggestion(ServerData server, Response res) {
+  Set<String> parseSuggestion(Server server, Response res) {
     final entries = List.from(res.data['results']);
     final result = <String>{};
     for (final entry in entries.whereType<Map<String, dynamic>>()) {

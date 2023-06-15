@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/entity/booru_error.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/fetch_result.dart';
 import 'package:boorusphere/presentation/provider/booru/entity/page_data.dart';
@@ -66,7 +66,7 @@ class _ErrorStatus extends ConsumerWidget {
   final Object? error;
   final StackTrace? stackTrace;
 
-  Object? buildError(BuildContext context, ServerData server) {
+  Object? buildError(BuildContext context, Server server) {
     final e = error;
     if (e is DioException && e.response?.statusCode != null) {
       return context.t.pageStatus
@@ -87,7 +87,7 @@ class _ErrorStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(searchSessionProvider);
-    final server = ref.watch(serverDataStateProvider).getById(session.serverId);
+    final server = ref.watch(serverStateProvider).getById(session.serverId);
 
     return Center(
       child: NoticeCard(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:boorusphere/data/dio/app_dio.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -25,15 +25,15 @@ Future<CookieJar> provideCookieJar() async {
 }
 
 @Riverpod(keepAlive: true)
-Map<String, ServerData> defaultServers(DefaultServersRef ref) {
+Map<String, Server> defaultServers(DefaultServersRef ref) {
   return {};
 }
 
-Future<Map<String, ServerData>> provideDefaultServers() async {
+Future<Map<String, Server>> provideDefaultServers() async {
   final json = await rootBundle.loadString('assets/servers.json');
   final servers = jsonDecode(json) as List;
   return Map.fromEntries(servers.map((it) {
-    final value = ServerData.fromJson(it);
+    final value = Server.fromJson(it);
     return MapEntry(value.key, value);
   }));
 }

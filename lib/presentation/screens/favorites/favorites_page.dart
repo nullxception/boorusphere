@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/favorite_post_state.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
@@ -71,14 +71,14 @@ class _Pager extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverDataState = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
 
     final pages = posts
         .groupListsBy(
-          (e) => serverDataState.getById(e.serverId, or: ServerData.empty),
+          (e) => servers.getById(e.serverId, or: Server.empty),
         )
         .entries
-        .where((it) => it.key != ServerData.empty)
+        .where((it) => it.key != Server.empty)
         .sortedBy((it) => it.key.id);
 
     return DefaultTabController(
@@ -136,7 +136,7 @@ class _Content extends ConsumerWidget {
   const _Content({required this.posts, required this.server});
 
   final Iterable<Post> posts;
-  final ServerData server;
+  final Server server;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

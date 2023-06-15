@@ -4,7 +4,7 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
 import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.dart';
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/data/repository/tags_blocker/entity/booru_tag.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
@@ -16,7 +16,7 @@ void initializeTestHive() {
       path.join(Directory.current.path, 'build', 'test', 'runtime');
   Hive.init(runtimeDir);
   Hive
-    ..registerAdapter(ServersAdapter())
+    ..registerAdapter(ServerAdapter())
     ..registerAdapter(BooruTagAdapter())
     ..registerAdapter(SearchHistoryAdapter())
     ..registerAdapter(PostAdapter())

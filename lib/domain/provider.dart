@@ -11,8 +11,8 @@ import 'package:boorusphere/data/repository/favorite_post/entity/favorite_post.d
 import 'package:boorusphere/data/repository/favorite_post/user_favorite_post_repo.dart';
 import 'package:boorusphere/data/repository/search_history/entity/search_history.dart';
 import 'package:boorusphere/data/repository/search_history/user_search_history.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
-import 'package:boorusphere/data/repository/server/user_server_data_repo.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
+import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/data/repository/setting/user_setting_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/booru_tags_blocker_repo.dart';
 import 'package:boorusphere/data/repository/tags_blocker/entity/booru_tag.dart';
@@ -52,12 +52,12 @@ TagsBlockerRepo tagsBlockerRepo(TagsBlockerRepoRef ref) {
 }
 
 @riverpod
-ImageboardRepo imageboardRepo(ImageboardRepoRef ref, ServerData server) {
+ImageboardRepo imageboardRepo(ImageboardRepoRef ref, Server server) {
   return BooruRepo(
     parsers: ref.watch(booruParsersProvider),
     client: ref.watch(dioProvider),
     server: server,
-    serverDataState: ref.watch(serverDataStateProvider.notifier),
+    serverState: ref.watch(serverStateProvider.notifier),
   );
 }
 
@@ -82,10 +82,10 @@ SearchHistoryRepo searchHistoryRepo(SearchHistoryRepoRef ref) {
 }
 
 @riverpod
-ServerDataRepo serverDataRepo(ServerDataRepoRef ref) {
-  return UserServerDataRepo(
+ServerRepo serverRepo(ServerRepoRef ref) {
+  return UserServerRepo(
     defaultServers: ref.watch(defaultServersProvider),
-    box: Hive.box<ServerData>(UserServerDataRepo.key),
+    box: Hive.box<Server>(UserServerRepo.key),
   );
 }
 

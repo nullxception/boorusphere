@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -190,10 +190,10 @@ class BooruScanner {
     yield firstFound;
   }
 
-  Future<ServerData> scan(String homeUrl, String apiUrl) async {
+  Future<Server> scan(String homeUrl, String apiUrl) async {
     final api = apiUrl.replaceFirst(RegExp(r'/$'), '');
     final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
-    var data = ServerData.empty;
+    var data = Server.empty;
 
     _logsHolder.clear();
     _logs = StreamController.broadcast();

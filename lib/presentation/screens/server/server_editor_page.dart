@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
-import 'package:boorusphere/data/repository/server/entity/server_data.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart';
@@ -17,16 +17,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
 class ServerEditorPage extends StatelessWidget {
-  const ServerEditorPage({super.key, this.server = ServerData.empty});
+  const ServerEditorPage({super.key, this.server = Server.empty});
 
-  final ServerData server;
+  final Server server;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          server != ServerData.empty
+          server != Server.empty
               ? context.t.servers.edit(name: server.name)
               : context.t.servers.add,
         ),
@@ -44,9 +44,9 @@ class ServerEditorPage extends StatelessWidget {
 class _ServerEditor extends HookConsumerWidget {
   const _ServerEditor({required this.server});
 
-  final ServerData server;
+  final Server server;
 
-  bool get isEditing => server != ServerData.empty;
+  bool get isEditing => server != Server.empty;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -179,13 +179,12 @@ class _ServerEditor extends HookConsumerWidget {
                     server: newServer.value,
                     isEditing: isEditing,
                     onSubmitted: (data) {
-                      final serverDataNotifier =
-                          ref.read(serverDataStateProvider.notifier);
+                      final serverPod = ref.read(serverStateProvider.notifier);
 
                       if (isEditing) {
-                        serverDataNotifier.edit(server, data);
+                        serverPod.edit(server, data);
                       } else {
-                        serverDataNotifier.add(data);
+                        serverPod.add(data);
                       }
 
                       context.router.pop();

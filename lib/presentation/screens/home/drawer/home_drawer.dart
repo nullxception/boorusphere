@@ -248,15 +248,14 @@ class _ServerSelection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
     final session = ref.watch(searchSessionProvider);
-    final serverActive =
-        ref.watch(serverDataStateProvider).getById(session.serverId);
+    final serverActive = servers.getById(session.serverId);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: serverData.map((it) {
+      children: servers.map((it) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
           child: ListTile(

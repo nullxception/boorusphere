@@ -33,7 +33,7 @@ class _Content extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final serverData = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +59,7 @@ class _Content extends ConsumerWidget {
                         ElevatedButton(
                           onPressed: () {
                             context.navigator.pop();
-                            ref.read(serverDataStateProvider.notifier).reset();
+                            ref.read(serverStateProvider.notifier).reset();
                           },
                           child: Text(context.t.reset),
                         )
@@ -86,7 +86,7 @@ class _Content extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ...serverData.map((it) {
+              ...servers.map((it) {
                 return ListTile(
                   title: Text(it.name),
                   subtitle: Text(it.homepage),
@@ -98,7 +98,7 @@ class _Content extends ConsumerWidget {
                           context.router.push(ServerEditorRoute(server: it));
                           break;
                         case 'remove':
-                          if (serverData.length == 1) {
+                          if (servers.length == 1) {
                             context.scaffoldMessenger.showSnackBar(
                               SnackBar(
                                 duration: const Duration(seconds: 1),
@@ -109,7 +109,7 @@ class _Content extends ConsumerWidget {
                             break;
                           }
 
-                          ref.read(serverDataStateProvider.notifier).remove(it);
+                          ref.read(serverStateProvider.notifier).remove(it);
                           break;
                         default:
                           break;

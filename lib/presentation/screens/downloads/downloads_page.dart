@@ -25,7 +25,7 @@ class DownloadsPage extends HookConsumerWidget {
     final savedServerId =
         ref.read(serverSettingStateProvider.select((it) => it.lastActiveId));
     final session = this.session ?? SearchSession(serverId: savedServerId);
-    final serverData = ref.watch(serverDataStateProvider);
+    final servers = ref.watch(serverStateProvider);
     final downloadEntries =
         ref.watch(downloadEntryStateProvider).whereNotReserved();
     final downloadProgressState = ref.watch(downloadProgressStateProvider);
@@ -111,7 +111,7 @@ class DownloadsPage extends HookConsumerWidget {
               : ExpandableGroupListView<DownloadEntry, String>(
                   items: filteredEntries,
                   groupedBy: (item) => item.post.serverId,
-                  groupTitle: (id) => Text(serverData.getById(id).name),
+                  groupTitle: (id) => Text(servers.getById(id).name),
                   itemBuilder: (item) => DownloadEntryView(
                     entry: item,
                     groupByServer: groupByServer,
