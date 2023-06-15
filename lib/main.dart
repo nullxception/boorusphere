@@ -24,8 +24,10 @@ import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
 
 void main() async {
+  setupLogger();
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
@@ -63,5 +65,12 @@ void main() async {
       ],
       child: TranslationProvider(child: const Boorusphere()),
     ),
+  );
+}
+
+void setupLogger() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen(
+    (x) => debugPrint('(${x.level.name}) ${x.loggerName}: ${x.message}'),
   );
 }

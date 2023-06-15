@@ -108,13 +108,6 @@ class _PostVideoContent extends HookConsumerWidget {
     }, []);
 
     useEffect(() {
-      debugPrint('watching video');
-      return () {
-        debugPrint('leaving video');
-      };
-    }, []);
-
-    useEffect(() {
       controller?.initialize().whenComplete(() async {
         onFirstFrame() {
           controller.removeListener(onFirstFrame);

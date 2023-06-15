@@ -60,6 +60,7 @@ dependencies:
   html_unescape: ^2.0.0
   intl: ^0.18.0
   json_annotation: ^4.8.1
+  logging: ^1.2.0
   media_scanner: ^2.1.0
   mime: ^1.0.0
   package_info: ^2.0.0
