@@ -36,7 +36,7 @@ class BooruRepo implements ImageboardRepo {
     final suggestionUrl = server.suggestionUrlsOf(word);
     final res = await _request(suggestionUrl, parser);
 
-    if (parser is! NoParser) {
+    if (parser.canParseSuggestion(res)) {
       debugPrint('getSuggestion: using ${parser.id}_parser');
       return parser.parseSuggestion(server, res).toSet();
     }
@@ -63,7 +63,7 @@ class BooruRepo implements ImageboardRepo {
         option.query, index, option.searchRating, option.limit);
     final res = await _request(searchUrl, parser);
 
-    if (parser is! NoParser) {
+    if (parser.canParsePage(res)) {
       debugPrint('getPage: using ${parser.id}_parser');
       return parser.parsePage(server, res).toSet();
     }
