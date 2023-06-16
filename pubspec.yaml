@@ -90,7 +90,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.1
   freezed: ^2.1.0+1
-  full_coverage: ^1.0.0
   grinder: ^0.9.4
   hive_generator: ^2.0.0
   json_serializable: ^6.7.0

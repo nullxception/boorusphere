@@ -13,7 +13,6 @@ listTasks() => grutil.tasks();
 @Task('Generate code')
 Future<void> gencode() async {
   await me.pun('build_runner', args: ['build', '--delete-conflicting-outputs']);
-  await me.pun('full_coverage');
 }
 
 @Task('Generate localization')
@@ -54,8 +53,8 @@ Future<void> analyze() async {
   await me.fun(['analyze']);
 }
 
-@Task('Unit test')
-Future<void> unittest() async {
+@Task('Test')
+Future<void> test() async {
   await me.fun(['test', '--coverage']);
 }
 
@@ -65,10 +64,10 @@ Future<void> apkrelease() async {
   await me.pun('boorusphere', bin: 'renameapks');
 }
 
-@Task('Test all things')
-@Depends(chkfmt, analyze, unittest)
-void testall() {}
+@Task('Check all things')
+@Depends(chkfmt, analyze, test)
+void chkall() {}
 
 @Task('Perform release pipeline')
-@Depends(gencode, genlang, testall, apkrelease, mkreleasenote)
+@Depends(gencode, genlang, chkall, apkrelease, mkreleasenote)
 void release() {}

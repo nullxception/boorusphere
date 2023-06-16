@@ -39,4 +39,4 @@ jobs:
       - name: Analyze code
         run: grind analyze
       - name: Perform testing
-        run: grind unittest
+        run: grind test
