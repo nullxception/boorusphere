@@ -16,7 +16,7 @@ class BooruOnRailsJsonParser extends BooruParser {
       'api/v1/json/search/images?q={tags}&per_page={post-limit}&page={page-id}';
 
   @override
-  final suggestionQuery = 'api/v1/json/search/tags?q={tag-part}';
+  final suggestionQuery = 'api/v1/json/search/tags?q={tag-part}*';
 
   @override
   bool canParsePage(Response res) {
