@@ -12,15 +12,15 @@ void main() async {
 
   group('ServerSetting', () {
     final ref = ProviderContainer();
+    final hiveContainer = HiveTestContainer();
 
     setUpAll(() async {
-      initializeTestHive();
       await UserSettingsRepo.prepare();
       ref.setupTestFor(serverSettingStateProvider);
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

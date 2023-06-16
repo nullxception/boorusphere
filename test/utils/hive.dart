@@ -11,22 +11,31 @@ import 'package:boorusphere/presentation/provider/settings/entity/download_quali
 import 'package:hive/hive.dart';
 import 'package:path/path.dart' as path;
 
-void initializeTestHive() {
-  final runtimeDir =
-      path.join(Directory.current.path, 'build', 'test', 'runtime');
-  Hive.init(runtimeDir);
-  Hive
-    ..registerAdapter(ServerAdapter())
-    ..registerAdapter(BooruTagAdapter())
-    ..registerAdapter(SearchHistoryAdapter())
-    ..registerAdapter(PostAdapter())
-    ..registerAdapter(DownloadEntryAdapter())
-    ..registerAdapter(FavoritePostAdapter())
-    ..registerAdapter(BooruRatingAdapter())
-    ..registerAdapter(DownloadQualityAdapter());
-}
+class HiveTestContainer {
+  HiveTestContainer() {
+    final ud = path.join(Directory.current.path, 'build', 'test_hive');
+    final dir = Directory(ud)..createSync(recursive: true);
+    _dir = dir.createTempSync();
 
-Future<void> destroyTestHive() async {
-  await Hive.deleteFromDisk();
-  await Hive.close();
+    Hive.init(_dir.absolute.path);
+    Hive
+      ..registerAdapter(ServerAdapter())
+      ..registerAdapter(BooruTagAdapter())
+      ..registerAdapter(SearchHistoryAdapter())
+      ..registerAdapter(PostAdapter())
+      ..registerAdapter(DownloadEntryAdapter())
+      ..registerAdapter(FavoritePostAdapter())
+      ..registerAdapter(BooruRatingAdapter())
+      ..registerAdapter(DownloadQualityAdapter());
+  }
+
+  late Directory _dir;
+
+  Future<void> dispose() async {
+    await Hive.deleteFromDisk();
+    await Hive.close();
+    if (_dir.listSync().isEmpty) {
+      _dir.deleteSync();
+    }
+  }
 }

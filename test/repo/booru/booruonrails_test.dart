@@ -19,6 +19,7 @@ void main() async {
   setupLogger(test: true);
   setupMocktailFallbacks();
   TestWidgetsFlutterBinding.ensureInitialized();
+  final hiveContainer = HiveTestContainer();
 
   test('BooruOnRails', () async {
     final ref = ProviderContainer(overrides: [
@@ -26,9 +27,8 @@ void main() async {
       envRepoProvider.overrideWithValue(FakeEnvRepo()),
     ]);
 
-    initializeTestHive();
     addTearDown(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

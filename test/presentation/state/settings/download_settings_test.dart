@@ -12,18 +12,18 @@ void main() async {
 
   group('DownloadSetting', () {
     final ref = ProviderContainer();
+    final hiveContainer = HiveTestContainer();
 
     notifier() => ref.read(downloadSettingStateProvider.notifier);
     state() => ref.read(downloadSettingStateProvider);
 
     setUpAll(() async {
-      initializeTestHive();
       await UserSettingsRepo.prepare();
       ref.setupTestFor(downloadSettingStateProvider);
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

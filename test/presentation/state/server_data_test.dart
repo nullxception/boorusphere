@@ -12,6 +12,7 @@ import '../../utils/riverpod.dart';
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
+  final hiveContainer = HiveTestContainer();
 
   Map<String, Server> mapDefaultServers() {
     return Map.fromEntries(
@@ -30,7 +31,6 @@ void main() async {
     state() => ref.read(serverStateProvider);
 
     setUpAll(() async {
-      initializeTestHive();
       await UserServerRepo.prepare();
       await UserSettingsRepo.prepare();
 
@@ -39,7 +39,7 @@ void main() async {
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

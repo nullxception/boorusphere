@@ -12,18 +12,18 @@ void main() async {
   group('tags blocker', () {
     const serverId = 'TestBooru';
     final ref = ProviderContainer();
+    final hiveContainer = HiveTestContainer();
 
     notifier() => ref.read(tagsBlockerStateProvider.notifier);
     state() => ref.read(tagsBlockerStateProvider);
 
     setUpAll(() async {
-      initializeTestHive();
       await BooruTagsBlockerRepo.prepare();
       ref.setupTestFor(tagsBlockerStateProvider);
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

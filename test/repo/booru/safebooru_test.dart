@@ -25,10 +25,10 @@ void main() async {
       defaultServersProvider.overrideWithValue(await provideDefaultServers()),
       envRepoProvider.overrideWithValue(FakeEnvRepo()),
     ]);
+    final hiveContainer = HiveTestContainer();
 
-    initializeTestHive();
     addTearDown(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

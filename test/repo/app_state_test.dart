@@ -11,15 +11,15 @@ void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   final ref = ProviderContainer();
+  final hiveContainer = HiveTestContainer();
 
   setUpAll(() async {
-    initializeTestHive();
     await CurrentAppStateRepo.prepare();
     ref.setupTestFor(appStateRepoProvider);
   });
 
   tearDownAll(() async {
-    await destroyTestHive();
+    await hiveContainer.dispose();
     ref.dispose();
   });
 

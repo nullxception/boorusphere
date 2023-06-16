@@ -13,18 +13,18 @@ void main() async {
   group('favorite post', () {
     final posts = getSamplePosts();
     final ref = ProviderContainer();
+    final hiveContainer = HiveTestContainer();
 
     notifier() => ref.read(favoritePostStateProvider.notifier);
     state() => ref.read(favoritePostStateProvider);
 
     setUpAll(() async {
-      initializeTestHive();
       await UserFavoritePostRepo.prepare();
       ref.setupTestFor(favoritePostStateProvider);
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

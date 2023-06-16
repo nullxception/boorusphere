@@ -13,18 +13,18 @@ void main() async {
   group('search history', () {
     final servers = getDefaultServerData();
     final ref = ProviderContainer();
+    final hiveContainer = HiveTestContainer();
 
     notifier() => ref.read(searchHistoryStateProvider.notifier);
     state() => ref.read(searchHistoryStateProvider);
 
     setUpAll(() async {
-      initializeTestHive();
       await UserSearchHistoryRepo.prepare();
       ref.setupTestFor(searchHistoryStateProvider);
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 

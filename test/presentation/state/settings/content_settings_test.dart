@@ -11,18 +11,18 @@ void main() async {
 
   group('ContentSetting', () {
     final ref = ProviderContainer();
+    final hiveContainer = HiveTestContainer();
 
     notifier() => ref.read(contentSettingStateProvider.notifier);
     state() => ref.read(contentSettingStateProvider);
 
     setUpAll(() async {
-      initializeTestHive();
       await UserSettingsRepo.prepare();
       ref.setupTestFor(contentSettingStateProvider);
     });
 
     tearDownAll(() async {
-      await destroyTestHive();
+      await hiveContainer.dispose();
       ref.dispose();
     });
 
