@@ -6,14 +6,12 @@ import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/utils/logger.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../presentation/state/app_version_test.dart';
 import '../../utils/dio.dart';
-import '../../utils/fake_data.dart';
 import '../../utils/hive.dart';
 import '../../utils/mocktail.dart';
 import '../../utils/riverpod.dart';
@@ -48,16 +46,10 @@ void main() async {
         tagSuggestionUrl: parser.suggestionQuery);
 
     const option = PageOption(limit: 5, searchRating: BooruRating.all);
-    final okHeadersXml = {
-      Headers.contentTypeHeader: ['text/xml']
-    };
-    final okHeadersJson = {
-      Headers.contentTypeHeader: [Headers.jsonContentType]
-    };
 
-    final fakePage = getFakeData('rule34.paheal/posts.xml').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakePage, 200, headers: okHeadersXml));
+    const fakePage = 'rule34.paheal/posts.xml';
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakePage, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -65,9 +57,9 @@ void main() async {
       reason: 'expecting 2 invalid post',
     );
 
-    final fakeTags = getFakeData('rule34.paheal/tags.json').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakeTags, 200, headers: okHeadersJson));
+    const fakeTags = 'rule34.paheal/tags.json';
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakeTags, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),

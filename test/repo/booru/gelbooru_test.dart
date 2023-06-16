@@ -6,14 +6,12 @@ import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
 import 'package:boorusphere/utils/logger.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../presentation/state/app_version_test.dart';
 import '../../utils/dio.dart';
-import '../../utils/fake_data.dart';
 import '../../utils/hive.dart';
 import '../../utils/mocktail.dart';
 import '../../utils/riverpod.dart';
@@ -46,13 +44,10 @@ void main() async {
     ref.setupTestFor(imageboardRepoProvider(server));
 
     const option = PageOption(limit: 5);
-    final okHeaders = {
-      Headers.contentTypeHeader: [Headers.jsonContentType]
-    };
 
-    final fakePage = getFakeData('gelbooru/posts.json').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((x) async =>
-        ResponseBody.fromString(fakePage, 200, headers: okHeaders));
+    const fakePage = 'gelbooru/posts.json';
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((x) async => FakeResponseBody.fromFakeData(fakePage, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -60,9 +55,9 @@ void main() async {
       reason: 'expecting 2 invalid post',
     );
 
-    final fakeTags = getFakeData('gelbooru/tags.json').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakeTags, 200, headers: okHeaders));
+    const fakeTags = 'gelbooru/tags.json';
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakeTags, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),
@@ -71,9 +66,6 @@ void main() async {
       reason: 'expecting 2 tags with zero post_count',
     );
 
-    final okHeadersXml = {
-      Headers.contentTypeHeader: ['text/xml']
-    };
     final parser = GelbooruXmlParser();
     final serverXml = ref
         .read(serverRepoProvider)
@@ -84,9 +76,9 @@ void main() async {
             tagSuggestionUrl: parser.suggestionQuery);
     ref.setupTestFor(imageboardRepoProvider(serverXml));
 
-    final fakePageXml = getFakeData('gelbooru/posts.xml').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((x) async =>
-        ResponseBody.fromString(fakePageXml, 200, headers: okHeadersXml));
+    const fakePageXml = 'gelbooru/posts.xml';
+    when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+        (x) async => FakeResponseBody.fromFakeData(fakePageXml, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -94,9 +86,9 @@ void main() async {
       reason: 'expecting 2 invalid post',
     );
 
-    final fakeTagsXml = getFakeData('gelbooru/tags.xml').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakeTagsXml, 200, headers: okHeadersXml));
+    const fakeTagsXml = 'gelbooru/tags.xml';
+    when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+        (_) async => FakeResponseBody.fromFakeData(fakeTagsXml, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),

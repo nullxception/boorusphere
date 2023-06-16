@@ -12,7 +12,6 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../presentation/state/app_version_test.dart';
 import '../../utils/dio.dart';
-import '../../utils/fake_data.dart';
 import '../../utils/hive.dart';
 import '../../utils/mocktail.dart';
 import '../../utils/riverpod.dart';
@@ -45,13 +44,10 @@ void main() async {
         tagSuggestionUrl: parser.suggestionQuery);
 
     const option = PageOption(limit: 5);
-    final jsonHeaders = {
-      Headers.contentTypeHeader: [Headers.jsonContentType]
-    };
 
-    final fakePage = getFakeData('szurubooru/posts.json').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakePage, 200, headers: jsonHeaders));
+    const fakePage = 'szurubooru/posts.json';
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakePage, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -59,9 +55,9 @@ void main() async {
       reason: 'expecting 2 invalid post',
     );
 
-    final fakeTags = getFakeData('szurubooru/tags.json').readAsStringSync();
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakeTags, 403, headers: jsonHeaders));
+    const fakeTags = 'szurubooru/tags.json';
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakeTags, 403));
 
     await expectLater(
       ref.read(imageboardRepoProvider(server)).getSuggestion('book'),
@@ -69,8 +65,9 @@ void main() async {
       reason: 'expecting error because not logged in',
     );
 
-    when(() => adapter.fetch(any(), any(), any())).thenAnswer((_) async =>
-        ResponseBody.fromString(fakeTags, 200, headers: jsonHeaders));
+    when(() => adapter.fetch(any(), any(), any()))
+        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakeTags, 200));
+
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),
       isA<Iterable>().having((x) => x.length, 'total', 4 - 1),
