@@ -30,7 +30,9 @@ const _clear = '\u001b[0m';
 
 String _color(int n) => '\u001b[38;5;${n}m';
 
-void setupLogger() {
+void setupLogger({bool test = false}) {
+  final log = test ? debugPrint : debugPrintSynchronously;
+
   Logger.root.level = kDebugMode ? _Level.v : _Level.i;
   Logger.root.onRecord.listen((x) {
     final lv = x.level.value;
@@ -42,7 +44,6 @@ void setupLogger() {
       _ => _color(8),
     };
 
-    debugPrint(
-        '$lc${x.level.name} ${_color(2)}${x.loggerName}$_clear: ${x.message}');
+    log('$lc${x.level.name} ${_color(2)}${x.loggerName}$_clear: ${x.message}');
   });
 }

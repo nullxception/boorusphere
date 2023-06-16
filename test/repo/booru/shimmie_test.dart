@@ -19,7 +19,7 @@ import '../../utils/mocktail.dart';
 import '../../utils/riverpod.dart';
 
 void main() async {
-  setupLogger();
+  setupLogger(test: true);
   setupMocktailFallbacks();
   TestWidgetsFlutterBinding.ensureInitialized();
 
