@@ -4,8 +4,8 @@ import 'package:boorusphere/data/repository/booru/parser/gelbooru_xml_parser.dar
 import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/data/repository/server/user_server_repo.dart';
 import 'package:boorusphere/domain/provider.dart';
-import 'package:boorusphere/main.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

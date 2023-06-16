@@ -4,6 +4,7 @@ import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/repository/imageboards_repo.dart';
 import 'package:boorusphere/presentation/provider/server_data_state.dart';
+import 'package:boorusphere/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 
@@ -38,7 +39,7 @@ class BooruRepo implements ImageboardRepo {
     final res = await _request(suggestionUrl, parser);
 
     if (parser.canParseSuggestion(res)) {
-      _log.fine('getSuggestion: using ${parser.id}_parser');
+      _log.i('getSuggestion(${server.name}): using ${parser.id}_parser');
       return parser.parseSuggestion(server, res).toSet();
     }
 
@@ -46,8 +47,8 @@ class BooruRepo implements ImageboardRepo {
         orElse: NoParser.new);
 
     if (parser.id.isNotEmpty) {
-      _log.fine(
-          'getSuggestion: parser resolved, now using ${parser.id}_parser');
+      _log.i(
+          'getSuggestion(${server.name}): parser resolved, now using ${parser.id}_parser');
       await serverState.edit(
           server, server.copyWith(suggestionParserId: parser.id));
     }
@@ -64,7 +65,7 @@ class BooruRepo implements ImageboardRepo {
     final res = await _request(searchUrl, parser);
 
     if (parser.canParsePage(res)) {
-      _log.fine('getPage: using ${parser.id}_parser');
+      _log.i('getPage(${server.name}): using ${parser.id}_parser');
       return parser.parsePage(server, res).toSet();
     }
 
@@ -72,7 +73,8 @@ class BooruRepo implements ImageboardRepo {
         parsers.firstWhere((it) => it.canParsePage(res), orElse: NoParser.new);
 
     if (parser.id.isNotEmpty) {
-      _log.fine('getPage: parser resolved, now using ${parser.id}_parser');
+      _log.i(
+          'getPage(${server.name}): parser resolved, now using ${parser.id}_parser');
       await serverState.edit(
           server, server.copyWith(searchParserId: parser.id));
     }

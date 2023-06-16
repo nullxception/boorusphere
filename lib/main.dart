@@ -21,10 +21,10 @@ import 'package:boorusphere/presentation/i18n/strings.g.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/download_quality.dart';
 import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
+import 'package:boorusphere/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:logging/logging.dart';
 
 void main() async {
   setupLogger();
@@ -65,12 +65,5 @@ void main() async {
       ],
       child: TranslationProvider(child: const Boorusphere()),
     ),
-  );
-}
-
-void setupLogger() {
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen(
-    (x) => debugPrint('(${x.level.name}) ${x.loggerName}: ${x.message}'),
   );
 }

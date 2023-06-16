@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/repository/booru/entity/page_option.dart';
 import 'package:boorusphere/presentation/provider/settings/entity/booru_rating.dart';
+import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
@@ -28,9 +29,9 @@ class Server with _$Server {
   bool get canSuggestTags => tagSuggestionUrl.contains('{tag-part}');
 
   String searchUrlOf(PageOption option, {required int page}) {
-    String tags =
-        option.query.trim().isEmpty ? Server.defaultTag : option.query.trim();
-    if (searchUrl.contains(RegExp(r'.*[\?&]offset=.*#opt\?json=1'))) {
+    final query = option.query.trim();
+    var tags = query.isEmpty ? Server.defaultTag : query;
+    if (searchUrl.toUri().queryParameters.containsKey('offset')) {
       // Szurubooru has exclusive-way (but still same shit) of rating
       tags += ' ${_szuruRateString(option.searchRating)}';
     } else if (searchUrl.contains('api/v1/json/search')) {
@@ -39,9 +40,10 @@ class Server with _$Server {
     } else {
       tags += ' ${_rateString(option.searchRating)}';
     }
+    tags = Uri.encodeComponent(tags.trim());
 
     return '$homepage/$searchUrl'
-        .replaceAll('{tags}', Uri.encodeComponent(tags.trim()))
+        .replaceAll('{tags}', tags)
         .replaceAll('{page-id}', '$page')
         .replaceAll('{post-offset}', (page * option.limit).toString())
         .replaceAll('{post-limit}', '${option.limit}');
