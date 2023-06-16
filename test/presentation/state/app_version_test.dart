@@ -33,7 +33,7 @@ void main() async {
       ref.setupTestFor(appVersionsStateProvider);
 
       const edgeVersion = '9.9.9';
-      final adapter = DioAdapterMock.on(ref.read(dioProvider));
+      final adapter = DioAdapterMock(ref.read(dioProvider));
       when(() => adapter.fetch(any(), any(), any())).thenAnswer(
           (invocation) async => ResponseBody.fromString(
               '\n# comments\nversion: $edgeVersion+99\n', 200));
@@ -64,8 +64,7 @@ void main() async {
       ref.setupTestFor(dioProvider);
       ref.setupTestFor(appVersionsStateProvider);
 
-      final adapter = DioAdapterMock();
-      ref.read(dioProvider).httpClientAdapter = adapter;
+      final adapter = DioAdapterMock(ref.read(dioProvider));
       when(() => adapter.fetch(any(), any(), any()))
           .thenAnswer((invocation) async => ResponseBody.fromString('', 200));
 

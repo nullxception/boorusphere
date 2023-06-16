@@ -36,7 +36,7 @@ void main() async {
 
     await UserServerRepo.prepare();
     ref.setupTestFor(dioProvider);
-    final adapter = DioAdapterMock.on(ref.read(dioProvider));
+    final adapter = DioAdapterMock(ref.read(dioProvider));
 
     final parser = SzurubooruJsonParser();
     final server = Server(

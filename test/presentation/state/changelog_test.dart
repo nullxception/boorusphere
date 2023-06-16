@@ -51,7 +51,7 @@ void main() async {
 
       addTearDown(ref.dispose);
 
-      final adapter = DioAdapterMock.on(ref.read(dioProvider));
+      final adapter = DioAdapterMock(ref.read(dioProvider));
       when(() => adapter.fetch(any(), any(), any())).thenAnswer(
           (invocation) async =>
               ResponseBody.fromString('\n## 999.9.9\n* Fix deez nuts\n', 200));
@@ -75,8 +75,7 @@ void main() async {
       ref.setupTestFor(dioProvider);
       ref.setupTestFor(logProvider);
 
-      final adapter = DioAdapterMock();
-      ref.read(dioProvider).httpClientAdapter = adapter;
+      final adapter = DioAdapterMock(ref.read(dioProvider));
       when(() => adapter.fetch(any(), any(), any()))
           .thenAnswer((invocation) async => ResponseBody.fromString('', 200));
 
