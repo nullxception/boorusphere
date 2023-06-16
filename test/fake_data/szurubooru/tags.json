@@ -1,0 +1,60 @@
+{
+    "query": "book*",
+    "offset": 0,
+    "limit": 10,
+    "total": 4,
+    "results": [
+        {
+            "names": [
+                "book"
+            ],
+            "category": "18_objects",
+            "version": 2,
+            "description": null,
+            "creationTime": "2019-11-30T10:09:41.363572Z",
+            "lastEditTime": "2020-07-12T18:11:14.251137Z",
+            "usages": 308,
+            "suggestions": [],
+            "implications": []
+        },
+        {
+            "names": [
+                "book_club"
+            ],
+            "category": "default",
+            "version": 1,
+            "description": null,
+            "creationTime": "2022-06-29T00:47:49.052792Z",
+            "lastEditTime": null,
+            "usages": 1,
+            "suggestions": [],
+            "implications": []
+        },
+        {
+            "names": [
+                "bookhorse"
+            ],
+            "category": "default",
+            "version": 1,
+            "description": null,
+            "creationTime": "2023-04-07T06:47:47.988418Z",
+            "lastEditTime": null,
+            "usages": 1,
+            "suggestions": [],
+            "implications": []
+        },
+        {
+            "names": [
+                "bookshelf"
+            ],
+            "category": "18_objects",
+            "version": 2,
+            "description": null,
+            "creationTime": "2020-01-06T12:40:13.893126Z",
+            "lastEditTime": "2020-07-13T03:51:25.602744Z",
+            "usages": 0,
+            "suggestions": [],
+            "implications": []
+        }
+    ]
+}
