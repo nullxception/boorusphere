@@ -26,9 +26,23 @@ class _Level {
   static final v = Level('V', Level.FINEST.value + 1);
 }
 
+const _clear = '\u001b[0m';
+
+String _color(int n) => '\u001b[38;5;${n}m';
+
 void setupLogger() {
   Logger.root.level = kDebugMode ? _Level.v : _Level.i;
-  Logger.root.onRecord.listen(
-    (x) => debugPrint('${x.level.name} ${x.loggerName}: ${x.message}'),
-  );
+  Logger.root.onRecord.listen((x) {
+    final lv = x.level.value;
+    final lc = switch (lv) {
+      _ when lv >= Level.SEVERE.value => _color(1),
+      _ when lv >= Level.WARNING.value => _color(3),
+      _ when lv >= Level.INFO.value => _color(6),
+      _ when lv >= Level.FINE.value => _color(4),
+      _ => _color(8),
+    };
+
+    debugPrint(
+        '$lc${x.level.name} ${_color(2)}${x.loggerName}$_clear: ${x.message}');
+  });
 }
