@@ -8,6 +8,7 @@ import 'package:boorusphere/data/repository/booru/parser/gelbooru_xml_parser.dar
 import 'package:boorusphere/data/repository/booru/parser/moebooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/safebooru_xml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/shimmie_xml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/szurubooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
 import 'package:boorusphere/domain/provider.dart';
@@ -239,6 +240,35 @@ void main() async {
 
       final result = await scanner.scan(host, host);
       final parser = ShimmieXmlParser();
+
+      expect(result.searchUrl, parser.searchQuery);
+      expect(result.searchParserId, parser.id);
+      expect(result.tagSuggestionUrl, parser.suggestionQuery);
+      expect(result.suggestionParserId, parser.id);
+      expect(result.postUrl, parser.postUrl);
+    });
+
+    test('Szurubooru', () async {
+      const host = 'https://homestuck.test/resources/booru';
+      adapter
+        ..put(
+          '$host/api/posts/?offset=3&limit=3&query=*',
+          FakeResponseBody.fromFakeData('szurubooru/posts.json', 200),
+        )
+        ..put(
+          '$host/api/tags/?offset=0&limit=3&query=a*',
+          FakeResponseBody.fromFakeData('szurubooru/tags.json', 200),
+        )
+        ..put(
+          '$host/post/100',
+          FakeResponseBody.fromFakeData('szurubooru/post.html', 200),
+        );
+
+      final scanner =
+          BooruScanner(parsers: parsers, client: ref.read(dioProvider));
+
+      final result = await scanner.scan(host, host);
+      final parser = SzurubooruJsonParser();
 
       expect(result.searchUrl, parser.searchQuery);
       expect(result.searchParserId, parser.id);
