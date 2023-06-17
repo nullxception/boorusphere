@@ -1,5 +1,6 @@
 import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/booruonrails_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/danbooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooru_xml_parser.dart';
@@ -153,6 +154,35 @@ void main() async {
       expect(result.searchParserId, resultParser.id);
       expect(result.tagSuggestionUrl, parser.suggestionQuery);
       expect(result.suggestionParserId, resultParser.id);
+      expect(result.postUrl, parser.postUrl);
+    });
+
+    test('BooruOnRails', () async {
+      const host = 'https://derpibooru.test';
+      adapter
+        ..put(
+          '$host/api/v1/json/search/images?q=*&per_page=3&page=1',
+          FakeResponseBody.fromFakeData('booruonrails/posts.json', 200),
+        )
+        ..put(
+          '$host/api/v1/json/search/tags?q=a*',
+          FakeResponseBody.fromFakeData('booruonrails/tags.json', 200),
+        )
+        ..put(
+          '$host/100',
+          FakeResponseBody.fromFakeData('booruonrails/post.html', 200),
+        );
+
+      final scanner =
+          BooruScanner(parsers: parsers, client: ref.read(dioProvider));
+
+      final result = await scanner.scan(host, host);
+      final parser = BooruOnRailsJsonParser();
+
+      expect(result.searchUrl, parser.searchQuery);
+      expect(result.searchParserId, parser.id);
+      expect(result.tagSuggestionUrl, parser.suggestionQuery);
+      expect(result.suggestionParserId, parser.id);
       expect(result.postUrl, parser.postUrl);
     });
   });
