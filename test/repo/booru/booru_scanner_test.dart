@@ -3,6 +3,7 @@ import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/danbooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooru_xml_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/moebooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
 import 'package:boorusphere/domain/provider.dart';
@@ -92,6 +93,36 @@ void main() async {
       expect(result.tagSuggestionUrl, parserJson.suggestionQuery);
       expect(result.suggestionParserId, parserJson.id);
       expect(result.postUrl, parserXml.postUrl);
+    });
+
+    test('Moebooru', () async {
+      const host = 'https://konachan.test';
+
+      adapter
+        ..put(
+          '$host/post.json?tags=*&page=1&limit=3',
+          FakeResponseBody.fromFakeData('konachan/posts.json', 200),
+        )
+        ..put(
+          '$host/tag.json?name=*a*&order=count&limit=3',
+          FakeResponseBody.fromFakeData('konachan/tags.json', 200),
+        )
+        ..put(
+          '$host/post/show/100',
+          FakeResponseBody.fromFakeData('konachan/post.html', 200),
+        );
+
+      final scanner =
+          BooruScanner(parsers: parsers, client: ref.read(dioProvider));
+
+      final result = await scanner.scan(host, host);
+      final parser = MoebooruJsonParser();
+
+      expect(result.searchUrl, parser.searchQuery);
+      expect(result.searchParserId, parser.id);
+      expect(result.tagSuggestionUrl, parser.suggestionQuery);
+      expect(result.suggestionParserId, parser.id);
+      expect(result.postUrl, parser.postUrl);
     });
   });
 }
