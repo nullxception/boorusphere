@@ -2,6 +2,7 @@ import 'package:boorusphere/data/provider.dart';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/booruonrails_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/danbooru_json_parser.dart';
+import 'package:boorusphere/data/repository/booru/parser/e621_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/gelbooru_xml_parser.dart';
 import 'package:boorusphere/data/repository/booru/parser/moebooru_json_parser.dart';
@@ -181,6 +182,36 @@ void main() async {
 
       expect(result.searchUrl, parser.searchQuery);
       expect(result.searchParserId, parser.id);
+      expect(result.tagSuggestionUrl, parser.suggestionQuery);
+      expect(result.suggestionParserId, parser.id);
+      expect(result.postUrl, parser.postUrl);
+    });
+
+    test('E621', () async {
+      const host = 'https://e621.test';
+      adapter
+        ..put(
+          '$host/posts.json?tags=*&page=1&limit=3',
+          FakeResponseBody.fromFakeData('e621/posts.json', 200),
+        )
+        ..put(
+          '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=3',
+          FakeResponseBody.fromFakeData('e621/tags.json', 200),
+        )
+        ..put(
+          '$host/posts/100',
+          FakeResponseBody.fromFakeData('e621/post.html', 200),
+        );
+
+      final scanner =
+          BooruScanner(parsers: parsers, client: ref.read(dioProvider));
+
+      final result = await scanner.scan(host, host);
+      final parser = DanbooruJsonParser();
+      final pageParser = E621JsonParser();
+
+      expect(result.searchUrl, parser.searchQuery);
+      expect(result.searchParserId, pageParser.id);
       expect(result.tagSuggestionUrl, parser.suggestionQuery);
       expect(result.suggestionParserId, parser.id);
       expect(result.postUrl, parser.postUrl);
