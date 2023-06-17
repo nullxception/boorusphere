@@ -45,15 +45,15 @@ void main() async {
       adapter
         ..put(
           '$host/posts.json?tags=*&page=1&limit=3',
-          FakeResponseBody.fromFakeData('danbooru/posts.json', 200),
+          FakeResponseBody.fromFixture('danbooru/posts.json', 200),
         )
         ..put(
           '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=3',
-          FakeResponseBody.fromFakeData('danbooru/tags.json', 200),
+          FakeResponseBody.fromFixture('danbooru/tags.json', 200),
         )
         ..put(
           '$host/posts/100',
-          FakeResponseBody.fromFakeData('danbooru/post.html', 200),
+          FakeResponseBody.fromFixture('danbooru/post.html', 200),
         );
 
       final scanner =
@@ -75,15 +75,15 @@ void main() async {
       adapter
         ..put(
           '$host/index.php?page=dapi&s=post&q=index&tags=*&pid=1&limit=3&json=1',
-          FakeResponseBody.fromFakeData('gelbooru/posts.json', 200),
+          FakeResponseBody.fromFixture('gelbooru/posts.json', 200),
         )
         ..put(
           '$host/index.php?page=dapi&s=tag&q=index&name_pattern=%25a%25&orderby=count&limit=3&json=1',
-          FakeResponseBody.fromFakeData('gelbooru/tags.json', 200),
+          FakeResponseBody.fromFixture('gelbooru/tags.json', 200),
         )
         ..put(
           '$host/index.php?page=post&s=view&id=100',
-          FakeResponseBody.fromFakeData('gelbooru/post.html', 200),
+          FakeResponseBody.fromFixture('gelbooru/post.html', 200),
         );
 
       final scanner =
@@ -106,15 +106,15 @@ void main() async {
       adapter
         ..put(
           '$host/post.json?tags=*&page=1&limit=3',
-          FakeResponseBody.fromFakeData('konachan/posts.json', 200),
+          FakeResponseBody.fromFixture('konachan/posts.json', 200),
         )
         ..put(
           '$host/tag.json?name=*a*&order=count&limit=3',
-          FakeResponseBody.fromFakeData('konachan/tags.json', 200),
+          FakeResponseBody.fromFixture('konachan/tags.json', 200),
         )
         ..put(
           '$host/post/show/100',
-          FakeResponseBody.fromFakeData('konachan/post.html', 200),
+          FakeResponseBody.fromFixture('konachan/post.html', 200),
         );
 
       final scanner =
@@ -135,15 +135,15 @@ void main() async {
       adapter
         ..put(
           '$host/index.php?page=dapi&s=post&q=index&tags=*&pid=1&limit=3',
-          FakeResponseBody.fromFakeData('safebooru/posts.xml', 200),
+          FakeResponseBody.fromFixture('safebooru/posts.xml', 200),
         )
         ..put(
           '$host/index.php?page=dapi&s=tag&q=index&name_pattern=%25a%25&orderby=count&limit=3',
-          FakeResponseBody.fromFakeData('safebooru/tags.xml', 200),
+          FakeResponseBody.fromFixture('safebooru/tags.xml', 200),
         )
         ..put(
           '$host/index.php?page=post&s=view&id=100',
-          FakeResponseBody.fromFakeData('safebooru/post.html', 200),
+          FakeResponseBody.fromFixture('safebooru/post.html', 200),
         );
 
       final scanner =
@@ -165,15 +165,15 @@ void main() async {
       adapter
         ..put(
           '$host/api/v1/json/search/images?q=*&per_page=3&page=1',
-          FakeResponseBody.fromFakeData('booruonrails/posts.json', 200),
+          FakeResponseBody.fromFixture('booruonrails/posts.json', 200),
         )
         ..put(
           '$host/api/v1/json/search/tags?q=a*',
-          FakeResponseBody.fromFakeData('booruonrails/tags.json', 200),
+          FakeResponseBody.fromFixture('booruonrails/tags.json', 200),
         )
         ..put(
           '$host/100',
-          FakeResponseBody.fromFakeData('booruonrails/post.html', 200),
+          FakeResponseBody.fromFixture('booruonrails/post.html', 200),
         );
 
       final scanner =
@@ -194,15 +194,15 @@ void main() async {
       adapter
         ..put(
           '$host/posts.json?tags=*&page=1&limit=3',
-          FakeResponseBody.fromFakeData('e621/posts.json', 200),
+          FakeResponseBody.fromFixture('e621/posts.json', 200),
         )
         ..put(
           '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=3',
-          FakeResponseBody.fromFakeData('e621/tags.json', 200),
+          FakeResponseBody.fromFixture('e621/tags.json', 200),
         )
         ..put(
           '$host/posts/100',
-          FakeResponseBody.fromFakeData('e621/post.html', 200),
+          FakeResponseBody.fromFixture('e621/post.html', 200),
         );
 
       final scanner =
@@ -224,15 +224,15 @@ void main() async {
       adapter
         ..put(
           '$host/api/danbooru/find_posts/index.xml?tags=*&limit=3&page=1',
-          FakeResponseBody.fromFakeData('rule34.paheal/posts.xml', 200),
+          FakeResponseBody.fromFixture('rule34.paheal/posts.xml', 200),
         )
         ..put(
           '$host/api/internal/autocomplete?s=a',
-          FakeResponseBody.fromFakeData('rule34.paheal/tags.json', 200),
+          FakeResponseBody.fromFixture('rule34.paheal/tags.json', 200),
         )
         ..put(
           '$host/post/view/100',
-          FakeResponseBody.fromFakeData('rule34.paheal/post.html', 200),
+          FakeResponseBody.fromFixture('rule34.paheal/post.html', 200),
         );
 
       final scanner =
@@ -253,15 +253,15 @@ void main() async {
       adapter
         ..put(
           '$host/api/posts/?offset=3&limit=3&query=*',
-          FakeResponseBody.fromFakeData('szurubooru/posts.json', 200),
+          FakeResponseBody.fromFixture('szurubooru/posts.json', 200),
         )
         ..put(
           '$host/api/tags/?offset=0&limit=3&query=a*',
-          FakeResponseBody.fromFakeData('szurubooru/tags.json', 200),
+          FakeResponseBody.fromFixture('szurubooru/tags.json', 200),
         )
         ..put(
           '$host/post/100',
-          FakeResponseBody.fromFakeData('szurubooru/post.html', 200),
+          FakeResponseBody.fromFixture('szurubooru/post.html', 200),
         );
 
       final scanner =

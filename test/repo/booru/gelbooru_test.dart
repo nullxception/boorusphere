@@ -47,7 +47,7 @@ void main() async {
 
     const fakePage = 'gelbooru/posts.json';
     when(() => adapter.fetch(any(), any(), any()))
-        .thenAnswer((x) async => FakeResponseBody.fromFakeData(fakePage, 200));
+        .thenAnswer((x) async => FakeResponseBody.fromFixture(fakePage, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -57,7 +57,7 @@ void main() async {
 
     const fakeTags = 'gelbooru/tags.json';
     when(() => adapter.fetch(any(), any(), any()))
-        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakeTags, 200));
+        .thenAnswer((_) async => FakeResponseBody.fromFixture(fakeTags, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),
@@ -78,7 +78,7 @@ void main() async {
 
     const fakePageXml = 'gelbooru/posts.xml';
     when(() => adapter.fetch(any(), any(), any())).thenAnswer(
-        (x) async => FakeResponseBody.fromFakeData(fakePageXml, 200));
+        (x) async => FakeResponseBody.fromFixture(fakePageXml, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -88,7 +88,7 @@ void main() async {
 
     const fakeTagsXml = 'gelbooru/tags.xml';
     when(() => adapter.fetch(any(), any(), any())).thenAnswer(
-        (_) async => FakeResponseBody.fromFakeData(fakeTagsXml, 200));
+        (_) async => FakeResponseBody.fromFixture(fakeTagsXml, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),

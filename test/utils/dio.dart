@@ -26,13 +26,13 @@ class DioAdapterMock extends Mock implements HttpClientAdapter {
 }
 
 class FakeResponseBody {
-  static ResponseBody fromFakeData(
+  static ResponseBody fromFixture(
     String filePath,
     int statusCode, {
     Map<String, List<String>>? headers,
   }) {
     return ResponseBody(
-      getFakeData(filePath).openRead().map(Uint8List.fromList),
+      getFixture(filePath).openRead().map(Uint8List.fromList),
       statusCode,
       headers: {
         Headers.contentTypeHeader: [filePath.mimeType],

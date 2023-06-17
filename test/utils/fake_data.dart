@@ -5,13 +5,13 @@ import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:path/path.dart' as path;
 
-File getFakeData(String file) {
-  final fakeDataDir = path.join(Directory.current.path, 'test', 'fake_data');
+File getFixture(String file) {
+  final fakeDataDir = path.join(Directory.current.path, 'test', 'fixtures');
   return File(path.join(fakeDataDir, file));
 }
 
 Iterable<Post> getSamplePosts() {
-  final fakePostsFile = getFakeData('posts.json');
+  final fakePostsFile = getFixture('posts.json');
   final rawPosts = jsonDecode(fakePostsFile.readAsStringSync()) as Iterable;
   return rawPosts.map((it) => Post.fromJson(Map.from(it)));
 }

@@ -46,7 +46,7 @@ void main() async {
 
     const fakePage = 'booruonrails/posts.json';
     when(() => adapter.fetch(any(), any(), any()))
-        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakePage, 200));
+        .thenAnswer((_) async => FakeResponseBody.fromFixture(fakePage, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getPage(option, 1),
@@ -56,7 +56,7 @@ void main() async {
 
     const fakeTags = 'booruonrails/tags.json';
     when(() => adapter.fetch(any(), any(), any()))
-        .thenAnswer((_) async => FakeResponseBody.fromFakeData(fakeTags, 200));
+        .thenAnswer((_) async => FakeResponseBody.fromFixture(fakeTags, 200));
 
     expect(
       await ref.read(imageboardRepoProvider(server)).getSuggestion('book'),
