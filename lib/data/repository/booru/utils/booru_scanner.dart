@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:boorusphere/data/repository/booru/parser/booru_parser.dart';
 import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
+import 'package:boorusphere/utils/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:logging/logging.dart';
 
 BooruScanner useBooruScanner(
   Dio client,
@@ -50,18 +52,19 @@ class BooruScanner {
 
   final List<BooruParser> parsers;
   final Dio client;
+  final _log = Logger('BooruScanner');
 
   late CancelToken _cancelToken = CancelToken();
 
-  final _logsHolder = <String>[];
-  late StreamController<List<String>> _logs = StreamController.broadcast();
+  final _uiLogsHolder = <String>[];
+  late StreamController<List<String>> _uiLogs = StreamController.broadcast();
 
-  Stream<List<String>> get logs => _logs.stream;
+  Stream<List<String>> get logs => _uiLogs.stream;
 
-  _log([String msg = '']) {
-    if (!_logs.isClosed) {
-      _logsHolder.add(msg);
-      _logs.add(_logsHolder);
+  _uilog([String msg = '']) {
+    if (!_uiLogs.isClosed) {
+      _uiLogsHolder.add(msg);
+      _uiLogs.add(_uiLogsHolder);
     }
   }
 
@@ -89,7 +92,8 @@ class BooruScanner {
         .replaceAll('{post-id}', '100');
     try {
       final testUrl = '$host/$test';
-      _log('→ checking ${type.name}::${parser.id}...');
+      _uilog('→ checking ${type.name}::${parser.id}...');
+      _log.v('Scanning $testUrl');
       final res = await client.get(
         testUrl,
         options: Options(
@@ -181,12 +185,12 @@ class BooruScanner {
     );
 
     if (firstFound.parserId.isEmpty) {
-      _log('❌ no ${type.name}Query matched');
+      _uilog('❌ no ${type.name}Query matched');
     } else {
-      _log('✔️ ${type.name}Query matched: ${firstFound.parserId}');
+      _uilog('✔️ ${type.name}Query matched: ${firstFound.parserId}');
     }
 
-    _log();
+    _uilog();
     yield firstFound;
   }
 
@@ -195,10 +199,10 @@ class BooruScanner {
     final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
     var data = Server.empty;
 
-    _logsHolder.clear();
-    _logs = StreamController.broadcast();
+    _uiLogsHolder.clear();
+    _uiLogs = StreamController.broadcast();
 
-    _log('🧐 Scanning search query...');
+    _uilog('🧐 Scanning search query...');
     _cancelToken = CancelToken();
     final search = _performScans(api, type: _ScanType.search);
     await for (var ev in search) {
@@ -213,7 +217,7 @@ class BooruScanner {
       );
     }
 
-    _log('🧐 Scanning suggestion query...');
+    _uilog('🧐 Scanning suggestion query...');
     final suggestion = _performScans(api, type: _ScanType.suggestion);
     await for (var ev in suggestion) {
       if (ev == _ScanResult.empty) {
@@ -227,7 +231,7 @@ class BooruScanner {
       );
     }
 
-    _log('🧐 Scanning web post query...');
+    _uilog('🧐 Scanning web post query...');
     final post = _performScans(home, type: _ScanType.post);
     await for (var ev in post) {
       if (ev == _ScanResult.empty) {
@@ -251,7 +255,7 @@ class BooruScanner {
 
   Future<void> stop() async {
     _cancelToken.cancel();
-    _logsHolder.clear();
-    await _logs.close();
+    _uiLogsHolder.clear();
+    await _uiLogs.close();
   }
 }
