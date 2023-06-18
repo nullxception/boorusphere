@@ -194,10 +194,10 @@ class BooruScanner {
     yield firstFound;
   }
 
-  Future<Server> scan(String homeUrl, String apiUrl) async {
-    final api = apiUrl.replaceFirst(RegExp(r'/$'), '');
-    final home = homeUrl.replaceFirst(RegExp(r'/$'), '');
-    var data = Server.empty;
+  Future<Server> scan(Server server) async {
+    final api = server.apiAddress.replaceFirst(RegExp(r'/$'), '');
+    final home = server.homepage.replaceFirst(RegExp(r'/$'), '');
+    var data = server;
 
     _uiLogsHolder.clear();
     _uiLogs = StreamController.broadcast();

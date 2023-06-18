@@ -9,7 +9,6 @@ import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
-import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -42,11 +41,11 @@ class ServerEditorPage extends StatelessWidget {
 }
 
 class _ServerEditor extends HookConsumerWidget {
-  const _ServerEditor({required this.server});
+  const _ServerEditor({Server server = Server.empty}) : _server = server;
 
-  final Server server;
+  final Server _server;
 
-  bool get isEditing => server != Server.empty;
+  bool get isEditing => _server != Server.empty;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,14 +55,14 @@ class _ServerEditor extends HookConsumerWidget {
     final formKey = useMemoized(GlobalKey<FormState>.new);
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
-    final newServer = useState(server);
+    final server = useState(_server);
     final isScanning = useState(false);
     final useApiAddr = useState(false);
     final error = useState<Object?>(null);
     final homepage = useTextEditingController(
-        text: isEditing ? server.homepage : 'https://');
+        text: isEditing ? _server.homepage : 'https://');
     final apiAddress = useTextEditingController(
-        text: server.apiAddr.isEmpty ? 'https://' : server.apiAddr);
+        text: _server.apiAddr.isEmpty ? 'https://' : _server.apiAddr);
 
     validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
@@ -135,10 +134,15 @@ class _ServerEditor extends HookConsumerWidget {
 
                 isScanning.value = true;
                 error.value = null;
-                final home = homepage.text;
-                final api = useApiAddr.value ? apiAddress.text : home;
+                final baseServer = Server(
+                  homepage: homepage.text,
+                  apiAddr: useApiAddr.value ? apiAddress.text : '',
+                );
                 try {
-                  newServer.value = await scanner.scan(home, api);
+                  final result = await scanner.scan(baseServer);
+                  if (result.searchParserId.isNotEmpty) {
+                    server.value = result;
+                  }
                 } catch (e) {
                   if (e is DioException && e.type == DioExceptionType.cancel) {
                     isScanning.value = false;
@@ -146,11 +150,6 @@ class _ServerEditor extends HookConsumerWidget {
                   }
 
                   error.value = e;
-                  newServer.value = newServer.value.copyWith(homepage: home);
-                  if (newServer.value.id.isEmpty) {
-                    newServer.value =
-                        newServer.value.copyWith(id: home.toUri().host);
-                  }
                 }
 
                 isScanning.value = false;
@@ -176,13 +175,13 @@ class _ServerEditor extends HookConsumerWidget {
                 child: Opacity(
                   opacity: isScanning.value ? 0.25 : 1,
                   child: ServerDetails(
-                    server: newServer.value,
+                    server: server.value,
                     isEditing: isEditing,
                     onSubmitted: (data) {
                       final serverPod = ref.read(serverStateProvider.notifier);
 
                       if (isEditing) {
-                        serverPod.edit(server, data);
+                        serverPod.edit(_server, data);
                       } else {
                         serverPod.add(data);
                       }

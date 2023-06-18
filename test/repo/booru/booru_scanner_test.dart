@@ -11,6 +11,7 @@ import 'package:boorusphere/data/repository/booru/parser/shimmie_xml_parser.dart
 import 'package:boorusphere/data/repository/booru/parser/szurubooru_json_parser.dart';
 import 'package:boorusphere/data/repository/booru/provider.dart';
 import 'package:boorusphere/data/repository/booru/utils/booru_scanner.dart';
+import 'package:boorusphere/data/repository/server/entity/server.dart';
 import 'package:boorusphere/domain/provider.dart';
 import 'package:boorusphere/utils/logger.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -59,7 +60,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = DanbooruJsonParser();
 
       expect(result.searchUrl, parser.searchQuery);
@@ -89,7 +90,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parserJson = GelbooruJsonParser();
       final parserXml = GelbooruXmlParser();
 
@@ -120,7 +121,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = MoebooruJsonParser();
 
       expect(result.searchUrl, parser.searchQuery);
@@ -149,7 +150,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = GelbooruXmlParser();
       final resultParser = SafebooruXmlParser();
 
@@ -179,7 +180,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = BooruOnRailsJsonParser();
 
       expect(result.searchUrl, parser.searchQuery);
@@ -208,7 +209,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = DanbooruJsonParser();
       final pageParser = E621JsonParser();
 
@@ -238,7 +239,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = ShimmieXmlParser();
 
       expect(result.searchUrl, parser.searchQuery);
@@ -267,7 +268,7 @@ void main() async {
       final scanner =
           BooruScanner(parsers: parsers, client: ref.read(dioProvider));
 
-      final result = await scanner.scan(host, host);
+      final result = await scanner.scan(const Server(homepage: host));
       final parser = SzurubooruJsonParser();
 
       expect(result.searchUrl, parser.searchQuery);
