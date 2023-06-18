@@ -132,7 +132,7 @@ class _ServerEditor extends HookConsumerWidget {
                 }
 
                 error.value = null;
-                final baseServer = Server(
+                final baseServer = server.value.copyWith(
                   homepage: homepage.text,
                   apiAddr: useApiAddr.value ? apiAddress.text : '',
                 );
