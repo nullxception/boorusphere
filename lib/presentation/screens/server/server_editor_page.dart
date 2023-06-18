@@ -139,9 +139,13 @@ class _ServerEditor extends HookConsumerWidget {
                   apiAddr: useApiAddr.value ? apiAddress.text : '',
                 );
                 try {
+                  final unparsedErr = context.t.servers.incompatible;
                   final result = await scanner.scan(baseServer);
                   if (result.searchParserId.isNotEmpty) {
                     server.value = result;
+                  } else {
+                    server.value = Server.empty;
+                    error.value = unparsedErr(addr: baseServer.apiAddress);
                   }
                 } catch (e) {
                   if (e is DioException && e.type == DioExceptionType.cancel) {
