@@ -9,7 +9,6 @@ import 'package:boorusphere/presentation/provider/settings/ui_setting_state.dart
 import 'package:boorusphere/presentation/screens/server/server_details.dart';
 import 'package:boorusphere/presentation/utils/extensions/buildcontext.dart';
 import 'package:boorusphere/presentation/widgets/error_info.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -56,13 +55,14 @@ class _ServerEditor extends HookConsumerWidget {
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final server = useState(_server);
-    final isScanning = useState(false);
     final useApiAddr = useState(false);
     final error = useState<Object?>(null);
     final homepage = useTextEditingController(
         text: isEditing ? _server.homepage : 'https://');
     final apiAddress = useTextEditingController(
         text: _server.apiAddr.isEmpty ? 'https://' : _server.apiAddr);
+
+    final isScanning = useValueListenable(scanner.isScanning);
 
     validateAddress(String? value) {
       if (value?.contains(RegExp(r'https?://.+\..+')) == false) {
@@ -126,13 +126,11 @@ class _ServerEditor extends HookConsumerWidget {
                 }
 
                 FocusScope.of(context).unfocus();
-                if (isScanning.value) {
+                if (isScanning) {
                   await scanner.stop();
-                  isScanning.value = false;
                   return;
                 }
 
-                isScanning.value = true;
                 error.value = null;
                 final baseServer = Server(
                   homepage: homepage.text,
@@ -148,17 +146,10 @@ class _ServerEditor extends HookConsumerWidget {
                     error.value = unparsedErr(addr: baseServer.apiAddress);
                   }
                 } catch (e) {
-                  if (e is DioException && e.type == DioExceptionType.cancel) {
-                    isScanning.value = false;
-                    return;
-                  }
-
                   error.value = e;
                 }
-
-                isScanning.value = false;
               },
-              child: Text(isScanning.value ? context.t.cancel : context.t.scan),
+              child: Text(isScanning ? context.t.cancel : context.t.scan),
             ),
           ),
           if (error.value != null)
@@ -175,9 +166,9 @@ class _ServerEditor extends HookConsumerWidget {
           Stack(
             children: [
               IgnorePointer(
-                ignoring: isScanning.value,
+                ignoring: isScanning,
                 child: Opacity(
-                  opacity: isScanning.value ? 0.25 : 1,
+                  opacity: isScanning ? 0.25 : 1,
                   child: ServerDetails(
                     server: server.value,
                     isEditing: isEditing,
@@ -195,7 +186,7 @@ class _ServerEditor extends HookConsumerWidget {
                   ),
                 ),
               ),
-              if (isScanning.value) ScannerLog(scanner: scanner)
+              if (isScanning) ScannerLog(scanner: scanner)
             ],
           ),
         ],

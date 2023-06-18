@@ -6,6 +6,7 @@ import 'package:boorusphere/utils/extensions/string.dart';
 import 'package:boorusphere/utils/logger.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:logging/logging.dart';
 
@@ -60,6 +61,9 @@ class BooruScanner {
   late StreamController<List<String>> _uiLogs = StreamController.broadcast();
 
   Stream<List<String>> get logs => _uiLogs.stream;
+
+  final _isScanning = ValueNotifier(false);
+  ValueListenable<bool> get isScanning => _isScanning;
 
   _uilog([String msg = '']) {
     if (!_uiLogs.isClosed) {
@@ -199,61 +203,71 @@ class BooruScanner {
     final home = server.homepage.replaceFirst(RegExp(r'/$'), '');
     var data = server;
 
+    _isScanning.value = true;
     _uiLogsHolder.clear();
     _uiLogs = StreamController.broadcast();
 
-    _uilog('🧐 Scanning search query...');
-    _cancelToken = CancelToken();
-    final search = _performScans(api, type: _ScanType.search);
-    await for (var ev in search) {
-      if (ev == _ScanResult.empty) {
-        continue;
+    try {
+      _uilog('🧐 Scanning search query...');
+      _cancelToken = CancelToken();
+      final search = _performScans(api, type: _ScanType.search);
+      await for (var ev in search) {
+        if (ev == _ScanResult.empty) {
+          continue;
+        }
+
+        data = data.copyWith(
+          searchParserId: ev.parserId,
+          searchUrl: ev.query,
+          apiAddr: ev.origin,
+        );
+      }
+
+      _uilog('🧐 Scanning suggestion query...');
+      final suggestion = _performScans(api, type: _ScanType.suggestion);
+      await for (var ev in suggestion) {
+        if (ev == _ScanResult.empty) {
+          continue;
+        }
+
+        data = data.copyWith(
+          suggestionParserId: ev.parserId,
+          tagSuggestionUrl: ev.query,
+          apiAddr: ev.origin,
+        );
+      }
+
+      _uilog('🧐 Scanning web post query...');
+      final post = _performScans(home, type: _ScanType.post);
+      await for (var ev in post) {
+        if (ev == _ScanResult.empty) {
+          continue;
+        }
+
+        data = data.copyWith(
+          postUrl: ev.query,
+          homepage: ev.origin,
+        );
       }
 
       data = data.copyWith(
-        searchParserId: ev.parserId,
-        searchUrl: ev.query,
-        apiAddr: ev.origin,
+        apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
+        id: home.toUri().host,
       );
-    }
 
-    _uilog('🧐 Scanning suggestion query...');
-    final suggestion = _performScans(api, type: _ScanType.suggestion);
-    await for (var ev in suggestion) {
-      if (ev == _ScanResult.empty) {
-        continue;
+      _isScanning.value = false;
+      return data;
+    } catch (e) {
+      _isScanning.value = false;
+      if (e is DioException && e.type == DioExceptionType.cancel) {
+        return server;
       }
-
-      data = data.copyWith(
-        suggestionParserId: ev.parserId,
-        tagSuggestionUrl: ev.query,
-        apiAddr: ev.origin,
-      );
+      rethrow;
     }
-
-    _uilog('🧐 Scanning web post query...');
-    final post = _performScans(home, type: _ScanType.post);
-    await for (var ev in post) {
-      if (ev == _ScanResult.empty) {
-        continue;
-      }
-
-      data = data.copyWith(
-        postUrl: ev.query,
-        homepage: ev.origin,
-      );
-    }
-
-    data = data.copyWith(
-      apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
-      id: home.toUri().host,
-    );
-
-    await stop();
-    return data;
   }
 
   Future<void> stop() async {
+    _isScanning.value = false;
     _cancelToken.cancel();
     _uiLogsHolder.clear();
     await _uiLogs.close();
