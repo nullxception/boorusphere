@@ -210,7 +210,7 @@ class BooruScanner {
       _cancelToken = CancelToken();
       final search = _performScans(api, type: _ScanType.search);
       await for (var ev in search) {
-        if (ev == _ScanResult.empty) {
+        if (ev == _ScanResult.empty && isScanning.value) {
           continue;
         }
 
@@ -224,7 +224,7 @@ class BooruScanner {
       _uilog('🧐 Scanning suggestion query...');
       final suggestion = _performScans(api, type: _ScanType.suggestion);
       await for (var ev in suggestion) {
-        if (ev == _ScanResult.empty) {
+        if (ev == _ScanResult.empty && isScanning.value) {
           continue;
         }
 
@@ -238,7 +238,7 @@ class BooruScanner {
       _uilog('🧐 Scanning web post query...');
       final post = _performScans(home, type: _ScanType.post);
       await for (var ev in post) {
-        if (ev == _ScanResult.empty) {
+        if (ev == _ScanResult.empty && isScanning.value) {
           continue;
         }
 
