@@ -205,7 +205,7 @@ class ScannerLog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logs = useStream(scanner.logs);
+    final logs = useValueListenable(scanner.logs);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -218,7 +218,7 @@ class ScannerLog extends HookWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ...?logs.data?.map(
+                ...logs.map(
                   (e) => Text(
                     e,
                     style: const TextStyle(

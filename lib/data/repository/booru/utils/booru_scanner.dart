@@ -57,19 +57,18 @@ class BooruScanner {
 
   late CancelToken _cancelToken = CancelToken();
 
-  final _uiLogsHolder = <String>[];
-  late StreamController<List<String>> _uiLogs = StreamController.broadcast();
-
-  Stream<List<String>> get logs => _uiLogs.stream;
-
+  final _uiLogs = ValueNotifier(<String>[]);
   final _isScanning = ValueNotifier(false);
+
+  ValueListenable<List<String>> get logs => _uiLogs;
   ValueListenable<bool> get isScanning => _isScanning;
 
   _uilog([String msg = '']) {
-    if (!_uiLogs.isClosed) {
-      _uiLogsHolder.add(msg);
-      _uiLogs.add(_uiLogsHolder);
-    }
+    _uiLogs.value = [..._uiLogs.value, msg];
+  }
+
+  _clearUiLog() {
+    _uiLogs.value = [];
   }
 
   Future<_ScanResult> _scan(
@@ -204,8 +203,7 @@ class BooruScanner {
     var data = server;
 
     _isScanning.value = true;
-    _uiLogsHolder.clear();
-    _uiLogs = StreamController.broadcast();
+    _clearUiLog();
 
     try {
       _uilog('🧐 Scanning search query...');
@@ -267,7 +265,6 @@ class BooruScanner {
   Future<void> stop() async {
     _isScanning.value = false;
     _cancelToken.cancel();
-    _uiLogsHolder.clear();
-    await _uiLogs.close();
+    _clearUiLog();
   }
 }
