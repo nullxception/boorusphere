@@ -250,13 +250,11 @@ class BooruScanner {
         );
       }
 
-      data = data.copyWith(
-        apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
-        id: home.toUri().host,
-      );
-
       _isScanning.value = false;
-      return data;
+      return data.copyWith(
+        apiAddr: data.apiAddr == data.homepage ? '' : data.apiAddr,
+        id: data.id.isEmpty ? home.toUri().host : data.id,
+      );
     } catch (e) {
       _isScanning.value = false;
       if (e is DioException && e.type == DioExceptionType.cancel) {
