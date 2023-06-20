@@ -255,9 +255,6 @@ class BooruScanner {
       );
     } catch (e) {
       _isScanning.value = false;
-      if (e is DioException && e.type == DioExceptionType.cancel) {
-        return server;
-      }
       rethrow;
     }
   }
@@ -265,6 +262,5 @@ class BooruScanner {
   Future<void> stop() async {
     _isScanning.value = false;
     _cancelToken.cancel();
-    _clearUiLog();
   }
 }
