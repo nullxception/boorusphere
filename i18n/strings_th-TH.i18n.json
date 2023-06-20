@@ -29,7 +29,7 @@
   "open_settings": "เปิดตั้งค่า",
   "copy_success": "คัดลอกไปยังคลิปบอร์ดแล้ว",
   "load_image_failed": "เกิดข้อผิดพลาดในการโหลดภาพ",
-  "unsafe_content": "Content is not safe",
+  "unsafe_content": "คอนเท้นนี้ไม่ปลอดภัย",
   "unblur": "แสดงเลย",
   "unsupported_media": "${file_ext} ไม่ถูกรองรับ",
   "open_externally": "เปิดภายนอก",
@@ -43,8 +43,9 @@
   "searchHistory": "ประวัติการค้นหา",
   "score": "คะแนน",
   "always_ask": "ถามเสมอ",
+  "action_continue": "ดำเนินการต่อ",
   "rating": {
-    "title": "เรท",
+    "title": "เรทติ้ง",
     "questionable": "อาจโป๊เปลือย",
     "explicit": "โป๊เปลือย",
     "safe": "ปลอดภัย",
@@ -92,7 +93,8 @@
   "changelog": {
     "title": "บันทึกการเปลี่ยนแปลง",
     "view": "ดูการเปลี่ยนแปลง",
-    "none": "ไม่มีบันทึกการเปลี่ยนแปลง"
+    "none": "ไม่มีบันทึกการเปลี่ยนแปลง",
+    "whats_new": "มีอะไรใหม่ใน ${version}"
   },
   "license": {
     "package": "แพ็คเกจ: ${name}",
@@ -124,8 +126,10 @@
       "canceled": "ถูกยกเลิก",
       "paused": "หยุดชั่วคราว"
     },
-    "filter_by_status": "Filter by status",
-    "no_filter": "No filter"
+    "filter_by_status": "กรองด้วยสถานะ",
+    "no_filter": "ไม่กรอง",
+    "clear_all": "เคลียร์มั้งหมด",
+    "clear_all_warning": "คุณแน่ใจนะที่จะลบการบันทึกการดาวน์โหลดทั้งหมด?"
   },
   "favorites": {
     "title": "รายการโปรด",
@@ -153,7 +157,8 @@
     "addr_error": "ไม่ใช่ที่อยู่ที่ถูกต้อง",
     "api_addr": "ที่อยู่ API",
     "api_addr_hint": "ที่อยู่ API, ยกตัวอย่างเช่น: https://api-v69.verycoolbooru.com",
-    "already_exists": "ข้อมูลเซิร์ฟเวอร์ ${name} มีอยู่แล้ว"
+    "already_exists": "ข้อมูลเซิร์ฟเวอร์ ${name} มีอยู่แล้ว",
+    "invalid_search_query": "คำค้นหาไม่ถูกต้อง"
   },
   "server_query": {
     "title": "คิวรี่",
@@ -218,14 +223,15 @@
       "title": "สำรองข้อมูล",
       "desc": "สำรองข้อมูลของแอปเป็นไฟล์",
       "success": "ข้อมูลสำรองสร้างที่ :\n${dest}",
-      "loading": "Creating backup..."
+      "loading": "กำลังสร้างไฟล์สำรอง..."
     },
     "restore": {
       "title": "กู้คืนข้อมูล",
       "desc": "กู้คืนข้อมูลของแอปจากไฟล์ข้อมูลสำรอง",
       "success": "ข้อมูลของแอปได้กู้กลับมาแล้ว",
       "invalid": "ไฟล์สำรองข้อมูลไม่ถูกต้อง",
-      "warning": "ระวังนะ! การกระทำนี้จะเขียนทับข้อมูลที่มีอยู่ตอนนี้ \nแน่ใจแล้วหรอที่จะดำเนินต่อ?"
+      "warning": "ระวังนะ! การกระทำนี้จะเขียนทับข้อมูลที่มีอยู่ตอนนี้ \nแน่ใจแล้วหรอที่จะดำเนินต่อ?",
+      "loading": "กำลังกู้คืนข้อมูล..."
     }
   }
 }

@@ -29,7 +29,7 @@
   "open_settings": "設定を開く",
   "copy_success": "クリップボードにコピーしました",
   "load_image_failed": "画像の読み込みに失敗しました",
-  "unsafe_content": "Content is not safe",
+  "unsafe_content": "コンテンツが安全でない",
   "unblur": "表示",
   "unsupported_media": "${file_ext} はサポートされていません",
   "open_externally": "外部で開く",
@@ -43,6 +43,7 @@
   "searchHistory": "履歴を検索",
   "score": "スコア",
   "always_ask": "常に問いかける",
+  "action_continue": "続ける",
   "rating": {
     "title": "評価",
     "questionable": "疑問点",
@@ -92,7 +93,8 @@
   "changelog": {
     "title": "更新履歴",
     "view": "変更を表示",
-    "none": "更新履歴はありません"
+    "none": "更新履歴はありません",
+    "whats_new": "${version} の新着情報"
   },
   "license": {
     "package": "パッケージ: ${name}",
@@ -123,7 +125,11 @@
       "failed": "失敗しました",
       "canceled": "キャンセルされました",
       "paused": "一時停止"
-    }
+    },
+    "filter_by_status": "ステータスで絞り込む",
+    "no_filter": "フィルターなし",
+    "clear_all": "すべてクリア",
+    "clear_all_warning": "本当にダウンロード記録をすべて消去するのですか？"
   },
   "favorites": {
     "title": "お気に入り",
@@ -151,7 +157,8 @@
     "addr_error": "有効な「アドレス」ではない",
     "api_addr": "APIアドレス",
     "api_addr_hint": "API アドレス、例: https://api-v69.verycoolbooru.com",
-    "already_exists": "${name} のサーバーデータは既に存在します"
+    "already_exists": "${name} のサーバーデータは既に存在します",
+    "invalid_search_query": "無効な検索クエリ"
   },
   "server_query": {
     "title": "クエリ",
@@ -215,14 +222,16 @@
     "backup": {
       "title": "データのバックアップ",
       "desc": "アプリのデータをファイルにバックアップ",
-      "success": "バックアップ作成日時 :\n${dest}"
+      "success": "バックアップ作成日時 :\n${dest}",
+      "loading": "バックアップを作成する..."
     },
     "restore": {
       "title": "データを復元",
       "desc": "アプリのデータをバックアップ ファイルから復元",
       "success": "アプリデータが復元されました",
       "invalid": "バックアップファイルが無効です",
-      "warning": "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？"
+      "warning": "警告！このアクションは、既存のデータを上書きします。\n本当に続けますか？",
+      "loading": "データを復元する..."
     }
   }
 }
