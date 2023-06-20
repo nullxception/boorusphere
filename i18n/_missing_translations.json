@@ -81,29 +81,7 @@
     }
   },
   "id-ID": {},
-  "ja-JP": {
-    "action_continue": "Continue",
-    "changelog": {
-      "whats_new": "What's new in ${version}"
-    },
-    "downloads": {
-      "filter_by_status": "Filter by status",
-      "no_filter": "No filter",
-      "clear_all": "Clear all",
-      "clear_all_warning": "Are you sure you want to clear all the download record ?"
-    },
-    "servers": {
-      "invalid_search_query": "Invalid search query"
-    },
-    "data_backup": {
-      "backup": {
-        "loading": "Creating backup..."
-      },
-      "restore": {
-        "loading": "Restoring data..."
-      }
-    }
-  },
+  "ja-JP": {},
   "ru": {
     "score": "Score",
     "always_ask": "Always ask",
@@ -132,24 +110,7 @@
       }
     }
   },
-  "th-TH": {
-    "action_continue": "Continue",
-    "changelog": {
-      "whats_new": "What's new in ${version}"
-    },
-    "downloads": {
-      "clear_all": "Clear all",
-      "clear_all_warning": "Are you sure you want to clear all the download record ?"
-    },
-    "servers": {
-      "invalid_search_query": "Invalid search query"
-    },
-    "data_backup": {
-      "restore": {
-        "loading": "Restoring data..."
-      }
-    }
-  },
+  "th-TH": {},
   "tr-TR": {
     "action_continue": "Continue",
     "changelog": {
