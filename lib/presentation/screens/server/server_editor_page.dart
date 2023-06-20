@@ -56,10 +56,10 @@ class _ServerEditor extends HookConsumerWidget {
     final imeIncognito =
         ref.watch(uiSettingStateProvider.select((it) => it.imeIncognito));
     final server = useState(_server);
-    final useApiAddr = useState(false);
+    final useApiAddr = useState(_server.apiAddr.isNotEmpty);
     final homepage = useTextEditingController(
         text: isEditing ? _server.homepage : 'https://');
-    final apiAddress = useTextEditingController(
+    final apiAddr = useTextEditingController(
         text: _server.apiAddr.isEmpty ? 'https://' : _server.apiAddr);
 
     validateAddress(String? value) {
@@ -108,7 +108,7 @@ class _ServerEditor extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: TextFormField(
-                    controller: apiAddress,
+                    controller: apiAddr,
                     enableIMEPersonalizedLearning: !imeIncognito,
                     decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
@@ -128,12 +128,16 @@ class _ServerEditor extends HookConsumerWidget {
                     FocusScope.of(context).unfocus();
                     final baseServer = server.value.copyWith(
                       homepage: homepage.text,
-                      apiAddr: useApiAddr.value ? apiAddress.text : '',
+                      apiAddr: useApiAddr.value ? apiAddr.text : '',
                     );
                     final result =
                         await ScannerDialog.open(context, baseServer);
                     if (result.searchParserId.isNotEmpty) {
                       server.value = result;
+                    }
+                    if (result.apiAddr.isNotEmpty) {
+                      useApiAddr.value = true;
+                      apiAddr.text = result.apiAddr;
                     }
                   },
                   child: Text(context.t.scan),
@@ -145,13 +149,17 @@ class _ServerEditor extends HookConsumerWidget {
         ServerDetails(
           server: server.value,
           isEditing: isEditing,
-          onSubmitted: (data) {
+          onSubmitted: (newServer) {
             final serverPod = ref.read(serverStateProvider.notifier);
+            newServer = newServer.copyWith(
+              homepage: homepage.text,
+              apiAddr: useApiAddr.value ? apiAddr.text : '',
+            );
 
             if (isEditing) {
-              serverPod.edit(_server, data);
+              serverPod.edit(_server, newServer);
             } else {
-              serverPod.add(data);
+              serverPod.add(newServer);
             }
 
             context.router.pop();

@@ -45,8 +45,6 @@ class ServerDetails extends HookConsumerWidget {
     final cName = useTextEditingController(text: server.id);
     final cAlias = useTextEditingController(
         text: server.alias.isEmpty ? server.id : server.alias);
-    final cHomepage = useTextEditingController(text: server.homepage);
-    final cApiAddr = useTextEditingController(text: server.apiAddr);
     final cSearchUrl = useTextEditingController(text: server.searchUrl);
     final cSuggestUrl = useTextEditingController(text: server.tagSuggestionUrl);
     final cPostUrl = useTextEditingController(text: server.postUrl);
@@ -54,8 +52,6 @@ class ServerDetails extends HookConsumerWidget {
     useEffect(() {
       cName.text = server.id;
       cAlias.text = server.alias.isEmpty ? server.id : server.alias;
-      cHomepage.text = server.homepage;
-      cApiAddr.text = server.apiAddr;
       cSearchUrl.text = server.searchUrl;
       cSuggestUrl.text = server.tagSuggestionUrl;
       cPostUrl.text = server.postUrl;
@@ -81,16 +77,12 @@ class ServerDetails extends HookConsumerWidget {
       final newData = isEditing
           ? server.copyWith(
               alias: cAlias.text,
-              homepage: cHomepage.text,
-              apiAddr: cApiAddr.text,
               searchUrl: cSearchUrl.text,
               tagSuggestionUrl: cSuggestUrl.text,
               postUrl: cPostUrl.text,
             )
           : server.copyWith(
               id: cName.text,
-              homepage: cHomepage.text,
-              apiAddr: cApiAddr.text,
               searchUrl: cSearchUrl.text,
               tagSuggestionUrl: cSuggestUrl.text,
               postUrl: cPostUrl.text,
@@ -108,13 +100,6 @@ class ServerDetails extends HookConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: Text(
-                    context.t.details,
-                    style: context.theme.textTheme.titleMedium,
-                  ),
-                ),
                 if (!isEditing)
                   TextFormField(
                     controller: cName,
@@ -142,22 +127,6 @@ class ServerDetails extends HookConsumerWidget {
                       labelText: context.t.servers.alias,
                     ),
                   ),
-                TextFormField(
-                  controller: cHomepage,
-                  enableIMEPersonalizedLearning: !imeIncognito,
-                  decoration: InputDecoration(
-                    border: const UnderlineInputBorder(),
-                    labelText: context.t.servers.homepage,
-                  ),
-                ),
-                TextFormField(
-                  controller: cApiAddr,
-                  enableIMEPersonalizedLearning: !imeIncognito,
-                  decoration: InputDecoration(
-                    border: const UnderlineInputBorder(),
-                    labelText: context.t.servers.apiAddr,
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Row(
