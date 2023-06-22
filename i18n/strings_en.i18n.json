@@ -44,6 +44,7 @@
   "score": "Score",
   "always_ask": "Always ask",
   "action_continue": "Continue",
+  "auto": "Automatic",
   "rating": {
     "title": "Rating",
     "questionable": "Questionable",
@@ -159,7 +160,12 @@
     "api_addr_hint": "API address, example: https://api-v69.verycoolbooru.com",
     "already_exists": "Server data for ${name} already exists",
     "invalid_search_query": "Invalid search query",
-    "incompatible": "Cannot find compatible parser for ${addr}"
+    "incompatible": "Cannot find compatible parser for ${addr}",
+    "id": "ID",
+    "parser_type": {
+      "search": "Search Parser",
+      "suggestion": "Tag Suggestion Parser"
+    }
   },
   "server_query": {
     "title": "Query",

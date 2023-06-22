@@ -10,6 +10,10 @@ extension StringExt on String {
     return basename(toUri().path);
   }
 
+  String get fileNameNoExt {
+    return withoutExtension(fileName);
+  }
+
   String get fileExt {
     return extension(toUri().path).replaceFirst('.', '');
   }
