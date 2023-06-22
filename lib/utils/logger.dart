@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
+final mainLog = Logger('boorusphere');
+
 extension LoggerExt on Logger {
   void e(Object? message, [Object? error, StackTrace? stackTrace]) =>
       log(_Level.e, message, error, stackTrace);
