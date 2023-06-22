@@ -142,10 +142,7 @@
   "settings": {
     "lang": {
       "title": "Lingguahe",
-      "auto": {
-        "title": "Automatic",
-        "desc": "Sundin ang system language (hangga't maaari)"
-      }
+      "auto": "Sundin ang system language (hangga't maaari)"
     },
     "midnight_theme": {
       "desc": "Gumamit pa ng mas dark na kulay para sa dark mode"

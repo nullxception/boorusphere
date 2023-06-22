@@ -177,11 +177,7 @@ class _CurrentLanguage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(uiSettingStateProvider.select((ui) => ui.locale));
 
-    return Text(
-      locale == null
-          ? context.t.settings.lang.auto.title
-          : context.t.languageName,
-    );
+    return Text(locale == null ? context.t.auto : context.t.languageName);
   }
 }
 

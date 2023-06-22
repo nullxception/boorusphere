@@ -43,6 +43,7 @@
   "searchHistory": "Arama Geçmişi",
   "score": "Puan",
   "always_ask": "Her zaman sor",
+  "auto": "Otomatik",
   "rating": {
     "title": "Derecelendirme",
     "questionable": "Şüpheli",
@@ -169,10 +170,7 @@
     "misc": "Çeşitli",
     "lang": {
       "title": "Dil",
-      "auto": {
-        "title": "Otomatik",
-        "desc": "Sistem diline uy (mümkünse)"
-      }
+      "auto": "Sistem diline uy (mümkünse)"
     },
     "midnight_theme": {
       "title": "Gece yarısı teması",

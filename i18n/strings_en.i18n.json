@@ -180,10 +180,7 @@
     "misc": "Miscellaneous",
     "lang": {
       "title": "Language",
-      "auto": {
-        "title": "Automatic",
-        "desc": "Follow system language (if possible)"
-      }
+      "auto": "Follow system language (if possible)"
     },
     "midnight_theme": {
       "title": "Midnight Theme",

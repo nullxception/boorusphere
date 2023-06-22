@@ -44,6 +44,7 @@
   "score": "Skor",
   "always_ask": "Selalu tanya",
   "action_continue": "Lanjutkan",
+  "auto": "Otomatis",
   "rating": {
     "title": "Penilaian",
     "questionable": "Dipertanyakan",
@@ -173,10 +174,7 @@
     "misc": "Lain-lain",
     "lang": {
       "title": "Bahasa",
-      "auto": {
-        "title": "Otomatis",
-        "desc": "Ikuti bahasa sistem jika memungkinkan"
-      }
+      "auto": "Ikuti bahasa sistem jika memungkinkan"
     },
     "midnight_theme": {
       "title": "Tema Tengah Malam",

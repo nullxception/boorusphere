@@ -157,9 +157,7 @@
     "misc": "Miscewwanyeous",
     "lang": {
       "title": "Wanguage",
-      "auto": {
-        "desc": "Fowwow system wanguage (if p-p-possibwe)"
-      }
+      "auto": "Fowwow system wanguage (if p-p-possibwe)"
     },
     "midnight_theme": {
       "title": "midnyight *cries* Theme",

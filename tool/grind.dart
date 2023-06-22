@@ -18,6 +18,7 @@ Future<void> gencode() async {
 @Task('Generate localization')
 Future<void> genlang() async {
   await me.pun('slang');
+  await me.pun('slang', args: ['analyze', '--outdir=i18n']);
 }
 
 @Task('Generate pigeon bindings')

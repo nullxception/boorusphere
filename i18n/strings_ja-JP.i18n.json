@@ -44,6 +44,7 @@
   "score": "スコア",
   "always_ask": "常に問いかける",
   "action_continue": "続ける",
+  "auto": "自動",
   "rating": {
     "title": "評価",
     "questionable": "疑問点",
@@ -173,10 +174,7 @@
     "misc": "その他",
     "lang": {
       "title": "言語",
-      "auto": {
-        "title": "自動",
-        "desc": "システムの言語に従ってください (可能な場合)"
-      }
+      "auto": "システムの言語に従ってください (可能な場合)"
     },
     "midnight_theme": {
       "title": "ミッドナイト・テーマ",

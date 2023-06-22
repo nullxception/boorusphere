@@ -35,10 +35,10 @@ class _Content extends ConsumerWidget {
     return ListView(
       children: [
         ListTile(
-          title: Text(context.t.settings.lang.auto.title),
+          title: Text(context.t.auto),
           subtitle: Padding(
             padding: subtitlePadding,
-            child: Text(context.t.settings.lang.auto.desc),
+            child: Text(context.t.settings.lang.auto),
           ),
           onTap: () {
             updateLocale(null);
