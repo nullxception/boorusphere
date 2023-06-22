@@ -32,7 +32,7 @@ class BooruRepo implements ImageboardRepo {
 
   @override
   Future<Set<String>> getSuggestion(String word) async {
-    var parser = parsers.firstWhere((x) => x.id == server.searchParserId,
+    var parser = parsers.firstWhere((x) => x.id == server.suggestionParserId,
         orElse: NoParser.new);
 
     final suggestionUrl = server.suggestionUrlsOf(word);
