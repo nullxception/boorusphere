@@ -89,12 +89,7 @@
   },
   "id-ID": {
     "servers": {
-      "incompatible": "Cannot find compatible parser for ${addr}",
-      "id": "ID",
-      "parser_type": {
-        "search": "Search Parser",
-        "suggestion": "Tag Suggestion Parser"
-      }
+      "id": "ID"
     }
   },
   "ja-JP": {

@@ -159,7 +159,12 @@
     "api_addr": "Alamat API",
     "api_addr_hint": "Alamat API, contoh: https://api-v69.verycoolbooru.com",
     "already_exists": "Data server untuk ${name} sudah ada",
-    "invalid_search_query": "Search query tidak valid"
+    "invalid_search_query": "Search query tidak valid",
+    "incompatible": "Tidak menemukan pengolah data yang cocok untuk ${addr}",
+    "parser_type": {
+      "search": "Pengolah Pencarian",
+      "suggestion": "Pengolah Saran Pencarian"
+    }
   },
   "server_query": {
     "title": "Query",
