@@ -26,6 +26,12 @@ class ShimmieXmlParser extends BooruParser {
   final suggestionQuery = 'api/internal/autocomplete?s={tag-part}';
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();

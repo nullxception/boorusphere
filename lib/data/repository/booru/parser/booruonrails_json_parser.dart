@@ -22,6 +22,12 @@ class BooruOnRailsJsonParser extends BooruParser {
   final postUrl = '{post-id}';
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     return data is Map && data.keys.contains('images');

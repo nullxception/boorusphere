@@ -21,6 +21,12 @@ class MoebooruJsonParser extends BooruParser {
   final postUrl = 'post/show/{post-id}';
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();

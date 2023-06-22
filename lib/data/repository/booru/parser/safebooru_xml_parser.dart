@@ -16,6 +16,12 @@ class SafebooruXmlParser extends BooruParser {
   final id = 'Safebooru.xml';
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();

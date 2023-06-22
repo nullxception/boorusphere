@@ -11,4 +11,7 @@ class DanbooruV113JsonParser extends BooruParser {
   @override
   final suggestionQuery =
       'tag/index.json?name=*{tag-part}*&order=count&limit={post-limit}';
+
+  @override
+  List<BooruParserType> get type => [];
 }

@@ -27,6 +27,12 @@ class GelbooruXmlParser extends BooruParser {
   final postUrl = 'index.php?page=post&s=view&id={post-id}';
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();

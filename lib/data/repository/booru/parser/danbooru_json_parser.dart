@@ -22,6 +22,12 @@ class DanbooruJsonParser extends BooruParser {
   final postUrl = 'posts/{post-id}';
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     return data is List && data.toString().contains('preview_file_url');

@@ -27,6 +27,12 @@ class SzurubooruJsonParser extends BooruParser {
   };
 
   @override
+  List<BooruParserType> get type => [
+        BooruParserType.search,
+        BooruParserType.suggestion,
+      ];
+
+  @override
   bool canParsePage(Response res) {
     final data = res.data;
     final rawString = data.toString();

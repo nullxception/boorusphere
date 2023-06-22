@@ -11,4 +11,7 @@ class DanbooruV113XmlParser extends BooruParser {
   @override
   final suggestionQuery =
       'tag/index.xml?name=*{tag-part}*&order=count&limit={post-limit}';
+
+  @override
+  List<BooruParserType> get type => [];
 }
