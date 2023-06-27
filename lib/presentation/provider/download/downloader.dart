@@ -26,12 +26,16 @@ class Downloader {
     String Function(String fileName)? dest,
   }) async {
     final fileUrl = url ?? post.originalFile;
+    // sanitize forbidden characters on the file name
+    final fileName = Uri.decodeComponent(fileUrl.fileName)
+        .replaceAll(RegExp(r'([^a-zA-Z0-9\s\.\(\)_]+)'), '_');
     final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
 
     await sharedStorageHandle.init();
 
     final taskId = await FlutterDownloader.enqueue(
         url: fileUrl,
+        fileName: fileName,
         savedDir: targetPath ?? sharedStorageHandle.path,
         showNotification: true,
         openFileFromNotification: true);
@@ -40,7 +44,7 @@ class Downloader {
       final entry = DownloadEntry(
         id: taskId,
         post: post,
-        dest: dest?.call(fileUrl.fileName) ?? fileUrl.fileName,
+        dest: dest?.call(fileName) ?? fileName,
       );
       await ref.read(downloadEntryStateProvider.notifier).add(entry);
     }
