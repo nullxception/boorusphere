@@ -45,11 +45,11 @@ void main() async {
       const host = 'https://danbooru.test';
       adapter
         ..put(
-          '$host/posts.json?tags=*&page=1&limit=3',
+          '$host/posts.json?tags=*&page=1&limit=30',
           FakeResponseBody.fromFixture('danbooru/posts.json', 200),
         )
         ..put(
-          '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=3',
+          '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=30',
           FakeResponseBody.fromFixture('danbooru/tags.json', 200),
         )
         ..put(
@@ -75,11 +75,11 @@ void main() async {
 
       adapter
         ..put(
-          '$host/index.php?page=dapi&s=post&q=index&tags=*&pid=1&limit=3&json=1',
+          '$host/index.php?page=dapi&s=post&q=index&tags=*&pid=1&limit=30&json=1',
           FakeResponseBody.fromFixture('gelbooru/posts.json', 200),
         )
         ..put(
-          '$host/index.php?page=dapi&s=tag&q=index&name_pattern=%25a%25&orderby=count&limit=3&json=1',
+          '$host/index.php?page=dapi&s=tag&q=index&name_pattern=%25a%25&orderby=count&limit=30&json=1',
           FakeResponseBody.fromFixture('gelbooru/tags.json', 200),
         )
         ..put(
@@ -106,11 +106,11 @@ void main() async {
 
       adapter
         ..put(
-          '$host/post.json?tags=*&page=1&limit=3',
+          '$host/post.json?tags=*&page=1&limit=30',
           FakeResponseBody.fromFixture('konachan/posts.json', 200),
         )
         ..put(
-          '$host/tag.json?name=*a*&order=count&limit=3',
+          '$host/tag.json?name=*a*&order=count&limit=30',
           FakeResponseBody.fromFixture('konachan/tags.json', 200),
         )
         ..put(
@@ -135,11 +135,11 @@ void main() async {
       const host = 'https://safebooru.test';
       adapter
         ..put(
-          '$host/index.php?page=dapi&s=post&q=index&tags=*&pid=1&limit=3',
+          '$host/index.php?page=dapi&s=post&q=index&tags=*&pid=1&limit=30',
           FakeResponseBody.fromFixture('safebooru/posts.xml', 200),
         )
         ..put(
-          '$host/index.php?page=dapi&s=tag&q=index&name_pattern=%25a%25&orderby=count&limit=3',
+          '$host/index.php?page=dapi&s=tag&q=index&name_pattern=%25a%25&orderby=count&limit=30',
           FakeResponseBody.fromFixture('safebooru/tags.xml', 200),
         )
         ..put(
@@ -165,7 +165,7 @@ void main() async {
       const host = 'https://derpibooru.test';
       adapter
         ..put(
-          '$host/api/v1/json/search/images?q=*&per_page=3&page=1',
+          '$host/api/v1/json/search/images?q=*&per_page=30&page=1',
           FakeResponseBody.fromFixture('booruonrails/posts.json', 200),
         )
         ..put(
@@ -194,11 +194,11 @@ void main() async {
       const host = 'https://e621.test';
       adapter
         ..put(
-          '$host/posts.json?tags=*&page=1&limit=3',
+          '$host/posts.json?tags=*&page=1&limit=30',
           FakeResponseBody.fromFixture('e621/posts.json', 200),
         )
         ..put(
-          '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=3',
+          '$host/tags.json?search[name_matches]=*a*&search[order]=count&limit=30',
           FakeResponseBody.fromFixture('e621/tags.json', 200),
         )
         ..put(
@@ -224,7 +224,7 @@ void main() async {
       const host = 'https://rule34.paheal.test';
       adapter
         ..put(
-          '$host/api/danbooru/find_posts/index.xml?tags=*&limit=3&page=1',
+          '$host/api/danbooru/find_posts/index.xml?tags=*&limit=30&page=1',
           FakeResponseBody.fromFixture('rule34.paheal/posts.xml', 200),
         )
         ..put(
@@ -253,11 +253,11 @@ void main() async {
       const host = 'https://homestuck.test/resources/booru';
       adapter
         ..put(
-          '$host/api/posts/?offset=3&limit=3&query=*',
+          '$host/api/posts/?offset=3&limit=30&query=*',
           FakeResponseBody.fromFixture('szurubooru/posts.json', 200),
         )
         ..put(
-          '$host/api/tags/?offset=0&limit=3&query=a*',
+          '$host/api/tags/?offset=0&limit=30&query=a*',
           FakeResponseBody.fromFixture('szurubooru/tags.json', 200),
         )
         ..put(

@@ -89,7 +89,8 @@ class BooruScanner {
     final test = loadQuery
         .replaceAll('{tags}', '*')
         .replaceAll('{tag-part}', 'a')
-        .replaceAll('{post-limit}', '3')
+        // sometimes realbooru won't show anything when limit is too low
+        .replaceAll('{post-limit}', '30')
         .replaceAll('{page-id}', '1')
         .replaceAll('{post-offset}', '3')
         .replaceAll('{post-id}', '100');
