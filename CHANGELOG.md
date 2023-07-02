@@ -1,3 +1,13 @@
+## 1.4.1
+
+* Fix BooruOnRails web post url scanning
+* Fix downloading images that has special characters name
+* Fix scanning issues on realbooru
+* Improve scanning mechanism
+* Initial support for Szurubooru
+* Japanese and Thai translation update (by @rinme)
+* Update flutter to 3.10.5
+
 ## 1.4.0
 
 * Add warning popup when using menu > clear all on Downloads screen
