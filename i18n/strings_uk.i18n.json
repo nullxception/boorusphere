@@ -66,11 +66,11 @@
     "blocked": "'${query}' заблоковано блокуванням тегів"
   },
   "suggestion": {
-    "not_supported": "${server_name} не підтримує пропозицію пошуку",
-    "suggested": "Запропоновано на ${server_name}",
-    "desc": "на ${server_name}",
+    "not_supported": "${server_name} не підтримує підказки пошуку",
+    "suggested": "Запропоновано в ${server_name}",
+    "desc": "в ${server_name}",
     "empty": "Немає тегів, що відповідають '${query}'",
-    "http_error": "Не вдається отримати результат для '${query}' на ${server_name}"
+    "http_error": "Не вдається отримати результат для '${query}' в ${server_name}"
   },
   "action_tag": {
     "copy": "Скопіювати тег",
@@ -93,7 +93,8 @@
   "changelog": {
     "title": "Список змін",
     "view": "Переглянути зміни",
-    "none": "Список змін відсутній"
+    "none": "Список змін відсутній",
+    "whats_new": "Що нового в ${version}"
   },
   "license": {
     "package": "бібліотека: ${name}",
@@ -126,7 +127,9 @@
       "paused": "Призупинено"
     },
     "filter_by_status": "Фільтрувати за статусом",
-    "no_filter": "Немає фільтра"
+    "no_filter": "Немає фільтра",
+    "clear_all": "Очистити все",
+    "clear_all_warning": "Ви впевнені, що хочете очистити всі записи завантажень?"
   },
   "favorites": {
     "title": "Улюблені",
@@ -155,12 +158,18 @@
     "api_addr": "Адреса API",
     "api_addr_hint": "Адреса API, приклад: https://api-v69.verycoolbooru.com",
     "already_exists": "Дані сервера для ${name} вже існують",
-    "invalid_search_query": "Некоректний пошуковий запит"
+    "invalid_search_query": "Некоректний пошуковий запит",
+    "incompatible": "Неможливо знайти сумісний парсер для ${addr}",
+    "id": "ID",
+    "parser_type": {
+      "search": "Знайти парсер",
+      "suggestion": "Парсер варіантів тегів"
+    }
   },
   "server_query": {
     "title": "Запит",
     "search": "Пошуковий запит",
-    "suggestion": "Запит на пропозицію тегів",
+    "suggestion": "Запит на підсказку тегів",
     "post": "Запит на веб-пост"
   },
   "settings": {
@@ -227,5 +236,6 @@
       "warning": "Увага! Ця дія перезапише всі існуючі дані.\nВи впевнені, що хочете продовжити?",
       "loading": "Відновлення даних..."
     }
-  }
+  },
+  "action_continue": "Продовжити"
 }
