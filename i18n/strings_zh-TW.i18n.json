@@ -1,0 +1,241 @@
+{
+  "language_name": "繁體中文",
+  "language_alias": "Chinese (zh-TW)",
+  "save": "儲存",
+  "cancel": "取消",
+  "clear": "清除",
+  "retry": "重試",
+  "remove": "移除",
+  "edit": "編輯",
+  "add": "新增",
+  "reset": "重設",
+  "reset_to_default": "重設至預設值",
+  "scan": "掃描",
+  "load_more": "載入更多",
+  "clearing": "清除中...",
+  "details": "詳細資訊",
+  "location": "圖片連結",
+  "source": "來源",
+  "file_sample": "樣本",
+  "file_og": "原圖",
+  "tags": "標籤",
+  "meta": "Meta",
+  "artist": "作者",
+  "character": "角色",
+  "copyright": "著作權",
+  "general": "一般",
+  "oss_license": "開放原始碼授權",
+  "github": "GitHub",
+  "open_settings": "開啟設定",
+  "copy_success": "已複製至剪貼簿",
+  "load_image_failed": "載入圖片失敗",
+  "unsafe_content": "含有不合適內容",
+  "unblur": "仍要顯示",
+  "unsupported_media": "${file_ext} 不支援",
+  "open_externally": "以外部開啟",
+  "retry_pop_back": "再按一次返回鍵以退出",
+  "home": "首頁",
+  "recently": "最近搜尋",
+  "search_hint": "在 ${server_name} 中搜尋...",
+  "version": "版本 ${version}",
+  "backup": "備份",
+  "restore": "還原",
+  "searchHistory": "搜尋紀錄",
+  "score": "評分",
+  "always_ask": "每次詢問",
+  "action_continue": "繼續",
+  "auto": "自動",
+  "rating": {
+    "title": "評級",
+    "questionable": "可疑的",
+    "explicit": "限制的",
+    "safe": "安全的",
+    "sensitive": "敏感的",
+    "all": "全部",
+    "disable_rating_safe": "停用評級:safe"
+  },
+  "page_status": {
+    "http_error": "無法從 ${server_name}獲取結果",
+    "no_result": {
+      "zero": "沒有找到結果",
+      "other": "沒有更多結果了"
+    },
+    "no_result_for_query": {
+      "zero": "${query}: 沒有找到結果",
+      "other": "${query}: 沒有更多結果了"
+    },
+    "blocked": "'${query}' 已被標籤黑名單阻擋"
+  },
+  "suggestion": {
+    "not_supported": "${server_name} 不支援搜尋建議",
+    "suggested": "${server_name} 建議標籤",
+    "desc": "在 ${server_name}",
+    "empty": "沒有符合的標籤: '${query}'",
+    "http_error": "無法在 ${server_name} 上找到 '${query}' 的結果 "
+  },
+  "action_tag": {
+    "copy": "複製標籤",
+    "block": "排除所選擇標籤",
+    "blocked": "新增至標籤黑名單",
+    "append": "新增標籤至當前搜尋",
+    "search": "搜尋標籤"
+  },
+  "updater": {
+    "check": "檢查更新",
+    "checking": "正在檢查更新...",
+    "download": "下載 ${version}",
+    "available": "有可用的更新: ${version}",
+    "preparing": "準備更新...",
+    "on_latest": "您使用的是最新版本",
+    "on_new_version": "有可用的新版本!",
+    "install": "安裝更新",
+    "progress": "下載中: ${progress}%"
+  },
+  "changelog": {
+    "title": "更新日誌",
+    "view": "查看變更項目",
+    "none": "沒有可用的更新日誌",
+    "whats_new": "${version} 更新內容"
+  },
+  "license": {
+    "package": "套件: ${name}",
+    "title": {
+      "one": "授權",
+      "other": "授權"
+    },
+    "counted": {
+      "one": "${n} 個授權",
+      "other": "${n} 個授權"
+    }
+  },
+  "downloads": {
+    "title": "下載",
+    "no_file": "檔案已被移除",
+    "redownload": "重新下載",
+    "detail": "顯示詳細資訊",
+    "placeholder": "您下載的檔案將顯示於此",
+    "ungroup": "取消分組",
+    "group_by_server": "依伺服器分組",
+    "no_permission": "無法下載檔案；請開啟通知權限",
+    "quality": "下載品質",
+    "status": {
+      "empty": "空",
+      "pending": "序列中",
+      "downloading": "下載中",
+      "downloaded": "已下載",
+      "failed": "下載失敗",
+      "canceled": "已取消",
+      "paused": "已暫停"
+    },
+    "filter_by_status": "依照狀態篩選",
+    "no_filter": "不使用篩選",
+    "clear_all": "清除全部",
+    "clear_all_warning": "您確定要清除所有下載紀錄嗎？"
+  },
+  "favorites": {
+    "title": "最愛",
+    "placeholder": "您保存的內容將顯示在這裡"
+  },
+  "tags_blocker": {
+    "title": "標籤黑名單",
+    "desc": "您可以使用空格分隔來隱藏多個標籤",
+    "empty": "尚無封鎖標籤",
+    "hint": "範例: red_shirt blue_shoes"
+  },
+  "servers": {
+    "title": "伺服器",
+    "reset_warning": "您確定要將伺服器清單重置為預設值嗎？\n\n這將刪除您所添加的所有伺服器",
+    "remove_last_error": "最後一個伺服器無法被移除。",
+    "preset": "從預設伺服器選擇",
+    "select": "選擇伺服器",
+    "add": "新增伺服器",
+    "edit": "編輯 ${name}",
+    "alias": "別名",
+    "homepage": "首頁",
+    "homepage_hint": "首頁, 例如: https://verycoolbooru.com",
+    "use_custom_api": "使用自訂 API 地址",
+    "use_custom_api_desc": "適用於伺服器的 API 地址與首頁不同時",
+    "addr_error": "不是有效地址",
+    "api_addr": "API 地址",
+    "api_addr_hint": "API 地址, 例如: https://api-v69.verycoolbooru.com",
+    "already_exists": "伺服器 ${name} 已經存在",
+    "invalid_search_query": "無效的搜尋請求",
+    "incompatible": "找不到適用於 ${addr} 的解析器",
+    "id": "ID",
+    "parser_type": {
+      "search": "搜尋解析器",
+      "suggestion": "建議標籤解析器"
+    }
+  },
+  "server_query": {
+    "title": "Query",
+    "search": "Search Query",
+    "suggestion": "Tag Suggestion Query",
+    "post": "Web Post Query"
+  },
+  "settings": {
+    "title": "設定",
+    "interface": "介面",
+    "safe_mode": "安全模式",
+    "misc": "其他",
+    "lang": {
+      "title": "語言",
+      "auto": "使用系統語言 (如果可用的話)"
+    },
+    "midnight_theme": {
+      "title": "夜間主題",
+      "desc": "在深色模式下使用更深的顏色"
+    },
+    "ui_blur": {
+      "title": "啟用模糊",
+      "desc": "啟用對各種 UI 元素的背景模糊效果"
+    },
+    "hide_media": {
+      "title": "隱藏已下載媒體",
+      "desc": "避免外部相簿應用程式顯示已下載檔案"
+    },
+    "blur_content": {
+      "title": "模糊不合適內容",
+      "desc": "評級為限制內容的部分將被模糊處理"
+    },
+    "blur_timeline_only": {
+      "title": "僅模糊時間軸上的內容",
+      "desc": "檢視模式下，限制內容將不會被模糊處理"
+    },
+    "ime_incognito": {
+      "title": "無痕鍵盤",
+      "desc": "如果支援的話，啟用鍵盤的無痕模式"
+    },
+    "load_og": {
+      "title": "顯示原圖",
+      "desc": "開啟圖片時載入原始檔案而不是樣本檔案。"
+    },
+    "post_limit": {
+      "title": "單次載入最大數量",
+      "desc": "結果可能低於預期（可能含有被封鎖的標籤或無效數據）"
+    },
+    "clear_cache": {
+      "title": "清除快取",
+      "desc": "清除快取中的已載入內容",
+      "done": "快取已清除"
+    }
+  },
+  "data_backup": {
+    "title": "備份與還原",
+    "desc": "備份與還原應用程式中數據",
+    "backup": {
+      "title": "備份數據",
+      "desc": "將應用程式中數據備份為檔案",
+      "success": "備份檔案建立於:\n${dest}",
+      "loading": "建立備份中..."
+    },
+    "restore": {
+      "title": "還原數據",
+      "desc": "從備份檔案中還原應用程式數據",
+      "success": "應用程式數據已還原",
+      "invalid": "無效的備份檔案",
+      "warning": "警告!此操作會覆蓋已存在的任何數據\n您確定要繼續嗎?",
+      "loading": "還原數據中..."
+    }
+  }
+}
