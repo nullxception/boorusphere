@@ -1,0 +1,241 @@
+{
+  "language_name": "简体中文",
+  "language_alias": "Chinese (zh-Hans)",
+  "save": "保存",
+  "cancel": "取消",
+  "clear": "清除",
+  "retry": "重试",
+  "remove": "移除",
+  "edit": "编辑",
+  "add": "新增",
+  "reset": "重置",
+  "reset_to_default": "重置回默认值",
+  "scan": "扫描",
+  "load_more": "加载更多",
+  "clearing": "清除中...",
+  "details": "详细信息",
+  "location": "站内链接",
+  "source": "来源链接",
+  "file_sample": "采样文件",
+  "file_og": "原始文件",
+  "tags": "标签",
+  "meta": "Meta",
+  "artist": "作者",
+  "character": "角色",
+  "copyright": "所属作品系列",
+  "general": "所含标签",
+  "oss_license": "开放源码授权",
+  "github": "GitHub",
+  "open_settings": "Open Settings",
+  "copy_success": "已复制至剪切板",
+  "load_image_failed": "图片加载失败",
+  "unsafe_content": "含有不适内容",
+  "unblur": "仍要显示",
+  "unsupported_media": "${file_ext} 为不支持的文件",
+  "open_externally": "使用外部浏览器打开",
+  "retry_pop_back": "再按一次返回键以退出",
+  "home": "首页",
+  "recently": "最近搜索",
+  "search_hint": "在 ${server_name} 中搜索...",
+  "version": "版本 ${version}",
+  "backup": "备份",
+  "restore": "还原",
+  "searchHistory": "搜索历史",
+  "score": "评分",
+  "always_ask": "每次都询问",
+  "action_continue": "继续",
+  "auto": "自动",
+  "rating": {
+    "title": "评级",
+    "questionable": "可疑的",
+    "explicit": "限制级",
+    "safe": "安全的",
+    "sensitive": "敏感的",
+    "all": "全部",
+    "disable_rating_safe": "停用评级:safe"
+  },
+  "page_status": {
+    "http_error": "无法从 ${server_name} 获取结果",
+    "no_result": {
+      "zero": "没有找到结果",
+      "other": "没有更多结果了"
+    },
+    "no_result_for_query": {
+      "zero": "${query}: 没有找到结果",
+      "other": "${query}: 没有更多结果了"
+    },
+    "blocked": "'${query}' 标签已被标签黑名单主动屏蔽"
+  },
+  "suggestion": {
+    "not_supported": "${server_name} 不支持搜索建议",
+    "suggested": "${server_name} 建议标签",
+    "desc": "在 ${server_name}",
+    "empty": "没有符合 '${query}' 的标签",
+    "http_error": "无法在 ${server_name} 找到符合标签 '${query}' 的结果"
+  },
+  "action_tag": {
+    "copy": "复制所选标签",
+    "block": "屏蔽所选标签",
+    "blocked": "添加至标签黑名单",
+    "append": "添加标签至当前搜索",
+    "search": "搜索所选标签"
+  },
+  "updater": {
+    "check": "检查更新",
+    "checking": "正在检查更新...",
+    "download": "下载 ${version}",
+    "available": "有可用的更新: ${version}",
+    "preparing": "准备更新...",
+    "on_latest": "您使用的是最新的版本",
+    "on_new_version": "有可用的新版本！",
+    "install": "安装更新",
+    "progress": "下载中: ${progress}%"
+  },
+  "changelog": {
+    "title": "更新日志",
+    "view": "查看变更项目",
+    "none": "没有可用的更新日志",
+    "whats_new": "${version} 更新内容"
+  },
+  "license": {
+    "package": "套件: ${name}",
+    "title": {
+      "one": "授权",
+      "other": "授权"
+    },
+    "counted": {
+      "one": "${n} 个授权",
+      "other": "${n} 个授权"
+    }
+  },
+  "downloads": {
+    "title": "下载",
+    "no_file": "文件已被移除",
+    "redownload": "重新下载",
+    "detail": "显示详细信息",
+    "placeholder": "您已下载的文件显示于此",
+    "ungroup": "取消分组",
+    "group_by_server": "按站点分组",
+    "no_permission": "无法下载文件；请开启通知权限",
+    "quality": "下载图片品质",
+    "status": {
+      "empty": "空",
+      "pending": "等待中",
+      "downloading": "下载中",
+      "downloaded": "已下载",
+      "failed": "下载失败",
+      "canceled": "已取消",
+      "paused": "已暂停"
+    },
+    "filter_by_status": "按下载状态筛选",
+    "no_filter": "不使用筛选",
+    "clear_all": "清除全部",
+    "clear_all_warning": "确定要清除所有下载记录吗"
+  },
+  "favorites": {
+    "title": "最爱",
+    "placeholder": "您保存的内容将显示在这里"
+  },
+  "tags_blocker": {
+    "title": "标签黑名单",
+    "desc": "您可以使用“空格”分隔来屏蔽多个标签",
+    "empty": "还没有被屏蔽的标签",
+    "hint": "例如: red_shirt blue_shoes"
+  },
+  "servers": {
+    "title": "站点",
+    "reset_warning": "确定要将站点列表重置为默认值吗？\n\n这会删除您的所有自定义站点",
+    "remove_last_error": "至少保留一个站点",
+    "preset": "从预设站点中选择",
+    "select": "选择站点",
+    "add": "添加新站点",
+    "edit": "编辑 ${name}",
+    "alias": "站点别名",
+    "homepage": "首页",
+    "homepage_hint": "首页, 例如: https://verycoolbooru.com",
+    "use_custom_api": "使用自定义 API 地址",
+    "use_custom_api_desc": "适用于站点的 API 地址与首页不同时",
+    "addr_error": "不是有效地址",
+    "api_addr": "API 地址",
+    "api_addr_hint": "API 地址, 例如: https://api-v69.verycoolbooru.com",
+    "already_exists": "站点 ${name} 已经存在",
+    "invalid_search_query": "无效的搜索请求",
+    "incompatible": "找不到适用于 ${addr} 的解析器",
+    "id": "ID",
+    "parser_type": {
+      "search": "搜索解析器",
+      "suggestion": "建议标签解析器"
+    }
+  },
+  "server_query": {
+    "title": "Query",
+    "search": "Search Query",
+    "suggestion": "Tag Suggestion Query",
+    "post": "Web Post Query"
+  },
+  "settings": {
+    "title": "设置",
+    "interface": "界面",
+    "safe_mode": "安全模式",
+    "misc": "其他",
+    "lang": {
+      "title": "语言",
+      "auto": "自动跟随系统 (如果可用的话)"
+    },
+    "midnight_theme": {
+      "title": "夜间主题",
+      "desc": "在深色模式下使用更深的颜色"
+    },
+    "ui_blur": {
+      "title": "启用模糊",
+      "desc": "对各种 UI 元素启用背景模糊效果"
+    },
+    "hide_media": {
+      "title": "隐藏已下载文件",
+      "desc": "避免外部应用显示已下载的文件"
+    },
+    "blur_content": {
+      "title": "模糊不适内容",
+      "desc": "评级为“限制级”的内容将会模糊显示"
+    },
+    "blur_timeline_only": {
+      "title": "仅模糊时间线上的不适内容",
+      "desc": "在浏览模式下，限制级内容不会被模糊处理"
+    },
+    "ime_incognito": {
+      "title": "无痕键盘",
+      "desc": "如果支持的话，将启用键盘的无痕模式."
+    },
+    "load_og": {
+      "title": "显示原图",
+      "desc": "当打开图片时将加载原始文件而不是采样文件"
+    },
+    "post_limit": {
+      "title": "单次最大载入数量",
+      "desc": "结果可能少于设置的数值 (可能含有被屏蔽的标签或无效数据)"
+    },
+    "clear_cache": {
+      "title": "清除缓存",
+      "desc": "清除缓存中的已载入内容",
+      "done": "缓存已清除"
+    }
+  },
+  "data_backup": {
+    "title": "备份与还原",
+    "desc": "备份与还原应用数据",
+    "backup": {
+      "title": "备份数据",
+      "desc": "将备份保存为文件",
+      "success": "备份文件保存在 :\n${dest}",
+      "loading": "创建备份中..."
+    },
+    "restore": {
+      "title": "还原数据",
+      "desc": "从应用数据备份中还原",
+      "success": "应用数据已还原",
+      "invalid": "无效的备份文件",
+      "warning": "警告！此操作会覆盖已存在的任何数据\n您确定要继续吗？",
+      "loading": "还原数据中..."
+    }
+  }
+}
