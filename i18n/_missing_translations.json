@@ -164,24 +164,7 @@
       }
     }
   },
-  "uk": {
-    "action_continue": "Continue",
-    "changelog": {
-      "whats_new": "What's new in ${version}"
-    },
-    "downloads": {
-      "clear_all": "Clear all",
-      "clear_all_warning": "Are you sure you want to clear all the download record ?"
-    },
-    "servers": {
-      "incompatible": "Cannot find compatible parser for ${addr}",
-      "id": "ID",
-      "parser_type": {
-        "search": "Search Parser",
-        "suggestion": "Tag Suggestion Parser"
-      }
-    }
-  },
+  "uk": {},
   "uwu": {
     "save": "Save",
     "edit": "Edit",
@@ -218,5 +201,7 @@
     "settings": {
       "title": "Settings"
     }
-  }
+  },
+  "zh-Hans": {},
+  "zh-TW": {}
 }
