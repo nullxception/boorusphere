@@ -1,3 +1,9 @@
+## 1.4.2
+
+* Add zh-TW translation (@xperiazu21)
+* Add zh-Hans translation (@History-exe)
+* Update UK translation (@CakesTwix)
+
 ## 1.4.1
 
 * Fix BooruOnRails web post url scanning
