@@ -92,16 +92,7 @@
       "id": "ID"
     }
   },
-  "ja-JP": {
-    "servers": {
-      "incompatible": "Cannot find compatible parser for ${addr}",
-      "id": "ID",
-      "parser_type": {
-        "search": "Search Parser",
-        "suggestion": "Tag Suggestion Parser"
-      }
-    }
-  },
+  "ja-JP": {},
   "ru": {
     "score": "Score",
     "always_ask": "Always ask",
@@ -136,16 +127,7 @@
       }
     }
   },
-  "th-TH": {
-    "servers": {
-      "incompatible": "Cannot find compatible parser for ${addr}",
-      "id": "ID",
-      "parser_type": {
-        "search": "Search Parser",
-        "suggestion": "Tag Suggestion Parser"
-      }
-    }
-  },
+  "th-TH": {},
   "tr-TR": {
     "action_continue": "Continue",
     "changelog": {
@@ -165,43 +147,7 @@
     }
   },
   "uk": {},
-  "uwu": {
-    "save": "Save",
-    "edit": "Edit",
-    "add": "Add",
-    "scan": "Scan",
-    "tags": "Tags",
-    "meta": "Meta",
-    "github": "GitHub",
-    "open_settings": "Open Settings",
-    "unblur": "Show me",
-    "auto": "Automatic",
-    "rating": {
-      "sensitive": "Sensitive"
-    },
-    "action_tag": {
-      "copy": "Copy tag"
-    },
-    "changelog": {
-      "view": "View changes",
-      "whats_new": "What's new in ${version}"
-    },
-    "license": {
-      "package": "package: ${name}"
-    },
-    "servers": {
-      "homepage_hint": "Homepage, example: https://verycoolbooru.com",
-      "incompatible": "Cannot find compatible parser for ${addr}",
-      "id": "ID",
-      "parser_type": {
-        "search": "Search Parser",
-        "suggestion": "Tag Suggestion Parser"
-      }
-    },
-    "settings": {
-      "title": "Settings"
-    }
-  },
+  "uwu": {},
   "zh-Hans": {},
   "zh-TW": {}
 }

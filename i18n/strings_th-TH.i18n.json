@@ -159,7 +159,13 @@
     "api_addr": "ที่อยู่ API",
     "api_addr_hint": "ที่อยู่ API, ยกตัวอย่างเช่น: https://api-v69.verycoolbooru.com",
     "already_exists": "ข้อมูลเซิร์ฟเวอร์ ${name} มีอยู่แล้ว",
-    "invalid_search_query": "คำค้นหาไม่ถูกต้อง"
+    "invalid_search_query": "คำค้นหาไม่ถูกต้อง",
+    "incompatible": "ไม่พบพาร์เซอร์ที่เข้ากันได้สำหรับ ${addr}",
+    "id": "ID",
+    "parser_type": {
+      "search": "ค้นหาพาร์เซอร์",
+      "suggestion": "พาร์เซอร์ข้อเสนอแนะแท็ก"
+    }
   },
   "server_query": {
     "title": "คิวรี่",
