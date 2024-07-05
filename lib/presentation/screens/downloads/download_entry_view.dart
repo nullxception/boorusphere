@@ -53,7 +53,7 @@ class DownloadEntryView extends ConsumerWidget {
       case DownloadStatus.downloaded:
         return isFileExists
             ? Colors.lightBlueAccent
-            : scheme.onBackground.withAlpha(125);
+            : scheme.onSurface.withAlpha(125);
       case DownloadStatus.canceled:
       case DownloadStatus.failed:
         return Colors.pinkAccent;
@@ -121,7 +121,8 @@ class DownloadEntryView extends ConsumerWidget {
                             ? null
                             : progress.progress.ratio,
                         strokeWidth: 2.5,
-                        backgroundColor: context.colorScheme.surfaceVariant,
+                        backgroundColor:
+                            context.colorScheme.surfaceContainerHighest,
                       ),
                     ),
                   ),

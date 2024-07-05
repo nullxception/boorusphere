@@ -247,7 +247,7 @@ class _RatingButton extends ConsumerWidget {
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         side: BorderSide(
           width: 1,
-          color: context.colorScheme.surfaceVariant,
+          color: context.colorScheme.surfaceContainerHighest,
         ),
         elevation: 0,
       ),

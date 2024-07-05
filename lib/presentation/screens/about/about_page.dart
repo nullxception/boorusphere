@@ -33,7 +33,7 @@ class AboutPage extends ConsumerWidget {
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: context.colorScheme.onBackground,
+                  color: context.colorScheme.onSurface,
                 ),
                 padding: const EdgeInsets.all(32),
                 margin: const EdgeInsets.symmetric(vertical: 16),

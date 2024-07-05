@@ -45,22 +45,21 @@ class AppThemeDataNotifier {
     final defScheme = isDark ? defDarkScheme : defLightScheme;
     final harmonized = scheme?.harmonized() ?? defScheme;
     final colorScheme = harmonized.copyWith(
-      background: harmonized.surface.shade(isDark ? 30 : 3),
+      surface: harmonized.surface.shade(isDark ? 30 : 3),
       outlineVariant: harmonized.outlineVariant.withOpacity(0.3),
     );
     final origin = isDark ? ThemeData.dark() : ThemeData.light();
     return origin.copyWith(
-      useMaterial3: true,
       colorScheme: colorScheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
       ),
-      canvasColor: colorScheme.background,
-      scaffoldBackgroundColor: colorScheme.background,
-      dialogBackgroundColor: colorScheme.background,
+      canvasColor: colorScheme.surface,
+      scaffoldBackgroundColor: colorScheme.surface,
+      dialogBackgroundColor: colorScheme.surface,
       drawerTheme: origin.drawerTheme.copyWith(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: colorScheme.surfaceContainerLow,
       ),
       snackBarTheme: origin.snackBarTheme.copyWith(
         shape: const RoundedRectangleBorder(
@@ -94,8 +93,7 @@ class AppThemeDataNotifier {
       ),
       colorScheme: origin.colorScheme.copyWith(
         brightness: Brightness.dark,
-        background: Colors.black,
-        surface: origin.colorScheme.background,
+        surface: origin.colorScheme.surface,
       ),
     );
   }

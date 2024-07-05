@@ -37,7 +37,7 @@ class ExpandableGroupListView<T, E> extends StatelessWidget {
             child: ExpansionTile(
               title: groupTitle(group.key),
               initiallyExpanded: expanded,
-              textColor: context.colorScheme.onBackground,
+              textColor: context.colorScheme.onSurface,
               children: group.value.map(itemBuilder).toList(),
             ),
           );

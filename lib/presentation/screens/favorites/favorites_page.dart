@@ -121,7 +121,7 @@ class _Pager extends ConsumerWidget {
                   ),
               ],
               indicator: BoxDecoration(
-                color: context.colorScheme.background,
+                color: context.colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
               ),
             ),

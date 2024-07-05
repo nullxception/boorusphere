@@ -93,7 +93,7 @@ class QuickBar extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  color: context.theme.colorScheme.background,
+                  color: context.theme.colorScheme.surface,
                 ),
                 padding: const EdgeInsets.all(8),
                 margin: const EdgeInsets.all(2),

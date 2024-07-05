@@ -199,7 +199,7 @@ class _LongThumbnailIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: context.colorScheme.background.withOpacity(0.8),
+      color: context.colorScheme.surface.withOpacity(0.8),
       elevation: 0,
       margin: EdgeInsets.zero,
       shape: const RoundedRectangleBorder(
@@ -230,10 +230,10 @@ class _Placeholder extends StatelessWidget {
     }
 
     final baseColor = context.isLightThemed
-        ? context.colorScheme.background.desaturate(50).darken(2)
+        ? context.colorScheme.surface.desaturate(50).darken(2)
         : context.colorScheme.surface;
     final highlightColor = context.isLightThemed
-        ? context.colorScheme.background.desaturate(50).lighten(2)
+        ? context.colorScheme.surface.desaturate(50).lighten(2)
         : context.colorScheme.surface.lighten(5);
 
     return Shimmer(
