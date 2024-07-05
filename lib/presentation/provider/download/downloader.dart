@@ -34,11 +34,13 @@ class Downloader {
     await sharedStorageHandle.init();
 
     final taskId = await FlutterDownloader.enqueue(
-        url: fileUrl,
-        fileName: fileName,
-        savedDir: targetPath ?? sharedStorageHandle.path,
-        showNotification: true,
-        openFileFromNotification: true);
+      url: fileUrl,
+      fileName: fileName,
+      savedDir: targetPath ?? sharedStorageHandle.path,
+      showNotification: true,
+      openFileFromNotification: true,
+      headers: {'User-Agent': 'Boorusphere/1.4.3'},
+    );
 
     if (taskId != null) {
       final entry = DownloadEntry(
