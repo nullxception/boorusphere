@@ -61,8 +61,8 @@ class _Content extends HookConsumerWidget {
         case LoadingBackupResult(:final type):
           showDialog(
             context: context,
-            builder: (_) => ProviderScope(
-              parent: ProviderScope.containerOf(context),
+            builder: (_) => UncontrolledProviderScope(
+              container: ProviderScope.containerOf(context),
               child: _LoadingDialog(type: type),
             ),
           );

@@ -36,14 +36,13 @@ class PostViewer extends HookConsumerWidget {
     required int index,
     required Iterable<Post> posts,
   }) {
-    final parentContainer = ProviderScope.containerOf(context);
     context.navigator.push(
       SlidePageRoute(
         opaque: false,
         type: SlidePageType.close,
         builder: (_) {
-          return ProviderScope(
-            parent: parentContainer,
+          return UncontrolledProviderScope(
+            container: ProviderScope.containerOf(context),
             child: PostViewer(initial: index, posts: posts),
           );
         },
