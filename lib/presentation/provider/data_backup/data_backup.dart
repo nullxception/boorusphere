@@ -159,7 +159,7 @@ class DataBackupState extends _$DataBackupState {
       return encoder.addFile(file);
     }));
 
-    encoder.close();
+    await encoder.close();
 
     final dir = await _backupDir();
     final time = DateFormat('yyyy-MM-dd-HH-mm-ss').format(DateTime.now());
