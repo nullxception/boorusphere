@@ -162,7 +162,7 @@ class _ServerEditor extends HookConsumerWidget {
               serverPod.add(newServer);
             }
 
-            context.router.pop();
+            context.router.maybePop();
           },
         ),
       ],

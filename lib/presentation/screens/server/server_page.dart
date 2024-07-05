@@ -130,7 +130,7 @@ class _Content extends ConsumerWidget {
                   ),
                   dense: true,
                 );
-              }).toList(),
+              }),
               ListTile(
                 title: Text(context.t.add),
                 leading: const Icon(Icons.add),

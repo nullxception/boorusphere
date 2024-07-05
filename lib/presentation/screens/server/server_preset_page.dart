@@ -32,7 +32,7 @@ class ServerPresetPage extends ConsumerWidget {
                 dense: true,
                 onTap: () {
                   onReturned?.call(it);
-                  context.router.pop();
+                  context.router.maybePop();
                 },
               );
             }).toList(),

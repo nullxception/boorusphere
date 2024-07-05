@@ -28,7 +28,7 @@ class _Content extends ConsumerWidget {
       await ref.read(uiSettingStateProvider.notifier).setLocale(locale);
       Future.delayed(
         const Duration(milliseconds: 120),
-        () => context.router.pop(),
+        () => context.router.maybePop(),
       );
     }
 
@@ -55,7 +55,7 @@ class _Content extends ConsumerWidget {
               updateLocale(locale);
             },
           );
-        }).toList()
+        })
       ],
     );
   }
