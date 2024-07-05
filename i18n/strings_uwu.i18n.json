@@ -1,12 +1,16 @@
 {
   "language_name": "UwUgish",
   "language_alias": "Engwish",
+  "save": "Save",
   "cancel": "Cancew",
   "clear": "C-C-Cweaw",
   "retry": "Wetwy",
   "remove": "Wemuv",
+  "edit": "Edit",
+  "add": "Add",
   "reset": "Weset",
   "reset_to_default": "Weset t-to defauwt",
+  "scan": "Scan",
   "load_more": "Woad mowe",
   "clearing": "Cweawing... *looks at you*",
   "details": "Detaiws",
@@ -14,14 +18,19 @@
   "source": "Souwce",
   "file_sample": "Sampwe fiwe",
   "file_og": "Owiginyaw fiwe",
+  "tags": "Tags",
+  "meta": "Meta",
   "artist": "Awtist",
   "character": "chawactew ^-^",
   "copyright": "Copywight",
   "general": "Genyewaw",
   "oss_license": "Open souwce wicense",
+  "github": "G-Github",
+  "open_settings": "Open Settings",
   "copy_success": "Copied t-to cwipboawd *sees bulge*",
   "load_image_failed": "Faiwed t-to woad image",
   "unsafe_content": "Content is nyot safe!~",
+  "unblur": "Show me",
   "unsupported_media": "${file_ext} is nyot suppowted",
   "open_externally": "Open extewnyawwy",
   "retry_pop_back": "Pwess back again *sees bulge* t-to exit",
@@ -35,11 +44,13 @@
   "score": "Scowe",
   "always_ask": "Awways ask",
   "action_continue": "Let's gooo!",
+  "auto": "Automatic",
   "rating": {
     "title": "Wating",
     "questionable": "Questionyabwe",
     "explicit": "E-E-Expwicit",
     "safe": "safe *twerks*",
+    "sensitive": "S-Swensitive",
     "all": "aww >w<",
     "disable_rating_safe": "Disabwe rating:safe *huggles tightly*"
   },
@@ -63,6 +74,7 @@
     "http_error": "Cannyot get w-wesuwt fow '${query}' on ${server_name}"
   },
   "action_tag": {
+    "copy": "Copy tag (>ᴗ•) !",
     "block": "Bwock sewected tag",
     "blocked": "Added t-to tags bwockew",
     "append": "Add tag t-to cuwwent seawch",
@@ -81,9 +93,12 @@
   },
   "changelog": {
     "title": "Changewog",
-    "none": "Nyo changewog avaiwabwe"
+    "view": "View changes",
+    "none": "Nyo changewog avaiwabwe",
+    "whats_new": "What's nyew in ${version}"
   },
   "license": {
+    "package": "package: ${name}",
     "title": {
       "one": "Wicense",
       "other": "Wicenses"
@@ -137,13 +152,20 @@
     "edit": "Edit ${name}",
     "alias": "awias (・`ω´・)",
     "homepage": "Homepage",
+    "homepage_hint": "Homepage, exampwe: https://verycoolbooru.com",
     "use_custom_api": "Use custom API addwess",
     "use_custom_api_desc": "Usefuw if sewvew has diffewent API addwess than the x3 homepage",
     "addr_error": "nyot a vawid *looks at you* addwess",
     "api_addr": "API Addwess *sees bulge*",
     "api_addr_hint": "API addwess, example: https://api-v69.verycoolbooru.com",
     "already_exists": "Sewvew data fow ${name} awweady exists",
-    "invalid_search_query": "Invawid seawch quewy!~"
+    "invalid_search_query": "Invawid seawch quewy!~",
+    "incompatible": "Cannyot find compatibwe pawsew fow ${addr}",
+    "id": "ID",
+    "parser_type": {
+      "search": "Seawch Pawsew",
+      "suggestion": "T-Tag Suggestion Pawsew"
+    }
   },
   "server_query": {
     "title": "Quewy",
@@ -152,6 +174,7 @@
     "post": "Web Post Quewy"
   },
   "settings": {
+    "title": "Settings",
     "interface": "Intewface",
     "safe_mode": "safe *twerks* mode",
     "misc": "Miscewwanyeous",
