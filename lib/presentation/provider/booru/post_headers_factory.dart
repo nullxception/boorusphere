@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'post_headers_factory.g.dart';
 
-String _createReferer(String url) {
+String createReferer(String url) {
   final uri = Uri.parse(url);
   final path = uri.path.replaceAll(RegExp('/+'), '/');
   return uri.replace(path: uri.hasAbsolutePath ? path : '/').toString();
@@ -22,7 +22,7 @@ Map<String, String> postHeadersFactory(
 }) {
   final versionRepo = ref.watch(versionRepoProvider);
   final url = post.postUrl.isEmpty ? post.content.url : post.postUrl;
-  final referer = _createReferer(url);
+  final referer = createReferer(url);
 
   return HeadersFactory.builder()
       .setCookies(cookies)

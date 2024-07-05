@@ -2,6 +2,7 @@ import 'package:boorusphere/data/dio/headers_factory.dart';
 import 'package:boorusphere/data/repository/booru/entity/post.dart';
 import 'package:boorusphere/data/repository/downloads/entity/download_entry.dart';
 import 'package:boorusphere/domain/provider.dart';
+import 'package:boorusphere/presentation/provider/booru/post_headers_factory.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:boorusphere/utils/extensions/string.dart';
@@ -41,8 +42,10 @@ class Downloader {
       savedDir: targetPath ?? sharedStorageHandle.path,
       showNotification: true,
       openFileFromNotification: true,
-      headers:
-          HeadersFactory.builder().setUserAgent(versionRepo.current).build(),
+      headers: HeadersFactory.builder()
+          .setUserAgent(versionRepo.current)
+          .setReferer(createReferer(fileUrl))
+          .build(),
     );
 
     if (taskId != null) {
