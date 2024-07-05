@@ -36,28 +36,28 @@ dependencies:
     sdk: flutter
   archive: ^3.3.5
   async: ^2.8.2
-  auto_route: ^7.1.0
+  auto_route: ^8.2.0
   collection: ^1.16.0
   cookie_jar: ^4.0.1
   deep_pick: ^1.0.0
   dio_cookie_manager: ^3.0.0
-  dio_smart_retry: ^5.0.0
+  dio_smart_retry: ^6.0.0
   dio: ^5.0.0
   dynamic_color: ^1.4.0
   file_picker: ^5.2.3
   flutter_cache_manager: ^3.0.0-nullsafety.1
   flutter_displaymode: ^0.6.0
   flutter_downloader: ^1.10.4
-  flutter_hooks: ^0.18.5+1
+  flutter_hooks: ^0.20.5
   flutter_speed_dial: ^7.0.0
-  flutter_staggered_grid_view: ^0.6.1
+  flutter_staggered_grid_view: ^0.7.0
   font_awesome_flutter: ^10.1.0
   freezed_annotation: ^2.1.0
   hive_flutter: ^1.0.0
   hive: ^2.0.4
   hooks_riverpod: ^2.1.1
   html_unescape: ^2.0.0
-  intl: ^0.18.0
+  intl: ^0.19.0
   json_annotation: ^4.8.1
   logging: ^1.2.0
   media_scanner: ^2.1.0
@@ -65,10 +65,10 @@ dependencies:
   package_info: ^2.0.0
   path_provider: ^2.0.11
   path: ^1.8.1
-  permission_handler: ^10.0.0
+  permission_handler: ^11.3.1
   riverpod_annotation: ^2.0.0
   scroll_to_index: ^3.0.1
-  separated_row: ^2.0.0
+  separated_row: ^3.0.3
   shimmer: ^3.0.0
   slang_flutter: ^3.6.0
   slang: ^3.6.0
@@ -85,17 +85,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  auto_route_generator: ^7.0.0
+  auto_route_generator: ^8.0.0
   build_runner: ^2.0.5
   flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^2.0.1
+  flutter_lints: ^4.0.0
   freezed: ^2.1.0+1
   grinder: ^0.9.4
   hive_generator: ^2.0.0
   json_serializable: ^6.7.0
-  mocktail: ^0.3.0
+  mocktail: ^1.0.4
   riverpod_generator: ^2.0.0
-  pigeon: ^9.2.5
+  pigeon: ^20.0.2
 
 flutter_icons:
   android: true
