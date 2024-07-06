@@ -78,11 +78,11 @@ class PostViewer extends HookConsumerWidget {
       return Wakelock.disable;
     }, []);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) async {
         ref.watch(fullscreenStateProvider.notifier).reset();
         context.scaffoldMessenger.removeCurrentSnackBar();
-        return true;
       },
       child: Scaffold(
         backgroundColor: Colors.black,
