@@ -1,3 +1,7 @@
+## 1.4.4
+
+* Fix unable to exit app with double back-tap
+
 ## 1.4.3
 
 * Update th-th, ja-jp, and uwu translation (@rinme)
