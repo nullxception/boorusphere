@@ -1,3 +1,9 @@
+## 1.4.3
+
+* Update th-th, ja-jp, and uwu translation (@rinme)
+* Fix download failed on danbooru (@makisukurisu)
+* Update Flutter to 3.22.2
+
 ## 1.4.2
 
 * Add zh-TW translation (@xperiazu21)
