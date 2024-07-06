@@ -106,10 +106,7 @@ class _Home extends HookConsumerWidget {
     }
 
     return PopScope(
-      canPop: allowPop.value &&
-          context.router.canPop() &&
-          !drawer.isOpen &&
-          !searchBar.isOpen,
+      canPop: allowPop.value && !drawer.isOpen && !searchBar.isOpen,
       onPopInvoked: (didPop) async {
         if (drawer.isOpen || searchBar.isOpen) {
           maybePopTimer.cancel();
