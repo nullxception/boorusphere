@@ -25,7 +25,6 @@ class Downloader {
   Future<String?> download(
     Post post, {
     String? url,
-    String? targetPath,
     String Function(String fileName)? dest,
   }) async {
     final fileUrl = url ?? post.originalFile;
@@ -39,7 +38,7 @@ class Downloader {
     final taskId = await FlutterDownloader.enqueue(
       url: fileUrl,
       fileName: fileName,
-      savedDir: targetPath ?? sharedStorageHandle.path,
+      savedDir: sharedStorageHandle.path,
       showNotification: true,
       openFileFromNotification: true,
       headers: HeadersFactory.builder()

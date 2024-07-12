@@ -7,7 +7,6 @@ import 'package:boorusphere/data/repository/version/app_version_repo.dart';
 import 'package:boorusphere/data/repository/version/entity/app_version.dart';
 import 'package:boorusphere/presentation/provider/download/download_state.dart';
 import 'package:boorusphere/presentation/provider/download/downloader.dart';
-import 'package:boorusphere/presentation/provider/shared_storage_handle.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -33,7 +32,6 @@ class AppUpdater {
   final Ref ref;
 
   String id = '';
-  AppVersion _version = AppVersion.zero;
 
   String _fileNameOf(AppVersion version) {
     return 'boorusphere-$version-$kAppArch.apk';
@@ -76,57 +74,15 @@ class AppUpdater {
       } catch (e) {}
     }
 
-    final newId = await ref.read(downloaderProvider).download(
-          Post.appReserved,
-          url: url,
-          targetPath: tmp.absolute.path,
-          dest: (fileName) => path.join(updateDir, fileName),
-        );
+    final newId =
+        await ref.read(downloaderProvider).download(Post.appReserved, url: url);
 
     if (newId != null) {
-      _version = version;
       id = newId;
     }
   }
 
-  Future<void> exportToSharedDir() async {
-    final sharedStorageHandle = ref.read(sharedStorageHandleProvider);
-    final file = _fileNameOf(_version);
-    final tmp = await getTemporaryDirectory();
-
-    await sharedStorageHandle.init();
-    final destDir = sharedStorageHandle.createSubDir(updateDir);
-
-    final srcApk = File(path.join(tmp.absolute.path, file));
-    final destApk = File(path.join(destDir.absolute.path, file));
-
-    if (srcApk.existsSync() && !destApk.existsSync()) {
-      try {
-        await srcApk.copy(destApk.absolute.path);
-        // ignore: empty_catches
-      } catch (e) {}
-    }
-  }
-
-  bool isExported(AppVersion version) {
-    final file = _fileNameOf(version);
-    final onUpdateDir = path.join(updateDir, file);
-    return ref.read(sharedStorageHandleProvider).fileExists(onUpdateDir);
-  }
-
   Future<void> install(AppVersion version) async {
-    final file = _fileNameOf(version);
-    final tmp = await getTemporaryDirectory();
-    final onTmp = File(path.join(tmp.absolute.path, file));
-    final handle = ref.read(sharedStorageHandleProvider);
-    if (onTmp.existsSync()) {
-      await handle.open(file, on: tmp.absolute.path);
-      return;
-    }
-
-    final onUpdateDir = path.join(updateDir, file);
-    if (handle.fileExists(onUpdateDir)) {
-      await ref.read(sharedStorageHandleProvider).open(onUpdateDir);
-    }
+    ref.read(downloaderProvider).openFile(id: id);
   }
 }
