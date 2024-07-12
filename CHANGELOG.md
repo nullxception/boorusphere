@@ -1,3 +1,8 @@
+## 1.4.5
+
+* Fix backstack exit got blocked by the double back-tap prompt
+* Fix update app button did not work properly
+
 ## 1.4.4
 
 * Fix unable to exit app with double back-tap
