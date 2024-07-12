@@ -106,7 +106,9 @@ class _Home extends HookConsumerWidget {
     }
 
     return PopScope(
-      canPop: allowPop.value && !drawer.isOpen && !searchBar.isOpen,
+      canPop: (allowPop.value || context.router.canPop()) &&
+          !drawer.isOpen &&
+          !searchBar.isOpen,
       onPopInvoked: (didPop) async {
         if (drawer.isOpen || searchBar.isOpen) {
           maybePopTimer.cancel();
@@ -119,7 +121,7 @@ class _Home extends HookConsumerWidget {
           return;
         }
 
-        if (!allowPop.value) {
+        if (!allowPop.value && !context.router.canPop()) {
           allowPop.value = true;
           context.scaffoldMessenger.showSnackBar(SnackBar(
             content: Text(context.t.retryPopBack),
