@@ -1,3 +1,7 @@
+# This repository has been archived
+Boorusphere was supposed to be a simple booru viewer, but due to lack of interest, especially in flutter, it was shut down on July 19, 2024. It remains here for history's sake, although it serves no inherent purpose.
+
+<br/><br/>
 <div align="center">
     <div><img src="assets/icons/exported/legacy-circle.png" alt="boorusphere icon" height="92"></div>
     <div><h1 align="center">Boorusphere</h1></div>
